@@ -1,0 +1,171 @@
+{
+  "commun": {
+    "id": "commun",
+    "categorie": "socle",
+    "sequence": "Culture commune PJJ",
+    "titre": "PJJoue — Parcours PJJ",
+    "sousTitre": "10 étapes de 10 questions, puis une évaluation finale de 50 questions.",
+    "etapes": [
+      {
+        "id": 1,
+        "titre": "Découvrir la PJJ",
+        "couleur": "#39d7c4",
+        "souvenirs": [
+          "La PJJ appartient au ministère de la Justice.",
+          "Son action associe cadre judiciaire et accompagnement éducatif.",
+          "Elle intervient auprès des mineurs concernés par une décision judiciaire."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      },
+      {
+        "id": 2,
+        "titre": "Les acteurs et les rôles",
+        "couleur": "#ffc83d",
+        "souvenirs": [
+          "Les magistrats prennent les décisions judiciaires.",
+          "Les services éducatifs mettent en œuvre les mesures confiées.",
+          "La coordination des acteurs donne de la cohérence au parcours du jeune."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      },
+      {
+        "id": 3,
+        "titre": "Professionnels de la PJJ",
+        "couleur": "#a986ff",
+        "souvenirs": [
+          "Les équipes réunissent plusieurs métiers complémentaires.",
+          "Chaque professionnel apporte un regard particulier sur la situation.",
+          "Le travail collectif soutient l’évaluation et l’accompagnement éducatif."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      },
+      {
+        "id": 4,
+        "titre": "Organisation de la PJJ",
+        "couleur": "#62c5ff",
+        "souvenirs": [
+          "La PJJ s’organise à plusieurs niveaux territoriaux.",
+          "Les établissements et services assurent l’action éducative au quotidien.",
+          "L’organisation permet d’adapter les réponses aux besoins des territoires."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      },
+      {
+        "id": 5,
+        "titre": "Les différentes prises en charge",
+        "couleur": "#ff9e5e",
+        "souvenirs": [
+          "L’accompagnement peut se dérouler en milieu ouvert ou en hébergement.",
+          "Les modalités dépendent de la décision judiciaire et de la situation.",
+          "L’insertion et les activités de jour participent aussi au parcours éducatif."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      },
+      {
+        "id": 6,
+        "titre": "Parcours judiciaire et éducatif du mineur",
+        "couleur": "#5fe0a0",
+        "souvenirs": [
+          "Le parcours articule les temps judiciaires et éducatifs.",
+          "L’évaluation de la situation aide à proposer un accompagnement adapté.",
+          "Les décisions et les actions sont réexaminées selon l’évolution du jeune."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      },
+      {
+        "id": 7,
+        "titre": "Logique éducative de la PJJ",
+        "couleur": "#ffcf66",
+        "souvenirs": [
+          "L’accompagnement cherche à favoriser l’évolution et la responsabilisation.",
+          "Le projet éducatif tient compte de la situation singulière du jeune.",
+          "Le cadre posé reste lié au sens de la décision judiciaire."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      },
+      {
+        "id": 8,
+        "titre": "Le travail avec l’environnement du jeune",
+        "couleur": "#52d6c8",
+        "souvenirs": [
+          "La famille et les responsables du jeune sont des interlocuteurs importants.",
+          "L’école, la santé et les partenaires locaux contribuent à l’accompagnement.",
+          "Le travail en réseau favorise la continuité du parcours."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      },
+      {
+        "id": 9,
+        "titre": "Fonctionnement et public de la PJJ",
+        "couleur": "#78aef5",
+        "souvenirs": [
+          "La PJJ intervient dans un cadre défini par l’autorité judiciaire.",
+          "Les réponses éducatives s’adaptent à l’âge et à la situation du mineur.",
+          "La continuité de l’accompagnement nécessite des informations partagées avec discernement."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      },
+      {
+        "id": 10,
+        "titre": "Langage PJJ",
+        "couleur": "#c59cff",
+        "souvenirs": [
+          "Les sigles désignent des services, unités et modalités d’accompagnement.",
+          "Un vocabulaire partagé facilite la coopération entre professionnels.",
+          "Comprendre les termes aide à mieux situer le rôle de chaque structure."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "JUSTICE_DPJJ"
+        ],
+        "fondement": "direct"
+      }
+    ]
+  }
+}

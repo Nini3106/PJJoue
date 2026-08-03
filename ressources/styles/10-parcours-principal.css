@@ -1,0 +1,980 @@
+.programme-presentation {
+    padding: 28px 0 0;
+    max-width: var(--largeur-parcours);
+    width: 100%;
+    margin: 0 auto 20px;
+    padding-left: 0;
+    padding-right: 0;
+}
+.programme-presentation-principal {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto
+}
+.programme-presentation-principal h1 {
+    font-size: clamp(2.4rem,5vw,4rem);
+    line-height: 1.02;
+    margin: 0;
+}
+.programme-presentation-principal p {
+    font-size: clamp(1rem,1.4vw,1.18rem);
+    margin: 16px auto 0;
+    color: var(--texte-secondaire);
+}
+.programme-presentation-principal::after {
+    content: "";
+    display: block;
+    width: 92px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--accent);
+    margin: 18px auto 0;
+}
+.programme-objectif {
+    margin: 26px auto 4px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 22px;
+    border: 1px solid rgba(255,255,255,.42);
+    border-radius: 18px;
+    background: rgba(8,55,106,.28);
+    box-shadow: 0 18px 50px rgba(4,29,61,.12);
+    font-weight: 700;
+    width: min(980px,100%);
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+.objectif-icone {
+    font-size: 2rem;
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-right: 1px solid rgba(255,255,255,.25);
+    padding-right: 18px;
+    box-sizing: content-box;
+    color: var(--accent);
+}
+@media (max-width:760px) {
+    .programme-presentation {
+        padding-top: 12px
+    }
+    .programme-objectif {
+        align-items: flex-start;
+        padding: 14px 16px
+    }
+}
+.objectif-cible-icone {
+    width: 58px;
+    height: 58px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.evaluation-carte {
+    position: relative;
+    z-index: 3;
+    width: min(310px,90%);
+    min-height: 150px;
+    padding: 18px 22px;
+    border-radius: 22px;
+    border: 2px solid var(--accent);
+    background: linear-gradient(180deg,rgba(18,86,151,.98),rgba(5,48,95,.98));
+    color: var(--texte);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 46px rgba(1,25,55,.3);
+    opacity: 1;
+    cursor: default;
+}
+.evaluation-carte:disabled {
+    opacity: 1;
+    color: var(--texte)
+}
+.icone-evaluation {
+    width: 54px;
+    height: 54px;
+    border: 1px solid rgba(255,255,255,.5);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-bottom: 10px;
+    color: var(--accent);
+}
+.icone-evaluation svg {
+    width: 33px;
+    height: 33px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.evaluation-etape-numero {
+    color: var(--accent);
+    font-size: .82rem;
+    letter-spacing: .07em;
+    font-weight: 900;
+}
+.evaluation-titre {
+    font-size: 1.35rem;
+    font-weight: 900;
+    margin-top: 4px;
+}
+.evaluation-statut {
+    font-size: .88rem;
+    color: var(--texte-secondaire);
+    margin-top: 7px;
+}
+@media (max-width:900px) {
+    .evaluation-carte {
+        order: 0
+    }
+}
+#parcours {
+    --largeur-parcours: 1480px;
+    padding-bottom: 10px;
+    width: 100%;
+    max-width: 100%;
+}
+.carte-parcours-entete {
+    max-width: var(--largeur-parcours);
+    width: 100%;
+    margin: 14px auto 22px;
+    padding: 0 4px;
+    border: 0;
+    border-bottom: 1px solid rgba(145,198,245,.22);
+    background: transparent;
+    color: var(--texte);
+    line-height: 1.55;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: auto minmax(0,1fr);
+    align-items: center;
+    gap: 15px;
+}
+.carte-parcours-icone {
+    width: 54px;
+    height: 54px;
+    color: var(--jaune-interface);
+    display: grid;
+    place-items: center;
+}
+.carte-parcours-icone svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.carte-parcours-titres {
+    min-width: 0;
+}
+.carte-parcours-entete .carte-parcours-surtitre {
+    color: #7ce8dc;
+    font-size: .76rem;
+    font-weight: 850;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+.carte-parcours-entete h2 {
+    margin: 3px 0 4px;
+    font-size: var(--taille-titre-2);
+}
+.carte-parcours-entete p {
+    margin: 0;
+    color: var(--texte-secondaire);
+}
+@media (max-width:1520px) {
+    #parcours {
+        --largeur-parcours: calc(100vw - 56px);
+    }
+}
+@media (max-width:900px) {
+    #parcours {
+        --largeur-parcours: 100%;
+    }
+    .carte-parcours-entete {
+        margin-top: 12px;
+        padding: 12px 14px;
+    }
+}
+#parcours .programme-presentation {
+    padding-top: 30px;
+    margin-bottom: 8px;
+}
+#parcours .programme-presentation-principal h1 {
+    line-height: 1;
+    font-size: clamp(2.3rem,4vw,3.25rem);
+    margin-bottom: 5px;
+}
+#parcours .programme-presentation-principal p {
+    margin-top: 7px;
+    line-height: 1.3;
+    margin: 0 auto;
+    font-size: 1rem;
+}
+#parcours .programme-presentation-principal::after {
+    margin-top: 8px;
+    content: "";
+    display: block;
+    width: 78px;
+    height: 4px;
+    margin: 9px auto 0;
+    border-radius: 999px;
+    background: var(--accent);
+}
+#parcours .programme-objectif {
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding: 9px 16px;
+    min-height: 54px;
+    border-radius: 14px;
+    font-size: .91rem;
+    line-height: 1.28;
+}
+#parcours .objectif-icone {
+    width: 44px;
+    height: 44px;
+    padding-right: 12px;
+}
+#parcours .objectif-cible-icone {
+    width: 42px;
+    height: 42px;
+}
+#parcours .carte-parcours-entete {
+    margin-top: 8px;
+    margin-bottom: 10px;
+    padding: 8px 13px;
+    font-size: .78rem;
+    line-height: 1.38;
+}
+#parcours .icone-evaluation {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 5px;
+}
+#parcours .icone-evaluation svg {
+    width: 27px;
+    height: 27px;
+}
+#parcours .evaluation-etape-numero {
+    font-size: .69rem;
+}
+#parcours .evaluation-titre {
+    font-size: 1.02rem;
+    margin-top: 2px;
+}
+#parcours .evaluation-statut {
+    margin-top: 4px;
+    font-size: .75rem;
+}
+@media (min-width:1100px) and (max-height:950px) {
+    #parcours {
+        min-height: calc(100vh - 78px);
+    }
+}
+@media (max-width:900px) {
+    #parcours .programme-presentation {
+        padding-top: 10px;
+    }
+    #parcours .carte-parcours-entete {
+        font-size: .86rem;
+    }
+}
+@media (min-width:1100px) and (min-height:1000px) {
+    #parcours .carte-parcours-entete {
+        margin-bottom: 20px;
+    }
+}
+@media (min-width:1100px) {
+    #parcours .programme-presentation-principal {
+        transform: translateY(-5px);
+    }
+    #parcours .programme-objectif {
+        margin-top: 15px;
+        margin-bottom: 8px;
+        padding: 9px 16px;
+        font-size: .94rem;
+    }
+}
+@media (min-width:1100px) and (max-height:950px) {
+    #parcours .programme-objectif {
+        margin-top: 12px;
+        margin-bottom: 6px;
+    }
+}
+#parcours .programme-objectif-simple {
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 7px auto 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+#parcours .programme-objectif-interieur {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+#parcours .programme-objectif-simple .objectif-icone {
+    padding-right: 0;
+    border-right: 0;
+    box-sizing: border-box;
+    padding: 0;
+    border: 0;
+    overflow: visible;
+    width: 70px;
+    height: 70px;
+    flex: 0 0 70px;
+    display: grid;
+    place-items: center;
+}
+#parcours .programme-objectif-texte {
+    color: var(--texte);
+    font-size: 1rem;
+    line-height: 1.25;
+    font-weight: 800;
+}
+@media (min-width:1100px) and (max-height:950px) {
+    #parcours .programme-objectif-interieur {
+        gap: 14px;
+    }
+    #parcours .programme-objectif-simple .objectif-icone {
+        width: 44px;
+        height: 44px;
+    }
+    #parcours .programme-objectif-simple .objectif-cible-icone {
+        width: 42px;
+        height: 42px;
+    }
+}
+@media (min-width:1100px) {
+    #parcours .programme-presentation {
+        margin-top: -10px;
+        margin-bottom: 2px;
+        padding-top: 0;
+    }
+    #parcours .icone-evaluation {
+        width: 54px;
+        height: 54px;
+        margin-bottom: 8px;
+    }
+    #parcours .icone-evaluation svg {
+        width: 34px;
+        height: 34px;
+    }
+    #parcours .evaluation-etape-numero {
+        font-size: .82rem;
+    }
+    #parcours .evaluation-titre {
+        font-size: 1.28rem;
+        line-height: 1.12;
+        margin-top: 4px;
+    }
+    #parcours .evaluation-statut {
+        margin-top: 7px;
+        font-size: .84rem;
+    }
+}
+@media (min-width:1100px) and (max-height:950px) {
+    #parcours .programme-presentation {
+        margin-top: 0;
+        margin-bottom: 2px;
+        padding-top: 30px;
+    }
+    #parcours .programme-presentation-principal h1 {
+        font-size: var(--taille-titre-1);
+    }
+    #parcours .programme-objectif-simple {
+        margin-top: 2px;
+        margin-bottom: 6px;
+    }
+    #parcours .programme-objectif-texte {
+        font-size: 1rem;
+    }
+    #parcours .carte-parcours-entete {
+        margin-top: 4px;
+        margin-bottom: 12px;
+        padding-top: 9px;
+        padding-bottom: 9px;
+        font-size: .86rem;
+    }
+}
+@media (min-width:1500px) {
+    #parcours {
+        --largeur-parcours: min(1740px, calc(100vw - 48px));
+    }
+}
+@media (min-width:1100px) and (max-width:1350px) {
+    #parcours {
+        --largeur-parcours: calc(100vw - 34px);
+    }
+}
+@media (min-width:1100px) {
+    #parcours {
+        --largeur-parcours: calc(100vw - 20px);
+    }
+}
+@media (min-width:1450px) {
+    #parcours {
+        --largeur-parcours: calc(100vw - 24px);
+    }
+}
+@media (min-width:1100px) and (max-width:1300px) {
+    #parcours {
+        --largeur-parcours: calc(100vw - 16px);
+    }
+}
+@media (min-width:1100px) {
+    #parcours .carte-parcours-entete {
+        margin-top: 5px;
+        margin-bottom: 15px;
+        padding: 11px 16px;
+        font-size: .98rem;
+        line-height: 1.46;
+    }
+    #parcours .carte-parcours-entete .carte-parcours-surtitre {
+        font-size: 1rem;
+    }
+}
+@media (min-width:1450px) {
+    #parcours .carte-parcours-entete {
+        font-size: 1.02rem;
+    }
+}
+@media (min-width:1100px) and (max-width:1320px) {
+    #parcours .carte-parcours-entete {
+        font-size: .92rem;
+    }
+}
+#parcours .programme-presentation-principal {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+#parcours .programme-objectif-simple .objectif-cible-icone {
+    width: 42px;
+    height: 42px;
+}
+#parcours * {
+    max-width: 100%;
+}
+@media (max-width:600px) {
+    #parcours .programme-objectif-interieur {
+        align-items: flex-start;
+    }
+}
+#parcours .chemin-programme-presentation {
+    width: min(1180px, calc(100% - 28px));
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+#parcours .chemin-carte-parcours-entete {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 26px;
+    padding: 0 0 18px;
+    box-sizing: border-box;
+}
+#parcours .chemin-chemin {
+    position: relative;
+    width: min(1180px, calc(100% - 28px));
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    padding: 26px 26px 34px;
+    border: 1px solid rgba(145,198,245,.16);
+    border-radius: 32px;
+    background: rgba(6,47,96,.20);
+}
+#parcours .chemin-ligne {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 24px;
+    width: 100%;
+}
+#parcours .chemin-ligne-inverse {
+    direction: rtl;
+}
+#parcours .chemin-ligne-inverse > * {
+    direction: ltr;
+}
+#parcours .chemin-etape-carte {
+    position: relative;
+    min-width: 0;
+    min-height: 210px;
+    width: 100%;
+    padding: 20px 20px 16px;
+    border: 1px solid rgba(255,255,255,.42);
+    border-radius: 24px;
+    background: var(--surface-carte);
+    color: var(--texte);
+    display: grid;
+    grid-template-columns: 62px minmax(0,1fr);
+    grid-template-rows: auto 1fr auto auto;
+    column-gap: 16px;
+    text-align: left;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+#parcours .chemin-etape-carte.destination-actuelle {
+    border-color: var(--jaune-interface);
+    box-shadow: 0 0 0 3px rgba(255,200,61,.12),0 8px 22px rgba(0,19,52,.16);
+}
+#parcours .chemin-position-actuelle {
+    position: absolute;
+    top: 13px;
+    right: 13px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    color: var(--bleu-nuit-950);
+    background: var(--jaune-interface);
+    font-size: .7rem;
+    font-weight: 850;
+    animation: arriveePositionParcours .55s ease both;
+}
+#parcours.transition-vers-etape .chemin-etape-carte {
+    opacity: .56;
+    transition: opacity .2s ease,transform .25s ease,box-shadow .25s ease;
+}
+#parcours.transition-vers-etape .chemin-etape-carte.destination-en-vue {
+    z-index: 3;
+    opacity: 1;
+    transform: translateY(-4px) scale(1.025);
+    border-color: var(--jaune-interface);
+    box-shadow: 0 0 0 5px rgba(255,200,61,.14),0 14px 32px rgba(0,19,52,.26);
+}
+@keyframes arriveePositionParcours {
+    from {
+        opacity: 0;
+        transform: translateY(-7px) scale(.86);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+#parcours .chemin-etape-carte.a-valider .chemin-nombre::after {
+    content: " · à valider sans joker";
+    color: var(--jaune-interface);
+}
+#parcours .chemin-etape-carte:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 24px rgba(1,26,57,.22);
+}
+#parcours .chemin-etape-icone {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    color: var(--couleur-etape,var(--accent));
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    display: grid;
+    place-items: center;
+}
+#parcours .chemin-etape-texte {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    min-width: 0;
+}
+#parcours .chemin-etape-numero {
+    display: block;
+    color: var(--couleur-etape,var(--accent));
+    font-size: .82rem;
+    font-weight: 900;
+    letter-spacing: .055em;
+    margin-bottom: 8px;
+}
+#parcours .chemin-etape-titre {
+    display: block;
+    font-size: 1.18rem;
+    line-height: 1.18;
+    font-weight: 900;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+}
+#parcours .chemin-progression {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    width: 100%;
+    height: 7px;
+    margin-top: 20px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(0,0,0,.2);
+}
+#parcours .chemin-progression i {
+    display: block;
+    height: 100%;
+    background: var(--couleur-etape,var(--accent));
+}
+#parcours .chemin-nombre {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    margin-top: 8px;
+    color: var(--texte-secondaire);
+    font-size: .9rem;
+}
+#parcours .chemin-virage {
+    position: relative;
+    height: 72px;
+    width: 100%;
+}
+#parcours .chemin-virage::before {
+    content: "";
+    position: absolute;
+    border-color: rgba(255,209,102,.68);
+    border-style: dashed;
+}
+#parcours .chemin-virage-droite::before {
+    top: 0;
+    right: 16.66%;
+    width: 33.34%;
+    height: 36px;
+    border-width: 0 2px 2px 0;
+    border-radius: 0 0 20px 0;
+}
+#parcours .chemin-virage-gauche::before {
+    top: 0;
+    left: 16.66%;
+    width: 33.34%;
+    height: 36px;
+    border-width: 0 0 2px 2px;
+    border-radius: 0 0 0 20px;
+}
+#parcours .chemin-finale-ligne {
+    display: grid;
+    grid-template-columns: 1fr minmax(0,1fr) 86px minmax(0,1fr);
+    gap: 0;
+    align-items: center;
+    width: 100%;
+}
+#parcours .chemin-finale-espace {
+    grid-column: 1;
+}
+#parcours #carteEtape10 {
+    grid-column: 2;
+}
+#parcours #carteEtape10 .chemin-etape-carte {
+    min-height: 220px;
+}
+#parcours .chemin-finale-lien {
+    grid-column: 3;
+    position: relative;
+    height: 100%;
+    min-height: 90px;
+}
+#parcours .chemin-finale-lien::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: rgba(255,209,102,.72);
+}
+#parcours .chemin-evaluation-carte {
+    grid-column: 4;
+    width: 100%;
+    min-height: 220px;
+    padding: 20px;
+    border: 2px solid var(--accent);
+    border-radius: 24px;
+    background: linear-gradient(160deg,rgba(32,103,165,.9),rgba(7,48,92,.96));
+    color: var(--texte);
+}
+#parcours .chemin-evaluation-carte .icone-evaluation {
+    width: 62px;
+    height: 62px;
+    margin-bottom: 10px;
+    color: #8d72ff;
+}
+#parcours .chemin-evaluation-carte .icone-evaluation svg {
+    width: 39px;
+    height: 39px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+#parcours .chemin-evaluation-carte .evaluation-etape-numero {
+    font-size: .82rem;
+}
+#parcours .chemin-evaluation-carte .evaluation-titre {
+    font-size: 1.3rem;
+    margin-top: 4px;
+}
+#parcours .chemin-evaluation-carte .evaluation-statut {
+    margin-top: 8px;
+    white-space: nowrap;
+    font-size: .86rem;
+}
+@media (max-width:900px) {
+    #parcours .chemin-ligne {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    #parcours .chemin-ligne-inverse {
+        direction: ltr;
+    }
+    #parcours .chemin-virage {
+        display: none;
+    }
+    #parcours .chemin-finale-ligne {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    #parcours .chemin-finale-espace,#parcours #carteEtape10,#parcours .chemin-evaluation-carte {
+        grid-column: 1;
+    }
+    #parcours .chemin-finale-lien {
+        grid-column: 1;
+        display: none;
+    }
+}
+@media (min-width:1100px) {
+    #parcours .programme-presentation-principal h1 {
+        font-size: var(--taille-titre-1);
+        line-height: 1.12;
+    }
+    #parcours .programme-presentation-principal p {
+        font-size: 1.18rem;
+        line-height: 1.35;
+        margin-top: 8px;
+    }
+    #parcours .programme-presentation-principal::after {
+        width: 92px;
+        height: 5px;
+        margin-top: 11px;
+        margin-bottom: 0;
+    }
+    #parcours .programme-objectif-simple {
+        margin-top: 10px;
+        margin-bottom: 2px;
+    }
+    #parcours .programme-objectif-interieur {
+        gap: 16px;
+    }
+    #parcours .programme-objectif-simple .objectif-icone {
+        width: 56px;
+        height: 56px;
+    }
+    #parcours .programme-objectif-simple .objectif-cible-icone {
+        width: 54px;
+        height: 54px;
+    }
+    #parcours .programme-objectif-texte {
+        font-size: 1.16rem;
+        line-height: 1.35;
+    }
+    #parcours .chemin-carte-parcours-entete {
+        margin-top: 0;
+        margin-bottom: 24px;
+        padding: 0 0 18px;
+        font-size: .98rem;
+        line-height: 1.55;
+    }
+    #parcours .chemin-carte-parcours-entete .carte-parcours-surtitre {
+        font-size: .78rem;
+    }
+    #parcours .chemin-chemin {
+        padding-bottom: 46px;
+    }
+    #parcours .chemin-ligne {
+        gap: 28px;
+    }
+    #parcours .chemin-virage {
+        height: 82px;
+    }
+    #parcours .chemin-etape-carte {
+        min-height: 245px;
+        padding: 24px 24px 20px;
+        border-radius: 26px;
+        grid-template-columns: 74px minmax(0,1fr);
+        column-gap: 18px;
+    }
+    #parcours .chemin-etape-icone {
+        width: 74px;
+        height: 74px;
+        border-radius: 20px;
+    }
+    #parcours .chemin-etape-icone svg {
+        width: 46px;
+        height: 46px;
+    }
+    #parcours .chemin-etape-numero {
+        font-size: .95rem;
+        margin-bottom: 10px;
+        letter-spacing: .06em;
+    }
+    #parcours .chemin-etape-titre {
+        font-size: 1.38rem;
+        line-height: 1.2;
+    }
+    #parcours .chemin-progression {
+        height: 8px;
+        margin-top: 24px;
+    }
+    #parcours .chemin-nombre {
+        margin-top: 10px;
+        font-size: 1rem;
+    }
+    #parcours .chemin-finale-ligne {
+        grid-template-columns: 1fr minmax(0,1.18fr) 110px minmax(0,1.18fr);
+        margin-top: 4px;
+    }
+    #parcours #carteEtape10 .chemin-etape-carte {
+        min-height: 250px;
+    }
+    #parcours .chemin-finale-lien {
+        min-height: 110px;
+    }
+    #parcours .chemin-evaluation-carte {
+        min-height: 250px;
+        padding: 24px;
+        border-radius: 26px;
+    }
+    #parcours .chemin-evaluation-carte .icone-evaluation {
+        width: 74px;
+        height: 74px;
+        margin-bottom: 12px;
+    }
+    #parcours .chemin-evaluation-carte .icone-evaluation svg {
+        width: 46px;
+        height: 46px;
+    }
+    #parcours .chemin-evaluation-carte .evaluation-etape-numero {
+        font-size: .95rem;
+    }
+    #parcours .chemin-evaluation-carte .evaluation-titre {
+        font-size: 1.55rem;
+        line-height: 1.18;
+        margin-top: 6px;
+    }
+    #parcours .chemin-evaluation-carte .evaluation-statut {
+        font-size: 1rem;
+        line-height: 1.35;
+        margin-top: 10px;
+    }
+}
+@media (min-width:1100px) and (max-width:1320px) {
+    #parcours .chemin-etape-carte {
+        min-height: 225px;
+        padding: 20px;
+        grid-template-columns: 64px minmax(0,1fr);
+        column-gap: 15px;
+    }
+    #parcours .chemin-etape-icone {
+        width: 64px;
+        height: 64px;
+    }
+    #parcours .chemin-etape-icone svg {
+        width: 40px;
+        height: 40px;
+    }
+    #parcours .chemin-etape-titre {
+        font-size: 1.24rem;
+    }
+    #parcours .chemin-etape-numero {
+        font-size: .88rem;
+    }
+    #parcours .chemin-nombre {
+        font-size: .94rem;
+    }
+    #parcours .chemin-carte-parcours-entete {
+        font-size: 1.02rem;
+    }
+    #parcours .chemin-finale-ligne {
+        grid-template-columns: .8fr minmax(0,1fr) 90px minmax(0,1fr);
+    }
+    #parcours .chemin-evaluation-carte {
+        min-height: 225px;
+    }
+}
+@media (max-width:1099px) {
+    #parcours .chemin-etape-carte {
+        min-height: 210px;
+        padding: 18px;
+    }
+    #parcours .chemin-etape-titre {
+        font-size: 1.18rem;
+    }
+    #parcours .chemin-etape-numero {
+        font-size: .84rem;
+    }
+    #parcours .chemin-nombre {
+        font-size: .92rem;
+    }
+    #parcours .chemin-carte-parcours-entete {
+        font-size: 1rem;
+    }
+}
+#parcours .programme-objectif-simple .objectif-cible-reference {
+    width: 66px;
+    height: 66px;
+    transform: translateY(-12px);
+    overflow: visible;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.12));
+}
+#parcours .objectif-cible-reference .fleche-tige {
+    stroke-width: 3.2;
+}
+#parcours .objectif-cible-reference .fleche-entete {
+    stroke-width: 3.2;
+}
+@media (max-width:700px) {
+    #parcours .programme-objectif-simple .objectif-icone {
+        width: 58px;
+        height: 58px;
+        flex-basis: 58px;
+    }
+    #parcours .programme-objectif-simple .objectif-cible-reference {
+        width: 56px;
+        height: 56px;
+    }
+}
+@keyframes flottementSphereAccueil {
+    0%,100% {
+        transform: translateY(0) rotateX(0deg) rotateY(0deg);
+    }
+    50% {
+        transform: translateY(-8px) rotateX(1.4deg) rotateY(-1.8deg);
+    }
+}

@@ -1,0 +1,341 @@
+{
+  "produit": "PJJoue",
+  "version": "V1",
+  "dateConsolidation": "2026-08-02",
+  "composition": {
+    "questionsTotales": 150,
+    "questionsParcours": 100,
+    "etapesParcours": 10,
+    "questionsEvaluationFinale": 50
+  },
+  "fichiers": {
+    ".github/workflows/controle.yml": {
+      "tailleOctets": 1671,
+      "sha256": "747e8b0b70d843ab2cc2d8162fd7c31a3838f6ff4f0254110ed6371247fb72cc"
+    },
+    ".gitignore": {
+      "tailleOctets": 83,
+      "sha256": "5a37d6b0a6d46a96947f90d0c7b16c50f45d0eda892f7297fe7c0ea7a847d0ce"
+    },
+    ".nojekyll": {
+      "tailleOctets": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "accessibilite.html": {
+      "tailleOctets": 2389,
+      "sha256": "0d162f7f8bb5c3d37a7f59beb26c4e6a00712a8e9b4d0472dcae75efc76abe7a"
+    },
+    "administration.html": {
+      "tailleOctets": 2443,
+      "sha256": "a017fe0e46d62a2eb40c89517d70d80b9e6a74fced736e6e58c4b70571d26729"
+    },
+    "confidentialite.html": {
+      "tailleOctets": 2435,
+      "sha256": "ba1da429a09c04a2607b06577e116bf7d4c3c2f4a519329bb670e739f394d957"
+    },
+    "documentation/ACCESSIBILITE.md": {
+      "tailleOctets": 823,
+      "sha256": "61766372d1d4b51838b37eed10012c193f3775508bc2355f7ff568bad9fe1ab9"
+    },
+    "documentation/ARCHITECTURE.md": {
+      "tailleOctets": 15577,
+      "sha256": "5e47a33b6e7032241650d74ab2452e5cc60350ac61f8581a2e65437118d41306"
+    },
+    "documentation/audit_contenu.csv": {
+      "tailleOctets": 23083,
+      "sha256": "623a583ee103ad32b77b4148f1a3000d3361f92e1673e21028e0b705a99e7144"
+    },
+    "documentation/AUDIT_EDITORIAL.md": {
+      "tailleOctets": 674,
+      "sha256": "44353fbf5713fea9c7b440404649c222585fe2c6bf0efdc3cd4c8987eb41e735"
+    },
+    "documentation/AUDIT_TECHNIQUE_V1.md": {
+      "tailleOctets": 2831,
+      "sha256": "85db22f993c44e268889a4dc910393df933292041f5762a3f7a95188e37c92b5"
+    },
+    "documentation/BANQUE_QUESTIONS.md": {
+      "tailleOctets": 755,
+      "sha256": "edeac1355643e0c24d0b4f484ee2237f79d788b4d4a02b9261da3ec239af2572"
+    },
+    "documentation/CHARTE_BANQUE_QUESTIONS.md": {
+      "tailleOctets": 2056,
+      "sha256": "36c6f4dd84f0542e35b8f9979176628f4a38eab82dc11a423e13d4cbc8466a9e"
+    },
+    "documentation/COMMENCER_ICI.md": {
+      "tailleOctets": 4050,
+      "sha256": "67f83028d12ed6910c33487f71db9833cb30e5332a85d16ffd91171375c1d380"
+    },
+    "documentation/DEPLOIEMENT.md": {
+      "tailleOctets": 1211,
+      "sha256": "d525807e7e0ffcfa8c8883e5a14d9b5e0bb474792217609b01334339c493a291"
+    },
+    "documentation/ETAT_V1.md": {
+      "tailleOctets": 1579,
+      "sha256": "327e47e04a6c6ab28150a48af9cc3cb4388c7b245840719cd03c309b6db1d8b6"
+    },
+    "documentation/JOURNAL_NETTOYAGE_CSS.md": {
+      "tailleOctets": 2540,
+      "sha256": "68769804660f69f6eb7bde2cc3831f76e3b924c9e12e5e91ff78ecf99b0e4050"
+    },
+    "documentation/MANIFESTE_PRODUIT.md": {
+      "tailleOctets": 640,
+      "sha256": "b8f2391e497f1383c1b19c40b51241a6ee47c25693f1e16bc9c6788b327c0be7"
+    },
+    "documentation/RAPPORT_CONTROLE_FINAL.md": {
+      "tailleOctets": 1609,
+      "sha256": "7a77641581c0b3dcd80be097a535d310f6fb3dc48cc5e9c9e344840e32482fb2"
+    },
+    "documentation/RECETTE.md": {
+      "tailleOctets": 4236,
+      "sha256": "fb7ac42894ba171c07c08ac66deba07b0d2af3c6251074c8f92b33030ea34f82"
+    },
+    "documentation/SECURITE_RGPD.md": {
+      "tailleOctets": 1149,
+      "sha256": "ee656def432e0c8c98bfdccd4c1997746aac2b71d69412973c0095597fb769f4"
+    },
+    "documentation/VALIDATION_METIER.md": {
+      "tailleOctets": 587,
+      "sha256": "2e923697795c8d3f2dda80c05ddfd819b840d1f419121a5624a364f90c4b6f54"
+    },
+    "donnees/donnees-pjj.js": {
+      "tailleOctets": 182752,
+      "sha256": "9a382e051718c0e114093b33b2ca2f03a1bb665cca8a13c2430bea902808a942"
+    },
+    "donnees/programme.json": {
+      "tailleOctets": 5602,
+      "sha256": "fd485de9ff5cf85d90ec214b8b126d88284a54c90504fff1c5786fa98b317292"
+    },
+    "donnees/questions.json": {
+      "tailleOctets": 222380,
+      "sha256": "551a0eaf0900b076d96d3d463e67709e5c0f8ef854d3bcfaca0e1f304b11f14b"
+    },
+    "donnees/sources.json": {
+      "tailleOctets": 8180,
+      "sha256": "692be216fe673bc11f0b11fe293671495e0f83eee4b9ff002cf7a9ae1d22debd"
+    },
+    "eslint.config.js": {
+      "tailleOctets": 902,
+      "sha256": "67e3c534e9624cf758622e113f960857d1818a9de46ffe2916e0382689b58a3b"
+    },
+    "index.html": {
+      "tailleOctets": 41689,
+      "sha256": "9b8ae734b6c5df4266bee99f5b2ae3d0abe42cf75d9fb34d0ad4929c154e3992"
+    },
+    "mentions-legales.html": {
+      "tailleOctets": 2495,
+      "sha256": "e8dd6a075349357f2734773df81eb4374122e2e5d2d4b01ccb1168568dc7f35b"
+    },
+    "outils/analyser_doublons_css.js": {
+      "tailleOctets": 4182,
+      "sha256": "1607b4c1e48c474972a90c32c5652a34e9550f8d314d99801ea524e05100489e"
+    },
+    "outils/analyser_structure_css.js": {
+      "tailleOctets": 8468,
+      "sha256": "f24975d8e0677ba98fd06bb76b455aab182ae8c8aab435df705d8e3d7dbc09dd"
+    },
+    "outils/construire_donnees.py": {
+      "tailleOctets": 2385,
+      "sha256": "93b1dced58c16457cb662eb61ed86c35a776acca776a4f60fb755740edcfc7ee"
+    },
+    "outils/construire_manifeste.py": {
+      "tailleOctets": 2636,
+      "sha256": "681b5e44aec4bf408eb4c24b80e234ffe3a167974067a542a2c926df31be48eb"
+    },
+    "outils/controler_css.js": {
+      "tailleOctets": 1466,
+      "sha256": "70ec6c15e4e8a61eb37370c5949e1948a819ddd8eb1436c761249cfecca9e326"
+    },
+    "outils/validation_donnees.py": {
+      "tailleOctets": 12023,
+      "sha256": "8043c4e60680556b9419e00b21573a5010cf12223881269557ed6ed2c1c1fb30"
+    },
+    "package-lock.json": {
+      "tailleOctets": 34208,
+      "sha256": "62afe5c1775e3890a63888e5985266de7c40a4c744f451e40fa641530c680bd5"
+    },
+    "package.json": {
+      "tailleOctets": 1478,
+      "sha256": "d0c38d3f4a82c7291b37a2552a8d28f806963997e5e1493fb71f36c156afe2cb"
+    },
+    "POINT_DE_REPRISE_PJJOUE.md": {
+      "tailleOctets": 2021,
+      "sha256": "2b0f35bb346f02356c4bd74e1385fce239017de7d4c2917c344b80d3e029bcc5"
+    },
+    "README.md": {
+      "tailleOctets": 4933,
+      "sha256": "9448050cc25088d67524dec29124904cbafc3943abaa211c2cac35c729ae76dd"
+    },
+    "requirements-dev.txt": {
+      "tailleOctets": 19,
+      "sha256": "963bbb0c6c6b19b84b580f27aca706173058e2b88a620f533db5cb90a7cf879f"
+    },
+    "ressources/administration.css": {
+      "tailleOctets": 3343,
+      "sha256": "920023edf0ecca65ab6a9c44dc149818a861938869ef3f413dc76bcdecb9de9a"
+    },
+    "ressources/administration.js": {
+      "tailleOctets": 7416,
+      "sha256": "d5c7c15442038f9a809c398a602e1f839e21eb363e53764abe895048ac68815b"
+    },
+    "ressources/filigrane-parcours.svg": {
+      "tailleOctets": 1349,
+      "sha256": "566335679cad0c0b9f04b665c086cd0feaae04d84aa224a35ace711f580db322"
+    },
+    "ressources/moteur-jeu.js": {
+      "tailleOctets": 208806,
+      "sha256": "6529417d3ddf38b7135d0546f460ba5526e88cb30703d426b6a513b64ef6ed57"
+    },
+    "ressources/panorama-accueil-calme.png": {
+      "tailleOctets": 1811539,
+      "sha256": "ef6d930900e4547d85862f41e9ac2fe68c481d35d8ab52abdb7bb4c6ea4da7e8"
+    },
+    "ressources/styles/00-fondations-et-composants.css": {
+      "tailleOctets": 38621,
+      "sha256": "69eb1eb68553e4e1f34ba1dc9149dcd9408d23ef46ede2bc3cb377bf4ba75525"
+    },
+    "ressources/styles/10-parcours-principal.css": {
+      "tailleOctets": 23402,
+      "sha256": "98cf8e81d0d6961d546277ddf18ba0f6a2837f98dd776ca7ef1916785e303a09"
+    },
+    "ressources/styles/20-accueil-et-question-principale.css": {
+      "tailleOctets": 21040,
+      "sha256": "cf52679cf17afa140f89ddc2f5703863a3220ce7f64e033e1ac558b9482c83be"
+    },
+    "ressources/styles/30-revision-parcours-et-parametres.css": {
+      "tailleOctets": 20834,
+      "sha256": "2379e28369518a0bc69569743de1e3501d3565a5ea3f002d6b97229d3363e8ce"
+    },
+    "ressources/styles/40-progression-et-erreurs.css": {
+      "tailleOctets": 9526,
+      "sha256": "90b0649bc9031f840b095d93018531f530c6f4003e11df6480d0635caa353640"
+    },
+    "ressources/styles/50-carte-question-et-correction.css": {
+      "tailleOctets": 29423,
+      "sha256": "f3e7d07822aeb12ea06ba3726522b5476ead149902ebe684a77692fd03582d74"
+    },
+    "ressources/styles/60-parcours-modes-et-chronometre.css": {
+      "tailleOctets": 11226,
+      "sha256": "91599cdf94d35f421f8f7e4c5ed64e7ef54894e611391f3e174cc01301925ad5"
+    },
+    "ressources/styles/70-celebrations-bilan-et-fenetres.css": {
+      "tailleOctets": 13366,
+      "sha256": "29248489ee86481feb336e33ce3a769d0ef91620bc26100d9c146b166cf21282"
+    },
+    "ressources/styles/80-finitions-de-l-interface.css": {
+      "tailleOctets": 20964,
+      "sha256": "471ca6276271a2dde2c202dcf9687d68926828149422fe210f9417d41d04ca0c"
+    },
+    "ressources/styles/90-responsive-et-etats-finaux.css": {
+      "tailleOctets": 32272,
+      "sha256": "355cfc10629257c5e7a89e05c3ffef18ed7829dfdb83559ebeb1d696dadc883a"
+    },
+    "ressources/styles/README.md": {
+      "tailleOctets": 1688,
+      "sha256": "f27665c38883a270d96563c10fe44ee7d25378315486b91255528ec5cfc7d27a"
+    },
+    "serveur/entetes.conf": {
+      "tailleOctets": 490,
+      "sha256": "62ae632763752e45dc36837974b882d28691f66327497b2ae6014c0a7ce74eef"
+    },
+    "tests/references-visuelles/README.md": {
+      "tailleOctets": 908,
+      "sha256": "0dc7b6aa5ada188141c9958557a24b57e06e23176eb3792e38a3267d3b564248"
+    },
+    "tests/references-visuelles/windows-chromium/administration-bureau.png": {
+      "tailleOctets": 44501,
+      "sha256": "8625ffc3d6eb67f8afc116be4ee05e076a00e59ebd9c2cfcddb9e36297464daa"
+    },
+    "tests/references-visuelles/windows-chromium/bureau-accueil.png": {
+      "tailleOctets": 1296783,
+      "sha256": "7f2b7b1ea6a04d317e1ac4c2d421b909b16f86dae65883a025e7b37c0105111d"
+    },
+    "tests/references-visuelles/windows-chromium/bureau-bilan.png": {
+      "tailleOctets": 91512,
+      "sha256": "70086c256e182601f717ae7a3f4edf3f6ac4523974d8c11b74c828758a19cba8"
+    },
+    "tests/references-visuelles/windows-chromium/bureau-choix-mode.png": {
+      "tailleOctets": 65237,
+      "sha256": "349b22eb9654efb74357c9e921fe5eb4a64c62be1552c949fba8b19d2efd4e3f"
+    },
+    "tests/references-visuelles/windows-chromium/bureau-correction-fausse.png": {
+      "tailleOctets": 92756,
+      "sha256": "bf70b6037fc0de34796f07bf1cd39f85c1190eb3060bab6a122baa8ba44b8073"
+    },
+    "tests/references-visuelles/windows-chromium/bureau-entrainement.png": {
+      "tailleOctets": 72986,
+      "sha256": "8f63b368437b3cbf913635d5ea4f7c02b825ce229c3ac46c8175b5eea644af52"
+    },
+    "tests/references-visuelles/windows-chromium/bureau-parametres.png": {
+      "tailleOctets": 200732,
+      "sha256": "1440234fdb13ded1452255e5ec13feea2749f8d834b9cbaeb319e87248e6fba8"
+    },
+    "tests/references-visuelles/windows-chromium/bureau-parcours.png": {
+      "tailleOctets": 90686,
+      "sha256": "245c85570ef594a87ee0f7dfba4580b19dca2519507dbdec108274a8df2548f1"
+    },
+    "tests/references-visuelles/windows-chromium/bureau-progression.png": {
+      "tailleOctets": 73199,
+      "sha256": "46219f8d3c9066e46f9d277220f4bff8070342d80045ac34070e91d5c6513b49"
+    },
+    "tests/references-visuelles/windows-chromium/bureau-question-relier.png": {
+      "tailleOctets": 180711,
+      "sha256": "481a470e73e081e465a77a88d457412305513b76f7df5e5a7fd4f902093edf05"
+    },
+    "tests/references-visuelles/windows-chromium/empreintes.json": {
+      "tailleOctets": 4228,
+      "sha256": "39aab56e194dc17352f832a189a8451e7574f0774dce3cc16203416ea8ebe6fe"
+    },
+    "tests/references-visuelles/windows-chromium/mobile-accueil.png": {
+      "tailleOctets": 117066,
+      "sha256": "14f08a2217a73f298d40058cb20c7ec37372e4db4d3e3f4343ac5f49156b83cc"
+    },
+    "tests/references-visuelles/windows-chromium/mobile-bilan.png": {
+      "tailleOctets": 35276,
+      "sha256": "efd19ae4d1687556a3f5b612f6cf81362ed2b26c747ab66501d31385176529aa"
+    },
+    "tests/references-visuelles/windows-chromium/mobile-correction-fausse.png": {
+      "tailleOctets": 55124,
+      "sha256": "03c716803eb351a60cc3f284712b97905714ebd283b5b18b99de471fc0ed711a"
+    },
+    "tests/references-visuelles/windows-chromium/mobile-defi-chrono.png": {
+      "tailleOctets": 40609,
+      "sha256": "da5550a53d94a9aacf0de982a46d95dc6809923bcb06a8b5c443b8ea961a0857"
+    },
+    "tests/references-visuelles/windows-chromium/mobile-parcours.png": {
+      "tailleOctets": 45871,
+      "sha256": "7ff49d521c4c51e046a27e250e67203abde20bc4ad1442be9e58488befbb1bb2"
+    },
+    "tests/references-visuelles/windows-chromium/mobile-progression.png": {
+      "tailleOctets": 42310,
+      "sha256": "37d0bdb116ad5400ed06f8b8fb3fb6492d9225a6e308f57bd2a9bc7fe381b1c7"
+    },
+    "tests/references-visuelles/windows-chromium/mobile-question-ordre.png": {
+      "tailleOctets": 90663,
+      "sha256": "6b8fd67bf5604bf2d5a9be303ba3a0e1f6f0df048f0495e2b5739eb0f75bdac7"
+    },
+    "tests/references-visuelles/windows-chromium/portable-parcours.png": {
+      "tailleOctets": 62900,
+      "sha256": "d5cbad6cd26b2c0abe88bb1753bc8bb491e56e70373b67129b002185fb3e1b36"
+    },
+    "tests/references-visuelles/windows-chromium/portable-question-relier.png": {
+      "tailleOctets": 147967,
+      "sha256": "14bc4bfec24d3f7dc7f32ad2b17df4792acc4dfe71d78cff9031f896487910fb"
+    },
+    "tests/test_validation_donnees.py": {
+      "tailleOctets": 2672,
+      "sha256": "d5495634f58c9b1424113aa482203b92a983de1c71d943509d1c159cc536aa25"
+    },
+    "tests/verifier_interface.py": {
+      "tailleOctets": 43833,
+      "sha256": "0c3e4b794ef34f2f3990bf44de8ebcac476e9afe3257049f17547547e7171209"
+    },
+    "tests/verifier_regression_visuelle.py": {
+      "tailleOctets": 11513,
+      "sha256": "2e5379487b40c12194689602e852638770ab7cac906d26a78a559ab9a4975de2"
+    },
+    "tests/verifier_v1.py": {
+      "tailleOctets": 32289,
+      "sha256": "96466c6fde04a0fcfbde9e3bc26682a114c6401d98e612fa1b7dd927cc5bf382"
+    }
+  }
+}

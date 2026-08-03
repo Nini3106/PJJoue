@@ -1,0 +1,937 @@
+/* Accent discret : suit la largeur réelle de la carte
+   sans chevaucher le titre. */
+#question .question::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 22px;
+    right: 22px;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: var(--couleur-etape-active);
+    pointer-events: none;
+}
+/* Le titre garde exactement sa place existante.
+   On lui donne seulement un peu d'air par rapport à l'accent. */
+#question .question > #enonceQuestion {
+    padding-top: 6px;
+}
+/* Les corrections et indices restent dans la même carte,
+   avec une légère distinction visuelle seulement. */
+#question .question #zoneCorrection:not(.masque),
+#question .question #zoneIndice:not(.masque) {
+    border-radius: 14px;
+}
+/* Aucun mode n'est contraint en hauteur. */
+/* Mobile : rayon plus compact, sans toucher à la logique interne. */
+@media (max-width:760px) {
+    #question .question::before {
+        left: 14px;
+        right: 14px;
+    }
+}
+/* Respect de la réduction des animations. */
+@media (prefers-reduced-motion:reduce) {
+    #question .question {
+        scroll-behavior: auto;
+    }
+}
+/* Carte de question : la ligne colorée représente le tronçon de route actif. */
+#question .question-carte::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 4px;
+    border-radius: 0;
+    background: var(--couleur-etape-active);
+    pointer-events: none;
+    left: 0;
+    right: 0;
+}
+#question .question-carte.question-apparition {
+    animation: arriveeQuestion .18s ease-out both;
+}
+@keyframes arriveeQuestion {
+    from { opacity: .72; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Une réussite autonome allume un jalon sur la route. */
+#question .question-carte.jalon-valide::after {
+    content: "✓";
+    position: absolute;
+    z-index: 3;
+    top: 14px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 2px solid #d8ffe9;
+    border-radius: 50%;
+    color: #082f5f;
+    background: #38d39f;
+    box-shadow: 0 0 0 5px rgba(56,211,159,.14);
+    font-weight: 950;
+    animation: allumageJalon .22s ease-out both;
+}
+@keyframes allumageJalon {
+    from { opacity: 0; transform: scale(.72); }
+    to { opacity: 1; transform: scale(1); }
+}
+/* Le titre reste indépendant de la zone de réponses */
+/* Les badges/consignes restent dans la carte mais ne créent pas de grand vide */
+/* La zone de réponse occupe exactement la largeur disponible */
+/* Tous les modes complexes restent libres */
+/* Les colonnes / éléments ne doivent jamais dépasser */
+#question .question-carte .association-colonne,
+#question .question-carte .association-colonne button,
+#question .question-carte .classement-element,
+#question .question-carte .ordre-liste button {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+/* Validation intégrée dans la carte */
+/* Indice et correction à l'intérieur de la carte */
+#question .question-carte #zoneIndice,
+#question .question-carte #zoneCorrection {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    margin-top: clamp(14px,2vh,20px);
+    border-radius: 14px;
+}
+/* Les jokers et la navigation sont volontairement hors de la carte */
+#question .suivant-ligne {
+    margin-top: 14px;
+}
+/* Relier : deux colonnes tant que l'espace le permet */
+@media (min-width:761px) {
+    #question .question-carte .association-panneau {
+        grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    }
+}
+/* Mobile : tous les modes peuvent s'empiler */
+/* Structure de la question : la carte s’arrête avant les jokers. */
+#question > .question-conteneur > #zoneIndice,
+#question > .question-conteneur > #zoneCorrection {
+    width: 100%;
+    box-sizing: border-box;
+}
+/* Espacements de la carte de question. */
+/* Le titre ne doit jamais toucher la bordure supérieure ou latérale */
+/* La zone des badges/consignes respire aussi */
+/* Les réponses ne vont plus jusqu'aux bords de la carte */
+/* Un peu d'air supplémentaire entre les propositions */
+#question .question-carte #zoneReponses.reponses {
+    gap: clamp(12px,1.7vh,18px);
+}
+/* Choix simples / multiples : éviter l'effet "collé au cadre" */
+#question .question-carte .reponse {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    padding: clamp(13px,1.7vh,17px)
+    clamp(16px,1.8vw,22px);
+    border-radius: 15px;
+}
+/* Modes complexes : même retrait visuel à gauche et à droite */
+/* La barre jaune ne doit plus donner l'impression d'écraser le titre */
+/* Mobile : garder de l'air sans gaspiller la largeur */
+@media (max-width:760px) {
+    #question .question-carte::before {
+        left: 0;
+        right: 0;
+    }
+/* Rythme vertical de la carte de question. */
+/* Le titre descend nettement sous la bordure jaune */
+/* Les réponses gardent une vraie zone libre avant le bas de la carte */
+/* Tous les modes complexes bénéficient du même espace inférieur */
+/* Les zones de validation ou d'action ne doivent jamais coller au bord bas */
+/* Les blocs de consigne/validation générés par certains modes respirent aussi */
+/* Mobile : garder le principe sans exagérer la hauteur */
+    #question .question-carte #enonceQuestion {
+        margin-top: 8px;
+        margin-bottom: 24px;
+        padding-inline: 2px;
+        text-align: left;
+    }
+    #question .question-carte .ordre-liste, #question .question-carte .ecrite-activite {
+        margin-bottom: 28px;
+    }
+}
+/* Jokers centrés dans la largeur de la question. */
+/* La navigation occupe la même ligne sans déplacer les jokers */
+/* Les boutons restent cliquables malgré la couche de navigation */
+/* Même hauteur visuelle pour navigation et jokers */
+/* À droite, Passer et Question suivante peuvent cohabiter */
+#question .question-commande-ligne > .suivant-ligne > div, #question .question-commande-ligne > .suivant-ligne .droite {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+/* Mobile : deux lignes pour éviter les collisions */
+/* Barre de commandes répartie en trois zones. */
+#question .question-commande-ligne {
+    column-gap: 18px;
+    min-height: 48px;
+    width: 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: minmax(190px,1fr) auto minmax(300px,1fr);
+    align-items: center;
+    gap: 16px;
+    margin-top: 18px;
+    padding-top: 0;
+    border: 0;
+    box-shadow: none;
+}
+#question .question-commande-ligne > .jokers {
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+    pointer-events: auto;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+#question .question-commande-ligne > .suivant-ligne {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+    display: contents;
+    position: static;
+    inset: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+#question .question-commande-ligne > .suivant-ligne button {
+    pointer-events: auto;
+    position: relative;
+    z-index: 2;
+}
+#question .question-commande-ligne .suivant-ligne button {
+    min-height: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+@media (max-width:760px) {
+    #question .question-commande-ligne .joker,
+  #question .question-commande-ligne .suivant-ligne button {
+        height: auto;
+        min-height: 42px;
+    }
+}
+/* Commande permettant de rejouer une question ratée. */
+#question .reessayer-question-bouton {
+    min-height: 44px;
+    padding: 10px 22px
+}
+/* Alignement de la correction sur la carte de question. */
+#question .question-conteneur > #zoneCorrection {
+    width: 100%;
+    max-width: none;
+    margin: 16px 0 0;
+    padding: clamp(22px,2.8vw,32px);
+    box-sizing: border-box;
+    border-radius: 22px;
+}
+#question #zoneCorrection .reessayer-question-bouton {
+    min-height: 44px;
+    padding: 10px 22px;
+    margin: 0;
+    flex: 0 0 auto;
+    align-self: center;
+}
+/* Détails visuels de la correction. */
+/* 1. La carte de correction / bonne réponse prend la même largeur
+      horizontale que la carte de question. */
+/* 2. Le bouton "Rejouer la question" garde la même respiration
+      intérieure que le bouton de validation. */
+/* 3. Même respiration verticale :
+      le texte de question est éloigné du haut de la carte
+      comme le bouton Valider l'est du bas. */
+#question #enonceQuestion {
+    color: #fff;
+    letter-spacing: -.018em;
+    font-weight: 850;
+    font-size: clamp(
+    1.12rem,
+    calc(1.82rem * var(--densite-question)),
+    2rem
+  )!important;
+    margin-top: 0;
+    padding-top: 0;
+    margin: 0 auto 18px;
+    padding: 0 12px;
+    line-height: 1.28;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 28px;
+    padding-right: 28px;
+    text-align: center;
+    text-wrap: wrap;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+/* On conserve une vraie marge sous la zone de réponse / validation
+   sans modifier la disposition des modes. */
+#question #zoneReponses {
+    margin-bottom: 24px;
+    align-content: start;
+    justify-content: start;
+}
+/* Position de l’explication sous les jokers. */
+#question #zoneCorrection:not(.masque) {
+    padding: clamp(24px,2.8vh,32px)
+    clamp(26px,3.4vw,44px);
+}
+/* Le bouton Rejouer reste bien à l'intérieur avec de l'air en bas */
+/* Bouton Rejouer intégré à l’en-tête de correction. */
+/* Ligne de tête : état de réponse à gauche, Rejouer à droite */
+/* Le bouton Rejouer ne descend plus en bas de la carte */
+/* Toute éventuelle trace résiduelle est masquée par sécurité */
+/* En-tête de la correction. */
+#question #zoneCorrection .correction-entete h3 {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+#question #zoneCorrection .correction-entete .reessayer-question-bouton {
+    flex: 0 0 auto;
+    margin: 0;
+    align-self: center;
+}
+#question #zoneCorrection details, #question #zoneCorrection summary {
+    display: none !important;
+}
+/* La correction recouvre toute la carte, comme dans la V1 de référence. */
+#question #zoneCorrection {
+    --alignement-correction: 28px;
+    --axe-correction: 28px;
+}
+#question .question-carte > #zoneCorrection,
+#question .question > #zoneCorrection {
+    position: absolute;
+    inset: 0;
+    z-index: 40;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius: inherit;
+    background: linear-gradient(180deg,rgba(8,48,92,.998) 0%,rgba(6,39,76,.998) 100%);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+#question .question-carte > #zoneCorrection:not(.masque),
+#question .question > #zoneCorrection:not(.masque) {
+    display: block;
+    padding: 0;
+}
+#question #zoneCorrection .correction-entete {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-sizing: border-box;
+    padding: 24px var(--axe-correction) 18px;
+    margin: 0;
+}
+#question #zoneCorrection .correction-fermer {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #0b3f74;
+    border: 1px solid rgba(126,188,242,.55);
+    color: #ffc94f;
+    box-shadow: none;
+    border-radius: 12px;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+}
+/* Calque de correction dans la carte. */
+#question .question-carte {
+    border: 1px solid var(--bordure-carte);
+    border-radius: 20px;
+    background: var(--surface-carte-profonde);
+    box-shadow: var(--ombre-carte);
+    margin-bottom: 0;
+    padding: clamp(26px,3vh,36px)
+    clamp(26px,3.4vw,44px)
+    clamp(24px,2.8vh,34px);
+    width: 100%;
+    max-width: none;
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    overflow: hidden;
+    height: 390px;
+    min-height: 390px;
+    max-height: 390px;
+    padding-top: 26px;
+    padding-bottom: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#question #zoneCorrection.masque {
+    display: none;
+}
+#question #zoneCorrection .correction-entete-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex: 0 0 auto;
+}
+#question #zoneCorrection .correction-separateur {
+    width: auto;
+    height: 1px;
+    margin: 0 28px 20px;
+    background: rgba(255,255,255,.24);
+    margin-left: var(--axe-correction);
+    margin-right: var(--axe-correction);
+}
+#question #zoneCorrection > :last-child {
+    margin-bottom: 28px;
+}
+@media (max-width:760px) {
+    #question #zoneCorrection .correction-separateur {
+        margin: 0 18px 18px;
+    }
+}
+/* Présentation du calque d’explication. */
+/* Fond beaucoup plus opaque pour ne plus laisser la question distraire la lecture. */
+/* Tout le contenu textuel de la correction est franchement aligné à gauche. */
+/* Le titre commence sur le même axe visuel que le contenu. */
+/* Uniformiser précisément les retraits à gauche et à droite. */
+/* Les listes gardent leurs puces sans créer un retrait excessif. */
+#question #zoneCorrection > ul {
+    margin-left: 28px;
+    margin-right: 28px;
+    padding-right: 0;
+    padding-left: 20px;
+}
+/* Mobile : même alignement avec retrait plus compact. */
+@media (max-width:760px) {
+    #question #zoneCorrection .correction-entete {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        padding: 18px 18px 14px;
+        gap: 12px;
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+    #question #zoneCorrection > .encouragement, #question #zoneCorrection > p {
+        margin-left: 18px;
+        margin-right: 18px;
+    }
+    #question #zoneCorrection > ol {
+        margin-left: 18px;
+        margin-right: 18px;
+        padding-left: 18px;
+    }
+}
+/* Alignement horizontal du contenu de correction. */
+/* Axe horizontal unique pour tout le contenu de la correction */
+/* Le titre, le message, la réponse attendue et l'explication
+   commencent tous exactement au même endroit. */
+#question #zoneCorrection ul {
+    margin-left: var(--alignement-correction);
+    margin-right: var(--alignement-correction);
+    padding-left: 0;
+    padding-right: 0;
+    text-align: left;
+    box-sizing: border-box;
+}
+/* L’en-tête porte son propre espacement intérieur. */
+/* Éléments générés par les différents modes de réponse */
+#question #zoneCorrection .ordre-correction {
+    margin-left: var(--alignement-correction);
+    margin-right: var(--alignement-correction);
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+    text-align: left;
+}
+/* Les enfants internes ne rajoutent pas un deuxième décalage. */
+#question #zoneCorrection .ordre-correction > * {
+    margin-left: 0;
+    margin-right: 0;
+}
+/* La barre suit le même axe */
+/* Mobile */
+/* Système visuel des corrections et des jokers. */
+/* AXE UNIQUE : titre et tous les contenus de correction commencent à 28px. */
+#question #zoneCorrection > p {
+    margin-left: var(--alignement-correction);
+    margin-right: var(--alignement-correction);
+    padding-left: 0;
+    padding-right: 0;
+    text-align: left;
+}
+/* Résultat : vert si bon, rouge si faux. */
+#question #zoneCorrection.correction-correcte {
+    border-left: 5px solid #38d39f;
+    animation: arriveeCorrection .18s ease-out both;
+}
+#question #zoneCorrection.correction-incorrecte {
+    border-left: 5px solid #ef5b62;
+    animation: arriveeCorrection .18s ease-out both;
+}
+@keyframes arriveeCorrection {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Langue au chat : rouge, même si la réponse révélée est correcte. */
+#question #zoneCorrection.langue-chat-calque {
+    border-left: 5px solid #ef5b62;
+}
+/* Indice présenté en calque dans la carte. */
+#question #zoneIndice.masque {
+    display: none;
+}
+#question #zoneIndice:not(.masque) {
+    display: block;
+}
+#question #zoneIndice .correction-entete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 24px 28px 18px;
+    margin: 0;
+}
+#question #zoneIndice .correction-entete h3 {
+    margin: 0;
+}
+#question #zoneIndice .correction-separateur {
+    height: 1px;
+    margin: 0 28px 20px;
+    background: rgba(255,255,255,.24);
+}
+#question #zoneIndice .encouragement {
+    margin: 0 28px 28px;
+    text-align: left;
+}
+/* Bouton de fermeture assorti à la carte. */
+#question #zoneIndice .indice-fermer {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #0b3f74;
+    border: 1px solid rgba(126,188,242,.55);
+    color: #ffc94f;
+    box-shadow: none;
+    border-radius: 12px;
+    font-size: 28px;
+    line-height: 1;
+}
+/* Mode Relier : retour explicite aux fils jaunes. */
+@media (max-width:760px) {
+    #question #zoneIndice .correction-entete {
+        padding: 18px 18px 14px;
+    }
+    #question #zoneIndice .correction-separateur {
+        margin: 0 18px 18px;
+    }
+    #question #zoneIndice .encouragement {
+        margin: 0 18px 22px;
+    }
+}
+/* Axe horizontal unique de la correction. */
+/* L’en-tête et le corps utilisent exactement le même retrait. */
+#question #zoneCorrection .correction-corps {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px var(--axe-correction) 28px;
+    margin: 0;
+    text-align: left;
+}
+/* Les blocs du corps héritent de l’axe défini par leur conteneur. */
+#question #zoneCorrection .correction-corps > * {
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+    text-align: left;
+}
+/* Les paragraphes gardent seulement leurs marges verticales. */
+#question #zoneCorrection .correction-corps > p {
+    margin-top: 0;
+    margin-bottom: 18px;
+    padding-left: 0;
+    padding-right: 0;
+}
+/* C'est CE bloc qui causait le décalage.
+   Il n'a désormais plus aucun retrait horizontal propre. */
+#question #zoneCorrection .correction-corps .detaillee-correction {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 18px;
+    padding: 0;
+    box-sizing: border-box;
+    background: transparent;
+}
+/* Titre : même axe que "Ta réponse" et "Explication". */
+#question #zoneCorrection .correction-corps .detaillee-correction-titre {
+    width: 100%;
+    margin: 0 0 12px;
+    padding: 0;
+    text-align: left;
+}
+/* Liste : même axe également. */
+#question #zoneCorrection .correction-corps .detaillee-correction-liste {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* Les lignes peuvent conserver leur joli fond,
+   mais sans déplacer le titre ou le bloc entier. */
+#question #zoneCorrection .correction-corps .detaillee-correction-ligne,
+#question #zoneCorrection .correction-corps .correction-conserver,
+#question #zoneCorrection .correction-corps .correction-note {
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+/* Les modes avec flèches restent alignés sur le même départ. */
+#question #zoneCorrection .correction-corps .ordre-correction {
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+@media (max-width:760px) {
+    #question #zoneCorrection {
+        --alignement-correction: 18px;
+        --axe-correction: 18px;
+    }
+    #question #zoneCorrection .correction-corps {
+        padding-top: 18px;
+        padding-bottom: 22px;
+    }
+}
+/* La zone de réponse conserve le comportement de la V1 de référence. */
+#question .question-carte #zoneReponses,
+#question .question #zoneReponses {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: calc(100% - 54px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 0;
+    margin-bottom: 0;
+    align-self: stretch;
+    align-content: start;
+    box-sizing: border-box;
+}
+#question #zoneReponses.reponses:not(.activite-reponses) {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    grid-auto-rows: min-content;
+    gap: 12px;
+}
+#question .activite-reponses,
+#question .elimination-grille,
+#question .association-panneau,
+#question .classement-liste,
+#question .ordre-liste {
+    align-content: start;
+}
+/* Dimensions des cartes de question. */
+/* Une hauteur stable pour toutes les questions sur un même écran. */
+/* Titre et consigne restent fixes en haut. */
+#question .question #enonceQuestion {
+    flex: 0 0 auto;
+}
+/* La zone de réponse absorbe toute la place restante.
+   Si elle est trop longue, elle défile à l'intérieur de la carte. */
+/* Les activités longues ne doivent plus agrandir la carte. */
+#question .question .ecrite-activite {
+    max-height: none;
+    overflow: visible;
+    margin-bottom: 10px;
+}
+/* Overlay de correction et overlay Indice :
+   exactement la même taille que la carte, sans la faire bouger. */
+#question .question-carte > #zoneIndice {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg,#0b3f74 0%,#082f5b 100%);
+    border-left: 5px solid #2d77b8;
+    z-index: 30;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    height: 100%;
+    max-height: 100%;
+}
+/* Barre de défilement discrète. */
+#question #zoneIndice {
+    scrollbar-width: thin;
+    scrollbar-color: #4c8bc4 rgba(5,43,83,.30);
+}
+#question .question-carte #zoneReponses::-webkit-scrollbar,
+#question .question #zoneReponses::-webkit-scrollbar,
+#question #zoneCorrection::-webkit-scrollbar,
+#question #zoneIndice::-webkit-scrollbar {
+    width: 9px;
+}
+#question .question-carte #zoneReponses::-webkit-scrollbar-track,
+#question .question #zoneReponses::-webkit-scrollbar-track,
+#question #zoneCorrection::-webkit-scrollbar-track,
+#question #zoneIndice::-webkit-scrollbar-track {
+    background: rgba(5,43,83,.30);
+    border-radius: 10px;
+}
+#question .question-carte #zoneReponses::-webkit-scrollbar-thumb,
+#question .question #zoneReponses::-webkit-scrollbar-thumb,
+#question #zoneCorrection::-webkit-scrollbar-thumb,
+#question #zoneIndice::-webkit-scrollbar-thumb {
+    background: #4c8bc4;
+    border-radius: 10px;
+}
+/* Desktop plus bas : la carte reste stable mais se réduit pour éviter
+   que la page entière se mette à défiler. */
+/* Mobile : format fixe adapté à l'écran, toujours identique entre questions. */
+/* Position de l’énoncé et de la validation. */
+/* La question reste stable au-dessus de la carte. */
+/* La carte ne contient plus le titre : on peut réduire sa hauteur
+   tout en gardant un format identique entre les questions. */
+/* Les badges/consignes restent en haut, avec un espace raisonnable. */
+/* La zone réponses prend le reste.
+   Scroll uniquement si le contenu réel dépasse. */
+/* Les contenus courts n'ont pas de barre visible. */
+#question .question-carte #zoneReponses:not(:hover),
+#question .question #zoneReponses:not(:hover) {
+    scrollbar-color: transparent transparent;
+}
+#question .question-carte #zoneReponses:hover,
+#question .question #zoneReponses:hover {
+    scrollbar-color: #4c8bc4 rgba(5,43,83,.30);
+}
+/* Validation : rapprochée du mode de réponse.
+   Plus de grande zone vide sous le bouton. */
+#question .question .activite-valider,
+#question .question-carte .ecrite-zone .principal,
+#question .question .ecrite-zone .principal {
+    margin-top: 14px;
+    margin-bottom: 0;
+}
+/* Les conteneurs qui entourent Valider ne rajoutent pas de marge inutile. */
+/* Modes complexes : on économise l'espace vertical. */
+#question .question .activite-consigne {
+    margin-bottom: 14px;
+}
+/* Overlay de correction / indice : couvre uniquement la carte de réponses. */
+/* Desktop bas : garder la carte dans le viewport. */
+@media (max-height:780px) and (min-width:761px) {
+    #question .question-carte,
+  #question .question {
+        height: 360px;
+        min-height: 360px;
+        max-height: 360px;
+    }
+    #question #enonceQuestion {
+        margin-bottom: 14px;
+    }
+}
+/* Mobile */
+/* Validation unique et choix compacts. */
+/* Un seul vrai bouton Valider, à gauche de Passer. */
+#question #boutonValider {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    height: 42px;
+    margin: 0;
+    padding: 0 22px;
+    white-space: nowrap;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    min-width: 190px;
+}
+#question #boutonValider.masque {
+    display: none;
+}
+/* Groupe de droite : Valider puis Passer / Question suivante. */
+#question .navigation-question-groupe {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+/* Une seule ligne propre sous la carte. */
+#question #boutonQuestionPrecedente {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+}
+#question .question-commande-ligne .navigation-question-groupe {
+    justify-self: end;
+    grid-column: 3;
+    grid-row: 1;
+}
+#question .question-commande-ligne #boutonQuestionPrecedente,
+#question .question-commande-ligne #boutonPasserQuestion,
+#question .question-commande-ligne #boutonQuestionSuivante,
+#question .question-commande-ligne #boutonValider {
+    height: 42px;
+    min-height: 42px;
+    align-self: center;
+}
+/* ---------------------------------------------------------
+   Les choix courts ne doivent plus s'étirer verticalement.
+   --------------------------------------------------------- */
+/* La zone réponses n'étire pas artificiellement ses enfants. */
+/* Choix simple : hauteur naturelle selon le texte. */
+/* Les cartes de réponse gardent seulement une hauteur confortable minimale. */
+#question #zoneReponses .reponse {
+    min-height: 58px;
+    height: auto;
+    padding: 14px 16px;
+    align-items: center;
+    background: var(--surface-carte);
+    border-color: var(--bordure-carte);
+}
+#question #zoneReponses .reponse:hover {
+    border-color: var(--couleur-etape-active,var(--jaune-interface));
+    background: #17558f;
+}
+#question #zoneReponses .reponse.selectionne,
+#question #zoneReponses .reponse[aria-checked="true"] {
+    border-color: var(--couleur-etape-active,var(--jaune-interface));
+    background: #174f88;
+    box-shadow: inset 4px 0 0 var(--couleur-etape-active,var(--jaune-interface));
+}
+/* Sélection multiple / éliminer : même logique compacte. */
+#question .multiple-choix,
+#question .elimination-choix {
+    min-height: 58px;
+    height: auto;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+/* Relier / Classer / Ordre : pas d'étirement vertical des lignes. */
+#question .association-colonne button, #question .classement-element {
+    min-height: 52px;
+    height: auto;
+}
+/* L'espace libre reste en bas de la carte au lieu d'être réparti entre les choix. */
+@media (max-width:760px) {
+    #question #zoneReponses.reponses:not(.activite-reponses) {
+        grid-template-columns: 1fr;
+    }
+    #question .question-commande-ligne {
+        display: flex !important;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 0;
+    }
+    #question .question-commande-ligne > .jokers {
+        order: 1;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+/* Centrage vertical des modes de jeu. */
+/* La carte distribue l'espace libre autour du bloc de jeu,
+   au lieu de repousser tout le vide vers le bas. */
+/* La consigne reste liée visuellement aux réponses. */
+#question .question-carte #reperesQuestion {
+    width: min(100%,960px);
+    margin: 0 auto
+    clamp(18px,2.2vh,26px);
+    padding-inline: clamp(4px,.8vw,10px);
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+/* Les réponses prennent seulement la hauteur dont elles ont besoin.
+   Elles peuvent grandir jusqu'à la place disponible puis scroller si nécessaire. */
+/* Les modes courts gardent leur hauteur naturelle. */
+#question .ecrite-activite {
+    flex-grow: 0;
+    align-content: start;
+}
+/* Aucun mode ne force artificiellement la hauteur complète de la carte. */
+#question #zoneReponses > *,
+#question .activite-reponses > * {
+    flex-grow: 0;
+}
+/* Sur mobile, même principe de centrage. */
+@media (max-width:760px) {
+    #question .question-carte {
+        padding: 34px 16px 32px;
+        border-radius: 18px;
+        height: auto;
+        min-height: 420px;
+        max-height: none;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        justify-content: center;
+    }
+    #question .question #zoneReponses {
+        padding-right: 6px;
+        max-height: none;
+    }
+/* Énoncé sur toute la largeur de la carte. */
+/* La question utilise exactement la même largeur utile que la carte. */
+/* Évite qu'un signe de ponctuation isolé parte inutilement à la ligne. */
+/* Mobile : même principe avec un retrait plus compact. */
+    #question #enonceQuestion {
+        margin-bottom: 14px;
+        padding: 0 18px;
+        text-align: left;
+    }
+}
+/* Retour à la ligne naturel des énoncés. */

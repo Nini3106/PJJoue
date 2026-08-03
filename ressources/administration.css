@@ -1,0 +1,167 @@
+/* Administration locale de PJJoue V1. */
+body {
+  margin: 0;
+  color: #f7f8ff;
+  background: #0a2a52;
+  font-family: system-ui, sans-serif;
+}
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 28px;
+}
+.barre-outils {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 0;
+  background: #0a2a52;
+}
+button {
+  padding: 10px 14px;
+  border: 1px solid #6f91bb;
+  border-radius: 10px;
+  font: inherit;
+  cursor: pointer;
+}
+input,
+select {
+  padding: 10px;
+  border: 1px solid #8fb2d9;
+  border-radius: 8px;
+  color: #fff;
+  background: #092b54;
+  font: inherit;
+}
+textarea {
+  min-height: 90px;
+  padding: 10px;
+  border: 1px solid #8fb2d9;
+  border-radius: 8px;
+  color: #fff;
+  background: #092b54;
+  font: inherit;
+}
+.carte-question {
+  margin: 14px 0;
+  padding: 18px;
+  border: 1px solid #5c86b7;
+  border-radius: 16px;
+  background: #123f78;
+}
+.grille-question {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.pleine-largeur {
+  grid-column: 1 / -1;
+}
+label {
+  display: grid;
+  gap: 6px;
+}
+small {
+  color: #c6d8ef;
+}
+.etat-administration {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #173b68;
+}
+.fenetre-administration {
+  width: min(520px, calc(100vw - 36px));
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 24px;
+  color: #fff;
+  background: transparent;
+}
+.fenetre-administration::backdrop {
+  background: rgba(2, 19, 42, .76);
+  backdrop-filter: blur(4px);
+}
+.fenetre-administration-panneau {
+  position: relative;
+  padding: 34px 34px 30px;
+  border: 1px solid rgba(142, 199, 251, .42);
+  border-radius: 24px;
+  background: radial-gradient(circle at 88% 10%, rgba(86, 164, 230, .15), transparent 32%), linear-gradient(160deg, #15518e, #082f60);
+  box-shadow: 0 24px 70px rgba(0, 19, 52, .46);
+}
+.fenetre-administration-icone {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 18px;
+  place-items: center;
+  border: 1px solid rgba(255, 200, 87, .55);
+  border-radius: 18px;
+  color: #ffc857;
+  background: rgba(255, 200, 87, .08);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+.fenetre-administration h2 {
+  margin: 0 44px 10px 0;
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1.15;
+}
+.fenetre-administration p {
+  margin: 0;
+  color: #d7e7f7;
+  line-height: 1.55;
+}
+.fenetre-administration-fermer {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid rgba(255, 200, 87, .62);
+  border-radius: 13px;
+  color: #ffc857;
+  background: #0b3c72;
+  font-size: 1.45rem;
+}
+.fenetre-administration-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+}
+.fenetre-administration-actions button {
+  min-height: 44px;
+  padding: 0 20px;
+  color: #fff;
+  background: #0b3c72;
+}
+.fenetre-administration-actions .fenetre-administration-principal {
+  border-color: #ffebae;
+  color: #083566;
+  background: linear-gradient(180deg, #ffe286, #ffc83d);
+  font-weight: 900;
+}
+@media (max-width: 720px) {
+  .grille-question {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .fenetre-administration-panneau {
+    padding: 28px 22px 24px;
+  }
+  .fenetre-administration-actions {
+    flex-direction: column-reverse;
+  }
+  .fenetre-administration-actions button {
+    width: 100%;
+  }
+}

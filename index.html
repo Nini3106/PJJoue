@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="fr">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="no-referrer" name="referrer"/>
+  <meta content="dark" name="color-scheme"/>
+  <meta content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" http-equiv="Content-Security-Policy"/>
+  <title>
+   PJJoue — Découvrir et comprendre la PJJ
+  </title>
+  <link rel="stylesheet" href="ressources/styles/00-fondations-et-composants.css">
+  <link rel="stylesheet" href="ressources/styles/10-parcours-principal.css">
+  <link rel="stylesheet" href="ressources/styles/20-accueil-et-question-principale.css">
+  <link rel="stylesheet" href="ressources/styles/30-revision-parcours-et-parametres.css">
+  <link rel="stylesheet" href="ressources/styles/40-progression-et-erreurs.css">
+  <link rel="stylesheet" href="ressources/styles/50-carte-question-et-correction.css">
+  <link rel="stylesheet" href="ressources/styles/60-parcours-modes-et-chronometre.css">
+  <link rel="stylesheet" href="ressources/styles/70-celebrations-bilan-et-fenetres.css">
+  <link rel="stylesheet" href="ressources/styles/80-finitions-de-l-interface.css">
+  <link rel="stylesheet" href="ressources/styles/90-responsive-et-etats-finaux.css">
+ </head>
+ <body>
+  <a class="passer-lien" href="#contenuPrincipal">
+   Aller au contenu principal
+  </a>
+  <div aria-atomic="true" aria-live="polite" class="lecteur-ecran-seulement" id="statutAccessibilite">
+  </div>
+  <header class="entete">
+   <div class="marque">
+    <b>
+     <span>PJJ</span>oue
+    </b>
+    <span>
+     Découvrir et comprendre la PJJ
+    </span>
+   </div>
+   <button aria-controls="menuPrincipal" aria-expanded="false" aria-label="Ouvrir le menu" class="menu-mobile-bouton" id="boutonMenuMobile" type="button">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+   </button>
+   <nav class="navigation" id="menuPrincipal">
+    <button data-ecran="accueil">
+     Accueil
+    </button>
+    <button data-ecran="choixMode">
+     Jouer
+    </button>
+    <button data-ecran="erreurs">
+     Réviser
+    </button>
+    <button data-ecran="progression">
+     Progression
+    </button>
+    <button data-ecran="parametres">
+     Paramètres
+    </button>
+   <button aria-label="Désactiver le son" aria-pressed="true" class="rapide son-commande" id="boutonSonRapide" type="button">
+    <svg aria-hidden="true" class="son-icone" viewbox="0 0 24 24">
+     <path d="M4 10h3l4-3v10l-4-3H4z">
+     </path>
+     <path class="son-onde" d="M14 9a4 4 0 0 1 0 6M16.5 6.5a7.5 7.5 0 0 1 0 11">
+     </path>
+    </svg>
+    <span class="son-texte">
+     Son activé
+    </span>
+   </button>
+   </nav>
+  </header>
+  <main class="conteneur" id="contenuPrincipal" tabindex="-1">
+   <div class="barre-actions-page">
+    <button class="discret global-retour masque" id="boutonRetourGlobal" type="button">
+     ← Retour
+    </button>
+    <button aria-label="Désactiver le son" aria-pressed="true" class="discret son-mobile son-commande" id="boutonSonMobile" type="button">
+     <svg aria-hidden="true" class="son-icone" viewbox="0 0 24 24">
+      <path d="M4 10h3l4-3v10l-4-3H4z"></path>
+      <path class="son-onde" d="M14 9a4 4 0 0 1 0 6M16.5 6.5a7.5 7.5 0 0 1 0 11"></path>
+     </svg>
+     <span class="son-texte">Son activé</span>
+    </button>
+   </div>
+   <section class="ecran actif" id="accueil">
+    <div class="lecteur-ecran-seulement">
+     <h1>
+      PJJoue — Entre dans l’univers de la PJJ
+     </h1>
+     <p>
+      Découvre la Protection judiciaire de la jeunesse, comprends son fonctionnement et progresse à ton rythme à travers un parcours structuré et interactif.
+     </p>
+     <ul>
+      <li>
+       10 étapes
+      </li>
+      <li>
+       150 questions
+      </li>
+      <li>
+       7 modes de jeu
+      </li>
+      <li>
+       1 évaluation
+      </li>
+     </ul>
+    </div>
+    <div class="accueil-presentation">
+     <img alt="" aria-hidden="true" class="accueil-presentation-image" src="ressources/panorama-accueil-calme.png"/>
+     <div class="accueil-contenu">
+      <div class="accueil-texte-image">
+       <p class="accueil-marque"><span>PJJ</span>oue</p>
+       <h1>Entre dans l’univers de la PJJ</h1>
+       <span aria-hidden="true" class="accueil-accent"></span>
+      </div>
+      <p class="accueil-introduction">Découvre la Protection judiciaire de la jeunesse, comprends son fonctionnement et progresse à ton rythme à travers un parcours structuré et interactif.</p>
+      <div class="accueil-actions">
+       <button class="accueil-presentation-zone-cliquable accueil-presentation-demarrer" data-ecran="choixMode" id="boutonAccueilPrincipal" type="button">Commencer <span aria-hidden="true">→</span></button>
+       <button class="accueil-presentation-zone-cliquable accueil-presentation-entrainement" data-ecran="entrainement" type="button">S’entraîner librement</button>
+      </div>
+      <ul class="accueil-statistiques" aria-label="Contenu du jeu">
+       <li>
+        <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-turquoise" viewBox="0 0 48 48"><path d="M6 10c7-2 13 0 18 5v25c-5-5-11-7-18-5zM42 10c-7-2-13 0-18 5v25c5-5 11-7 18-5z"/></svg>
+        <strong>10</strong><span>étapes</span>
+       </li>
+       <li>
+        <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-jaune" viewBox="0 0 48 48"><path d="M25 7c-9 0-16 6-16 14 0 4 2 8 5 10l-2 8 9-4h4c9 0 16-6 16-14S34 7 25 7z"/><path class="accueil-icone-detail" d="M21 18c0-3 2-5 5-5s5 2 5 5c0 4-5 4-5 8M26 31h.01"/></svg>
+        <strong>150</strong><span>questions</span>
+       </li>
+       <li>
+        <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-turquoise" viewBox="0 0 48 48"><path d="M14 15h20c4 0 7 3 8 8l2 10c1 5-5 8-8 4l-5-6H17l-5 6c-3 4-9 1-8-4l2-10c1-5 4-8 8-8z"/><path class="accueil-icone-detail" d="M15 21v8M11 25h8M33 22h.01M37 27h.01"/></svg>
+        <strong>7</strong><span>modes de jeu</span>
+       </li>
+       <li>
+        <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-violette" viewBox="0 0 48 48"><path d="M15 8h18v8c0 9-4 14-9 14s-9-5-9-14zM18 40h12M24 30v10M15 12H8v5c0 6 4 10 10 10M33 12h7v5c0 6-4 10-10 10"/></svg>
+        <strong>1</strong><span>évaluation</span>
+       </li>
+      </ul>
+     </div>
+    </div>
+   </section>
+   <section class="ecran" id="choixMode">
+    <div class="page-entete">
+     <h1>
+      Comment veux-tu jouer ?
+     </h1>
+     <p>
+      Découvre le parcours PJJ étape par étape ou entraîne-toi librement.
+     </p>
+    </div>
+    <div class="mode-grille">
+     <button class="mode-carte" id="boutonParcours">
+      <span aria-hidden="true" class="mode-icone mode-icone-programme">
+       <svg viewbox="0 0 64 64">
+        <path d="M8 14 23 9l18 6 15-5v40l-15 5-18-6-15 5z"></path>
+        <path d="M23 9v40M41 15v40"></path>
+        <path d="M14 39c7-10 13-4 18-12s11-6 17-3"></path>
+        <circle cx="14" cy="39" r="2.7"></circle>
+        <circle cx="49" cy="24" r="2.7"></circle>
+       </svg>
+      </span>
+      <span class="mode-titre">
+       Parcours PJJ
+      </span>
+      <span class="mode-texte">
+       Découvre les 10 étapes du parcours PJJ, étape par étape.
+      </span>
+      <div class="mode-details">
+       10 étapes · progression structurée
+      </div>
+      <span class="lancer">
+       Ouvrir le programme
+      </span>
+     </button>
+     <button class="mode-carte" id="boutonEntrainementLibre">
+      <span aria-hidden="true" class="mode-icone mode-icone-libre">
+       <svg viewbox="0 0 64 64">
+        <circle cx="32" cy="32" r="23"></circle>
+        <circle cx="32" cy="32" r="4"></circle>
+        <path d="m27 37 7-17 8-6-5 17-10 6Z"></path>
+        <path d="M32 5v5M59 32h-5M32 59v-5M5 32h5"></path>
+       </svg>
+      </span>
+      <span class="mode-titre">
+       Entraînement libre
+      </span>
+      <span class="mode-texte">
+       Mélange les activités du parcours PJJ pour vérifier ce que tu sais réellement mobiliser.
+      </span>
+      <div class="mode-details">
+       Thème · nombre de questions · mode
+      </div>
+      <span class="lancer">
+       Configurer l’entraînement
+      </span>
+     </button>
+    </div>
+   </section>
+   <section class="ecran" id="parcours">
+    <div class="programme-presentation chemin-programme-presentation">
+     <div class="programme-presentation-principal">
+      <h1 id="titreParcours">
+       Parcours PJJ
+      </h1>
+      <p id="sousTitreParcours">
+       Explore, comprends et progresse à ton rythme à travers 10 étapes clés.
+      </p>
+     </div>
+     <div class="programme-objectif programme-objectif-simple">
+      <div class="programme-objectif-interieur">
+       <span aria-hidden="true" class="objectif-icone">
+        <svg aria-hidden="true" class="objectif-cible-icone objectif-cible-reference" focusable="false" viewbox="0 0 96 96">
+         <circle cx="42" cy="54" r="30">
+         </circle>
+         <circle cx="42" cy="54" r="19">
+         </circle>
+         <circle cx="42" cy="54" r="8">
+         </circle>
+         <path class="fleche-tige" d="M42 54 L70 26">
+         </path>
+         <path class="fleche-entete" d="M70 26 L70 14 L82 14">
+         </path>
+         <path class="fleche-entete" d="M70 26 L81 25 L81 14">
+         </path>
+        </svg>
+       </span>
+       <span class="programme-objectif-texte">
+        Complète les 10 étapes sans joker pour accéder à l’évaluation finale.
+       </span>
+      </div>
+     </div>
+    </div>
+    <aside class="carnet-parcours" aria-labelledby="titreCarnetParcours">
+     <div class="carnet-parcours-contenu">
+      <div class="carnet-parcours-entete">
+       <div aria-hidden="true" class="carnet-parcours-icone">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"></circle><path d="m29 19-3 7-7 3 3-7z"></path><path d="M24 3v4M24 41v4M3 24h4M41 24h4"></path></svg>
+       </div>
+       <div>
+        <span class="carnet-parcours-surtitre">Carnet de voyage</span>
+        <h2 id="titreCarnetParcours">Ton aventure dans l’univers de la PJJ</h2>
+       </div>
+       <span class="carnet-parcours-titre" id="titreSymboliqueParcours">Nouveau départ</span>
+      </div>
+      <div class="carnet-outils">
+       <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
+        <span aria-hidden="true" class="parcours-chronometre-icone">
+         <svg viewBox="0 0 48 48"><circle cx="24" cy="26" r="16"></circle><path d="M24 26V16M24 26l7 5M19 5h10M24 5v5"></path></svg>
+        </span>
+        <div class="parcours-chronometre-texte">
+         <strong id="titreChronometreParcours">Défi chrono</strong>
+         <span>Ajoute du rythme à la prochaine étape si tu en as envie.</span>
+        </div>
+        <div class="parcours-chronometre-commandes">
+         <div class="parcours-bascule-groupe" id="choixChronometreParcours">
+          <button class="option-bouton actif" data-valeur="non" type="button">Libre</button>
+          <button class="option-bouton" data-valeur="oui" type="button">Chronométré</button>
+         </div>
+         <div class="parcours-secondes masque" id="secondesChronometreParcours">
+          <span>Secondes</span>
+          <div class="entrainement-secondes-groupe">
+           <button class="choix-bouton" data-secondes="5" type="button">5 s</button>
+           <button class="choix-bouton" data-secondes="10" type="button">10 s</button>
+           <button class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
+           <button class="choix-bouton" data-secondes="20" type="button">20 s</button>
+           <button class="choix-bouton" data-secondes="25" type="button">25 s</button>
+           <button class="choix-bouton" data-secondes="30" type="button">30 s</button>
+          </div>
+         </div>
+        </div>
+       </section>
+       <section class="carnet-defi-de" aria-labelledby="titreDefiDe">
+        <span aria-hidden="true" class="de-objet" data-face="1" id="faceDeParcours">
+         <svg viewBox="0 0 72 72">
+          <path class="de-contour" d="M10 22 25 10h33v35L43 57H10V22Zm0 0h33l15-12M43 22v35"></path>
+          <g class="de-points-avant"><circle cx="18" cy="30" r="2.7"></circle><circle cx="26.5" cy="30" r="2.7"></circle><circle cx="35" cy="30" r="2.7"></circle><circle cx="18" cy="39.5" r="2.7"></circle><circle cx="26.5" cy="39.5" r="2.7"></circle><circle cx="35" cy="39.5" r="2.7"></circle><circle cx="18" cy="49" r="2.7"></circle><circle cx="26.5" cy="49" r="2.7"></circle><circle cx="35" cy="49" r="2.7"></circle></g>
+          <g class="de-points-dessus"><circle cx="27" cy="16" r="2"></circle><circle cx="43" cy="16" r="2"></circle></g>
+          <g class="de-points-cote"><circle cx="50" cy="25" r="2"></circle><circle cx="50" cy="34" r="2"></circle><circle cx="50" cy="43" r="2"></circle></g>
+         </svg>
+        </span>
+        <div class="carnet-defi-de-texte">
+         <strong id="titreDefiDe">Défi du hasard</strong>
+         <span id="resultatDeParcours">Lance le dé pour tirer de 1 à 6 questions aléatoires.</span>
+        </div>
+        <div class="carnet-defi-de-actions">
+         <button aria-label="Lancer le dé" class="secondaire" id="boutonLancerDeParcours" type="button">
+          <span class="libelle-bureau">Lancer le dé</span><span aria-hidden="true" class="libelle-mobile">Lancer</span>
+         </button>
+         <button class="principal masque" id="boutonJouerTirageDe" type="button">Jouer le tirage</button>
+        </div>
+       </section>
+      </div>
+      <p id="prochaineDestinationParcours">Ta première destination t’attend.</p>
+      <div class="carnet-parcours-route" id="routeCarnetParcours" role="progressbar" aria-label="Avancement dans le parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+       <span class="carnet-parcours-trace"><i></i></span>
+       <span aria-hidden="true" class="carnet-parcours-position">●</span>
+      </div>
+      <div class="carnet-parcours-reperes" aria-hidden="true"><span>Départ</span><span>Étape 5</span><span>Évaluation</span></div>
+      <div class="carnet-parcours-details">
+       <section aria-labelledby="titreSouvenirsParcours" class="carnet-souvenirs">
+        <div class="carnet-section-entete"><span aria-hidden="true">◇</span><h3 id="titreSouvenirsParcours">Souvenirs de parcours</h3></div>
+        <div id="souvenirsParcours"><p class="carnet-vide">Maîtrise une étape pour conserver ses trois repères essentiels.</p></div>
+       </section>
+       <section aria-labelledby="titreDefisParcours" class="carnet-defis">
+        <div class="carnet-section-entete"><span aria-hidden="true">⚑</span><h3 id="titreDefisParcours">Défis personnels</h3></div>
+        <ul id="defisParcours"></ul>
+       </section>
+      </div>
+     </div>
+    </aside>
+    <div class="chemin-chemin">
+     <div class="carte-parcours-entete chemin-carte-parcours-entete">
+      <span aria-hidden="true" class="carte-parcours-icone">
+       <svg viewBox="0 0 48 48"><path d="m6 10 11-4 14 5 11-4v31l-11 4-14-5-11 4z"></path><path d="M17 6v31M31 11v31"></path><path d="M11 29c5-7 10-3 14-9s8-5 12-2"></path><circle cx="11" cy="29" r="2"></circle><circle cx="37" cy="18" r="2"></circle></svg>
+      </span>
+      <div class="carte-parcours-titres">
+       <span class="carte-parcours-surtitre">Carte du parcours</span>
+       <h2>Les 10 destinations</h2>
+       <p id="resumeCarteParcours"></p>
+      </div>
+     </div>
+     <div class="chemin-ligne" id="ligneParcours1">
+     </div>
+     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
+     </div>
+     <div class="chemin-ligne chemin-ligne-inverse" id="ligneParcours2">
+     </div>
+     <div aria-hidden="true" class="chemin-virage chemin-virage-gauche">
+     </div>
+     <div class="chemin-ligne" id="ligneParcours3">
+     </div>
+     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
+     </div>
+      <div class="chemin-finale-ligne">
+      <div class="chemin-finale-espace">
+      </div>
+      <div id="carteEtape10">
+      </div>
+      <div aria-hidden="true" class="chemin-finale-lien">
+      </div>
+      <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled="" id="carteEvaluationFinale" type="button">
+       <span aria-hidden="true" class="icone-evaluation">
+        <svg aria-hidden="true" focusable="false" viewbox="0 0 48 48">
+         <path d="M16 9h16v7c0 7-3.4 12-8 12s-8-5-8-12V9z">
+         </path>
+         <path d="M16 13h-6v4c0 5 3 8 8 8">
+         </path>
+         <path d="M32 13h6v4c0 5-3 8-8 8">
+         </path>
+         <path d="M24 28v7">
+         </path>
+         <path d="M19 35h10">
+         </path>
+         <path d="M17 40h14">
+         </path>
+        </svg>
+       </span>
+       <span class="evaluation-etape-numero">
+        ÉTAPE 11
+       </span>
+       <span class="evaluation-titre">
+        Évaluation
+       </span>
+       <span class="evaluation-statut">
+        Parcours sans jokers requis
+       </span>
+      </button>
+     </div>
+    </div>
+   </section>
+   <section class="ecran" id="entrainement">
+    <div class="page-entete entrainement-entete">
+     <h1>
+      Choisis ton mode d’entraînement
+     </h1>
+    </div>
+    <div class="entrainement-nombre">
+     <div class="choix-libelle">
+      Nombre de questions
+     </div>
+     <select aria-hidden="true" class="natif-masque" id="nombreQuestionsEntrainement" tabindex="-1">
+      <option selected="" value="10">
+       10
+      </option>
+      <option value="20">
+       20
+      </option>
+      <option value="30">
+       30
+      </option>
+      <option value="40">
+       40
+      </option>
+      <option value="50">
+       50
+      </option>
+      <option value="60">
+       60
+      </option>
+      <option value="70">
+       70
+      </option>
+      <option value="80">
+       80
+      </option>
+      <option value="90">
+       90
+      </option>
+      <option value="100">
+       100
+      </option>
+     </select>
+     <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement">
+      <button class="choix-bouton actif" data-valeur="10" type="button">
+       10
+      </button>
+      <button class="choix-bouton" data-valeur="20" type="button">
+       20
+      </button>
+      <button class="choix-bouton" data-valeur="30" type="button">
+       30
+      </button>
+      <button class="choix-bouton" data-valeur="40" type="button">
+       40
+      </button>
+      <button class="choix-bouton" data-valeur="50" type="button">
+       50
+      </button>
+      <button class="choix-bouton" data-valeur="60" type="button">
+       60
+      </button>
+      <button class="choix-bouton" data-valeur="70" type="button">
+       70
+      </button>
+      <button class="choix-bouton" data-valeur="80" type="button">
+       80
+      </button>
+      <button class="choix-bouton" data-valeur="90" type="button">
+       90
+      </button>
+      <button class="choix-bouton" data-valeur="100" type="button">
+       100
+      </button>
+     </div>
+    </div>
+    <div class="entrainement-grille">
+     <article class="entrainement-carte entrainement-ordonne" data-carte-entrainement="ordonne">
+      <div aria-hidden="true" class="entrainement-icone entrainement-icone-ordonne">
+       <svg viewbox="0 0 64 64">
+        <path d="M13 49h13V37h13V25h13"></path>
+        <circle cx="13" cy="49" r="4"></circle>
+        <circle cx="26" cy="37" r="4"></circle>
+        <circle cx="39" cy="25" r="4"></circle>
+        <path d="m46 19 7 6-7 6"></path>
+       </svg>
+      </div>
+      <h2>
+       Par ordre d’étapes
+      </h2>
+      <p>
+       Les questions suivent la progression du programme, de l’étape 1 à l’étape 10.
+      </p>
+      <div class="entrainement-details">
+       Étape 1 → Étape 10
+      </div>
+      <div class="entrainement-options">
+       <div class="entrainement-option">
+        <span>
+         Jokers
+        </span>
+        <div class="entrainement-bascule-groupe" data-proposition="jokers">
+         <button class="option-bouton actif" data-valeur="oui" type="button">
+          Avec
+         </button>
+         <button class="option-bouton" data-valeur="non" type="button">
+          Sans
+         </button>
+        </div>
+       </div>
+       <div class="entrainement-option">
+        <span>
+         Chrono
+        </span>
+        <div class="entrainement-bascule-groupe" data-proposition="chronometre">
+         <button class="option-bouton actif" data-valeur="non" type="button">
+          Sans
+         </button>
+         <button class="option-bouton" data-valeur="oui" type="button">
+          Avec
+         </button>
+        </div>
+       </div>
+       <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre="">
+        <span>
+         Temps par question
+        </span>
+        <div class="entrainement-secondes-groupe">
+         <button class="choix-bouton" data-secondes="5" type="button">
+          5 s
+         </button>
+         <button class="choix-bouton" data-secondes="10" type="button">
+          10 s
+         </button>
+         <button class="choix-bouton actif" data-secondes="15" type="button">
+          15 s
+         </button>
+         <button class="choix-bouton" data-secondes="20" type="button">
+          20 s
+         </button>
+         <button class="choix-bouton" data-secondes="25" type="button">
+          25 s
+         </button>
+         <button class="choix-bouton" data-secondes="30" type="button">
+          30 s
+         </button>
+        </div>
+       </div>
+      </div>
+      <button class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">
+       Lancer l’entraînement
+      </button>
+     </article>
+     <article class="entrainement-carte entrainement-melange" data-carte-entrainement="melange">
+      <div aria-hidden="true" class="entrainement-icone entrainement-icone-melange">
+       <svg viewbox="0 0 64 64">
+        <path d="M10 18h9c10 0 13 11 19 23 4 7 8 9 16 9"></path>
+        <path d="m48 44 7 6-7 6"></path>
+        <path d="M10 49h9c8 0 12-8 16-16 5-10 9-15 19-15"></path>
+        <path d="m48 12 7 6-7 6"></path>
+       </svg>
+      </div>
+      <h2>
+       Mélangé
+      </h2>
+      <p>
+       Les questions proviennent de toutes les étapes et sont présentées dans un ordre aléatoire.
+      </p>
+      <div class="entrainement-details">
+       Toutes les étapes · ordre mélangé
+      </div>
+      <div class="entrainement-options">
+       <div class="entrainement-option">
+        <span>
+         Jokers
+        </span>
+        <div class="entrainement-bascule-groupe" data-proposition="jokers">
+         <button class="option-bouton actif" data-valeur="oui" type="button">
+          Avec
+         </button>
+         <button class="option-bouton" data-valeur="non" type="button">
+          Sans
+         </button>
+        </div>
+       </div>
+       <div class="entrainement-option">
+        <span>
+         Chrono
+        </span>
+        <div class="entrainement-bascule-groupe" data-proposition="chronometre">
+         <button class="option-bouton actif" data-valeur="non" type="button">
+          Sans
+         </button>
+         <button class="option-bouton" data-valeur="oui" type="button">
+          Avec
+         </button>
+        </div>
+       </div>
+       <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre="">
+        <span>
+         Temps par question
+        </span>
+        <div class="entrainement-secondes-groupe">
+         <button class="choix-bouton" data-secondes="5" type="button">
+          5 s
+         </button>
+         <button class="choix-bouton" data-secondes="10" type="button">
+          10 s
+         </button>
+         <button class="choix-bouton actif" data-secondes="15" type="button">
+          15 s
+         </button>
+         <button class="choix-bouton" data-secondes="20" type="button">
+          20 s
+         </button>
+         <button class="choix-bouton" data-secondes="25" type="button">
+          25 s
+         </button>
+         <button class="choix-bouton" data-secondes="30" type="button">
+          30 s
+         </button>
+        </div>
+       </div>
+      </div>
+      <button class="entrainement-lancer principal" data-organisation-session="melange" type="button">
+       Lancer l’entraînement
+      </button>
+     </article>
+    </div>
+   </section>
+   <section class="ecran" id="question">
+    <div class="question-conteneur">
+     <div class="question-entete">
+      <div class="compteur" id="compteurQuestion">
+      </div>
+      <div aria-label="Avancement de la session" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="progression" role="progressbar">
+       <i id="progressionQuestion">
+       </i>
+      </div>
+      <div class="chronometre" id="chronometreQuestion">
+      </div>
+      <div aria-live="polite" class="indicateur-serie masque" id="indicateurSerie">
+       <span aria-hidden="true">✦</span>
+       <strong></strong>
+      </div>
+     </div>
+     <h2 id="enonceQuestion">
+     </h2>
+     <div class="question-etape">
+      <div class="question question-carte">
+       <div class="reperes" id="reperesQuestion">
+       </div>
+       <div class="reponses" id="zoneReponses">
+       </div>
+       <div aria-atomic="true" aria-live="polite" class="correction masque" id="zoneCorrection" role="status" tabindex="-1">
+       </div>
+       <div class="correction masque" id="zoneIndice">
+       </div>
+      </div>
+     </div>
+     <div class="question-commande-ligne">
+      <div class="suivant-ligne">
+       <button aria-label="Question précédente" class="precedent-bouton" id="boutonQuestionPrecedente">
+        <span class="libelle-bureau">← Question précédente</span><span aria-hidden="true" class="libelle-mobile">← Précédente</span>
+       </button>
+       <button class="principal masque" id="boutonValider" type="button">
+        Valider
+       </button>
+       <div class="navigation-question-groupe">
+        <button aria-controls="fenetreJokers" aria-expanded="false" aria-haspopup="dialog" class="joker-menu-bouton masque" id="boutonMenuJokers" type="button">
+         <span aria-hidden="true" class="joker-onglet-icone">
+          <svg viewBox="0 0 24 24"><path d="M5 8h14v10H5zM9 8V6h6v2"></path><path d="M12 11v4M10 13h4"></path></svg>
+         </span>
+         <span>Jokers</span>
+        </button>
+        <button class="passer-bouton" id="boutonPasserQuestion">
+         Passer →
+        </button>
+        <button aria-label="Question suivante" class="principal masque" id="boutonQuestionSuivante">
+         <span class="libelle-bureau">Question suivante →</span><span aria-hidden="true" class="libelle-mobile">Suivante →</span>
+        </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="ecran" id="bilan">
+    <div class="bilan-resume-carte">
+     <header class="bilan-resume-entete">
+      <div aria-hidden="true" class="resultat-icone">
+      </div>
+      <div class="bilan-resume-titre">
+       <span class="bilan-contexte" id="contexteBilan">
+        Parcours PJJ
+       </span>
+       <h1 id="titreBilan">
+        Session terminée sans joker
+       </h1>
+       <p class="sous-titre" id="rangBilan">
+       </p>
+      </div>
+     </header>
+     <div class="statistiques bilan-statistiques">
+      <div class="statistique">
+       <strong id="scoreBilan">
+        0%
+       </strong>
+       <span>
+        score
+       </span>
+      </div>
+      <div class="statistique">
+       <strong id="bonnesReponsesBilan">
+        0
+       </strong>
+       <span>
+        réussites autonomes
+       </span>
+      </div>
+      <div class="statistique">
+       <strong id="meilleureSerieBilan">
+        0
+       </strong>
+       <span>
+        meilleure série
+       </span>
+      </div>
+      <div class="statistique">
+       <strong id="gainExperienceBilan">
+        +0
+       </strong>
+       <span>
+        points de progression
+       </span>
+      </div>
+     </div>
+     <aside class="bilan-prochaine-destination">
+      <span aria-hidden="true" class="bilan-destination-icone">➜</span>
+      <div><strong>Prochaine destination</strong><span id="prochaineDestinationBilan">Continue ton parcours.</span></div>
+     </aside>
+     <section aria-labelledby="titreCarteVoyageFinale" class="carte-voyage-finale masque" id="carteVoyageFinale">
+      <div class="carte-voyage-entete">
+       <div><span>Ton carnet complet</span><h2 id="titreCarteVoyageFinale">La carte de ton voyage</h2></div>
+       <strong>11 destinations parcourues</strong>
+      </div>
+      <div class="carte-voyage-destinations" id="destinationsVoyageFinal"></div>
+      <p>Sélectionne une étape pour retrouver ses souvenirs pédagogiques dans ton carnet.</p>
+     </section>
+     <section aria-labelledby="titreErreursBilan" class="bilan-erreurs-panneau">
+      <div class="bilan-section-entete">
+       <div>
+        <span class="bilan-section-surtitre">
+         Bilan de la session
+        </span>
+        <h2 id="titreErreursBilan">
+         Questions à reprendre
+        </h2>
+       </div>
+       <span class="bilan-erreurs-nombre" id="nombreErreursBilan">
+        0 question ratée
+       </span>
+      </div>
+      <div id="listeErreursBilan">
+      </div>
+     </section>
+     <div class="actions bilan-actions">
+      <button class="principal" id="boutonContinuerBilan">
+       Continuer
+      </button>
+      <button class="secondaire" id="boutonRevoirErreursBilan">
+       Rejouer mes erreurs
+      </button>
+      <button class="discret" id="boutonRetourParcoursBilan" type="button">
+       Revenir au parcours
+      </button>
+     </div>
+    </div>
+   </section>
+   <section class="ecran" id="erreurs">
+    <div class="page-entete">
+     <h1>
+      Mes erreurs à retravailler
+     </h1>
+     <p>
+      Choisis un thème précis à retravailler ou mélange toutes tes erreurs en mode aléatoire. Une erreur reste active jusqu’à deux réussites ultérieures en mode révision.
+     </p>
+    </div>
+    <div id="contenuErreurs">
+    </div>
+   </section>
+   <section class="ecran" id="progression">
+    <div class="page-entete progression-entete">
+     <h1>
+      Progression
+     </h1>
+     <p>
+      Retrouve ton activité générale, tes erreurs actives et ton avancée dans le parcours PJJ.
+     </p>
+    </div>
+    <div class="progression-grille">
+     <article class="progression-carte progression-activite">
+      <div class="progression-carte-entete">
+       <div aria-hidden="true" class="progression-icone">
+        <svg viewbox="0 0 64 64">
+         <path d="M10 52V12M10 52h44"></path>
+         <path d="m16 43 11-12 9 6 14-18"></path>
+         <circle cx="16" cy="43" r="3"></circle>
+         <circle cx="27" cy="31" r="3"></circle>
+         <circle cx="36" cy="37" r="3"></circle>
+         <circle cx="50" cy="19" r="3"></circle>
+        </svg>
+       </div>
+       <div>
+        <h2>
+         Mon activité
+        </h2>
+        <p>
+         Les principaux repères de ton entraînement.
+        </p>
+       </div>
+      </div>
+      <div class="progression-statistiques">
+       <div class="progression-statistique progression-decouverte-statistique">
+        <strong id="experienceProgression">
+         <span class="experience-valeur">0</span>
+         <span class="experience-libelle">découvertes</span>
+        </strong>
+       </div>
+       <div class="progression-statistique">
+        <strong id="questionsJoueesProgression">
+         0
+        </strong>
+        <span>
+         activités réalisées
+        </span>
+       </div>
+       <div class="progression-statistique">
+        <strong id="erreursProgression">
+         0
+        </strong>
+        <span>
+         erreurs actives
+        </span>
+       </div>
+       <div class="progression-statistique">
+        <strong id="etapesMaitriseesProgression">
+         0
+        </strong>
+        <span>
+         étapes maîtrisées
+        </span>
+       </div>
+      </div>
+      <div class="progression-actions">
+       <button class="secondaire" id="boutonExporterProgression">
+        Exporter ma progression
+       </button>
+       <label class="secondaire progression-importation" for="fichierImporterProgression">
+        Importer
+        <input accept="application/json" hidden="" id="fichierImporterProgression" type="file"/>
+       </label>
+      </div>
+     </article>
+     <article class="progression-carte progression-parcours">
+      <div class="progression-carte-entete">
+       <div aria-hidden="true" class="progression-icone progression-icone-parcours">
+        <svg viewbox="0 0 64 64">
+         <path d="M8 14 23 9l18 6 15-5v40l-15 5-18-6-15 5z"></path>
+         <path d="M23 9v40M41 15v40"></path>
+         <path d="M14 42c8-11 14-4 20-13s11-5 16-2"></path>
+         <circle cx="14" cy="42" r="2.7"></circle>
+         <circle cx="50" cy="27" r="2.7"></circle>
+        </svg>
+       </div>
+       <div>
+        <h2>
+         Ma progression dans le parcours PJJ
+        </h2>
+        <p>
+         Ton avancement est enregistré étape par étape.
+        </p>
+       </div>
+      </div>
+      <div class="tableau-bord progression-tableau-bord" id="tableauProgression">
+      </div>
+      <div class="progression-actions progression-actions-parcours">
+       <button class="secondaire" id="boutonOuvrirParcoursProgression" type="button">
+        Ouvrir
+       </button>
+      </div>
+     </article>
+    </div>
+   </section>
+   <section class="ecran" id="parametres">
+    <div class="page-entete">
+     <h1>
+      Paramètres
+     </h1>
+     <p>
+      Adapte l’affichage et le volume à ton confort d’utilisation.
+     </p>
+    </div>
+    <div class="formulaire-grille">
+     <div class="parametre">
+      <label for="volumeSon">
+       Volume
+      </label>
+      <input class="curseur" id="volumeSon" max="1" min="0" step="0.05" type="range"/>
+     </div>
+     <div class="parametre parametres-choix">
+      <div class="choix-libelle">
+       Taille du texte
+      </div>
+      <select aria-hidden="true" class="natif-masque" id="echelleTexte" tabindex="-1">
+       <option value="0.9">
+        Compacte
+       </option>
+       <option value="1">
+        Normale
+       </option>
+       <option value="1.08">
+        Grande
+       </option>
+      </select>
+      <div class="choix-groupe" data-groupe-choix="echelleTexte">
+       <button class="choix-bouton" data-valeur="0.9">
+        Compacte
+       </button>
+       <button class="choix-bouton actif" data-valeur="1">
+        Normale
+       </button>
+       <button class="choix-bouton" data-valeur="1.08">
+        Grande
+       </button>
+      </div>
+     </div>
+     <div class="parametre parametres-actions-carte">
+      <div class="parametres-actions-boutons">
+       <button class="principal" data-ecran="accueil" id="boutonEnregistrerParametres">
+        Enregistrer et revenir
+       </button>
+       <button class="danger" id="boutonReinitialiserProgression">
+        Réinitialiser toute la progression
+       </button>
+      </div>
+     </div>
+    </div>
+    <div class="section-titre">
+     <div>
+      <h2>
+       Sources intégrées
+      </h2>
+      <p>
+       Les questions factuelles renvoient vers les sources officielles intégrées à la version publiée.
+      </p>
+     </div>
+    </div>
+    <div class="sources-panneau">
+     <div class="sources-defilement" id="listeSources">
+     </div>
+    </div>
+   </section>
+  </main>
+  <div aria-atomic="true" aria-live="polite" class="notification" id="notification" role="status">
+  </div>
+  <footer class="produit-pied-page">
+   <div class="produit-repere">
+    Version 1 · Août 2026
+   </div>
+   <p>
+    <strong>
+     PJJoue
+    </strong>
+    est un outil d’acculturation à la PJJ. Aucune donnée réelle de mineur ne doit être saisie. La progression est stockée uniquement dans le navigateur tant qu’aucun service serveur n’est ajouté.
+   </p>
+   <p>
+    <strong>
+     Création, conception et développement : Dev'Ines — 07-2026
+    </strong>
+   </p>
+   <nav aria-label="Informations réglementaires">
+    <a href="accessibilite.html">
+     Accessibilité
+    </a>
+    <a href="confidentialite.html">
+     Confidentialité
+    </a>
+    <a href="mentions-legales.html">
+     Mentions légales
+    </a>
+   </nav>
+  </footer>
+  <script defer="" src="donnees/donnees-pjj.js">
+  </script>
+  <script defer="" src="ressources/moteur-jeu.js">
+  </script>
+  <dialog aria-describedby="texteFenetreQuitterSession" aria-labelledby="titreFenetreQuitterSession" class="pjj-fenetre" id="fenetreQuitterSession">
+   <div class="pjj-fenetre-panneau">
+    <button aria-label="Fermer" class="pjj-fenetre-fermer" id="fermerFenetreQuitterSession" type="button">
+     ×
+    </button>
+    <div aria-hidden="true" class="pjj-fenetre-icone">
+     <svg focusable="false" viewbox="0 0 48 48">
+      <path d="M24 6a18 18 0 1 0 18 18A18 18 0 0 0 24 6Z">
+      </path>
+      <path d="M24 15v11">
+      </path>
+      <path d="M24 33h.01">
+      </path>
+     </svg>
+    </div>
+    <h2 id="titreFenetreQuitterSession">
+     Quitter cette session ?
+    </h2>
+    <p id="texteFenetreQuitterSession">
+     Les réponses déjà données restent enregistrées, mais la session en cours sera interrompue.
+    </p>
+    <div class="pjj-fenetre-actions">
+     <button class="secondaire" id="annulerQuitterSession" type="button">
+      Annuler
+     </button>
+     <button class="principal" id="confirmerQuitterSession" type="button">
+      Quitter la session
+     </button>
+    </div>
+   </div>
+  </dialog>
+  <dialog aria-describedby="texteFenetreMessage" aria-labelledby="titreFenetreMessage" class="pjj-fenetre" id="fenetreMessage">
+   <div class="pjj-fenetre-panneau">
+    <button aria-label="Fermer" class="pjj-fenetre-fermer" id="fermerFenetreMessage" type="button">
+     ×
+    </button>
+    <div aria-hidden="true" class="pjj-fenetre-icone">
+     <svg focusable="false" viewbox="0 0 48 48">
+      <path d="M24 6a18 18 0 1 0 18 18A18 18 0 0 0 24 6Z">
+      </path>
+      <path d="M24 15v11">
+      </path>
+      <path d="M24 33h.01">
+      </path>
+     </svg>
+    </div>
+    <h2 id="titreFenetreMessage">
+     Information
+    </h2>
+    <p id="texteFenetreMessage">
+    </p>
+    <div class="pjj-fenetre-actions">
+     <button class="secondaire masque" id="annulerFenetreMessage" type="button">
+      Annuler
+     </button>
+     <button class="principal" id="confirmerFenetreMessage" type="button">
+      Compris
+     </button>
+    </div>
+   </div>
+  </dialog>
+  <dialog aria-describedby="texteFenetreJokers" aria-labelledby="titreFenetreJokers" class="pjj-fenetre joker-fenetre" id="fenetreJokers">
+   <div class="pjj-fenetre-panneau joker-fenetre-panneau">
+    <button aria-label="Fermer les jokers" class="pjj-fenetre-fermer" id="fermerFenetreJokers" type="button">
+     ×
+    </button>
+    <div aria-hidden="true" class="pjj-fenetre-icone joker-fenetre-icone">
+     <svg focusable="false" viewbox="0 0 48 48">
+      <path d="M9 16h30v22H9zM18 16v-5h12v5"></path><path d="M24 23v9M19.5 27.5h9"></path>
+     </svg>
+    </div>
+    <h2 id="titreFenetreJokers">
+     Choisis un joker
+    </h2>
+    <p id="texteFenetreJokers">
+     Chaque joker utilisé rend la réussite assistée. Tu pourras rejouer l’étape sans aide pour déverrouiller l’évaluation finale.
+    </p>
+     <div aria-label="Jokers disponibles" class="jokers joker-choix" role="group">
+     <button class="joker" id="joker5050" type="button">
+      <span aria-hidden="true" class="joker-icone">
+       <svg viewbox="0 0 24 24">
+        <rect height="14" rx="2" width="8" x="2" y="5"></rect><rect height="14" rx="2" width="8" x="14" y="5"></rect>
+        <path d="m4.5 12 2 2 3-4M16.5 10l5 5M21.5 10l-5 5"></path>
+       </svg>
+      </span>
+      <span>
+       50/50
+      </span>
+     </button>
+     <button class="joker" id="jokerIndice" type="button">
+      <span aria-hidden="true" class="joker-icone">
+       <svg viewbox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.1 4.9-4.9 2.1 2.1-4.9z"></path><circle cx="12" cy="12" r="1"></circle>
+       </svg>
+      </span>
+      <span>
+       Indice
+      </span>
+     </button>
+     <button class="joker" id="jokerLangueAuChat" type="button">
+      <span aria-hidden="true" class="joker-icone">
+       <svg viewbox="0 0 24 24">
+        <path d="M4 5h16v12H9l-5 3z"></path><path d="m8 10-.5-3 2.7 1.5A6 6 0 0 1 12 8.2c.7 0 1.3.1 1.8.3L16.5 7 16 10"></path><circle cx="10" cy="12" r=".7"></circle><circle cx="14" cy="12" r=".7"></circle><path d="M10.5 14c1 .7 2 .7 3 0"></path>
+       </svg>
+      </span>
+      <span>
+       Langue au chat
+      </span>
+     </button>
+    </div>
+    <p aria-live="polite" class="joker-fenetre-statut" id="statutFenetreJokers">
+    </p>
+   </div>
+  </dialog>
+  <dialog aria-describedby="texteFenetreCelebration" aria-labelledby="titreFenetreCelebration" class="celebration-fenetre" id="fenetreCelebration">
+   <div class="celebration-panneau">
+    <button aria-label="Fermer" class="celebration-fermer" id="fermerFenetreCelebration" type="button">
+     ×
+    </button>
+    <div aria-hidden="true" class="celebration-icone">
+     ★
+    </div>
+    <h2 id="titreFenetreCelebration">
+     Bravo !
+    </h2>
+    <p id="texteFenetreCelebration">
+    </p>
+    <button class="celebration-continuer" id="continuerFenetreCelebration" type="button">
+     Continuer
+    </button>
+   </div>
+  </dialog>
+ </body>
+</html>

@@ -1,0 +1,46 @@
+{
+  "name": "pjjoue-v1",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Contrôles techniques et recette de PJJoue V1",
+  "scripts": {
+    "test": "npm run controle:javascript && npm run controle:css && npm run test:unitaire && python tests/verifier_v1.py && python tests/verifier_interface.py",
+    "controle:javascript": "eslint ressources/*.js",
+    "controle:css": "npm run controle:css:doublons && npm run controle:css:structure",
+    "controle:css:doublons": "node outils/controler_css.js doublons",
+    "controle:css:structure": "node outils/controler_css.js structure",
+    "test:unitaire": "python -m unittest discover -s tests -p test_*.py",
+    "test:structure": "python tests/verifier_v1.py",
+    "test:interface": "python tests/verifier_interface.py",
+    "test:visuel": "python tests/verifier_regression_visuelle.py",
+    "build:donnees": "python outils/construire_donnees.py",
+    "build:manifeste": "python outils/construire_manifeste.py"
+  },
+  "keywords": [
+    "PJJ",
+    "formation",
+    "jeu-pedagogique"
+  ],
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "eslint": "10.8.0",
+    "globals": "17.8.0",
+    "postcss": "^8.5.6",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=24.18 <25"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=24.18 <25",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "npm",
+      "version": ">=11.16 <12",
+      "onFail": "error"
+    }
+  }
+}

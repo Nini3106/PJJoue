@@ -1,0 +1,369 @@
+/* Présentation du parcours et de la révision. */
+/* Les petits carrés parasites des virages sont supprimés.
+   Le tracé principal (::before) reste intact. */
+#parcours .chemin-virage::after {
+    position: absolute;
+    border-color: rgba(255,209,102,.68);
+    border-style: solid;
+    content: none;
+    display: none;
+    width: 0;
+    height: 0;
+    border: 0;
+}
+/* Étape 11 : trophée violet, dans le style de l'icône fournie. */
+/* Le statut très court de l'étape 11 tient sur une ligne. */
+/* Progression du programme :
+   UNE ligne, aucune barre latérale/horizontale, aucune zone scrollable. */
+/* On réduit très légèrement la typographie uniquement si nécessaire
+   pour conserver toute la progression sur une ligne. */
+/* Mes erreurs par étape :
+   4 boutons par ligne au lieu de 5 pour afficher clairement Étape + numéro. */
+#erreurs .revision-etape-bouton span {
+    min-width: max-content;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: nowrap;
+}
+@media (max-width:950px) {
+    #erreurs .revision-etape-boutons {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+    }
+}
+@media (max-width:620px) {
+    #erreurs .revision-etape-boutons {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+    #parcours .chemin-carte-parcours-entete,
+  #parcours .carte-parcours-entete {
+        white-space: normal;
+    }
+    #parcours .chemin-evaluation-carte .evaluation-statut {
+        white-space: normal;
+    }
+}
+/* Présentation du choix unique. */
+/* Les réponses à choix unique utilisent le même niveau de contraste
+   visuel que les réponses à choix multiple. */
+/* Hover/focus : légère montée en contraste, cohérente avec le reste. */
+#question #zoneReponses .reponse:hover,
+#question #zoneReponses .reponse:focus-visible {
+    background: #2f73b8;
+    border-color: #86b5df;
+}
+/* Une réponse sélectionnée garde une différence claire. */
+/* Mise en valeur des jokers et placement du choix unique. */
+/* ---------------------------------------------------------
+   Jokers : contour jaune permanent.
+   --------------------------------------------------------- */
+#question .jokers .joker {
+    border: 1.5px solid var(--accent);
+    box-shadow: 0 0 0 1px rgba(255,200,87,.08);
+}
+/* Survol / focus : présence jaune plus nette sans changer le style du site. */
+#question .jokers .joker:hover,
+#question .jokers .joker:focus-visible {
+    border-color: var(--accent);
+    background: rgba(255,200,87,.14);
+    box-shadow: 0 0 0 2px rgba(255,200,87,.18);
+}
+/* État actif/sélectionné. */
+#question .jokers .joker.selectionne,
+#question .jokers .joker.actif,
+#question .jokers .joker[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: rgba(255,200,87,.24);
+    box-shadow: 0 0 0 2px rgba(255,200,87,.24);
+}
+/* Un joker désactivé garde son contour jaune, mais reste visuellement désactivé. */
+#question .jokers .joker:disabled {
+    border-color: var(--accent);
+}
+/* ---------------------------------------------------------
+   Choix unique : réduire TRÈS légèrement le vide au-dessus.
+   L'espace reste présent, mais les réponses remontent de 10 px.
+   Les autres modes ne sont pas touchés.
+   --------------------------------------------------------- */
+/* Le déplacement n'affecte pas la hauteur utile ni le scroll. */
+/* Contour de sélection du choix unique. */
+/* Position naturelle conservée.
+   Quelques pixels de respiration empêchent le contour/halo de la
+   première rangée d'être rogné quand on sélectionne une réponse. */
+/* La réponse sélectionnée passe au-dessus des éléments voisins. */
+#question #zoneReponses .reponse[aria-checked="true"] {
+    position: relative;
+    z-index: 2;
+}
+/* Le dernier joker ouvert reste au premier plan. */
+/* Taille du titre de l’écran Jouer. */
+#choixMode .page-entete h1 {
+    font-size: var(--taille-titre-1);
+    letter-spacing: -.03em;
+}
+/* Espacement vertical du contenu principal. */
+main.conteneur {
+    padding-top: 38px;
+}
+/* L’accueil panoramique compense cet espacement sur les écrans étroits. */
+@media (max-width:820px) {
+    main.conteneur {
+        padding-top: 30px;
+    }
+    #accueil {
+        margin-top: -30px;
+    }
+}
+@media (max-width:560px) {
+    main.conteneur {
+        padding-top: 25px;
+    }
+    #accueil {
+        margin-top: -25px;
+    }
+}
+/* Dimensions finales des deux cartes principales de Progression.
+   Ce bloc reste à cette position : il fixe le gabarit entre 821 px et 980 px. */
+#progression .progression-carte {
+    min-height: 530px;
+    height: 100%;
+    padding: 34px 34px 30px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+/* Titres des cartes principales de Progression. */
+#progression .progression-carte h2 {
+    margin-top: 0;
+    font-size: 1.65rem;
+}
+/* La carte d’activité libère sa hauteur sous 820 px. */
+@media (max-width:820px) {
+    #progression .progression-carte {
+        min-height: auto;
+    }
+}
+/* Largeur et répartition de la grille de Progression. */
+#progression .progression-grille {
+    margin-left: auto;
+    margin-right: auto;
+    width: min(1180px,100%);
+    margin: 8px auto 0;
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 30px;
+    align-items: stretch;
+}
+#progression .progression-carte .barre {
+    margin-top: 8px;
+    margin-bottom: 6px;
+}
+@media (max-width:980px) {
+    #progression .progression-grille {
+        grid-template-columns: 1fr;
+        width: min(760px,100%);
+    }
+}
+@media (max-width:560px) {
+    #progression .progression-carte {
+        padding: 20px;
+        border-radius: 22px;
+    }
+}
+/* Dimensions des cartes de Progression sur petits écrans. */
+@media (max-width:820px) {
+    #progression .progression-grille {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    #progression .progression-carte {
+        min-height: 300px;
+        padding: 30px 28px;
+    }
+}
+@media (max-width:580px) {
+    #progression .progression-carte {
+        min-height: 270px;
+        padding: 26px 22px;
+        border-radius: 22px;
+    }
+}
+/* Couleurs du chronomètre selon le temps restant. */
+/* État normal : bleu du site, jamais jaune par défaut. */
+#parcours .parcours-chronometre-panneau .choix-bouton, #parcours .parcours-chronometre-panneau button[data-valeur] {
+    color: #e7f3ff;
+    background: rgba(8,56,108,.50);
+    border: 1px solid rgba(142,199,251,.35);
+    box-shadow: none;
+}
+/* Survol / focus : seul le contour devient jaune. */
+#parcours .parcours-chronometre-panneau .choix-bouton:hover:not(.actif):not(.selectionne),
+#parcours .parcours-chronometre-panneau .choix-bouton:focus-visible:not(.actif):not(.selectionne),
+#parcours .parcours-chronometre-panneau button[data-valeur]:hover:not(.actif):not(.selectionne),
+#parcours .parcours-chronometre-panneau button[data-valeur]:focus-visible:not(.actif):not(.selectionne) {
+    color: #e7f3ff;
+    background: rgba(8,56,108,.50);
+    border-color: var(--accent);
+    box-shadow: none;
+}
+/* Sélection : fond jaune + contour jaune. */
+#parcours .parcours-chronometre-panneau .choix-bouton.actif,
+#parcours .parcours-chronometre-panneau .choix-bouton.selectionne,
+#parcours .parcours-chronometre-panneau .choix-bouton[aria-pressed="true"],
+#parcours .parcours-chronometre-panneau button[data-valeur].actif,
+#parcours .parcours-chronometre-panneau button[data-valeur].selectionne,
+#parcours .parcours-chronometre-panneau button[data-valeur][aria-pressed="true"] {
+    color: var(--texte-sur-jaune);
+    background: linear-gradient(180deg,#ffe286,var(--jaune-interface));
+    border-color: #ffebae;
+    font-weight: 900;
+}
+/* Fenêtre de confirmation de sortie de session. */
+.pjj-fenetre {
+    width: min(520px,calc(100vw - 36px));
+    padding: 0;
+    border: 0;
+    border-radius: 24px;
+    color: #fff;
+    background: transparent;
+    overflow: visible;
+}
+.pjj-fenetre::backdrop {
+    background: rgba(2,19,42,.76);
+    backdrop-filter: blur(4px);
+}
+.pjj-fenetre-panneau {
+    position: relative;
+    padding: 34px 34px 30px;
+    border: 1px solid rgba(142,199,251,.42);
+    border-radius: 24px;
+    background: radial-gradient(circle at 88% 10%,rgba(86,164,230,.15),transparent 32%),
+    linear-gradient(160deg,#15518e,#082f60);
+    box-shadow: 0 24px 70px rgba(0,19,52,.46);
+}
+.pjj-fenetre-icone {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 18px;
+    color: var(--accent);
+    border: 1px solid rgba(255,200,87,.55);
+    border-radius: 18px;
+    background: rgba(255,200,87,.08);
+}
+.pjj-fenetre-icone svg {
+    width: 32px;
+    height: 32px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.pjj-fenetre h2 {
+    margin: 0 44px 10px 0;
+    color: #fff;
+    font-size: 1.6rem;
+    line-height: 1.15;
+}
+.pjj-fenetre p {
+    margin: 0;
+    color: #d7e7f7;
+    font-size: 1rem;
+    line-height: 1.55;
+}
+.pjj-fenetre-fermer {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid rgba(255,200,87,.62);
+    border-radius: 13px;
+    color: var(--accent);
+    background: #0b3c72;
+    font-size: 1.45rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.pjj-fenetre-fermer:hover,
+.pjj-fenetre-fermer:focus-visible {
+    border-color: var(--accent);
+    background: rgba(255,200,87,.14);
+}
+.pjj-fenetre-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+}
+#annulerQuitterSession {
+    color: #e7f3ff;
+    border-color: rgba(142,199,251,.45);
+    background: rgba(8,56,108,.58);
+}
+#annulerQuitterSession:hover,
+#annulerQuitterSession:focus-visible {
+    border-color: var(--accent);
+}
+#confirmerQuitterSession {
+    color: var(--texte-sur-jaune);
+    background: linear-gradient(180deg,#ffe286,var(--jaune-interface));
+    border-color: #ffebae;
+    font-weight: 900;
+}
+@media (max-width:560px) {
+    .pjj-fenetre-panneau {
+        padding: 28px 22px 24px;
+    }
+    .pjj-fenetre-actions {
+        flex-direction: column-reverse;
+    }
+    .pjj-fenetre-actions button {
+        width: 100%;
+    }
+}
+/* Activité de classement avec distracteurs. */
+#question .choisir-ordre-activite {
+    display: grid;
+    gap: 14px;
+}
+#question .choisir-ordre-reserve {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+#question .choisir-ordre-proposition {
+    min-height: 44px;
+    padding: 9px 14px;
+    border: 1px solid rgba(142,199,251,.48);
+    border-radius: 13px;
+    background: #2867a8;
+    color: #fff;
+    font-weight: 800;
+}
+#question .choisir-ordre-proposition:hover,
+#question .choisir-ordre-proposition:focus-visible {
+    border-color: var(--accent);
+}
+#question .ordre-choix-selectionne {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#question .choisir-ordre-compteur {
+    color: #d7e7f7;
+    font-weight: 700;
+}
+/* Activité d’ordre sans numérotation visible. */
+#question .ordre-liste li {
+    grid-template-columns: 1fr auto;
+}
+/* Aucun numéro de position n'est affiché : l'ordre est donné uniquement
+   par la position verticale des éléments. */

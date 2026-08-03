@@ -1,0 +1,146 @@
+{
+  "JUSTICE_DPJJ": {
+    "titre": "Ministère de la Justice — Direction de la protection judiciaire de la jeunesse",
+    "url": "https://www.justice.gouv.fr/ministere-justice/missions-organisation/direction-protection-judiciaire-jeunesse",
+    "repere": "Missions et organisation de la DPJJ",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Source institutionnelle vérifiée ; contenu pédagogique relu par la conceptrice",
+    "roleRelecteur": "Référent métier DPJJ / propriétaire fonctionnel"
+  },
+  "JUSTICE_UEMO": {
+    "titre": "Ministère de la Justice — Unités éducatives de milieu ouvert (UEMO)",
+    "url": "https://www.justice.gouv.fr/annuaire/etablissements-services-protection-judiciaire-jeunesse/unites-educatives-milieu-ouvert-uemo",
+    "repere": "Définition et missions des UEMO",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Source institutionnelle vérifiée ; contenu pédagogique relu par la conceptrice",
+    "roleRelecteur": "Référent métier DPJJ / propriétaire fonctionnel"
+  },
+  "LEGIFRANCE_CJPM": {
+    "titre": "Légifrance — Code de la justice pénale des mineurs",
+    "url": "https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000039086952/",
+    "repere": "Code de la justice pénale des mineurs",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Source juridique officielle ; contenu pédagogique relu par la conceptrice",
+    "roleRelecteur": "Référent métier / juridique compétent"
+  },
+  "CNIL_SECURITE": {
+    "titre": "CNIL — Guide de la sécurité des données personnelles",
+    "url": "https://www.cnil.fr/fr/guide-de-la-securite-des-donnees-personnelles",
+    "repere": "Mesures de sécurité et maîtrise des accès",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Source institutionnelle de référence pour la sécurité des données",
+    "roleRelecteur": "DPO / RSSI lors d’un déploiement institutionnel"
+  },
+  "JUSTICE_MINISTERE": {
+    "titre": "Ministère de la Justice — Missions et organisation",
+    "url": "https://www.justice.gouv.fr/ministere-justice/missions-organisation",
+    "repere": "Organisation du ministère et directions, dont la DPJJ",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent métier DPJJ / propriétaire fonctionnel"
+  },
+  "JUSTICE_PARQUET": {
+    "titre": "Tribunal de Paris — Parquet de Paris",
+    "url": "https://www.tribunal-de-paris.justice.fr/75/parquet-de-paris",
+    "repere": "Définition du parquet et rôle du procureur de la République",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent juridique / métier"
+  },
+  "JUSTICE_ENPJJ": {
+    "titre": "Ministère de la Justice — Écoles",
+    "url": "https://www.justice.gouv.fr/ministere-justice/ecoles",
+    "repere": "École nationale de protection judiciaire de la jeunesse",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Conceptrice du contenu pédagogique"
+  },
+  "JUSTICE_SAH": {
+    "titre": "Ministère de la Justice — Secteur associatif habilité",
+    "url": "https://www.justice.gouv.fr/actualites/actualite/rencontre-federations-du-secteur-associatif-habilite",
+    "repere": "Rôle complémentaire du secteur associatif habilité",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent métier DPJJ"
+  },
+  "JUSTICE_EPEI": {
+    "titre": "Ministère de la Justice — Établissement de placement éducatif et d’insertion",
+    "url": "https://www.justice.gouv.fr/annuaire/fiche/etablissement-de-placement-educatif-et-d-insertion-de-mont-de-marsan-larrayade",
+    "repere": "Appellation EPEI dans l’annuaire du ministère",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent métier DPJJ"
+  },
+  "LEGIFRANCE_UJPE": {
+    "titre": "Légifrance — Unités judiciaires à priorité éducative",
+    "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053911130",
+    "repere": "Arrêté du 14 avril 2026 fixant le cahier des charges des UJPE",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Texte officiel vérifié",
+    "roleRelecteur": "Référent juridique / métier DPJJ"
+  },
+  "LEGIFRANCE_UEHDR": {
+    "titre": "Légifrance — Unité éducative d’hébergement diversifié dite renforcée",
+    "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000051797248",
+    "repere": "Appellation réglementaire de l’UEHD dite renforcée",
+    "dateVerification": "2026-07-27",
+    "statutRelecture": "Texte officiel vérifié",
+    "roleRelecteur": "Référent juridique / métier DPJJ"
+  },
+  "JUSTICE_UEAJ": {
+    "titre": "Ministère de la Justice — Unité éducative d’activités de jour (UEAJ)",
+    "url": "https://www.justice.gouv.fr/annuaire/fiche/unite-educative-d-activites-de-jour-d-angouleme-7-68123",
+    "repere": "Appellation, public et projet de service d’une UEAJ",
+    "dateVerification": "2026-07-28",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent métier DPJJ / propriétaire fonctionnel"
+  },
+  "JUSTICE_UEAT": {
+    "titre": "Ministère de la Justice — Unité éducative auprès du tribunal (UEAT)",
+    "url": "https://www.justice.gouv.fr/annuaire/fiche/unite-educative-aupres-du-tribunal-de-toulouse",
+    "repere": "Appellation officielle d’une UEAT",
+    "dateVerification": "2026-07-28",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent métier DPJJ / propriétaire fonctionnel"
+  },
+  "JUSTICE_EPE": {
+    "titre": "Ministère de la Justice — Établissement de placement éducatif (EPE)",
+    "url": "https://www.justice.gouv.fr/annuaire/fiche/etablissement-de-placement-educatif-de-toulouse",
+    "repere": "Appellation officielle d’un EPE",
+    "dateVerification": "2026-07-28",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent métier DPJJ / propriétaire fonctionnel"
+  },
+  "JUSTICE_STEMOI": {
+    "titre": "Ministère de la Justice — Service territorial éducatif de milieu ouvert et d’insertion (STEMOI)",
+    "url": "https://www.justice.gouv.fr/annuaire/fiche/service-territorial-educatif-de-milieu-ouvert-et-d-insertion-d-auch",
+    "repere": "Appellation officielle d’un STEMOI",
+    "dateVerification": "2026-07-28",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent métier DPJJ / propriétaire fonctionnel"
+  },
+  "JUSTICE_CER": {
+    "titre": "Ministère de la Justice — Centre éducatif renforcé (CER)",
+    "url": "https://www.justice.gouv.fr/annuaire/fiche/unite-centre-educatif-renforce-nomade-7-65043",
+    "repere": "Appellation officielle d’un CER",
+    "dateVerification": "2026-07-28",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent métier DPJJ / propriétaire fonctionnel"
+  },
+  "JUSTICE_CEF": {
+    "titre": "Ministère de la Justice — Centre éducatif fermé (CEF)",
+    "url": "https://www.justice.gouv.fr/annuaire/fiche/centre-educatif-ferme-de-la-ferte",
+    "repere": "Appellation officielle d’un CEF",
+    "dateVerification": "2026-07-28",
+    "statutRelecture": "Source institutionnelle officielle vérifiée",
+    "roleRelecteur": "Référent métier DPJJ / propriétaire fonctionnel"
+  },
+  "LEGIFRANCE_UJPE_DECREE": {
+    "titre": "Légifrance — Décret n° 2026-180 du 12 mars 2026 portant création des UJPE",
+    "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053669122",
+    "repere": "Décret du 12 mars 2026 portant création des unités judiciaires à priorité éducative",
+    "dateVerification": "2026-07-28",
+    "statutRelecture": "Texte juridique officiel vérifié",
+    "roleRelecteur": "Référent juridique / métier DPJJ"
+  }
+}
