@@ -9,6 +9,7 @@ import json
 import re
 import subprocess
 import sys
+import xml.etree.ElementTree as ET
 
 RACINE = Path(__file__).resolve().parents[1]
 if str(RACINE) not in sys.path:
@@ -103,6 +104,8 @@ def verifier_fichiers() -> None:
         ".github/workflows/controle.yml",
         "index.html",
         "administration.html",
+        "robots.txt",
+        "sitemap.xml",
         "ressources/moteur-jeu.js",
         "ressources/styles/00-fondations-et-composants.css",
         "ressources/styles/10-parcours-principal.css",
@@ -150,7 +153,8 @@ def verifier_fichiers() -> None:
         'accessibilite.html', 'administration.html', 'confidentialite.html',
         'index.html', 'mentions-legales.html', 'ressources', 'donnees', 'documentation',
         'node_modules', 'outils', 'serveur', 'test-results', 'tests', 'eslint.config.js',
-        'package.json', 'package-lock.json', 'requirements-dev.txt',
+        'package.json', 'package-lock.json', 'requirements-dev.txt', 'robots.txt',
+        'sitemap.xml',
     }
     emplacements_inattendus = sorted(
         chemin.name
@@ -167,6 +171,53 @@ def verifier_references_html() -> None:
         collecteur.feed(page.read_text(encoding="utf-8"))
         manquantes = [reference for reference in collecteur.references if not (RACINE / reference).exists()]
         exiger(not manquantes, f"{page.name} contient des références locales manquantes : {manquantes}")
+
+
+def verifier_referencement() -> None:
+    """Vérifie les éléments publics nécessaires à l'exploration du site."""
+    page = (RACINE / "index.html").read_text(encoding="utf-8")
+    descriptions = re.findall(
+        r'<meta\s+[^>]*name=["\']description["\'][^>]*>',
+        page,
+        re.IGNORECASE,
+    )
+    exiger(len(descriptions) == 1, "La page d'accueil doit contenir une seule méta-description.")
+    exiger(
+        "PJJoue est un parcours pédagogique interactif" in descriptions[0],
+        "La méta-description de l'accueil est absente ou incorrecte.",
+    )
+
+    robots = (RACINE / "robots.txt").read_text(encoding="utf-8")
+    exiger("User-agent: *" in robots, "robots.txt ne cible pas les robots d'exploration.")
+    exiger("Allow: /" in robots, "robots.txt n'autorise pas l'exploration publique du site.")
+    exiger(
+        "Sitemap: https://pjjoue.fr/sitemap.xml" in robots,
+        "robots.txt ne déclare pas le sitemap public.",
+    )
+
+    administration = (RACINE / "administration.html").read_text(encoding="utf-8")
+    exiger(
+        'name="robots" content="noindex,nofollow"' in administration,
+        "La page d'administration doit être exclue de l'indexation.",
+    )
+
+    try:
+        arbre = ET.parse(RACINE / "sitemap.xml")
+    except ET.ParseError as erreur:
+        raise AssertionError(f"Le sitemap XML est invalide : {erreur}") from erreur
+    espace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    urls = [element.text for element in arbre.findall("s:url/s:loc", espace)]
+    urls_attendues = [
+        "https://pjjoue.fr/",
+        "https://pjjoue.fr/mentions-legales.html",
+        "https://pjjoue.fr/confidentialite.html",
+        "https://pjjoue.fr/accessibilite.html",
+    ]
+    exiger(urls == urls_attendues, "Le sitemap ne contient pas exactement les pages publiques attendues.")
+    exiger(
+        "https://pjjoue.fr/administration.html" not in urls,
+        "La page d'administration ne doit pas figurer dans le sitemap.",
+    )
 
 
 def verifier_securite_et_accessibilite() -> None:
@@ -736,6 +787,7 @@ def principal() -> int:
     controles = [
         verifier_fichiers,
         verifier_references_html,
+        verifier_referencement,
         verifier_securite_et_accessibilite,
         verifier_raccourci_validation,
         verifier_nommage_interface,

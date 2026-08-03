@@ -30,8 +30,8 @@
       "sha256": "0d162f7f8bb5c3d37a7f59beb26c4e6a00712a8e9b4d0472dcae75efc76abe7a"
     },
     "administration.html": {
-      "tailleOctets": 2443,
-      "sha256": "a017fe0e46d62a2eb40c89517d70d80b9e6a74fced736e6e58c4b70571d26729"
+      "tailleOctets": 2493,
+      "sha256": "fce4abb0dfa785d0ee3c91cf1702e0abff6d5bb99ca42b4164142f4c494e9ccc"
     },
     "confidentialite.html": {
       "tailleOctets": 2435,
@@ -66,8 +66,8 @@
       "sha256": "8d829904c5e124662aa3a158d86a31215128fc5c4d4abc89b8ad1c6b3f4c86bc"
     },
     "documentation/DEPLOIEMENT.md": {
-      "tailleOctets": 1211,
-      "sha256": "d525807e7e0ffcfa8c8883e5a14d9b5e0bb474792217609b01334339c493a291"
+      "tailleOctets": 2009,
+      "sha256": "01825a3efa57510fe530d74bbf702538f230a9097ba75fe969ec4ca4f0f85bff"
     },
     "documentation/ETAT_V1.md": {
       "tailleOctets": 1579,
@@ -126,8 +126,8 @@
       "sha256": "67e3c534e9624cf758622e113f960857d1818a9de46ffe2916e0382689b58a3b"
     },
     "index.html": {
-      "tailleOctets": 39951,
-      "sha256": "2498975c551a8029e5fe08100a3c208a20813474f8cb4855cbf086c6a46e078d"
+      "tailleOctets": 40151,
+      "sha256": "5289d8487334f58ee30c2a691a69be605d5cf03ae21d67ee74ef7426556b5e5d"
     },
     "mentions-legales.html": {
       "tailleOctets": 2495,
@@ -233,9 +233,17 @@
       "tailleOctets": 1688,
       "sha256": "f27665c38883a270d96563c10fe44ee7d25378315486b91255528ec5cfc7d27a"
     },
+    "robots.txt": {
+      "tailleOctets": 63,
+      "sha256": "b990d5d0e52186c331e35c4f4ce7f9017ff8351f88f5a1733c54a4dd6158115c"
+    },
     "serveur/entetes.conf": {
       "tailleOctets": 490,
       "sha256": "62ae632763752e45dc36837974b882d28691f66327497b2ae6014c0a7ce74eef"
+    },
+    "sitemap.xml": {
+      "tailleOctets": 509,
+      "sha256": "ddec5e138276b4e604ef90236111f31462a5ee0ea58a1292741c408874b5f302"
     },
     "tests/references-visuelles/README.md": {
       "tailleOctets": 908,
@@ -330,8 +338,8 @@
       "sha256": "2cb05f4a2e7abf18e4c37175503ca611f5fea23774b7b9c7f4fb56e2ab3fd4fe"
     },
     "tests/verifier_v1.py": {
-      "tailleOctets": 32735,
-      "sha256": "8101d1957ee16f844c709ccc599c5fa93456f64af75f495230a3a0fab5360efe"
+      "tailleOctets": 34884,
+      "sha256": "aacd7f7e1eaa9af42696322e450fb56ad90a0d8425b4d09fe6895fb66985eb67"
     }
   }
 }
