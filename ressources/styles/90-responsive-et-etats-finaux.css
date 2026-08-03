@@ -610,6 +610,7 @@
     header.entete {
         display: grid;
         grid-template-columns: minmax(0,1fr) auto;
+        grid-template-rows: 49px;
         align-items: center;
         gap: 8px;
         padding: 8px 12px;
@@ -801,10 +802,6 @@ header.entete .navigation button[aria-current="page"] {
 
 /* Proportions finales des commandes sur mobile. */
 @media (max-width:820px) {
-    header.entete .marque > span {
-        position: relative;
-        top: 2px;
-    }
     #entrainement .entrainement-lancer,
 #carnet #boutonLancerDeParcours,
 #carnet #boutonJouerTirageDe,
@@ -862,7 +859,13 @@ header.entete .navigation button[aria-current="page"] {
 
 /* Ajustements ciblés des composants qui possèdent leurs propres dimensions. */
 header.entete .marque > span {
-    top: 3px;
+    position: relative;
+    top: 2px;
+}
+@media (max-width:820px) {
+    header.entete .marque > span {
+        top: 4px;
+    }
 }
 #carnet .carnet-parcours {
     display: block;
