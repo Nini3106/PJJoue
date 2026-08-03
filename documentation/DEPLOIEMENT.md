@@ -2,14 +2,14 @@
 
 ## Environnement
 
-Utiliser un serveur web statique HTTPS administré par l’organisme déployeur. `index.html` doit rester à la racine publiée.
+Utiliser un hébergement web statique en HTTPS. `index.html` doit rester à la racine publiée.
 
 ## Fichiers publics nécessaires
 
 Publier :
 
 - `index.html` ;
-- `accessibilite.html`, `confidentialite.html` et `mentions-legales.html` ;
+- `confidentialite.html` et `mentions-legales.html` ;
 - `robots.txt` et `sitemap.xml` ;
 - les dossiers `ressources/` et `donnees/` ;
 - `.nojekyll` lorsque l’hébergement l’exige ;
@@ -17,13 +17,11 @@ Publier :
 
 `administration.html`, `outils/`, `tests/` et `documentation/` ne sont pas nécessaires au fonctionnement public. L’outil d’administration ne doit pas être exposé sans contrôle d’accès dans un contexte institutionnel.
 
-## Avant publication institutionnelle
+## Avant publication
 
-- faire valider les 150 questions par les référents compétents ;
-- réaliser un audit d’accessibilité représentatif ;
-- compléter les responsabilités, contacts et informations d’hébergement ;
-- effectuer la revue de sécurité adaptée au contexte ;
-- exécuter la recette sur les navigateurs et postes cibles.
+- vérifier les liens vers les sources officielles ;
+- vérifier les mentions légales et la politique de confidentialité ;
+- exécuter les contrôles et la recette sur les navigateurs cibles.
 
 ## Données
 

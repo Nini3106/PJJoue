@@ -22,20 +22,20 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "README.md": {
-      "tailleOctets": 4933,
-      "sha256": "9448050cc25088d67524dec29124904cbafc3943abaa211c2cac35c729ae76dd"
+      "tailleOctets": 4892,
+      "sha256": "62af28bffeb18cfd2958e826895b32b703351bc8b532b63a6920bdfb1da0d555"
     },
     "accessibilite.html": {
-      "tailleOctets": 2389,
-      "sha256": "0d162f7f8bb5c3d37a7f59beb26c4e6a00712a8e9b4d0472dcae75efc76abe7a"
+      "tailleOctets": 4222,
+      "sha256": "db81c239dff38536813d5d29c50753bafe8460c4a9809d60628318abc85fcaeb"
     },
     "administration.html": {
       "tailleOctets": 2493,
       "sha256": "fce4abb0dfa785d0ee3c91cf1702e0abff6d5bb99ca42b4164142f4c494e9ccc"
     },
     "confidentialite.html": {
-      "tailleOctets": 2435,
-      "sha256": "ba1da429a09c04a2607b06577e116bf7d4c3c2f4a519329bb670e739f394d957"
+      "tailleOctets": 6368,
+      "sha256": "4d70c71e2f7b6cfea2b8fb713189b8961ed5afb3967ea312bc6f36ccbff364ea"
     },
     "documentation/ACCESSIBILITE.md": {
       "tailleOctets": 823,
@@ -66,20 +66,20 @@
       "sha256": "8d829904c5e124662aa3a158d86a31215128fc5c4d4abc89b8ad1c6b3f4c86bc"
     },
     "documentation/DEPLOIEMENT.md": {
-      "tailleOctets": 2009,
-      "sha256": "01825a3efa57510fe530d74bbf702538f230a9097ba75fe969ec4ca4f0f85bff"
+      "tailleOctets": 1808,
+      "sha256": "85a617b2334d46b5e1c9b93b491932322fb1cfe152c48cae2d053f4933deab36"
     },
     "documentation/ETAT_V1.md": {
-      "tailleOctets": 1579,
-      "sha256": "327e47e04a6c6ab28150a48af9cc3cb4388c7b245840719cd03c309b6db1d8b6"
+      "tailleOctets": 1559,
+      "sha256": "732a2459a8618f363dc09dd1fca64e1eb759f20631570e158b85c5e746c70379"
     },
     "documentation/JOURNAL_NETTOYAGE_CSS.md": {
       "tailleOctets": 2540,
       "sha256": "68769804660f69f6eb7bde2cc3831f76e3b924c9e12e5e91ff78ecf99b0e4050"
     },
     "documentation/MANIFESTE_PRODUIT.md": {
-      "tailleOctets": 640,
-      "sha256": "b8f2391e497f1383c1b19c40b51241a6ee47c25693f1e16bc9c6788b327c0be7"
+      "tailleOctets": 931,
+      "sha256": "5c2e47c7dcc877096cdbd5f193a0198cf7fe3bbe7b588ae1c887e950d546488e"
     },
     "documentation/POINT_DE_REPRISE.md": {
       "tailleOctets": 1847,
@@ -94,20 +94,20 @@
       "sha256": "851b4afe537c8820f801f7ed69a18cca56f4028e7789d75fabe94ae6e0a9b71c"
     },
     "documentation/SECURITE_RGPD.md": {
-      "tailleOctets": 1149,
-      "sha256": "ee656def432e0c8c98bfdccd4c1997746aac2b71d69412973c0095597fb769f4"
+      "tailleOctets": 1139,
+      "sha256": "9a734edd41ae14e5f5adbf7efe5b2ffe67d5dd4c75b12667b12ad21a4dc0b89f"
     },
     "documentation/VALIDATION_METIER.md": {
-      "tailleOctets": 587,
-      "sha256": "2e923697795c8d3f2dda80c05ddfd819b840d1f419121a5624a364f90c4b6f54"
+      "tailleOctets": 538,
+      "sha256": "0d7de0d202fce0acb2cffa0b67133fbee9ec945ce52f367994b4addcc003cc11"
     },
     "documentation/audit_contenu.csv": {
       "tailleOctets": 23083,
       "sha256": "623a583ee103ad32b77b4148f1a3000d3361f92e1673e21028e0b705a99e7144"
     },
     "donnees/donnees-pjj.js": {
-      "tailleOctets": 182752,
-      "sha256": "9a382e051718c0e114093b33b2ca2f03a1bb665cca8a13c2430bea902808a942"
+      "tailleOctets": 182609,
+      "sha256": "c7ffa1af26e9589711938c21167026a0485f7324951dad7d55fa1039561694a2"
     },
     "donnees/programme.json": {
       "tailleOctets": 5602,
@@ -118,20 +118,20 @@
       "sha256": "551a0eaf0900b076d96d3d463e67709e5c0f8ef854d3bcfaca0e1f304b11f14b"
     },
     "donnees/sources.json": {
-      "tailleOctets": 8180,
-      "sha256": "692be216fe673bc11f0b11fe293671495e0f83eee4b9ff002cf7a9ae1d22debd"
+      "tailleOctets": 8043,
+      "sha256": "4a3ce38e8621ae1c738e598b4294d8beec3c088f96e12554406a3eddc53b24f7"
     },
     "eslint.config.js": {
       "tailleOctets": 902,
       "sha256": "67e3c534e9624cf758622e113f960857d1818a9de46ffe2916e0382689b58a3b"
     },
     "index.html": {
-      "tailleOctets": 40151,
-      "sha256": "5289d8487334f58ee30c2a691a69be605d5cf03ae21d67ee74ef7426556b5e5d"
+      "tailleOctets": 40396,
+      "sha256": "9d49c45b0720d9192b52b11b757524c263534298b39e595e696a2997b7b657fe"
     },
     "mentions-legales.html": {
-      "tailleOctets": 2495,
-      "sha256": "e8dd6a075349357f2734773df81eb4374122e2e5d2d4b01ccb1168568dc7f35b"
+      "tailleOctets": 5966,
+      "sha256": "aabb201641b4f5b69dbf5bdb2629f5d01404cfd3058cbbb3eb9d0e8ec512fc47"
     },
     "outils/analyser_doublons_css.js": {
       "tailleOctets": 4182,
@@ -154,8 +154,8 @@
       "sha256": "70ec6c15e4e8a61eb37370c5949e1948a819ddd8eb1436c761249cfecca9e326"
     },
     "outils/validation_donnees.py": {
-      "tailleOctets": 12023,
-      "sha256": "8043c4e60680556b9419e00b21573a5010cf12223881269557ed6ed2c1c1fb30"
+      "tailleOctets": 12026,
+      "sha256": "862d8d88c907df521394f489d10258798df1a83fa0e4cc7a97e0fcba6b99cf34"
     },
     "package-lock.json": {
       "tailleOctets": 34208,
@@ -182,8 +182,8 @@
       "sha256": "566335679cad0c0b9f04b665c086cd0feaae04d84aa224a35ace711f580db322"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 208697,
-      "sha256": "9f13451b3da1a925bf70137542650893609924418d9a5cd1e641f3e98477c444"
+      "tailleOctets": 208594,
+      "sha256": "ab997ba864e9daa1f612cd94ecf4826470bbacb69828184ec944c776ba4f5e43"
     },
     "ressources/panorama-accueil-calme.png": {
       "tailleOctets": 1811539,
@@ -222,8 +222,8 @@
       "sha256": "29248489ee86481feb336e33ce3a769d0ef91620bc26100d9c146b166cf21282"
     },
     "ressources/styles/80-finitions-de-l-interface.css": {
-      "tailleOctets": 19282,
-      "sha256": "a28bbab0dd7cadea74d00d0ea2a2360b58bb7b48188d4b2b4b2e2a9082a20f15"
+      "tailleOctets": 21808,
+      "sha256": "3171cbc5d6c8b3ab875840bf21ad62d13ea853be2ac0f6649e09546e98b68558"
     },
     "ressources/styles/90-responsive-et-etats-finaux.css": {
       "tailleOctets": 30101,
@@ -338,8 +338,8 @@
       "sha256": "2cb05f4a2e7abf18e4c37175503ca611f5fea23774b7b9c7f4fb56e2ab3fd4fe"
     },
     "tests/verifier_v1.py": {
-      "tailleOctets": 34884,
-      "sha256": "aacd7f7e1eaa9af42696322e450fb56ad90a0d8425b4d09fe6895fb66985eb67"
+      "tailleOctets": 36926,
+      "sha256": "8b36674aeb2ca1942068694ec64e91f40702aa268109437a79c2f0462fda120a"
     }
   }
 }

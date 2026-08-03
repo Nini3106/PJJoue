@@ -117,4 +117,4 @@ python outils/construire_manifeste.py
 
 ## Statut
 
-Cette archive constitue la **V1 officielle**. Une diffusion institutionnelle nécessite néanmoins une validation métier formelle des contenus, un audit d’accessibilité représentatif et la revue de sécurité adaptée à l’hébergement retenu.
+Cette archive constitue la **V1 officielle du projet personnel PJJoue**. Avant chaque publication, vérifier les sources, les mentions juridiques, la sécurité de l’hébergement et la recette fonctionnelle.

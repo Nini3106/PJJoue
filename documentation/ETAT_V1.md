@@ -10,7 +10,7 @@ Date de consolidation : juillet 2026.
 - fonctionnement local et sur hébergement statique HTTPS ;
 - progression locale avec export et import JSON ;
 - interface adaptée aux différentes tailles d’écran, navigation clavier et réduction des animations ;
-- pages de confidentialité, d’accessibilité et de mentions légales.
+- pages de confidentialité et de mentions légales.
 
 ## Contrôles intégrés
 

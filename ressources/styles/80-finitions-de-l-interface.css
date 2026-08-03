@@ -710,3 +710,114 @@ body:not([data-ecran-actif="accueil"])::before {
         justify-content: flex-end;
     }
 }
+
+/* ==========================================================
+   Pages d’information et pied de page public
+   ========================================================== */
+.page-information-corps {
+    min-height: 100vh;
+    margin: 0;
+    color: var(--texte);
+    background: #123f73;
+}
+.page-information {
+    width: min(900px,calc(100% - 32px));
+    margin: 40px auto 24px;
+    padding: 28px;
+    box-sizing: border-box;
+    border: 1px solid var(--bordure);
+    border-radius: 24px;
+    background: var(--surface-carte-profonde);
+    box-shadow: var(--ombre-carte);
+}
+.page-information-retour,
+.page-information a {
+    color: var(--texte);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.page-information-entete {
+    margin: 22px 0 32px;
+    text-align: center;
+}
+.page-information-entete h1 {
+    margin: 0 0 10px;
+}
+.page-information-entete p {
+    max-width: 720px;
+    margin: 0 auto;
+    color: var(--texte-secondaire);
+}
+.page-information section + section {
+    margin-top: 30px;
+}
+.page-information h2 {
+    margin: 0 0 12px;
+}
+.page-information p,
+.page-information li,
+.page-information dd {
+    line-height: 1.7;
+}
+.page-information li {
+    margin: .45rem 0;
+}
+.page-information code {
+    white-space: pre-wrap;
+}
+.page-information address {
+    margin: 12px 0;
+    font-style: normal;
+    line-height: 1.7;
+}
+.page-information-liste {
+    display: grid;
+    gap: 0;
+    margin: 0 0 18px;
+}
+.page-information-liste > div {
+    display: grid;
+    grid-template-columns: minmax(180px,.8fr) minmax(0,1.7fr);
+    gap: 18px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--bordure);
+}
+.page-information-liste dt {
+    font-weight: 800;
+}
+.page-information-liste dd {
+    margin: 0;
+}
+.page-information-encadre {
+    padding: 20px;
+    border: 1px solid var(--accent);
+    border-radius: 18px;
+    background: var(--accent-doux);
+}
+.produit-pied-page .pied-page-independance,
+.produit-pied-page .pied-page-credit,
+.produit-pied-page .pied-page-contact {
+    margin: 7px 0;
+}
+.produit-pied-page-information {
+    margin-top: 0;
+}
+.produit-pied-page a[aria-current="page"] {
+    font-weight: 850;
+    text-decoration-thickness: 2px;
+}
+@media (max-width:580px) {
+    .page-information {
+        width: min(100% - 20px,900px);
+        margin: 18px auto 12px;
+        padding: 20px 16px;
+        border-radius: 18px;
+    }
+    .page-information-entete {
+        margin: 18px 0 26px;
+    }
+    .page-information-liste > div {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+}

@@ -180,7 +180,7 @@ def valider_donnees(
             if not isinstance(source, dict):
                 erreurs.append(f"Source {identifiant} : la fiche doit être un objet.")
                 continue
-            for champ in ("titre", "url", "repere", "dateVerification", "statutRelecture", "roleRelecteur"):
+            for champ in ("titre", "url", "repere", "dateVerification", "statutSource", "traitementEditorial"):
                 valider_texte(source.get(champ), f"Source {identifiant}.{champ}", erreurs)
 
     if not isinstance(programme, dict):

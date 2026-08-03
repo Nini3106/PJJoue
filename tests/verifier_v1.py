@@ -220,6 +220,55 @@ def verifier_referencement() -> None:
     )
 
 
+def verifier_pied_page_et_pages_information() -> None:
+    """Vérifie le pied de page public et l'absence de vestiges juridiques."""
+    pages = {
+        nom: (RACINE / nom).read_text(encoding="utf-8")
+        for nom in (
+            "index.html",
+            "mentions-legales.html",
+            "confidentialite.html",
+            "accessibilite.html",
+        )
+    }
+    for nom, contenu in pages.items():
+        exiger(
+            "contact.pjjoue@gmail.com" in contenu,
+            f"L'adresse de contact publique est absente de {nom}.",
+        )
+        exiger(
+            "site personnel, pédagogique, indépendant et non officiel" in contenu,
+            f"La mention d'indépendance est absente de {nom}.",
+        )
+        exiger("<footer" in contenu, f"Le pied de page public est absent de {nom}.")
+
+    mentions = pages["mentions-legales.html"]
+    exiger(
+        mentions.count("Année de création") == 1,
+        "L'année de création doit être indiquée une seule fois dans les mentions légales.",
+    )
+    exiger(
+        "GitHub, Inc." in mentions and "88 Colin P. Kelly Jr. Street" in mentions,
+        "L'hébergeur GitHub Pages n'est pas correctement identifié.",
+    )
+    exiger(
+        "ni édité, ni financé, ni mandaté, ni agréé, ni validé" in mentions,
+        "L'absence de lien institutionnel n'est pas formulée explicitement.",
+    )
+    vestiges = (
+        "[à compléter",
+        "[À compléter",
+        "organisme acquéreur",
+        "organisme déployeur",
+        "diffusion institutionnelle",
+        "DPO/RSSI",
+        "validation métier formelle",
+    )
+    for nom in ("mentions-legales.html", "confidentialite.html", "accessibilite.html"):
+        presents = [fragment for fragment in vestiges if fragment in pages[nom]]
+        exiger(not presents, f"Vestiges juridiques dans {nom} : {presents}")
+
+
 def verifier_securite_et_accessibilite() -> None:
     page = (RACINE / "index.html").read_text(encoding="utf-8")
     exiger(re.search(r'<html\s+lang="fr"', page, re.IGNORECASE) is not None, "La langue française n’est pas déclarée.")
@@ -685,6 +734,9 @@ if(
     fichiers_corpus = [
         RACINE / "index.html",
         RACINE / "administration.html",
+        RACINE / "mentions-legales.html",
+        RACINE / "confidentialite.html",
+        RACINE / "accessibilite.html",
         RACINE / "ressources/moteur-jeu.js",
         RACINE / "ressources/administration.js",
         RACINE / "donnees/donnees-pjj.js",
@@ -788,6 +840,7 @@ def principal() -> int:
         verifier_fichiers,
         verifier_references_html,
         verifier_referencement,
+        verifier_pied_page_et_pages_information,
         verifier_securite_et_accessibilite,
         verifier_raccourci_validation,
         verifier_nommage_interface,

@@ -4031,7 +4031,7 @@ function construireLienSource(source) {
 
 function construireFicheSource(source) {
     const element = document.createElement('article');
-    const repere = source.repere || 'À préciser pendant la validation métier';
+    const repere = source.repere || 'Information présentée par la source';
     const dateVerification = source.dateVerification || 'Non renseignée';
     element.className = 'source';
     element.innerHTML = `
@@ -4039,9 +4039,8 @@ function construireFicheSource(source) {
         <dl>
             <div><dt>Repère précis</dt><dd>${repere}</dd></div>
             <div><dt>Date de vérification</dt><dd>${dateVerification}</dd></div>
-            <div><dt>Statut</dt><dd>${source.statutRelecture}</dd></div>
-            <div><dt>Relecteur attendu</dt><dd>${source.roleRelecteur}</dd></div>
-            <div><dt>Gouvernance</dt><dd>Révision des contenus avant chaque diffusion majeure.</dd></div>
+            <div><dt>Statut</dt><dd>${source.statutSource}</dd></div>
+            <div><dt>Traitement pédagogique</dt><dd>${source.traitementEditorial}</dd></div>
         </dl>`;
     return element;
 }

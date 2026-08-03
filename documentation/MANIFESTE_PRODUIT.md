@@ -1,15 +1,17 @@
-# Positionnement produit
+# Positionnement du projet
 
-**Promesse :** comprendre la PJJ, son environnement judiciaire, ses acteurs, ses structures et la logique d'un parcours éducatif.
+**Promesse :** découvrir et comprendre la PJJ, son environnement judiciaire, ses acteurs, ses structures et la logique d’un parcours éducatif.
 
-PJJoue n'est pas :
+PJJoue est un projet personnel, pédagogique, indépendant et non officiel. Il n’est pas édité ni validé par le Gouvernement français, le ministère de la Justice, la PJJ ou l’ENPJJ.
+
+PJJoue n’est pas :
 - un logiciel métier ;
 - une base juridique opposable ;
-- une formation à chacun des métiers de la PJJ ;
-- un outil destiné à saisir des données de jeunes.
+- une communication institutionnelle ;
+- un outil destiné à saisir des données réelles sur des mineurs ou des procédures.
 
-## Publics envisageables
-Nouveaux arrivants, partenaires, stagiaires, agents souhaitant consolider leur culture commune PJJ.
+## Public
+Toute personne souhaitant découvrir la Protection judiciaire de la jeunesse grâce à un parcours interactif.
 
-## Gouvernance
-Toute diffusion institutionnelle exige un propriétaire fonctionnel et un référent métier responsables de la validation et de la mise à jour de la banque.
+## Suivi éditorial
+Les contenus sont sélectionnés et reformulés par Dev'Ines à partir de sources officielles consultables depuis le site. Les sources et les contenus doivent être revérifiés avant chaque publication importante.

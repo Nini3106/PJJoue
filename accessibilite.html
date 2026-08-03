@@ -1,25 +1,76 @@
-<!doctype html><html lang="fr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="referrer" content="no-referrer">
-<link rel="stylesheet" href="ressources/styles/00-fondations-et-composants.css">
-<link rel="stylesheet" href="ressources/styles/10-parcours-principal.css">
-<link rel="stylesheet" href="ressources/styles/20-accueil-et-question-principale.css">
-<link rel="stylesheet" href="ressources/styles/30-revision-parcours-et-parametres.css">
-<link rel="stylesheet" href="ressources/styles/40-progression-et-erreurs.css">
-<link rel="stylesheet" href="ressources/styles/50-carte-question-et-correction.css">
-<link rel="stylesheet" href="ressources/styles/60-parcours-modes-et-chronometre.css">
-<link rel="stylesheet" href="ressources/styles/70-celebrations-bilan-et-fenetres.css">
-<link rel="stylesheet" href="ressources/styles/80-finitions-de-l-interface.css">
-<link rel="stylesheet" href="ressources/styles/90-responsive-et-etats-finaux.css">
-<style>.page-information{max-width:900px;margin:40px auto;padding:24px}.page-information h1{margin-top:0}.page-information a{color:var(--encre);text-decoration:underline}.page-information li{margin:.45rem 0}.page-information code{white-space:pre-wrap}</style>
-<title>Accessibilité — PJJoue</title></head>
-<body><main class="page-information">
-<a href="index.html">← Retour à PJJoue</a>
-<h1>Accessibilité</h1>
-<p><strong>État de conformité : non évalué.</strong></p>
-<p>Cette version a été préparée pour un audit RGAA 4.1.2 : navigation clavier, focus visible, lien d’évitement, réduction des animations, alternatives textuelles et composants interactifs accessibles sont pris en compte dans la conception.</p>
-<p>La conformité ne pourra être déclarée qu’après un audit sur un échantillon représentatif des écrans et fonctionnalités, puis correction des non-conformités constatées.</p>
-<h2>Fonctionnalités à auditer en priorité</h2>
-<ul><li>choix multiples et réponses dynamiques ;</li><li>relier, classer et remettre en ordre au clavier et avec lecteur d’écran ;</li><li>fenêtres modales, annonces de feedback et gestion du focus ;</li><li>contrastes, zoom à 200 % et affichage mobile ;</li><li>sons, animations et chronomètre.</li></ul>
-<h2>Contact accessibilité</h2><p>[À compléter par l’organisme déployeur]</p>
-</main></body></html>
+<!doctype html>
+<html lang="fr">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="description" content="Informations sur l’accessibilité de PJJoue et moyen de signaler une difficulté d’utilisation.">
+ <meta name="referrer" content="no-referrer">
+ <link rel="stylesheet" href="ressources/styles/00-fondations-et-composants.css">
+ <link rel="stylesheet" href="ressources/styles/10-parcours-principal.css">
+ <link rel="stylesheet" href="ressources/styles/20-accueil-et-question-principale.css">
+ <link rel="stylesheet" href="ressources/styles/30-revision-parcours-et-parametres.css">
+ <link rel="stylesheet" href="ressources/styles/40-progression-et-erreurs.css">
+ <link rel="stylesheet" href="ressources/styles/50-carte-question-et-correction.css">
+ <link rel="stylesheet" href="ressources/styles/60-parcours-modes-et-chronometre.css">
+ <link rel="stylesheet" href="ressources/styles/70-celebrations-bilan-et-fenetres.css">
+ <link rel="stylesheet" href="ressources/styles/80-finitions-de-l-interface.css">
+ <link rel="stylesheet" href="ressources/styles/90-responsive-et-etats-finaux.css">
+ <title>Accessibilité — PJJoue</title>
+</head>
+<body class="page-information-corps">
+ <main class="page-information" id="contenuPrincipal">
+  <a class="page-information-retour" href="index.html">← Retour à PJJoue</a>
+  <header class="page-information-entete">
+   <h1>Accessibilité</h1>
+   <p>Informations sur l’état actuel de l’accessibilité et le signalement des difficultés.</p>
+  </header>
+
+  <section class="page-information-encadre">
+   <h2>État actuel</h2>
+   <p><strong>État de conformité : non évalué.</strong></p>
+   <p>PJJoue ne revendique pas, à ce stade, de conformité complète au Référentiel général d’amélioration de l’accessibilité (RGAA). Une déclaration de conformité ne pourra être publiée qu’après un audit représentatif et la correction des non-conformités constatées.</p>
+  </section>
+
+  <section>
+   <h2>Mesures déjà prises en compte</h2>
+   <ul>
+    <li>navigation au clavier et indication visible du focus ;</li>
+    <li>lien d’accès direct au contenu principal ;</li>
+    <li>réduction des animations selon les préférences du système ;</li>
+    <li>alternatives textuelles pour les éléments porteurs d’information ;</li>
+    <li>annonces de statut pour plusieurs interactions dynamiques ;</li>
+    <li>mise en page adaptée aux écrans mobiles et au zoom.</li>
+   </ul>
+  </section>
+
+  <section>
+   <h2>Points à contrôler en priorité</h2>
+   <ul>
+    <li>les activités de classement, d’association et de remise en ordre avec un clavier ou un lecteur d’écran ;</li>
+    <li>les fenêtres modales et la restitution du focus après fermeture ;</li>
+    <li>les contrastes dans tous les thèmes visuels ;</li>
+    <li>le chronomètre, les sons et les animations ;</li>
+    <li>l’affichage à fort grossissement.</li>
+   </ul>
+  </section>
+
+  <section>
+   <h2>Signaler une difficulté</h2>
+   <p>Pour signaler un obstacle d’accessibilité, décrivez si possible la page, l’action effectuée, l’appareil, le navigateur et l’outil d’assistance utilisés, puis écrivez à <a href="mailto:contact.pjjoue@gmail.com">contact.pjjoue@gmail.com</a>.</p>
+  </section>
+ </main>
+
+ <footer class="produit-pied-page produit-pied-page-information">
+  <p class="pied-page-independance">
+     <strong>PJJoue est un site personnel, pédagogique, indépendant et non officiel.</strong> Il est sans lien institutionnel avec le Gouvernement français, le ministère de la Justice, la PJJ ou l’ENPJJ. Les réponses s’appuient sur des sources officielles consultables depuis le site.
+    </p>
+  <p class="pied-page-credit">Création, conception et développement : <strong>Dev'Ines</strong></p>
+  <p class="pied-page-contact">Contact : <a href="mailto:contact.pjjoue@gmail.com">contact.pjjoue@gmail.com</a></p>
+  <nav aria-label="Informations légales et pratiques">
+   <a aria-current="page" href="accessibilite.html">Accessibilité</a>
+   <a href="confidentialite.html">Confidentialité</a>
+   <a href="mentions-legales.html">Mentions légales</a>
+  </nav>
+ </footer>
+</body>
+</html>
