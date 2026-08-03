@@ -26,24 +26,24 @@
       "sha256": "011311942811019a33d54aa07f1045a43301fc18a6819602dc52f47c4a6ac293"
     },
     "accessibilite.html": {
-      "tailleOctets": 4604,
-      "sha256": "978261f1c94dad966c30593c3e81ebb8e8b5f7c1ce9868aafd26a2b1c0a1221d"
+      "tailleOctets": 4620,
+      "sha256": "5e23a760f839cd01f1826915a99e04c2039315d98317699e9d4de83fb858a8c2"
     },
     "administration.html": {
-      "tailleOctets": 2762,
-      "sha256": "8763494ea7a51bbe632bcab70ff6f8024f86655aba48225a0ef0fe911c78270a"
+      "tailleOctets": 2778,
+      "sha256": "26cfd01a75c957c78f19301806aa21fa85d04a3db1e47f039ae92fecfa43a4bd"
     },
     "apple-touch-icon.png": {
-      "tailleOctets": 4637,
-      "sha256": "9af9e3ed65bf6f53f22f248c4741e24ce77aec51dea06bf383ffc2f9aa8398f6"
+      "tailleOctets": 8773,
+      "sha256": "54e25f324522ce2b4acc6e632eddbad746f2cd2683340e214a6b07a0e24d99b6"
     },
     "confidentialite.html": {
-      "tailleOctets": 6752,
-      "sha256": "c8779ca04182405520c6d06fa8d87b6b1be54affd722dd87fbc1c0b381b111e4"
+      "tailleOctets": 6768,
+      "sha256": "65031878e29f4e93ef67b4414701cb2c3ce573cf9fd7d0c668e9c3de83a715cf"
     },
     "decouvrir-la-pjj/index.html": {
-      "tailleOctets": 8220,
-      "sha256": "2b9696299a76c4763e6a1de6abc5a1bc95c91523289fcf6b3291ef0fc6ee78fc"
+      "tailleOctets": 8236,
+      "sha256": "afa8b9ee4be40afadcbc21b93ae20758c73a3b2b91abc4a5d70f7f118c22c611"
     },
     "documentation/ACCESSIBILITE.md": {
       "tailleOctets": 823,
@@ -134,36 +134,40 @@
       "sha256": "67e3c534e9624cf758622e113f960857d1818a9de46ffe2916e0382689b58a3b"
     },
     "favicon-48x48.png": {
-      "tailleOctets": 1335,
-      "sha256": "9bb7e47dda4721454f530871f9d74e17fd6dd16d94add74f15f82c15012b0c7e"
+      "tailleOctets": 2210,
+      "sha256": "93e6644ea03db15230a78cef4e19a01e4d4edb84f5fec4bf371e0ae65d54e957"
+    },
+    "favicon-96x96.png": {
+      "tailleOctets": 4546,
+      "sha256": "9a56a296e36ba731d5e856d851330f5c62d867df5c625e4af9dcc8c1eec87fb1"
+    },
+    "favicon-source.png": {
+      "tailleOctets": 12395,
+      "sha256": "99d5462dbafe0e3634e58329c11fce3af4240dd0cda7cfaca9233046384b91c3"
     },
     "favicon.ico": {
-      "tailleOctets": 4368,
-      "sha256": "501d13e04c87d4172f8978cf88f81fc3101adba3237982765a8d87f6aacafaed"
-    },
-    "favicon.svg": {
-      "tailleOctets": 428,
-      "sha256": "a377bc5bba7c1a328fcb26a57fd013fc7d61c81058a7e8d5a42df3a23bdbd8cf"
+      "tailleOctets": 4154,
+      "sha256": "e6ea9290538158404b13400c6059a8cdb13b90d3e733a9e8baf36f9b09ed38c6"
     },
     "index.html": {
-      "tailleOctets": 42833,
-      "sha256": "37337eb66eebddf557b2315ee0ac202d4909d1b58376d50d9125e7158d05a2e4"
+      "tailleOctets": 42849,
+      "sha256": "e77ee9d6799b81fbb5cd35f161659262dc524e94ef2770d4c0311138a9e9d8b4"
     },
     "mentions-legales.html": {
-      "tailleOctets": 6351,
-      "sha256": "d71d7ddcd389b1b2edda9f1f9800eb9a61ccfb639ec6a5eebdeafa29c35d86f9"
+      "tailleOctets": 6367,
+      "sha256": "d18d8f78369aa9885465379d3db8e173e30f66890b9c8506dbadce9fc0d0c7f3"
     },
     "mesures-educatives-pjj/index.html": {
-      "tailleOctets": 7830,
-      "sha256": "97b8d7064acf1646a0098e2773e2cda16a6e73eadb131b19c94a37a384c782bf"
+      "tailleOctets": 7846,
+      "sha256": "f6190ca8fceb54bc026b4907c356a96aed5db855e1a2356ee88b5f65280cdb67"
     },
     "metiers-pjj/index.html": {
-      "tailleOctets": 7619,
-      "sha256": "d8b10bde83b4712e8bd9233a88ee4d16f2c72300c6c09b5a1c8131925de770f5"
+      "tailleOctets": 7635,
+      "sha256": "648a6813fe702483e0a00dca1993340f30c5161388d208b6891b9ec10481deee"
     },
     "organisation-pjj/index.html": {
-      "tailleOctets": 8076,
-      "sha256": "1ebde6b2b6ec5285fbfe687100dec1674240e8bf50a055f5a882036720827d03"
+      "tailleOctets": 8092,
+      "sha256": "582b3db4ab2478dfcd496f7b4bcb2af60aa55c66c60a1cfb5ce994388f5106f6"
     },
     "outils/analyser_doublons_css.js": {
       "tailleOctets": 4182,
@@ -198,8 +202,8 @@
       "sha256": "d0c38d3f4a82c7291b37a2552a8d28f806963997e5e1493fb71f36c156afe2cb"
     },
     "quiz-pjj/index.html": {
-      "tailleOctets": 7788,
-      "sha256": "7ecfa62cac6c7e75df915c246e0903a74ec59f1dd1691f3708e779b62da39986"
+      "tailleOctets": 7804,
+      "sha256": "cf45d97baa4351288eeefc918e6556bb7bfa31ef6f6c2b85e9d203e873a7574c"
     },
     "requirements-dev.txt": {
       "tailleOctets": 19,
@@ -282,16 +286,16 @@
       "sha256": "62ae632763752e45dc36837974b882d28691f66327497b2ae6014c0a7ce74eef"
     },
     "sigles-pjj/index.html": {
-      "tailleOctets": 10691,
-      "sha256": "e6ba8407cefaa9fa250e37ee21fa3cf8dae7755ba326bea82b410f218aa4c129"
+      "tailleOctets": 10707,
+      "sha256": "92ea6e3c57c50bde0959728f301bfc310a1e085c63baffa5ba2aeff9c4220370"
     },
     "sitemap.xml": {
       "tailleOctets": 1208,
       "sha256": "e59c354228ef24c93e4430943d8230a74c86e0c521a6343cd6b50819ffd103e3"
     },
     "structures-pjj/index.html": {
-      "tailleOctets": 10082,
-      "sha256": "4473cde3554eaae9e3b51430ab6a9345baa806dd29788f614f2fc6e7a85f0e0d"
+      "tailleOctets": 10098,
+      "sha256": "7252e13758d3b8ede8049782315824a7b9cb81a4b41d487b36f8262cb84e2d56"
     },
     "tests/references-visuelles/README.md": {
       "tailleOctets": 908,
