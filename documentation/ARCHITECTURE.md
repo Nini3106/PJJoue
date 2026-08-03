@@ -14,6 +14,17 @@ Les fichiers JSON de `donnees/` restent les sources de vérité. `outils/constru
 
 Avant toute génération, `outils/validation_donnees.py` contrôle les champs obligatoires et les relations internes des activités : identifiants uniques, réponses multiples, ordres, associations, classements et références de sources. Le build s’arrête en présentant toutes les anomalies plutôt que de produire un fichier partiellement valide.
 
+
+## Guides pédagogiques publics
+
+Les répertoires `decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`,
+`structures-pjj/`, `mesures-educatives-pjj/`, `sigles-pjj/` et `quiz-pjj/`
+contiennent chacun un `index.html` statique avec une URL canonique propre.
+Ces pages n’embarquent pas le moteur du jeu : elles présentent des synthèses
+pédagogiques, renvoient vers les sources officielles et assurent le maillage
+interne vers le parcours. Leur présence dans `sitemap.xml` est contrôlée par
+`tests/verifier_v1.py`.
+
 ## Répartition des responsabilités
 
 ### `ressources/moteur-jeu.js`
@@ -31,10 +42,11 @@ Une fonction doit porter le nom exact de son action. Par exemple : `afficherQues
 
 ### `ressources/styles/`
 
-Les dix feuilles sont des tranches continues de l’ancienne cascade. Leur
+Les dix feuilles historiques sont des tranches continues de l’ancienne cascade. Leur
 préfixe numérique définit leur ordre de chargement et ne doit pas être
-modifié. Aucune règle n’a été déplacée par thème : ce choix garantit un
-rendu strictement identique tout en donnant à chaque tranche un rôle lisible.
+modifié. La feuille `85-guides-pedagogiques.css`, ajoutée après cette séparation,
+regroupe uniquement les pages pédagogiques publiques et leur maillage interne.
+Aucune règle historique n’y a été déplacée.
 
 Le fichier `ressources/styles/README.md` indique le contenu et les bornes
 fonctionnelles de chaque feuille. Les ajustements responsive restent dans la

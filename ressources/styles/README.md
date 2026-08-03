@@ -15,6 +15,7 @@ les déplacer ou modifier leur ordre peut changer le rendu.
 | 60 | `60-parcours-modes-et-chronometre.css` | finitions du parcours, modes, chronomètre et classement |
 | 70 | `70-celebrations-bilan-et-fenetres.css` | célébrations, bilan, modales et messages |
 | 80 | `80-finitions-de-l-interface.css` | couche de compatibilité et finitions transversales |
+| 85 | `85-guides-pedagogiques.css` | pages pédagogiques publiques, maillage interne et cartes de guides |
 | 90 | `90-responsive-et-etats-finaux.css` | derniers états et adaptations responsive de référence |
 
 ## Règle de modification
@@ -26,3 +27,4 @@ l’équivalence de la cascade et sans exécuter `npm test` puis
 
 Le filigrane référencé depuis le sous-dossier utilise volontairement le chemin
 `../filigrane-parcours.svg`.
+

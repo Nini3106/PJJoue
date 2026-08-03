@@ -36,6 +36,7 @@ FEUILLES_INTERFACE = (
     "ressources/styles/60-parcours-modes-et-chronometre.css",
     "ressources/styles/70-celebrations-bilan-et-fenetres.css",
     "ressources/styles/80-finitions-de-l-interface.css",
+    "ressources/styles/85-guides-pedagogiques.css",
     "ressources/styles/90-responsive-et-etats-finaux.css",
 )
 
@@ -116,6 +117,7 @@ def verifier_fichiers() -> None:
         "ressources/styles/60-parcours-modes-et-chronometre.css",
         "ressources/styles/70-celebrations-bilan-et-fenetres.css",
         "ressources/styles/80-finitions-de-l-interface.css",
+        "ressources/styles/85-guides-pedagogiques.css",
         "ressources/styles/90-responsive-et-etats-finaux.css",
         "ressources/styles/README.md",
         "ressources/administration.js",
@@ -151,6 +153,8 @@ def verifier_fichiers() -> None:
     emplacements_autorises = {
         '.git', '.github', '.gitignore', '.nojekyll', 'MANIFESTE.json', 'README.md',
         'accessibilite.html', 'administration.html', 'confidentialite.html',
+        'decouvrir-la-pjj', 'organisation-pjj', 'metiers-pjj', 'structures-pjj',
+        'mesures-educatives-pjj', 'sigles-pjj', 'quiz-pjj',
         'index.html', 'mentions-legales.html', 'ressources', 'donnees', 'documentation',
         'node_modules', 'outils', 'serveur', 'test-results', 'tests', 'eslint.config.js',
         'package.json', 'package-lock.json', 'requirements-dev.txt', 'robots.txt',
@@ -166,11 +170,20 @@ def verifier_fichiers() -> None:
 
 
 def verifier_references_html() -> None:
-    for page in RACINE.glob("*.html"):
+    for page in RACINE.rglob("*.html"):
+        if est_ignore_par_controles(page):
+            continue
         collecteur = CollecteurReferences()
         collecteur.feed(page.read_text(encoding="utf-8"))
-        manquantes = [reference for reference in collecteur.references if not (RACINE / reference).exists()]
-        exiger(not manquantes, f"{page.name} contient des références locales manquantes : {manquantes}")
+        manquantes = [
+            reference
+            for reference in collecteur.references
+            if not (page.parent / reference).resolve().exists()
+        ]
+        exiger(
+            not manquantes,
+            f"{page.relative_to(RACINE)} contient des références locales manquantes : {manquantes}",
+        )
 
 
 def verifier_referencement() -> None:
@@ -209,6 +222,13 @@ def verifier_referencement() -> None:
     urls = [element.text for element in arbre.findall("s:url/s:loc", espace)]
     urls_attendues = [
         "https://pjjoue.fr/",
+        "https://pjjoue.fr/decouvrir-la-pjj/",
+        "https://pjjoue.fr/organisation-pjj/",
+        "https://pjjoue.fr/metiers-pjj/",
+        "https://pjjoue.fr/structures-pjj/",
+        "https://pjjoue.fr/mesures-educatives-pjj/",
+        "https://pjjoue.fr/sigles-pjj/",
+        "https://pjjoue.fr/quiz-pjj/",
         "https://pjjoue.fr/mentions-legales.html",
         "https://pjjoue.fr/confidentialite.html",
         "https://pjjoue.fr/accessibilite.html",
@@ -218,6 +238,32 @@ def verifier_referencement() -> None:
         "https://pjjoue.fr/administration.html" not in urls,
         "La page d'administration ne doit pas figurer dans le sitemap.",
     )
+
+
+
+def verifier_guides_referencement() -> None:
+    guides = (
+        "decouvrir-la-pjj",
+        "organisation-pjj",
+        "metiers-pjj",
+        "structures-pjj",
+        "mesures-educatives-pjj",
+        "sigles-pjj",
+        "quiz-pjj",
+    )
+    accueil = (RACINE / "index.html").read_text(encoding="utf-8")
+    exiger('rel="canonical"' in accueil, "La page d’accueil doit déclarer son URL canonique.")
+    exiger('type="application/ld+json"' in accueil, "Les données structurées WebSite sont absentes de l’accueil.")
+    exiger('id="titreGuidesPublics"' in accueil, "Le maillage visible vers les guides est absent de l’accueil.")
+    for guide in guides:
+        chemin = RACINE / guide / "index.html"
+        exiger(chemin.is_file(), f"Le guide public {guide} est absent.")
+        contenu = chemin.read_text(encoding="utf-8")
+        exiger(contenu.count('name="description"') == 1, f"La méta-description de {guide} est absente ou dupliquée.")
+        exiger(f'href="https://pjjoue.fr/{guide}/"' in contenu, f"L’URL canonique de {guide} est incorrecte.")
+        exiger('type="application/ld+json"' in contenu, f"Les données structurées de {guide} sont absentes.")
+        exiger('<h1>' in contenu and 'Sources officielles' in contenu, f"Le contenu éditorial de {guide} est incomplet.")
+        exiger("site personnel, pédagogique, indépendant et non officiel" in contenu, f"L’avertissement d’indépendance est absent de {guide}.")
 
 
 def verifier_pied_page_et_pages_information() -> None:
@@ -275,7 +321,12 @@ def verifier_securite_et_accessibilite() -> None:
     exiger("Content-Security-Policy" in page, "La politique de sécurité du contenu est absente.")
     exiger("script-src 'self'" in page and "unsafe-eval" not in page, "La politique de scripts est insuffisante.")
     for attributs, contenu in re.findall(r"<script([^>]*)>(.*?)</script>", page, re.DOTALL | re.IGNORECASE):
-        exiger("src=" in attributs or not contenu.strip(), "Un script intégré directement dans index.html a été détecté.")
+        est_json_ld = 'type="application/ld+json"' in attributs.lower()
+        exiger(
+            "src=" in attributs or not contenu.strip() or est_json_ld,
+            "Un script exécutable intégré directement dans index.html a été détecté.",
+        )
+    exiger("sha256-" in page, "Le script JSON-LD de l’accueil doit être autorisé par une empreinte CSP.")
     identifiants = re.findall(r'\bid="([^"]+)"', page)
     dupliques = sorted({identifiant for identifiant in identifiants if identifiants.count(identifiant) > 1})
     exiger(not dupliques, f"Identifiants HTML dupliqués : {dupliques}")
@@ -737,6 +788,10 @@ if(
         RACINE / "mentions-legales.html",
         RACINE / "confidentialite.html",
         RACINE / "accessibilite.html",
+        *(RACINE / guide / "index.html" for guide in (
+            "decouvrir-la-pjj", "organisation-pjj", "metiers-pjj",
+            "structures-pjj", "mesures-educatives-pjj", "sigles-pjj", "quiz-pjj",
+        )),
         RACINE / "ressources/moteur-jeu.js",
         RACINE / "ressources/administration.js",
         RACINE / "donnees/donnees-pjj.js",
@@ -840,6 +895,7 @@ def principal() -> int:
         verifier_fichiers,
         verifier_references_html,
         verifier_referencement,
+        verifier_guides_referencement,
         verifier_pied_page_et_pages_information,
         verifier_securite_et_accessibilite,
         verifier_raccourci_validation,

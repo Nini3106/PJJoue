@@ -6,7 +6,17 @@
   <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 150 questions et 7 modes de jeu." name="description"/>
   <meta content="no-referrer" name="referrer"/>
   <meta content="dark" name="color-scheme"/>
-  <meta content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" http-equiv="Content-Security-Policy"/>
+  <meta content="index,follow,max-image-preview:large" name="robots"/>
+  <link href="https://pjjoue.fr/" rel="canonical"/>
+  <meta content="website" property="og:type"/>
+  <meta content="PJJoue" property="og:site_name"/>
+  <meta content="fr_FR" property="og:locale"/>
+  <meta content="PJJoue — Découvrir et comprendre la PJJ" property="og:title"/>
+  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 150 questions et 7 modes de jeu." property="og:description"/>
+  <meta content="https://pjjoue.fr/" property="og:url"/>
+  <meta content="https://pjjoue.fr/ressources/panorama-accueil-calme.png" property="og:image"/>
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="default-src 'self'; script-src 'self' 'sha256-qh/c/CvY76sHcEVgWMfQQGZzfeZoitbxce1/RhQ+kWw='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" http-equiv="Content-Security-Policy"/>
   <title>
    PJJoue — Découvrir et comprendre la PJJ
   </title>
@@ -19,7 +29,9 @@
   <link rel="stylesheet" href="ressources/styles/60-parcours-modes-et-chronometre.css">
   <link rel="stylesheet" href="ressources/styles/70-celebrations-bilan-et-fenetres.css">
   <link rel="stylesheet" href="ressources/styles/80-finitions-de-l-interface.css">
+  <link rel="stylesheet" href="ressources/styles/85-guides-pedagogiques.css">
   <link rel="stylesheet" href="ressources/styles/90-responsive-et-etats-finaux.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PJJoue","alternateName":"PJJoue — Découvrir et comprendre la PJJ","url":"https://pjjoue.fr/","description":"Parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
  </head>
  <body>
   <a class="passer-lien" href="#contenuPrincipal">
@@ -892,6 +904,21 @@
     </div>
    </section>
   </main>
+  <section class="guides-publics-accueil" aria-labelledby="titreGuidesPublics">
+   <div class="guides-publics-accueil-entete">
+    <h2 id="titreGuidesPublics">Guides pour découvrir la PJJ</h2>
+    <p>Comprends les notions essentielles avant ou après le quiz. Chaque guide s’appuie sur des sources officielles accessibles pour vérifier les informations.</p>
+   </div>
+   <nav class="guides-publics-accueil-grille" aria-label="Guides pédagogiques sur la PJJ">
+    <a href="decouvrir-la-pjj/">Qu’est-ce que la PJJ ?</a>
+    <a href="organisation-pjj/">Organisation de la PJJ</a>
+    <a href="metiers-pjj/">Métiers de la PJJ</a>
+    <a href="structures-pjj/">Structures de la PJJ</a>
+    <a href="mesures-educatives-pjj/">Mesures éducatives</a>
+    <a href="sigles-pjj/">Sigles essentiels</a>
+    <a href="quiz-pjj/">Quiz PJJ : 150 questions</a>
+   </nav>
+  </section>
   <div aria-atomic="true" aria-live="polite" class="notification" id="notification" role="status">
   </div>
   <footer class="produit-pied-page">

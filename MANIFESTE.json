@@ -22,28 +22,32 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "README.md": {
-      "tailleOctets": 4892,
-      "sha256": "62af28bffeb18cfd2958e826895b32b703351bc8b532b63a6920bdfb1da0d555"
+      "tailleOctets": 5109,
+      "sha256": "011311942811019a33d54aa07f1045a43301fc18a6819602dc52f47c4a6ac293"
     },
     "accessibilite.html": {
-      "tailleOctets": 4222,
-      "sha256": "db81c239dff38536813d5d29c50753bafe8460c4a9809d60628318abc85fcaeb"
+      "tailleOctets": 4335,
+      "sha256": "8915f09b73550686fec5b55dcb2c9feaddd4797854abafd667e0ded2d8024ae4"
     },
     "administration.html": {
       "tailleOctets": 2493,
       "sha256": "fce4abb0dfa785d0ee3c91cf1702e0abff6d5bb99ca42b4164142f4c494e9ccc"
     },
     "confidentialite.html": {
-      "tailleOctets": 6368,
-      "sha256": "4d70c71e2f7b6cfea2b8fb713189b8961ed5afb3967ea312bc6f36ccbff364ea"
+      "tailleOctets": 6483,
+      "sha256": "bc766c11fc47606d060e1ed7fa7b12b1c4c4105eaa748f8e986640ec4565d1d0"
+    },
+    "decouvrir-la-pjj/index.html": {
+      "tailleOctets": 7939,
+      "sha256": "a98863995570882964966963be80d9841dcac0aeb81421c44eab824300baa765"
     },
     "documentation/ACCESSIBILITE.md": {
       "tailleOctets": 823,
       "sha256": "61766372d1d4b51838b37eed10012c193f3775508bc2355f7ff568bad9fe1ab9"
     },
     "documentation/ARCHITECTURE.md": {
-      "tailleOctets": 15723,
-      "sha256": "5130ee0d64c68d4e008f7374bb6133b0a281335b810b31189cd413c75a0e6ed0"
+      "tailleOctets": 16314,
+      "sha256": "cd9366032a6d882e51d7f202455edda863308e70d3142e5e1ce262ba103eb6e7"
     },
     "documentation/AUDIT_EDITORIAL.md": {
       "tailleOctets": 674,
@@ -66,8 +70,8 @@
       "sha256": "8d829904c5e124662aa3a158d86a31215128fc5c4d4abc89b8ad1c6b3f4c86bc"
     },
     "documentation/DEPLOIEMENT.md": {
-      "tailleOctets": 1808,
-      "sha256": "85a617b2334d46b5e1c9b93b491932322fb1cfe152c48cae2d053f4933deab36"
+      "tailleOctets": 2038,
+      "sha256": "746ee522eb01e8e91d51cc91044a760bd335684180166f45ddb333912476bd88"
     },
     "documentation/ETAT_V1.md": {
       "tailleOctets": 1559,
@@ -126,12 +130,24 @@
       "sha256": "67e3c534e9624cf758622e113f960857d1818a9de46ffe2916e0382689b58a3b"
     },
     "index.html": {
-      "tailleOctets": 40396,
-      "sha256": "9d49c45b0720d9192b52b11b757524c263534298b39e595e696a2997b7b657fe"
+      "tailleOctets": 42566,
+      "sha256": "44477db11970e45d13eae0b60362bd511ff8285ecd19c36117b4f61ebd6c8bd3"
     },
     "mentions-legales.html": {
-      "tailleOctets": 5966,
-      "sha256": "aabb201641b4f5b69dbf5bdb2629f5d01404cfd3058cbbb3eb9d0e8ec512fc47"
+      "tailleOctets": 6082,
+      "sha256": "be2112aa12b1a9dbdd8c23d746d8e02c7232c78ecd73673654042be49994159a"
+    },
+    "mesures-educatives-pjj/index.html": {
+      "tailleOctets": 7549,
+      "sha256": "382fe6f5c05596e626a207f668d24689d595f11a4eecb6e46e53b7305ddd1bfd"
+    },
+    "metiers-pjj/index.html": {
+      "tailleOctets": 7338,
+      "sha256": "a8343da10f0ee4cb176b16dd61b6290b2577fcb9256832809dc368832ea4be6d"
+    },
+    "organisation-pjj/index.html": {
+      "tailleOctets": 7795,
+      "sha256": "0e50c3e370701c78e20a5c2c0967b8dc40c8a12336ca863ff668341a641f27e4"
     },
     "outils/analyser_doublons_css.js": {
       "tailleOctets": 4182,
@@ -164,6 +180,10 @@
     "package.json": {
       "tailleOctets": 1478,
       "sha256": "d0c38d3f4a82c7291b37a2552a8d28f806963997e5e1493fb71f36c156afe2cb"
+    },
+    "quiz-pjj/index.html": {
+      "tailleOctets": 7507,
+      "sha256": "766dbd966aa7c2719e501f2604f28779b2f0c9823bd3ecfaa70e34766a630d36"
     },
     "requirements-dev.txt": {
       "tailleOctets": 19,
@@ -225,13 +245,17 @@
       "tailleOctets": 21808,
       "sha256": "3171cbc5d6c8b3ab875840bf21ad62d13ea853be2ac0f6649e09546e98b68558"
     },
+    "ressources/styles/85-guides-pedagogiques.css": {
+      "tailleOctets": 8172,
+      "sha256": "c731b6637c52ed8680af8c248f2de7db25afb376c59ae95d16689ac733fc834a"
+    },
     "ressources/styles/90-responsive-et-etats-finaux.css": {
       "tailleOctets": 30101,
       "sha256": "098e5cf8a0b74db13f68a71de4ea6eba5b688755e90d426e3b293e67dc3525d1"
     },
     "ressources/styles/README.md": {
-      "tailleOctets": 1688,
-      "sha256": "f27665c38883a270d96563c10fe44ee7d25378315486b91255528ec5cfc7d27a"
+      "tailleOctets": 1797,
+      "sha256": "95f93c019bd68951d15fd1e1c0a7e75de5fc8734e53c86b385bcecef2e95462a"
     },
     "robots.txt": {
       "tailleOctets": 63,
@@ -241,9 +265,17 @@
       "tailleOctets": 490,
       "sha256": "62ae632763752e45dc36837974b882d28691f66327497b2ae6014c0a7ce74eef"
     },
+    "sigles-pjj/index.html": {
+      "tailleOctets": 10410,
+      "sha256": "3e185bcae0de060a6b68256d4ed7a974854ba914ff216b62f1db9dfca7cce300"
+    },
     "sitemap.xml": {
-      "tailleOctets": 509,
-      "sha256": "ddec5e138276b4e604ef90236111f31462a5ee0ea58a1292741c408874b5f302"
+      "tailleOctets": 1208,
+      "sha256": "e59c354228ef24c93e4430943d8230a74c86e0c521a6343cd6b50819ffd103e3"
+    },
+    "structures-pjj/index.html": {
+      "tailleOctets": 9801,
+      "sha256": "4bd54148e0f1ebe23196cdda310cb7d2b2dffb95111debf6e8e8e084755da957"
     },
     "tests/references-visuelles/README.md": {
       "tailleOctets": 908,
@@ -330,16 +362,16 @@
       "sha256": "d5495634f58c9b1424113aa482203b92a983de1c71d943509d1c159cc536aa25"
     },
     "tests/verifier_interface.py": {
-      "tailleOctets": 48574,
-      "sha256": "c46c55a0c4693df6c0a8133fcfd5120fd3b90782368da464bb96f6315931ed65"
+      "tailleOctets": 48626,
+      "sha256": "3bb5984170097b80a80df1f3108c50016e50e7a18820ee1ff48adcc2c59eebe7"
     },
     "tests/verifier_regression_visuelle.py": {
       "tailleOctets": 11449,
       "sha256": "2cb05f4a2e7abf18e4c37175503ca611f5fea23774b7b9c7f4fb56e2ab3fd4fe"
     },
     "tests/verifier_v1.py": {
-      "tailleOctets": 36926,
-      "sha256": "8b36674aeb2ca1942068694ec64e91f40702aa268109437a79c2f0462fda120a"
+      "tailleOctets": 39629,
+      "sha256": "849415c91d17805d4fd430b920ef0f7b9951d2b41126612c750b42f74bab030d"
     }
   }
 }

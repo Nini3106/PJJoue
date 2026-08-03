@@ -33,7 +33,8 @@ py -m http.server 8000
 
 ## Organisation principale
 
-- `index.html` : interface publique du jeu ;
+- `index.html` : interface publique du jeu et point d’entrée vers les guides ;
+- `decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`, `structures-pjj/`, `mesures-educatives-pjj/`, `sigles-pjj/` et `quiz-pjj/` : pages pédagogiques publiques indexables ;
 - `ressources/moteur-jeu.js` : logique complète du jeu ;
 - `ressources/styles/` : feuilles visuelles thématiques chargées dans l’ordre numérique ;
 - `donnees/*.json` : sources de vérité de la banque, des programmes et des références ;

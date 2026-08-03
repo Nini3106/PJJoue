@@ -29,6 +29,7 @@ FEUILLES_INTERFACE = (
     "ressources/styles/60-parcours-modes-et-chronometre.css",
     "ressources/styles/70-celebrations-bilan-et-fenetres.css",
     "ressources/styles/80-finitions-de-l-interface.css",
+    "ressources/styles/85-guides-pedagogiques.css",
     "ressources/styles/90-responsive-et-etats-finaux.css",
 )
 

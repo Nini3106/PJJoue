@@ -9,7 +9,8 @@ Utiliser un hébergement web statique en HTTPS. `index.html` doit rester à la r
 Publier :
 
 - `index.html` ;
-- `confidentialite.html` et `mentions-legales.html` ;
+- `confidentialite.html`, `mentions-legales.html` et `accessibilite.html` ;
+- les répertoires de guides publics (`decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`, `structures-pjj/`, `mesures-educatives-pjj/`, `sigles-pjj/`, `quiz-pjj/`) ;
 - `robots.txt` et `sitemap.xml` ;
 - les dossiers `ressources/` et `donnees/` ;
 - `.nojekyll` lorsque l’hébergement l’exige ;
@@ -37,4 +38,4 @@ Après la mise en ligne sur `https://pjjoue.fr/` :
 4. saisir `sitemap.xml`, puis cliquer sur **Envoyer** ;
 5. laisser Google explorer et indexer le site, puis contrôler l’état du sitemap dans Search Console.
 
-Le sitemap contient uniquement les pages publiques stables. Les écrans internes du jeu utilisent une navigation dynamique dans `index.html` et ne doivent pas être déclarés comme des URL séparées. La page `administration.html` porte une directive `noindex,nofollow` et ne figure pas dans le sitemap.
+Le sitemap contient les pages publiques stables, notamment les guides pédagogiques indexables. Les écrans internes du jeu utilisent une navigation dynamique dans `index.html` et ne doivent pas être déclarés comme des URL séparées. La page `administration.html` porte une directive `noindex,nofollow` et ne figure pas dans le sitemap.
