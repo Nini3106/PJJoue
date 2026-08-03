@@ -5,7 +5,7 @@
 ## Version à reprendre
 
 Le dossier de travail validé est :
-`C:\Users\inesz\OneDrive\Desktop\PJJoue\PJJoue_V2_CSS_THEMATIQUE`
+`C:\Users\inesz\OneDrive\Desktop\PJJoue\PJJoue_V2_TRAVAIL`
 
 L’archive finale est :
 `C:\Users\inesz\OneDrive\Desktop\PJJoue\PJJoue_V2_CSS_THEMATIQUE.zip`
@@ -40,8 +40,3 @@ L’archive finale est :
 
 Le rendu et le fonctionnement de référence ne doivent jamais être modifiés sans
 décision explicite.
-
-## Organisation conservÃ©e
-
-Dans le dossier `PJJoue`, conserver uniquement ce dossier de travail et
-`PJJoue_V2_CSS_THEMATIQUE.zip`, sa sauvegarde validÃ©e.

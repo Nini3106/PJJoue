@@ -10,7 +10,7 @@ Sous Windows, lancer depuis la racine :
 npm run test:visuel
 ```
 
-Le contrôle compare 19 vues par leur largeur, leur hauteur et l'empreinte
+Le contrôle compare 18 vues par leur largeur, leur hauteur et l'empreinte
 SHA-256 de leurs pixels décodés. Les métadonnées propres au fichier PNG ne sont
 donc pas prises en compte.
 

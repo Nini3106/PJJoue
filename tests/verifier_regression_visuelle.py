@@ -80,7 +80,6 @@ document.querySelector(
 
 SCENARIOS_VISUELS = {
     "bureau-accueil": ("jeu", "bureau", SCENARIOS["accueil"]),
-    "bureau-choix-mode": ("jeu", "bureau", SCENARIOS["jouer"]),
     "bureau-parcours": ("jeu", "bureau", SCENARIOS["parcours"]),
     "bureau-entrainement": ("jeu", "bureau", SCENARIOS["entrainement"]),
     "bureau-question-relier": ("jeu", "bureau", SCENARIOS["question_relier"]),

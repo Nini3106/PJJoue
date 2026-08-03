@@ -5,7 +5,7 @@ fonctionne en ouvrant `index.html` et ne nécessite ni serveur applicatif, ni
 base de données, ni étape de compilation pour être diffusé.
 
 Pour reprendre le chantier de nettoyage interrompu, lire d'abord
-`../POINT_DE_REPRISE_PJJOUE.md`.
+`documentation/POINT_DE_REPRISE.md`.
 
 ## Trouver immédiatement le bon fichier
 

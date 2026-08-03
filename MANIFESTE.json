@@ -1,7 +1,7 @@
 {
   "produit": "PJJoue",
   "version": "V1",
-  "dateConsolidation": "2026-08-02",
+  "dateConsolidation": "2026-08-03",
   "composition": {
     "questionsTotales": 150,
     "questionsParcours": 100,
@@ -21,6 +21,10 @@
       "tailleOctets": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
+    "README.md": {
+      "tailleOctets": 4933,
+      "sha256": "9448050cc25088d67524dec29124904cbafc3943abaa211c2cac35c729ae76dd"
+    },
     "accessibilite.html": {
       "tailleOctets": 2389,
       "sha256": "0d162f7f8bb5c3d37a7f59beb26c4e6a00712a8e9b4d0472dcae75efc76abe7a"
@@ -38,12 +42,8 @@
       "sha256": "61766372d1d4b51838b37eed10012c193f3775508bc2355f7ff568bad9fe1ab9"
     },
     "documentation/ARCHITECTURE.md": {
-      "tailleOctets": 15577,
-      "sha256": "5e47a33b6e7032241650d74ab2452e5cc60350ac61f8581a2e65437118d41306"
-    },
-    "documentation/audit_contenu.csv": {
-      "tailleOctets": 23083,
-      "sha256": "623a583ee103ad32b77b4148f1a3000d3361f92e1673e21028e0b705a99e7144"
+      "tailleOctets": 15723,
+      "sha256": "5130ee0d64c68d4e008f7374bb6133b0a281335b810b31189cd413c75a0e6ed0"
     },
     "documentation/AUDIT_EDITORIAL.md": {
       "tailleOctets": 674,
@@ -62,8 +62,8 @@
       "sha256": "36c6f4dd84f0542e35b8f9979176628f4a38eab82dc11a423e13d4cbc8466a9e"
     },
     "documentation/COMMENCER_ICI.md": {
-      "tailleOctets": 4050,
-      "sha256": "67f83028d12ed6910c33487f71db9833cb30e5332a85d16ffd91171375c1d380"
+      "tailleOctets": 4054,
+      "sha256": "8d829904c5e124662aa3a158d86a31215128fc5c4d4abc89b8ad1c6b3f4c86bc"
     },
     "documentation/DEPLOIEMENT.md": {
       "tailleOctets": 1211,
@@ -81,13 +81,17 @@
       "tailleOctets": 640,
       "sha256": "b8f2391e497f1383c1b19c40b51241a6ee47c25693f1e16bc9c6788b327c0be7"
     },
+    "documentation/POINT_DE_REPRISE.md": {
+      "tailleOctets": 1847,
+      "sha256": "b2b83c8b72f87a471f73415f228b9fcc29389a86736b0c814788f807f8855c7b"
+    },
     "documentation/RAPPORT_CONTROLE_FINAL.md": {
       "tailleOctets": 1609,
       "sha256": "7a77641581c0b3dcd80be097a535d310f6fb3dc48cc5e9c9e344840e32482fb2"
     },
     "documentation/RECETTE.md": {
-      "tailleOctets": 4236,
-      "sha256": "fb7ac42894ba171c07c08ac66deba07b0d2af3c6251074c8f92b33030ea34f82"
+      "tailleOctets": 4477,
+      "sha256": "851b4afe537c8820f801f7ed69a18cca56f4028e7789d75fabe94ae6e0a9b71c"
     },
     "documentation/SECURITE_RGPD.md": {
       "tailleOctets": 1149,
@@ -96,6 +100,10 @@
     "documentation/VALIDATION_METIER.md": {
       "tailleOctets": 587,
       "sha256": "2e923697795c8d3f2dda80c05ddfd819b840d1f419121a5624a364f90c4b6f54"
+    },
+    "documentation/audit_contenu.csv": {
+      "tailleOctets": 23083,
+      "sha256": "623a583ee103ad32b77b4148f1a3000d3361f92e1673e21028e0b705a99e7144"
     },
     "donnees/donnees-pjj.js": {
       "tailleOctets": 182752,
@@ -118,8 +126,8 @@
       "sha256": "67e3c534e9624cf758622e113f960857d1818a9de46ffe2916e0382689b58a3b"
     },
     "index.html": {
-      "tailleOctets": 41689,
-      "sha256": "9b8ae734b6c5df4266bee99f5b2ae3d0abe42cf75d9fb34d0ad4929c154e3992"
+      "tailleOctets": 39951,
+      "sha256": "2498975c551a8029e5fe08100a3c208a20813474f8cb4855cbf086c6a46e078d"
     },
     "mentions-legales.html": {
       "tailleOctets": 2495,
@@ -157,14 +165,6 @@
       "tailleOctets": 1478,
       "sha256": "d0c38d3f4a82c7291b37a2552a8d28f806963997e5e1493fb71f36c156afe2cb"
     },
-    "POINT_DE_REPRISE_PJJOUE.md": {
-      "tailleOctets": 2021,
-      "sha256": "2b0f35bb346f02356c4bd74e1385fce239017de7d4c2917c344b80d3e029bcc5"
-    },
-    "README.md": {
-      "tailleOctets": 4933,
-      "sha256": "9448050cc25088d67524dec29124904cbafc3943abaa211c2cac35c729ae76dd"
-    },
     "requirements-dev.txt": {
       "tailleOctets": 19,
       "sha256": "963bbb0c6c6b19b84b580f27aca706173058e2b88a620f533db5cb90a7cf879f"
@@ -182,28 +182,28 @@
       "sha256": "566335679cad0c0b9f04b665c086cd0feaae04d84aa224a35ace711f580db322"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 208806,
-      "sha256": "6529417d3ddf38b7135d0546f460ba5526e88cb30703d426b6a513b64ef6ed57"
+      "tailleOctets": 208697,
+      "sha256": "9f13451b3da1a925bf70137542650893609924418d9a5cd1e641f3e98477c444"
     },
     "ressources/panorama-accueil-calme.png": {
       "tailleOctets": 1811539,
       "sha256": "ef6d930900e4547d85862f41e9ac2fe68c481d35d8ab52abdb7bb4c6ea4da7e8"
     },
     "ressources/styles/00-fondations-et-composants.css": {
-      "tailleOctets": 38621,
-      "sha256": "69eb1eb68553e4e1f34ba1dc9149dcd9408d23ef46ede2bc3cb377bf4ba75525"
+      "tailleOctets": 35423,
+      "sha256": "d45ec3d0efbf40ce745e6d0d6240233a78ad9017a8cca25ed6be38dd505ca8e3"
     },
     "ressources/styles/10-parcours-principal.css": {
       "tailleOctets": 23402,
       "sha256": "98cf8e81d0d6961d546277ddf18ba0f6a2837f98dd776ca7ef1916785e303a09"
     },
     "ressources/styles/20-accueil-et-question-principale.css": {
-      "tailleOctets": 21040,
-      "sha256": "cf52679cf17afa140f89ddc2f5703863a3220ce7f64e033e1ac558b9482c83be"
+      "tailleOctets": 16949,
+      "sha256": "d1be5d0538e6381e96282d0d2581d7ea6c36f5c0be83a744290a813fa34deffb"
     },
     "ressources/styles/30-revision-parcours-et-parametres.css": {
-      "tailleOctets": 20834,
-      "sha256": "2379e28369518a0bc69569743de1e3501d3565a5ea3f002d6b97229d3363e8ce"
+      "tailleOctets": 20441,
+      "sha256": "dd7911425ea5aadefff089fcd9c6d0a23af949faac8f4f3a29c7adb72a1b8a80"
     },
     "ressources/styles/40-progression-et-erreurs.css": {
       "tailleOctets": 9526,
@@ -214,20 +214,20 @@
       "sha256": "f3e7d07822aeb12ea06ba3726522b5476ead149902ebe684a77692fd03582d74"
     },
     "ressources/styles/60-parcours-modes-et-chronometre.css": {
-      "tailleOctets": 11226,
-      "sha256": "91599cdf94d35f421f8f7e4c5ed64e7ef54894e611391f3e174cc01301925ad5"
+      "tailleOctets": 11062,
+      "sha256": "3115f59561d5d4c8f2d37ab38c2edbea13e5c6c3d939179d855368ff6bc89f87"
     },
     "ressources/styles/70-celebrations-bilan-et-fenetres.css": {
       "tailleOctets": 13366,
       "sha256": "29248489ee86481feb336e33ce3a769d0ef91620bc26100d9c146b166cf21282"
     },
     "ressources/styles/80-finitions-de-l-interface.css": {
-      "tailleOctets": 20964,
-      "sha256": "471ca6276271a2dde2c202dcf9687d68926828149422fe210f9417d41d04ca0c"
+      "tailleOctets": 19282,
+      "sha256": "a28bbab0dd7cadea74d00d0ea2a2360b58bb7b48188d4b2b4b2e2a9082a20f15"
     },
     "ressources/styles/90-responsive-et-etats-finaux.css": {
-      "tailleOctets": 32272,
-      "sha256": "355cfc10629257c5e7a89e05c3ffef18ed7829dfdb83559ebeb1d696dadc883a"
+      "tailleOctets": 30042,
+      "sha256": "e1da603a43d6052f0a350f1b58b0e30381db311572408c49b93975fe654cabe3"
     },
     "ressources/styles/README.md": {
       "tailleOctets": 1688,
@@ -239,7 +239,7 @@
     },
     "tests/references-visuelles/README.md": {
       "tailleOctets": 908,
-      "sha256": "0dc7b6aa5ada188141c9958557a24b57e06e23176eb3792e38a3267d3b564248"
+      "sha256": "5f33245bbbc2c2bb769e33ab8b10f47eb8367734a2234c3f0f6b215fb0b52876"
     },
     "tests/references-visuelles/windows-chromium/administration-bureau.png": {
       "tailleOctets": 44501,
@@ -252,10 +252,6 @@
     "tests/references-visuelles/windows-chromium/bureau-bilan.png": {
       "tailleOctets": 91512,
       "sha256": "70086c256e182601f717ae7a3f4edf3f6ac4523974d8c11b74c828758a19cba8"
-    },
-    "tests/references-visuelles/windows-chromium/bureau-choix-mode.png": {
-      "tailleOctets": 65237,
-      "sha256": "349b22eb9654efb74357c9e921fe5eb4a64c62be1552c949fba8b19d2efd4e3f"
     },
     "tests/references-visuelles/windows-chromium/bureau-correction-fausse.png": {
       "tailleOctets": 92756,
@@ -282,8 +278,8 @@
       "sha256": "481a470e73e081e465a77a88d457412305513b76f7df5e5a7fd4f902093edf05"
     },
     "tests/references-visuelles/windows-chromium/empreintes.json": {
-      "tailleOctets": 4228,
-      "sha256": "39aab56e194dc17352f832a189a8451e7574f0774dce3cc16203416ea8ebe6fe"
+      "tailleOctets": 3898,
+      "sha256": "22729e7746b5ad53e9d16f2ddd9a86761e49280b854530faccfbc3fc9575d632"
     },
     "tests/references-visuelles/windows-chromium/mobile-accueil.png": {
       "tailleOctets": 117066,
@@ -326,16 +322,16 @@
       "sha256": "d5495634f58c9b1424113aa482203b92a983de1c71d943509d1c159cc536aa25"
     },
     "tests/verifier_interface.py": {
-      "tailleOctets": 43833,
-      "sha256": "0c3e4b794ef34f2f3990bf44de8ebcac476e9afe3257049f17547547e7171209"
+      "tailleOctets": 48574,
+      "sha256": "c46c55a0c4693df6c0a8133fcfd5120fd3b90782368da464bb96f6315931ed65"
     },
     "tests/verifier_regression_visuelle.py": {
-      "tailleOctets": 11513,
-      "sha256": "2e5379487b40c12194689602e852638770ab7cac906d26a78a559ab9a4975de2"
+      "tailleOctets": 11449,
+      "sha256": "2cb05f4a2e7abf18e4c37175503ca611f5fea23774b7b9c7f4fb56e2ab3fd4fe"
     },
     "tests/verifier_v1.py": {
-      "tailleOctets": 32289,
-      "sha256": "96466c6fde04a0fcfbde9e3bc26682a114c6401d98e612fa1b7dd927cc5bf382"
+      "tailleOctets": 32735,
+      "sha256": "8101d1957ee16f844c709ccc599c5fa93456f64af75f495230a3a0fab5360efe"
     }
   }
 }

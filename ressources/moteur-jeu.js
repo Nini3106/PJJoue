@@ -510,12 +510,12 @@ function ajusterQuestionAEcran() {
 }
 const TITRES_ECRANS = {
     accueil: 'Accueil',
-    choixMode: 'Comment veux-tu jouer ?',
+    parcours: 'Parcours PJJ',
+    carnet: 'Carnet de voyage',
     entrainement: 'Choisis ton mode d’entraînement',
     erreurs: 'Mes erreurs à retravailler',
     progression: 'Progression',
     parametres: 'Paramètres',
-    parcours: 'Parcours PJJ',
     question: 'Question',
     bilan: 'Résultats'
 };
@@ -564,6 +564,10 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
         afficherProgression();
     if (identifiant === 'parametres')
         afficherSources();
+    if (identifiant === 'carnet') {
+        initialiserProgression('commun');
+        actualiserCarnetParcours(PROGRAMMES.commun);
+    }
     actualiserGroupesChoix();
     actualiserNavigation(identifiant);
     actualiserBoutonRetour();
@@ -730,8 +734,8 @@ function revenirEnArriere() {
         afficherEcran(secours, { forcerSortieQuestion: true, remplacerHistorique: true });
         return;
     }
-    if (etat.ecran === 'parcours' || etat.ecran === 'entrainement') {
-        afficherEcran('choixMode', { forcerSortieQuestion: true, remplacerHistorique: true });
+    if (etat.ecran === 'parcours' || etat.ecran === 'carnet' || etat.ecran === 'entrainement') {
+        afficherEcran('accueil', { forcerSortieQuestion: true, remplacerHistorique: true });
         return;
     }
     if (etat.ecran === 'bilan') {
@@ -748,7 +752,7 @@ function lireRoute() {
     const parties = location.hash.replace(/^#/, '').split('/').map(decodeURIComponent);
     if (parties[0] === 'parcours')
         return { pjjoue: true, ecran: 'parcours', theme: parties[1] || 'commun' };
-    const ecransAutorises = ['accueil', 'choixMode', 'entrainement', 'erreurs', 'progression', 'parametres'];
+    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'progression', 'parametres'];
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
 }
 function restaurerRoute(route) {
@@ -1034,14 +1038,16 @@ function actualiserBoutonPrincipalAccueil() {
     );
     if (nombreQuestionsTraitees === 0) {
         bouton.innerHTML = 'Commencer <span aria-hidden="true">→</span>';
-        bouton.onclick = () => afficherEcran('choixMode');
+        bouton.onclick = () => ouvrirParcours(programme.id);
         return;
     }
     const etapeAReprendre = obtenirEtapeAReprendre(programme);
     bouton.innerHTML = etapeAReprendre
         ? `Reprendre l’étape ${etapeAReprendre.id} <span aria-hidden="true">→</span>`
         : 'Voir mon carnet <span aria-hidden="true">→</span>';
-    bouton.onclick = () => ouvrirParcours(programme.id);
+    bouton.onclick = etapeAReprendre
+        ? () => ouvrirParcours(programme.id)
+        : () => afficherEcran('carnet');
 }
 function obtenirProchaineDestinationParcours(programme) {
     const etapeAReprendre = obtenirEtapeAReprendre(programme);
@@ -1295,7 +1301,7 @@ function initialiserGroupesChoix() {
                     proposition.classList.toggle('selectionne', actif);
                     proposition.setAttribute('aria-pressed', String(actif));
                 });
-                if (listeDeroulante.id === 'echelleTexte')
+                if (listeDeroulante.id === 'echelleTexte' || listeDeroulante.id === 'sonActif')
                     enregistrerParametres();
             };
         });
@@ -3842,8 +3848,8 @@ function afficherEtatVideErreurs(zone, aucunePartieJouee) {
                 </div>
                 <h2>Tu n’as pas encore joué.</h2>
                 <p>Commence une partie avant de pouvoir rejouer tes erreurs.</p>
-                <button class="principal" data-action="commencer-depuis-erreurs">
-                    Commencer une partie
+                <button class="principal" data-action="ouvrir-parcours-depuis-erreurs">
+                    Commencer le parcours
                 </button>
             </div>`;
         return;
@@ -4048,42 +4054,39 @@ function afficherSources() {
 // -----------------------------------------------------------------------------
 // Paramètres, import/export, sons et effets de célébration
 // -----------------------------------------------------------------------------
-function appliquerEtatSon() {
-    selectionnerTous('.son-commande').forEach(bouton => {
-        bouton.setAttribute('aria-pressed', String(!!sauvegarde.parametres.son));
-        bouton.setAttribute('aria-label', sauvegarde.parametres.son ? 'Désactiver le son' : 'Activer le son');
-        const libelle = bouton.querySelector('.son-texte');
-        if (libelle)
-            libelle.textContent = sauvegarde.parametres.son ? 'Son activé' : 'Son coupé';
-    });
-}
-
-function basculerSon() {
-    sauvegarde.parametres.son = !sauvegarde.parametres.son;
-    enregistrerSauvegarde();
-    chargerParametres();
-    if (sauvegarde.parametres.son) {
-        initialiserAudio();
-        jouerSonReussite();
-    }
+function appliquerDisponibiliteVolumeSon() {
+    const volume = selectionner('#volumeSon');
+    const parametreVolume = volume?.closest('.parametre-volume');
+    if (!volume)
+        return;
+    const sonActif = sauvegarde.parametres.son !== false;
+    volume.disabled = !sonActif;
+    volume.setAttribute('aria-disabled', String(!sonActif));
+    parametreVolume?.classList.toggle('parametre-desactive', !sonActif);
 }
 function chargerParametres() {
     const parametres = sauvegarde.parametres;
+    selectionner('#sonActif').value = String(parametres.son !== false);
     selectionner('#volumeSon').value = parametres.volume;
     selectionner('#echelleTexte').value = String(parametres.echelleTexte || 1);
     document.documentElement.style.setProperty('--echelle-texte', String(parametres.echelleTexte || 1));
+    appliquerDisponibiliteVolumeSon();
     requestAnimationFrame(mesurerHauteurEntete);
-    appliquerEtatSon();
     actualiserGroupesChoix();
 }
 function enregistrerParametres() {
+    const sonEtaitActif = sauvegarde.parametres.son !== false;
     sauvegarde.parametres = {
-        son: sauvegarde.parametres.son,
+        son: selectionner('#sonActif').value === 'true',
         volume: Number(selectionner('#volumeSon').value),
         echelleTexte: Number(selectionner('#echelleTexte').value)
     };
     enregistrerSauvegarde();
     chargerParametres();
+    if (!sonEtaitActif && sauvegarde.parametres.son) {
+        initialiserAudio();
+        jouerSonReussite();
+    }
 }
 function exporterProgression() {
     const contenuFichier = new Blob([JSON.stringify(sauvegarde, null, 2)], { type: 'application/json' });
@@ -4237,14 +4240,15 @@ function lancerConfettis(intensite = 1, cible = document.body) {
 // -----------------------------------------------------------------------------
 // Branchement des commandes de l’interface
 // -----------------------------------------------------------------------------
-selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => { if (etat.ecran === 'parametres')
-    enregistrerParametres(); afficherEcran(bouton.dataset.ecran); });
-const boutonParcours = selectionner('#boutonParcours');
-if (boutonParcours)
-    boutonParcours.onclick = () => { etat.theme = 'commun'; ouvrirParcours('commun'); };
-const boutonEntrainementLibre = selectionner('#boutonEntrainementLibre');
-if (boutonEntrainementLibre)
-    boutonEntrainementLibre.onclick = () => afficherEcran('entrainement');
+selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => {
+    if (etat.ecran === 'parametres')
+        enregistrerParametres();
+    if (bouton.dataset.ecran === 'parcours') {
+        ouvrirParcours('commun');
+        return;
+    }
+    afficherEcran(bouton.dataset.ecran);
+});
 const boutonLancerDeParcours = selectionner('#boutonLancerDeParcours');
 if (boutonLancerDeParcours)
     boutonLancerDeParcours.onclick = lancerDeParcours;
@@ -4278,7 +4282,6 @@ selectionner('#boutonRetourGlobal').onclick = revenirEnArriere;
 selectionner('#boutonRevoirErreursBilan').onclick = () => afficherEcran('erreurs');
 selectionner('#boutonRetourParcoursBilan').onclick = () => ouvrirParcours('commun', { remplacerHistorique: true });
 selectionner('#boutonOuvrirParcoursProgression').onclick = () => ouvrirParcours('commun');
-selectionnerTous('.son-commande').forEach(bouton => bouton.onclick = basculerSon);
 selectionner('#boutonExporterProgression').onclick = exporterProgression;
 selectionner('#fichierImporterProgression').onchange = evenement => evenement.target.files[0] && importerProgression(evenement.target.files[0]);
 selectionner('#boutonReinitialiserProgression').onclick = () => ouvrirFenetreMessage({
@@ -4368,8 +4371,6 @@ document.addEventListener('click', evenement => {
         selectionnerAssociation(cible.dataset.cote, cible.dataset.element);
     else if (action === 'attribuer-categorie')
         attribuerCategorie(cible.dataset.element, cible.dataset.categorie);
-    else if (action === 'afficher-choix-mode')
-        afficherEcran('choixMode');
     else if (action === 'reviser-toutes-erreurs')
         lancerRevision('toutes');
     else if (action === 'reviser-theme')
@@ -4454,9 +4455,9 @@ document.addEventListener('click', evenement => {
     }
 });
 document.addEventListener('click', evenement => {
-    const demarrerDepuisErreurs = evenement.target.closest('[data-action="commencer-depuis-erreurs"]');
-    if (!demarrerDepuisErreurs)
+    const ouvrirParcoursDepuisErreurs = evenement.target.closest('[data-action="ouvrir-parcours-depuis-erreurs"]');
+    if (!ouvrirParcoursDepuisErreurs)
         return;
     evenement.preventDefault();
-    afficherEcran('choixMode');
+    ouvrirParcours('commun');
 });

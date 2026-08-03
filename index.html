@@ -41,45 +41,33 @@
     <span aria-hidden="true"></span>
    </button>
    <nav class="navigation" id="menuPrincipal">
-    <button data-ecran="accueil">
+    <button data-ecran="accueil" type="button">
      Accueil
     </button>
-    <button data-ecran="choixMode">
-     Jouer
+    <button data-ecran="parcours" type="button">
+     Parcours PJJ
     </button>
-    <button data-ecran="erreurs">
+    <button data-ecran="carnet" type="button">
+     Carnet de voyage
+    </button>
+    <button data-ecran="entrainement" type="button">
+     Entraînement libre
+    </button>
+    <button data-ecran="erreurs" type="button">
      Réviser
     </button>
-    <button data-ecran="progression">
+    <button data-ecran="progression" type="button">
      Progression
     </button>
-    <button data-ecran="parametres">
+    <button data-ecran="parametres" type="button">
      Paramètres
     </button>
-   <button aria-label="Désactiver le son" aria-pressed="true" class="rapide son-commande" id="boutonSonRapide" type="button">
-    <svg aria-hidden="true" class="son-icone" viewbox="0 0 24 24">
-     <path d="M4 10h3l4-3v10l-4-3H4z">
-     </path>
-     <path class="son-onde" d="M14 9a4 4 0 0 1 0 6M16.5 6.5a7.5 7.5 0 0 1 0 11">
-     </path>
-    </svg>
-    <span class="son-texte">
-     Son activé
-    </span>
-   </button>
    </nav>
   </header>
   <main class="conteneur" id="contenuPrincipal" tabindex="-1">
    <div class="barre-actions-page">
     <button class="discret global-retour masque" id="boutonRetourGlobal" type="button">
      ← Retour
-    </button>
-    <button aria-label="Désactiver le son" aria-pressed="true" class="discret son-mobile son-commande" id="boutonSonMobile" type="button">
-     <svg aria-hidden="true" class="son-icone" viewbox="0 0 24 24">
-      <path d="M4 10h3l4-3v10l-4-3H4z"></path>
-      <path class="son-onde" d="M14 9a4 4 0 0 1 0 6M16.5 6.5a7.5 7.5 0 0 1 0 11"></path>
-     </svg>
-     <span class="son-texte">Son activé</span>
     </button>
    </div>
    <section class="ecran actif" id="accueil">
@@ -112,12 +100,11 @@
        <p class="accueil-marque"><span>PJJ</span>oue</p>
        <h1>Entre dans l’univers de la PJJ</h1>
        <span aria-hidden="true" class="accueil-accent"></span>
+       <div class="accueil-action-principale">
+        <button class="accueil-presentation-zone-cliquable accueil-presentation-demarrer" id="boutonAccueilPrincipal" type="button">Commencer <span aria-hidden="true">→</span></button>
+       </div>
       </div>
       <p class="accueil-introduction">Découvre la Protection judiciaire de la jeunesse, comprends son fonctionnement et progresse à ton rythme à travers un parcours structuré et interactif.</p>
-      <div class="accueil-actions">
-       <button class="accueil-presentation-zone-cliquable accueil-presentation-demarrer" data-ecran="choixMode" id="boutonAccueilPrincipal" type="button">Commencer <span aria-hidden="true">→</span></button>
-       <button class="accueil-presentation-zone-cliquable accueil-presentation-entrainement" data-ecran="entrainement" type="button">S’entraîner librement</button>
-      </div>
       <ul class="accueil-statistiques" aria-label="Contenu du jeu">
        <li>
         <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-turquoise" viewBox="0 0 48 48"><path d="M6 10c7-2 13 0 18 5v25c-5-5-11-7-18-5zM42 10c-7-2-13 0-18 5v25c5-5 11-7 18-5z"/></svg>
@@ -137,63 +124,6 @@
        </li>
       </ul>
      </div>
-    </div>
-   </section>
-   <section class="ecran" id="choixMode">
-    <div class="page-entete">
-     <h1>
-      Comment veux-tu jouer ?
-     </h1>
-     <p>
-      Découvre le parcours PJJ étape par étape ou entraîne-toi librement.
-     </p>
-    </div>
-    <div class="mode-grille">
-     <button class="mode-carte" id="boutonParcours">
-      <span aria-hidden="true" class="mode-icone mode-icone-programme">
-       <svg viewbox="0 0 64 64">
-        <path d="M8 14 23 9l18 6 15-5v40l-15 5-18-6-15 5z"></path>
-        <path d="M23 9v40M41 15v40"></path>
-        <path d="M14 39c7-10 13-4 18-12s11-6 17-3"></path>
-        <circle cx="14" cy="39" r="2.7"></circle>
-        <circle cx="49" cy="24" r="2.7"></circle>
-       </svg>
-      </span>
-      <span class="mode-titre">
-       Parcours PJJ
-      </span>
-      <span class="mode-texte">
-       Découvre les 10 étapes du parcours PJJ, étape par étape.
-      </span>
-      <div class="mode-details">
-       10 étapes · progression structurée
-      </div>
-      <span class="lancer">
-       Ouvrir le programme
-      </span>
-     </button>
-     <button class="mode-carte" id="boutonEntrainementLibre">
-      <span aria-hidden="true" class="mode-icone mode-icone-libre">
-       <svg viewbox="0 0 64 64">
-        <circle cx="32" cy="32" r="23"></circle>
-        <circle cx="32" cy="32" r="4"></circle>
-        <path d="m27 37 7-17 8-6-5 17-10 6Z"></path>
-        <path d="M32 5v5M59 32h-5M32 59v-5M5 32h5"></path>
-       </svg>
-      </span>
-      <span class="mode-titre">
-       Entraînement libre
-      </span>
-      <span class="mode-texte">
-       Mélange les activités du parcours PJJ pour vérifier ce que tu sais réellement mobiliser.
-      </span>
-      <div class="mode-details">
-       Thème · nombre de questions · mode
-      </div>
-      <span class="lancer">
-       Configurer l’entraînement
-      </span>
-     </button>
     </div>
    </section>
    <section class="ecran" id="parcours">
@@ -230,14 +160,83 @@
       </div>
      </div>
     </div>
-    <aside class="carnet-parcours" aria-labelledby="titreCarnetParcours">
+    <div class="chemin-chemin">
+     <div class="carte-parcours-entete chemin-carte-parcours-entete">
+      <span aria-hidden="true" class="carte-parcours-icone">
+       <svg viewBox="0 0 48 48"><path d="m6 10 11-4 14 5 11-4v31l-11 4-14-5-11 4z"></path><path d="M17 6v31M31 11v31"></path><path d="M11 29c5-7 10-3 14-9s8-5 12-2"></path><circle cx="11" cy="29" r="2"></circle><circle cx="37" cy="18" r="2"></circle></svg>
+      </span>
+      <div class="carte-parcours-titres">
+       <span class="carte-parcours-surtitre">Carte du parcours</span>
+       <h2>Les 10 destinations</h2>
+       <p id="resumeCarteParcours"></p>
+      </div>
+     </div>
+     <div class="chemin-ligne" id="ligneParcours1">
+     </div>
+     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
+     </div>
+     <div class="chemin-ligne chemin-ligne-inverse" id="ligneParcours2">
+     </div>
+     <div aria-hidden="true" class="chemin-virage chemin-virage-gauche">
+     </div>
+     <div class="chemin-ligne" id="ligneParcours3">
+     </div>
+     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
+     </div>
+      <div class="chemin-finale-ligne">
+      <div class="chemin-finale-espace">
+      </div>
+      <div id="carteEtape10">
+      </div>
+      <div aria-hidden="true" class="chemin-finale-lien">
+      </div>
+      <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled="" id="carteEvaluationFinale" type="button">
+       <span aria-hidden="true" class="icone-evaluation">
+        <svg aria-hidden="true" focusable="false" viewbox="0 0 48 48">
+         <path d="M16 9h16v7c0 7-3.4 12-8 12s-8-5-8-12V9z">
+         </path>
+         <path d="M16 13h-6v4c0 5 3 8 8 8">
+         </path>
+         <path d="M32 13h6v4c0 5-3 8-8 8">
+         </path>
+         <path d="M24 28v7">
+         </path>
+         <path d="M19 35h10">
+         </path>
+         <path d="M17 40h14">
+         </path>
+        </svg>
+       </span>
+       <span class="evaluation-etape-numero">
+        ÉTAPE 11
+       </span>
+       <span class="evaluation-titre">
+        Évaluation
+       </span>
+       <span class="evaluation-statut">
+        Parcours sans jokers requis
+       </span>
+      </button>
+     </div>
+    </div>
+   </section>
+   <section class="ecran" id="carnet">
+    <div class="page-entete carnet-page-entete">
+     <h1>
+      Carnet de voyage
+     </h1>
+     <p>
+      Retrouve ton avancée, tes souvenirs et les défis qui accompagnent ton parcours.
+     </p>
+    </div>
+    <section class="carnet-parcours" aria-labelledby="titreCarnetParcours">
      <div class="carnet-parcours-contenu">
       <div class="carnet-parcours-entete">
        <div aria-hidden="true" class="carnet-parcours-icone">
         <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"></circle><path d="m29 19-3 7-7 3 3-7z"></path><path d="M24 3v4M24 41v4M3 24h4M41 24h4"></path></svg>
        </div>
        <div>
-        <span class="carnet-parcours-surtitre">Carnet de voyage</span>
+        <span class="carnet-parcours-surtitre">Ton parcours</span>
         <h2 id="titreCarnetParcours">Ton aventure dans l’univers de la PJJ</h2>
        </div>
        <span class="carnet-parcours-titre" id="titreSymboliqueParcours">Nouveau départ</span>
@@ -307,66 +306,7 @@
        </section>
       </div>
      </div>
-    </aside>
-    <div class="chemin-chemin">
-     <div class="carte-parcours-entete chemin-carte-parcours-entete">
-      <span aria-hidden="true" class="carte-parcours-icone">
-       <svg viewBox="0 0 48 48"><path d="m6 10 11-4 14 5 11-4v31l-11 4-14-5-11 4z"></path><path d="M17 6v31M31 11v31"></path><path d="M11 29c5-7 10-3 14-9s8-5 12-2"></path><circle cx="11" cy="29" r="2"></circle><circle cx="37" cy="18" r="2"></circle></svg>
-      </span>
-      <div class="carte-parcours-titres">
-       <span class="carte-parcours-surtitre">Carte du parcours</span>
-       <h2>Les 10 destinations</h2>
-       <p id="resumeCarteParcours"></p>
-      </div>
-     </div>
-     <div class="chemin-ligne" id="ligneParcours1">
-     </div>
-     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
-     </div>
-     <div class="chemin-ligne chemin-ligne-inverse" id="ligneParcours2">
-     </div>
-     <div aria-hidden="true" class="chemin-virage chemin-virage-gauche">
-     </div>
-     <div class="chemin-ligne" id="ligneParcours3">
-     </div>
-     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
-     </div>
-      <div class="chemin-finale-ligne">
-      <div class="chemin-finale-espace">
-      </div>
-      <div id="carteEtape10">
-      </div>
-      <div aria-hidden="true" class="chemin-finale-lien">
-      </div>
-      <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled="" id="carteEvaluationFinale" type="button">
-       <span aria-hidden="true" class="icone-evaluation">
-        <svg aria-hidden="true" focusable="false" viewbox="0 0 48 48">
-         <path d="M16 9h16v7c0 7-3.4 12-8 12s-8-5-8-12V9z">
-         </path>
-         <path d="M16 13h-6v4c0 5 3 8 8 8">
-         </path>
-         <path d="M32 13h6v4c0 5-3 8-8 8">
-         </path>
-         <path d="M24 28v7">
-         </path>
-         <path d="M19 35h10">
-         </path>
-         <path d="M17 40h14">
-         </path>
-        </svg>
-       </span>
-       <span class="evaluation-etape-numero">
-        ÉTAPE 11
-       </span>
-       <span class="evaluation-titre">
-        Évaluation
-       </span>
-       <span class="evaluation-statut">
-        Parcours sans jokers requis
-       </span>
-      </button>
-     </div>
-    </div>
+    </section>
    </section>
    <section class="ecran" id="entrainement">
     <div class="page-entete entrainement-entete">
@@ -866,11 +806,32 @@
       Paramètres
      </h1>
      <p>
-      Adapte l’affichage et le volume à ton confort d’utilisation.
+      Adapte l’affichage et le son à ton confort d’utilisation.
      </p>
     </div>
     <div class="formulaire-grille">
-     <div class="parametre">
+     <div class="parametre parametres-choix parametre-son">
+      <div class="choix-libelle">
+       Son
+      </div>
+      <select aria-hidden="true" class="natif-masque" id="sonActif" tabindex="-1">
+       <option value="true">
+        Activé
+       </option>
+       <option value="false">
+        Désactivé
+       </option>
+      </select>
+      <div class="choix-groupe" data-groupe-choix="sonActif">
+       <button class="choix-bouton actif" data-valeur="true" type="button">
+        Activé
+       </button>
+       <button class="choix-bouton" data-valeur="false" type="button">
+        Désactivé
+       </button>
+      </div>
+     </div>
+     <div class="parametre parametre-volume">
       <label for="volumeSon">
        Volume
       </label>

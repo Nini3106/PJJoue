@@ -71,28 +71,15 @@
     label.secondaire {
         min-height: 44px;
     }
-    #choixMode .mode-grille,
     #entrainement .entrainement-grille,
-    #erreurs .revision-mode-grille,
-    #progression .progression-grille {
+#erreurs .revision-mode-grille,
+#progression .progression-grille {
         grid-template-columns: 1fr;
         gap: 16px;
     }
-    #choixMode .mode-carte {
-        min-height: 0;
-        padding: 22px 20px;
-        border-radius: 19px;
-    }
-    #choixMode .mode-icone {
-        width: 62px;
-        height: 62px;
-        min-width: 62px;
-        margin-bottom: 14px;
-    }
-    #choixMode .mode-icone svg {
-        width: 56px;
-        height: 56px;
-    }
+    
+    
+    
     #entrainement .entrainement-carte,
     #erreurs .revision-mode-carte,
     #progression .progression-carte,
@@ -122,8 +109,8 @@
         width: 100%;
     }
     #parcours .chemin-programme-presentation,
-    #parcours .carnet-parcours,
-    #parcours .chemin-chemin {
+#carnet .carnet-parcours,
+#parcours .chemin-chemin {
         width: 100%;
         min-width: 0;
     }
@@ -261,11 +248,10 @@
     .conteneur {
         width: calc(100% - 16px);
     }
-    #choixMode .mode-carte,
     #entrainement .entrainement-carte,
-    #erreurs .revision-mode-carte,
-    #progression .progression-carte,
-    #parametres .parametre {
+#erreurs .revision-mode-carte,
+#progression .progression-carte,
+#parametres .parametre {
         padding: 18px 16px;
         border-radius: 17px;
     }
@@ -403,34 +389,8 @@
     line-height: 1.5;
 }
 
-/* Correctifs mobiles ciblés : menu complet et entraînement sans collision. */
+/* Ajustements mobiles ciblés : navigation et entraînement sans collision. */
 @media (max-width:580px) {
-    .navigation {
-        display: grid;
-        grid-template-columns: repeat(6,minmax(0,1fr));
-        gap: 8px;
-        width: 100%;
-        padding: 3px 0 2px;
-        overflow: visible;
-        box-sizing: border-box;
-    }
-    .navigation::after {
-        content: none;
-    }
-    .navigation button {
-        grid-column: span 2;
-        width: 100%;
-        min-width: 0;
-        min-height: 42px;
-        padding: 8px 5px;
-        overflow: visible;
-        text-overflow: clip;
-        font-size: .82rem;
-        white-space: nowrap;
-    }
-    .navigation button:nth-last-child(-n+2) {
-        grid-column: span 3;
-    }
     #entrainement .entrainement-grille {
         width: 100%;
         gap: 14px;
@@ -508,13 +468,6 @@
 }
 
 @media (max-width:360px) {
-    .navigation {
-        gap: 6px;
-    }
-    .navigation button {
-        padding-inline: 3px;
-        font-size: .76rem;
-    }
     #entrainement .entrainement-carte {
         padding-inline: 14px;
     }
@@ -537,40 +490,6 @@
 }
 
 @media (max-width:820px) {
-    header.entete {
-        grid-template-columns: 1fr;
-    }
-    header.entete .marque {
-        justify-self: center;
-    }
-    header.entete .navigation {
-        display: grid;
-        grid-template-columns: repeat(3,minmax(0,1fr));
-        gap: 7px;
-        padding: 0;
-    }
-    header.entete .navigation button,
-    header.entete .navigation button:nth-last-child(-n+2),
-    header.entete .navigation .son-commande.rapide {
-        grid-column: auto;
-        width: 100%;
-        min-width: 0;
-        min-height: 38px;
-        height: auto;
-        padding: 6px 8px;
-        font-size: clamp(.7rem,2.7vw,.84rem);
-        line-height: 1.15;
-        white-space: nowrap;
-    }
-    header.entete .navigation .son-commande.rapide {
-        gap: 5px;
-    }
-    header.entete .navigation .son-icone {
-        width: 17px;
-        height: 17px;
-        flex: 0 0 17px;
-    }
-
     #accueil.ecran.actif {
         display: block;
         height: auto;
@@ -657,16 +576,6 @@
 }
 
 @media (max-width:360px) {
-    header.entete .navigation {
-        gap: 5px;
-    }
-    header.entete .navigation button,
-    header.entete .navigation button:nth-last-child(-n+2),
-    header.entete .navigation .son-commande.rapide {
-        min-height: 36px;
-        padding: 5px 4px;
-        font-size: .68rem;
-    }
     #accueil .accueil-contenu {
         padding-inline: 16px;
     }
@@ -762,11 +671,7 @@
     header.entete.menu-mobile-ouvert .navigation {
         display: grid;
     }
-    header.entete .navigation button,
-    header.entete .navigation button:nth-last-child(-n+2),
-    header.entete .navigation .son-commande.rapide,
-    header.entete .navigation .son-commande.rapide[aria-pressed="true"],
-    header.entete .navigation .son-commande.rapide[aria-pressed="false"] {
+    header.entete .navigation button {
         grid-column: auto;
         width: max-content;
         max-width: 100%;
@@ -785,23 +690,14 @@
         white-space: nowrap;
     }
     header.entete .navigation button:hover,
-    header.entete .navigation button:focus-visible,
-    header.entete .navigation button[aria-current="page"],
-    header.entete .navigation .son-commande.rapide:hover,
-    header.entete .navigation .son-commande.rapide:focus-visible,
-    header.entete .navigation .son-commande.rapide[aria-pressed="true"] {
+header.entete .navigation button:focus-visible,
+header.entete .navigation button[aria-current="page"] {
         color: var(--bouton-selection);
         border-bottom-color: var(--bouton-selection);
         background: transparent;
     }
-    header.entete .navigation .son-icone {
-        width: 16px;
-        height: 16px;
-        flex: 0 0 16px;
-    }
-    header.entete .navigation .son-texte {
-        font-size: inherit;
-    }
+    
+    
 
     #accueil .accueil-presentation {
         position: relative;
@@ -809,6 +705,7 @@
     #accueil .accueil-contenu {
         position: static;
         padding: 22px 20px 28px;
+        transform: none;
     }
     #accueil .accueil-texte-image {
         position: absolute;
@@ -830,7 +727,17 @@
     #accueil .accueil-texte-image .accueil-accent {
         width: clamp(42px,13vw,70px);
         height: 4px;
-        margin: 10px 0 0;
+        margin: 9px 0 0;
+    }
+    #accueil .accueil-action-principale {
+        width: 100%;
+        margin-top: 20px;
+    }
+    #accueil .accueil-action-principale .accueil-presentation-zone-cliquable {
+        min-height: 34px;
+        margin-inline: 0;
+        padding: 5px 12px;
+        font-size: .82rem;
     }
     #accueil .accueil-introduction {
         max-width: 680px;
@@ -898,17 +805,16 @@
         position: relative;
         top: 2px;
     }
-    #accueil .accueil-presentation-zone-cliquable,
     #entrainement .entrainement-lancer,
-    #parcours #boutonLancerDeParcours,
-    #parcours #boutonJouerTirageDe,
-    #question .question-commande-ligne button,
-    #bilan .bilan-actions button,
-    #progression .progression-actions button,
-    #parametres .parametres-actions-boutons button,
-    .pjj-fenetre-actions button,
-    .celebration-continuer,
-    .global-retour {
+#carnet #boutonLancerDeParcours,
+#carnet #boutonJouerTirageDe,
+#question .question-commande-ligne button,
+#bilan .bilan-actions button,
+#progression .progression-actions button,
+#parametres .parametres-actions-boutons button,
+.pjj-fenetre-actions button,
+.celebration-continuer,
+.global-retour {
         width: max-content;
         max-width: calc(100vw - 32px);
         min-width: 0;
@@ -958,14 +864,14 @@
 header.entete .marque > span {
     top: 3px;
 }
-#parcours .carnet-parcours {
+#carnet .carnet-parcours {
     display: block;
 }
-#parcours .carnet-parcours-contenu {
+#carnet .carnet-parcours-contenu {
     width: 100%;
     min-width: 0;
 }
-#parcours .carnet-parcours-entete {
+#carnet .carnet-parcours-entete {
     display: grid;
     grid-template-columns: auto minmax(0,1fr) auto;
     align-items: center;
@@ -974,11 +880,11 @@ header.entete .marque > span {
     padding-bottom: 18px;
     border-bottom: 1px solid rgba(145,198,245,.22);
 }
-#parcours .carnet-parcours-icone {
+#carnet .carnet-parcours-icone {
     align-self: center;
     margin: 0;
 }
-#parcours #boutonLancerDeParcours .libelle-mobile {
+#carnet #boutonLancerDeParcours .libelle-mobile {
     display: none;
 }
 #question .question-commande-ligne .libelle-mobile {
@@ -1031,15 +937,15 @@ header.entete .marque > span {
         justify-content: center;
         gap: 8px;
     }
-    #parcours .carnet-parcours-entete {
+    #carnet .carnet-parcours-entete {
         grid-template-columns: 44px minmax(0,1fr);
         align-items: center;
         gap: 12px;
     }
-    #parcours .carnet-parcours-entete > div:nth-child(2) {
+    #carnet .carnet-parcours-entete > div:nth-child(2) {
         align-self: center;
     }
-    #parcours .carnet-parcours-titre {
+    #carnet .carnet-parcours-titre {
         grid-column: 2;
         justify-self: start;
     }
@@ -1053,21 +959,21 @@ header.entete .marque > span {
         padding-right: 0;
     }
     /* Deux commandes d'un même encadrement restent côte à côte si elles tiennent. */
-    #parcours .carnet-defi-de-actions,
-    #bilan .bilan-actions,
-    #progression .progression-actions,
-    #parametres .parametres-actions-boutons,
-    #question .question-commande-ligne > .suivant-ligne,
-    #question .question-commande-ligne .navigation-question-groupe,
-    .actions,
-    .pjj-fenetre-actions {
+    #carnet .carnet-defi-de-actions,
+#bilan .bilan-actions,
+#progression .progression-actions,
+#parametres .parametres-actions-boutons,
+#question .question-commande-ligne > .suivant-ligne,
+#question .question-commande-ligne .navigation-question-groupe,
+.actions,
+.pjj-fenetre-actions {
         display: flex;
         flex-flow: row wrap;
         align-items: center;
         justify-content: center;
         gap: 8px;
     }
-    #parcours .carnet-defi-de-actions {
+    #carnet .carnet-defi-de-actions {
         grid-column: 1 / -1;
         display: grid;
         grid-template-columns: max-content max-content;
@@ -1076,7 +982,7 @@ header.entete .marque > span {
         gap: 7px;
         width: 100%;
     }
-    #parcours .carnet-defi-de-actions button {
+    #carnet .carnet-defi-de-actions button {
         flex: 0 1 auto;
         width: max-content !important;
         min-width: 0;
@@ -1087,10 +993,10 @@ header.entete .marque > span {
         white-space: nowrap;
         font-size: .8rem;
     }
-    #parcours #boutonLancerDeParcours .libelle-bureau {
+    #carnet #boutonLancerDeParcours .libelle-bureau {
         display: none;
     }
-    #parcours #boutonLancerDeParcours .libelle-mobile {
+    #carnet #boutonLancerDeParcours .libelle-mobile {
         display: inline;
     }
     /* Navigation d'une question : deux rangées stables, sans chevauchement. */
@@ -1140,6 +1046,33 @@ header.entete .marque > span {
 
 /* Accueil ordinateur : l'illustration utilise toute la largeur visible. */
 @media (min-width:821px) {
+    #accueil .accueil-contenu {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    #accueil .accueil-texte-image {
+        display: contents;
+    }
+    #accueil .accueil-marque {
+        order: 1;
+    }
+    #accueil .accueil-contenu h1 {
+        order: 2;
+    }
+    #accueil .accueil-accent {
+        order: 3;
+    }
+    #accueil .accueil-introduction {
+        order: 4;
+    }
+    #accueil .accueil-action-principale {
+        order: 5;
+    }
+    #accueil .accueil-statistiques {
+        order: 6;
+        align-self: stretch;
+    }
     body[data-ecran-actif="accueil"] .conteneur {
         width: 100%;
         max-width: none;

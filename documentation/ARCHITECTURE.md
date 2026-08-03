@@ -115,7 +115,7 @@ Dans l’écran de question, `afficherReperesQuestion` rassemble les information
 
 Les transitions de question et de correction sont volontairement courtes. Elles sont neutralisées par la préférence système de réduction des animations. Sur mobile, la carte conserve une hauteur minimale mais peut grandir pour accueillir les énoncés et réponses longues sans les comprimer.
 
-Le carnet regroupe les deux outils facultatifs du voyage. Le défi chrono configure seulement les prochaines étapes du parcours. Le défi du hasard appelle `lancerDeParcours`, mémorise temporairement une face de 1 à 6 puis `jouerTirageDeParcours` lance exactement le même nombre de questions aléatoires en mode libre. Ce tirage ne modifie pas les règles de validation des dix étapes.
+Le Carnet de voyage est un écran indépendant accessible depuis la navigation principale. La page Parcours PJJ reste consacrée à la carte des dix étapes et à l’évaluation finale. Le carnet regroupe les deux outils facultatifs du voyage. Le défi chrono configure seulement les prochaines étapes du parcours. Le défi du hasard appelle `lancerDeParcours`, mémorise temporairement une face de 1 à 6 puis `jouerTirageDeParcours` lance exactement le même nombre de questions aléatoires en mode libre. Ce tirage ne modifie pas les règles de validation des dix étapes.
 
 Le dé du hasard est un SVG en perspective. La propriété `data-face` portée par `de-objet` commande uniquement les points de la face avant ; les faces supérieure et latérale restent décoratives. La zone `souvenirsParcours` possède une hauteur maximale et un défilement vertical automatique : la barre latérale n’apparaît que lorsque les fiches dépassent l’espace prévu.
 
@@ -137,7 +137,7 @@ Le filigrane `ressources/filigrane-parcours.svg` rassemble la route, la boussole
 
 L’icône cible de l’objectif conserve son SVG et son emplacement. Son trait de `3.2` et son ombre légère reprennent la finesse des icônes de carte et de boussole.
 
-Les pictogrammes de choix de jeu, de révision et de progression utilisent des SVG au trait commun (`2.6`). Les couleurs existantes restent sémantiques : jaune pour le parcours, turquoise pour l’entraînement et la révision aléatoire, jaune pour la révision par étape et la progression du parcours. La carte du parcours réemploie le dessin cartographique de la page Parcours PJJ.
+Les pictogrammes de révision et de progression utilisent des SVG au trait commun (`2.6`). Les couleurs existantes restent sémantiques : turquoise pour l’entraînement et la révision aléatoire, jaune pour la révision par étape et la progression du parcours. La carte du parcours réemploie le dessin cartographique de la page Parcours PJJ.
 
 Les phrases produites par `activite-consigne` sont des indications secondaires communes à tous les modes. Leur texte utilise `.88rem`, tandis que le badge du mode utilise `.72rem`. Les compteurs d’élimination et de choix ordonné restent légèrement plus petits (`.82rem`).
 

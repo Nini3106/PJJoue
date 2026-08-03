@@ -60,8 +60,8 @@ dossier appartient à un dépôt GitHub.
 
 ## Recette fonctionnelle manuelle
 
-1. Ouvrir l’accueil et vérifier les boutons Accueil, Jouer, Réviser, Progression et Paramètres.
-2. Ouvrir le parcours et vérifier les dix étapes ainsi que la carte de l’évaluation finale.
+1. Ouvrir l’accueil et vérifier les boutons Accueil, Parcours PJJ, Carnet de voyage, Entraînement libre, Réviser, Progression et Paramètres.
+2. Ouvrir le parcours et vérifier les dix étapes ainsi que la carte de l’évaluation finale, puis ouvrir le Carnet de voyage et vérifier qu’il constitue un écran indépendant.
 3. Tester les sept formes d’activité : Choix unique, Sélection multiple, Relier / Association, Éliminer, Réponse écrite, Remettre dans l’ordre et Classer.
 4. Vérifier les fils jaunes et les associations du mode Relier.
 5. Tester les jokers 50/50, indice et langue au chat dans une étape du parcours.
@@ -71,11 +71,11 @@ dossier appartient à un dépôt GitHub.
 9. Vérifier que l’étape 11 reste verrouillée tant que les dix étapes ne sont pas terminées sans joker.
 10. Lancer l’étape 11 et vérifier ses 50 questions, l’absence de joker et l’absence de bouton Passer.
 11. Vérifier le titre `Évaluation terminée`, le bouton `Refaire l’évaluation` et le retour au parcours.
-12. Tester la révision des erreurs, la progression, les paramètres, l’export et l’import.
+12. Tester la révision des erreurs, la progression, le réglage du son dans Paramètres, l’export et l’import.
 13. Tester au clavier les fenêtres, les boutons d’ordre et le retour global.
 14. Contrôler le rendu à 390 px, 1024 px et 1440 px de largeur.
 15. Sur chaque forme de question, vérifier que la touche Entrée déclenche le bouton `Valider` lorsqu’il est disponible, sans empêcher l’utilisation normale des autres boutons et champs.
-16. Sur l’accueil, vérifier que `S’entraîner librement` reçoit un contour doré au survol sans déplacer le bouton.
+16. Sur l’accueil, vérifier que `Commencer` se trouve sous la barre jaune, que le bloc titre-bouton est équilibré verticalement dans l’image et qu’aucun bouton d’entraînement libre n’est présent.
 
 ## Critère d’acceptation
 

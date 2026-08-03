@@ -1,6 +1,16 @@
 #erreurs .page-entete h1 {
     letter-spacing: -.03em;
 }
+#carnet > .page-entete,
+#erreurs > .page-entete,
+#parametres > .page-entete {
+    text-align: center;
+}
+#carnet > .page-entete > p,
+#erreurs > .page-entete > p,
+#parametres > .page-entete > p {
+    margin-inline: auto;
+}
 #erreurs .revision-mode-grille {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -166,7 +176,7 @@
     border-color: var(--jaune-interface);
     color: var(--texte-sur-jaune);
 }
-#parcours .parcours-chronometre-panneau {
+#carnet .parcours-chronometre-panneau {
     width: min(1120px,100%);
     margin: 4px auto 18px;
     padding: 14px 16px;
@@ -179,13 +189,13 @@
     gap: 14px;
     box-shadow: 0 6px 18px rgba(0,19,52,.12);
 }
-#parcours .carnet-outils {
+#carnet .carnet-outils {
     display: grid;
     grid-template-columns: minmax(0,1.35fr) minmax(300px,.65fr);
     gap: 12px;
     margin-top: 16px;
 }
-#parcours .carnet-outils .parcours-chronometre-panneau {
+#carnet .carnet-outils .parcours-chronometre-panneau {
     width: auto;
     margin: 0;
     border-radius: 14px;
@@ -193,14 +203,14 @@
     box-shadow: none;
 }
 @media (min-width:951px) {
-    #parcours .carnet-outils .parcours-chronometre-panneau {
+    #carnet .carnet-outils .parcours-chronometre-panneau {
         grid-template-columns: auto minmax(0,1fr);
     }
-    #parcours .carnet-outils .parcours-chronometre-icone {
+    #carnet .carnet-outils .parcours-chronometre-icone {
         grid-row: 1 / span 2;
         align-self: start;
     }
-    #parcours .carnet-outils .parcours-chronometre-commandes {
+    #carnet .carnet-outils .parcours-chronometre-commandes {
         grid-column: 2;
         width: 100%;
         min-width: 0;
@@ -208,7 +218,7 @@
         gap: 8px 12px;
     }
 }
-#parcours .carnet-defi-de {
+#carnet .carnet-defi-de {
     min-width: 0;
     padding: 14px;
     display: grid;
@@ -220,41 +230,41 @@
     border-radius: 14px;
     background: var(--surface-carte-profonde);
 }
-#parcours .carnet-defi-de-texte {
+#carnet .carnet-defi-de-texte {
     min-width: 0;
     display: grid;
     gap: 3px;
 }
-#parcours .carnet-defi-de-texte strong {
+#carnet .carnet-defi-de-texte strong {
     color: #fff;
 }
-#parcours .carnet-defi-de-texte span {
+#carnet .carnet-defi-de-texte span {
     color: #cfe2f4;
     font-size: .86rem;
     line-height: 1.35;
 }
-#parcours .carnet-defi-de-actions {
+#carnet .carnet-defi-de-actions {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
 }
-#parcours .carnet-defi-de-actions button {
+#carnet .carnet-defi-de-actions button {
     min-height: 40px;
     border-radius: 11px;
 }
-#parcours .carnet-defi-de-actions .secondaire {
+#carnet .carnet-defi-de-actions .secondaire {
     color: #e7f3ff;
     border: 1px solid rgba(142,199,251,.38);
     background: var(--surface-carte);
     font-weight: 800;
 }
-#parcours .carnet-defi-de-actions .secondaire:hover,
-#parcours .carnet-defi-de-actions .secondaire:focus-visible {
+#carnet .carnet-defi-de-actions .secondaire:hover,
+#carnet .carnet-defi-de-actions .secondaire:focus-visible {
     border-color: #39d7c4;
     background: #17558f;
 }
-#parcours .de-objet {
+#carnet .de-objet {
     width: 42px;
     height: 42px;
     display: grid;
@@ -263,52 +273,52 @@
     filter: drop-shadow(0 2px 3px rgba(255,200,61,.14));
     transform-origin: center;
 }
-#parcours .de-objet svg {
+#carnet .de-objet svg {
     width: 100%;
     height: 100%;
     overflow: visible;
 }
-#parcours .de-contour {
+#carnet .de-contour {
     fill: none;
     stroke: currentColor;
     stroke-width: 2.6;
     stroke-linecap: round;
     stroke-linejoin: round;
 }
-#parcours .de-points-avant circle {
+#carnet .de-points-avant circle {
     display: none;
     fill: currentColor;
 }
-#parcours .de-points-dessus circle {
+#carnet .de-points-dessus circle {
     fill: currentColor;
 }
-#parcours .de-points-cote circle {
+#carnet .de-points-cote circle {
     fill: currentColor;
 }
-#parcours .de-objet[data-face="1"] .de-points-avant circle:nth-child(5),
-#parcours .de-objet[data-face="2"] .de-points-avant circle:nth-child(1),
-#parcours .de-objet[data-face="2"] .de-points-avant circle:nth-child(9),
-#parcours .de-objet[data-face="3"] .de-points-avant circle:nth-child(1),
-#parcours .de-objet[data-face="3"] .de-points-avant circle:nth-child(5),
-#parcours .de-objet[data-face="3"] .de-points-avant circle:nth-child(9),
-#parcours .de-objet[data-face="4"] .de-points-avant circle:nth-child(1),
-#parcours .de-objet[data-face="4"] .de-points-avant circle:nth-child(3),
-#parcours .de-objet[data-face="4"] .de-points-avant circle:nth-child(7),
-#parcours .de-objet[data-face="4"] .de-points-avant circle:nth-child(9),
-#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(1),
-#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(3),
-#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(5),
-#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(7),
-#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(9),
-#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(1),
-#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(3),
-#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(4),
-#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(6),
-#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(7),
-#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(9) {
+#carnet .de-objet[data-face="1"] .de-points-avant circle:nth-child(5),
+#carnet .de-objet[data-face="2"] .de-points-avant circle:nth-child(1),
+#carnet .de-objet[data-face="2"] .de-points-avant circle:nth-child(9),
+#carnet .de-objet[data-face="3"] .de-points-avant circle:nth-child(1),
+#carnet .de-objet[data-face="3"] .de-points-avant circle:nth-child(5),
+#carnet .de-objet[data-face="3"] .de-points-avant circle:nth-child(9),
+#carnet .de-objet[data-face="4"] .de-points-avant circle:nth-child(1),
+#carnet .de-objet[data-face="4"] .de-points-avant circle:nth-child(3),
+#carnet .de-objet[data-face="4"] .de-points-avant circle:nth-child(7),
+#carnet .de-objet[data-face="4"] .de-points-avant circle:nth-child(9),
+#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(1),
+#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(3),
+#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(5),
+#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(7),
+#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(9),
+#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(1),
+#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(3),
+#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(4),
+#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(6),
+#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(7),
+#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(9) {
     display: block;
 }
-#parcours .de-objet.de-en-lancer {
+#carnet .de-objet.de-en-lancer {
     animation: lancerDe .42s ease-out;
 }
 @keyframes lancerDe {
@@ -316,14 +326,14 @@
     55% { transform: rotate(190deg) scale(.9); }
     100% { transform: rotate(360deg) scale(1); }
 }
-#parcours .parcours-chronometre-icone {
+#carnet .parcours-chronometre-icone {
     width: 42px;
     height: 42px;
     color: var(--jaune-interface);
     display: grid;
     place-items: center;
 }
-#parcours .parcours-chronometre-icone svg {
+#carnet .parcours-chronometre-icone svg {
     width: 100%;
     height: 100%;
     fill: none;
@@ -332,47 +342,50 @@
     stroke-linecap: round;
     stroke-linejoin: round;
 }
-#parcours .parcours-chronometre-texte {
+#carnet .parcours-chronometre-texte {
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
-#parcours .parcours-chronometre-texte strong {
+#carnet .parcours-chronometre-texte strong {
     color: #fff
 }
-#parcours .parcours-chronometre-texte span {
+#carnet .parcours-chronometre-texte span {
     color: #cfe2f4;
     font-size: .9rem;
 }
-#parcours .parcours-chronometre-commandes {
+#carnet .parcours-chronometre-commandes {
     display: flex;
     align-items: center;
     gap: 14px;
 }
-#parcours .parcours-bascule-groupe {
+#carnet .parcours-bascule-groupe {
     display: flex;
     gap: 7px;
 }
-#parcours .parcours-bascule-groupe .option-bouton {
+#carnet .parcours-bascule-groupe .option-bouton {
     min-height: 40px;
     padding: 7px 13px;
 }
-#parcours .parcours-secondes {
+#carnet .parcours-secondes {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-#parcours .parcours-secondes>span {
+#carnet .parcours-secondes>span {
     font-size: .88rem;
     color: #d9e9f7;
     white-space: nowrap;
 }
-#parcours .parcours-secondes .entrainement-secondes-groupe {
+#carnet .parcours-secondes .entrainement-secondes-groupe {
     min-width: 300px;
 }
-#parcours .carnet-parcours {
-    width: min(1120px,100%);
-    margin: 28px auto 18px;
+#carnet .carnet-page-entete {
+    margin-bottom: 22px;
+}
+#carnet .carnet-parcours {
+    width: 100%;
+    margin: 0 auto 18px;
     padding: 18px 20px;
     border: 1px solid rgba(145,198,245,.34);
     border-radius: 18px;
@@ -382,12 +395,12 @@
     grid-template-columns: auto minmax(0,1fr);
     gap: 17px;
 }
-#parcours .carnet-parcours-icone {
+#carnet .carnet-parcours-icone {
     width: 54px;
     height: 54px;
     color: var(--jaune-interface);
 }
-#parcours .carnet-parcours-icone svg {
+#carnet .carnet-parcours-icone svg {
     width: 100%;
     height: 100%;
     fill: none;
@@ -396,25 +409,25 @@
     stroke-linecap: round;
     stroke-linejoin: round;
 }
-#parcours .carnet-parcours-entete {
+#carnet .carnet-parcours-entete {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
 }
-#parcours .carnet-parcours-surtitre {
+#carnet .carnet-parcours-surtitre {
     color: #9fc7ec;
     font-size: .76rem;
     font-weight: 800;
     letter-spacing: .08em;
     text-transform: uppercase;
 }
-#parcours .carnet-parcours h2 {
+#carnet .carnet-parcours h2 {
     margin: 3px 0 0;
     color: #fff;
     font-size: 1.15rem;
 }
-#parcours .carnet-parcours-titre {
+#carnet .carnet-parcours-titre {
     flex: 0 0 auto;
     padding: 7px 11px;
     border: 1px solid rgba(255,200,61,.62);
@@ -424,17 +437,17 @@
     font-size: .82rem;
     font-weight: 800;
 }
-#parcours #prochaineDestinationParcours {
+#carnet #prochaineDestinationParcours {
     margin: 10px 0 14px;
     color: #e5f1fc;
     font-size: .94rem;
 }
-#parcours .carnet-parcours-route {
+#carnet .carnet-parcours-route {
     --avancement-carnet: 0%;
     position: relative;
     height: 18px;
 }
-#parcours .carnet-parcours-trace {
+#carnet .carnet-parcours-trace {
     position: absolute;
     top: 6px;
     left: 0;
@@ -444,7 +457,7 @@
     border-radius: 999px;
     background: #0a3769;
 }
-#parcours .carnet-parcours-trace i {
+#carnet .carnet-parcours-trace i {
     display: block;
     width: var(--avancement-carnet);
     height: 100%;
@@ -452,7 +465,7 @@
     background: var(--jaune-interface);
     transition: width .35s ease;
 }
-#parcours .carnet-parcours-position {
+#carnet .carnet-parcours-position {
     position: absolute;
     z-index: 2;
     top: 0;
@@ -468,14 +481,14 @@
     font-size: 7px;
     transition: left .35s ease;
 }
-#parcours .carnet-parcours-reperes {
+#carnet .carnet-parcours-reperes {
     display: flex;
     justify-content: space-between;
     margin-top: 4px;
     color: #9fc7ec;
     font-size: .7rem;
 }
-#parcours .carnet-parcours-details {
+#carnet .carnet-parcours-details {
     display: grid;
     grid-template-columns: minmax(0,1.25fr) minmax(260px,.75fr);
     gap: 14px;
@@ -483,14 +496,14 @@
     padding-top: 17px;
     border-top: 1px solid rgba(145,198,245,.22);
 }
-#parcours .carnet-souvenirs,#parcours .carnet-defis {
+#carnet .carnet-souvenirs,#carnet .carnet-defis {
     min-width: 0;
     padding: 14px;
     border: 1px solid rgba(145,198,245,.22);
     border-radius: 14px;
     background: rgba(6,47,96,.34);
 }
-#parcours #souvenirsParcours {
+#carnet #souvenirsParcours {
     max-height: 300px;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -499,70 +512,70 @@
     scrollbar-width: thin;
     scrollbar-color: #5f98c8 rgba(7,48,97,.42);
 }
-#parcours #souvenirsParcours::-webkit-scrollbar {
+#carnet #souvenirsParcours::-webkit-scrollbar {
     width: 9px;
 }
-#parcours #souvenirsParcours::-webkit-scrollbar-track {
+#carnet #souvenirsParcours::-webkit-scrollbar-track {
     border-radius: 999px;
     background: rgba(7,48,97,.42);
 }
-#parcours #souvenirsParcours::-webkit-scrollbar-thumb {
+#carnet #souvenirsParcours::-webkit-scrollbar-thumb {
     border: 2px solid rgba(7,48,97,.42);
     border-radius: 999px;
     background: #5f98c8;
 }
-#parcours #souvenirsParcours::-webkit-scrollbar-thumb:hover {
+#carnet #souvenirsParcours::-webkit-scrollbar-thumb:hover {
     background: #7ce8dc;
 }
-#parcours .carnet-section-entete {
+#carnet .carnet-section-entete {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 11px;
 }
-#parcours .carnet-section-entete > span {
+#carnet .carnet-section-entete > span {
     color: var(--jaune-interface);
     font-size: 1.1rem;
 }
-#parcours .carnet-section-entete h3 {
+#carnet .carnet-section-entete h3 {
     margin: 0;
     color: #fff;
     font-size: .98rem;
 }
-#parcours .carnet-vide {
+#carnet .carnet-vide {
     margin: 0;
     color: #bcd6ee;
     font-size: .86rem;
 }
-#parcours .souvenir-etape {
+#carnet .souvenir-etape {
     border-left: 3px solid var(--couleur-etape,var(--jaune-interface));
     background: rgba(10,55,105,.48);
 }
-#parcours .souvenir-etape + .souvenir-etape {
+#carnet .souvenir-etape + .souvenir-etape {
     margin-top: 7px;
 }
-#parcours .souvenir-etape summary {
+#carnet .souvenir-etape summary {
     padding: 9px 11px;
     color: #edf6ff;
     cursor: pointer;
     font-size: .84rem;
     font-weight: 800;
 }
-#parcours .souvenir-etape ul {
+#carnet .souvenir-etape ul {
     margin: 0;
     padding: 0 14px 11px 30px;
     color: #cee2f4;
     font-size: .8rem;
     line-height: 1.45;
 }
-#parcours .carnet-defis ul {
+#carnet .carnet-defis ul {
     display: grid;
     gap: 8px;
     margin: 0;
     padding: 0;
     list-style: none;
 }
-#parcours .carnet-defis li {
+#carnet .carnet-defis li {
     display: grid;
     grid-template-columns: auto minmax(0,1fr) auto;
     align-items: center;
@@ -572,45 +585,45 @@
     color: #dcecff;
     background: rgba(10,55,105,.48);
 }
-#parcours .carnet-defis .defi-indicateur {
+#carnet .carnet-defis .defi-indicateur {
     color: #9fc7ec;
     font-size: 1rem;
 }
-#parcours .carnet-defis strong {
+#carnet .carnet-defis strong {
     font-size: .8rem;
 }
-#parcours .carnet-defis small {
+#carnet .carnet-defis small {
     color: #9fc7ec;
     font-size: .7rem;
 }
-#parcours .carnet-defis .defi-termine {
+#carnet .carnet-defis .defi-termine {
     background: rgba(53,208,127,.10);
 }
-#parcours .carnet-defis .defi-termine .defi-indicateur,
-#parcours .carnet-defis .defi-termine small {
+#carnet .carnet-defis .defi-termine .defi-indicateur,
+#carnet .carnet-defis .defi-termine small {
     color: #5fe0a0;
 }
 @media (max-width:950px) {
     #erreurs .revision-mode-grille,#entrainement .entrainement-grille {
         grid-template-columns: 1fr;
     }
-    #parcours .parcours-chronometre-panneau {
+    #carnet .parcours-chronometre-panneau {
         grid-template-columns: auto minmax(0,1fr);
     }
-    #parcours .carnet-outils {
+    #carnet .carnet-outils {
         grid-template-columns: 1fr;
     }
-    #parcours .parcours-chronometre-commandes {
+    #carnet .parcours-chronometre-commandes {
         grid-column: 1 / -1;
         width: 100%;
         flex-wrap: wrap;
     }
-    #parcours .carnet-parcours-entete {
+    #carnet .carnet-parcours-entete {
         align-items: flex-start;
         flex-direction: column;
         gap: 9px;
     }
-    #parcours .carnet-parcours-details {
+    #carnet .carnet-parcours-details {
         grid-template-columns: 1fr;
     }
 }
@@ -622,11 +635,11 @@
     .entrainement-secondes-groupe {
         grid-template-columns: repeat(3,1fr);
     }
-    #parcours .carnet-parcours {
+    #carnet .carnet-parcours {
         grid-template-columns: 1fr;
         padding: 16px;
     }
-    #parcours .carnet-parcours-icone {
+    #carnet .carnet-parcours-icone {
         width: 44px;
         height: 44px;
     }
@@ -634,17 +647,17 @@
         width: 44px;
         height: 44px;
     }
-    #parcours .carnet-defi-de-actions {
+    #carnet .carnet-defi-de-actions {
         grid-template-columns: 1fr;
     }
     #erreurs .revision-etape-boutons {
         grid-template-columns: repeat(2,1fr);
     }
-    #parcours .parcours-secondes {
+    #carnet .parcours-secondes {
         flex-direction: column;
         align-items: flex-start;
     }
-    #parcours .parcours-secondes .entrainement-secondes-groupe {
+    #carnet .parcours-secondes .entrainement-secondes-groupe {
         min-width: 0;
         width: 100%;
     }
@@ -738,30 +751,10 @@
     .barre-actions-page .global-retour {
         margin: 0;
     }
-    .barre-actions-page .son-mobile {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        width: max-content;
-        min-width: 0;
-        min-height: 36px;
-        margin: 0 0 0 auto;
-        padding: 6px 11px;
-        border-radius: 999px;
-        font-weight: 800;
-    }
-    .barre-actions-page .son-mobile .son-icone {
-        width: 17px;
-        height: 17px;
-        flex: 0 0 17px;
-    }
-    .barre-actions-page .son-mobile .son-texte {
-        font-size: .82rem;
-    }
-    header.entete .navigation #boutonSonRapide {
-        display: none !important;
-    }
+    
+    
+    
+    
     #parametres .parametres-choix,#parametres .parametres-actions-carte {
         grid-template-columns: 1fr;
         align-items: stretch;
@@ -791,6 +784,12 @@
     #parametres .parametres-actions-boutons {
         grid-template-columns: 1fr;
     }
+}
+#parametres .parametre-volume.parametre-desactive {
+    opacity: .58;
+}
+#parametres .parametre-volume.parametre-desactive .curseur {
+    cursor: not-allowed;
 }
 #progression .progression-entete {
     text-align: center;

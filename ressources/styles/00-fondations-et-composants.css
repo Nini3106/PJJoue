@@ -273,41 +273,13 @@ p {
     gap: 10px;
     margin: 18px 0
 }
-.mode-grille {
-    display: grid;
-    gap: 15px;
-    grid-template-columns: repeat(2,minmax(0,1fr))
-}
-.mode-carte {
-    border: 1px solid var(--bordure);
-    border-radius: var(--rayon-grand);
-    box-shadow: var(--ombre-douce);
-    border-color: var(--bordure);
-    background: rgba(17,60,113,.94);
-    min-height: 100%;
-    padding: 19px;
-    text-align: left;
-    color: var(--texte);
-}
-button.mode-carte {
-    width: 100%;
-    border-color: var(--bordure)
-}
+
+
+
 .carte:hover {
     border-color: var(--accent)
 }
-.mode-icone {
-    display: grid;
-    place-items: center;
-    width: 52px;
-    height: 52px;
-    flex: 0 0 52px;
-    margin-bottom: 14px;
-    border: 1px solid #6f94c0;
-    border-radius: 18px;
-    color: var(--accent);
-    background: var(--surface-secondaire);
-}
+
 .theme-icone,.vide-icone {
     display: grid;
     place-items: center;
@@ -321,15 +293,7 @@ button.mode-carte {
     background: transparent;
     box-shadow: none;
 }
-.mode-icone svg {
-    width: 29px;
-    height: 29px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
+
 .theme-icone svg,.vide-icone svg {
     width: 29px;
     height: 29px;
@@ -340,25 +304,9 @@ button.mode-carte {
     stroke-linejoin: round;
     filter: drop-shadow(0 3px 6px rgba(0,20,55,.12));
 }
-.mode-titre {
-    display: block;
-    color: #fff;
-    font-size: 1.12rem;
-    font-weight: 800
-}
-.mode-texte {
-    display: block;
-    min-height: 3.2em;
-    margin-top: 8px;
-    color: var(--texte-secondaire);
-    line-height: 1.55
-}
-.lancer {
-    display: block;
-    margin-top: 13px;
-    color: var(--accent);
-    font-weight: 900
-}
+
+
+
 .repere {
     display: inline-flex;
     align-items: center;
@@ -980,7 +928,7 @@ button.mode-carte {
         width: min(100% - 18px,1180px);
         padding-top: 20px
     }
-    .mode-grille,.formulaire-grille {
+    .formulaire-grille {
         grid-template-columns: 1fr
     }
     .tableau-bord,.statistiques {
@@ -1043,17 +991,17 @@ button.mode-carte {
     .tableau-bord,.statistiques {
         grid-template-columns: 1fr
     }
-    .mode-carte,.carte {
+    .carte {
         padding: 15px
     }
-    .mode-icone,.theme-icone,.vide-icone {
+    .theme-icone,.vide-icone {
         width: 47px;
         height: 47px;
         flex-basis: 47px;
         margin-bottom: 11px;
         border-radius: 14px
     }
-    .mode-icone svg,.theme-icone svg,.vide-icone svg {
+    .theme-icone svg,.vide-icone svg {
         width: 26px;
         height: 26px
     }
@@ -1171,11 +1119,8 @@ button.mode-carte {
 .barre-actions-page {
     display: contents;
 }
-.son-mobile {
-    display: none;
-}
-.discret.global-retour,
-.discret.son-mobile {
+
+.discret.global-retour {
     width: max-content;
     margin: 0 0 4px;
     color: #fff;
@@ -1183,81 +1128,26 @@ button.mode-carte {
     background: var(--surface-carte-profonde);
     box-shadow: none
 }
-.discret.global-retour:hover,
-.discret.son-mobile:hover {
+.discret.global-retour:hover {
     color: #fff;
     border-color: var(--accent);
     background: #17558f;
     box-shadow: none
 }
-.discret.global-retour:active,
-.discret.son-mobile:active {
+.discret.global-retour:active {
     color: #fff;
     background: #b67a00;
     border-color: var(--accent)
 }
-.son-commande.rapide {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: auto;
-    min-width: 112px;
-    min-height: 38px;
-    padding: 0 12px;
-    gap: 7px;
-    color: #fff;
-    border: 1px solid #6f94c0;
-    border-radius: 999px;
-    background: linear-gradient(135deg,var(--surface-secondaire),#215f9e);
-    font-weight: 800;
-    transition: transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease
-}
-.son-commande.rapide:hover {
-    border-color: var(--bouton-selection);
-    background: linear-gradient(135deg,#184f88,#2568aa)
-}
-.son-icone {
-    width: 20px;
-    height: 20px;
-    overflow: visible;
-    fill: currentColor;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round
-}
-.son-icone .son-onde {
-    fill: none;
-    transition: opacity .16s ease
-}
-.son-texte {
-    display: inline;
-    position: static;
-    width: auto;
-    height: auto;
-    border: 0;
-    border-radius: 0;
-    font-size: .78rem;
-    font-weight: 900;
-    white-space: nowrap
-}
-.son-texte::before,.son-texte::after {
-    display: none!important;
-    content: none
-}
-.son-commande[aria-pressed="false"] {
-    border-color: #6f94c0;
-    background: linear-gradient(135deg,var(--surface-secondaire),#215f9e);
-    color: #fff
-}
-.son-commande[aria-pressed="false"] .son-onde {
-    opacity: 0
-}
-.son-commande.rapide[aria-pressed="true"] {
-    color: #fff;
-    border-color: var(--bouton-selection);
-    background: var(--bouton-selection)
-}
+
+
+
+
+
+
+
+
+
 .joker-icone svg {
     fill: none;
     stroke: currentColor;
@@ -1268,16 +1158,8 @@ button.mode-carte {
     height: 19px
 }
 @media (max-width:620px) {
-    .son-commande.rapide {
-        width: auto;
-        min-width: 96px;
-        min-height: 34px;
-        height: 34px;
-        padding: 0 8px
-    }
-    .son-texte {
-        font-size: .73rem
-    }
+    
+    
     .joker {
         min-height: 32px;
         padding: 5px 8px;
@@ -1331,10 +1213,7 @@ button.mode-carte {
     transform: translateY(0);
     background: #e3a82f;
 }
-.mode-carte:hover {
-    border-color: var(--accent);
-    box-shadow: var(--ombre-douce);
-}
+
 .reponse:hover {
     background: var(--surface-active);
     border-color: var(--accent);

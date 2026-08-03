@@ -1,0 +1,68 @@
+name: Contrôles PJJoue
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  structure:
+    name: Structure et JavaScript
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v6
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.18.0
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Installer Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Installer les dépendances Node.js
+        run: npm ci
+
+      - name: Contrôler le JavaScript
+        run: npm run controle:javascript
+
+      - name: Contrôler la structure du CSS
+        run: npm run controle:css
+
+      - name: Tester la validation des données
+        run: npm run test:unitaire
+
+      - name: Contrôler la structure et les données
+        run: npm run test:structure
+
+  interface:
+    name: Interface ordinateur et mobile
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v6
+
+      - name: Installer Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Installer Playwright
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Installer Chromium et ses dépendances
+        run: python -m playwright install --with-deps chromium
+
+      - name: Contrôler les écrans et interactions
+        run: python tests/verifier_interface.py

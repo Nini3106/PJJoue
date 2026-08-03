@@ -211,7 +211,6 @@ body:not([data-ecran-actif="accueil"])::before {
 }
 
 /* Pictogrammes narratifs : même finesse, couleurs historiques conservées. */
-#choixMode .mode-icone svg,
 #erreurs .revision-mode-icone svg,
 #progression .progression-icone svg {
     fill: none;
@@ -224,7 +223,7 @@ body:not([data-ecran-actif="accueil"])::before {
 
 /* Dans le menu replié, la navigation se lit comme une liste de titres. */
 
-/* Commandes mobiles compactes ; les deux actions de l'accueil restent inchangées. */
+/* Commandes mobiles compactes et action principale de l’accueil. */
 @media (max-width:820px) {
     .page-entete h1,
     .ecran > h1 {
@@ -240,26 +239,15 @@ body:not([data-ecran-actif="accueil"])::before {
     }
 }
 
-/* Menu compact et composition de l'accueil sur téléphone. */
+/* Composition de l’accueil sur téléphone. */
 
 @media (max-width:820px) {
-    header.entete .navigation {
-        grid-template-columns: repeat(2,minmax(0,1fr));
-        padding-top: 2px;
-    }
-    header.entete .navigation button,
-    header.entete .navigation button:nth-last-child(-n+2),
-    header.entete .navigation .son-commande.rapide {
-        min-height: 40px;
-        padding: 7px 9px;
-        font-size: .8rem;
-    }
     #accueil .accueil-contenu {
         padding-top: 22px;
     }
 
 /* ==========================================================
-   Finitions mobiles : menu vertical, typographie et boutons ajustés
+   Finitions mobiles : typographie et boutons ajustés
    ========================================================== */
     header.entete .marque {
         min-width: 0;
@@ -273,20 +261,6 @@ body:not([data-ecran-actif="accueil"])::before {
         line-height: 1.15;
         letter-spacing: 0;
     }
-    header.entete .navigation {
-        padding: 5px 0 3px;
-    }
-    header.entete .navigation button,
-    header.entete .navigation button:nth-last-child(-n+2),
-    header.entete .navigation .son-commande.rapide,
-    header.entete .navigation .son-commande.rapide[aria-pressed="true"],
-    header.entete .navigation .son-commande.rapide[aria-pressed="false"] {
-        width: 100%;
-        min-height: 36px;
-        margin-inline: auto;
-        padding: 6px 9px;
-    }
-
     #accueil .accueil-texte-image {
         top: 50%;
     }
@@ -356,11 +330,6 @@ body:not([data-ecran-actif="accueil"])::before {
         max-width: 145px;
         font-size: .67rem;
     }
-    header.entete .navigation button,
-    header.entete .navigation button:nth-last-child(-n+2),
-    header.entete .navigation .son-commande.rapide {
-        font-size: .92rem;
-    }
 }
 
 @media (max-width:820px) {
@@ -374,9 +343,9 @@ body:not([data-ecran-actif="accueil"])::before {
     }
 
 /* Actions d'accueil aux proportions habituelles d'une interface mobile. */
-    #accueil .accueil-actions {
-        align-items: center;
-        justify-content: center;
+    #accueil .accueil-action-principale {
+        align-items: flex-start;
+        justify-content: flex-start;
         gap: 9px;
     }
     #accueil .accueil-presentation-zone-cliquable {
@@ -390,7 +359,7 @@ body:not([data-ecran-actif="accueil"])::before {
 }
 
 @media (max-width:390px) {
-    #accueil .accueil-actions {
+    #accueil .accueil-action-principale {
         flex-direction: column;
     }
     #accueil .accueil-presentation-zone-cliquable {
@@ -401,22 +370,6 @@ body:not([data-ecran-actif="accueil"])::before {
 
 /* Ajustement téléphone : boutons compacts et accueil jamais rogné. */
 @media (max-width:580px) {
-    .navigation {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        gap: 7px 8px;
-    }
-    .navigation button,
-    .navigation button:nth-last-child(-n+2) {
-        flex: 0 0 auto;
-        width: auto;
-        min-width: 0;
-        min-height: 40px;
-        padding: 7px 11px;
-        font-size: .8rem;
-    }
     #entrainement .entrainement-carte {
         padding: 16px 15px;
     }
@@ -471,18 +424,6 @@ body:not([data-ecran-actif="accueil"])::before {
     }
 }
 
-@media (max-width:360px) {
-    .navigation button,
-    .navigation button:nth-last-child(-n+2) {
-        min-height: 38px;
-        padding: 6px 9px;
-        font-size: .75rem;
-    }
-}
-#choixMode .mode-icone svg {
-    width: 64px;
-    height: 64px;
-}
 #erreurs .revision-mode-icone svg {
     width: 40px;
     height: 40px;

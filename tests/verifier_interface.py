@@ -107,7 +107,7 @@ def construire_page_administration() -> str:
 
 SCENARIOS = {
     "accueil": "afficherEcran('accueil',{remplacerHistorique:true});",
-    "jouer": "afficherEcran('choixMode',{remplacerHistorique:true});",
+    "carnet": "afficherEcran('carnet',{remplacerHistorique:true});",
     "parcours": "etat.theme='commun';ouvrirParcours('commun',{remplacerHistorique:true});",
     "entrainement": "afficherEcran('entrainement',{remplacerHistorique:true});",
     "question_choix": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);",
@@ -179,7 +179,7 @@ def verifier_chargement_local(navigateur) -> None:
 def construire_combinaisons() -> list[tuple[str, str]]:
     combinaisons = [("bureau", nom) for nom in SCENARIOS]
     combinaisons.extend(("mobile", nom) for nom in [
-        "accueil", "jouer", "parcours", "entrainement", "question_choix",
+        "accueil", "carnet", "parcours", "entrainement", "question_choix",
         "question_choisir_ordre", "joker_5050_choisir_ordre", "correction_fausse",
         "bilan", "erreurs", "progression", "parametres",
     ])
@@ -218,6 +218,18 @@ def verifier_interactions(navigateur, page_html: str) -> None:
     page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
     page.set_content(page_html, wait_until="domcontentloaded")
 
+    # Le menu expose les écrans principaux dans l’ordre attendu.
+    libelles_menu = page.locator("header .navigation button").all_inner_texts()
+    libelles_attendus = [
+        "Accueil", "Parcours PJJ", "Carnet de voyage", "Entraînement libre",
+        "Réviser", "Progression", "Paramètres",
+    ]
+    if libelles_menu != libelles_attendus:
+        raise AssertionError(f"Ordre ou libellés du menu incorrects : {libelles_menu}")
+    page.locator("#boutonAccueilPrincipal").click()
+    if not page.locator("#parcours").evaluate("element => element.classList.contains('actif')"):
+        raise AssertionError("Le bouton Commencer n’ouvre pas le Parcours PJJ.")
+
     # Le sélecteur visuel du nombre de questions pilote bien la valeur native.
     page.evaluate("afficherEcran('entrainement',{remplacerHistorique:true});")
     page.locator('[data-groupe-choix="nombreQuestionsEntrainement"] [data-valeur="20"]').click()
@@ -247,6 +259,19 @@ def verifier_interactions(navigateur, page_html: str) -> None:
     }""")
     if etat_echelle != {"valeur": "1.08", "actifs": ["1.08"], "selectionnes": ["1.08"]}:
         raise AssertionError(f"La taille de texte possède une sélection incohérente : {etat_echelle}")
+
+    # Le son se règle uniquement depuis Paramètres et désactive le volume quand il est coupé.
+    page.locator('[data-groupe-choix="sonActif"] [data-valeur="false"]').click()
+    etat_son_coupe = page.evaluate("""() => ({
+        valeur:document.querySelector('#sonActif').value,
+        volumeDesactive:document.querySelector('#volumeSon').disabled,
+        carteDesactivee:document.querySelector('.parametre-volume').classList.contains('parametre-desactive')
+    })""")
+    if etat_son_coupe != {"valeur": "false", "volumeDesactive": True, "carteDesactivee": True}:
+        raise AssertionError(f"La désactivation du son est incohérente : {etat_son_coupe}")
+    page.locator('[data-groupe-choix="sonActif"] [data-valeur="true"]').click()
+    if page.locator("#volumeSon").is_disabled():
+        raise AssertionError("Le volume reste désactivé après la réactivation du son.")
 
     # Les libellés de progression et les accords doivent suivre les compteurs.
     libelles_progression = page.evaluate("""() => {
@@ -472,7 +497,7 @@ def verifier_defi_chrono(navigateur, page_html: str) -> None:
         page = navigateur.new_page(viewport=dimensions)
         page.set_default_timeout(3000)
         page.set_content(page_html, wait_until="domcontentloaded")
-        page.evaluate("etat.theme='commun';ouvrirParcours('commun',{remplacerHistorique:true});")
+        page.evaluate("etat.theme='commun';afficherEcran('carnet',{remplacerHistorique:true});")
         page.locator('#choixChronometreParcours [data-valeur="oui"]').click()
         mesures = page.evaluate("""() => {
             const panneau = document.querySelector('.parcours-chronometre-panneau')
@@ -508,6 +533,68 @@ def verifier_defi_chrono(navigateur, page_html: str) -> None:
                 f"de {mesures['document']:.2f}px."
             )
         page.close()
+
+
+def verifier_accueil_et_entetes(navigateur, page_html: str) -> None:
+    """Vérifie le placement de l’action d’accueil et l’alignement des entêtes concernés."""
+    for format_ecran in ("bureau", "mobile"):
+        page = navigateur.new_page(viewport=LARGEURS[format_ecran])
+        page.set_default_timeout(3000)
+        page.set_content(page_html, wait_until="domcontentloaded")
+        page.evaluate("afficherEcran('accueil',{remplacerHistorique:true});")
+        disposition = page.evaluate("""() => {
+            const boite = selecteur => document.querySelector(selecteur).getBoundingClientRect();
+            const accent = boite('.accueil-accent');
+            const bouton = boite('#boutonAccueilPrincipal');
+            const introduction = boite('.accueil-introduction');
+            return {
+                ecartHorizontal: Math.abs(bouton.left - accent.left),
+                ecartVertical: bouton.top - accent.bottom,
+                boutonApresIntroduction: bouton.top >= introduction.bottom,
+            };
+        }""")
+        if format_ecran == "mobile":
+            if disposition["ecartHorizontal"] > 1:
+                raise AssertionError(
+                    "mobile : le bouton principal de l’accueil n’est plus aligné à gauche avec la barre jaune."
+                )
+            if disposition["ecartVertical"] < 18:
+                raise AssertionError(
+                    "mobile : l’espace entre la barre jaune et le bouton principal est insuffisant."
+                )
+            if disposition["boutonApresIntroduction"]:
+                raise AssertionError(
+                    "mobile : le bouton principal doit rester dans l’illustration, avant le texte de présentation."
+                )
+        elif not disposition["boutonApresIntroduction"]:
+            raise AssertionError(
+                "bureau : le bouton principal de l’accueil doit suivre le texte de présentation."
+            )
+        page.close()
+
+    page = navigateur.new_page(viewport=LARGEURS["bureau"])
+    page.set_default_timeout(3000)
+    page.set_content(page_html, wait_until="domcontentloaded")
+    for ecran in ("carnet", "erreurs", "parametres"):
+        alignement = page.evaluate("""ecran => {
+            afficherEcran(ecran, {remplacerHistorique: true});
+            const entete = document.querySelector(`#${ecran} > .page-entete`);
+            const paragraphe = entete.querySelector('p');
+            const cadreEntete = entete.getBoundingClientRect();
+            const cadreParagraphe = paragraphe.getBoundingClientRect();
+            return {
+                texte: getComputedStyle(entete).textAlign,
+                ecartCentres: Math.abs(
+                    (cadreEntete.left + cadreEntete.width / 2)
+                    - (cadreParagraphe.left + cadreParagraphe.width / 2)
+                ),
+            };
+        }""", ecran)
+        if alignement["texte"] != "center" or alignement["ecartCentres"] > 1:
+            raise AssertionError(
+                f"{ecran} : le titre et son texte d’introduction ne sont plus centrés."
+            )
+    page.close()
 
 
 def verifier_reponses_ecrites(navigateur, page_html: str) -> None:
@@ -773,6 +860,7 @@ def principal() -> int:
             navigateur = automate.chromium.launch(headless=True)
             verifier_chargement_local(navigateur)
             nombre_scenarios = verifier_scenarios(navigateur, page_jeu)
+            verifier_accueil_et_entetes(navigateur, page_jeu)
             verifier_interactions(navigateur, page_jeu)
             verifier_defi_chrono(navigateur, page_jeu)
             verifier_reponses_ecrites(navigateur, page_jeu)

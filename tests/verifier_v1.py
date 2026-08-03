@@ -189,6 +189,7 @@ def verifier_securite_et_accessibilite() -> None:
 
 
 def verifier_raccourci_validation() -> None:
+    page = (RACINE / "index.html").read_text(encoding="utf-8")
     moteur = (RACINE / "ressources/moteur-jeu.js").read_text(encoding="utf-8")
     feuille = lire_styles_interface()
     exiger(
@@ -198,9 +199,9 @@ def verifier_raccourci_validation() -> None:
         "Le raccourci Entrée du bouton Valider est absent ou incomplet.",
     )
     exiger(
-        ".accueil-presentation-entrainement:hover" in feuille
-        and "border-color: var(--bouton-selection)" in feuille,
-        "Le contour doré au survol de S’entraîner librement est absent.",
+        ".accueil-action-principale" in feuille
+        and 'id="boutonAccueilPrincipal"' in page,
+        "Le bouton principal de l’accueil n’est pas intégré sous la barre d’accent.",
     )
 
 
@@ -221,7 +222,15 @@ def verifier_nommage_interface() -> None:
     for identifiant, action in correspondances.items():
         exiger(f'id="{identifiant}"' in page, f"Élément visible mal nommé ou absent : {identifiant}.")
         exiger(re.search(rf"\b{re.escape(action)}\b", moteur) is not None, f"Action métier mal nommée ou absente : {action}.")
-    exiger('id="choixSon"' not in page, "L’ancien réglage Effets sonores est encore présent.")
+    exiger(page.count('id="sonActif"') == 1, "Le réglage du son doit exister une seule fois dans Paramètres.")
+    exiger(
+        all(f'data-ecran="{ecran}"' in page for ecran in ("parcours", "carnet", "entrainement")),
+        "Les destinations principales du menu sont incomplètes.",
+    )
+    exiger(
+        all(page.count(f'id="{ecran}"') == 1 for ecran in ("parcours", "carnet", "entrainement")),
+        "Les écrans Parcours, Carnet et Entraînement doivent être uniques.",
+    )
 
 
 def verifier_javascript() -> None:
