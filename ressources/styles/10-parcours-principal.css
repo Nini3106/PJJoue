@@ -948,16 +948,16 @@
     overflow: visible;
     fill: none;
     stroke: var(--accent);
-    stroke-width: 3.2;
+    stroke-width: 3.8;
     stroke-linecap: round;
     stroke-linejoin: round;
     filter: drop-shadow(0 2px 3px rgba(0,0,0,.12));
 }
 #parcours .objectif-cible-reference .fleche-tige {
-    stroke-width: 3.2;
+    stroke-width: 3.8;
 }
 #parcours .objectif-cible-reference .fleche-entete {
-    stroke-width: 3.2;
+    stroke-width: 3.8;
 }
 @media (max-width:700px) {
     #parcours .programme-objectif-simple .objectif-icone {
@@ -976,5 +976,245 @@
     }
     50% {
         transform: translateY(-8px) rotateX(1.4deg) rotateY(-1.8deg);
+    }
+}
+
+/* Outils facultatifs rattachés à la carte du parcours. */
+#parcours .parcours-chronometre-panneau {
+    width: min(1120px,100%);
+    margin: 4px auto 18px;
+    padding: 14px 16px;
+    border: 1px solid rgba(145,198,245,.34);
+    border-radius: 18px;
+    background: var(--surface-carte);
+    display: grid;
+    grid-template-columns: auto minmax(170px,1fr) auto;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 6px 18px rgba(0,19,52,.12);
+}
+#parcours .parcours-outils {
+    display: grid;
+    grid-template-columns: minmax(0,1.35fr) minmax(300px,.65fr);
+    gap: 12px;
+    margin: 0 0 26px;
+}
+#parcours .parcours-outils .parcours-chronometre-panneau {
+    width: auto;
+    margin: 0;
+    border-radius: 14px;
+    background: var(--surface-carte-profonde);
+    box-shadow: none;
+}
+@media (min-width:951px) {
+    #parcours .parcours-outils .parcours-chronometre-panneau {
+        grid-template-columns: auto minmax(0,1fr);
+    }
+    #parcours .parcours-outils .parcours-chronometre-icone {
+        grid-row: 1 / span 2;
+        align-self: start;
+    }
+    #parcours .parcours-outils .parcours-chronometre-commandes {
+        grid-column: 2;
+        width: 100%;
+        min-width: 0;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+    }
+}
+#parcours .parcours-defi-de {
+    min-width: 0;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: auto minmax(0,1fr);
+    align-items: center;
+    gap: 10px 12px;
+    border: 1px solid rgba(57,215,196,.42);
+    border-left: 4px solid #39d7c4;
+    border-radius: 14px;
+    background: var(--surface-carte-profonde);
+}
+#parcours .parcours-defi-de-texte {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+}
+#parcours .parcours-defi-de-texte strong {
+    color: #fff;
+}
+#parcours .parcours-defi-de-texte span {
+    color: #cfe2f4;
+    font-size: .86rem;
+    line-height: 1.35;
+}
+#parcours .parcours-defi-de-actions {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+#parcours .parcours-defi-de-actions button {
+    min-height: 40px;
+    border-radius: 11px;
+}
+#parcours .parcours-defi-de-actions .secondaire {
+    color: #e7f3ff;
+    border: 1px solid rgba(142,199,251,.38);
+    background: var(--surface-carte);
+    font-weight: 800;
+}
+#parcours .parcours-defi-de-actions .secondaire:hover,
+#parcours .parcours-defi-de-actions .secondaire:focus-visible {
+    border-color: #39d7c4;
+    background: #17558f;
+}
+#parcours .de-objet {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    color: var(--jaune-interface);
+    filter: drop-shadow(0 2px 3px rgba(255,200,61,.14));
+    transform-origin: center;
+}
+#parcours .de-objet svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+#parcours .de-contour {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+#parcours .de-points-avant circle {
+    display: none;
+    fill: currentColor;
+}
+#parcours .de-points-dessus circle {
+    fill: currentColor;
+}
+#parcours .de-points-cote circle {
+    fill: currentColor;
+}
+#parcours .de-objet[data-face="1"] .de-points-avant circle:nth-child(5),
+#parcours .de-objet[data-face="2"] .de-points-avant circle:nth-child(1),
+#parcours .de-objet[data-face="2"] .de-points-avant circle:nth-child(9),
+#parcours .de-objet[data-face="3"] .de-points-avant circle:nth-child(1),
+#parcours .de-objet[data-face="3"] .de-points-avant circle:nth-child(5),
+#parcours .de-objet[data-face="3"] .de-points-avant circle:nth-child(9),
+#parcours .de-objet[data-face="4"] .de-points-avant circle:nth-child(1),
+#parcours .de-objet[data-face="4"] .de-points-avant circle:nth-child(3),
+#parcours .de-objet[data-face="4"] .de-points-avant circle:nth-child(7),
+#parcours .de-objet[data-face="4"] .de-points-avant circle:nth-child(9),
+#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(1),
+#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(3),
+#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(5),
+#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(7),
+#parcours .de-objet[data-face="5"] .de-points-avant circle:nth-child(9),
+#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(1),
+#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(3),
+#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(4),
+#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(6),
+#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(7),
+#parcours .de-objet[data-face="6"] .de-points-avant circle:nth-child(9) {
+    display: block;
+}
+#parcours .de-objet.de-en-lancer {
+    animation: lancerDe .42s ease-out;
+}
+@keyframes lancerDe {
+    0% { transform: rotate(0) scale(1); }
+    55% { transform: rotate(190deg) scale(.9); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+#parcours .parcours-chronometre-icone {
+    width: 42px;
+    height: 42px;
+    color: var(--jaune-interface);
+    display: grid;
+    place-items: center;
+}
+#parcours .parcours-chronometre-icone svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+#parcours .parcours-chronometre-texte {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+#parcours .parcours-chronometre-texte strong {
+    color: #fff
+}
+#parcours .parcours-chronometre-texte span {
+    color: #cfe2f4;
+    font-size: .9rem;
+}
+#parcours .parcours-chronometre-commandes {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+#parcours .parcours-bascule-groupe {
+    display: flex;
+    gap: 7px;
+}
+#parcours .parcours-bascule-groupe .option-bouton {
+    min-height: 40px;
+    padding: 7px 13px;
+}
+#parcours .parcours-secondes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#parcours .parcours-secondes>span {
+    font-size: .88rem;
+    color: #d9e9f7;
+    white-space: nowrap;
+}
+#parcours .parcours-secondes .entrainement-secondes-groupe {
+    min-width: 300px;
+}
+
+@media (max-width:950px) {
+    #parcours .parcours-chronometre-panneau {
+        grid-template-columns: auto minmax(0,1fr);
+    }
+    #parcours .parcours-outils {
+        grid-template-columns: 1fr;
+    }
+    #parcours .parcours-chronometre-commandes {
+        grid-column: 1 / -1;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+@media (max-width:650px) {
+    #parcours .parcours-defi-de-actions {
+        grid-template-columns: 1fr;
+    }
+    #parcours .parcours-secondes {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #parcours .parcours-secondes .entrainement-secondes-groupe {
+        min-width: 0;
+        width: 100%;
+    }
+}
+@media (max-width:700px) {
+    #parcours .programme-objectif-simple .objectif-cible-reference,
+    #parcours .objectif-cible-reference .fleche-tige,
+    #parcours .objectif-cible-reference .fleche-entete {
+        stroke-width: 4.6;
     }
 }

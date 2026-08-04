@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
  <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M3LD4ZHK');</script>
+<!-- End Google Tag Manager -->
   <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
   <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 150 questions et 7 modes de jeu." name="description"/>
@@ -20,7 +27,7 @@
   <meta content="https://pjjoue.fr/" property="og:url"/>
   <meta content="https://pjjoue.fr/ressources/panorama-accueil-calme.png" property="og:image"/>
   <meta content="summary_large_image" name="twitter:card"/>
-  <meta content="default-src 'self'; script-src 'self' 'sha256-qh/c/CvY76sHcEVgWMfQQGZzfeZoitbxce1/RhQ+kWw='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" http-equiv="Content-Security-Policy"/>
+  <meta content="default-src 'self'; script-src 'self' 'sha256-qh/c/CvY76sHcEVgWMfQQGZzfeZoitbxce1/RhQ+kWw=' 'sha256-ItAmAWRxciYKfMfcAanjDGttuQ/nghlVDCGi8dDLT9I=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; font-src 'self'; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src https://www.googletagmanager.com" http-equiv="Content-Security-Policy"/>
   <title>
    PJJoue — Découvrir et comprendre la PJJ
   </title>
@@ -38,6 +45,10 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PJJoue","alternateName":"PJJoue — Découvrir et comprendre la PJJ","url":"https://pjjoue.fr/","description":"Parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
  </head>
  <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M3LD4ZHK"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
   <a class="passer-lien" href="#contenuPrincipal">
    Aller au contenu principal
   </a>
@@ -188,6 +199,54 @@
        <p id="resumeCarteParcours"></p>
       </div>
      </div>
+      <div class="parcours-outils">
+       <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
+        <span aria-hidden="true" class="parcours-chronometre-icone">
+         <svg viewBox="0 0 48 48"><circle cx="24" cy="26" r="16"></circle><path d="M24 26V16M24 26l7 5M19 5h10M24 5v5"></path></svg>
+        </span>
+        <div class="parcours-chronometre-texte">
+         <strong id="titreChronometreParcours">Défi chrono</strong>
+         <span>Ajoute du rythme à la prochaine étape si tu en as envie.</span>
+        </div>
+        <div class="parcours-chronometre-commandes">
+         <div class="parcours-bascule-groupe" id="choixChronometreParcours">
+          <button class="option-bouton actif" data-valeur="non" type="button">Libre</button>
+          <button class="option-bouton" data-valeur="oui" type="button">Chronométré</button>
+         </div>
+         <div class="parcours-secondes masque" id="secondesChronometreParcours">
+          <span>Secondes</span>
+          <div class="entrainement-secondes-groupe">
+           <button class="choix-bouton" data-secondes="5" type="button">5 s</button>
+           <button class="choix-bouton" data-secondes="10" type="button">10 s</button>
+           <button class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
+           <button class="choix-bouton" data-secondes="20" type="button">20 s</button>
+           <button class="choix-bouton" data-secondes="25" type="button">25 s</button>
+           <button class="choix-bouton" data-secondes="30" type="button">30 s</button>
+          </div>
+         </div>
+        </div>
+       </section>
+       <section class="parcours-defi-de" aria-labelledby="titreDefiDe">
+        <span aria-hidden="true" class="de-objet" data-face="1" id="faceDeParcours">
+         <svg viewBox="0 0 72 72">
+          <path class="de-contour" d="M10 22 25 10h33v35L43 57H10V22Zm0 0h33l15-12M43 22v35"></path>
+          <g class="de-points-avant"><circle cx="18" cy="30" r="2.7"></circle><circle cx="26.5" cy="30" r="2.7"></circle><circle cx="35" cy="30" r="2.7"></circle><circle cx="18" cy="39.5" r="2.7"></circle><circle cx="26.5" cy="39.5" r="2.7"></circle><circle cx="35" cy="39.5" r="2.7"></circle><circle cx="18" cy="49" r="2.7"></circle><circle cx="26.5" cy="49" r="2.7"></circle><circle cx="35" cy="49" r="2.7"></circle></g>
+          <g class="de-points-dessus"><circle cx="27" cy="16" r="2"></circle><circle cx="43" cy="16" r="2"></circle></g>
+          <g class="de-points-cote"><circle cx="50" cy="25" r="2"></circle><circle cx="50" cy="34" r="2"></circle><circle cx="50" cy="43" r="2"></circle></g>
+         </svg>
+        </span>
+        <div class="parcours-defi-de-texte">
+         <strong id="titreDefiDe">Défi du hasard</strong>
+         <span id="resultatDeParcours">Lance le dé pour tirer de 1 à 6 questions aléatoires.</span>
+        </div>
+        <div class="parcours-defi-de-actions">
+         <button aria-label="Lancer le dé" class="secondaire" id="boutonLancerDeParcours" type="button">
+          <span class="libelle-bureau">Lancer le dé</span><span aria-hidden="true" class="libelle-mobile">Lancer</span>
+         </button>
+         <button class="principal masque" id="boutonJouerTirageDe" type="button">Jouer le tirage</button>
+        </div>
+       </section>
+      </div>
      <div class="chemin-ligne" id="ligneParcours1">
      </div>
      <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
@@ -243,7 +302,7 @@
       Carnet de voyage
      </h1>
      <p>
-      Retrouve ton avancée, tes souvenirs et les défis qui accompagnent ton parcours.
+      Retrouve ta prochaine destination, tes souvenirs et tes défis personnels.
      </p>
     </div>
     <section class="carnet-parcours" aria-labelledby="titreCarnetParcours">
@@ -257,54 +316,6 @@
         <h2 id="titreCarnetParcours">Ton aventure dans l’univers de la PJJ</h2>
        </div>
        <span class="carnet-parcours-titre" id="titreSymboliqueParcours">Nouveau départ</span>
-      </div>
-      <div class="carnet-outils">
-       <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
-        <span aria-hidden="true" class="parcours-chronometre-icone">
-         <svg viewBox="0 0 48 48"><circle cx="24" cy="26" r="16"></circle><path d="M24 26V16M24 26l7 5M19 5h10M24 5v5"></path></svg>
-        </span>
-        <div class="parcours-chronometre-texte">
-         <strong id="titreChronometreParcours">Défi chrono</strong>
-         <span>Ajoute du rythme à la prochaine étape si tu en as envie.</span>
-        </div>
-        <div class="parcours-chronometre-commandes">
-         <div class="parcours-bascule-groupe" id="choixChronometreParcours">
-          <button class="option-bouton actif" data-valeur="non" type="button">Libre</button>
-          <button class="option-bouton" data-valeur="oui" type="button">Chronométré</button>
-         </div>
-         <div class="parcours-secondes masque" id="secondesChronometreParcours">
-          <span>Secondes</span>
-          <div class="entrainement-secondes-groupe">
-           <button class="choix-bouton" data-secondes="5" type="button">5 s</button>
-           <button class="choix-bouton" data-secondes="10" type="button">10 s</button>
-           <button class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
-           <button class="choix-bouton" data-secondes="20" type="button">20 s</button>
-           <button class="choix-bouton" data-secondes="25" type="button">25 s</button>
-           <button class="choix-bouton" data-secondes="30" type="button">30 s</button>
-          </div>
-         </div>
-        </div>
-       </section>
-       <section class="carnet-defi-de" aria-labelledby="titreDefiDe">
-        <span aria-hidden="true" class="de-objet" data-face="1" id="faceDeParcours">
-         <svg viewBox="0 0 72 72">
-          <path class="de-contour" d="M10 22 25 10h33v35L43 57H10V22Zm0 0h33l15-12M43 22v35"></path>
-          <g class="de-points-avant"><circle cx="18" cy="30" r="2.7"></circle><circle cx="26.5" cy="30" r="2.7"></circle><circle cx="35" cy="30" r="2.7"></circle><circle cx="18" cy="39.5" r="2.7"></circle><circle cx="26.5" cy="39.5" r="2.7"></circle><circle cx="35" cy="39.5" r="2.7"></circle><circle cx="18" cy="49" r="2.7"></circle><circle cx="26.5" cy="49" r="2.7"></circle><circle cx="35" cy="49" r="2.7"></circle></g>
-          <g class="de-points-dessus"><circle cx="27" cy="16" r="2"></circle><circle cx="43" cy="16" r="2"></circle></g>
-          <g class="de-points-cote"><circle cx="50" cy="25" r="2"></circle><circle cx="50" cy="34" r="2"></circle><circle cx="50" cy="43" r="2"></circle></g>
-         </svg>
-        </span>
-        <div class="carnet-defi-de-texte">
-         <strong id="titreDefiDe">Défi du hasard</strong>
-         <span id="resultatDeParcours">Lance le dé pour tirer de 1 à 6 questions aléatoires.</span>
-        </div>
-        <div class="carnet-defi-de-actions">
-         <button aria-label="Lancer le dé" class="secondaire" id="boutonLancerDeParcours" type="button">
-          <span class="libelle-bureau">Lancer le dé</span><span aria-hidden="true" class="libelle-mobile">Lancer</span>
-         </button>
-         <button class="principal masque" id="boutonJouerTirageDe" type="button">Jouer le tirage</button>
-        </div>
-       </section>
       </div>
       <p id="prochaineDestinationParcours">Ta première destination t’attend.</p>
       <div class="carnet-parcours-route" id="routeCarnetParcours" role="progressbar" aria-label="Avancement dans le parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -367,8 +378,8 @@
        100
       </option>
      </select>
-     <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement">
-      <button class="choix-bouton actif" data-valeur="10" type="button">
+     <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement" data-selection-visuelle="au-clic">
+      <button class="choix-bouton" data-valeur="10" type="button">
        10
       </button>
       <button class="choix-bouton" data-valeur="20" type="button">
@@ -425,8 +436,8 @@
         <span>
          Jokers
         </span>
-        <div class="entrainement-bascule-groupe" data-proposition="jokers">
-         <button class="option-bouton actif" data-valeur="oui" type="button">
+        <div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic">
+         <button class="option-bouton" data-valeur="oui" type="button">
           Avec
          </button>
          <button class="option-bouton" data-valeur="non" type="button">
@@ -438,8 +449,8 @@
         <span>
          Chrono
         </span>
-        <div class="entrainement-bascule-groupe" data-proposition="chronometre">
-         <button class="option-bouton actif" data-valeur="non" type="button">
+        <div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic">
+         <button class="option-bouton" data-valeur="non" type="button">
           Sans
          </button>
          <button class="option-bouton" data-valeur="oui" type="button">
@@ -451,14 +462,14 @@
         <span>
          Temps par question
         </span>
-        <div class="entrainement-secondes-groupe">
+        <div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic">
          <button class="choix-bouton" data-secondes="5" type="button">
           5 s
          </button>
          <button class="choix-bouton" data-secondes="10" type="button">
           10 s
          </button>
-         <button class="choix-bouton actif" data-secondes="15" type="button">
+         <button class="choix-bouton" data-secondes="15" type="button">
           15 s
          </button>
          <button class="choix-bouton" data-secondes="20" type="button">
@@ -500,8 +511,8 @@
         <span>
          Jokers
         </span>
-        <div class="entrainement-bascule-groupe" data-proposition="jokers">
-         <button class="option-bouton actif" data-valeur="oui" type="button">
+        <div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic">
+         <button class="option-bouton" data-valeur="oui" type="button">
           Avec
          </button>
          <button class="option-bouton" data-valeur="non" type="button">
@@ -513,8 +524,8 @@
         <span>
          Chrono
         </span>
-        <div class="entrainement-bascule-groupe" data-proposition="chronometre">
-         <button class="option-bouton actif" data-valeur="non" type="button">
+        <div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic">
+         <button class="option-bouton" data-valeur="non" type="button">
           Sans
          </button>
          <button class="option-bouton" data-valeur="oui" type="button">
@@ -526,14 +537,14 @@
         <span>
          Temps par question
         </span>
-        <div class="entrainement-secondes-groupe">
+        <div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic">
          <button class="choix-bouton" data-secondes="5" type="button">
           5 s
          </button>
          <button class="choix-bouton" data-secondes="10" type="button">
           10 s
          </button>
-         <button class="choix-bouton actif" data-secondes="15" type="button">
+         <button class="choix-bouton" data-secondes="15" type="button">
           15 s
          </button>
          <button class="choix-bouton" data-secondes="20" type="button">
@@ -839,8 +850,8 @@
         Désactivé
        </option>
       </select>
-      <div class="choix-groupe" data-groupe-choix="sonActif">
-       <button class="choix-bouton actif" data-valeur="true" type="button">
+      <div class="choix-groupe" data-groupe-choix="sonActif" data-selection-visuelle="au-clic">
+       <button class="choix-bouton" data-valeur="true" type="button">
         Activé
        </button>
        <button class="choix-bouton" data-valeur="false" type="button">
@@ -869,11 +880,11 @@
         Grande
        </option>
       </select>
-      <div class="choix-groupe" data-groupe-choix="echelleTexte">
+      <div class="choix-groupe" data-groupe-choix="echelleTexte" data-selection-visuelle="au-clic">
        <button class="choix-bouton" data-valeur="0.9">
         Compacte
        </button>
-       <button class="choix-bouton actif" data-valeur="1">
+       <button class="choix-bouton" data-valeur="1">
         Normale
        </button>
        <button class="choix-bouton" data-valeur="1.08">

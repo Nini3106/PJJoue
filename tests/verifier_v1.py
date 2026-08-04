@@ -105,6 +105,11 @@ def verifier_fichiers() -> None:
         ".github/workflows/controle.yml",
         "index.html",
         "administration.html",
+        "favicon.ico",
+        "favicon-48x48.png",
+        "favicon-96x96.png",
+        "favicon-source.png",
+        "apple-touch-icon.png",
         "robots.txt",
         "sitemap.xml",
         "ressources/moteur-jeu.js",
@@ -158,7 +163,8 @@ def verifier_fichiers() -> None:
         'index.html', 'mentions-legales.html', 'ressources', 'donnees', 'documentation',
         'node_modules', 'outils', 'serveur', 'test-results', 'tests', 'eslint.config.js',
         'package.json', 'package-lock.json', 'requirements-dev.txt', 'robots.txt',
-        'sitemap.xml',
+        'sitemap.xml', 'favicon.ico', 'favicon-48x48.png', 'favicon-96x96.png',
+        'favicon-source.png', 'apple-touch-icon.png',
     }
     emplacements_inattendus = sorted(
         chemin.name
@@ -320,13 +326,27 @@ def verifier_securite_et_accessibilite() -> None:
     exiger(re.search(r'<html\s+lang="fr"', page, re.IGNORECASE) is not None, "La langue française n’est pas déclarée.")
     exiger("Content-Security-Policy" in page, "La politique de sécurité du contenu est absente.")
     exiger("script-src 'self'" in page and "unsafe-eval" not in page, "La politique de scripts est insuffisante.")
+    scripts_gtm = 0
     for attributs, contenu in re.findall(r"<script([^>]*)>(.*?)</script>", page, re.DOTALL | re.IGNORECASE):
         est_json_ld = 'type="application/ld+json"' in attributs.lower()
-        exiger(
-            "src=" in attributs or not contenu.strip() or est_json_ld,
-            "Un script exécutable intégré directement dans index.html a été détecté.",
+        est_amorcage_gtm = (
+            "GTM-M3LD4ZHK" in contenu
+            and "www.googletagmanager.com/gtm.js" in contenu
+            and "dataLayer" in contenu
         )
-    exiger("sha256-" in page, "Le script JSON-LD de l’accueil doit être autorisé par une empreinte CSP.")
+        if est_amorcage_gtm:
+            scripts_gtm += 1
+        exiger(
+            "src=" in attributs or not contenu.strip() or est_json_ld or est_amorcage_gtm,
+            "Un script exécutable intégré non autorisé dans index.html a été détecté.",
+        )
+    exiger(scripts_gtm == 1, "Le script Google Tag Manager doit être présent une seule fois sur l’accueil.")
+    exiger(
+        page.count("GTM-M3LD4ZHK") == 2
+        and "Google Tag Manager (noscript)" in page,
+        "L’intégration Google Tag Manager de l’accueil est absente ou dupliquée.",
+    )
+    exiger("sha256-" in page, "Les scripts intégrés autorisés doivent être couverts par la CSP.")
     identifiants = re.findall(r'\bid="([^"]+)"', page)
     dupliques = sorted({identifiant for identifiant in identifiants if identifiants.count(identifiant) > 1})
     exiger(not dupliques, f"Identifiants HTML dupliqués : {dupliques}")

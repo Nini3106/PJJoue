@@ -1295,6 +1295,7 @@ function initialiserGroupesChoix() {
             bouton.setAttribute('aria-pressed', 'false');
             bouton.onclick = () => {
                 listeDeroulante.value = bouton.dataset.valeur;
+                groupe.dataset.selectionEffectuee = 'true';
                 groupe.querySelectorAll('.choix-bouton').forEach(proposition => {
                     const actif = proposition === bouton;
                     proposition.classList.toggle('actif', actif);
@@ -1312,8 +1313,11 @@ function actualiserGroupesChoix() {
         const listeDeroulante = selectionner('#' + groupe.dataset.groupeChoix);
         if (!listeDeroulante)
             return;
+        const attendSelectionUtilisateur = groupe.dataset.selectionVisuelle === 'au-clic'
+            && groupe.dataset.selectionEffectuee !== 'true';
         groupe.querySelectorAll('.choix-bouton').forEach(bouton => {
-            const actif = String(bouton.dataset.valeur) === String(listeDeroulante.value);
+            const actif = !attendSelectionUtilisateur
+                && String(bouton.dataset.valeur) === String(listeDeroulante.value);
             bouton.classList.toggle('actif', actif);
             bouton.classList.toggle('selectionne', actif);
             bouton.setAttribute('aria-pressed', String(actif));
@@ -4408,6 +4412,7 @@ document.addEventListener('click', evenement => {
     const boutonBascule = evenement.target.closest('.entrainement-bascule-groupe .option-bouton');
     if (boutonBascule) {
         const groupe = boutonBascule.closest('.entrainement-bascule-groupe');
+        groupe.dataset.selectionEffectuee = 'true';
         groupe.querySelectorAll('.option-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === boutonBascule));
         if (groupe.dataset.proposition === 'chronometre') {
             const carte = groupe.closest('[data-carte-entrainement]');
@@ -4418,6 +4423,7 @@ document.addEventListener('click', evenement => {
     const boutonSecondes = evenement.target.closest('.entrainement-secondes-groupe .choix-bouton');
     if (boutonSecondes && !boutonSecondes.closest('#secondesChronometreParcours')) {
         const groupe = boutonSecondes.closest('.entrainement-secondes-groupe');
+        groupe.dataset.selectionEffectuee = 'true';
         groupe.querySelectorAll('.choix-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === boutonSecondes));
         return;
     }

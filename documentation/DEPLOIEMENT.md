@@ -26,7 +26,7 @@ Publier :
 
 ## Données
 
-La progression reste dans le navigateur. Ne pas ajouter de collecte serveur ou de service tiers sans cadrage RGPD et sécurité préalable.
+La progression reste dans le navigateur. Les pages publiques intègrent le conteneur Google Tag Manager `GTM-M3LD4ZHK` pour la mesure d’audience. `administration.html` en est volontairement exclue afin de ne pas transmettre l’usage de l’outil interne. Toute balise publiée dans le conteneur doit rester cohérente avec la politique de confidentialité, le recueil du consentement applicable et la configuration CSP.
 
 ## Référencement public
 
@@ -39,3 +39,8 @@ Après la mise en ligne sur `https://pjjoue.fr/` :
 5. laisser Google explorer et indexer le site, puis contrôler l’état du sitemap dans Search Console.
 
 Le sitemap contient les pages publiques stables, notamment les guides pédagogiques indexables. Les écrans internes du jeu utilisent une navigation dynamique dans `index.html` et ne doivent pas être déclarés comme des URL séparées. La page `administration.html` porte une directive `noindex,nofollow` et ne figure pas dans le sitemap.
+
+
+## Google Tag Manager
+
+Le code du conteneur `GTM-M3LD4ZHK` est placé immédiatement après l’ouverture de `<head>` et sa version `noscript` immédiatement après l’ouverture de `<body>` sur les onze pages publiques. Lors d’un changement de conteneur, modifier les deux occurrences sur chaque page, mettre à jour `confidentialite.html`, la CSP de `index.html`, `serveur/entetes.conf`, puis régénérer `MANIFESTE.json`.

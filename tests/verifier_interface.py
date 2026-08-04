@@ -51,6 +51,22 @@ def construire_page_jeu() -> str:
         page,
         flags=re.IGNORECASE,
     )
+    # Les appels réseau de mesure d’audience ne font pas partie de la recette
+    # fonctionnelle locale ; l’intégration GTM est contrôlée structurellement.
+    page = re.sub(
+        r'<!-- Google Tag Manager -->.*?<!-- End Google Tag Manager -->\s*',
+        "",
+        page,
+        count=1,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
+    page = re.sub(
+        r'<!-- Google Tag Manager \(noscript\) -->.*?<!-- End Google Tag Manager \(noscript\) -->\s*',
+        "",
+        page,
+        count=1,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
     page = re.sub(
         r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css")[^>]*>\s*',
         "",
@@ -147,6 +163,8 @@ def verifier_chargement_local(navigateur) -> None:
     page.set_default_timeout(3000)
     erreurs: list[str] = []
     page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
+    page.route("https://www.googletagmanager.com/**", lambda route: route.abort())
+    page.route("https://*.google-analytics.com/**", lambda route: route.abort())
     page.goto((RACINE / "index.html").as_uri(), wait_until="load")
     page.wait_for_timeout(100)
     etat_chargement = page.evaluate("""() => ({
@@ -498,7 +516,7 @@ def verifier_defi_chrono(navigateur, page_html: str) -> None:
         page = navigateur.new_page(viewport=dimensions)
         page.set_default_timeout(3000)
         page.set_content(page_html, wait_until="domcontentloaded")
-        page.evaluate("etat.theme='commun';afficherEcran('carnet',{remplacerHistorique:true});")
+        page.evaluate("etat.theme='commun';ouvrirParcours('commun',{remplacerHistorique:true});")
         page.locator('#choixChronometreParcours [data-valeur="oui"]').click()
         mesures = page.evaluate("""() => {
             const panneau = document.querySelector('.parcours-chronometre-panneau')

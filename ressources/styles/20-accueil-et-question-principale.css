@@ -466,8 +466,11 @@
     background: rgba(8,56,108,.50);
     border: 1px solid rgba(142,199,251,.35);
 }
-#entrainement .entrainement-nombre-choix .choix-bouton:hover {
-    border-color: rgba(255,200,61,.62);
+#entrainement .choix-bouton:hover,
+#entrainement .choix-bouton:focus-visible {
+    color: var(--texte-sur-jaune);
+    background: var(--jaune-interface);
+    border-color: var(--jaune-interface);
 }
 #entrainement .entrainement-icone {
     margin-bottom: 26px;

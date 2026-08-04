@@ -7,9 +7,9 @@ les déplacer ou modifier leur ordre peut changer le rendu.
 | Ordre | Fichier | Contenu principal |
 |---:|---|---|
 | 00 | `00-fondations-et-composants.css` | variables, base globale, composants et activités communes |
-| 10 | `10-parcours-principal.css` | présentation et structure principales du parcours |
+| 10 | `10-parcours-principal.css` | présentation, carte des étapes et outils facultatifs du parcours |
 | 20 | `20-accueil-et-question-principale.css` | accueil, question, correction et commandes principales |
-| 30 | `30-revision-parcours-et-parametres.css` | révision, carnet de parcours et paramètres |
+| 30 | `30-revision-parcours-et-parametres.css` | révision, carnet de voyage et paramètres |
 | 40 | `40-progression-et-erreurs.css` | progression, erreurs et dimensions associées |
 | 50 | `50-carte-question-et-correction.css` | carte de question, validation, jokers et correction |
 | 60 | `60-parcours-modes-et-chronometre.css` | finitions du parcours, modes, chronomètre et classement |

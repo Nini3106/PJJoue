@@ -145,16 +145,13 @@
     color: #eaf5ff;
     cursor: pointer;
 }
+#entrainement .option-bouton:hover,
+#entrainement .option-bouton:focus-visible,
 .option-bouton.actif {
     color: var(--texte-sur-jaune);
     background: var(--jaune-interface);
     border-color: var(--jaune-interface);
     font-weight: 900;
-}
-#entrainement .entrainement-melange .option-bouton.actif {
-    background: var(--jaune-interface);
-    border-color: var(--jaune-interface);
-    color: var(--texte-sur-jaune);
 }
 .entrainement-secondes-groupe {
     display: grid;
@@ -166,221 +163,18 @@
     padding: 6px;
     border-radius: 9px;
 }
-#entrainement .entrainement-ordonne .entrainement-lancer {
-    background: var(--jaune-interface);
-    border-color: var(--jaune-interface);
-    color: var(--texte-sur-jaune);
-}
-#entrainement .entrainement-melange .entrainement-lancer {
-    background: var(--jaune-interface);
-    border-color: var(--jaune-interface);
-    color: var(--texte-sur-jaune);
-}
-#carnet .parcours-chronometre-panneau {
-    width: min(1120px,100%);
-    margin: 4px auto 18px;
-    padding: 14px 16px;
-    border: 1px solid rgba(145,198,245,.34);
-    border-radius: 18px;
-    background: var(--surface-carte);
-    display: grid;
-    grid-template-columns: auto minmax(170px,1fr) auto;
-    align-items: center;
-    gap: 14px;
-    box-shadow: 0 6px 18px rgba(0,19,52,.12);
-}
-#carnet .carnet-outils {
-    display: grid;
-    grid-template-columns: minmax(0,1.35fr) minmax(300px,.65fr);
-    gap: 12px;
-    margin-top: 16px;
-}
-#carnet .carnet-outils .parcours-chronometre-panneau {
-    width: auto;
-    margin: 0;
-    border-radius: 14px;
-    background: var(--surface-carte-profonde);
-    box-shadow: none;
-}
-@media (min-width:951px) {
-    #carnet .carnet-outils .parcours-chronometre-panneau {
-        grid-template-columns: auto minmax(0,1fr);
-    }
-    #carnet .carnet-outils .parcours-chronometre-icone {
-        grid-row: 1 / span 2;
-        align-self: start;
-    }
-    #carnet .carnet-outils .parcours-chronometre-commandes {
-        grid-column: 2;
-        width: 100%;
-        min-width: 0;
-        flex-wrap: wrap;
-        gap: 8px 12px;
-    }
-}
-#carnet .carnet-defi-de {
-    min-width: 0;
-    padding: 14px;
-    display: grid;
-    grid-template-columns: auto minmax(0,1fr);
-    align-items: center;
-    gap: 10px 12px;
-    border: 1px solid rgba(57,215,196,.42);
-    border-left: 4px solid #39d7c4;
-    border-radius: 14px;
-    background: var(--surface-carte-profonde);
-}
-#carnet .carnet-defi-de-texte {
-    min-width: 0;
-    display: grid;
-    gap: 3px;
-}
-#carnet .carnet-defi-de-texte strong {
+#entrainement .entrainement-lancer {
     color: #fff;
+    background: var(--surface-carte-profonde);
+    border-color: #6f94c0;
 }
-#carnet .carnet-defi-de-texte span {
-    color: #cfe2f4;
-    font-size: .86rem;
-    line-height: 1.35;
+#entrainement .entrainement-lancer:hover,
+#entrainement .entrainement-lancer:focus-visible {
+    color: var(--texte-sur-jaune);
+    background: var(--jaune-interface);
+    border-color: var(--jaune-interface);
 }
-#carnet .carnet-defi-de-actions {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-#carnet .carnet-defi-de-actions button {
-    min-height: 40px;
-    border-radius: 11px;
-}
-#carnet .carnet-defi-de-actions .secondaire {
-    color: #e7f3ff;
-    border: 1px solid rgba(142,199,251,.38);
-    background: var(--surface-carte);
-    font-weight: 800;
-}
-#carnet .carnet-defi-de-actions .secondaire:hover,
-#carnet .carnet-defi-de-actions .secondaire:focus-visible {
-    border-color: #39d7c4;
-    background: #17558f;
-}
-#carnet .de-objet {
-    width: 42px;
-    height: 42px;
-    display: grid;
-    place-items: center;
-    color: var(--jaune-interface);
-    filter: drop-shadow(0 2px 3px rgba(255,200,61,.14));
-    transform-origin: center;
-}
-#carnet .de-objet svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-}
-#carnet .de-contour {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-#carnet .de-points-avant circle {
-    display: none;
-    fill: currentColor;
-}
-#carnet .de-points-dessus circle {
-    fill: currentColor;
-}
-#carnet .de-points-cote circle {
-    fill: currentColor;
-}
-#carnet .de-objet[data-face="1"] .de-points-avant circle:nth-child(5),
-#carnet .de-objet[data-face="2"] .de-points-avant circle:nth-child(1),
-#carnet .de-objet[data-face="2"] .de-points-avant circle:nth-child(9),
-#carnet .de-objet[data-face="3"] .de-points-avant circle:nth-child(1),
-#carnet .de-objet[data-face="3"] .de-points-avant circle:nth-child(5),
-#carnet .de-objet[data-face="3"] .de-points-avant circle:nth-child(9),
-#carnet .de-objet[data-face="4"] .de-points-avant circle:nth-child(1),
-#carnet .de-objet[data-face="4"] .de-points-avant circle:nth-child(3),
-#carnet .de-objet[data-face="4"] .de-points-avant circle:nth-child(7),
-#carnet .de-objet[data-face="4"] .de-points-avant circle:nth-child(9),
-#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(1),
-#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(3),
-#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(5),
-#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(7),
-#carnet .de-objet[data-face="5"] .de-points-avant circle:nth-child(9),
-#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(1),
-#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(3),
-#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(4),
-#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(6),
-#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(7),
-#carnet .de-objet[data-face="6"] .de-points-avant circle:nth-child(9) {
-    display: block;
-}
-#carnet .de-objet.de-en-lancer {
-    animation: lancerDe .42s ease-out;
-}
-@keyframes lancerDe {
-    0% { transform: rotate(0) scale(1); }
-    55% { transform: rotate(190deg) scale(.9); }
-    100% { transform: rotate(360deg) scale(1); }
-}
-#carnet .parcours-chronometre-icone {
-    width: 42px;
-    height: 42px;
-    color: var(--jaune-interface);
-    display: grid;
-    place-items: center;
-}
-#carnet .parcours-chronometre-icone svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-#carnet .parcours-chronometre-texte {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-#carnet .parcours-chronometre-texte strong {
-    color: #fff
-}
-#carnet .parcours-chronometre-texte span {
-    color: #cfe2f4;
-    font-size: .9rem;
-}
-#carnet .parcours-chronometre-commandes {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-#carnet .parcours-bascule-groupe {
-    display: flex;
-    gap: 7px;
-}
-#carnet .parcours-bascule-groupe .option-bouton {
-    min-height: 40px;
-    padding: 7px 13px;
-}
-#carnet .parcours-secondes {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-#carnet .parcours-secondes>span {
-    font-size: .88rem;
-    color: #d9e9f7;
-    white-space: nowrap;
-}
-#carnet .parcours-secondes .entrainement-secondes-groupe {
-    min-width: 300px;
-}
-#carnet .carnet-page-entete {
+carnet .carnet-page-entete {
     margin-bottom: 22px;
 }
 #carnet .carnet-parcours {
@@ -607,17 +401,6 @@
     #erreurs .revision-mode-grille,#entrainement .entrainement-grille {
         grid-template-columns: 1fr;
     }
-    #carnet .parcours-chronometre-panneau {
-        grid-template-columns: auto minmax(0,1fr);
-    }
-    #carnet .carnet-outils {
-        grid-template-columns: 1fr;
-    }
-    #carnet .parcours-chronometre-commandes {
-        grid-column: 1 / -1;
-        width: 100%;
-        flex-wrap: wrap;
-    }
     #carnet .carnet-parcours-entete {
         align-items: flex-start;
         flex-direction: column;
@@ -647,19 +430,8 @@
         width: 44px;
         height: 44px;
     }
-    #carnet .carnet-defi-de-actions {
-        grid-template-columns: 1fr;
-    }
     #erreurs .revision-etape-boutons {
         grid-template-columns: repeat(2,1fr);
-    }
-    #carnet .parcours-secondes {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    #carnet .parcours-secondes .entrainement-secondes-groupe {
-        min-width: 0;
-        width: 100%;
     }
 }
 #question .temps-ecoule-correction {
@@ -711,9 +483,11 @@
     background: var(--surface-carte-profonde);
     box-shadow: none;
 }
-#parametres .parametres-actions-boutons .principal:hover {
+#parametres .parametres-actions-boutons .principal:hover,
+#parametres .parametres-actions-boutons .principal:focus-visible {
+    color: var(--texte-sur-jaune);
     border-color: var(--bouton-selection);
-    background: #17558f;
+    background: var(--bouton-selection);
     transform: none;
 }
 #parametres .parametres-choix {
@@ -738,6 +512,12 @@
     min-height: 40px;
     padding: 8px 12px;
     white-space: nowrap;
+}
+#parametres .parametres-choix .choix-bouton:hover,
+#parametres .parametres-choix .choix-bouton:focus-visible {
+    color: var(--texte-sur-jaune);
+    border-color: var(--bouton-selection);
+    background: var(--bouton-selection);
 }
 @media (max-width:820px) {
     .barre-actions-page {

@@ -17,3 +17,8 @@ PJJoue ne demande aucune identité et ne crée aucun compte. La progression est 
 - aucune dépendance JavaScript distante ni CDN ;
 - import de progression limité à 5 Mo et validation structurelle ;
 - échappement HTML des réponses utilisateur lorsqu’elles sont réaffichées.
+
+
+## Mesure d’audience
+
+Le conteneur public est `GTM-M3LD4ZHK`. La page `administration.html` ne charge pas Google Tag Manager. La politique de confidentialité doit être révisée à chaque ajout ou modification de balise, de finalité, de destinataire ou de durée de conservation. Les balises soumises au consentement ne doivent pas être déclenchées avant le choix du visiteur.

@@ -186,29 +186,29 @@ main.conteneur {
 }
 /* Couleurs du chronomètre selon le temps restant. */
 /* État normal : bleu du site, jamais jaune par défaut. */
-#carnet .parcours-chronometre-panneau .choix-bouton,#carnet .parcours-chronometre-panneau button[data-valeur] {
+#parcours .parcours-chronometre-panneau .choix-bouton,#parcours .parcours-chronometre-panneau button[data-valeur] {
     color: #e7f3ff;
     background: rgba(8,56,108,.50);
     border: 1px solid rgba(142,199,251,.35);
     box-shadow: none;
 }
 /* Survol / focus : seul le contour devient jaune. */
-#carnet .parcours-chronometre-panneau .choix-bouton:hover:not(.actif):not(.selectionne),
-#carnet .parcours-chronometre-panneau .choix-bouton:focus-visible:not(.actif):not(.selectionne),
-#carnet .parcours-chronometre-panneau button[data-valeur]:hover:not(.actif):not(.selectionne),
-#carnet .parcours-chronometre-panneau button[data-valeur]:focus-visible:not(.actif):not(.selectionne) {
+#parcours .parcours-chronometre-panneau .choix-bouton:hover:not(.actif):not(.selectionne),
+#parcours .parcours-chronometre-panneau .choix-bouton:focus-visible:not(.actif):not(.selectionne),
+#parcours .parcours-chronometre-panneau button[data-valeur]:hover:not(.actif):not(.selectionne),
+#parcours .parcours-chronometre-panneau button[data-valeur]:focus-visible:not(.actif):not(.selectionne) {
     color: #e7f3ff;
     background: rgba(8,56,108,.50);
     border-color: var(--accent);
     box-shadow: none;
 }
 /* Sélection : fond jaune + contour jaune. */
-#carnet .parcours-chronometre-panneau .choix-bouton.actif,
-#carnet .parcours-chronometre-panneau .choix-bouton.selectionne,
-#carnet .parcours-chronometre-panneau .choix-bouton[aria-pressed="true"],
-#carnet .parcours-chronometre-panneau button[data-valeur].actif,
-#carnet .parcours-chronometre-panneau button[data-valeur].selectionne,
-#carnet .parcours-chronometre-panneau button[data-valeur][aria-pressed="true"] {
+#parcours .parcours-chronometre-panneau .choix-bouton.actif,
+#parcours .parcours-chronometre-panneau .choix-bouton.selectionne,
+#parcours .parcours-chronometre-panneau .choix-bouton[aria-pressed="true"],
+#parcours .parcours-chronometre-panneau button[data-valeur].actif,
+#parcours .parcours-chronometre-panneau button[data-valeur].selectionne,
+#parcours .parcours-chronometre-panneau button[data-valeur][aria-pressed="true"] {
     color: var(--texte-sur-jaune);
     background: linear-gradient(180deg,#ffe286,var(--jaune-interface));
     border-color: #ffebae;
