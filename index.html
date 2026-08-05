@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
  <head>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-M3LD4ZHK');</script>
-<!-- End Google Tag Manager -->
-  <meta charset="utf-8"/>
+ <script src="ressources/consentement-analytics.js"></script>
+<meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 150 questions et 7 modes de jeu." name="description"/>
+  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 160 questions et 7 modes de jeu." name="description"/>
   <link rel="icon" href="favicon.ico" sizes="any"/>
   <link rel="icon" href="favicon-48x48.png" type="image/png" sizes="48x48"/>
   <link rel="icon" href="favicon-96x96.png" type="image/png" sizes="96x96"/>
@@ -23,7 +17,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta content="PJJoue" property="og:site_name"/>
   <meta content="fr_FR" property="og:locale"/>
   <meta content="PJJoue — Découvrir et comprendre la PJJ" property="og:title"/>
-  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 150 questions et 7 modes de jeu." property="og:description"/>
+  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 160 questions et 7 modes de jeu." property="og:description"/>
   <meta content="https://pjjoue.fr/" property="og:url"/>
   <meta content="https://pjjoue.fr/ressources/panorama-accueil-calme.png" property="og:image"/>
   <meta content="summary_large_image" name="twitter:card"/>
@@ -43,13 +37,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="ressources/styles/85-guides-pedagogiques.css">
   <link rel="stylesheet" href="ressources/styles/90-responsive-et-etats-finaux.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PJJoue","alternateName":"PJJoue — Découvrir et comprendre la PJJ","url":"https://pjjoue.fr/","description":"Parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
- </head>
+ <link rel="stylesheet" href="ressources/styles/95-consentement.css">
+</head>
  <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M3LD4ZHK"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-  <a class="passer-lien" href="#contenuPrincipal">
+<a class="passer-lien" href="#contenuPrincipal">
    Aller au contenu principal
   </a>
   <div aria-atomic="true" aria-live="polite" class="lecteur-ecran-seulement" id="statutAccessibilite">
@@ -108,10 +99,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      </p>
      <ul>
       <li>
-       10 étapes
+       11 étapes
       </li>
       <li>
-       150 questions
+       160 questions
       </li>
       <li>
        7 modes de jeu
@@ -136,11 +127,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <ul class="accueil-statistiques" aria-label="Contenu du jeu">
        <li>
         <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-turquoise" viewBox="0 0 48 48"><path d="M6 10c7-2 13 0 18 5v25c-5-5-11-7-18-5zM42 10c-7-2-13 0-18 5v25c5-5 11-7 18-5z"/></svg>
-        <strong>10</strong><span>étapes</span>
+        <strong>11</strong><span>étapes</span>
        </li>
        <li>
         <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-jaune" viewBox="0 0 48 48"><path d="M25 7c-9 0-16 6-16 14 0 4 2 8 5 10l-2 8 9-4h4c9 0 16-6 16-14S34 7 25 7z"/><path class="accueil-icone-detail" d="M21 18c0-3 2-5 5-5s5 2 5 5c0 4-5 4-5 8M26 31h.01"/></svg>
-        <strong>150</strong><span>questions</span>
+        <strong>160</strong><span>questions</span>
        </li>
        <li>
         <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-turquoise" viewBox="0 0 48 48"><path d="M14 15h20c4 0 7 3 8 8l2 10c1 5-5 8-8 4l-5-6H17l-5 6c-3 4-9 1-8-4l2-10c1-5 4-8 8-8z"/><path class="accueil-icone-detail" d="M15 21v8M11 25h8M33 22h.01M37 27h.01"/></svg>
@@ -161,7 +152,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
        Parcours PJJ
       </h1>
       <p id="sousTitreParcours">
-       Explore, comprends et progresse à ton rythme à travers 10 étapes clés.
+       Explore, comprends et progresse à ton rythme à travers 11 étapes clés.
       </p>
      </div>
      <div class="programme-objectif programme-objectif-simple">
@@ -183,7 +174,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </svg>
        </span>
        <span class="programme-objectif-texte">
-        Complète les 10 étapes sans joker pour accéder à l’évaluation finale.
+        Complète les 11 étapes sans joker pour accéder à l’évaluation finale.
        </span>
       </div>
      </div>
@@ -195,7 +186,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </span>
       <div class="carte-parcours-titres">
        <span class="carte-parcours-surtitre">Carte du parcours</span>
-       <h2>Les 10 destinations</h2>
+       <h2>Les 11 destinations</h2>
        <p id="resumeCarteParcours"></p>
       </div>
      </div>
@@ -251,18 +242,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      </div>
      <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
      </div>
-     <div class="chemin-ligne chemin-ligne-inverse" id="ligneParcours2">
+     <div class="chemin-ligne" id="ligneParcours2">
      </div>
      <div aria-hidden="true" class="chemin-virage chemin-virage-gauche">
      </div>
-     <div class="chemin-ligne" id="ligneParcours3">
+     <div class="chemin-ligne chemin-ligne-inverse" id="ligneParcours3">
      </div>
      <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
      </div>
       <div class="chemin-finale-ligne">
       <div class="chemin-finale-espace">
       </div>
-      <div id="carteEtape10">
+      <div id="cartesEtapesFinales">
       </div>
       <div aria-hidden="true" class="chemin-finale-lien">
       </div>
@@ -284,7 +275,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </svg>
        </span>
        <span class="evaluation-etape-numero">
-        ÉTAPE 11
+        ÉTAPE 12
        </span>
        <span class="evaluation-titre">
         Évaluation
@@ -322,7 +313,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
        <span class="carnet-parcours-trace"><i></i></span>
        <span aria-hidden="true" class="carnet-parcours-position">●</span>
       </div>
-      <div class="carnet-parcours-reperes" aria-hidden="true"><span>Départ</span><span>Étape 5</span><span>Évaluation</span></div>
+      <div class="carnet-parcours-reperes" aria-hidden="true"><span>Départ</span><span>Étape 6</span><span>Évaluation</span></div>
       <div class="carnet-parcours-details">
        <section aria-labelledby="titreSouvenirsParcours" class="carnet-souvenirs">
         <div class="carnet-section-entete"><span aria-hidden="true">◇</span><h3 id="titreSouvenirsParcours">Souvenirs de parcours</h3></div>
@@ -377,6 +368,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <option value="100">
        100
       </option>
+      <option value="110">
+       110
+      </option>
      </select>
      <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement" data-selection-visuelle="au-clic">
       <button class="choix-bouton" data-valeur="10" type="button">
@@ -409,6 +403,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="choix-bouton" data-valeur="100" type="button">
        100
       </button>
+      <button class="choix-bouton" data-valeur="110" type="button">
+       110
+      </button>
      </div>
     </div>
     <div class="entrainement-grille">
@@ -426,7 +423,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
        Par ordre d’étapes
       </h2>
       <p>
-       Les questions suivent la progression du programme, de l’étape 1 à l’étape 10.
+       Les questions suivent la progression du programme, de l’étape 1 à l’étape 11.
       </p>
       <div class="entrainement-details">
        Étape 1 → Étape 10
@@ -931,7 +928,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a href="structures-pjj/">Structures de la PJJ</a>
     <a href="mesures-educatives-pjj/">Mesures éducatives</a>
     <a href="sigles-pjj/">Sigles essentiels</a>
-    <a href="quiz-pjj/">Quiz PJJ : 150 questions</a>
+    <a href="quiz-pjj/">Quiz PJJ : 160 questions</a>
    </nav>
   </section>
   <div aria-atomic="true" aria-live="polite" class="notification" id="notification" role="status">
@@ -961,6 +958,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </footer>
   <script defer="" src="donnees/donnees-pjj.js">
   </script>
+  <script defer="" src="ressources/analytics-pjjoue.js"></script>
   <script defer="" src="ressources/moteur-jeu.js">
   </script>
   <dialog aria-describedby="texteFenetreQuitterSession" aria-labelledby="titreFenetreQuitterSession" class="pjj-fenetre" id="fenetreQuitterSession">

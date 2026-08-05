@@ -675,39 +675,37 @@
 }
 #parcours .chemin-finale-ligne {
     display: grid;
-    grid-template-columns: 1fr minmax(0,1fr) 86px minmax(0,1fr);
-    gap: 0;
-    align-items: center;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 24px;
+    align-items: stretch;
     width: 100%;
 }
-#parcours .chemin-finale-espace {
-    grid-column: 1;
-}
-#parcours #carteEtape10 {
-    grid-column: 2;
-}
-#parcours #carteEtape10 .chemin-etape-carte {
-    min-height: 220px;
-}
+#parcours .chemin-finale-espace,
 #parcours .chemin-finale-lien {
-    grid-column: 3;
-    position: relative;
-    height: 100%;
-    min-height: 90px;
+    display:none;
 }
-#parcours .chemin-finale-lien::before {
+#parcours #cartesEtapesFinales {
+    grid-column: 1 / span 2;
+    position: relative;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:24px;
+}
+#parcours #cartesEtapesFinales::after {
     content: "";
     position: absolute;
-    left: 0;
-    right: 0;
     top: 50%;
+    right: -24px;
+    width: 24px;
     height: 2px;
+    transform: translateY(-50%);
     background: rgba(255,209,102,.72);
 }
+#parcours #cartesEtapesFinales .chemin-etape-carte { min-height:210px; }
 #parcours .chemin-evaluation-carte {
-    grid-column: 4;
+    grid-column: 3;
     width: 100%;
-    min-height: 220px;
+    min-height: 210px;
     padding: 20px;
     border: 2px solid var(--accent);
     border-radius: 24px;
@@ -756,8 +754,11 @@
         grid-template-columns: 1fr;
         gap: 14px;
     }
-    #parcours .chemin-finale-espace,#parcours #carteEtape10,#parcours .chemin-evaluation-carte {
+    #parcours .chemin-finale-espace,#parcours #cartesEtapesFinales,#parcours .chemin-evaluation-carte {
         grid-column: 1;
+    }
+    #parcours #cartesEtapesFinales::after {
+        display: none;
     }
     #parcours .chemin-finale-lien {
         grid-column: 1;
@@ -852,17 +853,20 @@
         font-size: 1rem;
     }
     #parcours .chemin-finale-ligne {
-        grid-template-columns: 1fr minmax(0,1.18fr) 110px minmax(0,1.18fr);
+        grid-template-columns: repeat(3,minmax(0,1fr));
+        gap: 28px;
         margin-top: 4px;
     }
-    #parcours #carteEtape10 .chemin-etape-carte {
-        min-height: 250px;
+    #parcours #cartesEtapesFinales {
+        gap: 28px;
     }
-    #parcours .chemin-finale-lien {
-        min-height: 110px;
+    #parcours #cartesEtapesFinales::after {
+        right: -28px;
+        width: 28px;
     }
+    #parcours #cartesEtapesFinales .chemin-etape-carte { min-height:245px; }
     #parcours .chemin-evaluation-carte {
-        min-height: 250px;
+        min-height: 245px;
         padding: 24px;
         border-radius: 26px;
     }
@@ -917,7 +921,18 @@
         font-size: 1.02rem;
     }
     #parcours .chemin-finale-ligne {
-        grid-template-columns: .8fr minmax(0,1fr) 90px minmax(0,1fr);
+        grid-template-columns: repeat(3,minmax(0,1fr));
+        gap: 22px;
+    }
+    #parcours #cartesEtapesFinales {
+        gap: 22px;
+    }
+    #parcours #cartesEtapesFinales::after {
+        right: -22px;
+        width: 22px;
+    }
+    #parcours #cartesEtapesFinales .chemin-etape-carte {
+        min-height: 225px;
     }
     #parcours .chemin-evaluation-carte {
         min-height: 225px;
@@ -1218,3 +1233,5 @@
         stroke-width: 4.6;
     }
 }
+
+@media (max-width:900px){#parcours #cartesEtapesFinales{grid-template-columns:1fr;}}

@@ -19,7 +19,7 @@ THEMES = [
         "id": "commun",
         "icone": "",
         "titre": "Parcours PJJ",
-        "sousTitre": "Découvre la PJJ à travers 10 étapes progressives",
+        "sousTitre": "Découvre la PJJ à travers 11 étapes progressives",
         "categorie": "socle",
     }
 ]

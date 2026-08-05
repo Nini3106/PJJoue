@@ -26,7 +26,7 @@ Publier :
 
 ## Données
 
-La progression reste dans le navigateur. Les pages publiques intègrent le conteneur Google Tag Manager `GTM-M3LD4ZHK` pour la mesure d’audience. `administration.html` en est volontairement exclue afin de ne pas transmettre l’usage de l’outil interne. Toute balise publiée dans le conteneur doit rester cohérente avec la politique de confidentialité, le recueil du consentement applicable et la configuration CSP.
+La progression reste dans le navigateur. Les onze pages publiques chargent `ressources/consentement-analytics.js`, qui maintient Google Tag Manager désactivé tant que le visiteur n’a pas accepté la mesure d’audience. `administration.html` en est volontairement exclue afin de ne pas transmettre l’usage de l’outil interne. Toute balise publiée dans le conteneur doit rester cohérente avec la politique de confidentialité, le choix du visiteur et la configuration CSP.
 
 ## Référencement public
 
@@ -41,6 +41,12 @@ Après la mise en ligne sur `https://pjjoue.fr/` :
 Le sitemap contient les pages publiques stables, notamment les guides pédagogiques indexables. Les écrans internes du jeu utilisent une navigation dynamique dans `index.html` et ne doivent pas être déclarés comme des URL séparées. La page `administration.html` porte une directive `noindex,nofollow` et ne figure pas dans le sitemap.
 
 
-## Google Tag Manager
+## Google Tag Manager et consentement
 
-Le code du conteneur `GTM-M3LD4ZHK` est placé immédiatement après l’ouverture de `<head>` et sa version `noscript` immédiatement après l’ouverture de `<body>` sur les onze pages publiques. Lors d’un changement de conteneur, modifier les deux occurrences sur chaque page, mettre à jour `confidentialite.html`, la CSP de `index.html`, `serveur/entetes.conf`, puis régénérer `MANIFESTE.json`.
+Le conteneur `GTM-M3LD4ZHK` n’est plus chargé directement dans les pages. Le module `ressources/consentement-analytics.js`, placé au début du `<head>`, applique un état de consentement par défaut refusé et ne télécharge le conteneur qu’après un accord explicite. La version `noscript` a été retirée : elle contournerait le choix du visiteur.
+
+Le choix est enregistré localement sous la clé `pjjoue_consentement_analytics_v1`. Le bouton flottant **Gérer les cookies** et la commande présente sur `confidentialite.html` permettent de rouvrir le panneau. En cas de refus après un accord, le module transmet l’état refusé et tente de supprimer les cookies Google Analytics accessibles au site.
+
+Les événements du jeu sont produits dans `ressources/moteur-jeu.js`, filtrés par `ressources/analytics-pjjoue.js`, puis envoyés dans `dataLayer` uniquement lorsque le consentement est accordé. La configuration unique à réaliser dans Tag Manager est décrite dans `documentation/CONFIGURATION_GTM_ANALYTICS.md`.
+
+Lors d’un changement de conteneur, modifier uniquement `IDENTIFIANT_GTM` dans `ressources/consentement-analytics.js`, vérifier `confidentialite.html`, la CSP de `index.html`, `serveur/entetes.conf`, puis régénérer `MANIFESTE.json`.

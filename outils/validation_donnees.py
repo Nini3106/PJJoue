@@ -187,12 +187,12 @@ def valider_donnees(
         erreurs.append("programme.json doit contenir un objet.")
     else:
         etapes = programme.get("commun", {}).get("etapes") if isinstance(programme.get("commun"), dict) else None
-        if not isinstance(etapes, list) or len(etapes) != 10:
-            erreurs.append("programme.commun.etapes doit contenir dix étapes.")
+        if not isinstance(etapes, list) or len(etapes) != 11:
+            erreurs.append("programme.commun.etapes doit contenir onze étapes.")
         else:
             identifiants_etapes = [etape.get("id") for etape in etapes if isinstance(etape, dict)]
-            if identifiants_etapes != list(range(1, 11)):
-                erreurs.append("Les étapes du programme doivent être numérotées de 1 à 10 dans l’ordre.")
+            if identifiants_etapes != list(range(1, 12)):
+                erreurs.append("Les étapes du programme doivent être numérotées de 1 à 11 dans l’ordre.")
             for indice, etape in enumerate(etapes, start=1):
                 if not isinstance(etape, dict):
                     erreurs.append(f"Étape {indice} : la fiche doit être un objet.")
@@ -233,8 +233,8 @@ def valider_donnees(
         ):
             valider_texte(question.get(champ), f"{contexte}.{champ}", erreurs)
         valider_texte(question.get("indice"), f"{contexte}.indice", erreurs, vide_autorise=True)
-        if not est_entier(question.get("etape")) or not 1 <= question["etape"] <= 11:
-            erreurs.append(f"{contexte}.etape doit être un entier de 1 à 11.")
+        if not est_entier(question.get("etape")) or not 1 <= question["etape"] <= 12:
+            erreurs.append(f"{contexte}.etape doit être un entier de 1 à 12.")
         if not est_entier(question.get("chapitre")) or question["chapitre"] < 1:
             erreurs.append(f"{contexte}.chapitre doit être un entier positif.")
         if not isinstance(question.get("procedureLocale"), bool):

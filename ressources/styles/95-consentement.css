@@ -1,0 +1,178 @@
+/* Consentement Analytics : carte compacte alignée sur l'identité visuelle PJJoue. */
+.pjj-consentement,
+.pjj-consentement-preferences {
+    font-family: inherit;
+}
+.pjj-consentement {
+    position: fixed;
+    z-index: 2147483000;
+    right: clamp(12px, 3vw, 34px);
+    bottom: clamp(12px, 3vw, 30px);
+    width: min(660px, calc(100vw - 24px));
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 58px 20px 18px;
+    color: #fff;
+    background: linear-gradient(145deg, rgba(14, 38, 72, .985), rgba(25, 66, 112, .985));
+    border: 1px solid rgba(161, 201, 239, .68);
+    border-radius: 22px;
+    box-shadow: 0 18px 54px rgba(2, 12, 30, .42);
+    backdrop-filter: blur(16px);
+}
+.pjj-consentement[hidden],
+.pjj-consentement-preferences[hidden] {
+    display: none !important;
+}
+.pjj-consentement-repere {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 96px;
+    height: 58px;
+    padding: 0 16px;
+    border-radius: 18px;
+    color: #fff;
+    background: rgba(5, 24, 52, .56);
+    border: 1px solid rgba(255, 255, 255, .18);
+}
+.pjj-consentement-marque {
+    display: inline-flex;
+    align-items: baseline;
+    white-space: nowrap;
+    font-size: 1.08rem;
+    font-weight: 900;
+    letter-spacing: -.04em;
+}
+.pjj-consentement-marque-pjj {
+    color: #ffffff;
+}
+.pjj-consentement-marque-oue {
+    color: #ffcc4d;
+}
+.pjj-consentement-contenu h2 {
+    margin: 0 0 5px;
+    color: #fff;
+    font-size: 1.08rem;
+}
+.pjj-consentement-contenu p {
+    margin: 0;
+    color: #e7f2ff;
+    line-height: 1.45;
+    font-size: .94rem;
+}
+.pjj-consentement-lien {
+    display: inline-block;
+    margin-top: 7px;
+    color: #fff1b8;
+    font-weight: 800;
+    text-underline-offset: 3px;
+}
+.pjj-consentement-actions {
+    display: grid;
+    gap: 8px;
+    min-width: 118px;
+}
+.pjj-consentement-bouton {
+    min-height: 42px;
+    width: 100%;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+.pjj-consentement-bouton:hover {
+    transform: translateY(-1px);
+}
+.pjj-consentement-refuser {
+    color: #fff;
+    background: #173e6c;
+    border: 1px solid #9fc5eb;
+}
+.pjj-consentement-accepter {
+    color: #102a4a;
+    background: linear-gradient(135deg, #ffe08a, #f6bb3b);
+    border: 1px solid #ffeaad;
+    box-shadow: 0 7px 18px rgba(246, 187, 59, .2);
+}
+.pjj-consentement-fermer {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    color: #dbeeff;
+    background: rgba(255,255,255,.04);
+    font-size: 1.45rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.pjj-consentement-fermer:hover {
+    color: #102a4a;
+    background: #ffdb76;
+}
+.pjj-consentement-preferences {
+    position: fixed;
+    z-index: 2147482999;
+    right: 14px;
+    bottom: 14px;
+    min-height: 38px;
+    border: 1px solid rgba(171, 207, 241, .8);
+    border-radius: 999px;
+    padding: 7px 13px;
+    color: #f5faff;
+    background: rgba(12, 42, 77, .94);
+    box-shadow: 0 8px 24px rgba(2, 12, 30, .28);
+    font-size: .82rem;
+    font-weight: 850;
+    cursor: pointer;
+}
+.pjj-consentement-preferences:hover {
+    color: #102a4a;
+    background: #ffdb76;
+    border-color: #ffdb76;
+}
+.pjj-consentement :focus-visible,
+.pjj-consentement-preferences:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+}
+@media (max-width: 680px) {
+    .pjj-consentement {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        width: auto;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+        padding: 16px 16px 16px 16px;
+        border-radius: 19px;
+    }
+    .pjj-consentement-repere {
+        min-width: 84px;
+        width: fit-content;
+        height: 44px;
+        padding: 0 12px;
+        border-radius: 14px;
+    }
+    .pjj-consentement-marque {
+        font-size: .96rem;
+    }
+    .pjj-consentement-contenu {
+        padding-right: 28px;
+    }
+    .pjj-consentement-actions {
+        grid-column: 1 / -1;
+        grid-template-columns: 1fr 1fr;
+        min-width: 0;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .pjj-consentement-bouton {
+        transition: none;
+    }
+}

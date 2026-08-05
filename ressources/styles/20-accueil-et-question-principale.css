@@ -454,12 +454,16 @@
     font-weight: 900;
 }
 #entrainement .entrainement-nombre-choix {
-    display: grid;
-    grid-template-columns: repeat(10,minmax(54px,1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
 }
 #entrainement .entrainement-nombre-choix .choix-bouton {
+    width: max-content;
+    min-width: 0;
     min-height: 44px;
+    padding-inline: 14px;
     border-radius: 12px;
     box-shadow: none;
     color: #e7f3ff;
@@ -571,6 +575,9 @@
 }
 #parcours .chemin-etape-carte[data-etape="10"] .chemin-etape-icone {
     color: var(--icone-violette)
+}
+#parcours .chemin-etape-carte[data-etape="11"] .chemin-etape-icone {
+    color: var(--icone-orange)
 }
 #parcours .chemin-evaluation-carte .chemin-etape-icone {
     color: var(--icone-violette);

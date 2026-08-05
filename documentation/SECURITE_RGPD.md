@@ -14,11 +14,15 @@ PJJoue ne demande aucune identité et ne crée aucun compte. La progression est 
 - `object-src 'none'`, `base-uri 'self'`, `form-action 'self'` ;
 - politique de référent `no-referrer` ;
 - exemple d’en-têtes serveur dans `serveur/entetes.conf` ;
-- aucune dépendance JavaScript distante ni CDN ;
+- aucune dépendance JavaScript distante ni CDN avant le consentement ;
 - import de progression limité à 5 Mo et validation structurelle ;
 - échappement HTML des réponses utilisateur lorsqu’elles sont réaffichées.
 
 
 ## Mesure d’audience
 
-Le conteneur public est `GTM-M3LD4ZHK`. La page `administration.html` ne charge pas Google Tag Manager. La politique de confidentialité doit être révisée à chaque ajout ou modification de balise, de finalité, de destinataire ou de durée de conservation. Les balises soumises au consentement ne doivent pas être déclenchées avant le choix du visiteur.
+Le conteneur public est `GTM-M3LD4ZHK`. La page `administration.html` ne charge pas Google Tag Manager. Sur les pages publiques, `ressources/consentement-analytics.js` applique un refus par défaut et ne charge Google Tag Manager qu’après acceptation. L’absence de choix ou le refus n’empêche jamais l’utilisation du jeu.
+
+`ressources/analytics-pjjoue.js` bloque les événements métier tant que le consentement n’est pas accordé. Les événements ne contiennent ni texte de question, ni réponse saisie, ni contenu de sauvegarde. Ils utilisent uniquement des identifiants stables et des résultats techniques.
+
+La politique de confidentialité doit être révisée à chaque ajout ou modification de balise, de finalité, de destinataire, de paramètre transmis ou de durée de conservation. Le refus doit rester aussi simple que l’acceptation.

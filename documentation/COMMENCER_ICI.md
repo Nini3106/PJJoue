@@ -21,6 +21,8 @@ Pour reprendre le chantier de nettoyage interrompu, lire d'abord
 | Comprendre l'état, la navigation et les activités | `documentation/ARCHITECTURE.md` | rubrique correspondant au besoin |
 | Exécuter ou comprendre les tests | `documentation/RECETTE.md` | contrôle automatique ou recette manuelle |
 | Déployer le dossier | `documentation/DEPLOIEMENT.md` | hébergement statique |
+| Configurer le suivi Analytics | `documentation/CONFIGURATION_GTM_ANALYTICS.md` | un déclencheur générique et une balise GA4 |
+| Modifier une question sans casser l’historique Analytics | `documentation/MODIFIER_LES_QUESTIONS_SANS_CASSER_ANALYTICS.md` | conserver l’identifiant stable |
 
 ## Règles à connaître avant de modifier
 

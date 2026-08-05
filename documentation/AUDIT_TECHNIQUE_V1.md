@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Le nettoyage technique conserve strictement le produit visible : mêmes écrans, mêmes textes, mêmes boutons, mêmes activités, même ordre des 150 questions et mêmes règles de progression.
+Le nettoyage technique conserve strictement le produit visible : mêmes écrans, mêmes textes, mêmes boutons, mêmes activités, structure actuelle des 160 questions et mêmes règles de progression.
 
 Les changements concernent uniquement la lisibilité, l’organisation et la suppression du code sans effet.
 
@@ -46,7 +46,7 @@ La recette Chromium vérifie notamment :
 - 16 textes de correction représentatifs, explication comprise ;
 - le verrouillage et le bilan de l’étape 11 ;
 - les sauvegardes, l’import, l’export et la réinitialisation ;
-- l’administration et ses 150 questions.
+- l’administration et ses 160 questions.
 
 Une comparaison locale Windows protège également 19 vues de référence sur
 ordinateur, portable et mobile. Elle compare les pixels décodés avec la même

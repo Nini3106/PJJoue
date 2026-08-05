@@ -55,6 +55,12 @@ changé la cascade.
 
 Les classes et variables appartenant à PJJoue sont en français. Les propriétés
 CSS imposées par le standard web ne sont pas traduites.
+### `ressources/consentement-analytics.js` et `ressources/analytics-pjjoue.js`
+
+Le premier module conserve le choix du visiteur, applique le mode consentement Google et charge le conteneur uniquement après acceptation. Le second expose `window.PJJ_ANALYTICS.envoyer()` et refuse silencieusement tout événement tant que la mesure d’audience n’est pas autorisée.
+
+Le moteur produit des événements sémantiques (`pjj_screen_view`, `pjj_level_start`, `pjj_question_answer`, etc.) à partir des fonctions centrales. L’identité d’une question repose sur son champ `id`, jamais sur sa position ni sur son texte. L’ordre des questions, leur formulation et leur appartenance à une session peuvent donc évoluer sans modifier Tag Manager ni Analytics, tant que leurs identifiants restent stables.
+
 ### `ressources/administration.js`
 
 L’outil d’administration travaille sur une copie locale de la banque. Il permet de filtrer, modifier, contrôler et exporter les questions. Il ne modifie jamais directement les fichiers JSON présents sur le disque.
@@ -81,13 +87,13 @@ Chaque question indique son mode et, lorsque nécessaire, une structure `activit
 
 ## Étape 11
 
-L’évaluation finale utilise exactement Q101 à Q150. Elle est accessible lorsque les dix étapes du parcours ont été terminées sans joker. Elle ne propose ni joker ni bouton pour passer une question. Son bilan affiche `Évaluation terminée` et permet de refaire l’évaluation ou de revenir au parcours.
+L’évaluation finale utilise exactement Q111 à Q160. Elle est accessible lorsque les onze étapes du parcours ont été terminées sans joker. Elle ne propose ni joker ni bouton pour passer une question. Son bilan affiche `Évaluation terminée` et permet de refaire l’évaluation ou de revenir au parcours.
 
 ## Carnet de parcours
 
 Le carnet complète le chemin existant sans créer une seconde progression. Il lit uniquement les résultats déjà enregistrés pour afficher :
 
-- l’avancement réel dans les 100 questions du parcours ;
+- l’avancement réel dans les 110 questions du parcours ;
 - la prochaine destination utile ;
 - l’étape à rejouer lorsqu’elle doit encore être validée sans joker ;
 - un titre symbolique calculé à partir du nombre d’étapes maîtrisées.
@@ -127,7 +133,7 @@ Dans l’écran de question, `afficherReperesQuestion` rassemble les information
 
 Les transitions de question et de correction sont volontairement courtes. Elles sont neutralisées par la préférence système de réduction des animations. Sur mobile, la carte conserve une hauteur minimale mais peut grandir pour accueillir les énoncés et réponses longues sans les comprimer.
 
-Le Carnet de voyage est un écran indépendant accessible depuis la navigation principale. Il regroupe uniquement la prochaine destination, la progression du voyage, les souvenirs et les défis personnels. Les deux outils facultatifs sont intégrés à la carte de Parcours PJJ : le défi chrono configure seulement les prochaines étapes du parcours, tandis que le défi du hasard appelle `lancerDeParcours`, mémorise temporairement une face de 1 à 6 puis `jouerTirageDeParcours` lance exactement le même nombre de questions aléatoires en mode libre. Ce tirage ne modifie pas les règles de validation des dix étapes.
+Le Carnet de voyage est un écran indépendant accessible depuis la navigation principale. Il regroupe uniquement la prochaine destination, la progression du voyage, les souvenirs et les défis personnels. Les deux outils facultatifs sont intégrés à la carte de Parcours PJJ : le défi chrono configure seulement les prochaines étapes du parcours, tandis que le défi du hasard appelle `lancerDeParcours`, mémorise temporairement une face de 1 à 6 puis `jouerTirageDeParcours` lance exactement le même nombre de questions aléatoires en mode libre. Ce tirage ne modifie pas les règles de validation des onze étapes.
 
 Le dé du hasard est un SVG en perspective. La propriété `data-face` portée par `de-objet` commande uniquement les points de la face avant ; les faces supérieure et latérale restent décoratives. La zone `souvenirsParcours` possède une hauteur maximale et un défilement vertical automatique : la barre latérale n’apparaît que lorsque les fiches dépassent l’espace prévu.
 

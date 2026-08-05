@@ -17,6 +17,7 @@ les déplacer ou modifier leur ordre peut changer le rendu.
 | 80 | `80-finitions-de-l-interface.css` | couche de compatibilité et finitions transversales |
 | 85 | `85-guides-pedagogiques.css` | pages pédagogiques publiques, maillage interne et cartes de guides |
 | 90 | `90-responsive-et-etats-finaux.css` | derniers états et adaptations responsive de référence |
+| 95 | `95-consentement.css` | panneau de consentement Analytics et commande de préférences |
 
 ## Règle de modification
 

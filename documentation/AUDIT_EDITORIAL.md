@@ -1,7 +1,7 @@
 # Audit éditorial automatisé — PJJoue V1
 
-- Banque totale : **150 questions**.
-- Parcours : **100 questions**, réparties en 10 étapes de 10.
+- Banque totale : **160 questions**.
+- Parcours : **110 questions**, réparties en 11 étapes de 10.
 - Évaluation finale : **50 questions**.
 - Prompts strictement identiques : **0**.
 - Questions du parcours avec indice spécifique : **100/100**.

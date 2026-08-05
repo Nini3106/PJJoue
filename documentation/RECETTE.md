@@ -39,7 +39,7 @@ anomalies CSS. Deux contrôles dédiés refusent aussi les règles strictement
 dupliquées, les déclarations identiques répétées et les blocs `@media` adjacents
 de même condition.
 
-La recette navigateur contrôle l’ouverture réelle avec `file://`, 42 états et interactions, les fils jaunes du mode Relier, les corrections complètes, les réponses écrites, les sauvegardes importées, l’étape 11, le défi chrono et l’administration.
+La recette navigateur contrôle l’ouverture réelle avec `file://`, 42 états et interactions, les fils jaunes du mode Relier, les corrections complètes, les réponses écrites, les sauvegardes importées, l’étape 12, le défi chrono et l’administration.
 
 Sur le poste Windows de référence, vérifier en plus les 19 empreintes de pixels :
 
@@ -61,15 +61,15 @@ dossier appartient à un dépôt GitHub.
 ## Recette fonctionnelle manuelle
 
 1. Ouvrir l’accueil et vérifier les boutons Accueil, Parcours PJJ, Carnet de voyage, Entraînement libre, Réviser, Progression et Paramètres.
-2. Ouvrir le parcours et vérifier les dix étapes ainsi que la carte de l’évaluation finale, puis ouvrir le Carnet de voyage et vérifier qu’il constitue un écran indépendant.
+2. Ouvrir le parcours et vérifier les onze étapes ainsi que la carte de l’évaluation finale, puis ouvrir le Carnet de voyage et vérifier qu’il constitue un écran indépendant.
 3. Tester les sept formes d’activité : Choix unique, Sélection multiple, Relier / Association, Éliminer, Réponse écrite, Remettre dans l’ordre et Classer.
 4. Vérifier les fils jaunes et les associations du mode Relier.
 5. Tester les jokers 50/50, indice et langue au chat dans une étape du parcours.
 6. Vérifier les textes après une bonne et une mauvaise réponse, explication comprise.
 7. Vérifier qu’une question passée apparaît dans le bilan sans révéler la réponse attendue.
 8. Terminer une étape avec puis sans joker et vérifier le statut enregistré.
-9. Vérifier que l’étape 11 reste verrouillée tant que les dix étapes ne sont pas terminées sans joker.
-10. Lancer l’étape 11 et vérifier ses 50 questions, l’absence de joker et l’absence de bouton Passer.
+9. Vérifier que l’étape 12 reste verrouillée tant que les onze étapes ne sont pas terminées sans joker.
+10. Lancer l’étape 12 et vérifier ses 50 questions, l’absence de joker et l’absence de bouton Passer.
 11. Vérifier le titre `Évaluation terminée`, le bouton `Refaire l’évaluation` et le retour au parcours.
 12. Tester la révision des erreurs, la progression, le réglage du son dans Paramètres, l’export et l’import.
 13. Tester au clavier les fenêtres, les boutons d’ordre et le retour global.

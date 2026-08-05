@@ -30,6 +30,44 @@ function creerIconeTheme(identifiant, libelle = '') {
 }
 const selectionner = selecteur => document.querySelector(selecteur);
 const selectionnerTous = selecteur => [...document.querySelectorAll(selecteur)];
+function envoyerEvenementPJJ(nom, parametres = {}) {
+    return window.PJJ_ANALYTICS?.envoyer?.(nom, parametres) === true;
+}
+function obtenirDureeSessionAnalytics() {
+    if (!Number.isFinite(etat?.debutSessionAnalytics))
+        return null;
+    return Math.max(0, Math.round((Date.now() - etat.debutSessionAnalytics) / 1000));
+}
+function obtenirContexteSessionAnalytics() {
+    return {
+        pjj_mode: etat?.mode || 'navigation',
+        pjj_theme: etat?.theme || 'tous',
+        pjj_step: Number.isFinite(Number(etat?.etape)) ? Number(etat.etape) : null,
+        pjj_chapter: Number.isFinite(Number(etat?.chapitre)) ? Number(etat.chapitre) : null,
+        pjj_total: Array.isArray(etat?.questionsSession) ? etat.questionsSession.length : null,
+        pjj_detail: etat?.mode === 'revision'
+            ? (etat.perimetreRevision || 'toutes')
+            : (etat?.organisationSession || null)
+    };
+}
+function obtenirContexteQuestionAnalytics(question) {
+    return {
+        ...obtenirContexteSessionAnalytics(),
+        pjj_question_id: question?.id ?? null,
+        pjj_question_position: Number.isFinite(Number(etat?.indexQuestion))
+            ? Number(etat.indexQuestion) + 1
+            : null,
+        pjj_question_mode: question
+            ? (question.modePresentation || obtenirModeQuestion(question))
+            : null
+    };
+}
+function envoyerUtilisationJoker(type) {
+    envoyerEvenementPJJ('joker_use', {
+        ...obtenirContexteQuestionAnalytics(etat.questionCourante),
+        pjj_joker: type
+    });
+}
 function estRouteAccueil() {
     const fragment = location.hash || '#accueil';
     return fragment === '#accueil' || fragment === '#' || fragment === '';
@@ -87,7 +125,7 @@ const CLE_SAUVEGARDE = 'pjjoue_V1_sauvegarde';
 // -----------------------------------------------------------------------------
 function creerSauvegardeInitiale() {
     return {
-        version: 'V1',
+        version: 'V2-12-etapes',
         xp: 0,
         meilleureSerie: 0,
         nombreQuestionsJouees: 0,
@@ -183,7 +221,7 @@ function nettoyerErreurs(erreurs) {
         const identifiantQuestion = Number(identifiant);
         if (!Number.isInteger(identifiantQuestion)
             || identifiantQuestion < 1
-            || identifiantQuestion > 100
+            || identifiantQuestion > 110
             || !estObjetSimple(enregistrement))
             continue;
         erreursNettoyees[String(identifiantQuestion)] = {
@@ -196,7 +234,22 @@ function nettoyerErreurs(erreurs) {
     }
     return erreursNettoyees;
 }
+
+function migrerSauvegardeV1VersV2(sauvegardeBrute) {
+    if (!estObjetSimple(sauvegardeBrute) || sauvegardeBrute.version === 'V2-12-etapes')
+        return sauvegardeBrute;
+    const copie = JSON.parse(JSON.stringify(sauvegardeBrute));
+    copie.version = 'V2-12-etapes';
+    copie.erreurs = {};
+    copie.progression = { apprenant: {} };
+    copie.etapesDecouvertes = {};
+    copie.questionsJouees = {};
+    copie.evaluationFinale = { meilleurScore: 0, nombreTentatives: 0, reussie: false };
+    return copie;
+}
+
 function nettoyerSauvegarde(sauvegardeBrute) {
+    sauvegardeBrute = migrerSauvegardeV1VersV2(sauvegardeBrute);
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
         return sauvegardeInitiale;
@@ -215,7 +268,7 @@ function nettoyerSauvegarde(sauvegardeBrute) {
     const identifiantsQuestions = new Set(QUESTIONS.map(question => String(question.id)));
     return {
         ...sauvegardeInitiale,
-        version: 'V1',
+        version: 'V2-12-etapes',
         xp: convertirEntierBorne(sauvegardeBrute.xp),
         meilleureSerie: convertirEntierBorne(sauvegardeBrute.meilleureSerie),
         nombreQuestionsJouees,
@@ -544,6 +597,12 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
         && !optionsAffichage.forcerSortieQuestion
         && !optionsAffichage.depuisHistorique;
     if (doitAbandonnerSession) {
+        envoyerEvenementPJJ('level_abandon', {
+            ...obtenirContexteSessionAnalytics(),
+            pjj_score: etat.score,
+            pjj_duration_seconds: obtenirDureeSessionAnalytics(),
+            pjj_result: 'sortie_avant_fin'
+        });
         etat.questionsSession = [];
         etat.questionCourante = null;
         etat.questionValidee = false;
@@ -556,6 +615,13 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     cible.classList.add('actif');
     etat.ecran = identifiant;
     document.body.dataset.ecranActif = identifiant;
+    if (courant !== identifiant) {
+        envoyerEvenementPJJ('screen_view', {
+            ...obtenirContexteSessionAnalytics(),
+            pjj_screen: identifiant,
+            pjj_previous_screen: courant || 'aucun'
+        });
+    }
     actualiserTitrePage(identifiant);
     mesurerHauteurEntete();
     if (identifiant === 'erreurs')
@@ -1145,7 +1211,7 @@ function afficherDefisParcours(programme) {
         {
             libelle: etapeAReprendre
                 ? `Valider l’étape ${etapeAReprendre.id} sans joker`
-                : 'Valider les dix étapes sans joker',
+                : 'Valider les onze étapes sans joker',
             termine: !etapeAReprendre,
             progression: etapeAReprendre ? 'En cours' : 'Réussi'
         },
@@ -1182,7 +1248,7 @@ function ouvrirParcours(identifiantTheme, optionsAffichage = {}) {
     enregistrerSauvegarde();
     const programme = PROGRAMMES[identifiantTheme];
     selectionner('#titreParcours').textContent = 'Parcours PJJ';
-    selectionner('#sousTitreParcours').textContent = 'Explore, comprends et progresse à ton rythme à travers 10 étapes clés.';
+    selectionner('#sousTitreParcours').textContent = 'Explore, comprends et progresse à ton rythme à travers 11 étapes clés.';
     actualiserResumeCarteParcours(programme);
     afficherEtapes();
     afficherEcran('parcours', optionsAffichage);
@@ -1209,18 +1275,19 @@ const ICONES_ETAPES = {
     '7': "<svg viewBox=\"0 0 48 48\"><path d=\"M8 17l16-8 16 8-16 8z\"/><path d=\"M13 20v10c6 5 16 5 22 0V20\"/><path d=\"M40 18v12\"/></svg>",
     '8': "<svg viewBox=\"0 0 48 48\"><path d=\"M18 17l6 6 6-6M12 24l8 8 4-4 4 4 8-8\"/><path d=\"M7 20l8-8 5 5M41 20l-8-8-5 5\"/></svg>",
     '9': "<svg viewBox=\"0 0 48 48\"><path d=\"M8 38V15l8-5 8 5 8-5 8 5v23\"/><path d=\"M14 20h4M14 27h4M22 20h4M22 27h4M30 20h4M30 27h4\"/></svg>",
-    '10': "<svg viewBox=\"0 0 48 48\"><rect x=\"12\" y=\"8\" width=\"24\" height=\"32\" rx=\"2\"/><path d=\"M18 15h12M18 22h12M18 29h7\"/><path d=\"M32 29v6M29 32h6\"/></svg>"
+    '10': "<svg viewBox=\"0 0 48 48\"><rect x=\"12\" y=\"8\" width=\"24\" height=\"32\" rx=\"2\"/><path d=\"M18 15h12M18 22h12M18 29h7\"/><path d=\"M32 29v6M29 32h6\"/></svg>",
+    '11': "<svg viewBox=\"0 0 48 48\"><path d=\"M11 9h26v30H11z\"/><path d=\"M17 17h14M17 24h14M17 31h8\"/><path d=\"m29 31 3 3 6-7\"/></svg>"
 };
 function afficherEtapes() {
     initialiserProgression(etat.theme);
     const ligneParcours1 = selectionner('#ligneParcours1');
     const ligneParcours2 = selectionner('#ligneParcours2');
     const ligneParcours3 = selectionner('#ligneParcours3');
-    const carteEtape10 = selectionner('#carteEtape10');
+    const cartesEtapesFinales = selectionner('#cartesEtapesFinales');
     ligneParcours1.innerHTML = '';
     ligneParcours2.innerHTML = '';
     ligneParcours3.innerHTML = '';
-    carteEtape10.innerHTML = '';
+    cartesEtapesFinales.innerHTML = '';
     const programme = PROGRAMMES[etat.theme];
     synchroniserEtapesReussiesEnAutonomie(programme);
     let destinationActuelleSignalee = false;
@@ -1270,7 +1337,7 @@ function afficherEtapes() {
         else if (etapeProgramme.id <= 9)
             ligneParcours3.appendChild(carte);
         else
-            carteEtape10.appendChild(carte);
+            cartesEtapesFinales.appendChild(carte);
     }
     const evaluation = selectionner('#carteEvaluationFinale');
     const etapesTerminees = programme.etapes.filter(etapeProgramme =>
@@ -1432,8 +1499,8 @@ function obtenirQuestionsEvaluationFinale() {
     return QUESTIONS
         .filter(question =>
             question.estEvaluationFinale
-            && question.id >= 101
-            && question.id <= 150
+            && question.id >= 111
+            && question.id <= 160
         )
         .sort((questionA, questionB) => questionA.id - questionB.id);
 }
@@ -1444,7 +1511,7 @@ function lancerEvaluationFinale() {
         return;
     }
     etat.theme = 'commun';
-    etat.etape = 11;
+    etat.etape = 12;
     etat.chapitre = 1;
     etat.mode = 'evaluation-finale';
     etat.organisationSession = 'ordonne';
@@ -1456,7 +1523,7 @@ function lancerEntrainementLibre() {
     etat.mode = 'libre';
     etat.theme = null;
     const style = etat.organisationSession || 'ordonne';
-    const nombre = Math.min(100, Math.max(10, Number(selectionner('#nombreQuestionsEntrainement')?.value) || 10));
+    const nombre = Math.min(110, Math.max(10, Number(selectionner('#nombreQuestionsEntrainement')?.value) || 10));
     let session = [];
     if (style === 'ordonne') {
         session = [...QUESTIONS.filter(question => !question.estEvaluationFinale)]
@@ -1485,6 +1552,11 @@ function lancerDeParcours() {
     face.classList.add('de-en-lancer');
     window.setTimeout(() => {
         etat.nombreQuestionsTirageDe = nombreTire;
+        envoyerEvenementPJJ('dice_roll', {
+            ...obtenirContexteSessionAnalytics(),
+            pjj_score: nombreTire,
+            pjj_result: 'tirage'
+        });
         face.dataset.face = String(nombreTire);
         face.classList.remove('de-en-lancer');
         resultat.textContent = `${nombreTire} question${nombreTire === 1 ? '' : 's'} aléatoire${nombreTire === 1 ? '' : 's'} à relever.`;
@@ -1588,6 +1660,70 @@ function normaliserReponseEcrite(texte) {
         .replace(/\s+/g, ' ');
 }
 function normaliserReponseEvaluation(valeur) { return normaliserReponseEcrite(valeur).replace(/\b(le|la|les|un|une|des|du|de|d|l)\b/g, ' ').replace(/\s+/g, ' ').trim(); }
+function extraireSiglesSaisis(champ) {
+    const mots = normaliserReponseEcrite(champ).split(' ').filter(Boolean);
+    const formes = new Set(mots);
+    for (let debut = 0; debut < mots.length; debut++) {
+        let concatene = '';
+        for (let fin = debut; fin < Math.min(mots.length, debut + 6); fin++) {
+            if (mots[fin].length !== 1)
+                break;
+            concatene += mots[fin];
+            if (concatene.length >= 2)
+                formes.add(concatene);
+        }
+    }
+    return formes;
+}
+function validerListeSiglesDistincts(champ, question) {
+    if (!Array.isArray(question.siglesDistinctsAttendus) || !question.siglesDistinctsAttendus.length)
+        return null;
+    const formes = extraireSiglesSaisis(champ);
+    const nombreTrouves = new Set(
+        question.siglesDistinctsAttendus
+            .map(compacterSigle)
+            .filter(sigle => formes.has(sigle))
+    ).size;
+    return nombreTrouves >= Number(question.nombreSiglesRequis || question.siglesDistinctsAttendus.length);
+}
+function compacterSigle(valeur) {
+    return normaliserReponseEcrite(valeur).replace(/\s+/g, '');
+}
+function validerFormeSigle(champ, question) {
+    const forme = question.typeReponseAttendue || 'general';
+    const saisieCompacte = compacterSigle(champ);
+    const sigle = compacterSigle(question.sigleAttendu || question.bonneReponse);
+    if (forme === 'sigle') {
+        const siglesAcceptes = [question.bonneReponse, ...(question.reponsesAcceptees || [])]
+            .map(compacterSigle)
+            .filter(Boolean);
+        return siglesAcceptes.includes(saisieCompacte);
+    }
+    if (forme === 'developpement-sigle' && sigle && saisieCompacte === sigle)
+        return false;
+    return null;
+}
+function respecteOrdreConcepts(champ, groupes) {
+    if (!Array.isArray(groupes) || !groupes.length)
+        return true;
+    const texte = normaliserReponseEvaluation(champ);
+    let positionMinimale = -1;
+    for (const groupe of groupes) {
+        const variantes = Array.isArray(groupe) ? groupe : [groupe];
+        let meilleurePosition = -1;
+        for (const variante of variantes) {
+            const cible = normaliserReponseEvaluation(variante);
+            const position = cible ? texte.indexOf(cible, positionMinimale + 1) : -1;
+            if (position >= 0 && (meilleurePosition < 0 || position < meilleurePosition))
+                meilleurePosition = position;
+        }
+        if (meilleurePosition < 0)
+            return false;
+        positionMinimale = meilleurePosition;
+    }
+    return true;
+}
+
 const MOTS_NEGATION_REPONSE = new Set([
     'aucun', 'aucune', 'aucuns', 'aucunes', 'jamais', 'n', 'ne', 'ni', 'non', 'pas', 'sans'
 ]);
@@ -1627,6 +1763,71 @@ function calculerDistanceTextes(texteA, texteB) {
     }
     return lignePrecedente[texteB.length];
 }
+function obtenirMotsSignificatifsReponse(texte) {
+    const motsVides = new Set([
+        'le', 'la', 'les', 'un', 'une', 'des', 'de', 'du', 'd', 'l', 'et', 'ou', 'a', 'au', 'aux',
+        'en', 'dans', 'pour', 'par', 'sur', 'avec', 'sans', 'est', 'sont', 'etre', 'elle', 'il',
+        'qui', 'que', 'ce', 'cette', 'ces', 'se', 'sa', 'son', 'ses'
+    ]);
+    return normaliserReponseEvaluation(texte)
+        .split(' ')
+        .filter(mot => mot.length > 1 && !motsVides.has(mot));
+}
+function obtenirRacineSouple(mot) {
+    let racine = String(mot || '');
+    const terminaisons = [
+        'issements', 'issement', 'atrices', 'ateurs', 'atrice', 'ateur',
+        'iquement', 'ements', 'ement', 'ations', 'ation', 'itions', 'ition',
+        'aires', 'aire', 'alites', 'alite', 'ilites', 'ilite', 'ites', 'ite',
+        'iennes', 'ienne', 'iels', 'iel', 'ives', 'ive', 'ifs', 'if',
+        'euses', 'euse', 'eux', 'iques', 'ique', 'istes', 'iste',
+        'elles', 'elle', 'aux', 'ales', 'ale', 'es', 's', 'x', 'e'
+    ];
+    for (const terminaison of terminaisons) {
+        if (racine.length - terminaison.length >= 5 && racine.endsWith(terminaison)) {
+            racine = racine.slice(0, -terminaison.length);
+            break;
+        }
+    }
+    return racine;
+}
+function motsCorrespondentSouplement(motSaisi, motAttendu) {
+    if (motSaisi === motAttendu)
+        return true;
+    const longueurMaximale = Math.max(motSaisi.length, motAttendu.length);
+    if (longueurMaximale >= 4) {
+        const tolerance = longueurMaximale >= 9 ? 2 : 1;
+        if (calculerDistanceTextes(motSaisi, motAttendu) <= tolerance)
+            return true;
+    }
+    const racineSaisie = obtenirRacineSouple(motSaisi);
+    const racineAttendue = obtenirRacineSouple(motAttendu);
+    if (racineSaisie.length >= 5 && racineAttendue.length >= 5) {
+        if (racineSaisie === racineAttendue)
+            return true;
+        if (calculerDistanceTextes(racineSaisie, racineAttendue) <= 1)
+            return true;
+        const longueurCommune = Math.min(racineSaisie.length, racineAttendue.length);
+        const seuilPrefixe = Math.max(5, Math.ceil(longueurCommune * .78));
+        if (racineSaisie.slice(0, seuilPrefixe) === racineAttendue.slice(0, seuilPrefixe))
+            return true;
+    }
+    return false;
+}
+function compterMotsAttendusPresents(motsSaisis, motsAttendus) {
+    const dejaUtilises = new Set();
+    let correspondances = 0;
+    for (const motAttendu of motsAttendus) {
+        const indice = motsSaisis.findIndex((motSaisi, position) =>
+            !dejaUtilises.has(position) && motsCorrespondentSouplement(motSaisi, motAttendu)
+        );
+        if (indice >= 0) {
+            dejaUtilises.add(indice);
+            correspondances++;
+        }
+    }
+    return correspondances;
+}
 function correspondAVarianteEvaluation(champ, variante) {
     const reponseSaisie = normaliserReponseEvaluation(champ);
     const reponseAttendue = normaliserReponseEvaluation(variante);
@@ -1634,17 +1835,23 @@ function correspondAVarianteEvaluation(champ, variante) {
         return false;
     if (reponseSaisie === reponseAttendue || contientExpressionComplete(reponseSaisie, reponseAttendue))
         return true;
-    const motsSaisis = reponseSaisie.split(' ');
-    const motsAttendus = reponseAttendue.split(' ');
-    return motsAttendus.every(motAttendu => motsSaisis.some(motSaisi => {
-        if (motSaisi === motAttendu)
-            return true;
-        const longueurMaximale = Math.max(motSaisi.length, motAttendu.length);
-        return longueurMaximale >= 5
-            && calculerDistanceTextes(motSaisi, motAttendu) <= Math.max(1, Math.floor(longueurMaximale * .18));
-    }));
+    const motsSaisis = obtenirMotsSignificatifsReponse(reponseSaisie);
+    const motsAttendus = obtenirMotsSignificatifsReponse(reponseAttendue);
+    if (!motsAttendus.length)
+        return false;
+    const correspondances = compterMotsAttendusPresents(motsSaisis, motsAttendus);
+    const minimum = motsAttendus.length === 1
+        ? 1
+        : Math.max(2, Math.ceil(motsAttendus.length * .6));
+    return correspondances >= minimum;
 }
 function validerReponseEcriteEvaluation(champ, question) {
+    const controleForme = validerFormeSigle(champ, question);
+    if (controleForme !== null)
+        return controleForme;
+    const controleListeSigles = validerListeSiglesDistincts(champ, question);
+    if (controleListeSigles !== null)
+        return controleListeSigles;
     const reponseNormalisee = normaliserReponseEvaluation(champ);
     if (!reponseNormalisee)
         return false;
@@ -1661,45 +1868,43 @@ function validerReponseEcriteEvaluation(champ, question) {
     ];
     if (contientNegationInattendue(champ, variantesAttendues))
         return false;
-    if (reponsesDeclarees.some(variante => correspondAVarianteEvaluation(champ, variante)))
-        return true;
+    const expressionsInterditesExactes = Array.isArray(question.expressionsInterditesExactes)
+        ? question.expressionsInterditesExactes
+        : [];
+    const contientExpressionInterditeExacte = expressionsInterditesExactes.some(expression => {
+        const expressionNormalisee = normaliserReponseEvaluation(expression);
+        return expressionNormalisee && reponseNormalisee === expressionNormalisee;
+    });
+    if (contientExpressionInterditeExacte)
+        return false;
+    const conceptsInterdits = Array.isArray(question.conceptsInterdits) ? question.conceptsInterdits : [];
+    const contientConceptInterdit = conceptsInterdits.some(groupe => {
+        const variantes = Array.isArray(groupe) ? groupe : [groupe];
+        return variantes.some(variante => correspondAVarianteEvaluation(champ, variante));
+    });
+    if (contientConceptInterdit)
+        return false;
+    const correspondanceDeclaree = reponsesDeclarees.some(variante => correspondAVarianteEvaluation(champ, variante));
+    const correspondanceDeclareeExacte = reponsesDeclarees.some(variante => {
+        const reponseAttendue = normaliserReponseEvaluation(variante);
+        return reponseNormalisee === reponseAttendue || contientExpressionComplete(reponseNormalisee, reponseAttendue);
+    });
     if (!groupesConcepts.length)
-        return validerReponseEcriteSouple(champ, question);
+        return correspondanceDeclaree;
+    if (correspondanceDeclareeExacte)
+        return true;
     const nombreCorrespondances = groupesConcepts.filter(groupe =>
-        groupe.some(variante => correspondAVarianteEvaluation(champ, variante))
+        Array.isArray(groupe) && groupe.some(variante => correspondAVarianteEvaluation(champ, variante))
     ).length;
-    return nombreCorrespondances >= Number(question.nombreConceptsRequis || groupesConcepts.length);
+    if (nombreCorrespondances < Number(question.nombreConceptsRequis || groupesConcepts.length))
+        return false;
+    return respecteOrdreConcepts(champ, question.conceptsOrdonnes);
 }
 function validerReponseEcriteSouple(champ, question) {
-    const candidats = [
-        question?.bonneReponse,
-        ...(Array.isArray(question?.reponsesAcceptees) ? question.reponsesAcceptees : [])
-    ].filter(Boolean);
-    if (contientNegationInattendue(champ, candidats))
-        return false;
-    return candidats.some(reponseAttendue => {
-        const reponseSaisie = normaliserReponseEcrite(champ);
-        const reponseNormaliseeAttendue = normaliserReponseEcrite(reponseAttendue);
-        if (!reponseSaisie)
-            return false;
-        if (reponseSaisie === reponseNormaliseeAttendue)
-            return true;
-        const motsVides = new Set([
-            'le', 'la', 'les', 'un', 'une', 'des', 'de', 'du', 'd', 'et', 'ou', 'a', 'au', 'aux',
-            'en', 'dans', 'pour', 'par', 'sur', 'avec', 'sans', 'est', 'sont', 'etre', 'elle', 'il',
-            'qui', 'que'
-        ]);
-        const termesSignificatifs = reponseNormaliseeAttendue
-            .split(' ')
-            .filter(terme => terme.length > 2 && !motsVides.has(terme));
-        if (!termesSignificatifs.length)
-            return contientExpressionComplete(reponseSaisie, reponseNormaliseeAttendue)
-                || contientExpressionComplete(reponseNormaliseeAttendue, reponseSaisie);
-        const termesCles = [...new Set(termesSignificatifs)].slice(0, 6);
-        const motsSaisis = new Set(reponseSaisie.split(' '));
-        const nombreCorrespondances = termesCles.filter(terme => motsSaisis.has(terme)).length;
-        return nombreCorrespondances >= Math.max(1, Math.ceil(termesCles.length * .6));
-    });
+    // La même compréhension sémantique est appliquée pendant l'apprentissage et l'évaluation.
+    // Les accents, accords, pluriels, variantes morphologiques et petites fautes sont tolérés,
+    // mais les négations inattendues et les réponses qui ne contiennent pas assez de concepts restent refusées.
+    return validerReponseEcriteEvaluation(champ, question);
 }
 function masquerMoitiéTexte(texte) {
     const mots = String(texte || '').trim().split(/\s+/).filter(Boolean);
@@ -1726,6 +1931,7 @@ function marquerJokerUtilise() {
 }
 function consommerJoker5050(donnees) {
     marquerJokerUtilise();
+    envoyerUtilisationJoker('50_50');
     etat.jokers.cinquanteCinquante = false;
     etat.jokers.donneesJoker5050 = donnees;
     selectionner('#joker5050').disabled = true;
@@ -1804,6 +2010,18 @@ function validerActiviteEcrite() {
         : validerReponseEcriteSouple(champ.value, question);
     finaliserReponse(estCorrecte, champ.value.trim());
 }
+function obtenirNombreEliminationsAttendues(question) {
+    const nombreConfigure = Number(question?.nombreEliminationsAttendues);
+    if (Number.isInteger(nombreConfigure) && nombreConfigure > 0)
+        return nombreConfigure;
+    const mauvaisesReponses = Array.isArray(question?.mauvaisesReponses) ? question.mauvaisesReponses.length : 0;
+    return Math.max(1, Math.min(2, mauvaisesReponses || 2));
+}
+function obtenirConsigneElimination(question, nombreAttendu) {
+    if (String(question?.consigneElimination || '').trim())
+        return String(question.consigneElimination).trim();
+    return `Écarte exactement ${nombreAttendu} proposition${nombreAttendu > 1 ? 's' : ''} qui ne convient${nombreAttendu > 1 ? 'nent' : ''} pas.`;
+}
 function afficherActiviteEliminer(question, reponse) {
     const zoneReponses = selectionner('#zoneReponses');
     zoneReponses.className = 'reponses activite-reponses';
@@ -1833,11 +2051,13 @@ function afficherActiviteEliminer(question, reponse) {
     const rappelJoker = eliminationsVerrouillees.length
         ? '<div class="revelation-cinquante-cinquante"><b>50/50 :</b> une partie des retraits corrects est déjà confirmée et verrouillée.</div>'
         : '';
+    const nombreAttendu = obtenirNombreEliminationsAttendues(question);
+    const consigne = obtenirConsigneElimination(question, nombreAttendu);
     zoneReponses.innerHTML = `<div class="elimination-activite">
-        <div class="activite-consigne"><span>Retirer des choix</span><b>Écarte exactement deux propositions qui ne conviennent pas.</b></div>
+        <div class="activite-consigne"><span>Retirer des choix</span><b>${echapperHtml(consigne)}</b></div>
         ${rappelJoker}
         <div class="elimination-grille">${boutonsPropositions}</div>
-        <div class="elimination-compteur">${elementsElimines.length}/2 propositions écartées</div>
+        <div class="elimination-compteur">${elementsElimines.length}/${nombreAttendu} proposition${nombreAttendu > 1 ? 's' : ''} écartée${elementsElimines.length > 1 ? 's' : ''}</div>
     </div>`;
     actualiserBoutonValider();
 }
@@ -1853,8 +2073,9 @@ function basculerElimination(indice) {
         elementsElimines.splice(positionExistante, 1);
     }
     else {
-        if (elementsElimines.length >= 2) {
-            afficherNotification('Tu peux retirer deux propositions maximum.');
+        const nombreAttendu = obtenirNombreEliminationsAttendues(etat.questionCourante);
+        if (elementsElimines.length >= nombreAttendu) {
+            afficherNotification(`Tu peux retirer ${nombreAttendu} proposition${nombreAttendu > 1 ? 's' : ''} maximum.`);
             return;
         }
         elementsElimines.push(indice);
@@ -1864,8 +2085,9 @@ function basculerElimination(indice) {
 }
 function validerEliminations() {
     const elementsElimines = etat.brouillonActivite?.elementsElimines || [];
-    if (elementsElimines.length !== 2) {
-        afficherNotification('Retire exactement deux propositions.');
+    const nombreAttendu = obtenirNombreEliminationsAttendues(etat.questionCourante);
+    if (elementsElimines.length !== nombreAttendu) {
+        afficherNotification(`Retire exactement ${nombreAttendu} proposition${nombreAttendu > 1 ? 's' : ''}.`);
         return;
     }
     const propositions = obtenirChoixQuestion(etat.questionCourante);
@@ -1894,7 +2116,19 @@ function lancerSession(session) {
     etat.jokersQuestions = new Map();
     etat.nombreReponsesAidees = 0;
     etat.sessionAvecJoker = false;
+    etat.debutSessionAnalytics = Date.now();
     etat.jokers = { cinquanteCinquante: true, indice: true, langueAuChat: true };
+    const dureeMinuteurAnalytics = etat.chronometreSessionActif
+        ? Number(etat.dureeChronometreSession) || 0
+        : 0;
+    const detailSessionAnalytics = `${etat.organisationSession || 'standard'}`
+        + `;minuteur:${dureeMinuteurAnalytics}`
+        + `;jokers:${etat.jokersSessionActifs !== false ? 1 : 0}`;
+    envoyerEvenementPJJ('level_start', {
+        ...obtenirContexteSessionAnalytics(),
+        pjj_result: 'commencee',
+        pjj_detail: detailSessionAnalytics
+    });
     afficherEcran('question', { remplacerHistorique: etat.ecran === 'bilan' });
     afficherQuestion();
 }
@@ -1995,18 +2229,22 @@ function construireCorrectionDetaillee(question, echapperTexte) {
     }
     if (mode === 'eliminer') {
         const mauvaisesReponses = (question.mauvaisesReponses || []).filter(Boolean);
-        const retraitsAffiches = mauvaisesReponses.slice(0, 2);
+        const nombreAttendu = obtenirNombreEliminationsAttendues(question);
+        const retraitsAffiches = mauvaisesReponses.slice(0, nombreAttendu);
         const lignes = retraitsAffiches.map(texte => `
             <div class="detaillee-correction-ligne ligne-eliminee">
                 <span class="marque-erreur">✕</span><span>${echapperTexte(texte)}</span>
             </div>`);
-        if (mauvaisesReponses.length > 2) {
-            const autreRetraitPossible = echapperTexte(mauvaisesReponses[2]);
+        if (mauvaisesReponses.length > nombreAttendu) {
+            const autresRetraits = mauvaisesReponses
+                .slice(nombreAttendu)
+                .map(echapperTexte)
+                .join(' · ');
+            const nombreAutres = mauvaisesReponses.length - nombreAttendu;
             lignes.push(
                 '<div class="correction-note">'
-                + 'Deux retraits corrects possibles sont affichés. '
-                + `« ${autreRetraitPossible} » était également une proposition incorrecte `
-                + 'et pouvait remplacer l’un des deux retraits.'
+                + `Autre${nombreAutres > 1 ? 's' : ''} retrait${nombreAutres > 1 ? 's' : ''} `
+                + `également correct${nombreAutres > 1 ? 's' : ''} : ${autresRetraits}.`
                 + '</div>'
             );
         }
@@ -2014,7 +2252,10 @@ function construireCorrectionDetaillee(question, echapperTexte) {
             ? question.propositionsAConserver
             : [question.bonneReponse];
         lignes.push(`<div class="correction-conserver"><b>À conserver :</b> ${propositionsAConserver.map(echapperTexte).join(' · ')}</div>`);
-        return construireZone('Il fallait éliminer deux propositions incorrectes :', lignes);
+        return construireZone(
+            `Il fallait éliminer ${nombreAttendu} proposition${nombreAttendu > 1 ? 's' : ''} incorrecte${nombreAttendu > 1 ? 's' : ''} :`,
+            lignes
+        );
     }
     if (mode === 'association' && activite.type === 'association') {
         const textesGauche = Object.fromEntries((activite.colonneGauche || []).map(element => [element.id, element.texte]));
@@ -2219,10 +2460,11 @@ function construireConsigneActivite(activite) {
         + `<b>${activite.consigne}</b></div>`;
 }
 
-function construireSelectionMultiple(activite) {
+function construireSelectionMultiple() {
     const selectionnes = etat.brouillonActivite.elementsSelectionnes;
     const retires = etat.brouillonActivite.elementsRetires || [];
-    const boutons = activite.propositions.map(proposition => {
+    const propositionsMelangees = obtenirElementsActiviteMelanges(etat.questionCourante, 'propositions');
+    const boutons = propositionsMelangees.map(proposition => {
         const estSelectionnee = selectionnes.includes(proposition.id);
         const estRetiree = retires.includes(proposition.id);
         return `<button class="multiple-choix ${estSelectionnee ? 'selectionne' : ''} ${estRetiree ? 'retire' : ''}"`
@@ -2430,7 +2672,7 @@ function construireClassement(activite) {
 function construireCorpsActiviteInteractive(question) {
     const activite = question.activite;
     const contenusParType = {
-        'selection-multiple': () => construireSelectionMultiple(activite),
+        'selection-multiple': () => construireSelectionMultiple(),
         'remettre-ordre': () => construireRemiseEnOrdre(activite),
         'choisir-ordre': () => construireChoisirPuisOrdonner(question, activite),
         association: () => construireAssociation(question, activite),
@@ -2508,6 +2750,37 @@ function tableauxEgaux(tableauA, tableauB) {
     return tableauA.length === tableauB.length
         && tableauA.every((valeur, indice) => valeur === tableauB[indice]);
 }
+function obtenirTexteAssociationDroite(activite, identifiantDroite) {
+    return activite?.colonneDroite?.find(element => element.id === identifiantDroite)?.texte || '';
+}
+function associationElementCorrespond(activite, identifiantGauche, identifiantDroiteSaisi, schemaAttendu) {
+    const identifiantDroiteAttendu = schemaAttendu?.[identifiantGauche];
+    if (!identifiantDroiteAttendu || !identifiantDroiteSaisi)
+        return false;
+    if (identifiantDroiteSaisi === identifiantDroiteAttendu)
+        return true;
+    const equivalentsDeclares = activite?.equivalencesAssociation?.[identifiantGauche] || [];
+    if (equivalentsDeclares.includes(identifiantDroiteSaisi))
+        return true;
+    // Deux cartes portant réellement le même libellé ont la même valeur pédagogique.
+    // Le joueur n'est donc pas sanctionné pour avoir choisi l'autre identifiant technique.
+    const texteAttendu = normaliserReponseEvaluation(obtenirTexteAssociationDroite(activite, identifiantDroiteAttendu));
+    const texteSaisi = normaliserReponseEvaluation(obtenirTexteAssociationDroite(activite, identifiantDroiteSaisi));
+    return Boolean(texteAttendu && texteSaisi && texteAttendu === texteSaisi);
+}
+function validerSchemaAssociations(activite, associationsSaisies, schemaAttendu) {
+    return Object.keys(schemaAttendu || {}).length === Object.keys(associationsSaisies || {}).length
+        && Object.keys(schemaAttendu || {}).every(identifiantGauche =>
+            associationElementCorrespond(activite, identifiantGauche, associationsSaisies[identifiantGauche], schemaAttendu)
+        );
+}
+function validerAssociationsActivite(activite, associationsSaisies) {
+    const schemasAcceptes = [
+        activite?.associations || {},
+        ...(Array.isArray(activite?.associationsAcceptees) ? activite.associationsAcceptees : [])
+    ];
+    return schemasAcceptes.some(schema => validerSchemaAssociations(activite, associationsSaisies, schema));
+}
 function validerActiviteInteractive() {
     if (etat.questionValidee)
         return;
@@ -2543,9 +2816,7 @@ function validerActiviteInteractive() {
             afficherNotification('Relie chaque élément avant de valider.');
             return;
         }
-        estCorrecte = Object.entries(activite.associations).every(([identifiantGauche, identifiantDroite]) =>
-            brouillon.associations[identifiantGauche] === identifiantDroite
-        );
+        estCorrecte = validerAssociationsActivite(activite, brouillon.associations);
         texteChoisi = 'Associations complétées';
         precisions = { associations: { ...brouillon.associations } };
     }
@@ -2567,6 +2838,10 @@ function rejouerQuestionCourante() {
     if (!question || !etat.questionValidee)
         return;
     const precedent = etat.reponsesSession.get(question.id);
+    envoyerEvenementPJJ('question_replay', {
+        ...obtenirContexteQuestionAnalytics(question),
+        pjj_result: precedent?.statut || 'incorrecte'
+    });
     etat.tentativesQuestions = etat.tentativesQuestions || new Map();
     etat.tentativesQuestions.set(question.id, Math.max(1, etat.tentativesQuestions.get(question.id) || 0));
     etat.reponsesSession.set(question.id, { ...(precedent || {}), statut: 'passee' });
@@ -2789,6 +3064,10 @@ function appliquerIdentiteVisuelleEtape(question) {
 }
 function afficherQuestion() {
     const { question, reponse, dejaPassee } = preparerQuestionCourante();
+    envoyerEvenementPJJ('question_view', {
+        ...obtenirContexteQuestionAnalytics(question),
+        pjj_result: reponse?.statut || (dejaPassee ? 'passee' : 'a_repondre')
+    });
     appliquerIdentiteVisuelleEtape(question);
     const modeEvaluationFinale = etat.mode === 'evaluation-finale';
     const jokersActifs = etat.jokersSessionActifs !== false;
@@ -3080,6 +3359,15 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
         reussiteAidee,
         reussiteAutonome: estCorrecte && !reussiteAidee
     };
+    envoyerEvenementPJJ('question_answer', {
+        ...obtenirContexteQuestionAnalytics(question),
+        pjj_result: resultat.reussiteAutonome
+            ? 'correcte_autonome'
+            : (resultat.reussiteAidee ? 'correcte_aidee' : 'incorrecte'),
+        pjj_score: resultat.estCorrecte ? 1 : 0,
+        pjj_attempts: Math.max(1, Number(resultat.tentatives) + 1),
+        pjj_detail: resultat.aideUtilisee ? 'avec_aide' : 'sans_aide'
+    });
     enregistrerResultatReponse(question, texteChoisi, precisions, resultat);
     if (resultat.reussiteAutonome)
         traiterReussiteAutonome(question, resultat.etaitPassee);
@@ -3130,6 +3418,10 @@ function passerQuestion() {
         return;
     annulerRappelJokers();
     const question = etat.questionCourante, precedente = etat.reponsesSession.get(question.id);
+    envoyerEvenementPJJ('question_skip', {
+        ...obtenirContexteQuestionAnalytics(question),
+        pjj_result: 'passee'
+    });
     clearInterval(etat.identifiantMinuteur);
     sauvegarde.aDejaJoue = true;
     marquerEtapeDecouverte(question);
@@ -3186,41 +3478,44 @@ function utiliserJoker5050PourElimination(question) {
         };
     }
     const propositions = obtenirChoixQuestion(question);
+    const nombreAttendu = obtenirNombreEliminationsAttendues(question);
+    const nombreAConfirmer = Math.max(1, Math.ceil(nombreAttendu / 2));
     const propositionsIncorrectes = propositions
         .map((proposition, indice) => ({ proposition, indice }))
         .filter(element => !element.proposition.estCorrecte);
     const elementsDejaElimines = etat.brouillonActivite.elementsElimines || [];
-    const propositionAConfirmer = propositionsIncorrectes.find(element =>
-        !elementsDejaElimines.includes(element.indice)
-    ) || propositionsIncorrectes[0];
-    if (!propositionAConfirmer) {
+    const eliminationsCorrectesExistantes = elementsDejaElimines.filter(indice =>
+        !propositions[indice]?.estCorrecte
+    );
+    const dejaVerrouillees = (etat.brouillonActivite.eliminationsVerrouillees || []).filter(indice =>
+        !propositions[indice]?.estCorrecte
+    );
+    const indicesAConfirmer = [...new Set([
+        ...dejaVerrouillees,
+        ...eliminationsCorrectesExistantes,
+        ...propositionsIncorrectes.map(element => element.indice)
+    ])].slice(0, nombreAConfirmer);
+    if (!indicesAConfirmer.length) {
         consommerJoker5050({
             nature: 'eliminer',
             verrouilles: [],
-            elementsElimines: [...elementsDejaElimines]
+            elementsElimines: [...eliminationsCorrectesExistantes]
         });
         afficherNotification('Le 50/50 confirme le travail déjà réalisé.');
         return;
     }
-    const eliminationsVerrouillees = [...new Set([
-        ...(etat.brouillonActivite.eliminationsVerrouillees || []),
-        propositionAConfirmer.indice
-    ])];
-    const eliminationsCorrectesExistantes = elementsDejaElimines.filter(indice =>
-        !propositions[indice]?.estCorrecte
-    );
     etat.brouillonActivite.elementsElimines = [...new Set([
         ...eliminationsCorrectesExistantes,
-        propositionAConfirmer.indice
-    ])].slice(0, 2);
-    etat.brouillonActivite.eliminationsVerrouillees = eliminationsVerrouillees;
+        ...indicesAConfirmer
+    ])].slice(0, nombreAttendu);
+    etat.brouillonActivite.eliminationsVerrouillees = [...indicesAConfirmer];
     consommerJoker5050({
         nature: 'eliminer',
-        verrouilles: [...eliminationsVerrouillees],
+        verrouilles: [...indicesAConfirmer],
         elementsElimines: [...etat.brouillonActivite.elementsElimines]
     });
     afficherActiviteEliminer(question, null);
-    afficherNotification('La moitié des retraits attendus est confirmée et verrouillée.');
+    afficherNotification('Une partie des retraits attendus est confirmée et verrouillée.');
 }
 function utiliserJoker5050PourSelectionMultiple(activite) {
     const propositionsIncorrectes = activite.propositions.filter(proposition =>
@@ -3387,6 +3682,7 @@ function utiliserIndice(type) {
     if (type !== 'indice' || etat.questionValidee || !etat.jokers.indice)
         return;
     marquerJokerUtilise();
+    envoyerUtilisationJoker('indice');
     etat.jokers.indice = false;
     selectionner('#jokerIndice').disabled = true;
     actualiserBoutonJokers();
@@ -3422,6 +3718,7 @@ function utiliserLangueAuChat() {
         return;
     annulerRappelJokers();
     marquerJokerUtilise();
+    envoyerUtilisationJoker('langue_au_chat');
     etat.jokers.langueAuChat = false;
     selectionner('#jokerLangueAuChat').disabled = true;
     actualiserBoutonJokers();
@@ -3473,7 +3770,7 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
     if (evaluationDeverrouillee) {
         return {
             titre: 'Destination finale atteinte !',
-            message: `Les dix étapes sont validées en autonomie. Ton carnet te reconnaît comme « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
+            message: `Les onze étapes sont validées en autonomie. Ton carnet te reconnaît comme « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
             confetti: true
         };
     }
@@ -3490,7 +3787,7 @@ function sessionAUtiliseJoker() {
 }
 function obtenirContexteFinSession() {
     if (etat.mode === 'evaluation-finale')
-        return 'Étape 11 · Évaluation finale';
+        return 'Étape 12 · Évaluation finale';
     if (etat.mode === 'parcours') {
         const etapeProgramme = obtenirEtapeProgramme(etat.theme, etat.etape);
         return `Étape ${etat.etape}${etapeProgramme?.titre ? ' · ' + etapeProgramme.titre : ''}`;
@@ -3611,7 +3908,7 @@ function construireBilanEvaluationFinale(pourcentage, evaluationFinaleReussie) {
             messageResultat: `Résultat : ${pourcentage} %. Les connaissances du parcours sont validées.`,
             celebration: {
                 titre: 'Voyage accompli !',
-                message: 'Tu as parcouru les dix étapes et réussi l’évaluation finale. Ton carnet est complet : tu es désormais Éclaireur de la PJJ.',
+                message: 'Tu as parcouru les onze étapes et réussi l’évaluation finale. Ton carnet est complet : tu es désormais Éclaireur de la PJJ.',
                 confetti: true,
                 finale: true
             }
@@ -3668,7 +3965,7 @@ function configurerBoutonContinuerBilan() {
         const etapeCourante = Number(etat.etape);
         if (etapeNecessiteAutreChapitre(etat.theme, etat.etape))
             boutonContinuer.textContent = 'Continuer l’étape →';
-        else if (etapeCourante < 10)
+        else if (etapeCourante < 11)
             boutonContinuer.textContent = `Passer à l’étape ${etapeCourante + 1} →`;
         else
             boutonContinuer.textContent = 'Retour au parcours →';
@@ -3686,7 +3983,7 @@ function configurerBoutonContinuerBilan() {
                 return;
             }
             const etapeCourante = Number(etat.etape);
-            if (etapeCourante < 10) {
+            if (etapeCourante < 11) {
                 lancerTransitionVersEtape(etat.theme, etapeCourante + 1);
                 return;
             }
@@ -3723,7 +4020,7 @@ function actualiserProchaineDestinationBilan() {
             destination.textContent = `Poursuis l’étape ${etat.etape} pour découvrir les questions restantes.`;
             return;
         }
-        if (Number(etat.etape) < 10) {
+        if (Number(etat.etape) < 11) {
             const prochaineEtape = obtenirEtapeProgramme(etat.theme, Number(etat.etape) + 1);
             destination.textContent = `Étape ${prochaineEtape.id} · ${prochaineEtape.titre}`;
             return;
@@ -3818,6 +4115,16 @@ function terminerSession() {
             jokerUtilise,
             celebration: progression.celebration
         });
+    envoyerEvenementPJJ('level_end', {
+        ...obtenirContexteSessionAnalytics(),
+        pjj_score: etat.score,
+        pjj_total: total,
+        pjj_duration_seconds: obtenirDureeSessionAnalytics(),
+        pjj_result: etat.mode === 'evaluation-finale'
+            ? (progression.evaluationFinaleReussie ? 'reussie' : 'terminee')
+            : 'terminee',
+        pjj_detail: `pourcentage:${pourcentage};passees:${nombreQuestionsPassees};aidees:${nombreReponsesAidees};joker:${jokerUtilise ? 1 : 0}`
+    });
     enregistrerSauvegarde();
     selectionner('#scoreBilan').textContent = pourcentage + '%';
     selectionner('#bonnesReponsesBilan').textContent = etat.score + '/' + total;
@@ -4086,6 +4393,11 @@ function enregistrerParametres() {
     };
     enregistrerSauvegarde();
     chargerParametres();
+    envoyerEvenementPJJ('settings_save', {
+        pjj_screen: 'parametres',
+        pjj_result: 'enregistres',
+        pjj_detail: `son:${sauvegarde.parametres.son ? 1 : 0};echelle:${sauvegarde.parametres.echelleTexte}`
+    });
     if (!sonEtaitActif && sauvegarde.parametres.son) {
         initialiserAudio();
         jouerSonReussite();
@@ -4098,6 +4410,10 @@ function exporterProgression() {
     lienTelechargement.download = 'PJJoue_progression.json';
     lienTelechargement.click();
     URL.revokeObjectURL(lienTelechargement.href);
+    envoyerEvenementPJJ('progress_export', {
+        pjj_screen: 'progression',
+        pjj_result: 'exporte'
+    });
 }
 function importerProgression(fichier) {
     if (!fichier)
@@ -4120,6 +4436,10 @@ function importerProgression(fichier) {
             effacerSauvegardeV1DuNavigateur();
             enregistrerSauvegarde();
             actualiserAccueil();
+            envoyerEvenementPJJ('progress_import', {
+                pjj_screen: 'progression',
+                pjj_result: 'importe'
+            });
             afficherNotification('Progression importée et vérifiée');
         }
         catch (erreur) {
@@ -4295,6 +4615,10 @@ selectionner('#boutonReinitialiserProgression').onclick = () => ouvrirFenetreMes
     afficherAnnuler: true,
     variante: 'danger',
     apresConfirmation: () => {
+        envoyerEvenementPJJ('progress_reset', {
+            pjj_screen: 'progression',
+            pjj_result: 'confirme'
+        });
         sauvegarde = creerSauvegardeInitiale();
         effacerSauvegardeV1DuNavigateur();
         enregistrerSauvegarde();
@@ -4389,6 +4713,16 @@ restaurerRoute(history.state || lireRoute());
 garantirAccueilEnHaut();
 window.addEventListener('pageshow', garantirAccueilEnHaut);
 window.addEventListener('load', garantirAccueilEnHaut);
+window.addEventListener('pjjoue:consentement-change', evenement => {
+    if (evenement.detail?.analytics !== true)
+        return;
+    envoyerEvenementPJJ('screen_view', {
+        ...obtenirContexteSessionAnalytics(),
+        pjj_screen: etat.ecran,
+        pjj_previous_screen: 'consentement',
+        pjj_result: 'mesure_activee'
+    });
+});
 window.addEventListener('hashchange', garantirAccueilEnHaut);
 window.addEventListener('resize', () => {
     clearTimeout(window.__pjjoueMinuteurAjustementQuestion);
