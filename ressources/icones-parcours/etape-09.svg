@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" shape-rendering="geometricPrecision">
+  <defs>
+    <linearGradient id="etape09Gradient" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900">
+      <stop offset="0%" stop-color="#D2B2FF"/>
+      <stop offset="52%" stop-color="#C59CFF"/>
+      <stop offset="100%" stop-color="#8A6DB2"/>
+    </linearGradient>
+  </defs>
+
+  <g id="linework" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Fiche -->
+    <path d="M180 155 L505 155 L625 275 L625 830 L180 830 Z"/>
+    <path d="M505 155 L505 275 L625 275"/>
+    <path d="M275 365 L500 365"/>
+    <path d="M275 455 L500 455"/>
+    <path d="M275 545 L455 545"/>
+
+    <!-- Balance à côté -->
+    <path d="M765 260 L765 650"/>
+    <path d="M675 325 C720 295 810 295 855 325"/>
+    <circle cx="765" cy="235" r="34"/>
+    <path d="M705 325 L660 445"/>
+    <path d="M825 325 L870 445"/>
+    <path d="M610 445 Q660 535 710 445"/>
+    <path d="M820 445 Q870 535 920 445"/>
+    <path d="M685 650 L845 650"/>
+    <path d="M720 650 L680 735 L850 735 L810 650"/>
+  </g>
+
+  <use xlink:href="#linework" fill="none" stroke="#8A6DB2" stroke-width="36.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="url(#etape09Gradient)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -477,13 +477,13 @@
     border-color: var(--jaune-interface);
 }
 #entrainement .entrainement-icone {
-    margin-bottom: 26px;
+    margin-bottom: 12px;
     color: var(--jaune-interface);
     font-size: 1.55rem;
     font-weight: 950;
-    min-width: 92px;
-    width: 92px;
-    height: 92px;
+    min-width: 58px;
+    width: 58px;
+    height: 58px;
     padding: 0;
     border: 0;
     background: transparent;
@@ -493,16 +493,16 @@
     place-items: center;
 }
 #entrainement .entrainement-details {
-    margin-top: 20px;
+    margin-top: 12px;
     color: #aecdE8;
-    font-size: .94rem;
+    font-size: .88rem;
     font-weight: 750;
 }
 #entrainement .entrainement-lancer {
     font-weight: 900;
     box-shadow: none;
     width: 100%;
-    min-height: 52px;
+    min-height: 46px;
     margin-top: auto;
     border-radius: 13px;
 }
@@ -524,9 +524,10 @@
 
 
 
-#entrainement .entrainement-icone svg {
-    width: 76px;
-    height: 76px;
+#entrainement .entrainement-icone svg,
+#entrainement .entrainement-icone img {
+    width: 52px;
+    height: 52px;
     overflow: visible;
     filter: drop-shadow(0 5px 10px rgba(0,20,55,.15));
 }
@@ -535,54 +536,6 @@
 }
 #entrainement .entrainement-icone-melange {
     color: var(--icone-bleu-vert);
-}
-#parcours .chemin-etape-icone svg {
-    width: 54px;
-    height: 54px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 3.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    filter: drop-shadow(0 4px 8px rgba(0,20,55,.14));
-}
-#parcours .chemin-etape-carte[data-etape="1"] .chemin-etape-icone,#parcours .chemin-etape-carte:nth-child(1) .chemin-etape-icone {
-    color: var(--icone-bleu-vert)
-}
-#parcours .chemin-etape-carte[data-etape="2"] .chemin-etape-icone,#parcours .chemin-etape-carte:nth-child(2) .chemin-etape-icone {
-    color: var(--icone-orange)
-}
-#parcours .chemin-etape-carte[data-etape="3"] .chemin-etape-icone,#parcours .chemin-etape-carte:nth-child(3) .chemin-etape-icone {
-    color: var(--icone-verte)
-}
-#parcours .chemin-etape-carte[data-etape="4"] .chemin-etape-icone,#parcours .chemin-etape-carte:nth-child(4) .chemin-etape-icone {
-    color: var(--icone-violette)
-}
-#parcours .chemin-etape-carte[data-etape="5"] .chemin-etape-icone,#parcours .chemin-etape-carte:nth-child(5) .chemin-etape-icone {
-    color: var(--icone-jaune)
-}
-#parcours .chemin-etape-carte[data-etape="6"] .chemin-etape-icone {
-    color: var(--icone-ciel)
-}
-#parcours .chemin-etape-carte[data-etape="7"] .chemin-etape-icone {
-    color: var(--icone-bleu-vert)
-}
-#parcours .chemin-etape-carte[data-etape="8"] .chemin-etape-icone {
-    color: var(--icone-orange)
-}
-#parcours .chemin-etape-carte[data-etape="9"] .chemin-etape-icone {
-    color: var(--icone-verte)
-}
-#parcours .chemin-etape-carte[data-etape="10"] .chemin-etape-icone {
-    color: var(--icone-violette)
-}
-#parcours .chemin-etape-carte[data-etape="11"] .chemin-etape-icone {
-    color: var(--icone-orange)
-}
-#parcours .chemin-evaluation-carte .chemin-etape-icone {
-    color: var(--icone-violette);
-    border: 0;
-    background: transparent;
 }
 #erreurs .theme-icone,#erreurs .vide-icone {
     color: var(--icone-orange)
@@ -599,7 +552,8 @@
         height: 76px;
         min-width: 76px;
     }
-    #entrainement .entrainement-icone svg {
+    #entrainement .entrainement-icone svg,
+#entrainement .entrainement-icone img {
         width: 62px;
         height: 62px;
     }
@@ -608,7 +562,7 @@
         height: 56px;
         min-width: 56px;
     }
-    #parcours .chemin-etape-icone svg {
+    #parcours .chemin-etape-icone img {
         width: 46px;
         height: 46px;
     }

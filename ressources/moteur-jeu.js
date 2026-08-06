@@ -1253,31 +1253,13 @@ function ouvrirParcours(identifiantTheme, optionsAffichage = {}) {
     afficherEtapes();
     afficherEcran('parcours', optionsAffichage);
 }
-const ICONES_ETAPES = {
-    '1': "<svg viewBox=\"0 0 48 48\"><circle cx=\"20\" cy=\"20\" r=\"10\"/><path d=\"M28 28l9 9\"/><path d=\"M16 20h8M20 16v8\"/></svg>",
-    '2': "<svg viewBox=\"0 0 48 48\"><circle cx=\"17\" cy=\"17\" r=\"6\"/><circle cx=\"31\" cy=\"17\" r=\"6\"/><path d=\"M8 36c1-7 6-11 12-11M40 36c-1-7-6-11-12-11\"/></svg>",
-    '3': "<svg viewBox=\"0 0 48 48\"><circle cx=\"24\" cy=\"15\" r=\"7\"/><path d=\"M12 38c0-8 5-13 12-13s12 5 12 13\"/></svg>",
-    '4': '<svg viewBox="0 0 48 48">'
-        + '<rect x="20" y="7" width="8" height="8"/>'
-        + '<rect x="7" y="32" width="8" height="8"/>'
-        + '<rect x="20" y="32" width="8" height="8"/>'
-        + '<rect x="33" y="32" width="8" height="8"/>'
-        + '<path d="M24 15v9M11 32v-8h26v8"/>'
-        + '</svg>',
-    '5': "<svg viewBox=\"0 0 48 48\"><rect x=\"13\" y=\"9\" width=\"22\" height=\"30\"/><path d=\"M18 15h4v4h-4zM27 15h4v4h-4zM18 24h4v4h-4zM27 24h4v4h-4zM22 39v-7h4v7\"/></svg>",
-    '6': '<svg viewBox="0 0 48 48">'
-        + '<path d="M9 35c6-2 8-8 12-10s8 1 11-2 2-8 7-11"/>'
-        + '<circle cx="10" cy="35" r="3"/>'
-        + '<circle cx="21" cy="25" r="3"/>'
-        + '<circle cx="32" cy="23" r="3"/>'
-        + '<circle cx="39" cy="12" r="3"/>'
-        + '</svg>',
-    '7': "<svg viewBox=\"0 0 48 48\"><path d=\"M8 17l16-8 16 8-16 8z\"/><path d=\"M13 20v10c6 5 16 5 22 0V20\"/><path d=\"M40 18v12\"/></svg>",
-    '8': "<svg viewBox=\"0 0 48 48\"><path d=\"M18 17l6 6 6-6M12 24l8 8 4-4 4 4 8-8\"/><path d=\"M7 20l8-8 5 5M41 20l-8-8-5 5\"/></svg>",
-    '9': "<svg viewBox=\"0 0 48 48\"><path d=\"M8 38V15l8-5 8 5 8-5 8 5v23\"/><path d=\"M14 20h4M14 27h4M22 20h4M22 27h4M30 20h4M30 27h4\"/></svg>",
-    '10': "<svg viewBox=\"0 0 48 48\"><rect x=\"12\" y=\"8\" width=\"24\" height=\"32\" rx=\"2\"/><path d=\"M18 15h12M18 22h12M18 29h7\"/><path d=\"M32 29v6M29 32h6\"/></svg>",
-    '11': "<svg viewBox=\"0 0 48 48\"><path d=\"M11 9h26v30H11z\"/><path d=\"M17 17h14M17 24h14M17 31h8\"/><path d=\"m29 31 3 3 6-7\"/></svg>"
-};
+function obtenirBaliseIconeEtape(numeroEtape) {
+    const numero = Number(numeroEtape);
+    if (!Number.isInteger(numero) || numero < 1 || numero > 11)
+        return '';
+    const identifiant = String(numero).padStart(2, '0');
+    return `<img src="ressources/icones-parcours/etape-${identifiant}.svg" alt="" aria-hidden="true">`;
+}
 function afficherEtapes() {
     initialiserProgression(etat.theme);
     const ligneParcours1 = selectionner('#ligneParcours1');
@@ -1314,7 +1296,7 @@ function afficherEtapes() {
         ].filter(Boolean).join(' ');
         carte.setAttribute('aria-label', `Étape ${etapeProgramme.id} — ${etapeProgramme.titre} — ${nombreTraitees} questions réalisées sur ${total}`);
         carte.innerHTML = `
-      <span class="chemin-etape-icone" aria-hidden="true">${ICONES_ETAPES[etapeProgramme.id] || ''}</span>
+      <span class="chemin-etape-icone" aria-hidden="true">${obtenirBaliseIconeEtape(etapeProgramme.id)}</span>
       <span class="chemin-etape-texte">
         <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
         <span class="chemin-etape-titre">${etapeProgramme.titre}</span>
@@ -4061,7 +4043,7 @@ function afficherCarteVoyageFinale() {
         bouton.type = 'button';
         bouton.className = 'carte-voyage-etape';
         bouton.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#ffc83d');
-        bouton.innerHTML = `${ICONES_ETAPES[etapeProgramme.id] || ''}<span>${etapeProgramme.id}</span>`;
+        bouton.innerHTML = `${obtenirBaliseIconeEtape(etapeProgramme.id)}<span>${etapeProgramme.id}</span>`;
         bouton.setAttribute('aria-label', `Ouvrir les souvenirs de l’étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
         bouton.onclick = () => ouvrirSouvenirDepuisCarteFinale(etapeProgramme.id);
         destinations.appendChild(bouton);

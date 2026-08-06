@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" data-label="Mélanger" shape-rendering="geometricPrecision">
+  <defs>
+    <linearGradient id="orangeGradient" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900">
+      <stop offset="0%" stop-color="#7AF1E5"/>
+      <stop offset="52%" stop-color="#39D7C4"/>
+      <stop offset="100%" stop-color="#2C9B90"/>
+    </linearGradient>
+  </defs>
+  <g id="linework" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M205 320 H300 C380 320 420 355 472 432 L552 548 C604 625 644 660 724 660 H820"/>
+    <path d="M756 585 L820 660 L756 735"/>
+    <path d="M205 700 H300 C385 700 425 670 490 590"/>
+    <path d="M625 430 C666 370 713 320 792 320 H820"/>
+    <path d="M756 245 L820 320 L756 395"/>
+  </g>
+  <use xlink:href="#linework" fill="none" stroke="#2C9B90" stroke-width="36.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="url(#orangeGradient)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

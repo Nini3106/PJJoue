@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" shape-rendering="geometricPrecision">
+  <defs>
+    <linearGradient id="etape11Gradient" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900">
+      <stop offset="0%" stop-color="#A691FF"/>
+      <stop offset="52%" stop-color="#8D72FF"/>
+      <stop offset="100%" stop-color="#6350B2"/>
+    </linearGradient>
+  </defs>
+
+  <g id="linework" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Fiche -->
+    <path d="M165 160 L500 160 L615 275 L615 825 L165 825 Z"/>
+    <path d="M500 160 L500 275 L615 275"/>
+    <path d="M260 370 L500 370"/>
+    <path d="M260 460 L500 460"/>
+    <path d="M260 550 L455 550"/>
+
+    <!-- Stylo -->
+    <path d="M420 745 L680 485"/>
+    <path d="M390 785 L420 745 L460 785 L420 825 Z"/>
+    <path d="M680 485 L725 440"/>
+
+    <!-- Cadenas à côté -->
+    <rect x="670" y="590" width="220" height="190" rx="38"/>
+    <path d="M715 590 L715 520 C715 455 750 415 780 415 C830 415 845 455 845 520 L845 590"/>
+    <circle cx="780" cy="665" r="25"/>
+    <path d="M780 690 L780 730"/>
+  </g>
+
+  <use xlink:href="#linework" fill="none" stroke="#6350B2" stroke-width="36.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="url(#etape11Gradient)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

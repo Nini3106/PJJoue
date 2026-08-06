@@ -45,7 +45,8 @@
 #progression .progression-icone-parcours {
     color: var(--jaune-interface);
 }
-#progression .progression-icone svg {
+#progression .progression-icone svg,
+#progression .progression-icone img {
     overflow: visible;
     filter: drop-shadow(0 5px 10px rgba(0,20,55,.15));
     width: 54px;
@@ -378,4 +379,10 @@
         max-height: 300px;
         padding-right: 5px;
     }
+}
+
+
+#progression .progression-icone img {
+    display: block;
+    object-fit: contain;
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" data-label="Boussole" shape-rendering="geometricPrecision">
+  <defs>
+    <linearGradient id="orangeGradient" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900">
+      <stop offset="0%" stop-color="#FFD468"/>
+      <stop offset="52%" stop-color="#FFC83D"/>
+      <stop offset="100%" stop-color="#B28C2B"/>
+    </linearGradient>
+  </defs>
+  <g id="linework" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="512" cy="540" r="250"/>
+    <circle cx="512" cy="540" r="42"/>
+    <path d="M512 205 L512 255"/>
+    <path d="M512 825 L512 875"/>
+    <path d="M177 540 L227 540"/>
+    <path d="M797 540 L847 540"/>
+    <path d="M512 340 L605 540 L512 740 L419 540 Z"/>
+    <path d="M512 340 L605 540 L512 495 Z"/>
+  </g>
+  <use xlink:href="#linework" fill="none" stroke="#B28C2B" stroke-width="36.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="url(#orangeGradient)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

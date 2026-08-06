@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" data-label="Chrono" shape-rendering="geometricPrecision">
+  <defs>
+    <linearGradient id="orangeGradient" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900">
+      <stop offset="0%" stop-color="#FFD468"/>
+      <stop offset="52%" stop-color="#FFC83D"/>
+      <stop offset="100%" stop-color="#B28C2B"/>
+    </linearGradient>
+  </defs>
+  <g id="linework" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="512" cy="560" r="250"/>
+    <path d="M512 200 L512 270"/>
+    <rect x="448" y="150" width="128" height="58" rx="28" ry="28"/>
+    <path d="M675 255 L735 195"/>
+    <path d="M512 560 L512 435"/>
+    <path d="M512 560 L615 620"/>
+    <circle cx="512" cy="560" r="24"/>
+  </g>
+  <use xlink:href="#linework" fill="none" stroke="#B28C2B" stroke-width="36.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="url(#orangeGradient)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

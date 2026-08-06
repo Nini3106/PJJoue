@@ -1,7 +1,7 @@
 {
   "produit": "PJJoue",
   "version": "V1",
-  "dateConsolidation": "2026-08-05",
+  "dateConsolidation": "2026-08-06",
   "composition": {
     "questionsTotales": 160,
     "questionsParcours": 110,
@@ -9,10 +9,6 @@
     "questionsEvaluationFinale": 50
   },
   "fichiers": {
-    ".github/workflows/controle.yml": {
-      "tailleOctets": 1671,
-      "sha256": "747e8b0b70d843ab2cc2d8162fd7c31a3838f6ff4f0254110ed6371247fb72cc"
-    },
     ".gitignore": {
       "tailleOctets": 83,
       "sha256": "5a37d6b0a6d46a96947f90d0c7b16c50f45d0eda892f7297fe7c0ea7a847d0ce"
@@ -158,8 +154,8 @@
       "sha256": "e6ea9290538158404b13400c6059a8cdb13b90d3e733a9e8baf36f9b09ed38c6"
     },
     "index.html": {
-      "tailleOctets": 43741,
-      "sha256": "3f7f050a64f2529227892c2b3530cfcea6ec2e997b9c9000fa204ee56a171048"
+      "tailleOctets": 41980,
+      "sha256": "831b697bb3692ccfd5e787cae1b7d6c90ddf6f87e605f4a30af516e297952728"
     },
     "mentions-legales.html": {
       "tailleOctets": 6497,
@@ -230,16 +226,92 @@
       "sha256": "849fc0675ea6b3c7fc893795685f3d73c1bb246efe2318b65e2d92ceb614accf"
     },
     "ressources/consentement-analytics.js": {
-      "tailleOctets": 8774,
-      "sha256": "111c30f465bdedc491669f74eb4515a79beec56b9d630448e2f359c6ae354daa"
+      "tailleOctets": 9015,
+      "sha256": "c1b6d39def39772a997fccfacff06479f01f1db7beb1beeca13728baddae3d1d"
     },
     "ressources/filigrane-parcours.svg": {
       "tailleOctets": 1349,
       "sha256": "566335679cad0c0b9f04b665c086cd0feaae04d84aa224a35ace711f580db322"
     },
+    "ressources/icones-interface/boussole.svg": {
+      "tailleOctets": 1238,
+      "sha256": "bf1c10834828b99661b0a04f4752234ef360448e21ab8440de5bbf17d2de1e09"
+    },
+    "ressources/icones-interface/carte-parcours-pjj.svg": {
+      "tailleOctets": 1412,
+      "sha256": "94a0b1c62d6a16c72c5df82047ab1ebb9690ea1b2dfd74ba90be0224543a5ccd"
+    },
+    "ressources/icones-interface/cible.svg": {
+      "tailleOctets": 1258,
+      "sha256": "74e2a6fdb787406de17b40211082fac1e3549dc4add53f171009204b93eb901d"
+    },
+    "ressources/icones-interface/defi-chrono.svg": {
+      "tailleOctets": 1205,
+      "sha256": "b00495d26877863e47044d96427b366eb6223b858dedaba27f7016744657e0ea"
+    },
+    "ressources/icones-interface/melange.svg": {
+      "tailleOctets": 1215,
+      "sha256": "acb1c40e3d59c27053c026dbf5d3e238b87f5f58068aa9c1a385e1074dc6dde0"
+    },
+    "ressources/icones-interface/mon-activite.svg": {
+      "tailleOctets": 1304,
+      "sha256": "f610488abc67600900bfee19ee780e30c50a6e274c58169a88195aba582dac67"
+    },
+    "ressources/icones-interface/par-ordre-etapes.svg": {
+      "tailleOctets": 1598,
+      "sha256": "a5c225cf8a3bb4f65dc3db298a4d61be2fcae87f7d06e20baa220752a65bc82a"
+    },
+    "ressources/icones-interface/trophee-evaluation.svg": {
+      "tailleOctets": 1577,
+      "sha256": "1c54b2e4ae4df27701bfb801e144d9bbed51ecefda3f5b58f8b90fdf4df80d44"
+    },
+    "ressources/icones-parcours/etape-01.svg": {
+      "tailleOctets": 1398,
+      "sha256": "a6a57769dba8a1f8feb706cdc94faa2abdc11b86e00186fd8a0d1a54ed676caa"
+    },
+    "ressources/icones-parcours/etape-02.svg": {
+      "tailleOctets": 1326,
+      "sha256": "77b615d72b103f224dbbc15ac2e5f1357f11840c91ef4f21e0bf5f941279595c"
+    },
+    "ressources/icones-parcours/etape-03.svg": {
+      "tailleOctets": 13767,
+      "sha256": "3bf17f2d64afaa517a3fbe5480b4862ceaa9d029579b02b8d20b971ec13603de"
+    },
+    "ressources/icones-parcours/etape-04.svg": {
+      "tailleOctets": 15177,
+      "sha256": "dbd72c516f7d005cbe35c94a76dba7f3bba3a97ada4f93adee2035ec18a8d830"
+    },
+    "ressources/icones-parcours/etape-05.svg": {
+      "tailleOctets": 1425,
+      "sha256": "bc58e19739c976ed749e52a8725761d906ce08eeb9e52debfb6e0b8977e22122"
+    },
+    "ressources/icones-parcours/etape-06.svg": {
+      "tailleOctets": 1336,
+      "sha256": "0ed25cf63f6de5b2919e7a7f65a627d3be5b4a58617f73c3e51a796ba504bfa3"
+    },
+    "ressources/icones-parcours/etape-07.svg": {
+      "tailleOctets": 1406,
+      "sha256": "cde81bd0a9c71eb2fe81834212a23b3d8760bcea0cba91a739bb7c209c016775"
+    },
+    "ressources/icones-parcours/etape-08.svg": {
+      "tailleOctets": 1213,
+      "sha256": "b5044112af317706b6ec55b3af6b66b58f730e53585044614bb59825a4d47bad"
+    },
+    "ressources/icones-parcours/etape-09.svg": {
+      "tailleOctets": 1526,
+      "sha256": "e2ece6ae4dc55d068246c5a528c487ac3c01817c549a46ae37fbbed1dac21afb"
+    },
+    "ressources/icones-parcours/etape-10.svg": {
+      "tailleOctets": 13113,
+      "sha256": "7df7649b81201ea5d016b0699d7b0978d19a83196a2a322e3b4045d673ab080f"
+    },
+    "ressources/icones-parcours/etape-11.svg": {
+      "tailleOctets": 1534,
+      "sha256": "87b676f553b37b0097a4e728720b583fccd7ea757f3e8f643baaec1a620fd590"
+    },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 224385,
-      "sha256": "729ddf83be323214bdf931db90a366aed2a44b42c5614531796b76010d2f7628"
+      "tailleOctets": 222709,
+      "sha256": "ed087b80d9c0b56187f48bf1cc8645c6dd80834068a98bd9a7ee70102e21fe0e"
     },
     "ressources/panorama-accueil-calme.png": {
       "tailleOctets": 1811539,
@@ -250,20 +322,20 @@
       "sha256": "d45ec3d0efbf40ce745e6d0d6240233a78ad9017a8cca25ed6be38dd505ca8e3"
     },
     "ressources/styles/10-parcours-principal.css": {
-      "tailleOctets": 30526,
-      "sha256": "6e11ee8a3b53d2d1d2bc3691b84b6b48ef15e0508d8bb2a8f99e945e6abdaaf6"
+      "tailleOctets": 31918,
+      "sha256": "9e612bfe18ed6771d673420349daa24e04398dcf1ac24d537de779b89534acec"
     },
     "ressources/styles/20-accueil-et-question-principale.css": {
-      "tailleOctets": 17144,
-      "sha256": "07143b7634c67f605bb4496f17002d4469ad470cfad142ce7d1681d851b727ac"
+      "tailleOctets": 15467,
+      "sha256": "7f1d438377492003edf8b67813102d12c72595f87a5d272d1c7a11b5324bf19c"
     },
     "ressources/styles/30-revision-parcours-et-parametres.css": {
-      "tailleOctets": 14226,
-      "sha256": "8bf2db5d881bb6df43b319d957a5561fb5cc15484da4c7f5a06126fe75a2cceb"
+      "tailleOctets": 15057,
+      "sha256": "a21ac4c0253f209bf8a76542b3ea5ddefbdae05a0468651b59c89332fad4f850"
     },
     "ressources/styles/40-progression-et-erreurs.css": {
-      "tailleOctets": 9526,
-      "sha256": "90b0649bc9031f840b095d93018531f530c6f4003e11df6480d0635caa353640"
+      "tailleOctets": 9650,
+      "sha256": "5de1f01001e0d4274707f201fb49aed6abdc8f2b263c11e3995366c633391c20"
     },
     "ressources/styles/50-carte-question-et-correction.css": {
       "tailleOctets": 29423,
@@ -274,8 +346,8 @@
       "sha256": "12effebcdb69540e65e8c4d8310ba93cd4de2044a13d7de8b18218aabde58370"
     },
     "ressources/styles/70-celebrations-bilan-et-fenetres.css": {
-      "tailleOctets": 13366,
-      "sha256": "29248489ee86481feb336e33ce3a769d0ef91620bc26100d9c146b166cf21282"
+      "tailleOctets": 13291,
+      "sha256": "ff68bc78bc8bbfe0277da816e72ab79bc126234b0cfda630f173e278a53370bc"
     },
     "ressources/styles/80-finitions-de-l-interface.css": {
       "tailleOctets": 21808,
@@ -286,12 +358,16 @@
       "sha256": "c731b6637c52ed8680af8c248f2de7db25afb376c59ae95d16689ac733fc834a"
     },
     "ressources/styles/90-responsive-et-etats-finaux.css": {
-      "tailleOctets": 30445,
-      "sha256": "4b6ddcfbe7023d9e9d352da40b23a0d6c185c8107c81b2b6157f300a5415da9e"
+      "tailleOctets": 31418,
+      "sha256": "9124d97c9fa649f3ebb2f6afaf0f617bc21b923028123cfdb6e6a85cade675a9"
     },
     "ressources/styles/95-consentement.css": {
-      "tailleOctets": 3895,
-      "sha256": "d51c12b7b02925cb3b3e29a7fbff868730fe5cf6fc7bfda4bb1ccf21281b306f"
+      "tailleOctets": 4315,
+      "sha256": "8675f8e912140eaf787d33de53e9aaab8b833f18216bbbfca9948142bd13dbba"
+    },
+    "ressources/styles/96-icones-et-defi-hasard.css": {
+      "tailleOctets": 6622,
+      "sha256": "ab3697749b192d14049d217660de257693cc890e258fd2af36ec4c222f9cec80"
     },
     "ressources/styles/README.md": {
       "tailleOctets": 1907,

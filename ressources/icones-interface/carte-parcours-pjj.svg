@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" data-label="Carte aventure" shape-rendering="geometricPrecision">
+  <defs>
+    <linearGradient id="orangeGradient" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900">
+      <stop offset="0%" stop-color="#FFD468"/>
+      <stop offset="52%" stop-color="#FFC83D"/>
+      <stop offset="100%" stop-color="#B28C2B"/>
+    </linearGradient>
+  </defs>
+  <g id="linework" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M220 280 L380 235 L520 295 L665 245 L805 300 L805 744 L665 689 L520 744 L380 689 L220 744 Z"/>
+    <path d="M380 235 L380 689"/>
+    <path d="M520 295 L520 744"/>
+    <path d="M665 245 L665 689"/>
+    <path d="M330 620 C365 570 410 560 450 530 C490 500 505 460 535 445 C565 430 595 435 640 470" stroke-dasharray="18 28"/>
+    <circle cx="320" cy="635" r="18"/>
+    <path d="M675 425 L690 455 L723 460 L699 482 L705 515 L675 500 L645 515 L651 482 L627 460 L660 455 Z"/>
+  </g>
+  <use xlink:href="#linework" fill="none" stroke="#B28C2B" stroke-width="36.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="url(#orangeGradient)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

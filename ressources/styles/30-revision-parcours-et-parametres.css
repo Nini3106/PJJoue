@@ -80,19 +80,26 @@
 }
 #entrainement .entrainement-entete {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 30px;
+}
+#entrainement .entrainement-entete p {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
 }
 #entrainement .entrainement-grille {
-    width: min(1180px,100%);
+    width: min(1080px,100%);
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 28px;
+    gap: 22px;
 }
 #entrainement .entrainement-carte {
-    min-height: 530px;
-    padding: 34px 34px 30px;
+    min-height: 440px;
+    height: 440px;
+    padding: 26px 27px 24px;
     border-radius: 20px;
+    box-sizing: border-box;
     border: 1px solid var(--bordure-carte);
     background: var(--surface-carte);
     box-shadow: var(--ombre-carte);
@@ -109,24 +116,25 @@
 #entrainement .entrainement-carte h2 {
     margin: 0;
     color: #fff;
-    font-size: 1.65rem;
+    font-size: 1.45rem;
 }
 #entrainement .entrainement-carte>p {
-    margin: 13px 0 0;
+    margin: 8px 0 0;
     color: #cfe2f4;
-    line-height: 1.5;
+    font-size: .94rem;
+    line-height: 1.4;
 }
 #entrainement .entrainement-options {
     width: 100%;
-    margin-top: 24px;
+    margin-top: 16px;
     display: grid;
-    gap: 14px;
+    gap: 10px;
 }
 #entrainement .entrainement-option,#entrainement .entrainement-chronometre-secondes {
     display: grid;
-    grid-template-columns: 135px 1fr;
+    grid-template-columns: 110px 1fr;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 }
 #entrainement .entrainement-option>span,#entrainement .entrainement-chronometre-secondes>span {
     color: #eef7ff;
@@ -174,7 +182,7 @@
     background: var(--jaune-interface);
     border-color: var(--jaune-interface);
 }
-carnet .carnet-page-entete {
+#carnet .carnet-page-entete {
     margin-bottom: 22px;
 }
 #carnet .carnet-parcours {
@@ -194,7 +202,8 @@ carnet .carnet-page-entete {
     height: 54px;
     color: var(--jaune-interface);
 }
-#carnet .carnet-parcours-icone svg {
+#carnet .carnet-parcours-icone svg,
+#carnet .carnet-parcours-icone img {
     width: 100%;
     height: 100%;
     fill: none;
@@ -397,14 +406,21 @@ carnet .carnet-page-entete {
 #carnet .carnet-defis .defi-termine small {
     color: #5fe0a0;
 }
+
+@media (max-width:980px) {
+    #entrainement .entrainement-grille {
+        grid-template-columns: 1fr;
+        width: min(720px,100%);
+        gap: 18px;
+    }
+    #entrainement .entrainement-carte {
+        min-height: 0;
+        height: auto;
+    }
+}
 @media (max-width:950px) {
     #erreurs .revision-mode-grille,#entrainement .entrainement-grille {
         grid-template-columns: 1fr;
-    }
-    #carnet .carnet-parcours-entete {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 9px;
     }
     #carnet .carnet-parcours-details {
         grid-template-columns: 1fr;
@@ -579,4 +595,29 @@ carnet .carnet-page-entete {
     max-width: 760px;
     margin-left: auto;
     margin-right: auto;
+}
+
+
+#carnet .carnet-parcours-icone {
+    display: grid;
+    place-items: center;
+}
+#carnet .carnet-parcours-icone img {
+    display: block;
+    object-fit: contain;
+}
+#carnet .carnet-parcours-prochaine-ligne {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 10px 0 14px;
+}
+#carnet #prochaineDestinationParcours {
+    margin: 0;
+    flex: 1 1 260px;
+}
+#carnet .carnet-parcours-titre {
+    margin-left: auto;
 }

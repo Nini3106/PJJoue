@@ -803,8 +803,8 @@ header.entete .navigation button[aria-current="page"] {
 /* Proportions finales des commandes sur mobile. */
 @media (max-width:820px) {
     #entrainement .entrainement-lancer,
-#parcours #boutonLancerDeParcours,
-#parcours #boutonJouerTirageDe,
+#carnet #boutonLancerDeParcours,
+#carnet #boutonJouerTirageDe,
 #question .question-commande-ligne button,
 #bilan .bilan-actions button,
 #progression .progression-actions button,
@@ -876,7 +876,7 @@ header.entete .marque > span {
 }
 #carnet .carnet-parcours-entete {
     display: grid;
-    grid-template-columns: auto minmax(0,1fr) auto;
+    grid-template-columns: auto minmax(0,1fr) minmax(360px,460px) auto;
     align-items: center;
     gap: 15px;
     margin: 0 0 26px;
@@ -887,8 +887,24 @@ header.entete .marque > span {
     align-self: center;
     margin: 0;
 }
-#parcours #boutonLancerDeParcours .libelle-mobile {
+#carnet #boutonLancerDeParcours .libelle-mobile {
     display: none;
+}
+@media (max-width:1050px) and (min-width:821px) {
+    #carnet .carnet-parcours-entete {
+        grid-template-columns: 54px minmax(0,1fr) auto;
+    }
+    #carnet .carnet-defi-hasard-parcours {
+        grid-column: 2 / -1;
+        grid-row: 2;
+        min-width: 0;
+        width: 100%;
+        margin-top: 2px;
+    }
+    #carnet .carnet-parcours-titre {
+        grid-column: 3;
+        grid-row: 1;
+    }
 }
 #question .question-commande-ligne .libelle-mobile {
     display: none;
@@ -945,6 +961,12 @@ header.entete .marque > span {
         align-items: center;
         gap: 12px;
     }
+    #carnet .carnet-defi-hasard-parcours {
+        grid-column: 1 / -1;
+        min-width: 0;
+        width: 100%;
+        margin-top: 4px;
+    }
     #carnet .carnet-parcours-entete > div:nth-child(2) {
         align-self: center;
     }
@@ -962,7 +984,7 @@ header.entete .marque > span {
         padding-right: 0;
     }
     /* Deux commandes d'un même encadrement restent côte à côte si elles tiennent. */
-    #parcours .parcours-defi-de-actions,
+    #carnet .carnet-defi-hasard-actions,
 #bilan .bilan-actions,
 #progression .progression-actions,
 #parametres .parametres-actions-boutons,
@@ -976,7 +998,7 @@ header.entete .marque > span {
         justify-content: center;
         gap: 8px;
     }
-    #parcours .parcours-defi-de-actions {
+    #carnet .carnet-defi-hasard-actions {
         grid-column: 1 / -1;
         display: grid;
         grid-template-columns: max-content max-content;
@@ -985,9 +1007,9 @@ header.entete .marque > span {
         gap: 7px;
         width: 100%;
     }
-    #parcours .parcours-defi-de-actions button {
+    #carnet .carnet-defi-hasard-actions button {
         flex: 0 1 auto;
-        width: max-content !important;
+        width: max-content;
         min-width: 0;
         min-height: 34px;
         height: 34px;
@@ -996,10 +1018,10 @@ header.entete .marque > span {
         white-space: nowrap;
         font-size: .8rem;
     }
-    #parcours #boutonLancerDeParcours .libelle-bureau {
+    #carnet #boutonLancerDeParcours .libelle-bureau {
         display: none;
     }
-    #parcours #boutonLancerDeParcours .libelle-mobile {
+    #carnet #boutonLancerDeParcours .libelle-mobile {
         display: inline;
     }
     /* Navigation d'une question : deux rangées stables, sans chevauchement. */
@@ -1112,5 +1134,27 @@ header.entete .marque > span {
         border-color: var(--couleur-etape-active,var(--accent));
         background: #174f88;
         box-shadow: inset 4px 0 0 var(--couleur-etape-active,var(--accent));
+    }
+}
+
+
+@media (max-width: 900px) {
+    #carnet .carnet-parcours-prochaine-ligne {
+        align-items: flex-start;
+    }
+    #carnet .carnet-parcours-titre {
+        margin-left: 0;
+    }
+}
+
+
+@media (max-width:820px) {
+    #carnet .carnet-defi-hasard-texte {
+        display: grid;
+        gap: 3px;
+    }
+    #parcours .programme-objectif-simple .objectif-cible-reference {
+        width: 50px;
+        height: 50px;
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" data-label="Cible" shape-rendering="geometricPrecision">
+  <defs>
+    <linearGradient id="orangeGradient" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900">
+      <stop offset="0%" stop-color="#FFD468"/>
+      <stop offset="52%" stop-color="#FFC83D"/>
+      <stop offset="100%" stop-color="#B28C2B"/>
+    </linearGradient>
+  </defs>
+  <g id="linework" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="500" cy="545" r="245"/>
+    <circle cx="500" cy="545" r="165"/>
+    <circle cx="500" cy="545" r="85"/>
+    <circle cx="500" cy="545" r="22"/>
+    <path d="M655 390 L820 225"/>
+    <path d="M772 225 L820 225 L820 273"/>
+    <path d="M620 425 L690 495"/>
+    <path d="M642 403 L740 305"/>
+    <path d="M652 392 L542 502"/>
+  </g>
+  <use xlink:href="#linework" fill="none" stroke="#B28C2B" stroke-width="36.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="url(#orangeGradient)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
