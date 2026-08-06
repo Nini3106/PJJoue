@@ -121,6 +121,7 @@ Après toute modification d’un fichier diffusé, régénérer le manifeste d�
 ```bash
 python outils/construire_manifeste.py
 ```
+<!-- redéploiement v35 -->
 
 ## Statut
 
