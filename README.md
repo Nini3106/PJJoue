@@ -121,8 +121,9 @@ Après toute modification d’un fichier diffusé, régénérer le manifeste d�
 ```bash
 python outils/construire_manifeste.py
 ```
-<!-- redéploiement v35 -->
+
 
 ## Statut
 
 Cette archive constitue la **V1 officielle du projet personnel PJJoue**. Avant chaque publication, vérifier les sources, les mentions juridiques, la sécurité de l’hébergement et la recette fonctionnelle.
+<!-- redéploiement v35 -->
