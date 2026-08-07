@@ -22,7 +22,8 @@ Pour reprendre le chantier de nettoyage interrompu, lire d'abord
 | Exécuter ou comprendre les tests | `documentation/RECETTE.md` | contrôle automatique ou recette manuelle |
 | Déployer le dossier | `documentation/DEPLOIEMENT.md` | hébergement statique |
 | Configurer le suivi Analytics | `documentation/CONFIGURATION_GTM_ANALYTICS.md` | un déclencheur générique et une balise GA4 |
-| Modifier une question sans casser l’historique Analytics | `documentation/MODIFIER_LES_QUESTIONS_SANS_CASSER_ANALYTICS.md` | conserver l’identifiant stable |
+| Faire évoluer questions, étapes, modes et jokers sans casser Analytics | `ANALYTICS_CONSIGNES_MODIFICATIONS_PJJOUE.md` | guide complet de continuité Analytics |
+| Modifier une question sans casser l’historique Analytics | `documentation/MODIFIER_LES_QUESTIONS_SANS_CASSER_ANALYTICS.md` | renvoi vers le guide complet |
 
 ## Règles à connaître avant de modifier
 

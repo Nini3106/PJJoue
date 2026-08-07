@@ -65,7 +65,7 @@ def principal() -> int:
     analytics = (RACINE / "ressources/analytics-pjjoue.js").read_text(encoding="utf-8")
     exiger("GTM-M3LD4ZHK" in consentement and "consent', 'default'" in consentement and "consent', 'update'" in consentement, "Le mode de consentement Google est incomplet.")
     exiger("analytics_storage" in consentement and "pjjoue_consentement_analytics_v1" in consentement, "Le stockage ou l’état Analytics du consentement est incomplet.")
-    exiger("PREFIXE_EVENEMENT = 'pjj_'" in analytics and "normaliserParametres" in analytics, "La couche d’événements PJJoue est incomplète.")
+    exiger("PREFIXE_EVENEMENT = 'pjjoue_'" in analytics and "normaliserParametres" in analytics, "La couche d’événements PJJoue est incomplète.")
     exiger(page.count('src="ressources/consentement-analytics.js"') == 1, "Le module de consentement doit être chargé une seule fois sur l’accueil.")
     exiger(page.count('src="ressources/analytics-pjjoue.js"') == 1, "La couche d’événements doit être chargée une seule fois sur l’accueil.")
     exiger("www.googletagmanager.com/gtm.js" not in page and "Google Tag Manager (noscript)" not in page, "GTM ne doit pas être chargé directement avant le consentement.")
@@ -81,12 +81,16 @@ def principal() -> int:
         exiger("www.googletagmanager.com/gtm.js" not in contenu_page and "Google Tag Manager (noscript)" not in contenu_page, f"GTM est encore chargé directement dans {chemin_page}.")
     exiger("data-pjj-ouvrir-consentement" in (RACINE / "confidentialite.html").read_text(encoding="utf-8"), "La commande de modification du consentement est absente.")
     evenements_attendus = [
-        "screen_view", "level_start", "question_view", "question_answer", "question_skip",
-        "question_replay", "joker_use", "level_end", "level_abandon", "progress_export",
-        "progress_import", "progress_reset", "settings_save",
+        "page_consultee", "session_commencee", "question_affichee", "reponse_validee",
+        "question_passee", "question_rejouee", "joker_utilise", "session_terminee",
+        "session_quittee", "defi_du_hasard_lance", "progression_exportee",
+        "progression_importee", "progression_reinitialisee", "parametres_enregistres",
     ]
     exiger(all(f"'{nom}'" in moteur for nom in evenements_attendus), "Un événement métier Analytics manque dans le moteur.")
-    exiger("pjj_question_id" in moteur and "question?.id" in moteur, "Le suivi des questions ne repose pas sur leur identifiant stable.")
+    exiger("pjjoue_identifiant_question" in moteur and "obtenirIdentifiantQuestionAnalytics" in moteur, "Le suivi des questions ne repose pas sur leur identifiant stable.")
+    exiger("pjjoue_nom_question" in moteur and "question?.enonce" in moteur, "Le libellé lisible de la question n’est pas envoyé à Analytics.")
+    exiger("pjjoue_numero_etape" in moteur and "pjjoue_nom_etape" in moteur, "Le suivi Analytics des étapes est incomplet.")
+    exiger("pjjoue_defi_chrono" in moteur and "pjjoue_nombre_questions_defi_du_hasard" in moteur, "Le suivi des défis PJJoue est incomplet.")
     print("OK — 160 questions · 11 étapes d’apprentissage · 50 réponses écrites finales")
     return 0
 

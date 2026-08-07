@@ -3,12 +3,13 @@
 /**
  * Couche d'événements métier de PJJoue.
  *
- * Seules des valeurs techniques courtes sont envoyées. Le texte des questions,
- * les réponses saisies et le contenu de la progression ne quittent jamais le
- * navigateur par ce module.
+ * Les événements et paramètres métier utilisent le vocabulaire visible dans
+ * PJJoue. L'énoncé courant d'une question peut être envoyé comme libellé
+ * Analytics (limité à 100 caractères), mais jamais la réponse saisie par
+ * l'utilisateur, le contenu d'une sauvegarde, ni une donnée d'identité.
  */
 (() => {
-    const PREFIXE_EVENEMENT = 'pjj_';
+    const PREFIXE_EVENEMENT = 'pjjoue_';
     const LONGUEUR_MAXIMALE = 100;
 
     function consentementAccorde() {

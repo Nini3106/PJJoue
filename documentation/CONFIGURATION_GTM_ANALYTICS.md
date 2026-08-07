@@ -1,122 +1,186 @@
-# Configuration Google Tag Manager et Analytics — PJJoue
+# Configuration GTM et GA4 — PJJoue
 
-## Objectif
+Ce document décrit la configuration Analytics correspondant au code PJJoue actuel.
 
-Le site produit déjà tous les événements utiles. La configuration Tag Manager ne dépend ni de l’ordre des questions, ni de leur texte, ni de leur place dans une étape. Une question est suivie par son identifiant stable (`pjj_question_id`).
+## Principe
 
-Le conteneur Google Tag Manager n’est chargé qu’après acceptation du visiteur. Avant ce choix, aucun événement PJJoue n’est envoyé dans `dataLayer`.
+Tous les événements métier propres à PJJoue commencent par `pjjoue_` et utilisent des noms français lisibles.
 
-## Événements disponibles
+Le vocabulaire Analytics reprend autant que possible les mots visibles dans l'interface : **Parcours PJJ**, **Entraînement libre**, **Défi chrono**, **Défi du hasard**, **Jokers**, **Chrono**, **Temps par question**, **Réussite autonome**, etc.
+
+Les identifiants techniques stables servent uniquement à conserver l'historique lorsqu'un contenu évolue. La question affichée reste lisible grâce à `pjjoue_nom_question`.
+
+Le conteneur Google Tag Manager n'est chargé qu'après consentement Analytics. Les événements métier sont également bloqués côté `ressources/analytics-pjjoue.js` tant que le consentement n'est pas accordé.
+
+## Événements PJJoue envoyés
 
 | Événement | Signification |
 |---|---|
-| `pjj_screen_view` | écran interne affiché dans l’application |
-| `pjj_level_start` | session de parcours, révision, entraînement ou évaluation commencée |
-| `pjj_question_view` | question affichée |
-| `pjj_question_answer` | réponse validée, sans transmettre son contenu |
-| `pjj_question_skip` | question passée |
-| `pjj_question_replay` | question rejouée après correction |
-| `pjj_joker_use` | joker utilisé |
-| `pjj_level_end` | session terminée |
-| `pjj_level_abandon` | sortie volontaire avant la fin |
-| `pjj_dice_roll` | résultat du dé d’entraînement |
-| `pjj_progress_export` | progression exportée |
-| `pjj_progress_import` | progression importée avec succès |
-| `pjj_progress_reset` | progression réinitialisée après confirmation |
-| `pjj_settings_save` | paramètres enregistrés |
+| `pjjoue_page_consultee` | une page interne de PJJoue est consultée |
+| `pjjoue_session_commencee` | une session de jeu commence |
+| `pjjoue_question_affichee` | une question est affichée |
+| `pjjoue_reponse_validee` | une réponse est validée |
+| `pjjoue_question_passee` | l'utilisateur passe une question |
+| `pjjoue_question_rejouee` | une question est rejouée après correction |
+| `pjjoue_joker_utilise` | un joker est utilisé |
+| `pjjoue_session_terminee` | une session arrive à son bilan |
+| `pjjoue_session_quittee` | l'utilisateur quitte une session avant son terme |
+| `pjjoue_defi_du_hasard_lance` | le Défi du hasard est lancé et tire de 1 à 6 questions |
+| `pjjoue_progression_exportee` | la progression locale est exportée |
+| `pjjoue_progression_importee` | une progression est importée avec succès |
+| `pjjoue_progression_reinitialisee` | la progression locale est réinitialisée après confirmation |
+| `pjjoue_parametres_enregistres` | les paramètres PJJoue sont enregistrés |
 
-## Paramètres stables
+## Paramètres Data Layer à créer dans GTM
 
-Créer les variables de couche de données suivantes dans Tag Manager. Pour chacune : **Variables > Nouvelle > Variable de couche de données**, version 2.
+Créer une variable **Variable de couche de données** pour chacun des paramètres ci-dessous. Utiliser exactement le même nom dans le champ « Nom de la variable de couche de données ».
 
-| Nom conseillé dans GTM | Nom de variable de couche de données |
-|---|---|
-| `DLV - pjj_screen` | `pjj_screen` |
-| `DLV - pjj_previous_screen` | `pjj_previous_screen` |
-| `DLV - pjj_mode` | `pjj_mode` |
-| `DLV - pjj_theme` | `pjj_theme` |
-| `DLV - pjj_step` | `pjj_step` |
-| `DLV - pjj_chapter` | `pjj_chapter` |
-| `DLV - pjj_question_id` | `pjj_question_id` |
-| `DLV - pjj_question_position` | `pjj_question_position` |
-| `DLV - pjj_question_mode` | `pjj_question_mode` |
-| `DLV - pjj_attempts` | `pjj_attempts` |
-| `DLV - pjj_result` | `pjj_result` |
-| `DLV - pjj_joker` | `pjj_joker` |
-| `DLV - pjj_score` | `pjj_score` |
-| `DLV - pjj_total` | `pjj_total` |
-| `DLV - pjj_duration_seconds` | `pjj_duration_seconds` |
-| `DLV - pjj_detail` | `pjj_detail` |
+| Nom conseillé dans GTM | Paramètre Data Layer | Ce qu'il contient |
+|---|---|---|
+| DLV - Page PJJoue consultée | `pjjoue_page_consultee` | Accueil, Parcours PJJ, Carnet de voyage, etc. |
+| DLV - Page PJJoue précédente | `pjjoue_page_precedente` | page interne précédente |
+| DLV - Mode de jeu | `pjjoue_mode_de_jeu` | Parcours PJJ, Entraînement libre, Révision des erreurs, Évaluation finale, Défi du hasard |
+| DLV - Mode d'entraînement | `pjjoue_mode_entrainement` | Par ordre d'étapes ou Mélangé |
+| DLV - Numéro de l'étape | `pjjoue_numero_etape` | 1 à 12 selon le contexte |
+| DLV - Nom de l'étape | `pjjoue_nom_etape` | intitulé actuel de l'étape |
+| DLV - Nombre de questions | `pjjoue_nombre_questions` | nombre de questions de la session |
+| DLV - Jokers | `pjjoue_jokers` | Avec ou Sans |
+| DLV - Défi chrono | `pjjoue_defi_chrono` | Libre ou Chronométré, uniquement dans le Parcours PJJ |
+| DLV - Temps par question du Défi chrono | `pjjoue_temps_par_question_defi_chrono` | durée choisie en secondes |
+| DLV - Chrono | `pjjoue_chrono` | Avec ou Sans, uniquement dans Entraînement libre |
+| DLV - Temps par question | `pjjoue_temps_par_question` | durée choisie en secondes dans Entraînement libre |
+| DLV - Nombre de questions du Défi du hasard | `pjjoue_nombre_questions_defi_du_hasard` | résultat du tirage : 1 à 6 |
+| DLV - Identifiant de la question | `pjjoue_identifiant_question` | identifiant permanent de type Q001, Q002… |
+| DLV - Nom de la question | `pjjoue_nom_question` | énoncé lisible de la question, limité à 100 caractères par GA4 |
+| DLV - Position de la question dans la session | `pjjoue_position_question_session` | position réellement jouée : 1, 2, 3… |
+| DLV - Type de question | `pjjoue_type_question` | Choix unique, Sélection multiple, Relier, etc. |
+| DLV - Résultat de la réponse | `pjjoue_resultat_reponse` | Réussite autonome, Réussite avec aide, Réponse incorrecte, Question passée… |
+| DLV - Nombre de tentatives | `pjjoue_nombre_tentatives` | nombre de tentatives sur la question |
+| DLV - Joker utilisé | `pjjoue_joker_utilise` | 50/50, Indice ou Langue au chat |
+| DLV - Temps écoulé | `pjjoue_temps_ecoule` | Oui ou Non sur une réponse validée |
+| DLV - Score | `pjjoue_score` | pourcentage final affiché au bilan |
+| DLV - Réussites autonomes | `pjjoue_reussites_autonomes` | nombre de réussites autonomes de la session |
+| DLV - Questions passées | `pjjoue_questions_passees` | nombre de questions passées |
+| DLV - Réussites avec aide | `pjjoue_reussites_avec_aide` | nombre de réussites avec aide |
+| DLV - Joker utilisé dans la session | `pjjoue_joker_utilise_session` | Oui ou Non |
+| DLV - Durée de la session | `pjjoue_duree_session_secondes` | durée totale en secondes |
+| DLV - Résultat de la session | `pjjoue_resultat_session` | Session commencée, Session terminée, Session quittée, Évaluation réussie… |
+| DLV - Son | `pjjoue_son` | Activé ou Désactivé |
+| DLV - Taille du texte | `pjjoue_taille_texte` | Compacte, Normale ou Grande |
 
-Le nom exact des variables GTM peut changer ; le nom de la variable de couche de données ne doit pas changer.
+Il y a donc **30 paramètres PJJoue** actuellement prévus dans le code.
 
-## Déclencheur unique
+## Déclencheur GTM
 
-1. Ouvrir **Déclencheurs > Nouveau**.
-2. Nom : `EVT - Tous les événements PJJoue`.
-3. Type : **Événement personnalisé**.
-4. Nom de l’événement : `^pjj_.*`.
-5. Cocher **Utiliser la correspondance avec une expression régulière**.
-6. Déclenchement : **Tous les événements personnalisés**.
+Créer ou modifier le déclencheur d'événement personnalisé PJJoue :
 
-Ce déclencheur acceptera également un futur événement commençant par `pjj_`, sans nouvelle modification.
+1. Type : **Événement personnalisé**.
+2. Nom de l'événement : `^pjjoue_.*`.
+3. Cocher l'utilisation d'une expression régulière si l'interface GTM le demande.
+4. Déclencher sur **Tous les événements personnalisés** correspondant à cette expression.
 
-## Balise GA4 unique
+Ne plus utiliser l'ancienne expression `^pjj_.*`.
 
-1. Ouvrir **Balises > Nouvelle**.
-2. Nom : `GA4 - Événements PJJoue`.
-3. Type : **Événement Google Analytics : GA4**.
-4. Sélectionner la balise Google existante de PJJoue.
-5. Nom de l’événement : `{{Event}}`.
-6. Ajouter les paramètres d’événement listés ci-dessous.
+## Balise d'événement GA4
 
-| Paramètre GA4 | Valeur GTM |
-|---|---|
-| `pjj_screen` | `{{DLV - pjj_screen}}` |
-| `pjj_previous_screen` | `{{DLV - pjj_previous_screen}}` |
-| `pjj_mode` | `{{DLV - pjj_mode}}` |
-| `pjj_theme` | `{{DLV - pjj_theme}}` |
-| `pjj_step` | `{{DLV - pjj_step}}` |
-| `pjj_chapter` | `{{DLV - pjj_chapter}}` |
-| `pjj_question_id` | `{{DLV - pjj_question_id}}` |
-| `pjj_question_position` | `{{DLV - pjj_question_position}}` |
-| `pjj_question_mode` | `{{DLV - pjj_question_mode}}` |
-| `pjj_attempts` | `{{DLV - pjj_attempts}}` |
-| `pjj_result` | `{{DLV - pjj_result}}` |
-| `pjj_joker` | `{{DLV - pjj_joker}}` |
-| `pjj_score` | `{{DLV - pjj_score}}` |
-| `pjj_total` | `{{DLV - pjj_total}}` |
-| `pjj_duration_seconds` | `{{DLV - pjj_duration_seconds}}` |
-| `pjj_detail` | `{{DLV - pjj_detail}}` |
+La balise d'événement GA4 doit :
 
-7. Déclencheur : `EVT - Tous les événements PJJoue`.
-8. Enregistrer, puis tester en mode **Prévisualiser** avant de publier.
+1. utiliser la balise Google / l'identifiant de mesure PJJoue existant ;
+2. utiliser comme nom d'événement la variable GTM intégrée `{{Event}}` ;
+3. transmettre les paramètres PJJoue ci-dessus avec leurs variables DLV correspondantes ;
+4. utiliser le déclencheur `^pjjoue_.*` ;
+5. conserver les contrôles de consentement Analytics.
 
-La variable intégrée `Event` doit être activée dans **Variables > Configurer**.
+Il est normal que certains paramètres soient absents d'un événement : par exemple `pjjoue_son` ne concerne que `pjjoue_parametres_enregistres`, tandis que `pjjoue_nom_question` concerne les événements de question. **Ne pas inventer de valeur de remplacement** pour un paramètre qui n'est pas pertinent.
 
-## Consentement dans Tag Manager
+## Défi chrono
 
-La balise Google et la balise d’événement conservent leurs contrôles de consentement intégrés. Ne pas ajouter un déclencheur qui contourne `analytics_storage`. Le site ne charge déjà le conteneur qu’après acceptation ; cette vérification reste une seconde barrière utile.
+Dans le **Parcours PJJ**, Analytics reçoit :
 
-## Dimensions personnalisées à créer dans Analytics
+- `pjjoue_defi_chrono` = `Libre` ou `Chronométré` ;
+- `pjjoue_temps_par_question_defi_chrono` si le Défi chrono est chronométré ;
+- `pjjoue_temps_ecoule` sur chaque réponse, afin de distinguer une réponse incorrecte d'une question perdue parce que le temps est arrivé à zéro ;
+- à la fin de la session : Score, Réussites autonomes, Questions passées, Réussites avec aide, Joker utilisé dans la session et Durée de la session.
 
-Dans **Administration > Affichage des données > Définitions personnalisées**, créer au minimum les dimensions d’événement suivantes :
+Pour analyser les résultats du Défi chrono, filtrer les sessions avec `pjjoue_defi_chrono = Chronométré`.
 
-- `pjj_screen` — Écran PJJoue ;
-- `pjj_mode` — Mode de session ;
-- `pjj_step` — Étape PJJ ;
-- `pjj_question_id` — Identifiant de question ;
-- `pjj_question_mode` — Mode de réponse ;
-- `pjj_result` — Résultat de l’action ;
-- `pjj_joker` — Joker utilisé.
+## Défi du hasard
 
-Les paramètres numériques `pjj_score`, `pjj_total` et `pjj_duration_seconds` peuvent être créés comme métriques personnalisées si une analyse détaillée l’exige. Éviter de tout créer immédiatement : les événements sont d’abord vérifiés dans DebugView, puis seules les dimensions utiles au tableau de bord sont enregistrées.
+Lors du tirage :
 
-## Règle de maintenance des questions
+- événement `pjjoue_defi_du_hasard_lance` ;
+- `pjjoue_nombre_questions_defi_du_hasard` = 1 à 6.
 
-- garder un `id` unique et stable pour chaque question existante ;
-- l’ordre, le texte, les réponses, l’étape et le mode peuvent être modifiés dans les fichiers de données ;
-- une nouvelle question reçoit un nouvel identifiant ;
-- ne jamais réutiliser l’identifiant d’une question supprimée pour une notion différente.
+La session qui suit porte :
 
-Avec cette règle, les séries historiques restent comparables et aucune modification Tag Manager ou Analytics n’est nécessaire lors d’une réorganisation de la banque.
+- `pjjoue_mode_de_jeu = Défi du hasard` ;
+- le nombre tiré ;
+- les mêmes résultats finaux qu'une autre session.
+
+Il est donc possible de comparer les performances selon le nombre de questions tirées sans créer un deuxième système de score.
+
+## Questions : identité stable et nom lisible
+
+`pjjoue_identifiant_question` est la clé de continuité. Le code transforme l'identifiant numérique interne en libellé lisible stable : `1` devient `Q001`, `37` devient `Q037`, etc.
+
+`pjjoue_nom_question` contient l'énoncé courant pour le rendre lisible dans Analytics. GA4 standard limite une valeur de paramètre d'événement à 100 caractères ; l'énoncé est donc automatiquement tronqué à cette limite si nécessaire. **L'identification exacte doit toujours se faire avec `pjjoue_identifiant_question`.**
+
+Une reformulation ne doit pas créer un nouvel identifiant. Une question réellement nouvelle sur le fond doit recevoir un nouvel identifiant jamais utilisé auparavant.
+
+Voir le fichier `ANALYTICS_CONSIGNES_MODIFICATIONS_PJJOUE.md` à la racine du projet pour toutes les règles détaillées de modification.
+
+## Définitions personnalisées GA4
+
+Pour les analyses et rapports, créer en priorité des **dimensions personnalisées de portée Événement** pour les paramètres textuels utiles, par exemple :
+
+- Page PJJoue consultée ;
+- Mode de jeu ;
+- Mode d'entraînement ;
+- Numéro de l'étape ;
+- Nom de l'étape ;
+- Identifiant de la question ;
+- Nom de la question ;
+- Position de la question dans la session ;
+- Type de question ;
+- Résultat de la réponse ;
+- Joker utilisé ;
+- Défi chrono ;
+- Chrono ;
+- Temps écoulé ;
+- Résultat de la session.
+
+Les valeurs numériques comme le Score, la Durée de la session ou le Nombre de tentatives peuvent être utilisées comme métriques personnalisées **uniquement lorsque le rapport et l'agrégation sont adaptés**. Dans un rapport standard non filtré, GA4 additionne les métriques événementielles ; cela peut produire des totaux sans sens. Ne pas remettre ces métriques partout par défaut.
+
+## Acquisition des visiteurs
+
+Ne pas créer de paramètres PJJoue en doublon pour la provenance des visiteurs. GA4 gère nativement les informations de campagne (`utm_source`, `utm_medium`, `utm_campaign`, `utm_content`) et les dimensions Source/Support de la session et Première source/support de l'utilisateur.
+
+Utiliser des liens UTM lorsque PJJoue est partagé sur un réseau social, un QR code, un portfolio ou via un partenaire. Ces données d'acquisition pourront ensuite être croisées avec les événements PJJoue.
+
+## Limites GA4 prises en compte par le code
+
+La nomenclature actuelle respecte les limites GA4 standard importantes :
+
+- nom d'événement : maximum 40 caractères ;
+- nom de paramètre : maximum 40 caractères ;
+- valeur d'un paramètre d'événement : maximum 100 caractères ;
+- maximum 25 paramètres par événement.
+
+Le code PJJoue limite les valeurs textuelles à 100 caractères et aucun événement PJJoue n'approche la limite de 25 paramètres.
+
+## Contrôle après configuration
+
+Après modification du conteneur GTM :
+
+1. lancer l'aperçu GTM ;
+2. accepter Analytics sur PJJoue ;
+3. vérifier un `pjjoue_page_consultee` ;
+4. démarrer une session et vérifier `pjjoue_session_commencee` ;
+5. afficher puis répondre à une question ;
+6. utiliser au moins un joker ;
+7. terminer une session ;
+8. tester le Défi du hasard ;
+9. tester un Défi chrono avec une question allant jusqu'à « Temps écoulé » ;
+10. vérifier les paramètres dans DebugView / Temps réel avant de publier GTM.
+
+Les anciennes données utilisant les noms `pjj_...` restent dans l'historique GA4, mais les nouvelles données utilisent exclusivement la nouvelle nomenclature `pjjoue_...`.

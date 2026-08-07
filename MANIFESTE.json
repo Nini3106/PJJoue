@@ -1,7 +1,7 @@
 {
   "produit": "PJJoue",
   "version": "V1",
-  "dateConsolidation": "2026-08-06",
+  "dateConsolidation": "2026-08-07",
   "composition": {
     "questionsTotales": 160,
     "questionsParcours": 110,
@@ -16,6 +16,10 @@
     ".nojekyll": {
       "tailleOctets": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ANALYTICS_CONSIGNES_MODIFICATIONS_PJJOUE.md": {
+      "tailleOctets": 32671,
+      "sha256": "2fab22864e7e3e9dce71e18395dbbc3860b502740cf22579e96217592e4049cb"
     },
     "README.md": {
       "tailleOctets": 5929,
@@ -46,8 +50,8 @@
       "sha256": "61766372d1d4b51838b37eed10012c193f3775508bc2355f7ff568bad9fe1ab9"
     },
     "documentation/ARCHITECTURE.md": {
-      "tailleOctets": 17168,
-      "sha256": "db466fa7427eb5f96469e023d64a60dcff2e4eeb989bc9aafd83a635e8519ae2"
+      "tailleOctets": 17371,
+      "sha256": "f175d0ea13da8fe66b469817090d044e0626b49a467ad4f914905f96ed71ec03"
     },
     "documentation/AUDIT_EDITORIAL.md": {
       "tailleOctets": 674,
@@ -66,12 +70,12 @@
       "sha256": "36c6f4dd84f0542e35b8f9979176628f4a38eab82dc11a423e13d4cbc8466a9e"
     },
     "documentation/COMMENCER_ICI.md": {
-      "tailleOctets": 4349,
-      "sha256": "5307c7d23e565742428930e82bb73ceaab039949847c9b24e081ae5cdd514a38"
+      "tailleOctets": 4511,
+      "sha256": "824c54e162f868c00b2b23e0f10fa175e09910e0adbb7359b4163133bff1f5dd"
     },
     "documentation/CONFIGURATION_GTM_ANALYTICS.md": {
-      "tailleOctets": 5870,
-      "sha256": "793fb6a35bff9352d8848cf41f6612de63e95977a8988ac5f95544084beb59eb"
+      "tailleOctets": 11059,
+      "sha256": "a9011d3e593e67e3edb6eb6f28853894e9d5e1ab4a74efa985eafe8d25455d40"
     },
     "documentation/DEPLOIEMENT.md": {
       "tailleOctets": 3694,
@@ -90,8 +94,8 @@
       "sha256": "5c2e47c7dcc877096cdbd5f193a0198cf7fe3bbe7b588ae1c887e950d546488e"
     },
     "documentation/MODIFIER_LES_QUESTIONS_SANS_CASSER_ANALYTICS.md": {
-      "tailleOctets": 5995,
-      "sha256": "013a4484b384897ab221542166d8ab5d6c578329d832dc59f07524cf72df65a8"
+      "tailleOctets": 594,
+      "sha256": "1249163138cd1e05cec73a022bc388eee10cf21fed4ef1a1976a70245f872f56"
     },
     "documentation/POINT_DE_REPRISE.md": {
       "tailleOctets": 1847,
@@ -106,8 +110,8 @@
       "sha256": "bc3b5c61714be1b7de613a4cf749bda9b7a6e0a3905cd440b678a58e9262ba69"
     },
     "documentation/SECURITE_RGPD.md": {
-      "tailleOctets": 2049,
-      "sha256": "f573ffce074cbc334f256cf036ea86c3111de056533136e8e563a4e035a8cc16"
+      "tailleOctets": 2255,
+      "sha256": "8d9f2da3bd0adb5aa05bfd8e5adfbc45915fb53fb29d2e0c10b9bc9c55270e20"
     },
     "documentation/VALIDATION_METIER.md": {
       "tailleOctets": 538,
@@ -222,8 +226,8 @@
       "sha256": "d5c7c15442038f9a809c398a602e1f839e21eb363e53764abe895048ac68815b"
     },
     "ressources/analytics-pjjoue.js": {
-      "tailleOctets": 1731,
-      "sha256": "849fc0675ea6b3c7fc893795685f3d73c1bb246efe2318b65e2d92ceb614accf"
+      "tailleOctets": 1858,
+      "sha256": "105adf651499d611214f59d20eccf90f870e1b6de4303ca26c3a4f19c97395bf"
     },
     "ressources/consentement-analytics.js": {
       "tailleOctets": 9015,
@@ -310,8 +314,8 @@
       "sha256": "87b676f553b37b0097a4e728720b583fccd7ea757f3e8f643baaec1a620fd590"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 222709,
-      "sha256": "ed087b80d9c0b56187f48bf1cc8645c6dd80834068a98bd9a7ee70102e21fe0e"
+      "tailleOctets": 227359,
+      "sha256": "36f86aa4fb96a997e0592d3a4c1db5e53710190d25b4c4bf6e7cb012e265f897"
     },
     "ressources/panorama-accueil-calme.png": {
       "tailleOctets": 1811539,
@@ -366,8 +370,8 @@
       "sha256": "8675f8e912140eaf787d33de53e9aaab8b833f18216bbbfca9948142bd13dbba"
     },
     "ressources/styles/96-icones-et-defi-hasard.css": {
-      "tailleOctets": 6622,
-      "sha256": "ab3697749b192d14049d217660de257693cc890e258fd2af36ec4c222f9cec80"
+      "tailleOctets": 7851,
+      "sha256": "efdaca950afb3b6bbbfd080ae7e9a07ff655a9ab26b9d954f6236a152fb6007d"
     },
     "ressources/styles/README.md": {
       "tailleOctets": 1907,
@@ -490,8 +494,8 @@
       "sha256": "748820871798f30131f6174702c6714a7827c2a9c6da28eec813b1a3ac75582f"
     },
     "tests/verifier_v7.py": {
-      "tailleOctets": 7229,
-      "sha256": "1eb8e1809d71d07d789a6f5d97d51c0b54ebe00277759e485267ac65ef46f7f5"
+      "tailleOctets": 7776,
+      "sha256": "018921395178b52d950ac79493e2bcf2a231e14da08d6e8cd749f5896ed36804"
     }
   }
 }

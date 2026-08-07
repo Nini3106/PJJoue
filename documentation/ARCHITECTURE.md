@@ -59,7 +59,7 @@ CSS imposées par le standard web ne sont pas traduites.
 
 Le premier module conserve le choix du visiteur, applique le mode consentement Google et charge le conteneur uniquement après acceptation. Le second expose `window.PJJ_ANALYTICS.envoyer()` et refuse silencieusement tout événement tant que la mesure d’audience n’est pas autorisée.
 
-Le moteur produit des événements sémantiques (`pjj_screen_view`, `pjj_level_start`, `pjj_question_answer`, etc.) à partir des fonctions centrales. L’identité d’une question repose sur son champ `id`, jamais sur sa position ni sur son texte. L’ordre des questions, leur formulation et leur appartenance à une session peuvent donc évoluer sans modifier Tag Manager ni Analytics, tant que leurs identifiants restent stables.
+Le moteur produit des événements sémantiques français (`pjjoue_page_consultee`, `pjjoue_session_commencee`, `pjjoue_reponse_validee`, etc.) à partir des fonctions centrales. L’identité d’une question repose sur son champ `id`, transformé pour Analytics en identifiant stable de type `Q037`. Son énoncé courant est également envoyé dans `pjjoue_nom_question` pour rendre les analyses lisibles. L’ordre, l’étape, la formulation, les distracteurs, le type d’activité, l’explication et les aides peuvent évoluer sans perdre la continuité tant que l’identifiant n’est pas recyclé pour une question différente.
 
 ### `ressources/administration.js`
 

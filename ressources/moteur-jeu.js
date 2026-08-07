@@ -33,39 +33,142 @@ const selectionnerTous = selecteur => [...document.querySelectorAll(selecteur)];
 function envoyerEvenementPJJ(nom, parametres = {}) {
     return window.PJJ_ANALYTICS?.envoyer?.(nom, parametres) === true;
 }
+const LIBELLES_PAGES_ANALYTICS = Object.freeze({
+    accueil: 'Accueil',
+    parcours: 'Parcours PJJ',
+    carnet: 'Carnet de voyage',
+    entrainement: 'Entraînement libre',
+    erreurs: 'Mes erreurs à retravailler',
+    progression: 'Progression',
+    parametres: 'Paramètres',
+    question: 'Question',
+    bilan: 'Bilan de la session',
+    consentement: 'Consentement Analytics',
+    aucun: 'Aucune page précédente'
+});
+const LIBELLES_JOKERS_ANALYTICS = Object.freeze({
+    '50_50': '50/50',
+    indice: 'Indice',
+    langue_au_chat: 'Langue au chat'
+});
+function obtenirLibellePageAnalytics(identifiant) {
+    return LIBELLES_PAGES_ANALYTICS[identifiant] || String(identifiant || 'Page inconnue');
+}
+function obtenirLibelleTailleTexteAnalytics(echelle) {
+    const valeur = Number(echelle);
+    if (valeur <= 0.91)
+        return 'Compacte';
+    if (valeur >= 1.07)
+        return 'Grande';
+    return 'Normale';
+}
+function obtenirLibelleModeJeuAnalytics() {
+    if (etat?.origineSessionAnalytics === 'defi_du_hasard')
+        return 'Défi du hasard';
+    if (etat?.mode === 'parcours')
+        return 'Parcours PJJ';
+    if (etat?.mode === 'libre')
+        return 'Entraînement libre';
+    if (etat?.mode === 'revision')
+        return 'Révision des erreurs';
+    if (etat?.mode === 'evaluation-finale')
+        return 'Évaluation finale';
+    return null;
+}
+function obtenirInformationsEtapeAnalytics(question = null) {
+    const numero = Number(question?.etape ?? etat?.etape);
+    if (!Number.isFinite(numero) || numero <= 0)
+        return { numero: null, nom: null };
+    if (numero === 12)
+        return { numero, nom: 'Évaluation finale' };
+    const identifiantTheme = question?.theme || etat?.theme || 'commun';
+    const etapeProgramme = obtenirEtapeProgramme(identifiantTheme, numero)
+        || obtenirEtapeProgramme('commun', numero);
+    return {
+        numero,
+        nom: etapeProgramme?.titre || `Étape ${numero}`
+    };
+}
+function obtenirIdentifiantQuestionAnalytics(question) {
+    const identifiant = Number(question?.id);
+    if (!Number.isFinite(identifiant))
+        return null;
+    return `Q${String(Math.trunc(identifiant)).padStart(3, '0')}`;
+}
+function obtenirResultatReponseAnalytics(statut) {
+    const correspondances = {
+        correcte: 'Réussite autonome',
+        correcte_autonome: 'Réussite autonome',
+        aidee: 'Réussite avec aide',
+        correcte_aidee: 'Réussite avec aide',
+        incorrecte: 'Réponse incorrecte',
+        passee: 'Question passée',
+        a_repondre: 'À répondre'
+    };
+    return correspondances[statut] || null;
+}
 function obtenirDureeSessionAnalytics() {
     if (!Number.isFinite(etat?.debutSessionAnalytics))
         return null;
     return Math.max(0, Math.round((Date.now() - etat.debutSessionAnalytics) / 1000));
 }
 function obtenirContexteSessionAnalytics() {
-    return {
-        pjj_mode: etat?.mode || 'navigation',
-        pjj_theme: etat?.theme || 'tous',
-        pjj_step: Number.isFinite(Number(etat?.etape)) ? Number(etat.etape) : null,
-        pjj_chapter: Number.isFinite(Number(etat?.chapitre)) ? Number(etat.chapitre) : null,
-        pjj_total: Array.isArray(etat?.questionsSession) ? etat.questionsSession.length : null,
-        pjj_detail: etat?.mode === 'revision'
-            ? (etat.perimetreRevision || 'toutes')
-            : (etat?.organisationSession || null)
+    const modeDeJeu = obtenirLibelleModeJeuAnalytics();
+    if (!modeDeJeu)
+        return {};
+    const contexte = {
+        pjjoue_mode_de_jeu: modeDeJeu,
+        pjjoue_nombre_questions: Array.isArray(etat?.questionsSession) && etat.questionsSession.length
+            ? etat.questionsSession.length
+            : null,
+        pjjoue_jokers: etat?.jokersSessionActifs === false ? 'Sans' : 'Avec'
     };
+    if (etat.mode === 'parcours' || etat.mode === 'evaluation-finale') {
+        const etape = obtenirInformationsEtapeAnalytics();
+        contexte.pjjoue_numero_etape = etape.numero;
+        contexte.pjjoue_nom_etape = etape.nom;
+    }
+    if (etat.mode === 'parcours') {
+        contexte.pjjoue_defi_chrono = etat.chronometreSessionActif ? 'Chronométré' : 'Libre';
+        contexte.pjjoue_temps_par_question_defi_chrono = etat.chronometreSessionActif
+            ? Number(etat.dureeChronometreSession) || null
+            : null;
+    }
+    if (etat.mode === 'libre' && etat.origineSessionAnalytics !== 'defi_du_hasard') {
+        contexte.pjjoue_mode_entrainement = etat.organisationSession === 'ordonne'
+            ? 'Par ordre d’étapes'
+            : 'Mélangé';
+        contexte.pjjoue_chrono = etat.chronometreSessionActif ? 'Avec' : 'Sans';
+        contexte.pjjoue_temps_par_question = etat.chronometreSessionActif
+            ? Number(etat.dureeChronometreSession) || null
+            : null;
+    }
+    if (etat.origineSessionAnalytics === 'defi_du_hasard') {
+        contexte.pjjoue_nombre_questions_defi_du_hasard = Number(etat.nombreQuestionsTirageDe) || null;
+    }
+    return contexte;
 }
 function obtenirContexteQuestionAnalytics(question) {
+    const etape = obtenirInformationsEtapeAnalytics(question);
+    const modeQuestion = question
+        ? (question.modePresentation || obtenirModeQuestion(question))
+        : null;
     return {
         ...obtenirContexteSessionAnalytics(),
-        pjj_question_id: question?.id ?? null,
-        pjj_question_position: Number.isFinite(Number(etat?.indexQuestion))
+        pjjoue_numero_etape: etape.numero,
+        pjjoue_nom_etape: etape.nom,
+        pjjoue_identifiant_question: obtenirIdentifiantQuestionAnalytics(question),
+        pjjoue_nom_question: question?.enonce || null,
+        pjjoue_position_question_session: Number.isFinite(Number(etat?.indexQuestion))
             ? Number(etat.indexQuestion) + 1
             : null,
-        pjj_question_mode: question
-            ? (question.modePresentation || obtenirModeQuestion(question))
-            : null
+        pjjoue_type_question: modeQuestion ? obtenirLibelleMode(modeQuestion) : null
     };
 }
 function envoyerUtilisationJoker(type) {
-    envoyerEvenementPJJ('joker_use', {
+    envoyerEvenementPJJ('joker_utilise', {
         ...obtenirContexteQuestionAnalytics(etat.questionCourante),
-        pjj_joker: type
+        pjjoue_joker_utilise: LIBELLES_JOKERS_ANALYTICS[type] || type
     });
 }
 function estRouteAccueil() {
@@ -341,7 +444,8 @@ let etat = {
     dureeChronometreSession: 15,
     chronometreParcoursActif: false,
     dureeChronometreParcours: 15,
-    nombreQuestionsTirageDe: 0
+    nombreQuestionsTirageDe: 0,
+    origineSessionAnalytics: null
 };
 let minuteurRappelJokers = null;
 let minuteurFinRappelJokers = null;
@@ -597,11 +701,14 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
         && !optionsAffichage.forcerSortieQuestion
         && !optionsAffichage.depuisHistorique;
     if (doitAbandonnerSession) {
-        envoyerEvenementPJJ('level_abandon', {
+        envoyerEvenementPJJ('session_quittee', {
             ...obtenirContexteSessionAnalytics(),
-            pjj_score: etat.score,
-            pjj_duration_seconds: obtenirDureeSessionAnalytics(),
-            pjj_result: 'sortie_avant_fin'
+            pjjoue_reussites_autonomes: etat.score,
+            pjjoue_questions_passees: etat.questionsPassees?.size || 0,
+            pjjoue_reussites_avec_aide: etat.nombreReponsesAidees || 0,
+            pjjoue_joker_utilise_session: sessionAUtiliseJoker() ? 'Oui' : 'Non',
+            pjjoue_duree_session_secondes: obtenirDureeSessionAnalytics(),
+            pjjoue_resultat_session: 'Session quittée'
         });
         etat.questionsSession = [];
         etat.questionCourante = null;
@@ -616,10 +723,9 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     etat.ecran = identifiant;
     document.body.dataset.ecranActif = identifiant;
     if (courant !== identifiant) {
-        envoyerEvenementPJJ('screen_view', {
-            ...obtenirContexteSessionAnalytics(),
-            pjj_screen: identifiant,
-            pjj_previous_screen: courant || 'aucun'
+        envoyerEvenementPJJ('page_consultee', {
+            pjjoue_page_consultee: obtenirLibellePageAnalytics(identifiant),
+            pjjoue_page_precedente: obtenirLibellePageAnalytics(courant || 'aucun')
         });
     }
     actualiserTitrePage(identifiant);
@@ -1466,6 +1572,7 @@ function lancerEtape(identifiantTheme, etape, chapitre = null) {
     etat.etapeAvecJoker = false;
     etat.chapitre = Number(chapitre) || determinerProchainChapitre(identifiantTheme, etape);
     etat.mode = 'parcours';
+    etat.origineSessionAnalytics = 'parcours_pjj';
     etat.organisationSession = 'melange';
     etat.jokersSessionActifs = true;
     etat.chronometreSessionActif = !!etat.chronometreParcoursActif;
@@ -1496,6 +1603,7 @@ function lancerEvaluationFinale() {
     etat.etape = 12;
     etat.chapitre = 1;
     etat.mode = 'evaluation-finale';
+    etat.origineSessionAnalytics = 'evaluation_finale';
     etat.organisationSession = 'ordonne';
     etat.jokersSessionActifs = false;
     etat.chronometreSessionActif = false;
@@ -1503,6 +1611,7 @@ function lancerEvaluationFinale() {
 }
 function lancerEntrainementLibre() {
     etat.mode = 'libre';
+    etat.origineSessionAnalytics = 'entrainement_libre';
     etat.theme = null;
     const style = etat.organisationSession || 'ordonne';
     const nombre = Math.min(110, Math.max(10, Number(selectionner('#nombreQuestionsEntrainement')?.value) || 10));
@@ -1534,10 +1643,9 @@ function lancerDeParcours() {
     face.classList.add('de-en-lancer');
     window.setTimeout(() => {
         etat.nombreQuestionsTirageDe = nombreTire;
-        envoyerEvenementPJJ('dice_roll', {
-            ...obtenirContexteSessionAnalytics(),
-            pjj_score: nombreTire,
-            pjj_result: 'tirage'
+        envoyerEvenementPJJ('defi_du_hasard_lance', {
+            pjjoue_mode_de_jeu: 'Défi du hasard',
+            pjjoue_nombre_questions_defi_du_hasard: nombreTire
         });
         face.dataset.face = String(nombreTire);
         face.classList.remove('de-en-lancer');
@@ -1554,6 +1662,7 @@ function jouerTirageDeParcours() {
     const reserve = QUESTIONS.filter(question => !question.estEvaluationFinale);
     const session = melanger(reserve).slice(0, nombreQuestions);
     etat.mode = 'libre';
+    etat.origineSessionAnalytics = 'defi_du_hasard';
     etat.theme = null;
     etat.organisationSession = 'melange';
     etat.jokersSessionActifs = true;
@@ -1580,6 +1689,7 @@ function lancerRevision(identifiantTheme = 'toutes') {
         return;
     }
     etat.mode = 'revision';
+    etat.origineSessionAnalytics = 'revision_des_erreurs';
     etat.theme = identifiantTheme === 'toutes' ? null : identifiantTheme;
     etat.perimetreRevision = identifiantTheme;
     etat.jokersSessionActifs = true;
@@ -1600,6 +1710,7 @@ function lancerRevisionEtape(etape) {
         return;
     }
     etat.mode = 'revision';
+    etat.origineSessionAnalytics = 'revision_des_erreurs';
     etat.theme = null;
     etat.perimetreRevision = 'etape:' + etapeCible;
     etat.jokersSessionActifs = true;
@@ -2100,16 +2211,9 @@ function lancerSession(session) {
     etat.sessionAvecJoker = false;
     etat.debutSessionAnalytics = Date.now();
     etat.jokers = { cinquanteCinquante: true, indice: true, langueAuChat: true };
-    const dureeMinuteurAnalytics = etat.chronometreSessionActif
-        ? Number(etat.dureeChronometreSession) || 0
-        : 0;
-    const detailSessionAnalytics = `${etat.organisationSession || 'standard'}`
-        + `;minuteur:${dureeMinuteurAnalytics}`
-        + `;jokers:${etat.jokersSessionActifs !== false ? 1 : 0}`;
-    envoyerEvenementPJJ('level_start', {
+    envoyerEvenementPJJ('session_commencee', {
         ...obtenirContexteSessionAnalytics(),
-        pjj_result: 'commencee',
-        pjj_detail: detailSessionAnalytics
+        pjjoue_resultat_session: 'Session commencée'
     });
     afficherEcran('question', { remplacerHistorique: etat.ecran === 'bilan' });
     afficherQuestion();
@@ -2820,9 +2924,9 @@ function rejouerQuestionCourante() {
     if (!question || !etat.questionValidee)
         return;
     const precedent = etat.reponsesSession.get(question.id);
-    envoyerEvenementPJJ('question_replay', {
+    envoyerEvenementPJJ('question_rejouee', {
         ...obtenirContexteQuestionAnalytics(question),
-        pjj_result: precedent?.statut || 'incorrecte'
+        pjjoue_resultat_reponse: obtenirResultatReponseAnalytics(precedent?.statut || 'incorrecte')
     });
     etat.tentativesQuestions = etat.tentativesQuestions || new Map();
     etat.tentativesQuestions.set(question.id, Math.max(1, etat.tentativesQuestions.get(question.id) || 0));
@@ -3046,9 +3150,11 @@ function appliquerIdentiteVisuelleEtape(question) {
 }
 function afficherQuestion() {
     const { question, reponse, dejaPassee } = preparerQuestionCourante();
-    envoyerEvenementPJJ('question_view', {
+    envoyerEvenementPJJ('question_affichee', {
         ...obtenirContexteQuestionAnalytics(question),
-        pjj_result: reponse?.statut || (dejaPassee ? 'passee' : 'a_repondre')
+        pjjoue_resultat_reponse: obtenirResultatReponseAnalytics(
+            reponse?.statut || (dejaPassee ? 'passee' : 'a_repondre')
+        )
     });
     appliquerIdentiteVisuelleEtape(question);
     const modeEvaluationFinale = etat.mode === 'evaluation-finale';
@@ -3341,14 +3447,13 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
         reussiteAidee,
         reussiteAutonome: estCorrecte && !reussiteAidee
     };
-    envoyerEvenementPJJ('question_answer', {
+    envoyerEvenementPJJ('reponse_validee', {
         ...obtenirContexteQuestionAnalytics(question),
-        pjj_result: resultat.reussiteAutonome
-            ? 'correcte_autonome'
-            : (resultat.reussiteAidee ? 'correcte_aidee' : 'incorrecte'),
-        pjj_score: resultat.estCorrecte ? 1 : 0,
-        pjj_attempts: Math.max(1, Number(resultat.tentatives) + 1),
-        pjj_detail: resultat.aideUtilisee ? 'avec_aide' : 'sans_aide'
+        pjjoue_resultat_reponse: resultat.reussiteAutonome
+            ? 'Réussite autonome'
+            : (resultat.reussiteAidee ? 'Réussite avec aide' : 'Réponse incorrecte'),
+        pjjoue_nombre_tentatives: Math.max(1, Number(resultat.tentatives) + 1),
+        pjjoue_temps_ecoule: etat.delaiDepasse ? 'Oui' : 'Non'
     });
     enregistrerResultatReponse(question, texteChoisi, precisions, resultat);
     if (resultat.reussiteAutonome)
@@ -3400,9 +3505,9 @@ function passerQuestion() {
         return;
     annulerRappelJokers();
     const question = etat.questionCourante, precedente = etat.reponsesSession.get(question.id);
-    envoyerEvenementPJJ('question_skip', {
+    envoyerEvenementPJJ('question_passee', {
         ...obtenirContexteQuestionAnalytics(question),
-        pjj_result: 'passee'
+        pjjoue_resultat_reponse: 'Question passée'
     });
     clearInterval(etat.identifiantMinuteur);
     sauvegarde.aDejaJoue = true;
@@ -4097,15 +4202,17 @@ function terminerSession() {
             jokerUtilise,
             celebration: progression.celebration
         });
-    envoyerEvenementPJJ('level_end', {
+    envoyerEvenementPJJ('session_terminee', {
         ...obtenirContexteSessionAnalytics(),
-        pjj_score: etat.score,
-        pjj_total: total,
-        pjj_duration_seconds: obtenirDureeSessionAnalytics(),
-        pjj_result: etat.mode === 'evaluation-finale'
-            ? (progression.evaluationFinaleReussie ? 'reussie' : 'terminee')
-            : 'terminee',
-        pjj_detail: `pourcentage:${pourcentage};passees:${nombreQuestionsPassees};aidees:${nombreReponsesAidees};joker:${jokerUtilise ? 1 : 0}`
+        pjjoue_score: pourcentage,
+        pjjoue_reussites_autonomes: etat.score,
+        pjjoue_questions_passees: nombreQuestionsPassees,
+        pjjoue_reussites_avec_aide: nombreReponsesAidees,
+        pjjoue_joker_utilise_session: jokerUtilise ? 'Oui' : 'Non',
+        pjjoue_duree_session_secondes: obtenirDureeSessionAnalytics(),
+        pjjoue_resultat_session: etat.mode === 'evaluation-finale'
+            ? (progression.evaluationFinaleReussie ? 'Évaluation réussie' : 'Évaluation terminée')
+            : 'Session terminée'
     });
     enregistrerSauvegarde();
     selectionner('#scoreBilan').textContent = pourcentage + '%';
@@ -4375,10 +4482,10 @@ function enregistrerParametres() {
     };
     enregistrerSauvegarde();
     chargerParametres();
-    envoyerEvenementPJJ('settings_save', {
-        pjj_screen: 'parametres',
-        pjj_result: 'enregistres',
-        pjj_detail: `son:${sauvegarde.parametres.son ? 1 : 0};echelle:${sauvegarde.parametres.echelleTexte}`
+    envoyerEvenementPJJ('parametres_enregistres', {
+        pjjoue_page_consultee: 'Paramètres',
+        pjjoue_son: sauvegarde.parametres.son ? 'Activé' : 'Désactivé',
+        pjjoue_taille_texte: obtenirLibelleTailleTexteAnalytics(sauvegarde.parametres.echelleTexte)
     });
     if (!sonEtaitActif && sauvegarde.parametres.son) {
         initialiserAudio();
@@ -4392,9 +4499,8 @@ function exporterProgression() {
     lienTelechargement.download = 'PJJoue_progression.json';
     lienTelechargement.click();
     URL.revokeObjectURL(lienTelechargement.href);
-    envoyerEvenementPJJ('progress_export', {
-        pjj_screen: 'progression',
-        pjj_result: 'exporte'
+    envoyerEvenementPJJ('progression_exportee', {
+        pjjoue_page_consultee: 'Progression'
     });
 }
 function importerProgression(fichier) {
@@ -4418,9 +4524,8 @@ function importerProgression(fichier) {
             effacerSauvegardeV1DuNavigateur();
             enregistrerSauvegarde();
             actualiserAccueil();
-            envoyerEvenementPJJ('progress_import', {
-                pjj_screen: 'progression',
-                pjj_result: 'importe'
+            envoyerEvenementPJJ('progression_importee', {
+                pjjoue_page_consultee: 'Progression'
             });
             afficherNotification('Progression importée et vérifiée');
         }
@@ -4597,9 +4702,8 @@ selectionner('#boutonReinitialiserProgression').onclick = () => ouvrirFenetreMes
     afficherAnnuler: true,
     variante: 'danger',
     apresConfirmation: () => {
-        envoyerEvenementPJJ('progress_reset', {
-            pjj_screen: 'progression',
-            pjj_result: 'confirme'
+        envoyerEvenementPJJ('progression_reinitialisee', {
+            pjjoue_page_consultee: 'Progression'
         });
         sauvegarde = creerSauvegardeInitiale();
         effacerSauvegardeV1DuNavigateur();
@@ -4698,11 +4802,9 @@ window.addEventListener('load', garantirAccueilEnHaut);
 window.addEventListener('pjjoue:consentement-change', evenement => {
     if (evenement.detail?.analytics !== true)
         return;
-    envoyerEvenementPJJ('screen_view', {
-        ...obtenirContexteSessionAnalytics(),
-        pjj_screen: etat.ecran,
-        pjj_previous_screen: 'consentement',
-        pjj_result: 'mesure_activee'
+    envoyerEvenementPJJ('page_consultee', {
+        pjjoue_page_consultee: obtenirLibellePageAnalytics(etat.ecran),
+        pjjoue_page_precedente: obtenirLibellePageAnalytics('consentement')
     });
 });
 window.addEventListener('hashchange', garantirAccueilEnHaut);
