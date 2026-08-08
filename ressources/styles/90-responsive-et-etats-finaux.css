@@ -1158,3 +1158,23 @@ header.entete .marque > span {
         height: 50px;
     }
 }
+
+@media (max-width:700px) {
+    #question .question-contexte-etape {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+        margin: 0 4px 10px;
+    }
+    #question .question-etape-identite {
+        width: 100%;
+    }
+    #question .question-etape-identite > strong {
+        white-space: normal;
+        line-height: 1.25;
+    }
+    #question .question-autonomie {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

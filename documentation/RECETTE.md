@@ -73,9 +73,13 @@ dossier appartient à un dépôt GitHub.
 11. Vérifier le titre `Évaluation terminée`, le bouton `Refaire l’évaluation` et le retour au parcours.
 12. Tester la révision des erreurs, la progression, le réglage du son dans Paramètres, l’export et l’import.
 13. Tester au clavier les fenêtres, les boutons d’ordre et le retour global.
-14. Contrôler le rendu à 390 px, 1024 px et 1440 px de largeur.
-15. Sur chaque forme de question, vérifier que la touche Entrée déclenche le bouton `Valider` lorsqu’il est disponible, sans empêcher l’utilisation normale des autres boutons et champs.
-16. Sur l’accueil, vérifier que `Commencer` se trouve sous la barre jaune, que le bloc titre-bouton est équilibré verticalement dans l’image et qu’aucun bouton d’entraînement libre n’est présent.
+14. Contrôler le rendu à 390 px, 1024 px et 1440 px de largeur. Pendant une question active, passer plusieurs fois d’une largeur mobile à une largeur ordinateur et vérifier que l’énoncé, les réponses et les commandes restent présents.
+15. Recharger la page pendant une question active et vérifier que la même question, sa position et le brouillon éventuel sont restaurés sans créer un nouvel affichage Analytics artificiel.
+16. Vérifier au-dessus de la carte le numéro et le titre de l’étape ainsi que le compteur `Validées sans joker X/10` dans le parcours.
+17. Réussir une question sans joker, revenir plus tard sur cette question avec une aide et vérifier que la réussite autonome déjà acquise reste comptée. Utiliser ensuite `Réinitialiser` et vérifier que seules les validations sans joker de l’étape sont retirées.
+18. Vérifier qu’une question ne peut être rejouée qu’une seule fois : le bouton disparaît après cette reprise et une seconde reprise est refusée.
+19. Sur chaque forme de question, vérifier que la touche Entrée déclenche le bouton `Valider` lorsqu’il est disponible, sans empêcher l’utilisation normale des autres boutons et champs.
+20. Sur l’accueil, vérifier que `Commencer` se trouve sous la barre jaune, que le bloc titre-bouton est équilibré verticalement dans l’image et qu’aucun bouton d’entraînement libre n’est présent.
 
 ## Critère d’acceptation
 

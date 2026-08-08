@@ -120,6 +120,28 @@ def verifier_jeu(navigateur, page_html: str) -> int:
             verifier(question.bonneReponse, question, 'bonne réponse');
             for (const variante of (question.reponsesAcceptees || [])) verifier(variante, question, 'variante');
             verifier(String(question.bonneReponse).normalize('NFD').replace(/[\u0300-\u036f]/g, ''), question, 'sans accents');
+            if (question.typeReponseAttendue !== 'sigle') {
+                const motsLongs = [...String(question.bonneReponse).matchAll(/[A-Za-zÀ-ÿ]{6,}/g)]
+                    .sort((a, b) => b[0].length - a[0].length);
+                if (motsLongs.length) {
+                    const mot = motsLongs[0][0];
+                    const index = motsLongs[0].index;
+                    const coupe = Math.max(1, Math.min(mot.length - 2, Math.floor(mot.length / 2)));
+                    const motAvecFaute = mot.slice(0, coupe) + mot.slice(coupe + 1);
+                    verifier(
+                        String(question.bonneReponse).slice(0, index) + motAvecFaute + String(question.bonneReponse).slice(index + mot.length),
+                        question,
+                        'faute légère automatique'
+                    );
+                    if (!/s$/i.test(mot)) {
+                        verifier(
+                            String(question.bonneReponse).slice(0, index) + mot + 's' + String(question.bonneReponse).slice(index + mot.length),
+                            question,
+                            'variation de pluriel automatique'
+                        );
+                    }
+                }
+            }
             if (question.typeReponseAttendue === 'developpement-sigle') verifier(question.sigleAttendu, question, 'sigle seul', false);
             if (question.typeReponseAttendue === 'sigle') {
                 verifier(String(question.sigleAttendu).split('').join(' '), question, 'sigle espacé');
@@ -137,6 +159,72 @@ def verifier_jeu(navigateur, page_html: str) -> int:
         return {nombreQuestions: questions.length, controles, echecs};
     }""")
     assert not resultat_ecrit["echecs"], resultat_ecrit["echecs"][:20]
+
+    # Recette des ajouts finaux : ordre pédagogique indépendant des IDs Analytics,
+    # identité d’étape, restauration responsive, reprise unique et compteur sans joker.
+    page.evaluate("() => lancerEtape('commun', 2)")
+    page.wait_for_timeout(120)
+    ordre_etape_2 = page.evaluate("() => etat.questionsSession.map(question => question.id)")
+    assert ordre_etape_2 == [11, 12, 13, 14, 15, 17, 16, 18, 19, 20], ordre_etape_2
+    contexte = page.evaluate(r"""() => ({
+        numero: document.querySelector('#numeroEtapeQuestion')?.textContent.trim(),
+        titre: document.querySelector('#titreEtapeQuestion')?.textContent.trim(),
+        suivi: document.querySelector('#suiviSansJokerQuestion')?.textContent.replace(/\s+/g, ' ').trim(),
+        id: etat.questionCourante?.id
+    })""")
+    assert contexte["numero"] == "Étape 2", contexte
+    assert contexte["titre"], contexte
+    assert "Validées sans joker" in contexte["suivi"], contexte
+
+    identifiant_avant_resize = contexte["id"]
+    page.evaluate("""() => {
+        document.querySelector('#enonceQuestion').textContent = '';
+        document.querySelector('#zoneReponses').replaceChildren();
+    }""")
+    page.set_viewport_size({"width": 390, "height": 844})
+    page.wait_for_timeout(180)
+    rendu_repare = page.evaluate("""() => ({
+        id: etat.questionCourante?.id,
+        enonce: document.querySelector('#enonceQuestion')?.textContent.trim(),
+        reponses: document.querySelector('#zoneReponses')?.children.length || 0
+    })""")
+    assert rendu_repare["id"] == identifiant_avant_resize and rendu_repare["enonce"] and rendu_repare["reponses"] > 0, rendu_repare
+    page.set_viewport_size({"width": 1440, "height": 1000})
+    page.wait_for_timeout(120)
+
+    # Le stockage local est volontairement indisponible dans la page inline de cette
+    # recette (origine opaque). La restauration après rechargement est donc couverte
+    # par les contrôles statiques de verifier_v7.py ; ici on couvre le même rendu
+    # responsive à chaud, qui était l’autre déclencheur du bug signalé.
+
+    reprise = page.evaluate("""() => {
+        const id = etat.questionCourante.id;
+        etat.questionValidee = true;
+        etat.reponsesSession.set(id, {statut:'incorrecte'});
+        etat.tentativesQuestions = new Map();
+        rejouerQuestionCourante();
+        const apresPremiere = etat.tentativesQuestions.get(id) || 0;
+        etat.questionValidee = true;
+        rejouerQuestionCourante();
+        const apresSeconde = etat.tentativesQuestions.get(id) || 0;
+        return {apresPremiere, apresSeconde};
+    }""")
+    assert reprise == {"apresPremiere": 1, "apresSeconde": 1}, reprise
+
+    compteur_sans_joker = page.evaluate("""() => {
+        const bilan = obtenirBilanEtape('commun', 2);
+        const ids = obtenirQuestionsEtape('commun', 2).slice(0, 2).map(question => question.id);
+        bilan.questionsTraitees = bilan.questionsTraitees || {};
+        bilan.resultats = bilan.resultats || {};
+        ids.forEach(id => { bilan.questionsTraitees[id] = true; bilan.resultats[id] = true; });
+        actualiserSuiviEtapeQuestion(etat.questionCourante);
+        const avant = compterReussitesAutonomesEtape('commun', 2);
+        reinitialiserValidationSansJokerEtape('commun', 2);
+        const apres = compterReussitesAutonomesEtape('commun', 2);
+        const progressionConservee = ids.every(id => bilan.questionsTraitees[id] === true);
+        return {avant, apres, progressionConservee};
+    }""")
+    assert compteur_sans_joker == {"avant": 2, "apres": 0, "progressionConservee": True}, compteur_sans_joker
 
     page_mobile = navigateur.new_page(viewport={"width": 390, "height": 844})
     erreurs_mobile: list[str] = []

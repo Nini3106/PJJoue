@@ -73,7 +73,16 @@ L’objet `sauvegarde` contient les informations persistantes : progression, err
 
 Toute donnée importée passe par `nettoyerSauvegarde` avant d’être utilisée.
 
+Une session de question active dispose en plus d’un instantané technique séparé (`pjjoue_session_en_cours_v1`). Il sert uniquement à reconstruire la même question, son brouillon et son état d’interface après un rechargement ou une reconstruction responsive. Il ne remplace pas la progression principale et sa restauration ne doit jamais déclencher artificiellement un nouvel événement Analytics `question_affichee`.
+
+La sauvegarde persistante est écrite avec le marqueur `V2-12-etapes`, identique à celui attendu par le chargeur. Les réussites autonomes sont conservées question par question dans le bilan de l’étape. Une réussite déjà obtenue sans joker reste acquise lors d’une nouvelle tentative aidée ; seule l’action explicite **Réinitialiser** de l’étape retire ces validations autonomes sans effacer la progression générale.
+
+
 ## Navigation
+
+
+
+L’ordre visible des questions d’une étape est distinct de leur identité permanente. `obtenirOrdrePedagogiqueQuestion` lit le champ optionnel `ordreEtape` et permet de déplacer une question sans renuméroter son `id` Analytics.
 
 `afficherEcran` est l’unique point d’entrée pour changer d’écran. Ses options sont explicites :
 
@@ -85,9 +94,9 @@ Toute donnée importée passe par `nettoyerSauvegarde` avant d’être utilisée
 
 Chaque question indique son mode et, lorsque nécessaire, une structure `activite`. Le moteur ne fabrique pas une activité en mélangeant plusieurs questions. Les actions visibles sont reliées à des valeurs `data-action` françaises, par exemple `valider-activite`, `deplacer-ordre` ou `selectionner-association`.
 
-## Étape 11
+## Étape 12 — évaluation finale
 
-L’évaluation finale utilise exactement Q111 à Q160. Elle est accessible lorsque les onze étapes du parcours ont été terminées sans joker. Elle ne propose ni joker ni bouton pour passer une question. Son bilan affiche `Évaluation terminée` et permet de refaire l’évaluation ou de revenir au parcours.
+L’évaluation finale contient 50 questions marquées `estEvaluationFinale: true`. Les IDs retirés ne sont jamais recyclés et de nouvelles questions peuvent donc porter un ID supérieur à Q160. Elle est accessible lorsque les onze étapes du parcours ont été terminées sans joker. Elle ne propose ni joker ni bouton pour passer une question. Son bilan affiche `Évaluation terminée` et permet de refaire l’évaluation ou de revenir au parcours.
 
 ## Carnet de parcours
 

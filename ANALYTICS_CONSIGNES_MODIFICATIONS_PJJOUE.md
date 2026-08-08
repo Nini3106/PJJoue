@@ -279,7 +279,9 @@ Ne pas renuméroter les anciennes questions uniquement pour rendre la liste « p
 
 ### Contrainte actuelle du projet
 
-La V35 possède actuellement 160 questions et plusieurs contrôles structurels attendent encore une banque de 160 questions, avec des identifiants continus et une évaluation finale basée sur Q111 à Q160.
+À partir de la V37, PJJoue conserve 160 questions actives, mais les identifiants ne sont volontairement plus continus : un identifiant retiré n’est jamais recyclé. L’évaluation finale est repérée par `estEvaluationFinale: true` et non plus par une plage numérique fixe.
+
+IDs actuellement retirés et réservés définitivement : Q043, Q101 à Q110, Q145, Q154, Q155 et Q157 à Q160. Les nouvelles questions créées dans cette refonte utilisent Q161 à Q178.
 
 Donc ajouter une nouvelle question peut nécessiter, en plus de `donnees/questions.json` :
 
@@ -393,13 +395,13 @@ Ces éléments ne définissent pas l'identité Analytics de l'étape.
 
 ## 20. Déplacer / réordonner des étapes
 
-La V35 utilise actuellement les identifiants numériques 1 à 11 comme structure du Parcours PJJ.
+Depuis la V37, l’identité Analytics d’une étape est séparée de sa position visible.
 
-Pour préserver l'historique Analytics, **ne jamais renuméroter une étape existante uniquement parce qu'elle change de place conceptuelle**.
+- `id` dans `programme.json` = position visible dans le parcours ;
+- `idAnalyticsPermanent` = identité permanente de l’étape pour Analytics ;
+- `etapeAnalyticsPermanent` dans chaque question = identité permanente utilisée lors de l’envoi Analytics.
 
-Attention : le moteur actuel utilise également ces numéros pour l'ordre du parcours. Un véritable réordonnancement des étapes peut donc nécessiter une évolution du modèle de données afin de séparer « identifiant permanent » et « ordre d'affichage ».
-
-Si un jour cette évolution est souhaitée, il faudra la faire explicitement dans le code avant de renuméroter quoi que ce soit.
+Pour préserver l’historique, **ne jamais recycler une identité Analytics permanente**. Lorsqu’une étape existante change seulement de position, conserver son `idAnalyticsPermanent`. Lorsqu’un thème entièrement nouveau est créé, lui attribuer une nouvelle identité permanente.
 
 ---
 
@@ -534,13 +536,13 @@ Cela permet de comparer la même question lorsqu'elle est rencontrée dans le Pa
 
 ## 28. Modifier l'Évaluation finale
 
-L'Évaluation finale utilise actuellement Q111 à Q160 et attend 50 questions écrites.
+L’Évaluation finale attend 50 questions écrites et sélectionne les questions portant `estEvaluationFinale: true`. Elle ne dépend plus d’une plage Q111–Q160, ce qui permet de retirer une ancienne question sans recycler son ID et d’ajouter son remplacement avec un nouvel identifiant permanent.
 
 Modifier l'énoncé, la correction, la bonne réponse ou l'indice d'une question d'évaluation suit les mêmes règles d'identifiant que toutes les autres questions.
 
 En revanche, ajouter, supprimer ou remplacer des questions dans l'Évaluation demande de vérifier :
 
-- les bornes Q111-Q160 dans le moteur ;
+- le marqueur `estEvaluationFinale: true` et le contrôle des 50 questions dans le moteur ;
 - le contrôle des 50 questions ;
 - les tests ;
 - les textes publics ;
@@ -975,3 +977,16 @@ Une question peut changer de texte, de réponse correcte, de distracteurs, de ty
 **Nouvel objet pédagogique = nouvel identifiant jamais recyclé.**
 
 Les libellés visibles peuvent évoluer ; Analytics conservera l'historique ancien et les nouvelles valeurs. Les identifiants permettent de réunir les deux périodes sans casser la continuité.
+
+
+---
+
+## 38. Déplacer une question sans casser son identité Analytics
+
+Lorsque la progression pédagogique impose d’échanger deux questions mais que chacune conserve le même savoir évalué, **ne pas échanger ni renuméroter leurs `id` permanents**.
+
+Utiliser le champ optionnel `ordreEtape` pour définir leur ordre d’affichage dans l’étape. Le champ `id` continue d’alimenter `pjjoue_identifiant_question` (`Qxxx`) et reste donc stable dans GA4.
+
+Exemple : si Q017 doit être affichée avant Q016 pour introduire une notion, Q017 peut recevoir `ordreEtape: 6` et Q016 `ordreEtape: 7`. Analytics continue de suivre Q017 comme Q017 et Q016 comme Q016.
+
+Une restauration technique de la même question après rechargement ou changement de largeur ne constitue pas un nouvel affichage métier : elle doit réafficher l’interface **sans renvoyer** artificiellement `pjjoue_question_affichee`.

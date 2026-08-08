@@ -59,7 +59,7 @@
     "titre": "Ministère de la Justice — Secteur associatif habilité",
     "url": "https://www.justice.gouv.fr/actualites/actualite/rencontre-federations-du-secteur-associatif-habilite",
     "repere": "Rôle complémentaire du secteur associatif habilité",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -75,7 +75,7 @@
     "titre": "Légifrance — Unités judiciaires à priorité éducative",
     "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053911130",
     "repere": "Arrêté du 14 avril 2026 fixant le cahier des charges des UJPE",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -107,7 +107,7 @@
     "titre": "Ministère de la Justice — Établissement de placement éducatif (EPE)",
     "url": "https://www.justice.gouv.fr/annuaire/fiche/etablissement-de-placement-educatif-de-toulouse",
     "repere": "Appellation officielle d’un EPE",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -123,7 +123,7 @@
     "titre": "Ministère de la Justice — Centre éducatif renforcé (CER)",
     "url": "https://www.justice.gouv.fr/annuaire/fiche/unite-centre-educatif-renforce-nomade-7-65043",
     "repere": "Appellation officielle d’un CER",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -131,7 +131,7 @@
     "titre": "Ministère de la Justice — Centre éducatif fermé (CEF)",
     "url": "https://www.justice.gouv.fr/annuaire/fiche/centre-educatif-ferme-de-la-ferte",
     "repere": "Appellation officielle d’un CEF",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -146,8 +146,8 @@
   "LEGIFRANCE_CJPM_ORGANISATION": {
     "titre": "Légifrance — Services déconcentrés de la PJJ",
     "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000043581448/",
-    "repere": "Articles R. 241-3 à R. 241-9 : DIR, DT et chaîne hiérarchique",
-    "dateVerification": "2026-08-05",
+    "repere": "Articles R. 241-3 à R. 241-9 : DIR, DT, pilotage territorial et suivi du secteur public et du SAH",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -155,7 +155,7 @@
     "titre": "Légifrance — Services, établissements et secteur associatif habilité de la PJJ",
     "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000043581440/",
     "repere": "Missions, publics, services et établissements de la PJJ, au civil et au pénal",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -171,7 +171,7 @@
     "titre": "La Justice recrute — Directeur ou directrice des services de la PJJ",
     "url": "https://lajusticerecrute.fr/metiers/directeur-directrice-services-pjj",
     "repere": "Direction pédagogique et administrative et encadrement des RUE",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -208,18 +208,18 @@
     "statutSource": "Source officielle vérifiée"
   },
   "LEGIFRANCE_RUE": {
-    "titre": "Légifrance — Statut des cadres éducatifs de la PJJ",
-    "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000041451696",
-    "repere": "Encadrement d’une unité éducative en qualité de responsable d’unité éducative",
-    "dateVerification": "2026-08-05",
-    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "titre": "Légifrance — Fonctionnement des établissements et services PJJ",
+    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000043581464/",
+    "repere": "Article D. 241-30 : directeur de service, direction pédagogique et administrative de l’unité par le RUE et autorités respectives",
+    "dateVerification": "2026-08-07",
+    "traitementEditorial": "Paraphrase fidèle des responsabilités du directeur et du RUE",
     "statutSource": "Source officielle vérifiée"
   },
   "LEGIFRANCE_SECRET_PRO": {
     "titre": "Légifrance — Secret professionnel",
     "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006417945",
     "repere": "Article 226-13 du code pénal",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -227,7 +227,7 @@
     "titre": "Légifrance — Exceptions au secret professionnel",
     "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000049532171",
     "repere": "Article 226-14 du code pénal",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -259,7 +259,7 @@
     "titre": "ENPJJ — Présentation des missions et des professionnels de la PJJ",
     "url": "https://www.enpjj.justice.fr/DPJJ",
     "repere": "Professionnels de la DPJJ et équipe pluridisciplinaire, dont les infirmiers et infirmières",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -267,7 +267,7 @@
     "titre": "Légifrance — Mesure judiciaire d’investigation éducative",
     "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039088099/",
     "repere": "Objet et contenu de la mesure judiciaire d’investigation éducative",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -275,7 +275,7 @@
     "titre": "Légifrance — Mesure éducative judiciaire et ses modules",
     "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000051786157",
     "repere": "Mesure éducative judiciaire et modules insertion, réparation, santé et placement",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -291,7 +291,7 @@
     "titre": "Ministère de la Justice — Favoriser la formation et l’emploi des jeunes confiés",
     "url": "https://www.justice.gouv.fr/actualites/actualite/favoriser-formation-lemploi-jeunes-confies",
     "repere": "Partenariats avec les missions locales et acteurs de l’insertion",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -299,7 +299,7 @@
     "titre": "ENPJJ — Action en réseau de la PJJ",
     "url": "https://www.enpjj.justice.fr/DPJJ",
     "repere": "Partenariats avec l’Éducation nationale, les missions locales, les organismes de santé et les collectivités",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -315,7 +315,7 @@
     "titre": "Légifrance — Article L. 322-3 du code de la justice pénale des mineurs",
     "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000051786048",
     "repere": "Le RRSE est une évaluation synthétique de la personnalité et de la situation du mineur",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -323,7 +323,7 @@
     "titre": "Légifrance — Article L. 323-1 du code de la justice pénale des mineurs",
     "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000051786086",
     "repere": "La mesure éducative judiciaire peut être prononcée à titre provisoire avant le prononcé de la sanction",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -331,7 +331,7 @@
     "titre": "Légifrance — Services et établissements de la protection judiciaire de la jeunesse",
     "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000043581440/",
     "repere": "Missions civiles et pénales et prises en charge pouvant se poursuivre jusqu’à vingt et un ans",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   },
@@ -347,7 +347,7 @@
     "titre": "Légifrance — Partage d’informations et continuité éducative à la PJJ",
     "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000043581466/",
     "repere": "Articles R. 241-1, R. 241-2, D. 241-10 et D. 241-11 : partage autorisé, informations utiles, analyse, propositions et continuité éducative",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Paraphrase fidèle",
     "statutSource": "Source officielle vérifiée"
   },
@@ -355,7 +355,7 @@
     "titre": "Légifrance — Décret n° 2026-180 du 12 mars 2026",
     "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053669122",
     "repere": "Création des UJPE et maintien transitoire des UEHC jusqu’à l’entrée en vigueur différée de l’article 6 le 1er mars 2027",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
     "traitementEditorial": "Lecture chronologique du décret et de son article 8",
     "statutSource": "Source officielle vérifiée"
   },
@@ -379,7 +379,15 @@
     "titre": "La Justice recrute — Famille d’accueil de la PJJ",
     "url": "https://lajusticerecrute.fr/metiers/famille-daccueil",
     "repere": "Placement en famille d’accueil, rôle quotidien et alternative à l’hébergement collectif",
-    "dateVerification": "2026-08-05",
+    "dateVerification": "2026-08-07",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée"
+  },
+  "JUSTICE_PLAQUETTE_PJJ_2025": {
+    "titre": "Ministère de la Justice — Plaquette de présentation de la PJJ",
+    "url": "https://www.justice.gouv.fr/sites/default/files/2025-03/plaquette_PJJ.pdf",
+    "repere": "UEAJ, UEMO, mission éducative auprès du tribunal, placement et activités éducatives",
+    "dateVerification": "2026-08-08",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
     "statutSource": "Source officielle vérifiée"
   }

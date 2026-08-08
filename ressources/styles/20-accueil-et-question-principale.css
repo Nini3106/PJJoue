@@ -629,3 +629,68 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Repère discret de l’étape active et suivi des validations sans joker. */
+#question .question-contexte-etape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: -2px 0 12px;
+    color: #dcecff;
+    font-size: .82rem;
+}
+#question .question-etape-identite,
+#question .question-autonomie {
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+#question .question-etape-identite > span {
+    flex: 0 0 auto;
+    padding: 3px 8px;
+    border: 1px solid color-mix(in srgb, var(--couleur-etape-active) 66%, transparent);
+    border-radius: 999px;
+    color: #fff;
+    background: color-mix(in srgb, var(--couleur-etape-active) 16%, rgba(6,45,91,.72));
+    font-weight: 850;
+}
+#question .question-etape-identite > strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #eef7ff;
+    font-weight: 750;
+}
+#question .question-autonomie {
+    flex: 0 0 auto;
+    color: #c8def3;
+}
+#question .question-autonomie > span {
+    white-space: nowrap;
+}
+#question .question-autonomie strong {
+    color: #fff0b8;
+}
+#question .question-autonomie-reset {
+    min-height: 28px;
+    padding: 3px 8px;
+    border: 1px solid rgba(145,198,245,.28);
+    border-radius: 999px;
+    color: #dcecff;
+    background: rgba(8,50,101,.52);
+    font: inherit;
+    font-size: .76rem;
+    font-weight: 750;
+}
+#question .question-autonomie-reset:hover:not(:disabled),
+#question .question-autonomie-reset:focus-visible {
+    border-color: rgba(255,224,149,.72);
+    color: #fff;
+    background: rgba(15,73,135,.74);
+}
+#question .question-autonomie-reset:disabled {
+    opacity: .42;
+    cursor: default;
+}

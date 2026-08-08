@@ -7,7 +7,7 @@ Pour reprendre le projet rapidement, commencer par
 
 ## Contenu officiel
 
-- 160 questions : Q1 à Q110 pour le parcours guidé, Q111 à Q160 pour l’évaluation finale ;
+- 160 questions actives : 110 dans le parcours guidé et 50 dans l’évaluation finale ; les IDs techniques ne sont plus continus, afin de ne jamais recycler les identifiants Analytics retirés ;
 - 11 étapes pédagogiques de 10 questions ;
 - une étape 12 d’évaluation finale comportant 50 questions ;
 - 7 formes d’activité : Choix unique, Sélection multiple, Relier / Association, Éliminer, Réponse écrite, Remettre dans l’ordre et Classer ;

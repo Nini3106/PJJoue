@@ -25,16 +25,21 @@ def principal() -> int:
     erreurs = valider_donnees(programme, sources, questions)
     exiger(not erreurs, "Données invalides :\n- " + "\n- ".join(erreurs))
     exiger(len(questions) == 160, "La banque doit contenir 160 questions.")
-    exiger([q["id"] for q in questions] == list(range(1, 161)), "Les identifiants Q1 à Q160 doivent être continus.")
+    ids_attendus = list(range(1, 43)) + list(range(44, 101)) + list(range(111, 145)) + list(range(146, 154)) + [156] + list(range(161, 179))
+    exiger([q["id"] for q in questions] == ids_attendus, "Les identifiants actifs doivent respecter les IDs permanents et les retraits documentés.")
     parcours = [q for q in questions if not q.get("estEvaluationFinale")]
     evaluation = [q for q in questions if q.get("estEvaluationFinale")]
     exiger(len(parcours) == 110, "Le parcours doit contenir 110 questions.")
     exiger(len(evaluation) == 50, "L’évaluation doit contenir 50 questions.")
-    exiger([q["id"] for q in evaluation] == list(range(111, 161)), "L’évaluation doit utiliser Q111 à Q160.")
+    ids_evaluation_attendus = list(range(111, 145)) + list(range(146, 154)) + [156] + list(range(172, 179))
+    exiger([q["id"] for q in evaluation] == ids_evaluation_attendus, "L’évaluation doit conserver les IDs continus sur les compétences inchangées et utiliser de nouveaux IDs pour les remplacements.")
     exiger(all(q["etape"] == 12 for q in evaluation), "Toute l’évaluation doit appartenir à l’étape 12.")
     exiger(all(q["modePrefere"] == "reponse-ecrite" for q in evaluation), "Toute l’évaluation doit être écrite.")
     exiger(all(q.get("sansJokers") is True for q in evaluation), "Les jokers doivent être désactivés en évaluation.")
     exiger(all(not str(q.get("indice", "")).strip() for q in evaluation), "L’évaluation ne doit pas afficher d’indice.")
+    exiger(sorted(q.get("ordreEtape") for q in evaluation) == list(range(1, 51)), "L’évaluation doit avoir un ordre pédagogique 1 à 50 indépendant des IDs Analytics.")
+    q170 = next(q for q in questions if q["id"] == 170)
+    exiger(q170.get("modePrefere") == "reponse-ecrite" and len(q170.get("reponsesAcceptees", [])) >= 20, "Les variantes de la réponse « support éducatif » sont incomplètes.")
     for etape in range(1, 12):
         exiger(sum(q["etape"] == etape for q in parcours) == 10, f"L’étape {etape} doit contenir 10 questions.")
     etapes = programme["commun"]["etapes"]
@@ -51,7 +56,7 @@ def principal() -> int:
     moteur = (RACINE/"ressources/moteur-jeu.js").read_text(encoding="utf-8")
     page = (RACINE/"index.html").read_text(encoding="utf-8")
     guide = (RACINE/"quiz-pjj/index.html").read_text(encoding="utf-8")
-    exiger("question.id >= 111" in moteur and "question.id <= 160" in moteur, "Bornes de l’évaluation absentes.")
+    exiger("question.estEvaluationFinale === true" in moteur, "L’évaluation doit être sélectionnée par son marqueur éditorial et non par une plage d’IDs obsolète.")
     exiger("session.length !== 50" in moteur, "Contrôle des 50 questions finales absent.")
     exiger("etat.etape = 12" in moteur, "L’évaluation ne pointe pas vers l’étape 12.")
     exiger("etapeCourante < 10" not in moteur and "Number(etat.etape) < 10" not in moteur, "Une ancienne limite à 10 étapes subsiste.")
@@ -90,7 +95,18 @@ def principal() -> int:
     exiger("pjjoue_identifiant_question" in moteur and "obtenirIdentifiantQuestionAnalytics" in moteur, "Le suivi des questions ne repose pas sur leur identifiant stable.")
     exiger("pjjoue_nom_question" in moteur and "question?.enonce" in moteur, "Le libellé lisible de la question n’est pas envoyé à Analytics.")
     exiger("pjjoue_numero_etape" in moteur and "pjjoue_nom_etape" in moteur, "Le suivi Analytics des étapes est incomplet.")
+    exiger("etapeAnalyticsPermanent" in moteur and "idAnalyticsPermanent" in json.dumps(programme, ensure_ascii=False), "L’identité Analytics permanente des étapes n’est pas séparée de leur ordre visible.")
     exiger("pjjoue_defi_chrono" in moteur and "pjjoue_nombre_questions_defi_du_hasard" in moteur, "Le suivi des défis PJJoue est incomplet.")
+
+    # Garde-fous V36 : ordre pédagogique indépendant des identifiants Analytics,
+    # reprise robuste de la question active et validation persistante sans joker.
+    exiger("obtenirOrdrePedagogiqueQuestion" in moteur and "ordreEtape" in moteur, "L’ordre pédagogique indépendant des identifiants permanents manque.")
+    exiger("CLE_SESSION_EN_COURS" in moteur and "restaurerSessionEnCours" in moteur, "La restauration de la session de question active manque.")
+    exiger("verifierRenduQuestionActif" in moteur and "window.addEventListener('resize'" in moteur, "La réparation du rendu après changement de largeur manque.")
+    exiger("V3-activites-educatives" in moteur and "migrerSauvegardeV2VersV3" in moteur, "La migration de sauvegarde vers la nouvelle organisation manque.")
+    exiger("reinitialiserValidationSansJokerEtape" in moteur and "compterReussitesAutonomesEtape" in moteur, "Le suivi persistant des réussites sans joker est incomplet.")
+    exiger("(etat.tentativesQuestions?.get(question.id) || 0) < 1" in moteur, "La limite d’une seule reprise par question manque.")
+    exiger(all(identifiant in page for identifiant in ["contexteEtapeQuestion", "numeroEtapeQuestion", "titreEtapeQuestion", "compteurSansJokerQuestion", "boutonReinitialiserSansJoker"]), "Les repères discrets au-dessus de la carte de question sont incomplets.")
     print("OK — 160 questions · 11 étapes d’apprentissage · 50 réponses écrites finales")
     return 0
 

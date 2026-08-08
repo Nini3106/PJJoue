@@ -76,17 +76,25 @@ function obtenirLibelleModeJeuAnalytics() {
     return null;
 }
 function obtenirInformationsEtapeAnalytics(question = null) {
-    const numero = Number(question?.etape ?? etat?.etape);
-    if (!Number.isFinite(numero) || numero <= 0)
+    const numeroVisible = Number(question?.etape ?? etat?.etape);
+    if (!Number.isFinite(numeroVisible) || numeroVisible <= 0)
         return { numero: null, nom: null };
-    if (numero === 12)
-        return { numero, nom: 'Évaluation finale' };
+    if (numeroVisible === 12)
+        return { numero: 12, nom: 'Évaluation finale' };
     const identifiantTheme = question?.theme || etat?.theme || 'commun';
-    const etapeProgramme = obtenirEtapeProgramme(identifiantTheme, numero)
-        || obtenirEtapeProgramme('commun', numero);
+    const etapeProgramme = obtenirEtapeProgramme(identifiantTheme, numeroVisible)
+        || obtenirEtapeProgramme('commun', numeroVisible);
+    // L'ordre visible peut évoluer sans recycler l'identité Analytics historique.
+    // Ex. l'ancienne étape 8 de placement est désormais visible en étape 9,
+    // mais conserve l'identité permanente Analytics 8.
+    const numeroPermanent = Number(
+        question?.etapeAnalyticsPermanent
+        ?? etapeProgramme?.idAnalyticsPermanent
+        ?? numeroVisible
+    );
     return {
-        numero,
-        nom: etapeProgramme?.titre || `Étape ${numero}`
+        numero: Number.isFinite(numeroPermanent) && numeroPermanent > 0 ? numeroPermanent : numeroVisible,
+        nom: etapeProgramme?.titre || `Étape ${numeroVisible}`
     };
 }
 function obtenirIdentifiantQuestionAnalytics(question) {
@@ -223,12 +231,13 @@ const MESSAGES_ERREUR = [
     'Tu n’as pas raté la PJJ : tu viens de trouver un point à consolider.'
 ];
 const CLE_SAUVEGARDE = 'pjjoue_V1_sauvegarde';
+const CLE_SESSION_EN_COURS = 'pjjoue_session_en_cours_v1';
 // -----------------------------------------------------------------------------
 // Sauvegarde locale et état général
 // -----------------------------------------------------------------------------
 function creerSauvegardeInitiale() {
     return {
-        version: 'V2-12-etapes',
+        version: 'V3-activites-educatives',
         xp: 0,
         meilleureSerie: 0,
         nombreQuestionsJouees: 0,
@@ -322,9 +331,11 @@ function nettoyerErreurs(erreurs) {
         return erreursNettoyees;
     for (const [identifiant, enregistrement] of Object.entries(erreurs)) {
         const identifiantQuestion = Number(identifiant);
+        const questionCorrespondante = QUESTIONS.find(question => Number(question.id) === identifiantQuestion);
         if (!Number.isInteger(identifiantQuestion)
             || identifiantQuestion < 1
-            || identifiantQuestion > 110
+            || !questionCorrespondante
+            || questionCorrespondante.estEvaluationFinale === true
             || !estObjetSimple(enregistrement))
             continue;
         erreursNettoyees[String(identifiantQuestion)] = {
@@ -339,7 +350,7 @@ function nettoyerErreurs(erreurs) {
 }
 
 function migrerSauvegardeV1VersV2(sauvegardeBrute) {
-    if (!estObjetSimple(sauvegardeBrute) || sauvegardeBrute.version === 'V2-12-etapes')
+    if (!estObjetSimple(sauvegardeBrute) || ['V2-12-etapes', 'V3-activites-educatives'].includes(sauvegardeBrute.version))
         return sauvegardeBrute;
     const copie = JSON.parse(JSON.stringify(sauvegardeBrute));
     copie.version = 'V2-12-etapes';
@@ -350,9 +361,43 @@ function migrerSauvegardeV1VersV2(sauvegardeBrute) {
     copie.evaluationFinale = { meilleurScore: 0, nombreTentatives: 0, reussie: false };
     return copie;
 }
+function migrerSauvegardeV2VersV3(sauvegardeBrute) {
+    if (!estObjetSimple(sauvegardeBrute) || sauvegardeBrute.version === 'V3-activites-educatives')
+        return sauvegardeBrute;
+    if (sauvegardeBrute.version !== 'V2-12-etapes')
+        return sauvegardeBrute;
+    const copie = JSON.parse(JSON.stringify(sauvegardeBrute));
+    const progressionCommun = copie.progression?.apprenant?.commun;
+    if (estObjetSimple(progressionCommun)) {
+        const ancienne8 = progressionCommun['8'];
+        const ancienne9 = progressionCommun['9'];
+        const ancienne10 = progressionCommun['10'];
+        // L'ancienne étape 11 est remplacée par un nouveau thème : son progrès n'est pas transféré.
+        delete progressionCommun['11'];
+        delete progressionCommun['8'];
+        delete progressionCommun['9'];
+        delete progressionCommun['10'];
+        if (ancienne8) progressionCommun['9'] = ancienne8;
+        if (ancienne9) progressionCommun['10'] = ancienne9;
+        if (ancienne10) progressionCommun['11'] = ancienne10;
+    }
+    if (estObjetSimple(copie.etapesDecouvertes)) {
+        const anciennes = { ...copie.etapesDecouvertes };
+        delete copie.etapesDecouvertes['8'];
+        delete copie.etapesDecouvertes['9'];
+        delete copie.etapesDecouvertes['10'];
+        delete copie.etapesDecouvertes['11'];
+        if (anciennes['8']) copie.etapesDecouvertes['9'] = true;
+        if (anciennes['9']) copie.etapesDecouvertes['10'] = true;
+        if (anciennes['10']) copie.etapesDecouvertes['11'] = true;
+    }
+    copie.version = 'V3-activites-educatives';
+    return copie;
+}
 
 function nettoyerSauvegarde(sauvegardeBrute) {
     sauvegardeBrute = migrerSauvegardeV1VersV2(sauvegardeBrute);
+    sauvegardeBrute = migrerSauvegardeV2VersV3(sauvegardeBrute);
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
         return sauvegardeInitiale;
@@ -371,7 +416,7 @@ function nettoyerSauvegarde(sauvegardeBrute) {
     const identifiantsQuestions = new Set(QUESTIONS.map(question => String(question.id)));
     return {
         ...sauvegardeInitiale,
-        version: 'V2-12-etapes',
+        version: 'V3-activites-educatives',
         xp: convertirEntierBorne(sauvegardeBrute.xp),
         meilleureSerie: convertirEntierBorne(sauvegardeBrute.meilleureSerie),
         nombreQuestionsJouees,
@@ -445,7 +490,8 @@ let etat = {
     chronometreParcoursActif: false,
     dureeChronometreParcours: 15,
     nombreQuestionsTirageDe: 0,
-    origineSessionAnalytics: null
+    origineSessionAnalytics: null,
+    brouillonsEcrits: new Map()
 };
 let minuteurRappelJokers = null;
 let minuteurFinRappelJokers = null;
@@ -459,7 +505,7 @@ function effacerSauvegardeV1DuNavigateur() {
     }
 }
 function enregistrerSauvegarde() {
-    sauvegarde.version = 'V1';
+    sauvegarde.version = 'V2-12-etapes';
     try {
         localStorage.setItem(CLE_SAUVEGARDE, JSON.stringify(sauvegarde));
         return true;
@@ -468,6 +514,143 @@ function enregistrerSauvegarde() {
         afficherNotification('La sauvegarde locale est indisponible. Exporte ta progression avant de fermer la page.');
         return false;
     }
+}
+function serialiserMap(carte) {
+    return carte instanceof Map ? [...carte.entries()] : [];
+}
+function serialiserSet(ensemble) {
+    return ensemble instanceof Set ? [...ensemble.values()] : [];
+}
+function restaurerMap(valeur) {
+    return Array.isArray(valeur) ? new Map(valeur) : new Map();
+}
+function restaurerSet(valeur) {
+    return Array.isArray(valeur) ? new Set(valeur) : new Set();
+}
+function effacerSessionEnCours() {
+    try {
+        localStorage.removeItem(CLE_SESSION_EN_COURS);
+    }
+    catch (erreur) {
+        // Une session technique ne doit jamais bloquer le jeu si le stockage est indisponible.
+    }
+}
+function enregistrerSessionEnCours() {
+    if (etat.ecran !== 'question' || !etat.questionsSession?.length || !etat.questionCourante)
+        return false;
+    const saisieActive = selectionner('#reponseEcrite');
+    if (saisieActive && etat.questionCourante?.id) {
+        etat.brouillonsEcrits = etat.brouillonsEcrits || new Map();
+        etat.brouillonsEcrits.set(etat.questionCourante.id, saisieActive.value || '');
+    }
+    const instantane = {
+        version: 1,
+        enregistreLe: Date.now(),
+        theme: etat.theme,
+        etape: etat.etape,
+        chapitre: etat.chapitre,
+        mode: etat.mode,
+        organisationSession: etat.organisationSession,
+        origineSessionAnalytics: etat.origineSessionAnalytics,
+        perimetreRevision: etat.perimetreRevision || null,
+        indexQuestion: etat.indexQuestion,
+        questionValidee: etat.questionValidee === true,
+        score: etat.score,
+        serie: etat.serie,
+        meilleureSerie: etat.meilleureSerie,
+        nombreReponsesAidees: etat.nombreReponsesAidees,
+        sessionAvecJoker: etat.sessionAvecJoker === true,
+        etapeAvecJoker: etat.etapeAvecJoker === true,
+        jokersSessionActifs: etat.jokersSessionActifs !== false,
+        chronometreSessionActif: etat.chronometreSessionActif === true,
+        dureeChronometreSession: etat.dureeChronometreSession,
+        tempsRestant: etat.tempsRestant,
+        delaiDepasse: etat.delaiDepasse === true,
+        debutSessionAnalytics: etat.debutSessionAnalytics,
+        nombreQuestionsTirageDe: etat.nombreQuestionsTirageDe || 0,
+        decalageReponses: etat.decalageReponses || 0,
+        questions: etat.questionsSession.map(question => Number(question.id)).filter(Number.isFinite),
+        erreursSession: serialiserSet(etat.erreursSession),
+        questionsPassees: serialiserSet(etat.questionsPassees),
+        reponsesSession: serialiserMap(etat.reponsesSession),
+        optionsSession: serialiserMap(etat.optionsSession),
+        tentativesQuestions: serialiserMap(etat.tentativesQuestions),
+        jokersQuestions: serialiserMap(etat.jokersQuestions),
+        brouillonsEcrits: serialiserMap(etat.brouillonsEcrits),
+        brouillonActivite: etat.brouillonActivite || null
+    };
+    try {
+        localStorage.setItem(CLE_SESSION_EN_COURS, JSON.stringify(instantane));
+        return true;
+    }
+    catch (erreur) {
+        return false;
+    }
+}
+function chargerSessionEnCours() {
+    try {
+        const contenu = localStorage.getItem(CLE_SESSION_EN_COURS);
+        if (!contenu)
+            return null;
+        const instantane = JSON.parse(contenu);
+        if (!instantane || instantane.version !== 1 || !Array.isArray(instantane.questions))
+            return null;
+        return instantane;
+    }
+    catch (erreur) {
+        return null;
+    }
+}
+function restaurerSessionEnCours() {
+    const instantane = chargerSessionEnCours();
+    if (!instantane)
+        return false;
+    const questions = instantane.questions
+        .map(identifiant => QUESTIONS.find(question => Number(question.id) === Number(identifiant)))
+        .filter(Boolean)
+        .map(question => ({ ...question, modePresentation: question.modePrefere || obtenirModeQuestion(question) }));
+    if (!questions.length || questions.length !== instantane.questions.length) {
+        effacerSessionEnCours();
+        return false;
+    }
+    const index = Math.min(questions.length - 1, Math.max(0, Number(instantane.indexQuestion) || 0));
+    etat.theme = instantane.theme || questions[index]?.theme || 'commun';
+    etat.etape = Number(instantane.etape) || Number(questions[index]?.etape) || 1;
+    etat.chapitre = Number(instantane.chapitre) || 1;
+    etat.mode = instantane.mode || 'parcours';
+    etat.organisationSession = instantane.organisationSession || 'ordonne';
+    etat.origineSessionAnalytics = instantane.origineSessionAnalytics || null;
+    etat.perimetreRevision = instantane.perimetreRevision || null;
+    etat.questionsSession = questions;
+    etat.indexQuestion = index;
+    etat.score = Math.max(0, Number(instantane.score) || 0);
+    etat.serie = Math.max(0, Number(instantane.serie) || 0);
+    etat.meilleureSerie = Math.max(0, Number(instantane.meilleureSerie) || 0);
+    etat.nombreReponsesAidees = Math.max(0, Number(instantane.nombreReponsesAidees) || 0);
+    etat.sessionAvecJoker = instantane.sessionAvecJoker === true;
+    etat.etapeAvecJoker = instantane.etapeAvecJoker === true;
+    etat.jokersSessionActifs = instantane.jokersSessionActifs !== false;
+    etat.chronometreSessionActif = instantane.chronometreSessionActif === true;
+    etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(instantane.dureeChronometreSession) || 15));
+    etat.tempsRestant = Math.max(0, Number(instantane.tempsRestant) || 0);
+    etat.delaiDepasse = instantane.delaiDepasse === true;
+    etat.debutSessionAnalytics = Number(instantane.debutSessionAnalytics) || Date.now();
+    etat.nombreQuestionsTirageDe = Math.max(0, Number(instantane.nombreQuestionsTirageDe) || 0);
+    etat.decalageReponses = Number(instantane.decalageReponses) || 0;
+    etat.erreursSession = restaurerSet(instantane.erreursSession);
+    etat.questionsPassees = restaurerSet(instantane.questionsPassees);
+    etat.reponsesSession = restaurerMap(instantane.reponsesSession);
+    etat.optionsSession = restaurerMap(instantane.optionsSession);
+    etat.tentativesQuestions = restaurerMap(instantane.tentativesQuestions);
+    etat.jokersQuestions = restaurerMap(instantane.jokersQuestions);
+    etat.brouillonsEcrits = restaurerMap(instantane.brouillonsEcrits);
+    etat.brouillonActivite = instantane.brouillonActivite || null;
+    etat.questionCourante = questions[index];
+    etat.questionValidee = Boolean(instantane.questionValidee);
+    etat.jokers = etat.jokersQuestions.get(etat.questionCourante.id)
+        || { cinquanteCinquante: true, indice: true, langueAuChat: true };
+    actualiserIndicateurSerie();
+    return true;
 }
 function melanger(elements) {
     const elementsMelanges = [...elements];
@@ -714,6 +897,7 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
         etat.questionCourante = null;
         etat.questionValidee = false;
         etat.delaiDepasse = false;
+        effacerSessionEnCours();
     }
     selectionnerTous('.ecran').forEach(ecran => ecran.classList.remove('actif'));
     const cible = selectionner('#' + identifiant);
@@ -924,7 +1108,7 @@ function lireRoute() {
     const parties = location.hash.replace(/^#/, '').split('/').map(decodeURIComponent);
     if (parties[0] === 'parcours')
         return { pjjoue: true, ecran: 'parcours', theme: parties[1] || 'commun' };
-    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'progression', 'parametres'];
+    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'progression', 'parametres', 'question'];
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
 }
 function restaurerRoute(route) {
@@ -934,7 +1118,16 @@ function restaurerRoute(route) {
     if (etatRoute.etape)
         etat.etape = Number(etatRoute.etape);
     restaurationNavigation = true;
-    if (etatRoute.ecran === 'parcours' && etatRoute.theme)
+    if (etatRoute.ecran === 'question') {
+        if (restaurerSessionEnCours()) {
+            afficherEcran('question', { depuisHistorique: true, forcerSortieQuestion: true });
+            afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+        }
+        else {
+            ouvrirParcours(etatRoute.theme || 'commun', { remplacerHistorique: true });
+        }
+    }
+    else if (etatRoute.ecran === 'parcours' && etatRoute.theme)
         ouvrirParcours(etatRoute.theme);
     else
         afficherEcran(etatRoute.ecran || 'accueil', { depuisHistorique: true, forcerSortieQuestion: true });
@@ -952,6 +1145,7 @@ window.addEventListener('popstate', evenement => {
                 etat.questionsSession = [];
                 etat.questionCourante = null;
                 etat.questionValidee = false;
+                effacerSessionEnCours();
                 history.back();
             }
         });
@@ -1061,6 +1255,26 @@ function synchroniserEtapesReussiesEnAutonomie(programme) {
     if (validationCorrigee)
         enregistrerSauvegarde();
 }
+function compterReussitesAutonomesEtape(identifiantTheme, numeroEtape) {
+    const bilanEtape = obtenirBilanEtape(identifiantTheme, numeroEtape);
+    return obtenirQuestionsEtape(identifiantTheme, numeroEtape)
+        .filter(question => bilanEtape?.resultats?.[question.id] === true)
+        .length;
+}
+function reinitialiserValidationSansJokerEtape(identifiantTheme, numeroEtape) {
+    const bilanEtape = obtenirBilanEtape(identifiantTheme, numeroEtape);
+    const questionsEtape = obtenirQuestionsEtape(identifiantTheme, numeroEtape);
+    if (!bilanEtape || !questionsEtape.length)
+        return;
+    questionsEtape.forEach(question => {
+        delete bilanEtape.resultats[question.id];
+    });
+    bilanEtape.termineeSansJoker = false;
+    bilanEtape.jokersUtilises = true;
+    enregistrerSauvegarde();
+    actualiserSuiviEtapeQuestion(etat.questionCourante);
+    actualiserAccueil();
+}
 function compterErreursActives() {
     return Object.values(sauvegarde.erreurs || {}).filter(erreur => !erreur.maitrisee).length;
 }
@@ -1084,7 +1298,7 @@ function marquerEtapeDecouverte(question) {
     if (!question)
         return;
     const etape = Number(question.etape);
-    if (!Number.isFinite(etape) || etape < 1 || etape > 10)
+    if (!Number.isFinite(etape) || etape < 1 || !obtenirEtapeProgramme(question.theme, etape))
         return;
     sauvegarde.etapesDecouvertes = sauvegarde.etapesDecouvertes || {};
     sauvegarde.etapesDecouvertes[etape] = true;
@@ -1512,8 +1726,17 @@ function selectionnerQuestionsEquilibrees(reserve, nombre) {
     }
     return resultat.slice(0, nombre);
 }
+function obtenirOrdrePedagogiqueQuestion(question) {
+    const ordreExplicite = Number(question?.ordreEtape);
+    if (Number.isFinite(ordreExplicite) && ordreExplicite > 0)
+        return ordreExplicite;
+    const identifiant = Number(question?.id) || 0;
+    const etape = Number(question?.etape) || 1;
+    return identifiant - ((etape - 1) * 10);
+}
 function ordonnerQuestionsParcours(reserve) {
     return [...reserve].sort((questionA, questionB) => (Number(questionA.chapitre) || 1) - (Number(questionB.chapitre) || 1) ||
+        obtenirOrdrePedagogiqueQuestion(questionA) - obtenirOrdrePedagogiqueQuestion(questionB) ||
         (Number(questionA.id) || 0) - (Number(questionB.id) || 0));
 }
 function classerLongueurReponse(question) {
@@ -1586,12 +1809,11 @@ function lancerEtape(identifiantTheme, etape, chapitre = null) {
 }
 function obtenirQuestionsEvaluationFinale() {
     return QUESTIONS
-        .filter(question =>
-            question.estEvaluationFinale
-            && question.id >= 111
-            && question.id <= 160
-        )
-        .sort((questionA, questionB) => questionA.id - questionB.id);
+        .filter(question => question.estEvaluationFinale === true)
+        .sort((questionA, questionB) =>
+            obtenirOrdrePedagogiqueQuestion(questionA) - obtenirOrdrePedagogiqueQuestion(questionB)
+            || questionA.id - questionB.id
+        );
 }
 function lancerEvaluationFinale() {
     const session = obtenirQuestionsEvaluationFinale();
@@ -1619,6 +1841,7 @@ function lancerEntrainementLibre() {
     if (style === 'ordonne') {
         session = [...QUESTIONS.filter(question => !question.estEvaluationFinale)]
             .sort((questionA, questionB) => (Number(questionA.etape) || 0) - (Number(questionB.etape) || 0) ||
+            obtenirOrdrePedagogiqueQuestion(questionA) - obtenirOrdrePedagogiqueQuestion(questionB) ||
             (Number(questionA.id) || 0) - (Number(questionB.id) || 0))
             .slice(0, nombre);
     }
@@ -1799,20 +2022,30 @@ function validerFormeSigle(champ, question) {
 function respecteOrdreConcepts(champ, groupes) {
     if (!Array.isArray(groupes) || !groupes.length)
         return true;
-    const texte = normaliserReponseEvaluation(champ);
-    let positionMinimale = -1;
+    const motsSaisis = normaliserReponseEvaluation(champ).split(' ').filter(Boolean);
+    let positionMinimale = 0;
     for (const groupe of groupes) {
         const variantes = Array.isArray(groupe) ? groupe : [groupe];
         let meilleurePosition = -1;
+        let meilleureFin = -1;
         for (const variante of variantes) {
-            const cible = normaliserReponseEvaluation(variante);
-            const position = cible ? texte.indexOf(cible, positionMinimale + 1) : -1;
-            if (position >= 0 && (meilleurePosition < 0 || position < meilleurePosition))
-                meilleurePosition = position;
+            const motsAttendus = normaliserReponseEvaluation(variante).split(' ').filter(Boolean);
+            if (!motsAttendus.length)
+                continue;
+            for (let debut = positionMinimale; debut <= motsSaisis.length - motsAttendus.length; debut++) {
+                const correspond = motsAttendus.every((motAttendu, decalage) =>
+                    motsCorrespondentSouplement(motsSaisis[debut + decalage], motAttendu)
+                );
+                if (correspond && (meilleurePosition < 0 || debut < meilleurePosition)) {
+                    meilleurePosition = debut;
+                    meilleureFin = debut + motsAttendus.length;
+                    break;
+                }
+            }
         }
         if (meilleurePosition < 0)
             return false;
-        positionMinimale = meilleurePosition;
+        positionMinimale = meilleureFin;
     }
     return true;
 }
@@ -2089,6 +2322,16 @@ function afficherActiviteEcrite(reponse) {
         + `</div>${revelation}<div class="ecrite-zone">`
         + '<input id="reponseEcrite" autocomplete="off" aria-label="Ta réponse"'
         + ' placeholder="Écris ta réponse ici"></div></div>';
+    const champEcrit = selectionner('#reponseEcrite');
+    const brouillonEcrit = etat.brouillonsEcrits?.get(etat.questionCourante?.id) || '';
+    if (champEcrit) {
+        champEcrit.value = brouillonEcrit;
+        champEcrit.addEventListener('input', () => {
+            etat.brouillonsEcrits = etat.brouillonsEcrits || new Map();
+            etat.brouillonsEcrits.set(etat.questionCourante.id, champEcrit.value);
+            enregistrerSessionEnCours();
+        });
+    }
     actualiserBoutonValider();
 }
 function validerActiviteEcrite() {
@@ -2207,6 +2450,7 @@ function lancerSession(session) {
     etat.decalageReponses = Math.floor(Math.random() * 4);
     etat.tentativesQuestions = new Map();
     etat.jokersQuestions = new Map();
+    etat.brouillonsEcrits = new Map();
     etat.nombreReponsesAidees = 0;
     etat.sessionAvecJoker = false;
     etat.debutSessionAnalytics = Date.now();
@@ -2217,6 +2461,7 @@ function lancerSession(session) {
     });
     afficherEcran('question', { remplacerHistorique: etat.ecran === 'bilan' });
     afficherQuestion();
+    enregistrerSessionEnCours();
 }
 function nettoyerEnonce(question) {
     let enonce = (question.enonce || '').trim();
@@ -2923,17 +3168,23 @@ function rejouerQuestionCourante() {
     const question = etat.questionCourante;
     if (!question || !etat.questionValidee)
         return;
+    const nombreReprises = etat.tentativesQuestions?.get(question.id) || 0;
+    if (nombreReprises >= 1) {
+        afficherNotification('Cette question a déjà été rejouée une fois.');
+        return;
+    }
     const precedent = etat.reponsesSession.get(question.id);
     envoyerEvenementPJJ('question_rejouee', {
         ...obtenirContexteQuestionAnalytics(question),
         pjjoue_resultat_reponse: obtenirResultatReponseAnalytics(precedent?.statut || 'incorrecte')
     });
     etat.tentativesQuestions = etat.tentativesQuestions || new Map();
-    etat.tentativesQuestions.set(question.id, Math.max(1, etat.tentativesQuestions.get(question.id) || 0));
+    etat.tentativesQuestions.set(question.id, 1);
     etat.reponsesSession.set(question.id, { ...(precedent || {}), statut: 'passee' });
     etat.questionValidee = false;
     etat.brouillonActivite = null;
     afficherQuestion();
+    enregistrerSessionEnCours();
     annoncer('Question prête à être rejouée.');
 }
 // -----------------------------------------------------------------------------
@@ -3148,15 +3399,60 @@ function appliquerIdentiteVisuelleEtape(question) {
     );
     document.body.dataset.etapeActive = String(question?.etape || 'libre');
 }
-function afficherQuestion() {
-    const { question, reponse, dejaPassee } = preparerQuestionCourante();
-    envoyerEvenementPJJ('question_affichee', {
-        ...obtenirContexteQuestionAnalytics(question),
-        pjjoue_resultat_reponse: obtenirResultatReponseAnalytics(
-            reponse?.statut || (dejaPassee ? 'passee' : 'a_repondre')
-        )
+function actualiserSuiviEtapeQuestion(question) {
+    const conteneur = selectionner('#contexteEtapeQuestion');
+    const numero = selectionner('#numeroEtapeQuestion');
+    const titre = selectionner('#titreEtapeQuestion');
+    const suivi = selectionner('#suiviSansJokerQuestion');
+    const compteur = selectionner('#compteurSansJokerQuestion');
+    const boutonReset = selectionner('#boutonReinitialiserSansJoker');
+    if (!conteneur || !numero || !titre || !suivi || !compteur || !boutonReset || !question)
+        return;
+    const finale = etat.mode === 'evaluation-finale' || Number(question.etape) === 12;
+    const etapeProgramme = obtenirEtapeProgramme(question.theme, question.etape);
+    numero.textContent = finale ? 'Étape 12' : `Étape ${question.etape}`;
+    titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours PJJ');
+    suivi.classList.toggle('masque', finale || etat.mode !== 'parcours');
+    if (finale || etat.mode !== 'parcours')
+        return;
+    const questionsEtape = obtenirQuestionsEtape(question.theme, question.etape);
+    const nombreAutonomes = compterReussitesAutonomesEtape(question.theme, question.etape);
+    compteur.textContent = `${nombreAutonomes}/${questionsEtape.length}`;
+    boutonReset.disabled = nombreAutonomes === 0;
+    boutonReset.setAttribute(
+        'aria-label',
+        `Réinitialiser les ${nombreAutonomes} questions validées sans joker de l’étape ${question.etape}`
+    );
+}
+function demanderReinitialisationSansJoker() {
+    const question = etat.questionCourante;
+    if (!question || etat.mode !== 'parcours')
+        return;
+    const nombreAutonomes = compterReussitesAutonomesEtape(question.theme, question.etape);
+    if (!nombreAutonomes)
+        return;
+    ouvrirFenetreMessage({
+        titre: 'Réinitialiser le compteur sans joker ?',
+        message: `Les ${nombreAutonomes} validations sans joker de cette étape ne compteront plus pour ouvrir l’évaluation finale. Ta progression générale reste conservée.`,
+        libelleConfirmer: 'Réinitialiser',
+        libelleAnnuler: 'Annuler',
+        afficherAnnuler: true,
+        variante: 'avertissement',
+        apresConfirmation: () => reinitialiserValidationSansJokerEtape(question.theme, question.etape)
     });
+}
+function afficherQuestion({ suivreAnalytics = true, reprendreChronometre = false } = {}) {
+    const { question, reponse, dejaPassee } = preparerQuestionCourante();
+    if (suivreAnalytics) {
+        envoyerEvenementPJJ('question_affichee', {
+            ...obtenirContexteQuestionAnalytics(question),
+            pjjoue_resultat_reponse: obtenirResultatReponseAnalytics(
+                reponse?.statut || (dejaPassee ? 'passee' : 'a_repondre')
+            )
+        });
+    }
     appliquerIdentiteVisuelleEtape(question);
+    actualiserSuiviEtapeQuestion(question);
     const modeEvaluationFinale = etat.mode === 'evaluation-finale';
     const jokersActifs = etat.jokersSessionActifs !== false;
 
@@ -3169,7 +3465,16 @@ function afficherQuestion() {
         afficherCorrectionEnregistree(question, reponse);
     }
 
-    configurerChronometreEtFocusQuestion(jokersActifs, modeEvaluationFinale);
+    if (reprendreChronometre && etat.chronometreSessionActif && !etat.questionValidee && etat.tempsRestant > 0) {
+        reprendreChronometreQuestion(etat.tempsRestant);
+        const enonce = selectionner('#enonceQuestion');
+        enonce?.setAttribute('tabindex', '-1');
+        enonce?.focus?.({ preventScroll: true });
+    }
+    else {
+        configurerChronometreEtFocusQuestion(jokersActifs, modeEvaluationFinale);
+    }
+    enregistrerSessionEnCours();
 }
 function gererTempsEcoule() {
     if (etat.questionValidee)
@@ -3278,13 +3583,19 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
     });
     if (resultat.etaitPassee)
         etat.questionsPassees.delete(question.id);
-    if (etat.mode !== 'parcours')
+    etat.brouillonsEcrits?.delete(question.id);
+    if (etat.mode !== 'parcours') {
+        enregistrerSessionEnCours();
         return;
+    }
     const bilan = obtenirBilanEtape(question.theme, question.etape);
     bilan.questionsTraitees[question.id] = true;
-    bilan.resultats[question.id] = reussiteAutonome;
+    bilan.resultats[question.id] = bilan.resultats?.[question.id] === true || reussiteAutonome;
     if (aideUtilisee)
         etat.etapeAvecJoker = true;
+    synchroniserEtapesReussiesEnAutonomie(PROGRAMMES[question.theme]);
+    actualiserSuiviEtapeQuestion(question);
+    enregistrerSessionEnCours();
 }
 function obtenirSuiviErreur(question) {
     sauvegarde.erreurs[question.id] = sauvegarde.erreurs[question.id] || {
@@ -3378,9 +3689,11 @@ function obtenirTexteCorrection(question, resultat, texteChoisi, precisions) {
             : (reussiteAutonome
                 ? MESSAGES_REUSSITE[Math.floor(Math.random() * MESSAGES_REUSSITE.length)]
                 : MESSAGES_ERREUR[Math.floor(Math.random() * MESSAGES_ERREUR.length)]));
+    const repriseDisponible = (etat.tentativesQuestions?.get(question.id) || 0) < 1;
     const boutonRejouer = !estCorrecte
         && !reussiteAidee
         && etat.mode !== 'evaluation-finale'
+        && repriseDisponible
         ? '<button class="principal reessayer-question-bouton" id="rejouerQuestion" '
             + 'type="button">Rejouer la question</button>'
         : '';
@@ -3528,6 +3841,7 @@ function passerQuestion() {
     sauvegarde.erreurs[question.id].reussites = 0;
     sauvegarde.erreurs[question.id].maitrisee = false;
     enregistrerSauvegarde();
+    enregistrerSessionEnCours();
     afficherQuestionSuivante();
 }
 function afficherQuestionPrecedente() {
@@ -3957,16 +4271,22 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
         const etapeTerminee = !etapeNecessiteAutreChapitre(etat.theme, etat.etape)
             && nombreQuestionsPassees === 0;
         if (etapeTerminee) {
-            bilanEtape.termineeSansJoker = Boolean(bilanEtape.termineeSansJoker) || !jokerUtilise;
+            const questionsEtape = obtenirQuestionsEtape(etat.theme, etat.etape);
+            const toutesReussiesEnAutonomie = questionsEtape.length > 0
+                && questionsEtape.every(question => bilanEtape.resultats?.[question.id] === true);
+            const etaitDejaValideeSansJoker = bilanEtape.termineeSansJoker === true;
+            bilanEtape.termineeSansJoker = etaitDejaValideeSansJoker || toutesReussiesEnAutonomie;
             bilanEtape.jokersUtilises = !bilanEtape.termineeSansJoker;
             const evaluationDeverrouillee = obtenirEtapesProgramme(etat.theme).every(etapeProgramme =>
                 obtenirBilanEtape(etat.theme, etapeProgramme.id)?.termineeSansJoker === true
             );
-            celebration = obtenirCelebrationEtape(
-                etat.etape,
-                jokerUtilise,
-                evaluationDeverrouillee
-            );
+            if (toutesReussiesEnAutonomie && !etaitDejaValideeSansJoker) {
+                celebration = obtenirCelebrationEtape(
+                    etat.etape,
+                    false,
+                    evaluationDeverrouillee
+                );
+            }
         }
     }
     if (etat.mode === 'evaluation-finale') {
@@ -4155,7 +4475,7 @@ function afficherCarteVoyageFinale() {
     });
     const finale = document.createElement('span');
     finale.className = 'carte-voyage-etape carte-voyage-evaluation';
-    finale.innerHTML = '<span aria-hidden="true">★</span><strong>11</strong>';
+    finale.innerHTML = '<span aria-hidden="true">★</span><strong>12</strong>';
     finale.setAttribute('role', 'img');
     finale.setAttribute('aria-label', 'Évaluation finale réussie');
     destinations.appendChild(finale);
@@ -4229,6 +4549,7 @@ function terminerSession() {
     configurerBoutonContinuerBilan();
     actualiserProchaineDestinationBilan();
     afficherCarteVoyageFinale();
+    effacerSessionEnCours();
     afficherEcran('bilan', { remplacerHistorique: true });
     actualiserAccueil();
     lancerCelebrationBilan(bilan.celebration);
@@ -4668,6 +4989,7 @@ if (boutonJouerTirageDe)
 selectionner('#boutonQuestionSuivante').onclick = afficherQuestionSuivante;
 selectionner('#boutonQuestionPrecedente').onclick = afficherQuestionPrecedente;
 selectionner('#boutonPasserQuestion').onclick = demanderPassageQuestion;
+selectionner('#boutonReinitialiserSansJoker')?.addEventListener('click', demanderReinitialisationSansJoker);
 function initialiserFenetreJokers() {
     const declencheur = selectionner('#boutonMenuJokers');
     const fenetre = selectionner('#fenetreJokers');
@@ -4707,6 +5029,7 @@ selectionner('#boutonReinitialiserProgression').onclick = () => ouvrirFenetreMes
         });
         sauvegarde = creerSauvegardeInitiale();
         effacerSauvegardeV1DuNavigateur();
+        effacerSessionEnCours();
         enregistrerSauvegarde();
         actualiserAccueil();
         requestAnimationFrame(() => ouvrirFenetreMessage({
@@ -4808,10 +5131,31 @@ window.addEventListener('pjjoue:consentement-change', evenement => {
     });
 });
 window.addEventListener('hashchange', garantirAccueilEnHaut);
+function verifierRenduQuestionActif() {
+    if (etat.ecran !== 'question' || !etat.questionsSession?.length)
+        return;
+    const question = etat.questionsSession[etat.indexQuestion];
+    const enonce = selectionner('#enonceQuestion');
+    const zoneReponses = selectionner('#zoneReponses');
+    if (!question)
+        return;
+    const contenuManquant = !enonce?.textContent?.trim() || !zoneReponses?.children?.length;
+    if (!contenuManquant) {
+        enregistrerSessionEnCours();
+        return;
+    }
+    const tempsRestant = etat.tempsRestant;
+    afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+    etat.tempsRestant = tempsRestant;
+}
 window.addEventListener('resize', () => {
     clearTimeout(window.__pjjoueMinuteurAjustementQuestion);
-    window.__pjjoueMinuteurAjustementQuestion = setTimeout(ajusterQuestionAEcran, 80);
+    window.__pjjoueMinuteurAjustementQuestion = setTimeout(() => {
+        verifierRenduQuestionActif();
+        ajusterQuestionAEcran();
+    }, 80);
 });
+window.addEventListener('pagehide', enregistrerSessionEnCours);
 window.addEventListener('hashchange', () => {
     setTimeout(ajusterQuestionAEcran, 40);
 });
