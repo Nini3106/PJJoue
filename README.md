@@ -125,3 +125,15 @@ python outils/construire_manifeste.py
 ## Statut
 
 Cette archive constitue la **V1 officielle du projet personnel PJJoue**. Avant chaque publication, vérifier les sources, les mentions juridiques, la sécurité de l’hébergement et la recette fonctionnelle.
+
+## V38
+- Nouvelle icône SVG pour l étape 8 (activités éducatives / sport).
+- Décalage des icônes : ancienne étape 8 -> 9, 9 -> 10, 10 -> 11.
+- Correction de la logique de couleurs des icônes d étapes à partir de l étape 7.
+
+## V39
+- Étape 8 : remplacement par l icône sport (personnage et ballon) demandée, en couleur de l étape 9.
+- Étape 11 : couleur alignée sur le cercle du trophée d évaluation.
+
+## V40
+- Étape 11 recolorée en jaune pour correspondre au titre de l étape 12.

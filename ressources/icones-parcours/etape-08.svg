@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" shape-rendering="geometricPrecision">
-
   <defs>
     <linearGradient id="etape08Gradient" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900">
-      <stop offset="0%" stop-color="#96C0F7"/>
-      <stop offset="52%" stop-color="#78AEF5"/>
-      <stop offset="100%" stop-color="#547AAC"/>
+      <stop offset="0%" stop-color="#78DFD4"/>
+      <stop offset="52%" stop-color="#52D6C8"/>
+      <stop offset="100%" stop-color="#39968C"/>
     </linearGradient>
   </defs>
 
   <g id="linework" fill="none" stroke-linecap="round" stroke-linejoin="round">
-
-    <path d="M170 460 L512 185 L854 460"/>
-    <path d="M220 420 L220 810 L804 810 L804 420"/>
-    <rect x="620" y="545" width="118" height="265" rx="18"/>
-    <circle cx="430" cy="500" r="72"/>
-    <path d="M300 740 C310 645 357 590 430 590 C503 590 550 645 560 740"/>
-    <path d="M678 680 L680 680"/>
-
+    <circle cx="610" cy="184" r="76"/>
+    <path d="M540 276 C452 270 356 290 290 340"/>
+    <path d="M572 274 C513 338 482 417 500 496 C517 569 563 616 632 654"/>
+    <path d="M654 336 C713 397 757 433 826 448"/>
+    <path d="M536 614 C491 679 435 724 299 778"/>
+    <path d="M578 538 L681 624"/>
+    <path d="M655 648 C691 725 713 779 738 872"/>
+    <circle cx="800" cy="814" r="72"/>
+    <path d="M733 883 H873"/>
+    <path d="M750 830 L710 776"/>
+    <path d="M894 747 L930 726"/>
+    <path d="M906 814 L947 814"/>
+    <path d="M893 878 L929 887"/>
   </g>
-  <use xlink:href="#linework" fill="none" stroke="#547AAC" stroke-width="36.25" stroke-linecap="round" stroke-linejoin="round"/>
-  <use xlink:href="#linework" fill="none" stroke="url(#etape08Gradient)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
 
+  <use xlink:href="#linework" fill="none" stroke="#39968C" stroke-width="58" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="url(#etape08Gradient)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
