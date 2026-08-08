@@ -4,11 +4,8 @@
 
 ## Version à reprendre
 
-Le dossier de travail validé est :
-`C:\Users\inesz\OneDrive\Desktop\PJJoue\PJJoue_V2_TRAVAIL`
-
-L’archive finale est :
-`C:\Users\inesz\OneDrive\Desktop\PJJoue\PJJoue_V2_CSS_THEMATIQUE.zip`
+Utiliser une copie locale de la version validée du projet PJJoue.
+Aucun chemin de poste de travail personnel n'est conservé dans cette documentation.
 
 ## Travail terminé
 
@@ -26,7 +23,7 @@ L’archive finale est :
 
 1. Lire `documentation/COMMENCER_ICI.md`.
 2. Lire `ressources/styles/README.md` avant toute modification visuelle.
-3. Travailler uniquement dans le dossier indiqué ci-dessus.
+3. Travailler dans une copie locale du projet.
 4. Exécuter `npm test` après toute modification.
 5. Exécuter `npm run test:visuel` après toute modification CSS.
 

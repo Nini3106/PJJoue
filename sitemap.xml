@@ -2,7 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://pjjoue.fr/</loc>
-    <lastmod>2026-08-03</lastmod>
+    <lastmod>2026-08-08</lastmod>
+  </url>
+  <url>
+    <loc>https://pjjoue.fr/preparer-arrivee-pjj/</loc>
+    <lastmod>2026-08-08</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/decouvrir-la-pjj/</loc>
@@ -14,7 +18,7 @@
   </url>
   <url>
     <loc>https://pjjoue.fr/metiers-pjj/</loc>
-    <lastmod>2026-08-03</lastmod>
+    <lastmod>2026-08-08</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/structures-pjj/</loc>

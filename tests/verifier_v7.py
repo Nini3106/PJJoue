@@ -76,7 +76,7 @@ def principal() -> int:
     exiger("www.googletagmanager.com/gtm.js" not in page and "Google Tag Manager (noscript)" not in page, "GTM ne doit pas être chargé directement avant le consentement.")
     pages_publiques = [
         "accessibilite.html", "confidentialite.html", "mentions-legales.html",
-        "decouvrir-la-pjj/index.html", "organisation-pjj/index.html", "metiers-pjj/index.html",
+        "preparer-arrivee-pjj/index.html", "decouvrir-la-pjj/index.html", "organisation-pjj/index.html", "metiers-pjj/index.html",
         "structures-pjj/index.html", "mesures-educatives-pjj/index.html", "sigles-pjj/index.html",
         "quiz-pjj/index.html",
     ]

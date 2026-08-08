@@ -307,6 +307,53 @@
 body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil {
     display: none;
 }
+
+.guide-carte-parcours {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.guide-carte-parcours h3,
+.guide-carte-parcours p {
+    margin: 0;
+}
+.guide-profil {
+    width: fit-content;
+    padding: 4px 9px;
+    border: 1px solid rgba(255,200,61,.46);
+    border-radius: 999px;
+    color: var(--jaune-interface);
+    background: rgba(255,200,61,.08);
+    font-size: .75rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+.guide-parcours-liens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 4px;
+}
+.guide-parcours-liens a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 6px 10px;
+    border: 1px solid var(--bordure);
+    border-radius: 999px;
+    color: var(--texte);
+    background: rgba(255,255,255,.035);
+    font-size: .86rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+.guide-parcours-liens a:hover {
+    border-color: var(--accent);
+    background: var(--accent-doux);
+}
+
 @media (max-width:820px) {
     .guide-site-entete {
         width: min(100% - 24px,1180px);

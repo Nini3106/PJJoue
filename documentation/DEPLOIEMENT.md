@@ -10,7 +10,7 @@ Publier :
 
 - `index.html` ;
 - `confidentialite.html`, `mentions-legales.html` et `accessibilite.html` ;
-- les répertoires de guides publics (`decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`, `structures-pjj/`, `mesures-educatives-pjj/`, `sigles-pjj/`, `quiz-pjj/`) ;
+- les répertoires de guides publics (`preparer-arrivee-pjj/`, `decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`, `structures-pjj/`, `mesures-educatives-pjj/`, `sigles-pjj/`, `quiz-pjj/`) ;
 - `robots.txt` et `sitemap.xml` ;
 - les dossiers `ressources/` et `donnees/` ;
 - `.nojekyll` lorsque l’hébergement l’exige ;
@@ -26,7 +26,7 @@ Publier :
 
 ## Données
 
-La progression reste dans le navigateur. Les onze pages publiques chargent `ressources/consentement-analytics.js`, qui maintient Google Tag Manager désactivé tant que le visiteur n’a pas accepté la mesure d’audience. `administration.html` en est volontairement exclue afin de ne pas transmettre l’usage de l’outil interne. Toute balise publiée dans le conteneur doit rester cohérente avec la politique de confidentialité, le choix du visiteur et la configuration CSP.
+La progression reste dans le navigateur. Les douze pages publiques chargent `ressources/consentement-analytics.js`, qui maintient Google Tag Manager désactivé tant que le visiteur n’a pas accepté la mesure d’audience. `administration.html` en est volontairement exclue afin de ne pas transmettre l’usage de l’outil interne. Toute balise publiée dans le conteneur doit rester cohérente avec la politique de confidentialité, le choix du visiteur et la configuration CSP.
 
 ## Référencement public
 

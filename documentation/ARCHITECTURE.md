@@ -17,7 +17,7 @@ Avant toute génération, `outils/validation_donnees.py` contrôle les champs ob
 
 ## Guides pédagogiques publics
 
-Les répertoires `decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`,
+Les répertoires `preparer-arrivee-pjj/`, `decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`,
 `structures-pjj/`, `mesures-educatives-pjj/`, `sigles-pjj/` et `quiz-pjj/`
 contiennent chacun un `index.html` statique avec une URL canonique propre.
 Ces pages n’embarquent pas le moteur du jeu : elles présentent des synthèses
@@ -55,9 +55,11 @@ changé la cascade.
 
 Les classes et variables appartenant à PJJoue sont en français. Les propriétés
 CSS imposées par le standard web ne sont pas traduites.
-### `ressources/consentement-analytics.js` et `ressources/analytics-pjjoue.js`
+### `ressources/consentement-analytics.js`, `ressources/analytics-pjjoue.js` et `ressources/analytics-pages-pjjoue.js`
 
 Le premier module conserve le choix du visiteur, applique le mode consentement Google et charge le conteneur uniquement après acceptation. Le second expose `window.PJJ_ANALYTICS.envoyer()` et refuse silencieusement tout événement tant que la mesure d’audience n’est pas autorisée.
+
+Les guides publics envoient aussi un événement `pjjoue_page_consultee` avec un libellé de page stable via `analytics-pages-pjjoue.js`, uniquement après consentement.
 
 Le moteur produit des événements sémantiques français (`pjjoue_page_consultee`, `pjjoue_session_commencee`, `pjjoue_reponse_validee`, etc.) à partir des fonctions centrales. L’identité d’une question repose sur son champ `id`, transformé pour Analytics en identifiant stable de type `Q037`. Son énoncé courant est également envoyé dans `pjjoue_nom_question` pour rendre les analyses lisibles. L’ordre, l’étape, la formulation, les distracteurs, le type d’activité, l’explication et les aides peuvent évoluer sans perdre la continuité tant que l’identifiant n’est pas recyclé pour une question différente.
 

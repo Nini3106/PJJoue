@@ -117,6 +117,15 @@ La Q170 accepte notamment : support(s) éducatif(s), outil(s) éducatif(s), moye
 - Tests unitaires Python : 6/6 OK.
 - Recette navigateur : 605 contrôles de réponses réussis.
 - Contrôle strict des doublons CSS : OK.
-- Audit structurel CSS : même statut non nul et mêmes avertissements préexistants que dans la V36 de référence ; aucun fichier CSS n’a été modifié dans cette version.
+- Audit structurel CSS : même statut non nul et mêmes avertissements préexistants que dans la V36 de référence ; `85-guides-pedagogiques.css` a été complété uniquement pour la nouvelle page d’orientation et reste sans doublon CSS strict.
 
 Le script npm global n’a pas pu être lancé tel quel dans l’environnement de génération, car le projet impose Node 24.18–24.x alors que l’environnement fournit Node 22.16. Les contrôles sous-jacents disponibles ont été exécutés séparément ; la syntaxe JavaScript et les tests navigateur ont été vérifiés indépendamment.
+
+## Acquisition SEO — futurs professionnels, ENPJJ et prise de poste
+
+- Ajout de la page publique indexable `preparer-arrivee-pjj/` comme porte d’entrée pour les personnes préparant un concours, intéressées par l’ENPJJ, en prise de poste ou déjà professionnelles.
+- La page réutilise les guides existants au lieu de dupliquer le contenu : métiers, organisation, structures, mesures, sigles et quiz.
+- Ajout d’un lien vers cette page depuis l’accueil et le maillage interne des guides.
+- La page `metiers-pjj/` mentionne désormais explicitement l’infirmier / infirmière dans l’équipe pluridisciplinaire et référence une publication officielle du ministère de la Justice.
+- Mise à jour de `sitemap.xml`, de la documentation d’architecture et du contrôle des pages publiques.
+- La page rappelle explicitement que PJJoue est indépendant, ne remplace pas une préparation officielle aux concours et ne se substitue pas aux formations de l’ENPJJ.

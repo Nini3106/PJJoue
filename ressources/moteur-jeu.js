@@ -505,7 +505,7 @@ function effacerSauvegardeV1DuNavigateur() {
     }
 }
 function enregistrerSauvegarde() {
-    sauvegarde.version = 'V2-12-etapes';
+    sauvegarde.version = 'V3-activites-educatives';
     try {
         localStorage.setItem(CLE_SAUVEGARDE, JSON.stringify(sauvegarde));
         return true;
