@@ -22,8 +22,8 @@
       "sha256": "1359722f2aeb11457ee06e7017aff0bd536e5b65cc5f360c61ec3ec1765217b8"
     },
     "README.md": {
-      "tailleOctets": 6029,
-      "sha256": "7f1f07ad6f0577cb4bf410313da0f946f091292b73bab7bf9e72c1f9a1727109"
+      "tailleOctets": 6532,
+      "sha256": "42f6fb2d013504552c58dc57ca5642eb10b68c38be1cac09ebbedd0cb785664f"
     },
     "accessibilite.html": {
       "tailleOctets": 4750,
@@ -166,8 +166,8 @@
       "sha256": "e6ea9290538158404b13400c6059a8cdb13b90d3e733a9e8baf36f9b09ed38c6"
     },
     "index.html": {
-      "tailleOctets": 42545,
-      "sha256": "0c43c2ccbc9b1749642e16ae6b44a71a87b913cb92de3808c52d7c044ba74207"
+      "tailleOctets": 42608,
+      "sha256": "a7bffb8ed65fb928e7277bafad4b2dfad712127aa48044c9abd6630f51902156"
     },
     "mentions-legales.html": {
       "tailleOctets": 6497,
@@ -311,23 +311,23 @@
     },
     "ressources/icones-parcours/etape-07.svg": {
       "tailleOctets": 1406,
-      "sha256": "cde81bd0a9c71eb2fe81834212a23b3d8760bcea0cba91a739bb7c209c016775"
+      "sha256": "dbfe6dcef223c063a193f0af25c558afbc8d5449eff38341dd4e243325425aef"
     },
     "ressources/icones-parcours/etape-08.svg": {
-      "tailleOctets": 1213,
-      "sha256": "b5044112af317706b6ec55b3af6b66b58f730e53585044614bb59825a4d47bad"
+      "tailleOctets": 1582,
+      "sha256": "6091cd5724abb9cbe709f4a70bac20b759f68061f7bb8a1f0043ae3561437bc0"
     },
     "ressources/icones-parcours/etape-09.svg": {
-      "tailleOctets": 1526,
-      "sha256": "e2ece6ae4dc55d068246c5a528c487ac3c01817c549a46ae37fbbed1dac21afb"
+      "tailleOctets": 1213,
+      "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/icones-parcours/etape-10.svg": {
-      "tailleOctets": 13113,
-      "sha256": "7df7649b81201ea5d016b0699d7b0978d19a83196a2a322e3b4045d673ab080f"
+      "tailleOctets": 1526,
+      "sha256": "690e3fae90f96255559efcc69a6dc7cb0313cb557c8fe3b10a855300d935845a"
     },
     "ressources/icones-parcours/etape-11.svg": {
-      "tailleOctets": 1534,
-      "sha256": "87b676f553b37b0097a4e728720b583fccd7ea757f3e8f643baaec1a620fd590"
+      "tailleOctets": 13113,
+      "sha256": "6120c58ecfee58e9ba3ebf45afcee2d3318e3d5045a2383b1b1ca0d81a4da2d7"
     },
     "ressources/moteur-jeu.js": {
       "tailleOctets": 244408,
