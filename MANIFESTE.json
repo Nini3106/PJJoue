@@ -1,7 +1,7 @@
 {
   "produit": "PJJoue",
   "version": "V1",
-  "dateConsolidation": "2026-08-08",
+  "dateConsolidation": "2026-08-09",
   "composition": {
     "questionsTotales": 160,
     "questionsParcours": 110,
@@ -18,8 +18,12 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "ANALYTICS_CONSIGNES_MODIFICATIONS_PJJOUE.md": {
-      "tailleOctets": 34113,
-      "sha256": "1359722f2aeb11457ee06e7017aff0bd536e5b65cc5f360c61ec3ec1765217b8"
+      "tailleOctets": 35679,
+      "sha256": "6d2b7b7ff8d798afca37ace2cf56c4d6735beb684ac3bc4abee579d4f7eceaca"
+    },
+    "MODIFICATIONS_VIDEOS_GUIDES_V40.md": {
+      "tailleOctets": 1604,
+      "sha256": "2521451f307f3adb1419944681494dd9af386eb9df4cc116a737135df64a0969"
     },
     "README.md": {
       "tailleOctets": 6532,
@@ -38,8 +42,8 @@
       "sha256": "54e25f324522ce2b4acc6e632eddbad746f2cd2683340e214a6b07a0e24d99b6"
     },
     "confidentialite.html": {
-      "tailleOctets": 8369,
-      "sha256": "eecf402a38279d9088e11dbd7f28a6d59da4ea37833877d36b2eb4b1649e15aa"
+      "tailleOctets": 9090,
+      "sha256": "126f44c1b4100b7f6445305fa119dcc640f0443cdd26be5c337099fcccfd3b0c"
     },
     "decouvrir-la-pjj/index.html": {
       "tailleOctets": 8645,
@@ -166,8 +170,8 @@
       "sha256": "e6ea9290538158404b13400c6059a8cdb13b90d3e733a9e8baf36f9b09ed38c6"
     },
     "index.html": {
-      "tailleOctets": 42608,
-      "sha256": "a7bffb8ed65fb928e7277bafad4b2dfad712127aa48044c9abd6630f51902156"
+      "tailleOctets": 42681,
+      "sha256": "532291edd97e11cdcc765987008d7fdbb755f43a296f370cbe28b91ce2d746f1"
     },
     "mentions-legales.html": {
       "tailleOctets": 6497,
@@ -178,8 +182,8 @@
       "sha256": "6868f84242f1aa2728c21601ad7417a0a440986470a50929f844fa67289ac597"
     },
     "metiers-pjj/index.html": {
-      "tailleOctets": 8609,
-      "sha256": "ab249c7bc15b124fb566a392b56aff97f637811b5f731d9f6d19e3c7c5d533fb"
+      "tailleOctets": 13562,
+      "sha256": "a2f4eebc52e9a0f19dd88bab3d9103ba1bc077d46ccd43491142bd72999bdafc"
     },
     "organisation-pjj/index.html": {
       "tailleOctets": 8501,
@@ -218,8 +222,8 @@
       "sha256": "9f66d4cdb43d88c702f80af027c17042dc4e8ee0b1ae5ce4cc66d4db92423909"
     },
     "preparer-arrivee-pjj/index.html": {
-      "tailleOctets": 11018,
-      "sha256": "d9ea5aaea33b8968fdbec36b5d88e51e832082847d0b1898e49bf65d0f636b7e"
+      "tailleOctets": 13505,
+      "sha256": "bac7aadb6ff71bdc702287f7079a7048bbd935e3e68ffca91841484aed012cb3"
     },
     "quiz-pjj/index.html": {
       "tailleOctets": 8213,
@@ -378,8 +382,8 @@
       "sha256": "3171cbc5d6c8b3ab875840bf21ad62d13ea853be2ac0f6649e09546e98b68558"
     },
     "ressources/styles/85-guides-pedagogiques.css": {
-      "tailleOctets": 9193,
-      "sha256": "81951dda57e314f882656f6883d21a3304b703b536b59d89de2317be5b4faffb"
+      "tailleOctets": 12302,
+      "sha256": "0f634342851950e143d33e385988bf44a5773075887471c6ebb359214ebecbc8"
     },
     "ressources/styles/90-responsive-et-etats-finaux.css": {
       "tailleOctets": 31889,
@@ -397,6 +401,10 @@
       "tailleOctets": 1907,
       "sha256": "88e05debc5cad63c1d530858f3c64a6edeced510c18e011842a4d4ca9a1782e6"
     },
+    "ressources/videos-guides.js": {
+      "tailleOctets": 3476,
+      "sha256": "2749bccaac836cc1f4938a268c3052ab55aab5f774ec82bbb4ab9748049a8526"
+    },
     "robots.txt": {
       "tailleOctets": 63,
       "sha256": "b990d5d0e52186c331e35c4f4ce7f9017ff8351f88f5a1733c54a4dd6158115c"
@@ -411,7 +419,7 @@
     },
     "sitemap.xml": {
       "tailleOctets": 1314,
-      "sha256": "d69e5b6f71502ae32ab278a74167fe2e665d64e0cb481e13113c45a6c2e1f062"
+      "sha256": "1d9a509870cadc5a27b71c2f14c10a93902ed1aee98919cc16658faafe7c0df0"
     },
     "structures-pjj/index.html": {
       "tailleOctets": 10507,

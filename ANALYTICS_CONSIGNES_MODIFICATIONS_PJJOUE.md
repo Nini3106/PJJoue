@@ -990,3 +990,33 @@ Utiliser le champ optionnel `ordreEtape` pour définir leur ordre d’affichage 
 Exemple : si Q017 doit être affichée avant Q016 pour introduire une notion, Q017 peut recevoir `ordreEtape: 6` et Q016 `ordreEtape: 7`. Analytics continue de suivre Q017 comme Q017 et Q016 comme Q016.
 
 Une restauration technique de la même question après rechargement ou changement de largeur ne constitue pas un nouvel affichage métier : elle doit réafficher l’interface **sans renvoyer** artificiellement `pjjoue_question_affichee`.
+
+
+## Vidéos des guides publics — ajout V40
+
+Les pages `metiers-pjj/` et `preparer-arrivee-pjj/` contiennent désormais des lecteurs YouTube chargés uniquement après clic.
+
+### Événement Data Layer
+
+- `pjjoue_video_lancee` : lecture intégrée lancée sur pjjoue.fr ;
+- `pjjoue_video_ouverte_youtube` : ouverture volontaire de la vidéo sur YouTube (lien externe ou test local).
+
+### Paramètres envoyés par le site
+
+- `pjjoue_video_identifiant` : identifiant YouTube stable de la vidéo ;
+- `pjjoue_video_titre` : titre lisible affiché dans PJJoue ;
+- `pjjoue_video_page` : page guide depuis laquelle la vidéo a été lancée ;
+- `pjjoue_video_source` : source institutionnelle affichée (Ministère de la Justice ou ENPJJ).
+
+### Branchement GTM à ajouter
+
+Le déclencheur générique `^pjjoue_.*` capte déjà les événements `pjjoue_video_lancee` et `pjjoue_video_ouverte_youtube`. Pour faire remonter les quatre paramètres dans GA4, créer quatre variables Data Layer et les ajouter au tag d'événement GA4 existant :
+
+1. `DLV - Identifiant de la vidéo` → `pjjoue_video_identifiant`
+2. `DLV - Titre de la vidéo` → `pjjoue_video_titre`
+3. `DLV - Page de la vidéo` → `pjjoue_video_page`
+4. `DLV - Source de la vidéo` → `pjjoue_video_source`
+
+Dans GA4, créer ensuite les dimensions personnalisées événementielles correspondantes si l'on veut analyser séparément quelle vidéo a été lancée, depuis quelle page et depuis quelle source.
+
+Le site n'envoie aucun de ces événements si le consentement Analytics n'a pas été accordé.
