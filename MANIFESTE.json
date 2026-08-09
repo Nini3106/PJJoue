@@ -94,8 +94,8 @@
       "sha256": "222abecf020142abe7c9b77fb2384198cb38bc06a9fe0f02be77ade760c89a33"
     },
     "code/01 - Éléments communs/CSS - Éléments partagés et adaptation aux écrans.css": {
-      "tailleOctets": 127016,
-      "sha256": "deeeb0ec21a75bec16ecc49ab660eac22ae61de4bd561b7b9672a12389eec148"
+      "tailleOctets": 127756,
+      "sha256": "64787120fcf5383d175196ea37bfd6aadea5e834c29a2d864be9c8d02e7d2e29"
     },
     "code/01 - Éléments communs/JavaScript - Brancher les boutons.js": {
       "tailleOctets": 14927,
@@ -922,8 +922,8 @@
       "sha256": "3cb74f96a5e498d7afb3bac4db27caa89aa87892809531af1cdd161713ba2a41"
     },
     "ressources/styles/99-stabilisation-visuelle.css": {
-      "tailleOctets": 4194,
-      "sha256": "3a03485701a817a1c40b67a0ce8ed2949d92d17ef77a1db5954cce8eeeaba631"
+      "tailleOctets": 4934,
+      "sha256": "73ac10bba4006677a3dbcb139e5aa83f47749d5c0bf804c3a89f170da92b0829"
     },
     "ressources/styles/README.md": {
       "tailleOctets": 1914,
@@ -946,8 +946,8 @@
       "sha256": "bdd8f735642dadfda283d021ba8b59d88f30e3d995339ba8299c254dc02c504d"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 257869,
-      "sha256": "82c344a51c0d8d2a40524a54880cff2b4e42e10d221b9fb8d4356bdb6ea61372"
+      "tailleOctets": 258609,
+      "sha256": "20b5ef0b86ce53721acbcb22e2fc0dee90aca856139f51b634c902d21084ca97"
     },
     "ressources/videos-guides.js": {
       "tailleOctets": 3863,
@@ -963,7 +963,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 4000,
-      "sha256": "801bc5840a7c67bd2e490a31408e640cdcc83cd9fdfde1085ee391ff6598e161"
+      "sha256": "5d30a34d8095f2d131c6b4487854782a5669ffafe328dfb3d169a6e53fdac295"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 11258,
