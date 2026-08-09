@@ -142,7 +142,7 @@ img[src$="defi-chrono.svg"] { transform: scale(1.20); }
     padding: 9px 15px;
     white-space: nowrap;
 }
-#carnet #boutonJouerTirageDe {
+#carnet #boutonJouerLeTirage {
     padding-inline: 17px;
 }
 

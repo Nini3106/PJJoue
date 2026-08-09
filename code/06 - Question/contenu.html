@@ -1,0 +1,67 @@
+<section class="ecran" id="question">
+    <div class="question-conteneur">
+     <div class="question-entete">
+      <div class="compteur" id="compteurQuestion">
+      </div>
+      <div aria-label="Avancement de la session" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="progression" role="progressbar">
+       <i id="progressionQuestion">
+       </i>
+      </div>
+      <div class="chronometre" id="chronometreQuestion">
+      </div>
+      <div aria-live="polite" class="indicateur-serie masque" id="indicateurSerie">
+       <span aria-hidden="true">✦</span>
+       <strong></strong>
+      </div>
+     </div>
+     <div class="question-contexte-etape" id="contexteEtapeQuestion" aria-live="polite">
+      <div class="question-etape-identite">
+       <span id="numeroEtapeQuestion">Étape</span>
+       <strong id="titreEtapeQuestion">Parcours PJJ</strong>
+      </div>
+      <div class="question-autonomie" id="suiviSansJokerQuestion">
+       <span>Validées sans joker <strong id="compteurSansJokerQuestion">0/10</strong></span>
+       <button class="question-autonomie-reinitialiser" id="boutonReinitialiserValidationsSansJoker" type="button">Réinitialiser</button>
+      </div>
+     </div>
+     <h2 id="enonceQuestion">
+     </h2>
+     <div class="question-etape">
+      <div class="question question-carte">
+       <div class="reperes" id="reperesQuestion">
+       </div>
+       <div class="reponses" id="zoneReponses">
+       </div>
+       <div aria-atomic="true" aria-live="polite" class="correction masque" id="zoneCorrection" role="status" tabindex="-1">
+       </div>
+       <div class="correction masque" id="zoneIndice">
+       </div>
+      </div>
+     </div>
+     <div class="question-commande-ligne">
+      <div class="suivant-ligne">
+       <button aria-label="Question précédente" class="precedent-bouton" id="boutonQuestionPrecedente">
+        <span class="libelle-bureau">← Question précédente</span><span aria-hidden="true" class="libelle-mobile">← Précédente</span>
+       </button>
+       <button class="principal masque" id="boutonValider" type="button">
+        Valider
+       </button>
+       <div class="navigation-question-groupe">
+        <button aria-controls="fenetreJokers" aria-expanded="false" aria-haspopup="dialog" class="joker-menu-bouton masque" id="boutonJokers" type="button">
+         <span aria-hidden="true" class="joker-onglet-icone">
+          <svg viewBox="0 0 24 24"><path d="M5 8h14v10H5zM9 8V6h6v2"></path><path d="M12 11v4M10 13h4"></path></svg>
+         </span>
+         <span>Jokers</span>
+        </button>
+        <button class="passer-bouton" id="boutonPasser">
+         Passer →
+        </button>
+        <button aria-label="Question suivante" class="principal masque" id="boutonQuestionSuivante">
+         <span class="libelle-bureau">Question suivante →</span><span aria-hidden="true" class="libelle-mobile">Suivante →</span>
+        </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+   

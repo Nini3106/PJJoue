@@ -177,7 +177,7 @@ header.entete {
     font-weight: 800;
     transition: transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
 }
-.global-retour:active,.discret:active {
+.bouton-retour:active,.discret:active {
     color: #fff;
     background: #b67a00;
     border-color: var(--accent)
@@ -957,7 +957,7 @@ p {
     .marque > span {
         display: none;
     }
-    .global-retour {
+    .bouton-retour {
         min-height: 36px;
         padding: 6px 10px;
         font-size: .86rem
@@ -1120,7 +1120,7 @@ p {
     display: contents;
 }
 
-.discret.global-retour {
+.discret.bouton-retour {
     width: max-content;
     margin: 0 0 4px;
     color: #fff;
@@ -1128,13 +1128,13 @@ p {
     background: var(--surface-carte-profonde);
     box-shadow: none
 }
-.discret.global-retour:hover {
+.discret.bouton-retour:hover {
     color: #fff;
     border-color: var(--accent);
     background: #17558f;
     box-shadow: none
 }
-.discret.global-retour:active {
+.discret.bouton-retour:active {
     color: #fff;
     background: #b67a00;
     border-color: var(--accent)

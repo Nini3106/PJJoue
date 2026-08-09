@@ -1,0 +1,228 @@
+<section class="ecran" id="entrainement">
+    <div class="page-entete entrainement-entete progression-entete">
+     <h1>
+      Entraînement libre
+     </h1>
+     <p>
+      Choisis ton mode d’entraînement
+     </p>
+    </div>
+    <div class="entrainement-nombre">
+     <div class="choix-libelle">
+      Nombre de questions
+     </div>
+     <select aria-hidden="true" class="natif-masque" id="nombreQuestionsEntrainement" tabindex="-1">
+      <option selected="" value="10">
+       10
+      </option>
+      <option value="20">
+       20
+      </option>
+      <option value="30">
+       30
+      </option>
+      <option value="40">
+       40
+      </option>
+      <option value="50">
+       50
+      </option>
+      <option value="60">
+       60
+      </option>
+      <option value="70">
+       70
+      </option>
+      <option value="80">
+       80
+      </option>
+      <option value="90">
+       90
+      </option>
+      <option value="100">
+       100
+      </option>
+      <option value="110">
+       110
+      </option>
+     </select>
+     <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement" data-selection-visuelle="au-clic">
+      <button id="boutonEntrainement10Questions" class="choix-bouton" data-valeur="10" type="button">
+       10
+      </button>
+      <button id="boutonEntrainement20Questions" class="choix-bouton" data-valeur="20" type="button">
+       20
+      </button>
+      <button id="boutonEntrainement30Questions" class="choix-bouton" data-valeur="30" type="button">
+       30
+      </button>
+      <button id="boutonEntrainement40Questions" class="choix-bouton" data-valeur="40" type="button">
+       40
+      </button>
+      <button id="boutonEntrainement50Questions" class="choix-bouton" data-valeur="50" type="button">
+       50
+      </button>
+      <button id="boutonEntrainement60Questions" class="choix-bouton" data-valeur="60" type="button">
+       60
+      </button>
+      <button id="boutonEntrainement70Questions" class="choix-bouton" data-valeur="70" type="button">
+       70
+      </button>
+      <button id="boutonEntrainement80Questions" class="choix-bouton" data-valeur="80" type="button">
+       80
+      </button>
+      <button id="boutonEntrainement90Questions" class="choix-bouton" data-valeur="90" type="button">
+       90
+      </button>
+      <button id="boutonEntrainement100Questions" class="choix-bouton" data-valeur="100" type="button">
+       100
+      </button>
+      <button id="boutonEntrainement110Questions" class="choix-bouton" data-valeur="110" type="button">
+       110
+      </button>
+     </div>
+    </div>
+    <div class="entrainement-grille">
+     <article class="entrainement-carte entrainement-ordonne" data-carte-entrainement="ordonne">
+      <div aria-hidden="true" class="entrainement-icone entrainement-icone-ordonne">
+       <img src="ressources/icones-interface/icone-par-ordre-des-etapes.svg" alt="" aria-hidden="true">
+      </div>
+      <h2>
+       Par ordre d’étapes
+      </h2>
+      <p>
+       Les questions suivent la progression du programme, de l’étape 1 à l’étape 11.
+      </p>
+      <div class="entrainement-details">
+       Étape 1 → Étape 11
+      </div>
+      <div class="entrainement-options">
+       <div class="entrainement-option">
+        <span>
+         Jokers
+        </span>
+        <div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic">
+         <button id="boutonEntrainementOrdonneAvecJokers" class="option-bouton" data-valeur="oui" type="button">
+          Avec
+         </button>
+         <button id="boutonEntrainementOrdonneSansJokers" class="option-bouton" data-valeur="non" type="button">
+          Sans
+         </button>
+        </div>
+       </div>
+       <div class="entrainement-option">
+        <span>
+         Chrono
+        </span>
+        <div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic">
+         <button id="boutonEntrainementOrdonneSansChronometre" class="option-bouton" data-valeur="non" type="button">
+          Sans
+         </button>
+         <button id="boutonEntrainementOrdonneAvecChronometre" class="option-bouton" data-valeur="oui" type="button">
+          Avec
+         </button>
+        </div>
+       </div>
+       <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre="">
+        <span>
+         Temps par question
+        </span>
+        <div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic">
+         <button id="boutonEntrainementOrdonne5Secondes" class="choix-bouton" data-secondes="5" type="button">
+          5 s
+         </button>
+         <button id="boutonEntrainementOrdonne10Secondes" class="choix-bouton" data-secondes="10" type="button">
+          10 s
+         </button>
+         <button id="boutonEntrainementOrdonne15Secondes" class="choix-bouton" data-secondes="15" type="button">
+          15 s
+         </button>
+         <button id="boutonEntrainementOrdonne20Secondes" class="choix-bouton" data-secondes="20" type="button">
+          20 s
+         </button>
+         <button id="boutonEntrainementOrdonne25Secondes" class="choix-bouton" data-secondes="25" type="button">
+          25 s
+         </button>
+         <button id="boutonEntrainementOrdonne30Secondes" class="choix-bouton" data-secondes="30" type="button">
+          30 s
+         </button>
+        </div>
+       </div>
+      </div>
+      <button id="boutonLancerEntrainementOrdonne" class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">
+       Lancer l’entraînement
+      </button>
+     </article>
+     <article class="entrainement-carte entrainement-melange" data-carte-entrainement="melange">
+      <div aria-hidden="true" class="entrainement-icone entrainement-icone-melange">
+       <img src="ressources/icones-interface/icone-melanger.svg" alt="" aria-hidden="true">
+      </div>
+      <h2>
+       Mélangé
+      </h2>
+      <p>
+       Les questions proviennent de toutes les étapes et sont présentées dans un ordre aléatoire.
+      </p>
+      <div class="entrainement-details">
+       Toutes les étapes · ordre mélangé
+      </div>
+      <div class="entrainement-options">
+       <div class="entrainement-option">
+        <span>
+         Jokers
+        </span>
+        <div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic">
+         <button id="boutonEntrainementMelangeAvecJokers" class="option-bouton" data-valeur="oui" type="button">
+          Avec
+         </button>
+         <button id="boutonEntrainementMelangeSansJokers" class="option-bouton" data-valeur="non" type="button">
+          Sans
+         </button>
+        </div>
+       </div>
+       <div class="entrainement-option">
+        <span>
+         Chrono
+        </span>
+        <div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic">
+         <button id="boutonEntrainementMelangeSansChronometre" class="option-bouton" data-valeur="non" type="button">
+          Sans
+         </button>
+         <button id="boutonEntrainementMelangeAvecChronometre" class="option-bouton" data-valeur="oui" type="button">
+          Avec
+         </button>
+        </div>
+       </div>
+       <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre="">
+        <span>
+         Temps par question
+        </span>
+        <div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic">
+         <button id="boutonEntrainementMelange5Secondes" class="choix-bouton" data-secondes="5" type="button">
+          5 s
+         </button>
+         <button id="boutonEntrainementMelange10Secondes" class="choix-bouton" data-secondes="10" type="button">
+          10 s
+         </button>
+         <button id="boutonEntrainementMelange15Secondes" class="choix-bouton" data-secondes="15" type="button">
+          15 s
+         </button>
+         <button id="boutonEntrainementMelange20Secondes" class="choix-bouton" data-secondes="20" type="button">
+          20 s
+         </button>
+         <button id="boutonEntrainementMelange25Secondes" class="choix-bouton" data-secondes="25" type="button">
+          25 s
+         </button>
+         <button id="boutonEntrainementMelange30Secondes" class="choix-bouton" data-secondes="30" type="button">
+          30 s
+         </button>
+        </div>
+       </div>
+      </div>
+      <button id="boutonLancerEntrainementMelange" class="entrainement-lancer principal" data-organisation-session="melange" type="button">
+       Lancer l’entraînement
+      </button>
+     </article>
+    </div>
+   </section>
+   

@@ -515,16 +515,16 @@ function enregistrerSauvegarde() {
         return false;
     }
 }
-function serialiserMap(carte) {
+function serialiserTableauAssociatif(carte) {
     return carte instanceof Map ? [...carte.entries()] : [];
 }
-function serialiserSet(ensemble) {
+function serialiserEnsemble(ensemble) {
     return ensemble instanceof Set ? [...ensemble.values()] : [];
 }
-function restaurerMap(valeur) {
+function restaurerTableauAssociatif(valeur) {
     return Array.isArray(valeur) ? new Map(valeur) : new Map();
 }
-function restaurerSet(valeur) {
+function restaurerEnsemble(valeur) {
     return Array.isArray(valeur) ? new Set(valeur) : new Set();
 }
 function effacerSessionEnCours() {
@@ -570,13 +570,13 @@ function enregistrerSessionEnCours() {
         nombreQuestionsTirageDe: etat.nombreQuestionsTirageDe || 0,
         decalageReponses: etat.decalageReponses || 0,
         questions: etat.questionsSession.map(question => Number(question.id)).filter(Number.isFinite),
-        erreursSession: serialiserSet(etat.erreursSession),
-        questionsPassees: serialiserSet(etat.questionsPassees),
-        reponsesSession: serialiserMap(etat.reponsesSession),
-        optionsSession: serialiserMap(etat.optionsSession),
-        tentativesQuestions: serialiserMap(etat.tentativesQuestions),
-        jokersQuestions: serialiserMap(etat.jokersQuestions),
-        brouillonsEcrits: serialiserMap(etat.brouillonsEcrits),
+        erreursSession: serialiserEnsemble(etat.erreursSession),
+        questionsPassees: serialiserEnsemble(etat.questionsPassees),
+        reponsesSession: serialiserTableauAssociatif(etat.reponsesSession),
+        optionsSession: serialiserTableauAssociatif(etat.optionsSession),
+        tentativesQuestions: serialiserTableauAssociatif(etat.tentativesQuestions),
+        jokersQuestions: serialiserTableauAssociatif(etat.jokersQuestions),
+        brouillonsEcrits: serialiserTableauAssociatif(etat.brouillonsEcrits),
         brouillonActivite: etat.brouillonActivite || null
     };
     try {
@@ -613,16 +613,16 @@ function restaurerSessionEnCours() {
         effacerSessionEnCours();
         return false;
     }
-    const index = Math.min(questions.length - 1, Math.max(0, Number(instantane.indexQuestion) || 0));
-    etat.theme = instantane.theme || questions[index]?.theme || 'commun';
-    etat.etape = Number(instantane.etape) || Number(questions[index]?.etape) || 1;
+    const positionQuestion = Math.min(questions.length - 1, Math.max(0, Number(instantane.indexQuestion) || 0));
+    etat.theme = instantane.theme || questions[positionQuestion]?.theme || 'commun';
+    etat.etape = Number(instantane.etape) || Number(questions[positionQuestion]?.etape) || 1;
     etat.chapitre = Number(instantane.chapitre) || 1;
     etat.mode = instantane.mode || 'parcours';
     etat.organisationSession = instantane.organisationSession || 'ordonne';
     etat.origineSessionAnalytics = instantane.origineSessionAnalytics || null;
     etat.perimetreRevision = instantane.perimetreRevision || null;
     etat.questionsSession = questions;
-    etat.indexQuestion = index;
+    etat.indexQuestion = positionQuestion;
     etat.score = Math.max(0, Number(instantane.score) || 0);
     etat.serie = Math.max(0, Number(instantane.serie) || 0);
     etat.meilleureSerie = Math.max(0, Number(instantane.meilleureSerie) || 0);
@@ -637,15 +637,15 @@ function restaurerSessionEnCours() {
     etat.debutSessionAnalytics = Number(instantane.debutSessionAnalytics) || Date.now();
     etat.nombreQuestionsTirageDe = Math.max(0, Number(instantane.nombreQuestionsTirageDe) || 0);
     etat.decalageReponses = Number(instantane.decalageReponses) || 0;
-    etat.erreursSession = restaurerSet(instantane.erreursSession);
-    etat.questionsPassees = restaurerSet(instantane.questionsPassees);
-    etat.reponsesSession = restaurerMap(instantane.reponsesSession);
-    etat.optionsSession = restaurerMap(instantane.optionsSession);
-    etat.tentativesQuestions = restaurerMap(instantane.tentativesQuestions);
-    etat.jokersQuestions = restaurerMap(instantane.jokersQuestions);
-    etat.brouillonsEcrits = restaurerMap(instantane.brouillonsEcrits);
+    etat.erreursSession = restaurerEnsemble(instantane.erreursSession);
+    etat.questionsPassees = restaurerEnsemble(instantane.questionsPassees);
+    etat.reponsesSession = restaurerTableauAssociatif(instantane.reponsesSession);
+    etat.optionsSession = restaurerTableauAssociatif(instantane.optionsSession);
+    etat.tentativesQuestions = restaurerTableauAssociatif(instantane.tentativesQuestions);
+    etat.jokersQuestions = restaurerTableauAssociatif(instantane.jokersQuestions);
+    etat.brouillonsEcrits = restaurerTableauAssociatif(instantane.brouillonsEcrits);
     etat.brouillonActivite = instantane.brouillonActivite || null;
-    etat.questionCourante = questions[index];
+    etat.questionCourante = questions[positionQuestion];
     etat.questionValidee = Boolean(instantane.questionValidee);
     etat.jokers = etat.jokersQuestions.get(etat.questionCourante.id)
         || { cinquanteCinquante: true, indice: true, langueAuChat: true };
@@ -685,7 +685,7 @@ function annulerRappelJokers() {
     clearTimeout(minuteurFinRappelJokers);
     minuteurRappelJokers = null;
     minuteurFinRappelJokers = null;
-    selectionner('#boutonMenuJokers')?.classList.remove('rappel-jokers');
+    selectionner('#boutonJokers')?.classList.remove('rappel-jokers');
 }
 function compterJokersDisponibles() {
     if (etat.jokersSessionActifs === false || !etat.jokers)
@@ -693,7 +693,7 @@ function compterJokersDisponibles() {
     return ['cinquanteCinquante', 'indice', 'langueAuChat'].filter(cle => etat.jokers[cle] === true).length;
 }
 function actualiserBoutonJokers() {
-    const declencheur = selectionner('#boutonMenuJokers');
+    const declencheur = selectionner('#boutonJokers');
     const fenetre = selectionner('#fenetreJokers');
     const statut = selectionner('#statutFenetreJokers');
     if (!declencheur)
@@ -727,7 +727,7 @@ function actualiserBoutonJokers() {
 }
 function fermerFenetreJokers({ restaurerFocus = true } = {}) {
     const fenetre = selectionner('#fenetreJokers');
-    const declencheur = selectionner('#boutonMenuJokers');
+    const declencheur = selectionner('#boutonJokers');
     if (fenetre?.open)
         fenetre.close();
     declencheur?.setAttribute('aria-expanded', 'false');
@@ -736,7 +736,7 @@ function fermerFenetreJokers({ restaurerFocus = true } = {}) {
 }
 function ouvrirFenetreJokers() {
     const fenetre = selectionner('#fenetreJokers');
-    const declencheur = selectionner('#boutonMenuJokers');
+    const declencheur = selectionner('#boutonJokers');
     actualiserBoutonJokers();
     if (!fenetre || !declencheur || declencheur.disabled)
         return;
@@ -744,7 +744,7 @@ function ouvrirFenetreJokers() {
         fenetre.showModal();
     declencheur.setAttribute('aria-expanded', 'true');
     requestAnimationFrame(() => {
-        const premier = ['joker5050', 'jokerIndice', 'jokerLangueAuChat']
+        const premier = ['boutonJoker5050', 'boutonJokerIndice', 'boutonJokerLangueAuChat']
             .map(identifiant => selectionner('#' + identifiant))
             .find(bouton => bouton && !bouton.disabled);
         (premier || selectionner('#fermerFenetreJokers'))?.focus({ preventScroll: true });
@@ -755,7 +755,7 @@ function programmerRappelJokers() {
     minuteurRappelJokers = setTimeout(() => {
         if (etat.ecran !== 'question' || etat.questionValidee)
             return;
-        const declencheur = selectionner('#boutonMenuJokers');
+        const declencheur = selectionner('#boutonJokers');
         if (!declencheur || declencheur.disabled || declencheur.classList.contains('masque'))
             return;
         declencheur.classList.add('rappel-jokers');
@@ -781,7 +781,7 @@ function creerEtatNavigation(identifiant) {
     };
 }
 function actualiserBoutonRetour() {
-    const boutonRetour = selectionner('#boutonRetourGlobal');
+    const boutonRetour = selectionner('#boutonRetour');
     if (!boutonRetour)
         return;
     const retourDisponible = etat.ecran !== 'accueil';
@@ -826,7 +826,7 @@ function ajusterQuestionAEcran() {
         return;
     const entete = document.querySelector('header.entete');
     const basEntete = entete ? entete.getBoundingClientRect().bottom : 0;
-    const boutonRetour = selectionner('#boutonRetourGlobal');
+    const boutonRetour = selectionner('#boutonRetour');
     const hauteurRetour = boutonRetour && !boutonRetour.classList.contains('masque')
         ? boutonRetour.getBoundingClientRect().height + 8
         : 0;
@@ -1377,7 +1377,7 @@ function actualiserAccueil() {
     if (maitrisees)
         maitrisees.textContent = String(compterEtapesMaitrisees());
     actualiserLibellesProgression();
-    actualiserBoutonPrincipalAccueil();
+    actualiserBoutonCommencer();
     chargerParametres();
 }
 function calculerProgressionTheme(identifiantTheme) {
@@ -1412,8 +1412,8 @@ function obtenirEtapeAReprendre(programme) {
         return nombreQuestionsTraitees < nombreQuestions || bilanEtape.termineeSansJoker !== true;
     }) || null;
 }
-function actualiserBoutonPrincipalAccueil() {
-    const bouton = selectionner('#boutonAccueilPrincipal');
+function actualiserBoutonCommencer() {
+    const bouton = selectionner('#boutonCommencer');
     const programme = PROGRAMMES.commun;
     if (!bouton || !programme)
         return;
@@ -1573,12 +1573,24 @@ function ouvrirParcours(identifiantTheme, optionsAffichage = {}) {
     afficherEtapes();
     afficherEcran('parcours', optionsAffichage);
 }
+const FICHIERS_ICONES_ETAPES = Object.freeze({
+    1: 'icone-loupe-decouverte.svg',
+    2: 'icone-public-accompagne.svg',
+    3: 'icone-acteurs-justice.svg',
+    4: 'icone-professionnels-pjj.svg',
+    5: 'icone-organisation-pjj.svg',
+    6: 'icone-formes-prise-en-charge.svg',
+    7: 'icone-structure-ouverte-de-jour.svg',
+    8: 'icone-activites-educatives.svg',
+    9: 'icone-structures-placement.svg',
+    10: 'icone-mesures-judiciaires.svg',
+    11: 'icone-partenaires.svg'
+});
 function obtenirBaliseIconeEtape(numeroEtape) {
-    const numero = Number(numeroEtape);
-    if (!Number.isInteger(numero) || numero < 1 || numero > 11)
+    const nomFichier = FICHIERS_ICONES_ETAPES[Number(numeroEtape)];
+    if (!nomFichier)
         return '';
-    const identifiant = String(numero).padStart(2, '0');
-    return `<img src="ressources/icones-parcours/etape-${identifiant}.svg" alt="" aria-hidden="true">`;
+    return `<img src="ressources/icones-parcours/${nomFichier}" alt="" aria-hidden="true">`;
 }
 function afficherEtapes() {
     initialiserProgression(etat.theme);
@@ -1854,8 +1866,8 @@ function lancerEntrainementLibre() {
 function lancerDeParcours() {
     const face = selectionner('#faceDeParcours');
     const resultat = selectionner('#resultatDeParcours');
-    const boutonLancer = selectionner('#boutonLancerDeParcours');
-    const boutonJouer = selectionner('#boutonJouerTirageDe');
+    const boutonLancer = selectionner('#boutonLancerLeDe');
+    const boutonJouer = selectionner('#boutonJouerLeTirage');
     if (!face || !resultat || !boutonLancer || !boutonJouer)
         return;
     const nombreTire = Math.floor(Math.random() * 6) + 1;
@@ -2260,7 +2272,7 @@ function consommerJoker5050(donnees) {
     envoyerUtilisationJoker('50_50');
     etat.jokers.cinquanteCinquante = false;
     etat.jokers.donneesJoker5050 = donnees;
-    selectionner('#joker5050').disabled = true;
+    selectionner('#boutonJoker5050').disabled = true;
     actualiserBoutonJokers();
 }
 function obtenirConfigurationValidation() {
@@ -3332,7 +3344,7 @@ function configurerNavigationQuestion(dejaPassee, modeEvaluationFinale) {
     selectionner('#zoneCorrection').className = 'correction masque';
     selectionner('#boutonQuestionPrecedente').disabled = etat.indexQuestion === 0;
 
-    const boutonPasser = selectionner('#boutonPasserQuestion');
+    const boutonPasser = selectionner('#boutonPasser');
     const boutonSuivant = selectionner('#boutonQuestionSuivante');
     boutonPasser.classList.toggle('masque', etat.questionValidee || modeEvaluationFinale);
     boutonPasser.disabled = etat.questionValidee || modeEvaluationFinale;
@@ -3346,9 +3358,9 @@ function configurerNavigationQuestion(dejaPassee, modeEvaluationFinale) {
 }
 
 function configurerJokersQuestion(jokersActifs) {
-    const bouton5050 = selectionner('#joker5050');
-    const boutonIndice = selectionner('#jokerIndice');
-    const boutonLangueAuChat = selectionner('#jokerLangueAuChat');
+    const bouton5050 = selectionner('#boutonJoker5050');
+    const boutonIndice = selectionner('#boutonJokerIndice');
+    const boutonLangueAuChat = selectionner('#boutonJokerLangueAuChat');
 
     bouton5050.classList.remove('masque');
     bouton5050.disabled =
@@ -3405,8 +3417,8 @@ function actualiserSuiviEtapeQuestion(question) {
     const titre = selectionner('#titreEtapeQuestion');
     const suivi = selectionner('#suiviSansJokerQuestion');
     const compteur = selectionner('#compteurSansJokerQuestion');
-    const boutonReset = selectionner('#boutonReinitialiserSansJoker');
-    if (!conteneur || !numero || !titre || !suivi || !compteur || !boutonReset || !question)
+    const boutonReinitialiser = selectionner('#boutonReinitialiserValidationsSansJoker');
+    if (!conteneur || !numero || !titre || !suivi || !compteur || !boutonReinitialiser || !question)
         return;
     const finale = etat.mode === 'evaluation-finale' || Number(question.etape) === 12;
     const etapeProgramme = obtenirEtapeProgramme(question.theme, question.etape);
@@ -3418,8 +3430,8 @@ function actualiserSuiviEtapeQuestion(question) {
     const questionsEtape = obtenirQuestionsEtape(question.theme, question.etape);
     const nombreAutonomes = compterReussitesAutonomesEtape(question.theme, question.etape);
     compteur.textContent = `${nombreAutonomes}/${questionsEtape.length}`;
-    boutonReset.disabled = nombreAutonomes === 0;
-    boutonReset.setAttribute(
+    boutonReinitialiser.disabled = nombreAutonomes === 0;
+    boutonReinitialiser.setAttribute(
         'aria-label',
         `Réinitialiser les ${nombreAutonomes} questions validées sans joker de l’étape ${question.etape}`
     );
@@ -3565,7 +3577,7 @@ function preparerValidationReponse(question, bouton) {
     ).forEach(commande => commande.disabled = true);
     if (bouton)
         bouton.setAttribute('aria-checked', 'true');
-    selectionner('#boutonPasserQuestion').classList.add('masque');
+    selectionner('#boutonPasser').classList.add('masque');
     selectionner('#boutonValider')?.classList.add('masque');
     return { etaitPassee, tentatives, aideUtilisee };
 }
@@ -4085,7 +4097,7 @@ function utiliserIndice(type) {
     marquerJokerUtilise();
     envoyerUtilisationJoker('indice');
     etat.jokers.indice = false;
-    selectionner('#jokerIndice').disabled = true;
+    selectionner('#boutonJokerIndice').disabled = true;
     actualiserBoutonJokers();
     const zone = selectionner('#zoneIndice');
     zone.replaceChildren();
@@ -4110,7 +4122,7 @@ function utiliserIndice(type) {
     message.textContent = etat.questionCourante.indice || 'Repère les informations certaines de la situation avant d’examiner les choix.';
     zone.append(entete, separateur, message);
     zone.classList.remove('masque');
-    fermer.onclick = () => { zone.classList.add('masque'); zone.replaceChildren(); selectionner('#jokerIndice').focus({ preventScroll: true }); };
+    fermer.onclick = () => { zone.classList.add('masque'); zone.replaceChildren(); selectionner('#boutonJokerIndice').focus({ preventScroll: true }); };
     annoncer(`Indice. ${message.textContent}`);
 }
 function utiliserLangueAuChat() {
@@ -4121,7 +4133,7 @@ function utiliserLangueAuChat() {
     marquerJokerUtilise();
     envoyerUtilisationJoker('langue_au_chat');
     etat.jokers.langueAuChat = false;
-    selectionner('#jokerLangueAuChat').disabled = true;
+    selectionner('#boutonJokerLangueAuChat').disabled = true;
     actualiserBoutonJokers();
     const question = etat.questionCourante;
     finaliserReponse(true, question.bonneReponse || 'Réponse dévoilée', { precisions: { langueAuChatUtilisee: true } });
@@ -4365,7 +4377,7 @@ function construireBilanSessionOrdinaire({
     return { titre, messageResultat, celebration };
 }
 function configurerBoutonContinuerBilan() {
-    const boutonContinuer = selectionner('#boutonContinuerBilan');
+    const boutonContinuer = selectionner('#boutonContinuer');
     if (etat.mode === 'evaluation-finale')
         boutonContinuer.textContent = 'Refaire l’évaluation';
     else if (etat.mode === 'parcours') {
@@ -4980,23 +4992,23 @@ selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => {
     }
     afficherEcran(bouton.dataset.ecran);
 });
-const boutonLancerDeParcours = selectionner('#boutonLancerDeParcours');
-if (boutonLancerDeParcours)
-    boutonLancerDeParcours.onclick = lancerDeParcours;
-const boutonJouerTirageDe = selectionner('#boutonJouerTirageDe');
-if (boutonJouerTirageDe)
-    boutonJouerTirageDe.onclick = jouerTirageDeParcours;
+const boutonLancerLeDe = selectionner('#boutonLancerLeDe');
+if (boutonLancerLeDe)
+    boutonLancerLeDe.onclick = lancerDeParcours;
+const boutonJouerLeTirage = selectionner('#boutonJouerLeTirage');
+if (boutonJouerLeTirage)
+    boutonJouerLeTirage.onclick = jouerTirageDeParcours;
 selectionner('#boutonQuestionSuivante').onclick = afficherQuestionSuivante;
 selectionner('#boutonQuestionPrecedente').onclick = afficherQuestionPrecedente;
-selectionner('#boutonPasserQuestion').onclick = demanderPassageQuestion;
-selectionner('#boutonReinitialiserSansJoker')?.addEventListener('click', demanderReinitialisationSansJoker);
+selectionner('#boutonPasser').onclick = demanderPassageQuestion;
+selectionner('#boutonReinitialiserValidationsSansJoker')?.addEventListener('click', demanderReinitialisationSansJoker);
 function initialiserFenetreJokers() {
-    const declencheur = selectionner('#boutonMenuJokers');
+    const declencheur = selectionner('#boutonJokers');
     const fenetre = selectionner('#fenetreJokers');
     const boutonFermer = selectionner('#fermerFenetreJokers');
-    const boutonCinquanteCinquante = selectionner('#joker5050');
-    const boutonIndice = selectionner('#jokerIndice');
-    const boutonLangueAuChat = selectionner('#jokerLangueAuChat');
+    const boutonCinquanteCinquante = selectionner('#boutonJoker5050');
+    const boutonIndice = selectionner('#boutonJokerIndice');
+    const boutonLangueAuChat = selectionner('#boutonJokerLangueAuChat');
     if (!declencheur || !fenetre || !boutonFermer || !boutonCinquanteCinquante || !boutonIndice || !boutonLangueAuChat) {
         console.warn('PJJoue : interface des jokers incomplète ; le reste du site reste disponible.');
         return;
@@ -5010,13 +5022,13 @@ function initialiserFenetreJokers() {
     boutonLangueAuChat.onclick = () => { fermerFenetreJokers({ restaurerFocus: false }); utiliserLangueAuChat(); actualiserBoutonJokers(); };
 }
 initialiserFenetreJokers();
-selectionner('#boutonRetourGlobal').onclick = revenirEnArriere;
-selectionner('#boutonRevoirErreursBilan').onclick = () => afficherEcran('erreurs');
-selectionner('#boutonRetourParcoursBilan').onclick = () => ouvrirParcours('commun', { remplacerHistorique: true });
-selectionner('#boutonOuvrirParcoursProgression').onclick = () => ouvrirParcours('commun');
-selectionner('#boutonExporterProgression').onclick = exporterProgression;
+selectionner('#boutonRetour').onclick = revenirEnArriere;
+selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
+selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours('commun', { remplacerHistorique: true });
+selectionner('#boutonOuvrirParcours').onclick = () => ouvrirParcours('commun');
+selectionner('#boutonExporterMaProgression').onclick = exporterProgression;
 selectionner('#fichierImporterProgression').onchange = evenement => evenement.target.files[0] && importerProgression(evenement.target.files[0]);
-selectionner('#boutonReinitialiserProgression').onclick = () => ouvrirFenetreMessage({
+selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFenetreMessage({
     titre: 'Réinitialiser toute la progression ?',
     message: 'Les scores, les étapes validées et les erreurs enregistrées seront définitivement supprimés de ce navigateur.',
     libelleConfirmer: 'Réinitialiser',
@@ -5067,8 +5079,8 @@ document.addEventListener('keydown', evenement => {
         const nombre = Number(evenement.key);
         if (nombre >= 1 && nombre <= 4)
             document.querySelector(`.reponse[data-indice-reponse="${nombre - 1}"]`)?.click();
-        if (evenement.key.toLocaleLowerCase('fr-FR') === 'p' && !selectionner('#boutonPasserQuestion').classList.contains('masque'))
-            selectionner('#boutonPasserQuestion').click();
+        if (evenement.key.toLocaleLowerCase('fr-FR') === 'p' && !selectionner('#boutonPasser').classList.contains('masque'))
+            selectionner('#boutonPasser').click();
     }
     if (evenement.key === 'ArrowLeft') {
         evenement.preventDefault();

@@ -279,14 +279,14 @@ Ne pas renuméroter les anciennes questions uniquement pour rendre la liste « p
 
 ### Contrainte actuelle du projet
 
-À partir de la V37, PJJoue conserve 160 questions actives, mais les identifiants ne sont volontairement plus continus : un identifiant retiré n’est jamais recyclé. L’évaluation finale est repérée par `estEvaluationFinale: true` et non plus par une plage numérique fixe.
+PJJoue contient 160 questions actives, mais les identifiants ne sont volontairement pas continus : un identifiant retiré n’est jamais recyclé. L’évaluation finale est repérée par `estEvaluationFinale: true` et non par une plage numérique fixe.
 
 IDs actuellement retirés et réservés définitivement : Q043, Q101 à Q110, Q145, Q154, Q155 et Q157 à Q160. Les nouvelles questions créées dans cette refonte utilisent Q161 à Q178.
 
 Donc ajouter une nouvelle question peut nécessiter, en plus de `donnees/questions.json` :
 
 - d'adapter les règles dans `outils/validation_donnees.py` ;
-- d'adapter `tests/verifier_v7.py` ;
+- d'adapter `tests/verifier_pjjoue.py` ;
 - d'adapter les textes publics annonçant « 160 questions » ;
 - d'adapter la logique de l'Évaluation finale si son périmètre change ;
 - de reconstruire `donnees/donnees-pjj.js` et `MANIFESTE.json` avec les scripts du projet.
@@ -395,7 +395,7 @@ Ces éléments ne définissent pas l'identité Analytics de l'étape.
 
 ## 20. Déplacer / réordonner des étapes
 
-Depuis la V37, l’identité Analytics d’une étape est séparée de sa position visible.
+L’identité Analytics d’une étape est séparée de sa position visible.
 
 - `id` dans `programme.json` = position visible dans le parcours ;
 - `idAnalyticsPermanent` = identité permanente de l’étape pour Analytics ;
@@ -409,7 +409,7 @@ Pour préserver l’historique, **ne jamais recycler une identité Analytics per
 
 Une nouvelle étape doit recevoir un identifiant qui n'a jamais été utilisé.
 
-La V35 attend actuellement 11 étapes d'apprentissage puis l'étape 12 pour l'Évaluation finale. Ajouter une étape demande donc une modification structurelle plus large :
+PJJoue comporte actuellement 11 étapes d'apprentissage puis l'étape 12 pour l'Évaluation finale. Ajouter une étape demande donc une modification structurelle plus large :
 
 - programme ;
 - navigation ;
@@ -566,7 +566,7 @@ Si un nouveau mode est ajouté à PJJoue :
 3. conserver le préfixe `pjjoue_` pour tout nouvel événement ou paramètre ;
 4. vérifier que le nom d'événement et le nom de paramètre font au maximum 40 caractères ;
 5. ne pas dépasser 25 paramètres sur un même événement ;
-6. documenter le mode dans `documentation/CONFIGURATION_GTM_ANALYTICS.md` ;
+6. documenter le mode dans `documentation/documentation-actuelle/CONFIGURATION_GTM_ANALYTICS.md` ;
 7. tester dans GTM Preview et GA4 DebugView.
 
 Grâce au déclencheur GTM `^pjjoue_.*`, un nouvel événement PJJoue pourra être capté sans créer un déclencheur séparé, à condition que les paramètres nécessaires soient aussi configurés dans la balise.
@@ -700,7 +700,7 @@ Texte principal de la question affiché à l'utilisateur.
 
 ### `theme`
 
-Catégorie technique de rattachement des données. La V35 utilise principalement `commun`.
+Catégorie technique de rattachement des données. PJJoue utilise principalement `commun`.
 
 - peut évoluer si l'architecture éditoriale change ;
 - ne sert pas d'identité Analytics de la question ;
@@ -992,7 +992,7 @@ Exemple : si Q017 doit être affichée avant Q016 pour introduire une notion, Q0
 Une restauration technique de la même question après rechargement ou changement de largeur ne constitue pas un nouvel affichage métier : elle doit réafficher l’interface **sans renvoyer** artificiellement `pjjoue_question_affichee`.
 
 
-## Vidéos des guides publics — ajout V40
+## Vidéos des guides publics
 
 Les pages `metiers-pjj/` et `preparer-arrivee-pjj/` contiennent désormais des lecteurs YouTube chargés uniquement après clic.
 

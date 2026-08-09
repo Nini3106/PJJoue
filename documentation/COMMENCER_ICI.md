@@ -1,95 +1,94 @@
-# Commencer ici — guide de reprise
+# COMMENCER ICI — reprendre PJJoue sans se perdre
 
-Ce document est le point d'entrée du projet. PJJoue est un site statique : il
-fonctionne en ouvrant `index.html` et ne nécessite ni serveur applicatif, ni
-base de données, ni étape de compilation pour être diffusé.
+Si tu découvres PJJoue, commence par **`code/00 - LIRE EN PREMIER/`**.
 
-Pour reprendre le chantier de nettoyage interrompu, lire d'abord
-`documentation/POINT_DE_REPRISE.md`.
+Le document obligatoire est :
 
-## Trouver immédiatement le bon fichier
+**`code/00 - LIRE EN PREMIER/REGLES_OBLIGATOIRES_ORGANISATION_ET_NOMMAGE.md`**
 
-| Besoin | Fichier à ouvrir | Repère principal |
-|---|---|---|
-| Modifier un texte ou la structure d'un écran | `index.html` | identifiant français de l'écran : `accueil`, `parcours`, `question`, `bilan`… |
-| Modifier le fonctionnement du jeu | `ressources/moteur-jeu.js` | nom français de l'action : `afficherQuestion`, `validerQuestion`, `terminerSession`… |
-| Modifier l'apparence du jeu | `ressources/styles/` | commencer par `ressources/styles/README.md` |
-| Modifier l'outil d'administration | `administration.html`, puis `ressources/administration.js` et `ressources/administration.css` | `administration` |
-| Modifier une question | `donnees/questions.json` | identifiant numérique de la question |
-| Modifier une étape ou ses souvenirs | `donnees/programme.json` | numéro de l'étape |
-| Modifier une source documentaire | `donnees/sources.json` | identifiant de la source |
-| Comprendre l'état, la navigation et les activités | `documentation/ARCHITECTURE.md` | rubrique correspondant au besoin |
-| Exécuter ou comprendre les tests | `documentation/RECETTE.md` | contrôle automatique ou recette manuelle |
-| Déployer le dossier | `documentation/DEPLOIEMENT.md` | hébergement statique |
-| Configurer le suivi Analytics | `documentation/CONFIGURATION_GTM_ANALYTICS.md` | un déclencheur générique et une balise GA4 |
-| Faire évoluer questions, étapes, modes et jokers sans casser Analytics | `ANALYTICS_CONSIGNES_MODIFICATIONS_PJJOUE.md` | guide complet de continuité Analytics |
-| Modifier une question sans casser l’historique Analytics | `documentation/MODIFIER_LES_QUESTIONS_SANS_CASSER_ANALYTICS.md` | renvoi vers le guide complet |
+Il fixe la règle centrale : **ce que l’on voit dans PJJoue doit porter le même nom dans le code.**
 
-## Règles à connaître avant de modifier
+## Je veux modifier quelque chose de visible
 
-1. `donnees/questions.json`, `donnees/programme.json` et
-   `donnees/sources.json` sont les sources de vérité.
-2. `donnees/donnees-pjj.js` est généré : ne jamais le modifier à la main.
-3. Les noms propres au projet sont en français et décrivent le composant visible
-   ou l'action déclenchée. Les mots imposés par HTML, CSS et JavaScript restent
-   naturellement dans leur syntaxe standard.
-4. `index.html` doit continuer à fonctionner en ouverture directe, sans serveur.
-5. Une correction CSS ne doit pas être ajoutée machinalement en fin de feuille :
-   chercher d'abord la règle existante et vérifier la cascade.
-6. Une référence visuelle ne se recrée jamais pour faire disparaître un échec :
-   l'écart doit d'abord être compris et accepté.
+Ouvre le dossier qui porte le nom de la page :
 
-## Carte rapide du CSS
+- `code/02 - Accueil/`
+- `code/03 - Parcours PJJ/`
+- `code/04 - Carnet de voyage/`
+- `code/05 - Entraînement libre/`
+- `code/06 - Question/`
+- `code/07 - Bilan de la session/`
+- `code/08 - Réviser/`
+- `code/09 - Progression/`
+- `code/10 - Paramètres/`
+- `code/11 - Guides pour découvrir la PJJ/`
+- `code/12 - Informations légales/`
+- `code/13 - Administration/`
 
-- `:root` : palette, surfaces, texte, états, dimensions et couleurs d'icônes ;
-- `.entete`, `.navigation`, `.menu-mobile-bouton` : navigation générale ;
-- `#accueil`, `#jouer`, `#parcours`, `#entrainement`, `#revision`,
-  `#progression`, `#parametres`, `#question`, `#bilan` : écrans ;
-- `.question-carte`, `.zone-reponses`, `.question-commande-ligne` : structure
-  commune d'une question ;
-- `.association-*`, `.elimination-*`, `.ordre-*`, `.classement-*` : activités ;
-- `.joker-*`, `.correction*`, `.indication*` : aides et résultat ;
-- les blocs `@media` restent à leur position : leur ordre participe au rendu.
+Ce qui sert à plusieurs pages est rangé dans **`code/01 - Éléments communs/`**.
 
-Le détail du système visuel se trouve dans `documentation/ARCHITECTURE.md`. Le
-journal des décisions prises sans changement de rendu se trouve dans
-`documentation/JOURNAL_NETTOYAGE_CSS.md`.
+La page **Question** a volontairement un sous-dossier `actions/` : ses actions JavaScript sont séparées par rôle pour éviter un fichier géant.
 
-## Cycle normal d'une modification
+## Je veux retrouver un bouton, une icône ou une action
 
-Installer une fois les outils de développement :
+- `code/00 - LIRE EN PREMIER/INDEX_VISUEL_VERS_CODE.md`
+- `code/00 - LIRE EN PREMIER/CARTE_DES_ACTIONS_JAVASCRIPT.md`
+
+## Après une modification dans `code/`
+
+Reconstruire les fichiers publics :
+
+```bash
+python outils/construire_site.py
+```
+
+Sous Windows, on peut aussi lancer `CONSTRUIRE_PJJOUE.bat`.
+
+Le constructeur refuse maintenant les erreurs silencieuses : repère HTML oublié, morceau CSS dupliqué, source absente, morceau CSS non utilisé ou incohérence du plan.
+
+Pour vérifier qu’aucun fichier généré n’a été modifié directement :
+
+```bash
+python outils/construire_site.py --verifier
+```
+
+## Lancer les contrôles
+
+Sous Windows, pour une première installation, double-clique sur **`INSTALLER_OUTILS_DE_DEVELOPPEMENT.bat`**.
+
+Ensuite, le contrôle complet peut être lancé avec **`VERIFIER_PJJOUE.bat`**.
+
+Les mêmes commandes à la main sont :
 
 ```bash
 npm ci
-python -m pip install -r requirements-dev.txt
-python -m playwright install chromium
-```
-
-Après une modification des données :
-
-```bash
-python outils/construire_donnees.py
-```
-
-Après toute modification :
-
-```bash
 npm test
 ```
 
-Après une modification visuelle ou CSS, sur le poste Windows de référence :
+Versions de Node acceptées : **20.19+, 22.13+ ou 24+** selon la plage déclarée dans `package.json` et supportée par ESLint.
+
+Pour produire de vraies captures Chromium sur ordinateur, portable et mobile :
 
 ```bash
 npm run test:visuel
 ```
 
-Avant de créer une archive :
+Pour comparer deux versions pixel par pixel :
 
 ```bash
-python outils/construire_manifeste.py
-python tests/verifier_v1.py
+python tests/verifier_regression_visuelle.py --reference-projet CHEMIN_DE_LA_VERSION_REFERENCE
 ```
 
-Le résultat attendu est : ESLint sans erreur, CSS sans doublon ni déclaration
-répétée, 6 tests unitaires réussis, contrôle structurel réussi, 42 scénarios
-d'interface réussis et 19 captures visuelles identiques.
+## Documentation actuelle
+
+Tout ce qui sert à travailler aujourd’hui se trouve dans :
+
+**`documentation/documentation-actuelle/`**
+
+## Ne jamais renommer sans vérifier les conséquences
+
+- paramètres Analytics `pjjoue_...` ;
+- clés de sauvegarde locale ;
+- identifiants permanents des questions ;
+- URL publiques déjà indexées ;
+- migrations des anciennes sauvegardes.

@@ -821,7 +821,7 @@
     grid-row: 1;
 }
 #question .question-commande-ligne #boutonQuestionPrecedente,
-#question .question-commande-ligne #boutonPasserQuestion,
+#question .question-commande-ligne #boutonPasser,
 #question .question-commande-ligne #boutonQuestionSuivante,
 #question .question-commande-ligne #boutonValider {
     height: 42px;

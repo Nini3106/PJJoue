@@ -1,0 +1,309 @@
+/* ==========================================================
+   Paramètres
+   ==========================================================
+   Cette fiche est rangée ici pour que tu saches immédiatement où chercher.
+   Le script de construction remet chaque morceau dans son ordre d’origine.
+   Ne supprime pas les repères MORCEAU : ils protègent l’ordre du CSS.
+   ========================================================== */
+
+/* === MORCEAU CSS | sortie=00-fondations-et-composants.css | ordre=0124 === */
+.parametre {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px;
+    border: 1px solid var(--bordure-carte);
+    border-radius: var(--rayon-moyen);
+    background: var(--surface-carte);
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=00-fondations-et-composants.css | ordre=0131 === */
+.source {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--bordure)
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=00-fondations-et-composants.css | ordre=0132 === */
+.source a {
+    color: var(--accent);
+    font-weight: 850
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=20-accueil-et-question-principale.css | ordre=0076 === */
+#parametres .theme-icone,#parametres .vide-icone {
+    color: var(--icone-violette)
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0072 === */
+#parametres .parametres-actions-carte {
+    flex-direction: column;
+    justify-content: space-between;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 22px;
+    min-height: auto;
+    padding: 20px;
+    display: block;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0073 === */
+#parametres .parametres-actions-boutons button {
+    border-radius: 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    padding: 8px 10px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0074 === */
+#parametres .parametres-actions-boutons .principal {
+    color: #fff;
+    border-color: #6f94c0;
+    background: var(--surface-carte-profonde);
+    box-shadow: none;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0075 === */
+#parametres .parametres-actions-boutons .principal:hover,
+#parametres .parametres-actions-boutons .principal:focus-visible {
+    color: var(--texte-sur-jaune);
+    border-color: var(--bouton-selection);
+    background: var(--bouton-selection);
+    transform: none;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0076 === */
+#parametres .parametres-choix {
+    min-height: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 22px;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0077 === */
+#parametres .parametres-choix .choix-libelle {
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0078 === */
+#parametres .parametres-choix .choix-groupe {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 8px;
+    margin: 0;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0079 === */
+#parametres .parametres-choix .choix-bouton {
+    min-height: 40px;
+    padding: 8px 12px;
+    white-space: nowrap;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0080 === */
+#parametres .parametres-choix .choix-bouton:hover,
+#parametres .parametres-choix .choix-bouton:focus-visible {
+    color: var(--texte-sur-jaune);
+    border-color: var(--bouton-selection);
+    background: var(--bouton-selection);
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0081 === */
+@media (max-width:820px) {
+    .barre-actions-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    .barre-actions-page .bouton-retour {
+        margin: 0;
+    }
+    
+    
+    
+    
+    #parametres .parametres-choix,#parametres .parametres-actions-carte {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0082 === */
+@media (max-width:560px) {
+    #parametres .parametres-actions-boutons {
+        grid-template-columns: 1fr;
+    }
+    #parametres .parametres-choix .choix-groupe {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: max-content;
+        max-width: 100%;
+        margin-inline: auto;
+    }
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0083 === */
+#parametres .parametres-actions-boutons {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: 10px;
+    margin: 0;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0084 === */
+@media (max-width:700px) {
+    #parametres .parametres-actions-boutons {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0085 === */
+#parametres .parametre-volume.parametre-desactive {
+    opacity: .58;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=30-revision-parcours-et-parametres.css | ordre=0086 === */
+#parametres .parametre-volume.parametre-desactive .curseur {
+    cursor: not-allowed;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=40-progression-et-erreurs.css | ordre=0055 === */
+#parametres .sources-panneau {
+    width: 100%;
+    margin-top: 14px;
+    padding: 16px;
+    border: 1px solid rgba(142,199,251,.30);
+    border-radius: 18px;
+    background: linear-gradient(160deg,rgba(16,79,141,.72),rgba(6,47,96,.86));
+    box-shadow: 0 12px 28px rgba(0,19,52,.14);
+    box-sizing: border-box;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=40-progression-et-erreurs.css | ordre=0056 === */
+#parametres .sources-defilement {
+    max-height: 360px;
+    min-width: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+    box-sizing: border-box;
+    scrollbar-gutter: stable;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=40-progression-et-erreurs.css | ordre=0057 === */
+#parametres .sources-defilement::-webkit-scrollbar {
+    width: 9px;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=40-progression-et-erreurs.css | ordre=0058 === */
+#parametres .sources-defilement::-webkit-scrollbar-track {
+    background: rgba(5,42,84,.22);
+    border-radius: 999px;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=40-progression-et-erreurs.css | ordre=0059 === */
+#parametres .sources-defilement::-webkit-scrollbar-thumb {
+    background: rgba(145,198,245,.42);
+    border-radius: 999px;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=40-progression-et-erreurs.css | ordre=0060 === */
+#parametres .sources-defilement::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,200,61,.58);
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=40-progression-et-erreurs.css | ordre=0061 === */
+#parametres .sources-defilement * {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=40-progression-et-erreurs.css | ordre=0062 === */
+#parametres .sources-defilement a,#parametres .sources-defilement p,#parametres .sources-defilement div {
+    overflow-wrap: anywhere;
+}
+
+/* === FIN MORCEAU CSS === */
+
+/* === MORCEAU CSS | sortie=40-progression-et-erreurs.css | ordre=0063 === */
+@media (max-width:700px) {
+    #parametres .sources-panneau {
+        padding: 13px;
+        border-radius: 15px;
+    }
+    #parametres .sources-defilement {
+        max-height: 300px;
+        padding-right: 5px;
+    }
+}
+
+
+
+/* === FIN MORCEAU CSS === */
+

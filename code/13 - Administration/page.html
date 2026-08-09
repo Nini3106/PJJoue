@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+    <link rel="icon" href="favicon.ico" sizes="any"/>
+  <link rel="icon" href="favicon-48x48.png" type="image/png" sizes="48x48"/>
+  <link rel="icon" href="favicon-96x96.png" type="image/png" sizes="96x96"/>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180"/>
+  <title>Administration de contenu — PJJoue</title>
+  <link rel="stylesheet" href="ressources/administration.css">
+</head>
+<body>
+<main>
+  <h1>Administration de contenu — PJJoue</h1>
+  <p>Éditeur local de la banque. Il n’envoie aucune donnée et n’écrit pas directement dans le paquet livré : il exporte un JSON à valider puis intégrer dans une nouvelle version.</p>
+  <div class="barre-outils">
+    <label>Étape
+      <select id="filtreEtape">
+        <option value="0">Toutes</option>
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+        <option value="10">10</option><option value="11">11</option><option value="12">12 — Évaluation finale</option>
+      </select>
+    </label>
+    <label>Recherche <input id="rechercheQuestions" placeholder="sigle, mot, réponse…"></label>
+    <button id="boutonControler">Contrôler</button>
+    <button id="boutonExporter">Exporter JSON</button>
+    <button id="boutonReinitialiser">Réinitialiser</button>
+  </div>
+  <p id="nombreQuestionsAffichees"></p>
+  <div id="etatAdministration" class="etat-administration" aria-live="polite">Prêt.</div>
+  <div id="listeQuestions"></div>
+</main>
+<dialog id="fenetreReinitialisation" class="fenetre-administration" aria-labelledby="titreReinitialisation" aria-describedby="texteReinitialisation">
+  <div class="fenetre-administration-panneau">
+    <button type="button" id="fermerReinitialisation" class="fenetre-administration-fermer" aria-label="Fermer">×</button>
+    <div class="fenetre-administration-icone" aria-hidden="true">!</div>
+    <h2 id="titreReinitialisation">Abandonner le brouillon local ?</h2>
+    <p id="texteReinitialisation">Toutes les modifications non exportées seront supprimées.</p>
+    <div class="fenetre-administration-actions">
+      <button type="button" id="annulerReinitialisation">Annuler</button>
+      <button type="button" id="confirmerReinitialisation" class="fenetre-administration-principal">Réinitialiser</button>
+    </div>
+  </div>
+</dialog>
+<script src="donnees/donnees-pjj.js"></script>
+<script src="ressources/administration.js"></script>
+</body>
+</html>

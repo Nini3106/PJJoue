@@ -1,0 +1,95 @@
+<section class="ecran" id="parcours">
+    <div class="programme-presentation chemin-programme-presentation">
+     <div class="programme-presentation-principal">
+      <h1 id="titreParcours">
+       Parcours PJJ
+      </h1>
+      <p id="sousTitreParcours">
+       Explore, comprends et progresse à ton rythme à travers 11 étapes clés.
+      </p>
+     </div>
+     <div class="programme-objectif programme-objectif-simple">
+      <div class="programme-objectif-interieur">
+       <span aria-hidden="true" class="objectif-icone">
+        <img src="ressources/icones-interface/icone-cible.svg" alt="" aria-hidden="true" class="objectif-cible-reference">
+       </span>
+       <span class="programme-objectif-texte">
+        Complète les 11 étapes sans joker pour accéder à l’évaluation finale.
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="chemin-chemin">
+     <div class="carte-parcours-entete chemin-carte-parcours-entete">
+      <span aria-hidden="true" class="carte-parcours-icone">
+       <img src="ressources/icones-interface/icone-carte-du-parcours.svg" alt="" aria-hidden="true">
+      </span>
+      <div class="carte-parcours-titres">
+       <span class="carte-parcours-surtitre">Carte du parcours</span>
+       <h2>Les 11 destinations</h2>
+       <p id="resumeCarteParcours"></p>
+      </div>
+      <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
+       <span aria-hidden="true" class="parcours-chronometre-icone">
+        <img src="ressources/icones-interface/icone-defi-chrono.svg" alt="" aria-hidden="true">
+       </span>
+       <div class="parcours-chronometre-texte">
+        <strong id="titreChronometreParcours">Défi chrono</strong>
+        <span>Ajoute du rythme à la prochaine étape si tu en as envie.</span>
+       </div>
+       <div class="parcours-chronometre-commandes">
+        <div class="parcours-bascule-groupe" id="choixChronometreParcours">
+         <button id="boutonParcoursLibre" class="option-bouton actif" data-valeur="non" type="button">Libre</button>
+         <button id="boutonParcoursChronometre" class="option-bouton" data-valeur="oui" type="button">Chronométré</button>
+        </div>
+        <div class="parcours-secondes masque" id="secondesChronometreParcours">
+         <span>Secondes</span>
+         <div class="entrainement-secondes-groupe">
+          <button id="boutonParcours5Secondes" class="choix-bouton" data-secondes="5" type="button">5 s</button>
+          <button id="boutonParcours10Secondes" class="choix-bouton" data-secondes="10" type="button">10 s</button>
+          <button id="boutonParcours15Secondes" class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
+          <button id="boutonParcours20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button>
+          <button id="boutonParcours25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button>
+          <button id="boutonParcours30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button>
+         </div>
+        </div>
+       </div>
+      </section>
+     </div>
+     <div class="chemin-ligne" id="ligneParcours1">
+     </div>
+     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
+     </div>
+     <div class="chemin-ligne" id="ligneParcours2">
+     </div>
+     <div aria-hidden="true" class="chemin-virage chemin-virage-gauche">
+     </div>
+     <div class="chemin-ligne chemin-ligne-inverse" id="ligneParcours3">
+     </div>
+     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
+     </div>
+      <div class="chemin-finale-ligne">
+      <div class="chemin-finale-espace">
+      </div>
+      <div id="cartesEtapesFinales">
+      </div>
+      <div aria-hidden="true" class="chemin-finale-lien">
+      </div>
+      <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled="" id="carteEvaluationFinale" type="button">
+       <span aria-hidden="true" class="icone-evaluation">
+        <img src="ressources/icones-interface/icone-trophee-evaluation-finale.svg" alt="" aria-hidden="true">
+       </span>
+       <span class="evaluation-etape-numero">
+        ÉTAPE 12
+       </span>
+       <span class="evaluation-titre">
+        Évaluation
+       </span>
+       <span class="evaluation-statut">
+        Parcours sans jokers requis
+       </span>
+      </button>
+     </div>
+    </div>
+   </section>
+   

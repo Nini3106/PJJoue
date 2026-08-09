@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="ressources/styles/70-celebrations-bilan-et-fenetres.css">
   <link rel="stylesheet" href="ressources/styles/80-finitions-de-l-interface.css">
   <link rel="stylesheet" href="ressources/styles/85-guides-pedagogiques.css">
-  <link rel="stylesheet" href="ressources/styles/90-responsive-et-etats-finaux.css">
+  <link rel="stylesheet" href="ressources/styles/90-adaptation-ecrans-et-etats-finaux.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PJJoue","alternateName":"PJJoue — Découvrir et comprendre la PJJ","url":"https://pjjoue.fr/","description":"Parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
  <link rel="stylesheet" href="ressources/styles/95-consentement.css">
   <link rel="stylesheet" href="ressources/styles/96-icones-et-defi-hasard.css">
@@ -56,38 +56,38 @@
      Découvrir et comprendre la PJJ
     </span>
    </div>
-   <button aria-controls="menuPrincipal" aria-expanded="false" aria-label="Ouvrir le menu" class="menu-mobile-bouton" id="boutonMenuMobile" type="button">
+   <button aria-controls="menuPrincipal" aria-expanded="false" aria-label="Ouvrir le menu" class="bouton-menu-mobile" id="boutonMenuMobile" type="button">
     <span aria-hidden="true"></span>
     <span aria-hidden="true"></span>
     <span aria-hidden="true"></span>
    </button>
    <nav class="navigation" id="menuPrincipal">
-    <button data-ecran="accueil" type="button">
+    <button id="boutonAccueil" data-ecran="accueil" type="button">
      Accueil
     </button>
-    <button data-ecran="parcours" type="button">
+    <button id="boutonParcoursPJJ" data-ecran="parcours" type="button">
      Parcours PJJ
     </button>
-    <button data-ecran="carnet" type="button">
+    <button id="boutonCarnetDeVoyage" data-ecran="carnet" type="button">
      Carnet de voyage
     </button>
-    <button data-ecran="entrainement" type="button">
+    <button id="boutonEntrainementLibre" data-ecran="entrainement" type="button">
      Entraînement libre
     </button>
-    <button data-ecran="erreurs" type="button">
+    <button id="boutonReviser" data-ecran="erreurs" type="button">
      Réviser
     </button>
-    <button data-ecran="progression" type="button">
+    <button id="boutonProgression" data-ecran="progression" type="button">
      Progression
     </button>
-    <button data-ecran="parametres" type="button">
+    <button id="boutonParametres" data-ecran="parametres" type="button">
      Paramètres
     </button>
    </nav>
   </header>
   <main class="conteneur" id="contenuPrincipal" tabindex="-1">
    <div class="barre-actions-page">
-    <button class="discret global-retour masque" id="boutonRetourGlobal" type="button">
+    <button class="discret bouton-retour masque" id="boutonRetour" type="button">
      ← Retour
     </button>
    </div>
@@ -122,7 +122,7 @@
        <h1>Entre dans l’univers de la PJJ</h1>
        <span aria-hidden="true" class="accueil-accent"></span>
        <div class="accueil-action-principale">
-        <button class="accueil-presentation-zone-cliquable accueil-presentation-demarrer" id="boutonAccueilPrincipal" type="button">Commencer <span aria-hidden="true">→</span></button>
+        <button class="bouton-commencer bouton-commencer-principal" id="boutonCommencer" type="button">Commencer <span aria-hidden="true">→</span></button>
        </div>
       </div>
       <p class="accueil-introduction">Découvre la Protection judiciaire de la jeunesse, comprends son fonctionnement et progresse à ton rythme à travers un parcours structuré et interactif.</p>
@@ -140,7 +140,7 @@
         <strong>7</strong><span>modes de jeu</span>
        </li>
        <li>
-        <img src="ressources/icones-interface/trophee-evaluation.svg" alt="" aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-violette accueil-statistique-image">
+        <img src="ressources/icones-interface/icone-trophee-evaluation-finale.svg" alt="" aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-violette accueil-statistique-image">
         <strong>1</strong><span>évaluation</span>
        </li>
       </ul>
@@ -160,7 +160,7 @@
      <div class="programme-objectif programme-objectif-simple">
       <div class="programme-objectif-interieur">
        <span aria-hidden="true" class="objectif-icone">
-        <img src="ressources/icones-interface/cible.svg" alt="" aria-hidden="true" class="objectif-cible-reference">
+        <img src="ressources/icones-interface/icone-cible.svg" alt="" aria-hidden="true" class="objectif-cible-reference">
        </span>
        <span class="programme-objectif-texte">
         Complète les 11 étapes sans joker pour accéder à l’évaluation finale.
@@ -171,7 +171,7 @@
     <div class="chemin-chemin">
      <div class="carte-parcours-entete chemin-carte-parcours-entete">
       <span aria-hidden="true" class="carte-parcours-icone">
-       <img src="ressources/icones-interface/carte-parcours-pjj.svg" alt="" aria-hidden="true">
+       <img src="ressources/icones-interface/icone-carte-du-parcours.svg" alt="" aria-hidden="true">
       </span>
       <div class="carte-parcours-titres">
        <span class="carte-parcours-surtitre">Carte du parcours</span>
@@ -180,7 +180,7 @@
       </div>
       <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
        <span aria-hidden="true" class="parcours-chronometre-icone">
-        <img src="ressources/icones-interface/defi-chrono.svg" alt="" aria-hidden="true">
+        <img src="ressources/icones-interface/icone-defi-chrono.svg" alt="" aria-hidden="true">
        </span>
        <div class="parcours-chronometre-texte">
         <strong id="titreChronometreParcours">Défi chrono</strong>
@@ -188,18 +188,18 @@
        </div>
        <div class="parcours-chronometre-commandes">
         <div class="parcours-bascule-groupe" id="choixChronometreParcours">
-         <button class="option-bouton actif" data-valeur="non" type="button">Libre</button>
-         <button class="option-bouton" data-valeur="oui" type="button">Chronométré</button>
+         <button id="boutonParcoursLibre" class="option-bouton actif" data-valeur="non" type="button">Libre</button>
+         <button id="boutonParcoursChronometre" class="option-bouton" data-valeur="oui" type="button">Chronométré</button>
         </div>
         <div class="parcours-secondes masque" id="secondesChronometreParcours">
          <span>Secondes</span>
          <div class="entrainement-secondes-groupe">
-          <button class="choix-bouton" data-secondes="5" type="button">5 s</button>
-          <button class="choix-bouton" data-secondes="10" type="button">10 s</button>
-          <button class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
-          <button class="choix-bouton" data-secondes="20" type="button">20 s</button>
-          <button class="choix-bouton" data-secondes="25" type="button">25 s</button>
-          <button class="choix-bouton" data-secondes="30" type="button">30 s</button>
+          <button id="boutonParcours5Secondes" class="choix-bouton" data-secondes="5" type="button">5 s</button>
+          <button id="boutonParcours10Secondes" class="choix-bouton" data-secondes="10" type="button">10 s</button>
+          <button id="boutonParcours15Secondes" class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
+          <button id="boutonParcours20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button>
+          <button id="boutonParcours25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button>
+          <button id="boutonParcours30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button>
          </div>
         </div>
        </div>
@@ -226,7 +226,7 @@
       </div>
       <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled="" id="carteEvaluationFinale" type="button">
        <span aria-hidden="true" class="icone-evaluation">
-        <img src="ressources/icones-interface/trophee-evaluation.svg" alt="" aria-hidden="true">
+        <img src="ressources/icones-interface/icone-trophee-evaluation-finale.svg" alt="" aria-hidden="true">
        </span>
        <span class="evaluation-etape-numero">
         ÉTAPE 12
@@ -254,7 +254,7 @@
      <div class="carnet-parcours-contenu">
       <div class="carnet-parcours-entete">
        <div aria-hidden="true" class="carnet-parcours-icone">
-        <img src="ressources/icones-interface/boussole.svg" alt="" aria-hidden="true">
+        <img src="ressources/icones-interface/icone-boussole.svg" alt="" aria-hidden="true">
        </div>
        <div>
         <span class="carnet-parcours-surtitre">Ton parcours</span>
@@ -274,10 +274,10 @@
          <span id="resultatDeParcours">Lance le dé pour tirer de 1 à 6 questions aléatoires.</span>
         </div>
         <div class="carnet-defi-hasard-actions">
-         <button aria-label="Lancer le dé" class="secondaire" id="boutonLancerDeParcours" type="button">
+         <button aria-label="Lancer le dé" class="secondaire" id="boutonLancerLeDe" type="button">
           <span class="libelle-bureau">Lancer le dé</span><span aria-hidden="true" class="libelle-mobile">Lancer</span>
          </button>
-         <button class="principal masque" id="boutonJouerTirageDe" type="button">Jouer le tirage</button>
+         <button class="principal masque" id="boutonJouerLeTirage" type="button">Jouer le tirage</button>
         </div>
        </section>
       </div>
@@ -352,37 +352,37 @@
       </option>
      </select>
      <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement" data-selection-visuelle="au-clic">
-      <button class="choix-bouton" data-valeur="10" type="button">
+      <button id="boutonEntrainement10Questions" class="choix-bouton" data-valeur="10" type="button">
        10
       </button>
-      <button class="choix-bouton" data-valeur="20" type="button">
+      <button id="boutonEntrainement20Questions" class="choix-bouton" data-valeur="20" type="button">
        20
       </button>
-      <button class="choix-bouton" data-valeur="30" type="button">
+      <button id="boutonEntrainement30Questions" class="choix-bouton" data-valeur="30" type="button">
        30
       </button>
-      <button class="choix-bouton" data-valeur="40" type="button">
+      <button id="boutonEntrainement40Questions" class="choix-bouton" data-valeur="40" type="button">
        40
       </button>
-      <button class="choix-bouton" data-valeur="50" type="button">
+      <button id="boutonEntrainement50Questions" class="choix-bouton" data-valeur="50" type="button">
        50
       </button>
-      <button class="choix-bouton" data-valeur="60" type="button">
+      <button id="boutonEntrainement60Questions" class="choix-bouton" data-valeur="60" type="button">
        60
       </button>
-      <button class="choix-bouton" data-valeur="70" type="button">
+      <button id="boutonEntrainement70Questions" class="choix-bouton" data-valeur="70" type="button">
        70
       </button>
-      <button class="choix-bouton" data-valeur="80" type="button">
+      <button id="boutonEntrainement80Questions" class="choix-bouton" data-valeur="80" type="button">
        80
       </button>
-      <button class="choix-bouton" data-valeur="90" type="button">
+      <button id="boutonEntrainement90Questions" class="choix-bouton" data-valeur="90" type="button">
        90
       </button>
-      <button class="choix-bouton" data-valeur="100" type="button">
+      <button id="boutonEntrainement100Questions" class="choix-bouton" data-valeur="100" type="button">
        100
       </button>
-      <button class="choix-bouton" data-valeur="110" type="button">
+      <button id="boutonEntrainement110Questions" class="choix-bouton" data-valeur="110" type="button">
        110
       </button>
      </div>
@@ -390,7 +390,7 @@
     <div class="entrainement-grille">
      <article class="entrainement-carte entrainement-ordonne" data-carte-entrainement="ordonne">
       <div aria-hidden="true" class="entrainement-icone entrainement-icone-ordonne">
-       <img src="ressources/icones-interface/par-ordre-etapes.svg" alt="" aria-hidden="true">
+       <img src="ressources/icones-interface/icone-par-ordre-des-etapes.svg" alt="" aria-hidden="true">
       </div>
       <h2>
        Par ordre d’étapes
@@ -399,7 +399,7 @@
        Les questions suivent la progression du programme, de l’étape 1 à l’étape 11.
       </p>
       <div class="entrainement-details">
-       Étape 1 → Étape 10
+       Étape 1 → Étape 11
       </div>
       <div class="entrainement-options">
        <div class="entrainement-option">
@@ -407,10 +407,10 @@
          Jokers
         </span>
         <div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic">
-         <button class="option-bouton" data-valeur="oui" type="button">
+         <button id="boutonEntrainementOrdonneAvecJokers" class="option-bouton" data-valeur="oui" type="button">
           Avec
          </button>
-         <button class="option-bouton" data-valeur="non" type="button">
+         <button id="boutonEntrainementOrdonneSansJokers" class="option-bouton" data-valeur="non" type="button">
           Sans
          </button>
         </div>
@@ -420,10 +420,10 @@
          Chrono
         </span>
         <div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic">
-         <button class="option-bouton" data-valeur="non" type="button">
+         <button id="boutonEntrainementOrdonneSansChronometre" class="option-bouton" data-valeur="non" type="button">
           Sans
          </button>
-         <button class="option-bouton" data-valeur="oui" type="button">
+         <button id="boutonEntrainementOrdonneAvecChronometre" class="option-bouton" data-valeur="oui" type="button">
           Avec
          </button>
         </div>
@@ -433,34 +433,34 @@
          Temps par question
         </span>
         <div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic">
-         <button class="choix-bouton" data-secondes="5" type="button">
+         <button id="boutonEntrainementOrdonne5Secondes" class="choix-bouton" data-secondes="5" type="button">
           5 s
          </button>
-         <button class="choix-bouton" data-secondes="10" type="button">
+         <button id="boutonEntrainementOrdonne10Secondes" class="choix-bouton" data-secondes="10" type="button">
           10 s
          </button>
-         <button class="choix-bouton" data-secondes="15" type="button">
+         <button id="boutonEntrainementOrdonne15Secondes" class="choix-bouton" data-secondes="15" type="button">
           15 s
          </button>
-         <button class="choix-bouton" data-secondes="20" type="button">
+         <button id="boutonEntrainementOrdonne20Secondes" class="choix-bouton" data-secondes="20" type="button">
           20 s
          </button>
-         <button class="choix-bouton" data-secondes="25" type="button">
+         <button id="boutonEntrainementOrdonne25Secondes" class="choix-bouton" data-secondes="25" type="button">
           25 s
          </button>
-         <button class="choix-bouton" data-secondes="30" type="button">
+         <button id="boutonEntrainementOrdonne30Secondes" class="choix-bouton" data-secondes="30" type="button">
           30 s
          </button>
         </div>
        </div>
       </div>
-      <button class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">
+      <button id="boutonLancerEntrainementOrdonne" class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">
        Lancer l’entraînement
       </button>
      </article>
      <article class="entrainement-carte entrainement-melange" data-carte-entrainement="melange">
       <div aria-hidden="true" class="entrainement-icone entrainement-icone-melange">
-       <img src="ressources/icones-interface/melange.svg" alt="" aria-hidden="true">
+       <img src="ressources/icones-interface/icone-melanger.svg" alt="" aria-hidden="true">
       </div>
       <h2>
        Mélangé
@@ -477,10 +477,10 @@
          Jokers
         </span>
         <div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic">
-         <button class="option-bouton" data-valeur="oui" type="button">
+         <button id="boutonEntrainementMelangeAvecJokers" class="option-bouton" data-valeur="oui" type="button">
           Avec
          </button>
-         <button class="option-bouton" data-valeur="non" type="button">
+         <button id="boutonEntrainementMelangeSansJokers" class="option-bouton" data-valeur="non" type="button">
           Sans
          </button>
         </div>
@@ -490,10 +490,10 @@
          Chrono
         </span>
         <div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic">
-         <button class="option-bouton" data-valeur="non" type="button">
+         <button id="boutonEntrainementMelangeSansChronometre" class="option-bouton" data-valeur="non" type="button">
           Sans
          </button>
-         <button class="option-bouton" data-valeur="oui" type="button">
+         <button id="boutonEntrainementMelangeAvecChronometre" class="option-bouton" data-valeur="oui" type="button">
           Avec
          </button>
         </div>
@@ -503,34 +503,35 @@
          Temps par question
         </span>
         <div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic">
-         <button class="choix-bouton" data-secondes="5" type="button">
+         <button id="boutonEntrainementMelange5Secondes" class="choix-bouton" data-secondes="5" type="button">
           5 s
          </button>
-         <button class="choix-bouton" data-secondes="10" type="button">
+         <button id="boutonEntrainementMelange10Secondes" class="choix-bouton" data-secondes="10" type="button">
           10 s
          </button>
-         <button class="choix-bouton" data-secondes="15" type="button">
+         <button id="boutonEntrainementMelange15Secondes" class="choix-bouton" data-secondes="15" type="button">
           15 s
          </button>
-         <button class="choix-bouton" data-secondes="20" type="button">
+         <button id="boutonEntrainementMelange20Secondes" class="choix-bouton" data-secondes="20" type="button">
           20 s
          </button>
-         <button class="choix-bouton" data-secondes="25" type="button">
+         <button id="boutonEntrainementMelange25Secondes" class="choix-bouton" data-secondes="25" type="button">
           25 s
          </button>
-         <button class="choix-bouton" data-secondes="30" type="button">
+         <button id="boutonEntrainementMelange30Secondes" class="choix-bouton" data-secondes="30" type="button">
           30 s
          </button>
         </div>
        </div>
       </div>
-      <button class="entrainement-lancer principal" data-organisation-session="melange" type="button">
+      <button id="boutonLancerEntrainementMelange" class="entrainement-lancer principal" data-organisation-session="melange" type="button">
        Lancer l’entraînement
       </button>
      </article>
     </div>
    </section>
-   <section class="ecran" id="question">
+   
+<section class="ecran" id="question">
     <div class="question-conteneur">
      <div class="question-entete">
       <div class="compteur" id="compteurQuestion">
@@ -553,7 +554,7 @@
       </div>
       <div class="question-autonomie" id="suiviSansJokerQuestion">
        <span>Validées sans joker <strong id="compteurSansJokerQuestion">0/10</strong></span>
-       <button class="question-autonomie-reset" id="boutonReinitialiserSansJoker" type="button">Réinitialiser</button>
+       <button class="question-autonomie-reinitialiser" id="boutonReinitialiserValidationsSansJoker" type="button">Réinitialiser</button>
       </div>
      </div>
      <h2 id="enonceQuestion">
@@ -579,13 +580,13 @@
         Valider
        </button>
        <div class="navigation-question-groupe">
-        <button aria-controls="fenetreJokers" aria-expanded="false" aria-haspopup="dialog" class="joker-menu-bouton masque" id="boutonMenuJokers" type="button">
+        <button aria-controls="fenetreJokers" aria-expanded="false" aria-haspopup="dialog" class="joker-menu-bouton masque" id="boutonJokers" type="button">
          <span aria-hidden="true" class="joker-onglet-icone">
           <svg viewBox="0 0 24 24"><path d="M5 8h14v10H5zM9 8V6h6v2"></path><path d="M12 11v4M10 13h4"></path></svg>
          </span>
          <span>Jokers</span>
         </button>
-        <button class="passer-bouton" id="boutonPasserQuestion">
+        <button class="passer-bouton" id="boutonPasser">
          Passer →
         </button>
         <button aria-label="Question suivante" class="principal masque" id="boutonQuestionSuivante">
@@ -676,13 +677,13 @@
       </div>
      </section>
      <div class="actions bilan-actions">
-      <button class="principal" id="boutonContinuerBilan">
+      <button class="principal" id="boutonContinuer">
        Continuer
       </button>
-      <button class="secondaire" id="boutonRevoirErreursBilan">
+      <button class="secondaire" id="boutonRejouerMesErreurs">
        Rejouer mes erreurs
       </button>
-      <button class="discret" id="boutonRetourParcoursBilan" type="button">
+      <button class="discret" id="boutonRevenirAuParcours" type="button">
        Revenir au parcours
       </button>
      </div>
@@ -713,7 +714,7 @@
      <article class="progression-carte progression-activite">
       <div class="progression-carte-entete">
        <div aria-hidden="true" class="progression-icone">
-        <img src="ressources/icones-interface/mon-activite.svg" alt="" aria-hidden="true">
+        <img src="ressources/icones-interface/icone-mon-activite.svg" alt="" aria-hidden="true">
        </div>
        <div>
         <h2>
@@ -757,7 +758,7 @@
        </div>
       </div>
       <div class="progression-actions">
-       <button class="secondaire" id="boutonExporterProgression">
+       <button class="secondaire" id="boutonExporterMaProgression">
         Exporter ma progression
        </button>
        <label class="secondaire progression-importation" for="fichierImporterProgression">
@@ -769,7 +770,7 @@
      <article class="progression-carte progression-parcours">
       <div class="progression-carte-entete">
        <div aria-hidden="true" class="progression-icone progression-icone-parcours">
-        <img src="ressources/icones-interface/carte-parcours-pjj.svg" alt="" aria-hidden="true">
+        <img src="ressources/icones-interface/icone-carte-du-parcours.svg" alt="" aria-hidden="true">
        </div>
        <div>
         <h2>
@@ -783,7 +784,7 @@
       <div class="tableau-bord progression-tableau-bord" id="tableauProgression">
       </div>
       <div class="progression-actions progression-actions-parcours">
-       <button class="secondaire" id="boutonOuvrirParcoursProgression" type="button">
+       <button class="secondaire" id="boutonOuvrirParcours" type="button">
         Ouvrir
        </button>
       </div>
@@ -813,10 +814,10 @@
        </option>
       </select>
       <div class="choix-groupe" data-groupe-choix="sonActif" data-selection-visuelle="au-clic">
-       <button class="choix-bouton" data-valeur="true" type="button">
+       <button id="boutonSonActive" class="choix-bouton" data-valeur="true" type="button">
         Activé
        </button>
-       <button class="choix-bouton" data-valeur="false" type="button">
+       <button id="boutonSonDesactive" class="choix-bouton" data-valeur="false" type="button">
         Désactivé
        </button>
       </div>
@@ -843,23 +844,23 @@
        </option>
       </select>
       <div class="choix-groupe" data-groupe-choix="echelleTexte" data-selection-visuelle="au-clic">
-       <button class="choix-bouton" data-valeur="0.9">
+       <button id="boutonTailleTexteCompacte" class="choix-bouton" data-valeur="0.9">
         Compacte
        </button>
-       <button class="choix-bouton" data-valeur="1">
+       <button id="boutonTailleTexteNormale" class="choix-bouton" data-valeur="1">
         Normale
        </button>
-       <button class="choix-bouton" data-valeur="1.08">
+       <button id="boutonTailleTexteGrande" class="choix-bouton" data-valeur="1.08">
         Grande
        </button>
       </div>
      </div>
      <div class="parametre parametres-actions-carte">
       <div class="parametres-actions-boutons">
-       <button class="principal" data-ecran="accueil" id="boutonEnregistrerParametres">
+       <button class="principal" data-ecran="accueil" id="boutonEnregistrerEtRevenir">
         Enregistrer et revenir
        </button>
-       <button class="danger" id="boutonReinitialiserProgression">
+       <button class="danger" id="boutonReinitialiserTouteLaProgression">
         Réinitialiser toute la progression
        </button>
       </div>
@@ -1005,7 +1006,7 @@
      Chaque joker utilisé rend la réussite assistée. Tu pourras rejouer l’étape sans aide pour déverrouiller l’évaluation finale.
     </p>
      <div aria-label="Jokers disponibles" class="jokers joker-choix" role="group">
-     <button class="joker" id="joker5050" type="button">
+     <button class="joker" id="boutonJoker5050" type="button">
       <span aria-hidden="true" class="joker-icone">
        <svg viewbox="0 0 24 24">
         <rect height="14" rx="2" width="8" x="2" y="5"></rect><rect height="14" rx="2" width="8" x="14" y="5"></rect>
@@ -1016,7 +1017,7 @@
        50/50
       </span>
      </button>
-     <button class="joker" id="jokerIndice" type="button">
+     <button class="joker" id="boutonJokerIndice" type="button">
       <span aria-hidden="true" class="joker-icone">
        <svg viewbox="0 0 24 24">
         <circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.1 4.9-4.9 2.1 2.1-4.9z"></path><circle cx="12" cy="12" r="1"></circle>
@@ -1026,7 +1027,7 @@
        Indice
       </span>
      </button>
-     <button class="joker" id="jokerLangueAuChat" type="button">
+     <button class="joker" id="boutonJokerLangueAuChat" type="button">
       <span aria-hidden="true" class="joker-icone">
        <svg viewbox="0 0 24 24">
         <path d="M4 5h16v12H9l-5 3z"></path><path d="m8 10-.5-3 2.7 1.5A6 6 0 0 1 12 8.2c.7 0 1.3.1 1.8.3L16.5 7 16 10"></path><circle cx="10" cy="12" r=".7"></circle><circle cx="14" cy="12" r=".7"></circle><path d="M10.5 14c1 .7 2 .7 3 0"></path>

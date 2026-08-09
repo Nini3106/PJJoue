@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Construit le manifeste d’intégrité de la V1 officielle de PJJoue."""
+"""Construit le manifeste d’intégrité de la V1 de PJJoue."""
 from __future__ import annotations
 
 from datetime import date

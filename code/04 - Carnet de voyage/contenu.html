@@ -1,0 +1,63 @@
+<section class="ecran" id="carnet">
+    <div class="page-entete carnet-page-entete">
+     <h1>
+      Carnet de voyage
+     </h1>
+     <p>
+      Retrouve ta prochaine destination, tes souvenirs et tes défis personnels.
+     </p>
+    </div>
+    <section class="carnet-parcours" aria-labelledby="titreCarnetParcours">
+     <div class="carnet-parcours-contenu">
+      <div class="carnet-parcours-entete">
+       <div aria-hidden="true" class="carnet-parcours-icone">
+        <img src="ressources/icones-interface/icone-boussole.svg" alt="" aria-hidden="true">
+       </div>
+       <div>
+        <span class="carnet-parcours-surtitre">Ton parcours</span>
+        <h2 id="titreCarnetParcours">Ton aventure dans l’univers de la PJJ</h2>
+       </div>
+       <section class="carnet-defi-hasard carnet-defi-hasard-parcours" aria-labelledby="titreDefiDe">
+        <span aria-hidden="true" class="de-objet" data-face="1" id="faceDeParcours">
+         <svg viewBox="0 0 72 72">
+          <path class="de-contour" d="M10 22 25 10h33v35L43 57H10V22Zm0 0h33l15-12M43 22v35"></path>
+          <g class="de-points-avant"><circle cx="18" cy="30" r="2.7"></circle><circle cx="26.5" cy="30" r="2.7"></circle><circle cx="35" cy="30" r="2.7"></circle><circle cx="18" cy="39.5" r="2.7"></circle><circle cx="26.5" cy="39.5" r="2.7"></circle><circle cx="35" cy="39.5" r="2.7"></circle><circle cx="18" cy="49" r="2.7"></circle><circle cx="26.5" cy="49" r="2.7"></circle><circle cx="35" cy="49" r="2.7"></circle></g>
+          <g class="de-points-dessus"><circle cx="27" cy="16" r="2"></circle><circle cx="43" cy="16" r="2"></circle></g>
+          <g class="de-points-cote"><circle cx="50" cy="25" r="2"></circle><circle cx="50" cy="34" r="2"></circle><circle cx="50" cy="43" r="2"></circle></g>
+         </svg>
+        </span>
+        <div class="carnet-defi-hasard-texte">
+         <strong id="titreDefiDe">Défi du hasard</strong>
+         <span id="resultatDeParcours">Lance le dé pour tirer de 1 à 6 questions aléatoires.</span>
+        </div>
+        <div class="carnet-defi-hasard-actions">
+         <button aria-label="Lancer le dé" class="secondaire" id="boutonLancerLeDe" type="button">
+          <span class="libelle-bureau">Lancer le dé</span><span aria-hidden="true" class="libelle-mobile">Lancer</span>
+         </button>
+         <button class="principal masque" id="boutonJouerLeTirage" type="button">Jouer le tirage</button>
+        </div>
+       </section>
+      </div>
+      <div class="carnet-parcours-prochaine-ligne">
+       <p id="prochaineDestinationParcours">Ta première destination t’attend.</p>
+       <span class="carnet-parcours-titre" id="titreSymboliqueParcours">Nouveau départ</span>
+      </div>
+      <div class="carnet-parcours-route" id="routeCarnetParcours" role="progressbar" aria-label="Avancement dans le parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+       <span class="carnet-parcours-trace"><i></i></span>
+       <span aria-hidden="true" class="carnet-parcours-position">●</span>
+      </div>
+      <div class="carnet-parcours-reperes" aria-hidden="true"><span>Départ</span><span>Étape 6</span><span>Évaluation</span></div>
+      <div class="carnet-parcours-details">
+       <section aria-labelledby="titreSouvenirsParcours" class="carnet-souvenirs">
+        <div class="carnet-section-entete"><span aria-hidden="true">◇</span><h3 id="titreSouvenirsParcours">Souvenirs de parcours</h3></div>
+        <div id="souvenirsParcours"><p class="carnet-vide">Maîtrise une étape pour conserver ses trois repères essentiels.</p></div>
+       </section>
+       <section aria-labelledby="titreDefisParcours" class="carnet-defis">
+        <div class="carnet-section-entete"><span aria-hidden="true">⚑</span><h3 id="titreDefisParcours">Défis personnels</h3></div>
+        <ul id="defisParcours"></ul>
+       </section>
+      </div>
+     </div>
+    </section>
+   </section>
+   

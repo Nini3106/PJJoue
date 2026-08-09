@@ -30,8 +30,9 @@ FEUILLES_INTERFACE = (
     "ressources/styles/70-celebrations-bilan-et-fenetres.css",
     "ressources/styles/80-finitions-de-l-interface.css",
     "ressources/styles/85-guides-pedagogiques.css",
-    "ressources/styles/90-responsive-et-etats-finaux.css",
+    "ressources/styles/90-adaptation-ecrans-et-etats-finaux.css",
     "ressources/styles/95-consentement.css",
+    "ressources/styles/96-icones-et-defi-hasard.css",
 )
 
 
@@ -103,9 +104,9 @@ def verifier_jeu(navigateur, page_html: str) -> int:
     assert not page.locator('.chemin-evaluation-carte').evaluate("element => element.classList.contains('deverrouillee')"), "L’évaluation est déverrouillée trop tôt."
 
     page.evaluate("() => { etapeNecessiteAutreChapitre=()=>false; etat.mode='parcours'; etat.theme='commun'; etat.etape=10; etat.chapitre=1; configurerBoutonContinuerBilan(); }")
-    assert "étape 11" in page.locator('#boutonContinuerBilan').inner_text().lower()
+    assert "étape 11" in page.locator('#boutonContinuer').inner_text().lower()
     page.evaluate("() => { etat.etape=11; configurerBoutonContinuerBilan(); }")
-    assert "retour au parcours" in page.locator('#boutonContinuerBilan').inner_text().lower()
+    assert "retour au parcours" in page.locator('#boutonContinuer').inner_text().lower()
 
     resultat_ecrit = page.evaluate(r"""() => {
         const questions = QUESTIONS.filter(question => question.modePrefere === 'reponse-ecrite');
@@ -194,7 +195,7 @@ def verifier_jeu(navigateur, page_html: str) -> int:
 
     # Le stockage local est volontairement indisponible dans la page inline de cette
     # recette (origine opaque). La restauration après rechargement est donc couverte
-    # par les contrôles statiques de verifier_v7.py ; ici on couvre le même rendu
+    # par les contrôles statiques de verifier_pjjoue.py ; ici on couvre le même rendu
     # responsive à chaud, qui était l’autre déclencheur du bug signalé.
 
     reprise = page.evaluate("""() => {
@@ -269,7 +270,7 @@ def principal() -> int:
             controles = verifier_jeu(navigateur, construire_page_jeu())
             verifier_administration(navigateur, construire_page_administration())
             navigateur.close()
-        print(f"OK — interface V7 : 11 étapes, évaluation écrite et {controles} contrôles de réponses réussis")
+        print(f"OK — interface V1 : 11 étapes, évaluation écrite et {controles} contrôles de réponses réussis")
         return 0
     except (AssertionError, ErreurPlaywright, OSError) as erreur:
         print(f"ÉCHEC — {erreur}", file=sys.stderr)

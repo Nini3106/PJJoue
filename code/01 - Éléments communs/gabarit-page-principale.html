@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+ <head>
+ <script src="ressources/consentement-analytics.js"></script>
+ <script src="ressources/navigation-locale.js" defer></script>
+<meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 160 questions et 7 modes de jeu." name="description"/>
+  <link rel="icon" href="favicon.ico" sizes="any"/>
+  <link rel="icon" href="favicon-48x48.png" type="image/png" sizes="48x48"/>
+  <link rel="icon" href="favicon-96x96.png" type="image/png" sizes="96x96"/>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180"/>
+  <meta content="no-referrer" name="referrer"/>
+  <meta content="dark" name="color-scheme"/>
+  <meta content="index,follow,max-image-preview:large" name="robots"/>
+  <link href="https://pjjoue.fr/" rel="canonical"/>
+  <meta content="website" property="og:type"/>
+  <meta content="PJJoue" property="og:site_name"/>
+  <meta content="fr_FR" property="og:locale"/>
+  <meta content="PJJoue — Découvrir et comprendre la PJJ" property="og:title"/>
+  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 160 questions et 7 modes de jeu." property="og:description"/>
+  <meta content="https://pjjoue.fr/" property="og:url"/>
+  <meta content="https://pjjoue.fr/ressources/panorama-accueil-calme.png" property="og:image"/>
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="default-src 'self'; script-src 'self' 'sha256-qh/c/CvY76sHcEVgWMfQQGZzfeZoitbxce1/RhQ+kWw=' 'sha256-ItAmAWRxciYKfMfcAanjDGttuQ/nghlVDCGi8dDLT9I=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; font-src 'self'; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src https://www.googletagmanager.com" http-equiv="Content-Security-Policy"/>
+  <title>
+   PJJoue — Découvrir et comprendre la PJJ
+  </title>
+  <link rel="stylesheet" href="ressources/styles/00-fondations-et-composants.css">
+  <link rel="stylesheet" href="ressources/styles/10-parcours-principal.css">
+  <link rel="stylesheet" href="ressources/styles/20-accueil-et-question-principale.css">
+  <link rel="stylesheet" href="ressources/styles/30-revision-parcours-et-parametres.css">
+  <link rel="stylesheet" href="ressources/styles/40-progression-et-erreurs.css">
+  <link rel="stylesheet" href="ressources/styles/50-carte-question-et-correction.css">
+  <link rel="stylesheet" href="ressources/styles/60-parcours-modes-et-chronometre.css">
+  <link rel="stylesheet" href="ressources/styles/70-celebrations-bilan-et-fenetres.css">
+  <link rel="stylesheet" href="ressources/styles/80-finitions-de-l-interface.css">
+  <link rel="stylesheet" href="ressources/styles/85-guides-pedagogiques.css">
+  <link rel="stylesheet" href="ressources/styles/90-adaptation-ecrans-et-etats-finaux.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PJJoue","alternateName":"PJJoue — Découvrir et comprendre la PJJ","url":"https://pjjoue.fr/","description":"Parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
+ <link rel="stylesheet" href="ressources/styles/95-consentement.css">
+  <link rel="stylesheet" href="ressources/styles/96-icones-et-defi-hasard.css">
+</head>
+ <body>
+<a class="passer-lien" href="#contenuPrincipal">
+   Aller au contenu principal
+  </a>
+  <div aria-atomic="true" aria-live="polite" class="lecteur-ecran-seulement" id="statutAccessibilite">
+  </div>
+  <header class="entete">
+   <div class="marque">
+    <b>
+     <span>PJJ</span>oue
+    </b>
+    <span>
+     Découvrir et comprendre la PJJ
+    </span>
+   </div>
+   <button aria-controls="menuPrincipal" aria-expanded="false" aria-label="Ouvrir le menu" class="bouton-menu-mobile" id="boutonMenuMobile" type="button">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+   </button>
+   <nav class="navigation" id="menuPrincipal">
+    <button id="boutonAccueil" data-ecran="accueil" type="button">
+     Accueil
+    </button>
+    <button id="boutonParcoursPJJ" data-ecran="parcours" type="button">
+     Parcours PJJ
+    </button>
+    <button id="boutonCarnetDeVoyage" data-ecran="carnet" type="button">
+     Carnet de voyage
+    </button>
+    <button id="boutonEntrainementLibre" data-ecran="entrainement" type="button">
+     Entraînement libre
+    </button>
+    <button id="boutonReviser" data-ecran="erreurs" type="button">
+     Réviser
+    </button>
+    <button id="boutonProgression" data-ecran="progression" type="button">
+     Progression
+    </button>
+    <button id="boutonParametres" data-ecran="parametres" type="button">
+     Paramètres
+    </button>
+   </nav>
+  </header>
+  <main class="conteneur" id="contenuPrincipal" tabindex="-1">
+   <div class="barre-actions-page">
+    <button class="discret bouton-retour masque" id="boutonRetour" type="button">
+     ← Retour
+    </button>
+   </div>
+   {{PAGE_ACCUEIL}}{{PAGE_PARCOURS}}{{PAGE_CARNET}}{{PAGE_ENTRAINEMENT}}{{PAGE_QUESTION}}{{PAGE_BILAN}}{{PAGE_ERREURS}}{{PAGE_PROGRESSION}}{{PAGE_PARAMETRES}}  </main>
+{{ENCADREMENT_GUIDES_ACCUEIL}}  <div aria-atomic="true" aria-live="polite" class="notification" id="notification" role="status">
+  </div>
+  <footer class="produit-pied-page">
+   <div class="produit-repere">
+    Version 1 · Août 2026
+   </div>
+   <p class="pied-page-independance">
+     <strong>PJJoue est un site personnel, pédagogique, indépendant et non officiel.</strong> Il est sans lien institutionnel avec le Gouvernement français, le ministère de la Justice, la PJJ ou l’ENPJJ. Les réponses s’appuient sur des sources officielles consultables depuis le site.
+    </p>
+   <p class="pied-page-credit">
+    Création, conception et développement : <strong>Dev'Ines</strong>
+   </p>
+   <p class="pied-page-contact">
+    Contact : <a href="mailto:contact.pjjoue@gmail.com">contact.pjjoue@gmail.com</a>
+   </p>
+   <nav aria-label="Informations légales et pratiques">
+   <a href="accessibilite.html">Accessibilité</a>
+    <a href="confidentialite.html">
+     Confidentialité
+    </a>
+    <a href="mentions-legales.html">
+     Mentions légales
+    </a>
+   </nav>
+  </footer>
+  <script defer="" src="donnees/donnees-pjj.js">
+  </script>
+  <script defer="" src="ressources/analytics-pjjoue.js"></script>
+  <script defer="" src="ressources/moteur-jeu.js">
+  </script>
+  <dialog aria-describedby="texteFenetreQuitterSession" aria-labelledby="titreFenetreQuitterSession" class="pjj-fenetre" id="fenetreQuitterSession">
+   <div class="pjj-fenetre-panneau">
+    <button aria-label="Fermer" class="pjj-fenetre-fermer" id="fermerFenetreQuitterSession" type="button">
+     ×
+    </button>
+    <div aria-hidden="true" class="pjj-fenetre-icone">
+     <svg focusable="false" viewbox="0 0 48 48">
+      <path d="M24 6a18 18 0 1 0 18 18A18 18 0 0 0 24 6Z">
+      </path>
+      <path d="M24 15v11">
+      </path>
+      <path d="M24 33h.01">
+      </path>
+     </svg>
+    </div>
+    <h2 id="titreFenetreQuitterSession">
+     Quitter cette session ?
+    </h2>
+    <p id="texteFenetreQuitterSession">
+     Les réponses déjà données restent enregistrées, mais la session en cours sera interrompue.
+    </p>
+    <div class="pjj-fenetre-actions">
+     <button class="secondaire" id="annulerQuitterSession" type="button">
+      Annuler
+     </button>
+     <button class="principal" id="confirmerQuitterSession" type="button">
+      Quitter la session
+     </button>
+    </div>
+   </div>
+  </dialog>
+  <dialog aria-describedby="texteFenetreMessage" aria-labelledby="titreFenetreMessage" class="pjj-fenetre" id="fenetreMessage">
+   <div class="pjj-fenetre-panneau">
+    <button aria-label="Fermer" class="pjj-fenetre-fermer" id="fermerFenetreMessage" type="button">
+     ×
+    </button>
+    <div aria-hidden="true" class="pjj-fenetre-icone">
+     <svg focusable="false" viewbox="0 0 48 48">
+      <path d="M24 6a18 18 0 1 0 18 18A18 18 0 0 0 24 6Z">
+      </path>
+      <path d="M24 15v11">
+      </path>
+      <path d="M24 33h.01">
+      </path>
+     </svg>
+    </div>
+    <h2 id="titreFenetreMessage">
+     Information
+    </h2>
+    <p id="texteFenetreMessage">
+    </p>
+    <div class="pjj-fenetre-actions">
+     <button class="secondaire masque" id="annulerFenetreMessage" type="button">
+      Annuler
+     </button>
+     <button class="principal" id="confirmerFenetreMessage" type="button">
+      Compris
+     </button>
+    </div>
+   </div>
+  </dialog>
+  <dialog aria-describedby="texteFenetreJokers" aria-labelledby="titreFenetreJokers" class="pjj-fenetre joker-fenetre" id="fenetreJokers">
+   <div class="pjj-fenetre-panneau joker-fenetre-panneau">
+    <button aria-label="Fermer les jokers" class="pjj-fenetre-fermer" id="fermerFenetreJokers" type="button">
+     ×
+    </button>
+    <div aria-hidden="true" class="pjj-fenetre-icone joker-fenetre-icone">
+     <svg focusable="false" viewbox="0 0 48 48">
+      <path d="M9 16h30v22H9zM18 16v-5h12v5"></path><path d="M24 23v9M19.5 27.5h9"></path>
+     </svg>
+    </div>
+    <h2 id="titreFenetreJokers">
+     Choisis un joker
+    </h2>
+    <p id="texteFenetreJokers">
+     Chaque joker utilisé rend la réussite assistée. Tu pourras rejouer l’étape sans aide pour déverrouiller l’évaluation finale.
+    </p>
+     <div aria-label="Jokers disponibles" class="jokers joker-choix" role="group">
+     <button class="joker" id="boutonJoker5050" type="button">
+      <span aria-hidden="true" class="joker-icone">
+       <svg viewbox="0 0 24 24">
+        <rect height="14" rx="2" width="8" x="2" y="5"></rect><rect height="14" rx="2" width="8" x="14" y="5"></rect>
+        <path d="m4.5 12 2 2 3-4M16.5 10l5 5M21.5 10l-5 5"></path>
+       </svg>
+      </span>
+      <span>
+       50/50
+      </span>
+     </button>
+     <button class="joker" id="boutonJokerIndice" type="button">
+      <span aria-hidden="true" class="joker-icone">
+       <svg viewbox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.1 4.9-4.9 2.1 2.1-4.9z"></path><circle cx="12" cy="12" r="1"></circle>
+       </svg>
+      </span>
+      <span>
+       Indice
+      </span>
+     </button>
+     <button class="joker" id="boutonJokerLangueAuChat" type="button">
+      <span aria-hidden="true" class="joker-icone">
+       <svg viewbox="0 0 24 24">
+        <path d="M4 5h16v12H9l-5 3z"></path><path d="m8 10-.5-3 2.7 1.5A6 6 0 0 1 12 8.2c.7 0 1.3.1 1.8.3L16.5 7 16 10"></path><circle cx="10" cy="12" r=".7"></circle><circle cx="14" cy="12" r=".7"></circle><path d="M10.5 14c1 .7 2 .7 3 0"></path>
+       </svg>
+      </span>
+      <span>
+       Langue au chat
+      </span>
+     </button>
+    </div>
+    <p aria-live="polite" class="joker-fenetre-statut" id="statutFenetreJokers">
+    </p>
+   </div>
+  </dialog>
+  <dialog aria-describedby="texteFenetreCelebration" aria-labelledby="titreFenetreCelebration" class="celebration-fenetre" id="fenetreCelebration">
+   <div class="celebration-panneau">
+    <button aria-label="Fermer" class="celebration-fermer" id="fermerFenetreCelebration" type="button">
+     ×
+    </button>
+    <div aria-hidden="true" class="celebration-icone">
+     ★
+    </div>
+    <h2 id="titreFenetreCelebration">
+     Bravo !
+    </h2>
+    <p id="texteFenetreCelebration">
+    </p>
+    <button class="celebration-continuer" id="continuerFenetreCelebration" type="button">
+     Continuer
+    </button>
+   </div>
+  </dialog>
+ </body>
+</html>

@@ -92,7 +92,7 @@
     align-items: center;
     margin-top: 18px;
 }
-.accueil-presentation-zone-cliquable {
+.bouton-commencer {
     position: static;
     z-index: auto;
     min-height: 48px;
@@ -107,14 +107,14 @@
     appearance: none;
     -webkit-appearance: none;
 }
-.accueil-presentation-demarrer {
+.bouton-commencer-principal {
     color: var(--bleu-nuit-950);
     border-color: var(--jaune-interface);
     background: var(--jaune-interface);
 }
 
 
-.accueil-presentation-zone-cliquable:focus-visible {
+.bouton-commencer:focus-visible {
     outline: 4px solid #35d3ff;
     outline-offset: 4px;
 }
@@ -673,7 +673,7 @@
 #question .question-autonomie strong {
     color: #fff0b8;
 }
-#question .question-autonomie-reset {
+#question .question-autonomie-reinitialiser {
     min-height: 28px;
     padding: 3px 8px;
     border: 1px solid rgba(145,198,245,.28);
@@ -684,13 +684,13 @@
     font-size: .76rem;
     font-weight: 750;
 }
-#question .question-autonomie-reset:hover:not(:disabled),
-#question .question-autonomie-reset:focus-visible {
+#question .question-autonomie-reinitialiser:hover:not(:disabled),
+#question .question-autonomie-reinitialiser:focus-visible {
     border-color: rgba(255,224,149,.72);
     color: #fff;
     background: rgba(15,73,135,.74);
 }
-#question .question-autonomie-reset:disabled {
+#question .question-autonomie-reinitialiser:disabled {
     opacity: .42;
     cursor: default;
 }

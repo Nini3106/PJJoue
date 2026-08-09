@@ -453,13 +453,13 @@
     min-height: 46px;
     padding-inline: 19px;
 }
-#bilan #boutonRetourParcoursBilan {
+#bilan #boutonRevenirAuParcours {
     color: #e7f3ff;
     border-color: rgba(142,199,251,.48);
     background: rgba(8,56,108,.66);
 }
-#bilan #boutonRetourParcoursBilan:hover,
-#bilan #boutonRetourParcoursBilan:focus-visible {
+#bilan #boutonRevenirAuParcours:hover,
+#bilan #boutonRevenirAuParcours:focus-visible {
     color: #fff;
     border-color: var(--accent);
     background: #174f89;

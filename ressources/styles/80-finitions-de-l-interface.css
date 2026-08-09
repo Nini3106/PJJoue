@@ -155,10 +155,10 @@ body:not([data-ecran-actif="accueil"])::before {
     margin-top: 16px;
 }
 #question .question-commande-ligne #boutonQuestionPrecedente,
-#question .question-commande-ligne #boutonPasserQuestion,
+#question .question-commande-ligne #boutonPasser,
 #question .question-commande-ligne #boutonQuestionSuivante,
 #question .question-commande-ligne #boutonValider,
-#question .question-commande-ligne #boutonMenuJokers {
+#question .question-commande-ligne #boutonJokers {
     min-height: 44px;
     height: 44px;
     padding: 0 17px;
@@ -171,23 +171,23 @@ body:not([data-ecran-actif="accueil"])::before {
     box-shadow: none;
 }
 #question .question-commande-ligne #boutonQuestionPrecedente,
-#question .question-commande-ligne #boutonPasserQuestion,
-#question .question-commande-ligne #boutonMenuJokers {
+#question .question-commande-ligne #boutonPasser,
+#question .question-commande-ligne #boutonJokers {
     color: #edf6ff;
     border: 1px solid rgba(145,198,245,.48);
     background: rgba(10,61,116,.78);
 }
 #question .question-commande-ligne #boutonQuestionPrecedente:hover,
-#question .question-commande-ligne #boutonPasserQuestion:hover,
-#question .question-commande-ligne #boutonMenuJokers:hover,
+#question .question-commande-ligne #boutonPasser:hover,
+#question .question-commande-ligne #boutonJokers:hover,
 #question .question-commande-ligne #boutonQuestionPrecedente:focus-visible,
-#question .question-commande-ligne #boutonPasserQuestion:focus-visible,
-#question .question-commande-ligne #boutonMenuJokers:focus-visible {
+#question .question-commande-ligne #boutonPasser:focus-visible,
+#question .question-commande-ligne #boutonJokers:focus-visible {
     color: #fff;
     border-color: var(--accent);
     background: #17558f;
 }
-#question .question-commande-ligne #boutonMenuJokers {
+#question .question-commande-ligne #boutonJokers {
     position: static;
     width: auto;
     display: inline-flex;
@@ -195,14 +195,14 @@ body:not([data-ecran-actif="accueil"])::before {
     gap: 8px;
     transform: none;
 }
-#question .question-commande-ligne #boutonMenuJokers > span:last-child {
+#question .question-commande-ligne #boutonJokers > span:last-child {
     writing-mode: horizontal-tb;
     text-orientation: mixed;
     letter-spacing: 0;
 }
 #question .question-commande-ligne .joker-onglet-icone,
-#question .question-commande-ligne #boutonMenuJokers:hover .joker-onglet-icone,
-#question .question-commande-ligne #boutonMenuJokers:focus-visible .joker-onglet-icone {
+#question .question-commande-ligne #boutonJokers:hover .joker-onglet-icone,
+#question .question-commande-ligne #boutonJokers:focus-visible .joker-onglet-icone {
     color: var(--accent);
 }
 #question .question-commande-ligne .joker-onglet-icone svg {
@@ -232,7 +232,7 @@ body:not([data-ecran-actif="accueil"])::before {
 }
 
 @media (max-width:360px) {
-    button:not(.accueil-presentation-zone-cliquable):not(.menu-mobile-bouton),
+    button:not(.bouton-commencer):not(.bouton-menu-mobile),
     .secondaire,
     label.secondaire {
         font-size: .82rem;
@@ -290,8 +290,8 @@ body:not([data-ecran-actif="accueil"])::before {
     }
     #question #boutonQuestionPrecedente,
     #question #boutonValider,
-    #question .question-commande-ligne #boutonMenuJokers,
-    #question .question-commande-ligne #boutonPasserQuestion,
+    #question .question-commande-ligne #boutonJokers,
+    #question .question-commande-ligne #boutonPasser,
     #question .question-commande-ligne #boutonQuestionSuivante {
         width: auto;
         min-width: 0;
@@ -348,7 +348,7 @@ body:not([data-ecran-actif="accueil"])::before {
         justify-content: flex-start;
         gap: 9px;
     }
-    #accueil .accueil-presentation-zone-cliquable {
+    #accueil .bouton-commencer {
         width: auto;
         min-width: 0;
         min-height: 40px;
@@ -362,7 +362,7 @@ body:not([data-ecran-actif="accueil"])::before {
     #accueil .accueil-action-principale {
         flex-direction: column;
     }
-    #accueil .accueil-presentation-zone-cliquable {
+    #accueil .bouton-commencer {
         width: auto;
         max-width: calc(100vw - 40px);
     }
@@ -591,13 +591,13 @@ body:not([data-ecran-actif="accueil"])::before {
     place-items: center;
     color: #ffd76b;
 }
-#joker5050 .joker-icone {
+#boutonJoker5050 .joker-icone {
     color: #39d7c4;
 }
-#jokerIndice .joker-icone {
+#boutonJokerIndice .joker-icone {
     color: var(--jaune-interface);
 }
-#jokerLangueAuChat .joker-icone {
+#boutonJokerLangueAuChat .joker-icone {
     color: #a986ff;
 }
 .joker-fenetre .joker-icone svg {

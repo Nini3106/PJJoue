@@ -4,17 +4,20 @@
   "private": true,
   "description": "Contrôles techniques de PJJoue — 11 étapes et évaluation finale écrite",
   "scripts": {
-    "test": "npm run controle:javascript && npm run controle:css && npm run test:unitaire && python tests/verifier_v7.py && python tests/verifier_interface.py",
+    "test": "npm run controle:javascript && npm run controle:css && npm run test:unitaire && python tests/verifier_pjjoue.py && python tests/verifier_interface.py",
     "controle:javascript": "eslint ressources/*.js",
     "controle:css": "npm run controle:css:doublons && npm run controle:css:structure",
     "controle:css:doublons": "node outils/controler_css.js doublons",
     "controle:css:structure": "node outils/controler_css.js structure",
     "test:unitaire": "python -m unittest discover -s tests -p test_*.py",
-    "test:structure": "python tests/verifier_v7.py",
+    "test:structure": "python tests/verifier_pjjoue.py",
     "test:interface": "python tests/verifier_interface.py",
     "test:visuel": "python tests/verifier_regression_visuelle.py",
     "build:donnees": "python outils/construire_donnees.py",
-    "build:manifeste": "python outils/construire_manifeste.py"
+    "build:manifeste": "python outils/construire_manifeste.py",
+    "build:site": "python outils/construire_site.py",
+    "pretest": "npm run controle:construction",
+    "controle:construction": "python outils/construire_site.py --verifier"
   },
   "keywords": [
     "PJJ",
@@ -29,17 +32,18 @@
     "typescript": "^5.9.2"
   },
   "engines": {
-    "node": ">=24.18 <25"
+    "node": "^20.19.0 || ^22.13.0 || >=24",
+    "npm": ">=10 <12"
   },
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": ">=24.18 <25",
+      "version": "^20.19.0 || ^22.13.0 || >=24",
       "onFail": "error"
     },
     "packageManager": {
       "name": "npm",
-      "version": ">=11.16 <12",
+      "version": ">=10 <12",
       "onFail": "error"
     }
   }
