@@ -1,0 +1,54 @@
+name: Vérification de PJJoue
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le site
+        uses: actions/checkout@v4
+
+      - name: Préparer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Préparer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Installer les outils
+        run: |
+          npm ci
+          python -m pip install -r requirements-dev.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Contrôler le code et l’interface
+        run: npm test
+
+      - name: Contrôler les captures visuelles
+        run: python tests/verifier_regression_visuelle.py
+
+      - name: Conserver les captures en cas d’échec
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: captures-pjjoue
+          path: test-results/
+          if-no-files-found: ignore
+
+      - name: Contrôler les liens officiels chaque semaine
+        if: github.event_name == 'schedule'
+        run: python outils/verifier_liens_officiels.py

@@ -70,6 +70,12 @@ class ValidationDonneesTest(unittest.TestCase):
         )
         self.assertTrue(any("source inconnue" in erreur for erreur in erreurs))
 
+    def test_phrase_eclatee_en_caracteres_refusee(self) -> None:
+        erreurs = self.erreurs_apres_modification(
+            lambda questions: questions[25].update({"faitsCorrects": list("Une phrase éclatée")})
+        )
+        self.assertTrue(any("caractère par caractère" in erreur for erreur in erreurs))
+
 
 if __name__ == "__main__":
     unittest.main()

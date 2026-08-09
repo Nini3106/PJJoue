@@ -59,6 +59,19 @@ def valider_liste_textes(
     return [element for element in valeur if isinstance(element, str) and element.strip()]
 
 
+def refuser_chaine_eclatee(
+    valeur: object,
+    emplacement: str,
+    erreurs: list[str],
+) -> None:
+    """Détecte une phrase transformée par erreur en liste de caractères."""
+    if not isinstance(valeur, list) or len(valeur) < 12:
+        return
+    textes = [element for element in valeur if isinstance(element, str)]
+    if len(textes) == len(valeur) and sum(len(element) <= 1 for element in textes) >= len(textes) * 0.8:
+        erreurs.append(f"{emplacement} ressemble à une phrase éclatée caractère par caractère.")
+
+
 def valider_elements(
     activite: dict[str, Any],
     cle: str,
@@ -240,6 +253,8 @@ def valider_donnees(
         if not isinstance(question.get("procedureLocale"), bool):
             erreurs.append(f"{contexte}.procedureLocale doit être un booléen.")
         valider_liste_textes(question.get("mauvaisesReponses"), f"{contexte}.mauvaisesReponses", erreurs)
+        for champ in ("faitsCorrects", "faitsIncorrects"):
+            refuser_chaine_eclatee(question.get(champ), f"{contexte}.{champ}", erreurs)
         references = valider_liste_textes(question.get("referencesSources"), f"{contexte}.referencesSources", erreurs)
         if question.get("source") not in sources_connues or not set(references).issubset(sources_connues):
             erreurs.append(f"{contexte} référence une source inconnue.")

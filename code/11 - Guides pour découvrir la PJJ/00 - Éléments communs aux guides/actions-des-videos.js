@@ -45,7 +45,11 @@
             const url = `https://www.youtube.com/watch?v=${identifiant}`;
             const message = document.createElement('div');
             message.className = 'guide-video-local-message';
-            message.innerHTML = '<strong>Lecture locale</strong><span>La vidéo s’ouvre sur YouTube pendant les tests locaux. Sur pjjoue.fr, elle se lira directement dans cette carte.</span>';
+            const titre = document.createElement('strong');
+            titre.textContent = 'Lecture locale';
+            const explication = document.createElement('span');
+            explication.textContent = 'La vidéo s’ouvre sur YouTube pendant les tests locaux. Sur pjjoue.fr, elle se lira directement dans cette carte.';
+            message.append(titre, explication);
             zone.replaceChildren(message);
             envoyerAnalytics(carte, 'video_ouverte_youtube');
             window.open(url, '_blank', 'noopener,noreferrer');
@@ -68,8 +72,11 @@
     function initialiser() {
         document.querySelectorAll(SELECTEUR).forEach((carte) => {
             const bouton = carte.querySelector('[data-pjj-video-lancer]');
-            if (bouton)
+            if (bouton) {
+                const titre = String(carte.dataset.pjjVideoTitre || '').trim();
+                bouton.setAttribute('aria-label', titre ? `Lire la vidéo : ${titre}` : 'Lire la vidéo');
                 bouton.addEventListener('click', () => creerLecteur(carte), { once: true });
+            }
 
             const lienExterne = carte.querySelector('.guide-video-lien');
             if (lienExterne)
