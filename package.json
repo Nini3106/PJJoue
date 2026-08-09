@@ -19,7 +19,8 @@
     "build:donnees": "python outils/construire_donnees.py",
     "build:manifeste": "python outils/construire_manifeste.py",
     "build:site": "python outils/construire_site.py",
-    "pretest": "npm run controle:construction",
+    "pretest": "npm run controle:donnees && npm run controle:construction",
+    "controle:donnees": "python outils/construire_donnees.py --verifier",
     "controle:construction": "python outils/construire_site.py --verifier"
   },
   "keywords": [

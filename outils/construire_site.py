@@ -19,6 +19,7 @@ import sys
 RACINE = Path(__file__).resolve().parents[1]
 CHEMIN_PLAN = RACINE / "code" / "plan-construction.json"
 MOTIF_MARQUEUR_HTML = re.compile(r"\{\{[A-Z0-9_]+\}\}")
+MOTIF_RESSOURCE_CACHE = re.compile(r"['\"](\./[^'\"]*)['\"]")
 MOTIF_REPERE_CSS = re.compile(
     r"/\* === MORCEAU CSS \| sortie=(.*?) \| ordre=(\d+) === \*/\n"
     r"(.*?)\n"
@@ -251,13 +252,29 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
         "".join(feuilles_css[f"ressources/styles/{nom}"] for nom in ordre_feuilles_principales),
     )
 
-    # Le nom du cache change automatiquement dès qu'un fichier public change.
-    # Le navigateur remplace alors l'ancien cache sans demander de manipulation.
+    # Le nom du cache change automatiquement dès qu'un fichier public généré
+    # ou qu'une ressource précachée change. Cela couvre notamment
+    # donnees/donnees-pjj.js, les images et les icônes copiées telles quelles.
     empreinte_cache = hashlib.sha256()
     for chemin, contenu in sorted(sorties.items()):
         if chemin != "service-worker.js":
             empreinte_cache.update(chemin.encode("utf-8"))
             empreinte_cache.update(contenu.encode("utf-8"))
+    ressources_deja_comptees = set(sorties) - {"service-worker.js"}
+    ressources_cache = set(MOTIF_RESSOURCE_CACHE.findall(sorties["service-worker.js"]))
+    for adresse in sorted(ressources_cache):
+        chemin_relatif = adresse.removeprefix("./").split("?", 1)[0]
+        if not chemin_relatif:
+            chemin_relatif = "index.html"
+        if chemin_relatif in ressources_deja_comptees:
+            continue
+        chemin = RACINE / chemin_relatif
+        if not chemin.is_file():
+            raise ErreurConstruction(
+                f"Ressource précachée introuvable : {chemin_relatif}"
+            )
+        empreinte_cache.update(chemin_relatif.encode("utf-8"))
+        empreinte_cache.update(chemin.read_bytes())
     version_cache = empreinte_cache.hexdigest()[:12]
     sorties["service-worker.js"] = sorties["service-worker.js"].replace(
         "__VERSION_CACHE_PJJOUE__", version_cache

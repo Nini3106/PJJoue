@@ -10,8 +10,8 @@
   },
   "fichiers": {
     ".github/workflows/verification.yml": {
-      "tailleOctets": 1296,
-      "sha256": "5f0b0242c83eee57f3104fbaa223009ce34d7c2175552c14ea62ad0a9d783931"
+      "tailleOctets": 1350,
+      "sha256": "d4430d60e912dcb2015202396af79d73e0da478491c9998f8ac75758e315f56f"
     },
     ".gitignore": {
       "tailleOctets": 83,
@@ -594,8 +594,8 @@
       "sha256": "289dfa211fa109f6a360b12580f1ef24fa5e2cf33a1848fadfda879a61fee6f9"
     },
     "donnees/donnees-pjj.js": {
-      "tailleOctets": 240553,
-      "sha256": "67b9433e9ae371f65be0a435f18361f5bf376cb077f1d005eb6d3010abafa492"
+      "tailleOctets": 242478,
+      "sha256": "73981f36da72a583c402506c37a4405509e5b00cf81116e3ae3a68e6ac8b61bd"
     },
     "donnees/programme.json": {
       "tailleOctets": 6311,
@@ -686,16 +686,16 @@
       "sha256": "2cc61ab7afeaca4daba7b76a0c632d298270ab9bbcba3286ef5d7a81f009b8df"
     },
     "outils/construire_donnees.py": {
-      "tailleOctets": 2385,
-      "sha256": "fc6f4e5d28a8f7d43f324cbc6a0ed55350f2103a1779671e69f44eed00469916"
+      "tailleOctets": 3740,
+      "sha256": "a3f05cf1951d029a6ebfe5bff15bcb8132438354af544d81563209444647a31c"
     },
     "outils/construire_manifeste.py": {
       "tailleOctets": 2625,
       "sha256": "0ec1ea98f86061c197078511215879c6c54a2e8f9537701e115f3f5f6e5ab775"
     },
     "outils/construire_site.py": {
-      "tailleOctets": 13913,
-      "sha256": "e0bf1130f7275cdb202102f74e2a2a974b1d0326f67ac98cd0ad2bc020268917"
+      "tailleOctets": 14777,
+      "sha256": "3d0633b0384f1d5c2a1a9b6f3b64744a658bcc077d511c2bdee88dc26be8fd69"
     },
     "outils/controler_css.js": {
       "tailleOctets": 1583,
@@ -718,8 +718,8 @@
       "sha256": "b73461e9edc455aecc8d714e36a2d59af7c1ac1bdcf054eced9f204360d15eb8"
     },
     "package.json": {
-      "tailleOctets": 2044,
-      "sha256": "a64061cd0bf8d1a580c64ef81dcf59b75ca763187e6c204514588a9b03ea527f"
+      "tailleOctets": 2146,
+      "sha256": "f9ab09ec8ec4205d144277fa4de9ef6d8f4f48fd2c234a2d69d4e3c5cd60f95f"
     },
     "preparer-arrivee-pjj/index.html": {
       "tailleOctets": 13742,
@@ -963,7 +963,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 4000,
-      "sha256": "d209c4e6bbeb0757f388441a2fbd111cc6ec0a00386edefde713c84fb17036e8"
+      "sha256": "801bc5840a7c67bd2e490a31408e640cdcc83cd9fdfde1085ee391ff6598e161"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 11258,

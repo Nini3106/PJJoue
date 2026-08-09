@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 from typing import Any
@@ -41,8 +42,8 @@ def convertir_en_javascript(nom_variable: str, contenu: Any) -> str:
     return f"window.DONNEES_PJJ.{nom_variable}={contenu_json};"
 
 
-def construire_donnees() -> tuple[int, int]:
-    """Génère donnees-pjj.js et renvoie les nombres de questions et de sources."""
+def preparer_donnees() -> tuple[str, int, int]:
+    """Prépare le JavaScript attendu et renvoie son bilan."""
     programme = lire_json("programme.json")
     sources = lire_json("sources.json")
     questions = lire_json("questions.json")
@@ -64,18 +65,48 @@ def construire_donnees() -> tuple[int, int]:
         for nom_variable, contenu in ensembles
     )
 
-    FICHIER_DESTINATION.write_text(
-        "\n".join(lignes) + "\n",
-        encoding="utf-8",
-    )
-    return len(questions), len(sources)
+    return "\n".join(lignes) + "\n", len(questions), len(sources)
+
+
+def construire_donnees() -> tuple[int, int]:
+    """Génère donnees-pjj.js et renvoie les nombres de questions et de sources."""
+    contenu, nombre_questions, nombre_sources = preparer_donnees()
+    FICHIER_DESTINATION.write_text(contenu, encoding="utf-8")
+    return nombre_questions, nombre_sources
+
+
+def verifier_donnees() -> tuple[int, int]:
+    """Refuse un fichier public absent ou différent des JSON de référence."""
+    contenu, nombre_questions, nombre_sources = preparer_donnees()
+    if not FICHIER_DESTINATION.is_file():
+        raise SystemExit(
+            "ÉCHEC — donnees/donnees-pjj.js est absent. Lance npm run build:donnees."
+        )
+    if FICHIER_DESTINATION.read_text(encoding="utf-8") != contenu:
+        raise SystemExit(
+            "ÉCHEC — donnees/donnees-pjj.js n’est pas à jour par rapport aux JSON. "
+            "Lance npm run build:donnees."
+        )
+    return nombre_questions, nombre_sources
 
 
 def principal() -> None:
     """Exécute la construction et affiche un bilan lisible."""
-    nombre_questions, nombre_sources = construire_donnees()
+    analyseur = argparse.ArgumentParser(description="Construire ou vérifier les données de PJJoue.")
+    analyseur.add_argument(
+        "--verifier",
+        action="store_true",
+        help="vérifier que donnees-pjj.js correspond exactement aux JSON sans l’écrire",
+    )
+    options = analyseur.parse_args()
+    if options.verifier:
+        nombre_questions, nombre_sources = verifier_donnees()
+        action = "Données vérifiées"
+    else:
+        nombre_questions, nombre_sources = construire_donnees()
+        action = "Données construites"
     print(
-        "Données construites : "
+        f"{action} : "
         f"{nombre_questions} questions, {nombre_sources} sources."
     )
 
