@@ -56,6 +56,12 @@
       "style_sortie": "preparer-arrivee-pjj/style-de-la-page.css"
     },
     {
+      "source": "code/11 - Guides pour découvrir la PJJ/Préparer le concours d’éducateur de la PJJ/page.html",
+      "sortie": "concours-educateur-pjj/index.html",
+      "style_source": "code/11 - Guides pour découvrir la PJJ/Préparer le concours d’éducateur de la PJJ/style-de-la-page.css",
+      "style_sortie": "concours-educateur-pjj/style-de-la-page.css"
+    },
+    {
       "source": "code/11 - Guides pour découvrir la PJJ/Quiz PJJ - 160 questions/page.html",
       "sortie": "quiz-pjj/index.html",
       "style_source": "code/11 - Guides pour découvrir la PJJ/Quiz PJJ - 160 questions/style-de-la-page.css",

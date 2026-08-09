@@ -540,40 +540,7 @@ body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil
         min-height: 190px;
     }
 }
-/* Outils discrets partagés : connexion, installation et lecture des guides. */
-.indication-connexion {
-    position: fixed;
-    z-index: 320;
-    left: 14px;
-    bottom: 14px;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    min-height: 32px;
-    padding: 6px 10px;
-    border: 1px solid rgba(255,255,255,.24);
-    border-radius: 999px;
-    color: #e8f5ff;
-    background: rgba(5,38,80,.92);
-    box-shadow: 0 6px 18px rgba(0,18,48,.22);
-    font-size: .76rem;
-    font-weight: 800;
-    backdrop-filter: blur(8px);
-}
-
-.indication-connexion > span:first-child {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #55d88b;
-    box-shadow: 0 0 0 3px rgba(85,216,139,.15);
-}
-
-.indication-connexion.hors-connexion > span:first-child {
-    background: #ffb84d;
-    box-shadow: 0 0 0 3px rgba(255,184,77,.16);
-}
-
+/* Outils discrets partagés : messages réseau, installation et lecture. */
 .message-connexion {
     position: fixed;
     z-index: 321;
@@ -721,18 +688,6 @@ header.entete .navigation .bouton-installer-pjjoue::before {
 }
 
 @media (max-width:580px) {
-    .indication-connexion {
-        left: 10px;
-        bottom: 10px;
-    }
-    .indication-connexion-texte {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        white-space: nowrap;
-    }
     .bouton-retour-haut-guide {
         right: 10px;
         bottom: 10px;

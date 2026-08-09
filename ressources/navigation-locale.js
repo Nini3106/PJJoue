@@ -3,14 +3,7 @@
 
   let propositionInstallation = null;
 
-  function creerIndicationConnexion() {
-    const indication = document.createElement('div');
-    indication.className = 'indication-connexion';
-    indication.setAttribute('role', 'status');
-    indication.setAttribute('aria-live', 'polite');
-    indication.innerHTML = '<span aria-hidden="true"></span><span class="indication-connexion-texte"></span>';
-    document.body.appendChild(indication);
-
+  function creerMessagesConnexion() {
     const message = document.createElement('div');
     message.className = 'message-connexion';
     message.setAttribute('role', 'status');
@@ -18,20 +11,15 @@
     document.body.appendChild(message);
     let minuterieMessage;
 
-    const actualiser = (enLigne, annoncer) => {
-      indication.classList.toggle('hors-connexion', !enLigne);
-      indication.querySelector('.indication-connexion-texte').textContent = enLigne ? 'En ligne' : 'Hors connexion';
-      if (!annoncer)
-        return;
+    const annoncer = enLigne => {
       clearTimeout(minuterieMessage);
       message.textContent = enLigne ? 'Connexion retrouvée' : 'Tu es hors connexion';
       message.classList.add('visible');
       minuterieMessage = setTimeout(() => message.classList.remove('visible'), 3200);
     };
 
-    actualiser(navigator.onLine, false);
-    window.addEventListener('online', () => actualiser(true, true));
-    window.addEventListener('offline', () => actualiser(false, true));
+    window.addEventListener('online', () => annoncer(true));
+    window.addEventListener('offline', () => annoncer(false));
   }
 
   function preparerInstallation() {
@@ -128,7 +116,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    creerIndicationConnexion();
+    creerMessagesConnexion();
     preparerInstallation();
     creerOutilsDeLectureGuide();
   });

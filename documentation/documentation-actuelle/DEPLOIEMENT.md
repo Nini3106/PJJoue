@@ -10,7 +10,7 @@ Publier :
 
 - `index.html` ;
 - `confidentialite.html`, `mentions-legales.html` et `accessibilite.html` ;
-- les répertoires de guides publics (`preparer-arrivee-pjj/`, `decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`, `structures-pjj/`, `mesures-educatives-pjj/`, `sigles-pjj/`, `quiz-pjj/`) ;
+- les répertoires de guides publics (`preparer-arrivee-pjj/`, `concours-educateur-pjj/`, `decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`, `structures-pjj/`, `mesures-educatives-pjj/`, `sigles-pjj/`, `quiz-pjj/`) ;
 - `robots.txt` et `sitemap.xml` ;
 - les dossiers `ressources/` et `donnees/` ;
 - `.nojekyll` lorsque l’hébergement l’exige ;

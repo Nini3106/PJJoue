@@ -10,6 +10,7 @@
 (() => {
     const PAGES = [
         ['preparer-arrivee-pjj', 'Préparer son arrivée à la PJJ'],
+        ['concours-educateur-pjj', 'Préparer le concours d’éducateur de la PJJ'],
         ['decouvrir-la-pjj', 'Découvrir la PJJ'],
         ['organisation-pjj', 'Organisation de la PJJ'],
         ['metiers-pjj', 'Métiers de la PJJ'],

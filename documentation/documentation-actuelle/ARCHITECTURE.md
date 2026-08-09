@@ -19,7 +19,7 @@ Avant toute génération, `outils/validation_donnees.py` contrôle les champs ob
 
 ## Guides pédagogiques publics
 
-Les répertoires `preparer-arrivee-pjj/`, `decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`,
+Les répertoires `preparer-arrivee-pjj/`, `concours-educateur-pjj/`, `decouvrir-la-pjj/`, `organisation-pjj/`, `metiers-pjj/`,
 `structures-pjj/`, `mesures-educatives-pjj/`, `sigles-pjj/` et `quiz-pjj/`
 contiennent chacun un `index.html` statique avec une URL canonique propre.
 Ces pages n’embarquent pas le moteur du jeu : elles présentent des synthèses
