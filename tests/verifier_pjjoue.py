@@ -70,6 +70,15 @@ def principal() -> int:
     exiger("programme.etapes.length" in moteur and "programme.etapes.every" in moteur, "Le déverrouillage ne dépend pas de toutes les étapes.")
     exiger("ÉTAPE 12" in page and "Les 11 destinations" in page, "La page principale n’affiche pas la nouvelle structure.")
     exiger("160 questions" in page, "La page principale n’affiche pas 160 questions.")
+    exiger('href="sources.html"' in page, "Le lien vers les sources officielles manque dans le pied de page.")
+    page_sources = (RACINE / "sources.html").read_text(encoding="utf-8")
+    exiger("Sources officielles" in page_sources and "ressources/sources-pjjoue.js" in page_sources, "La page autonome des sources est incomplète.")
+    exiger((RACINE / "ressources/panorama-accueil.webp").is_file() and (RACINE / "ressources/panorama-accueil-mobile.webp").is_file(), "Les images WebP optimisées de l’accueil manquent.")
+    exiger("panorama-accueil-mobile.webp" in page and "panorama-accueil.webp" in page, "L’accueil n’utilise pas les images optimisées selon la largeur d’écran.")
+    exiger("<picture>" not in page and 'class="accueil-presentation-image"' in page, "La structure stable de l’image d’accueil a été modifiée.")
+    adaptation = (RACINE / "ressources/styles/90-adaptation-ecrans-et-etats-finaux.css").read_text(encoding="utf-8")
+    exiger("@media (max-width:1280px)" in adaptation, "Le menu replié des grands appareils tactiles n’est pas protégé.")
+    exiger('body[data-ecran-actif="accueil"] main.conteneur' in adaptation and "min-height: 0" in adaptation, "Le retrait du grand vide avant les guides n’est pas protégé.")
     exiger("<strong>11</strong><span>étapes progressives</span>" in guide, "Le guide public n’affiche pas 11 étapes.")
     exiger("12 — Évaluation finale" in (RACINE/"administration.html").read_text(encoding="utf-8"), "Le filtre de l’administration est obsolète.")
     consentement = (RACINE / "ressources/consentement-analytics.js").read_text(encoding="utf-8")
@@ -85,7 +94,7 @@ def principal() -> int:
     exiger(page.count('src="ressources/analytics-pjjoue.js"') == 1, "La couche d’événements doit être chargée une seule fois sur l’accueil.")
     exiger("www.googletagmanager.com/gtm.js" not in page and "Google Tag Manager (noscript)" not in page, "GTM ne doit pas être chargé directement avant le consentement.")
     pages_publiques = [
-        "accessibilite.html", "confidentialite.html", "mentions-legales.html",
+        "accessibilite.html", "confidentialite.html", "mentions-legales.html", "sources.html",
         "preparer-arrivee-pjj/index.html", "decouvrir-la-pjj/index.html", "organisation-pjj/index.html", "metiers-pjj/index.html",
         "structures-pjj/index.html", "mesures-educatives-pjj/index.html", "sigles-pjj/index.html",
         "quiz-pjj/index.html",

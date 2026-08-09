@@ -38,18 +38,29 @@ function fermerMenuMobile() {
     const entete = document.querySelector('header.entete');
     const bouton = selectionner('#boutonMenuMobile');
     entete?.classList.remove('menu-mobile-ouvert');
+    document.documentElement.classList.remove('menu-principal-ouvert');
     bouton?.setAttribute('aria-expanded', 'false');
     bouton?.setAttribute('aria-label', 'Ouvrir le menu');
+    const libelle = bouton?.querySelector('.bouton-menu-libelle');
+    if (libelle)
+        libelle.textContent = 'Menu';
 }
 function basculerMenuMobile() {
     const entete = document.querySelector('header.entete');
     const bouton = selectionner('#boutonMenuMobile');
+    const navigation = selectionner('#menuPrincipal');
     if (!entete || !bouton)
         return;
     const ouvert = entete.classList.toggle('menu-mobile-ouvert');
+    document.documentElement.classList.toggle('menu-principal-ouvert', ouvert);
     bouton.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
     bouton.setAttribute('aria-label', ouvert ? 'Fermer le menu' : 'Ouvrir le menu');
+    const libelle = bouton.querySelector('.bouton-menu-libelle');
+    if (libelle)
+        libelle.textContent = ouvert ? 'Fermer' : 'Menu';
     mesurerHauteurEntete();
+    if (ouvert)
+        requestAnimationFrame(() => navigation?.querySelector('button:not(:disabled)')?.focus());
 }
 function actualiserNavigation(identifiant) {
     selectionnerTous('.navigation [data-ecran]').forEach(bouton => {
@@ -82,7 +93,7 @@ function ajusterQuestionAEcran() {
         const hauteurNaturelle = conteneur.scrollHeight;
         let densite = Math.min(1, disponibles / Math.max(hauteurNaturelle, 1));
         // Marge de sécurité légère pour éviter le pixel de scroll.
-        densite = Math.max(.68, densite * .97);
+        densite = Math.max(.82, densite * .97);
         // Les questions normales restent à taille pleine.
         if (densite > .97)
             densite = 1;
@@ -159,8 +170,6 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
         afficherErreurs();
     if (identifiant === 'progression')
         afficherProgression();
-    if (identifiant === 'parametres')
-        afficherSources();
     if (identifiant === 'carnet') {
         initialiserProgression('commun');
         actualiserCarnetParcours(PROGRAMMES.commun);

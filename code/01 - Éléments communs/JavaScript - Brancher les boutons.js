@@ -151,10 +151,41 @@ document.addEventListener('click', evenement => {
 });
 mesurerHauteurEntete();
 selectionner('#boutonMenuMobile')?.addEventListener('click', basculerMenuMobile);
+document.addEventListener('click', evenement => {
+    const entete = document.querySelector('header.entete');
+    if (entete?.classList.contains('menu-mobile-ouvert') && !entete.contains(evenement.target))
+        fermerMenuMobile();
+});
+document.addEventListener('keydown', evenement => {
+    const entete = document.querySelector('header.entete');
+    if (!entete?.classList.contains('menu-mobile-ouvert'))
+        return;
+    if (evenement.key === 'Escape') {
+        fermerMenuMobile();
+        selectionner('#boutonMenuMobile')?.focus();
+        return;
+    }
+    if (evenement.key !== 'Tab')
+        return;
+    const elements = [
+        selectionner('#boutonMenuMobile'),
+        ...selectionnerTous('#menuPrincipal button:not(:disabled)')
+    ].filter(Boolean);
+    if (!elements.length)
+        return;
+    const premier = elements[0];
+    const dernier = elements[elements.length - 1];
+    if (evenement.shiftKey && document.activeElement === premier) {
+        evenement.preventDefault();
+        dernier.focus();
+    } else if (!evenement.shiftKey && document.activeElement === dernier) {
+        evenement.preventDefault();
+        premier.focus();
+    }
+});
 window.addEventListener('resize', mesurerHauteurEntete, { passive: true });
 initialiserGroupesChoix();
 actualiserAccueil();
-afficherSources();
 restaurerRoute(history.state || lireRoute());
 garantirAccueilEnHaut();
 window.addEventListener('pageshow', garantirAccueilEnHaut);

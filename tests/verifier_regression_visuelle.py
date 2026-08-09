@@ -36,6 +36,7 @@ FEUILLES_INTERFACE = (
     "ressources/styles/90-adaptation-ecrans-et-etats-finaux.css",
     "ressources/styles/95-consentement.css",
     "ressources/styles/96-icones-et-defi-hasard.css",
+    "ressources/styles/99-stabilisation-visuelle.css",
 )
 
 VUES = (
@@ -53,6 +54,28 @@ VUES = (
     ("mobile-parcours", 390, 844, "parcours"),
     ("mobile-carnet", 390, 844, "carnet"),
     ("mobile-question", 390, 844, "question"),
+    # Matrice représentative des téléphones actuellement courants et compacts.
+    ("mobile-320x568-accueil", 320, 568, "accueil"),
+    ("mobile-360x640-accueil", 360, 640, "accueil"),
+    ("mobile-375x667-accueil", 375, 667, "accueil"),
+    ("mobile-393x873-accueil", 393, 873, "accueil"),
+    ("mobile-412x915-accueil", 412, 915, "accueil"),
+    ("mobile-430x932-accueil", 430, 932, "accueil"),
+    ("mobile-fold-344x882-accueil", 344, 882, "accueil"),
+    ("mobile-fold-853x1280-accueil", 853, 1280, "accueil"),
+    ("mobile-surface-912x1368-accueil", 912, 1368, "accueil"),
+    ("mobile-tablette-1024x1366-accueil", 1024, 1366, "accueil"),
+    ("mobile-large-1280x800-accueil", 1280, 800, "accueil"),
+    ("mobile-375x667-parcours", 375, 667, "parcours"),
+    ("mobile-375x667-carnet", 375, 667, "carnet"),
+    ("mobile-375x667-entrainement", 375, 667, "entrainement"),
+    ("mobile-375x667-question", 375, 667, "question"),
+    ("mobile-375x667-progression", 375, 667, "progression"),
+    ("mobile-375x667-parametres", 375, 667, "parametres"),
+    ("paysage-568x320-accueil", 568, 320, "accueil"),
+    ("paysage-667x375-accueil", 667, 375, "accueil"),
+    ("paysage-844x390-accueil", 844, 390, "accueil"),
+    ("paysage-667x375-question", 667, 375, "question"),
 )
 
 
@@ -71,7 +94,21 @@ def integrer_images_html(page: str, racine: Path) -> str:
             return correspondance.group(0)
         return correspondance.group("avant") + uri_donnees(chemin) + correspondance.group("apres")
 
-    return motif.sub(remplacer, page)
+    page = motif.sub(remplacer, page)
+    motif_srcset = re.compile(r'\bsrcset="(?P<contenu>[^"]+)"')
+
+    def remplacer_srcset(correspondance: re.Match[str]) -> str:
+        candidats = []
+        for candidat in correspondance.group("contenu").split(","):
+            morceaux = candidat.strip().split()
+            if not morceaux:
+                continue
+            chemin = racine / morceaux[0]
+            adresse = uri_donnees(chemin) if chemin.is_file() else morceaux[0]
+            candidats.append(" ".join([adresse, *morceaux[1:]]))
+        return 'srcset="' + ", ".join(candidats) + '"'
+
+    return motif_srcset.sub(remplacer_srcset, page)
 
 
 def integrer_images_css(css: str, racine: Path) -> str:
@@ -153,6 +190,99 @@ def capturer(navigateur, racine: Path) -> dict[str, bytes]:
             ouvrir_vue(page, vue)
             if erreurs:
                 raise AssertionError(f"{nom} : erreur JavaScript : {erreurs[0]}")
+            debordement = page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth")
+            if debordement > 1:
+                raise AssertionError(f"{nom} : débordement horizontal de {debordement}px")
+            if vue == "accueil":
+                image_valide = page.evaluate("""() => {
+                    const image = document.querySelector('.accueil-presentation-image');
+                    const rectangle = image?.getBoundingClientRect();
+                    return Boolean(image?.complete && image.naturalWidth > 0 && rectangle?.width > 0 && rectangle?.height > 100);
+                }""")
+                if not image_valide:
+                    raise AssertionError(f"{nom} : image d’accueil absente ou sans hauteur")
+                coherence_accueil = page.evaluate("""() => {
+                    const accueil = document.querySelector('#accueil');
+                    const guides = document.querySelector('.guides-publics-accueil');
+                    const entete = document.querySelector('header.entete');
+                    const titre = document.querySelector('#accueil .accueil-contenu h1');
+                    const introduction = document.querySelector('#accueil .accueil-introduction');
+                    const accent = document.querySelector('#accueil .accueil-accent');
+                    const action = document.querySelector('#accueil .accueil-action-principale');
+                    const reperes = [...document.querySelectorAll('#accueil .accueil-statistiques li')];
+                    const pied = document.querySelector('.produit-pied-page');
+                    const boutonMenu = document.querySelector('.bouton-menu-mobile');
+                    const navigation = document.querySelector('header.entete .navigation');
+                    const largeur = document.documentElement.clientWidth;
+                    const ecart = guides.getBoundingClientRect().top - accueil.getBoundingClientRect().bottom;
+                    const ecartIntroductionHaut = introduction.getBoundingClientRect().top - accent.getBoundingClientRect().bottom;
+                    const ecartIntroductionBas = action.getBoundingClientRect().top - introduction.getBoundingClientRect().bottom;
+                    const hauteursReperes = reperes.map(repere => repere.getBoundingClientRect().height);
+                    const hautReperes = Math.min(...reperes.map(repere => repere.getBoundingClientRect().top));
+                    const basReperes = Math.max(...reperes.map(repere => repere.getBoundingClientRect().bottom));
+                    const basBouton = action.getBoundingClientRect().bottom;
+                    const hautBouton = action.getBoundingClientRect().top;
+                    const basIntroduction = introduction.getBoundingClientRect().bottom;
+                    const basImage = document.querySelector('.accueil-presentation').getBoundingClientRect().bottom;
+                    const ecartBoutonHaut = hautBouton - basIntroduction;
+                    const ecartReperesHaut = hautReperes - basBouton;
+                    const ecartReperesBas = basImage - basReperes;
+                    const reperesEgaux = Math.max(...hauteursReperes) - Math.min(...hauteursReperes) <= 2;
+                    const reperesSansDebordement = reperes.every(repere =>
+                        repere.scrollWidth <= repere.clientWidth + 1
+                        && repere.scrollHeight <= repere.clientHeight + 1
+                    );
+                    const titreDegage = titre.getBoundingClientRect().top >= entete.getBoundingClientRect().bottom - 1;
+                    const basDocument = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+                    const piedSansVide = basDocument - pied.getBoundingClientRect().bottom - scrollY <= 2;
+                    const menuReplie = largeur > 1280 || (
+                        getComputedStyle(boutonMenu).display !== 'none'
+                        && getComputedStyle(navigation).display === 'none'
+                    );
+                    return {
+                        ecart,
+                        menuReplie,
+                        titreDegage,
+                        reperesEgaux,
+                        reperesSansDebordement,
+                        ecartIntroductionHaut,
+                        ecartIntroductionBas,
+                        ecartBoutonHaut,
+                        ecartReperesHaut,
+                        ecartReperesBas,
+                        piedSansVide
+                    };
+                }""")
+                if coherence_accueil["ecart"] > 40:
+                    raise AssertionError(f"{nom} : espace de {coherence_accueil['ecart']:.0f}px avant les guides")
+                if not coherence_accueil["menuReplie"]:
+                    raise AssertionError(f"{nom} : menu principal non replié")
+                if not coherence_accueil["titreDegage"]:
+                    raise AssertionError(f"{nom} : titre d’accueil masqué par le menu")
+                if not coherence_accueil["reperesEgaux"]:
+                    raise AssertionError(f"{nom} : les quatre repères n’ont pas la même hauteur")
+                if not coherence_accueil["reperesSansDebordement"]:
+                    raise AssertionError(f"{nom} : texte débordant dans un repère d’accueil")
+                difference_espacement = abs(
+                    coherence_accueil["ecartIntroductionHaut"]
+                    - coherence_accueil["ecartIntroductionBas"]
+                )
+                if difference_espacement > 4:
+                    raise AssertionError(f"{nom} : espacement vertical irrégulier autour du texte d’accueil")
+                difference_reperes = abs(
+                    coherence_accueil["ecartReperesHaut"]
+                    - coherence_accueil["ecartReperesBas"]
+                )
+                if difference_reperes > 3:
+                    raise AssertionError(f"{nom} : espace inégal au-dessus et sous les quatre repères")
+                difference_bouton = abs(
+                    coherence_accueil["ecartBoutonHaut"]
+                    - coherence_accueil["ecartReperesHaut"]
+                )
+                if difference_bouton > 3:
+                    raise AssertionError(f"{nom} : bouton Commencer non centré entre le texte et les repères")
+                if not coherence_accueil["piedSansVide"]:
+                    raise AssertionError(f"{nom} : espace résiduel sous les mentions légales")
             captures[nom] = page.screenshot(full_page=False, animations="disabled")
         page.close()
     return captures
@@ -165,10 +295,15 @@ def pixels_identiques(image_a: bytes, image_b: bytes) -> bool:
 
 
 def lancer_chromium(automate):
-    candidats = [Path("/usr/bin/chromium"), Path("/usr/bin/chromium-browser")]
+    candidats = [Path("/usr/bin/chromium"), Path("/usr/bin/chromium-browser"), Path("/tmp/chromium")]
     for candidat in candidats:
         if candidat.exists():
-            return automate.chromium.launch(headless=True, executable_path=str(candidat), args=["--no-sandbox"])
+            return automate.chromium.launch(
+                headless=True,
+                executable_path=str(candidat),
+                args=["--no-sandbox", "--no-zygote", "--single-process", "--disable-gpu", "--disable-webgl"],
+                env={"LD_LIBRARY_PATH": "/tmp/al2023/lib", "FONTCONFIG_PATH": "/tmp/fonts"},
+            )
     return automate.chromium.launch(headless=True)
 
 

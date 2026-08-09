@@ -428,7 +428,7 @@ function nettoyerSauvegarde(sauvegardeBrute) {
             volume: Number.isFinite(Number(parametres.volume))
                 ? Math.min(1, Math.max(0, Number(parametres.volume)))
                 : .65,
-            echelleTexte: [.9, 1, 1.08].includes(Number(parametres.echelleTexte))
+            echelleTexte: [.9, 1, 1.08, 1.15].includes(Number(parametres.echelleTexte))
                 ? Number(parametres.echelleTexte)
                 : 1
         },
@@ -797,18 +797,29 @@ function fermerMenuMobile() {
     const entete = document.querySelector('header.entete');
     const bouton = selectionner('#boutonMenuMobile');
     entete?.classList.remove('menu-mobile-ouvert');
+    document.documentElement.classList.remove('menu-principal-ouvert');
     bouton?.setAttribute('aria-expanded', 'false');
     bouton?.setAttribute('aria-label', 'Ouvrir le menu');
+    const libelle = bouton?.querySelector('.bouton-menu-libelle');
+    if (libelle)
+        libelle.textContent = 'Menu';
 }
 function basculerMenuMobile() {
     const entete = document.querySelector('header.entete');
     const bouton = selectionner('#boutonMenuMobile');
+    const navigation = selectionner('#menuPrincipal');
     if (!entete || !bouton)
         return;
     const ouvert = entete.classList.toggle('menu-mobile-ouvert');
+    document.documentElement.classList.toggle('menu-principal-ouvert', ouvert);
     bouton.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
     bouton.setAttribute('aria-label', ouvert ? 'Fermer le menu' : 'Ouvrir le menu');
+    const libelle = bouton.querySelector('.bouton-menu-libelle');
+    if (libelle)
+        libelle.textContent = ouvert ? 'Fermer' : 'Menu';
     mesurerHauteurEntete();
+    if (ouvert)
+        requestAnimationFrame(() => navigation?.querySelector('button:not(:disabled)')?.focus());
 }
 function actualiserNavigation(identifiant) {
     selectionnerTous('.navigation [data-ecran]').forEach(bouton => {
@@ -841,7 +852,7 @@ function ajusterQuestionAEcran() {
         const hauteurNaturelle = conteneur.scrollHeight;
         let densite = Math.min(1, disponibles / Math.max(hauteurNaturelle, 1));
         // Marge de sécurité légère pour éviter le pixel de scroll.
-        densite = Math.max(.68, densite * .97);
+        densite = Math.max(.82, densite * .97);
         // Les questions normales restent à taille pleine.
         if (densite > .97)
             densite = 1;
@@ -918,8 +929,6 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
         afficherErreurs();
     if (identifiant === 'progression')
         afficherProgression();
-    if (identifiant === 'parametres')
-        afficherSources();
     if (identifiant === 'carnet') {
         initialiserProgression('commun');
         actualiserCarnetParcours(PROGRAMMES.commun);
@@ -4756,33 +4765,6 @@ function afficherProgression() {
     THEMES.forEach(theme => zone.appendChild(construireCarteProgression(theme)));
 }
 
-function construireLienSource(source) {
-    if (!source.url)
-        return source.titre;
-    return `<a href="${source.url}" target="_blank" rel="noopener">${source.titre}</a>`;
-}
-
-function construireFicheSource(source) {
-    const element = document.createElement('article');
-    const repere = source.repere || 'Information présentée par la source';
-    const dateVerification = source.dateVerification || 'Non renseignée';
-    element.className = 'source';
-    element.innerHTML = `
-        <h3>${construireLienSource(source)}</h3>
-        <dl>
-            <div><dt>Repère précis</dt><dd>${repere}</dd></div>
-            <div><dt>Date de vérification</dt><dd>${dateVerification}</dd></div>
-            <div><dt>Statut</dt><dd>${source.statutSource}</dd></div>
-            <div><dt>Traitement pédagogique</dt><dd>${source.traitementEditorial}</dd></div>
-        </dl>`;
-    return element;
-}
-
-function afficherSources() {
-    const zone = selectionner('#listeSources');
-    zone.innerHTML = '';
-    Object.values(SOURCES).forEach(source => zone.appendChild(construireFicheSource(source)));
-}
 // -----------------------------------------------------------------------------
 // Paramètres, import/export, sons et effets de célébration
 // -----------------------------------------------------------------------------
@@ -5126,10 +5108,41 @@ document.addEventListener('click', evenement => {
 });
 mesurerHauteurEntete();
 selectionner('#boutonMenuMobile')?.addEventListener('click', basculerMenuMobile);
+document.addEventListener('click', evenement => {
+    const entete = document.querySelector('header.entete');
+    if (entete?.classList.contains('menu-mobile-ouvert') && !entete.contains(evenement.target))
+        fermerMenuMobile();
+});
+document.addEventListener('keydown', evenement => {
+    const entete = document.querySelector('header.entete');
+    if (!entete?.classList.contains('menu-mobile-ouvert'))
+        return;
+    if (evenement.key === 'Escape') {
+        fermerMenuMobile();
+        selectionner('#boutonMenuMobile')?.focus();
+        return;
+    }
+    if (evenement.key !== 'Tab')
+        return;
+    const elements = [
+        selectionner('#boutonMenuMobile'),
+        ...selectionnerTous('#menuPrincipal button:not(:disabled)')
+    ].filter(Boolean);
+    if (!elements.length)
+        return;
+    const premier = elements[0];
+    const dernier = elements[elements.length - 1];
+    if (evenement.shiftKey && document.activeElement === premier) {
+        evenement.preventDefault();
+        dernier.focus();
+    } else if (!evenement.shiftKey && document.activeElement === dernier) {
+        evenement.preventDefault();
+        premier.focus();
+    }
+});
 window.addEventListener('resize', mesurerHauteurEntete, { passive: true });
 initialiserGroupesChoix();
 actualiserAccueil();
-afficherSources();
 restaurerRoute(history.state || lireRoute());
 garantirAccueilEnHaut();
 window.addEventListener('pageshow', garantirAccueilEnHaut);

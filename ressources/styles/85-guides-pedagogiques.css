@@ -540,3 +540,213 @@ body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil
         min-height: 190px;
     }
 }
+/* Outils discrets partagés : connexion, installation et lecture des guides. */
+.indication-connexion {
+    position: fixed;
+    z-index: 320;
+    left: 14px;
+    bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 32px;
+    padding: 6px 10px;
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 999px;
+    color: #e8f5ff;
+    background: rgba(5,38,80,.92);
+    box-shadow: 0 6px 18px rgba(0,18,48,.22);
+    font-size: .76rem;
+    font-weight: 800;
+    backdrop-filter: blur(8px);
+}
+
+.indication-connexion > span:first-child {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #55d88b;
+    box-shadow: 0 0 0 3px rgba(85,216,139,.15);
+}
+
+.indication-connexion.hors-connexion > span:first-child {
+    background: #ffb84d;
+    box-shadow: 0 0 0 3px rgba(255,184,77,.16);
+}
+
+.message-connexion {
+    position: fixed;
+    z-index: 321;
+    left: 50%;
+    bottom: 18px;
+    max-width: calc(100vw - 32px);
+    padding: 10px 16px;
+    border: 1px solid #6d95c2;
+    border-radius: 12px;
+    color: #fff;
+    background: #0b315d;
+    box-shadow: 0 12px 30px rgba(0,18,48,.34);
+    font-weight: 850;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%,12px);
+    transition: opacity .18s ease,transform .18s ease;
+}
+
+.message-connexion.visible {
+    opacity: 1;
+    transform: translate(-50%,0);
+}
+
+header.entete .navigation .bouton-installer-pjjoue {
+    margin-top: 5px;
+    color: var(--texte-sur-jaune);
+    border-color: var(--bouton-selection);
+    background: var(--bouton-selection);
+}
+
+header.entete .navigation .bouton-installer-pjjoue::before {
+    content: "↓";
+    margin-right: 8px;
+    font-size: 1.05em;
+}
+
+.barre-lecture-guide {
+    position: fixed;
+    z-index: 500;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 3px;
+    pointer-events: none;
+}
+
+.barre-lecture-guide span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--jaune-interface);
+    box-shadow: 0 0 8px rgba(255,209,102,.58);
+    transform: scaleX(0);
+    transform-origin: left center;
+}
+
+.bouton-retour-haut-guide {
+    position: fixed;
+    z-index: 319;
+    right: 16px;
+    bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 42px;
+    padding: 8px 13px;
+    border: 1px solid #6d95c2;
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(5,38,80,.94);
+    box-shadow: 0 8px 22px rgba(0,18,48,.28);
+    font: inherit;
+    font-size: .82rem;
+    font-weight: 850;
+    opacity: 0;
+    visibility: hidden;
+    cursor: pointer;
+    transform: translateY(10px);
+    transition: opacity .18s ease,transform .18s ease,visibility 0s linear .18s;
+}
+
+.bouton-retour-haut-guide.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
+}
+
+.bouton-retour-haut-guide:hover,
+.bouton-retour-haut-guide:focus-visible {
+    color: var(--texte-sur-jaune);
+    border-color: var(--jaune-interface);
+    background: var(--jaune-interface);
+}
+
+.sommaire-guide {
+    margin: 0 0 28px;
+    padding: 0;
+    border: 1px solid #6d95c2;
+    border-radius: 16px;
+    background: rgba(5,38,80,.42);
+    overflow: hidden;
+}
+
+.sommaire-guide summary {
+    padding: 14px 17px;
+    color: var(--jaune-interface);
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.sommaire-guide[open] summary {
+    border-bottom: 1px solid rgba(255,255,255,.16);
+}
+
+.sommaire-guide ol {
+    display: grid;
+    gap: 7px;
+    margin: 0;
+    padding: 14px 20px 17px 42px;
+}
+
+.sommaire-guide a {
+    color: #e7f3ff;
+    text-decoration-thickness: 1px;
+}
+
+.page-guide h2[id] {
+    scroll-margin-top: 18px;
+}
+
+.guide-public-corps .page-guide {
+    animation: entreeGuide .18s ease-out both;
+}
+
+.guide-public-corps.guide-quitte-page .page-guide {
+    opacity: 0;
+    transition: opacity .13s ease;
+}
+
+@keyframes entreeGuide {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width:580px) {
+    .indication-connexion {
+        left: 10px;
+        bottom: 10px;
+    }
+    .indication-connexion-texte {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+    .bouton-retour-haut-guide {
+        right: 10px;
+        bottom: 10px;
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .guide-public-corps .page-guide,
+    .guide-public-corps.guide-quitte-page .page-guide {
+        animation: none;
+        transition: none;
+    }
+    .message-connexion,
+    .bouton-retour-haut-guide {
+        transition: none;
+    }
+}

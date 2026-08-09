@@ -1,0 +1,189 @@
+/* Géométrie finale réellement testée dans Chromium de 375 à 1280 px. */
+body {
+    display: flex;
+    min-height: 100dvh;
+    flex-direction: column;
+}
+
+.produit-pied-page {
+    width: min(1180px, 100%);
+    margin-top: auto;
+    margin-bottom: 0;
+    padding-bottom: 16px;
+}
+
+body[data-ecran-actif="accueil"] main.conteneur {
+    width: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+body[data-ecran-actif="accueil"] #accueil {
+    left: auto;
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    margin: 0;
+}
+
+@media (max-width:1280px) {
+    body[data-ecran-actif="accueil"] #accueil .accueil-presentation {
+        display: block;
+        position: relative;
+        width: 100%;
+        min-height: max(420px, 47.75vw);
+        height: auto;
+        aspect-ratio: auto;
+        overflow: hidden;
+    }
+
+    #accueil .accueil-presentation-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    #accueil .accueil-presentation::after {
+        content: "";
+        position: absolute;
+        z-index: 2;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(3,28,61,.82), rgba(3,28,61,.42) 58%, rgba(3,28,61,.08));
+    }
+
+    #accueil .accueil-contenu {
+        display: flex;
+        position: relative;
+        z-index: 4;
+        inset: auto;
+        width: min(52%, 600px);
+        min-height: max(520px,47.75vw);
+        padding: clamp(24px,3.4vw,46px) clamp(22px,4.5vw,64px);
+        padding-bottom: 0;
+        flex-direction: column;
+        align-items: stretch;
+        box-sizing: border-box;
+        color: #fff;
+        background: transparent;
+        transform: none;
+    }
+
+    #accueil .accueil-texte-image {
+        display: contents;
+        position: static;
+        inset: auto;
+        width: auto;
+        color: inherit;
+        text-shadow: none;
+        transform: none;
+    }
+
+    #accueil .accueil-marque {
+        order: 1;
+        margin: 0 0 10px;
+    }
+
+    #accueil .accueil-contenu h1 {
+        order: 2;
+    }
+
+    #accueil .accueil-accent {
+        order: 3;
+        margin-top: 14px;
+    }
+
+    #accueil .accueil-introduction {
+        order: 4;
+        max-width: 100%;
+        margin-top: auto;
+        margin-bottom: 0;
+        text-align: left;
+    }
+
+    #accueil .accueil-action-principale {
+        order: 5;
+        width: 100%;
+        margin-top: auto;
+        margin-bottom: 0;
+    }
+
+    #accueil .accueil-statistiques {
+        order: 6;
+        width: 100%;
+        margin-top: auto;
+        margin-bottom: auto;
+        align-items: stretch;
+        grid-auto-rows: 1fr;
+    }
+
+    #accueil .accueil-statistiques li {
+        display: grid;
+        min-width: 0;
+        min-height: clamp(74px,9vw,122px);
+        grid-template-rows: auto auto minmax(1.3em, auto);
+        align-content: center;
+        justify-items: center;
+        overflow: hidden;
+    }
+
+    #accueil .accueil-statistiques strong,
+    #accueil .accueil-statistiques span {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    #accueil .accueil-statistiques span {
+        line-height: 1.25;
+    }
+}
+
+@media (min-width:761px) and (max-width:1280px) {
+    #accueil .accueil-statistiques li {
+        padding-inline: 4px;
+    }
+
+    #accueil .accueil-statistiques span {
+        overflow-wrap: normal;
+        word-break: normal;
+        font-size: clamp(.58rem,.82vw,.74rem);
+    }
+}
+
+@media (max-width:760px) {
+    body[data-ecran-actif="accueil"] #accueil .accueil-presentation {
+        min-height: 0;
+    }
+
+    #accueil .accueil-presentation::after {
+        background: rgba(4,35,73,.76);
+    }
+
+    #accueil .accueil-presentation-image {
+        object-position: 62% center;
+    }
+
+    #accueil .accueil-contenu {
+        width: 100%;
+        min-height: 610px;
+        padding: 26px 18px 0;
+    }
+
+    #accueil .accueil-statistiques {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+
+    #accueil .accueil-statistiques li {
+        min-height: 104px;
+    }
+}
+
+@media (max-width:360px) {
+    #accueil .accueil-contenu {
+        min-height: 590px;
+        padding-inline: 15px;
+    }
+}

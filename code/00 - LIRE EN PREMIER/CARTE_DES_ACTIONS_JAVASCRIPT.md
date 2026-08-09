@@ -388,7 +388,6 @@ Les explications sont volontairement simples. Les mots techniques imposés par J
 |---|---|
 | `construireLienSource()` | Prépare lien source. |
 | `construireFicheSource()` | Prépare fiche source. |
-| `afficherSources()` | Affiche sources. |
 | `appliquerDisponibiliteVolumeSon()` | Applique disponibilite volume son. |
 | `chargerParametres()` | Charge parametres. |
 | `enregistrerParametres()` | Enregistre parametres. |

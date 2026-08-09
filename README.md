@@ -64,6 +64,25 @@ Pour comparer une version avec une référence :
 python tests/verifier_regression_visuelle.py --reference-projet CHEMIN_DE_LA_VERSION_REFERENCE
 ```
 
+Contrôles complémentaires :
+
+```bash
+python outils/auditer_accessibilite_statique.py
+python outils/verifier_fraicheur_sources.py
+python outils/verifier_liens_officiels.py
+```
+
+Le rappel éditorial des sources se déclenche 365 jours après leur dernière
+date de vérification. Le contrôle des liens peut être lancé indépendamment à
+n’importe quel moment.
+
+## Installation et fonctionnement hors connexion
+
+PJJoue contient un manifeste d’application et un service worker. Depuis un
+navigateur compatible et une adresse HTTPS, le site peut être installé. Après
+une première visite en ligne, l’application principale peut être rouverte sans
+connexion. Les guides déjà consultés sont également conservés par le cache.
+
 ## Documentation
 
 Le seul point d’entrée est :

@@ -80,6 +80,12 @@
       "style_sortie": "ressources/styles/pages-legales/mentions-legales.css"
     },
     {
+      "source": "code/12 - Informations légales/Sources officielles/page.html",
+      "sortie": "sources.html",
+      "style_source": "code/12 - Informations légales/Sources officielles/style-de-la-page.css",
+      "style_sortie": "ressources/styles/pages-legales/sources.css"
+    },
+    {
       "source": "code/13 - Administration/page.html",
       "sortie": "administration.html"
     }
@@ -5195,6 +5201,11 @@
       "source": "code/11 - Guides pour découvrir la PJJ/00 - Éléments communs aux guides/style-commun-des-guides.css"
     },
     {
+      "sortie": "85-guides-pedagogiques.css",
+      "ordre": 86,
+      "source": "code/11 - Guides pour découvrir la PJJ/00 - Éléments communs aux guides/style-commun-des-guides.css"
+    },
+    {
       "sortie": "90-adaptation-ecrans-et-etats-finaux.css",
       "ordre": 1,
       "source": "code/01 - Éléments communs/CSS - Éléments partagés et adaptation aux écrans.css"
@@ -5743,6 +5754,31 @@
       "sortie": "96-icones-et-defi-hasard.css",
       "ordre": 36,
       "source": "code/03 - Parcours PJJ/style-de-la-page.css"
+    },
+    {
+      "sortie": "00-fondations-et-composants.css",
+      "ordre": 195,
+      "source": "code/01 - Éléments communs/CSS - Éléments partagés et adaptation aux écrans.css"
+    },
+    {
+      "sortie": "90-adaptation-ecrans-et-etats-finaux.css",
+      "ordre": 53,
+      "source": "code/01 - Éléments communs/CSS - Éléments partagés et adaptation aux écrans.css"
+    },
+    {
+      "sortie": "90-adaptation-ecrans-et-etats-finaux.css",
+      "ordre": 54,
+      "source": "code/01 - Éléments communs/CSS - Éléments partagés et adaptation aux écrans.css"
+    },
+    {
+      "sortie": "90-adaptation-ecrans-et-etats-finaux.css",
+      "ordre": 55,
+      "source": "code/01 - Éléments communs/CSS - Éléments partagés et adaptation aux écrans.css"
+    },
+    {
+      "sortie": "99-stabilisation-visuelle.css",
+      "ordre": 1,
+      "source": "code/01 - Éléments communs/CSS - Éléments partagés et adaptation aux écrans.css"
     }
   ],
   "ressources_administration": [
@@ -5769,12 +5805,24 @@
       "sortie": "ressources/navigation-locale.js"
     },
     {
+      "source": "code/01 - Éléments communs/Application installable et hors connexion/manifest.webmanifest",
+      "sortie": "manifest.webmanifest"
+    },
+    {
+      "source": "code/01 - Éléments communs/Application installable et hors connexion/service-worker.js",
+      "sortie": "service-worker.js"
+    },
+    {
       "source": "code/11 - Guides pour découvrir la PJJ/00 - Éléments communs aux guides/suivi-analytics-des-pages-guides.js",
       "sortie": "ressources/analytics-pages-pjjoue.js"
     },
     {
       "source": "code/11 - Guides pour découvrir la PJJ/00 - Éléments communs aux guides/actions-des-videos.js",
       "sortie": "ressources/videos-guides.js"
+    },
+    {
+      "source": "code/12 - Informations légales/Sources officielles/actions-de-la-page.js",
+      "sortie": "ressources/sources-pjjoue.js"
     }
   ]
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
  <head>
- <script src="ressources/consentement-analytics.js"></script>
+ <script src="ressources/consentement-analytics.js" defer></script>
  <script src="ressources/navigation-locale.js" defer></script>
 <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
@@ -10,6 +10,8 @@
   <link rel="icon" href="favicon-48x48.png" type="image/png" sizes="48x48"/>
   <link rel="icon" href="favicon-96x96.png" type="image/png" sizes="96x96"/>
   <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180"/>
+  <link rel="manifest" href="manifest.webmanifest"/>
+  <meta content="#0b315d" name="theme-color"/>
   <meta content="no-referrer" name="referrer"/>
   <meta content="dark" name="color-scheme"/>
   <meta content="index,follow,max-image-preview:large" name="robots"/>
@@ -26,40 +28,31 @@
   <title>
    PJJoue — Découvrir et comprendre la PJJ
   </title>
-  <link rel="stylesheet" href="ressources/styles/00-fondations-et-composants.css">
-  <link rel="stylesheet" href="ressources/styles/10-parcours-principal.css">
-  <link rel="stylesheet" href="ressources/styles/20-accueil-et-question-principale.css">
-  <link rel="stylesheet" href="ressources/styles/30-revision-parcours-et-parametres.css">
-  <link rel="stylesheet" href="ressources/styles/40-progression-et-erreurs.css">
-  <link rel="stylesheet" href="ressources/styles/50-carte-question-et-correction.css">
-  <link rel="stylesheet" href="ressources/styles/60-parcours-modes-et-chronometre.css">
-  <link rel="stylesheet" href="ressources/styles/70-celebrations-bilan-et-fenetres.css">
-  <link rel="stylesheet" href="ressources/styles/80-finitions-de-l-interface.css">
-  <link rel="stylesheet" href="ressources/styles/85-guides-pedagogiques.css">
-  <link rel="stylesheet" href="ressources/styles/90-adaptation-ecrans-et-etats-finaux.css">
+  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=20260809-1">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PJJoue","alternateName":"PJJoue — Découvrir et comprendre la PJJ","url":"https://pjjoue.fr/","description":"Parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
- <link rel="stylesheet" href="ressources/styles/95-consentement.css">
-  <link rel="stylesheet" href="ressources/styles/96-icones-et-defi-hasard.css">
 </head>
- <body>
+ <body data-ecran-actif="accueil">
 <a class="passer-lien" href="#contenuPrincipal">
    Aller au contenu principal
   </a>
   <div aria-atomic="true" aria-live="polite" class="lecteur-ecran-seulement" id="statutAccessibilite">
   </div>
   <header class="entete">
-   <div class="marque">
+   <button aria-label="PJJoue — Découvrir et comprendre la PJJ, revenir à l’accueil" class="marque bouton-marque" data-ecran="accueil" type="button">
     <b>
      <span>PJJ</span>oue
     </b>
     <span>
      Découvrir et comprendre la PJJ
     </span>
-   </div>
+   </button>
    <button aria-controls="menuPrincipal" aria-expanded="false" aria-label="Ouvrir le menu" class="bouton-menu-mobile" id="boutonMenuMobile" type="button">
-    <span aria-hidden="true"></span>
-    <span aria-hidden="true"></span>
-    <span aria-hidden="true"></span>
+    <span class="bouton-menu-libelle">Menu</span>
+    <span class="bouton-menu-icone" aria-hidden="true">
+     <span></span>
+     <span></span>
+     <span></span>
+    </span>
    </button>
    <nav class="navigation" id="menuPrincipal">
     <button id="boutonAccueil" data-ecran="accueil" type="button">
@@ -82,6 +75,9 @@
     </button>
     <button id="boutonParametres" data-ecran="parametres" type="button">
      Paramètres
+    </button>
+    <button class="bouton-installer-pjjoue" hidden id="boutonInstallerPJJoue" type="button">
+     Installer PJJoue
     </button>
    </nav>
   </header>
@@ -108,6 +104,7 @@
     Contact : <a href="mailto:contact.pjjoue@gmail.com">contact.pjjoue@gmail.com</a>
    </p>
    <nav aria-label="Informations légales et pratiques">
+   <a href="sources.html">Sources officielles</a>
    <a href="accessibilite.html">Accessibilité</a>
     <a href="confidentialite.html">
      Confidentialité

@@ -17,7 +17,8 @@ if (!analyseurs[mode]) {
 
 const dossierStyles = path.resolve('ressources/styles');
 const feuillesInterface = fs.readdirSync(dossierStyles)
-    .filter(nom => nom.endsWith('.css'))
+    // Le paquet principal est une copie optimisée des feuilles contrôlées ici.
+    .filter(nom => nom.endsWith('.css') && nom !== 'pjjoue-principal.css')
     .sort()
     .map(nom => path.join(dossierStyles, nom));
 const dossierTemporaire = fs.mkdtempSync(path.join(os.tmpdir(), 'pjjoue-css-'));

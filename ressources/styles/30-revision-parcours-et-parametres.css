@@ -281,7 +281,7 @@
     border-radius: 50%;
     color: #fff;
     background: var(--surface-carte);
-    font-size: 7px;
+    font-size: .75rem;
     transition: left .35s ease;
 }
 #carnet .carnet-parcours-reperes {

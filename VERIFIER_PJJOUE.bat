@@ -42,7 +42,22 @@ py -3.14 tests\verifier_interface.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 8/8 - Captures visuelles ordinateur, portable et mobile...
+echo 8/11 - Controle automatique de l'accessibilite...
+py -3.14 outils\auditer_accessibilite_statique.py
+if errorlevel 1 goto erreur
+
+echo.
+echo 9/11 - Rappel de verification des sources tous les 365 jours...
+py -3.14 outils\verifier_fraicheur_sources.py
+if errorlevel 1 goto erreur
+
+echo.
+echo 10/11 - Verification des liens officiels...
+py -3.14 outils\verifier_liens_officiels.py
+if errorlevel 1 goto erreur
+
+echo.
+echo 11/11 - Captures visuelles ordinateur, portable et mobile...
 py -3.14 tests\verifier_regression_visuelle.py
 if errorlevel 1 goto erreur
 

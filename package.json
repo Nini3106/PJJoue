@@ -4,7 +4,7 @@
   "private": true,
   "description": "Contrôles techniques de PJJoue — 11 étapes et évaluation finale écrite",
   "scripts": {
-    "test": "npm run controle:javascript && npm run controle:css && npm run test:unitaire && python tests/verifier_pjjoue.py && python tests/verifier_interface.py",
+    "test": "npm run controle:javascript && npm run controle:css && npm run test:unitaire && npm run controle:accessibilite && npm run controle:sources && python tests/verifier_pjjoue.py && python tests/verifier_interface.py",
     "controle:javascript": "eslint ressources/*.js",
     "controle:css": "npm run controle:css:doublons && npm run controle:css:structure",
     "controle:css:doublons": "node outils/controler_css.js doublons",
@@ -12,6 +12,9 @@
     "test:unitaire": "python -m unittest discover -s tests -p test_*.py",
     "test:structure": "python tests/verifier_pjjoue.py",
     "test:interface": "python tests/verifier_interface.py",
+    "controle:accessibilite": "python outils/auditer_accessibilite_statique.py",
+    "controle:sources": "python outils/verifier_fraicheur_sources.py",
+    "controle:liens": "python outils/verifier_liens_officiels.py",
     "test:visuel": "python tests/verifier_regression_visuelle.py",
     "build:donnees": "python outils/construire_donnees.py",
     "build:manifeste": "python outils/construire_manifeste.py",

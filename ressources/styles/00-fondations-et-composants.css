@@ -1542,3 +1542,17 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
         width: 100%
     }
 }
+/* Lisibilité minimale des informations secondaires et notification non bloquante. */
+.page-entete p,
+.entrainement-details,
+.produit-pied-page,
+.source dd,
+.source dt {
+    line-height: 1.55;
+}
+
+.notification {
+    pointer-events: none;
+    line-height: 1.45;
+    text-align: center;
+}

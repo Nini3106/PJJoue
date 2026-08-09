@@ -1,37 +1,10 @@
 /**
- * Afficher les sources, enregistrer les paramètres et importer ou exporter la progression.
+ * Enregistrer les paramètres et importer ou exporter la progression.
  *
  * Lis ce fichier comme une histoire : une fonction explique une petite action.
  * Les mots imposés par le navigateur (document, window, localStorage, history...)
  * gardent leur nom technique, car le navigateur ne comprendrait pas leur traduction.
  */
-function construireLienSource(source) {
-    if (!source.url)
-        return source.titre;
-    return `<a href="${source.url}" target="_blank" rel="noopener">${source.titre}</a>`;
-}
-
-function construireFicheSource(source) {
-    const element = document.createElement('article');
-    const repere = source.repere || 'Information présentée par la source';
-    const dateVerification = source.dateVerification || 'Non renseignée';
-    element.className = 'source';
-    element.innerHTML = `
-        <h3>${construireLienSource(source)}</h3>
-        <dl>
-            <div><dt>Repère précis</dt><dd>${repere}</dd></div>
-            <div><dt>Date de vérification</dt><dd>${dateVerification}</dd></div>
-            <div><dt>Statut</dt><dd>${source.statutSource}</dd></div>
-            <div><dt>Traitement pédagogique</dt><dd>${source.traitementEditorial}</dd></div>
-        </dl>`;
-    return element;
-}
-
-function afficherSources() {
-    const zone = selectionner('#listeSources');
-    zone.innerHTML = '';
-    Object.values(SOURCES).forEach(source => zone.appendChild(construireFicheSource(source)));
-}
 // -----------------------------------------------------------------------------
 // Paramètres, import/export, sons et effets de célébration
 // -----------------------------------------------------------------------------

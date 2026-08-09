@@ -201,7 +201,7 @@ function nettoyerSauvegarde(sauvegardeBrute) {
             volume: Number.isFinite(Number(parametres.volume))
                 ? Math.min(1, Math.max(0, Number(parametres.volume)))
                 : .65,
-            echelleTexte: [.9, 1, 1.08].includes(Number(parametres.echelleTexte))
+            echelleTexte: [.9, 1, 1.08, 1.15].includes(Number(parametres.echelleTexte))
                 ? Number(parametres.echelleTexte)
                 : 1
         },

@@ -11,6 +11,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from pathlib import Path
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -223,8 +224,44 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
             ajouter(ressource["sortie"], lire_texte(ressource["source"]))
 
     ajouter("ressources/moteur-jeu.js", construire_javascript(plan))
-    for sortie, contenu in construire_css(plan).items():
+    feuilles_css = construire_css(plan)
+    for sortie, contenu in feuilles_css.items():
         ajouter(sortie, contenu)
+    # La page principale charge une seule feuille afin de limiter les requêtes
+    # bloquant son premier affichage. Les feuilles séparées restent disponibles
+    # pour les guides et pour faciliter le diagnostic du code source.
+    ordre_feuilles_principales = [
+        "00-fondations-et-composants.css",
+        "10-parcours-principal.css",
+        "20-accueil-et-question-principale.css",
+        "30-revision-parcours-et-parametres.css",
+        "40-progression-et-erreurs.css",
+        "50-carte-question-et-correction.css",
+        "60-parcours-modes-et-chronometre.css",
+        "70-celebrations-bilan-et-fenetres.css",
+        "80-finitions-de-l-interface.css",
+        "85-guides-pedagogiques.css",
+        "90-adaptation-ecrans-et-etats-finaux.css",
+        "95-consentement.css",
+        "96-icones-et-defi-hasard.css",
+        "99-stabilisation-visuelle.css",
+    ]
+    ajouter(
+        "ressources/styles/pjjoue-principal.css",
+        "".join(feuilles_css[f"ressources/styles/{nom}"] for nom in ordre_feuilles_principales),
+    )
+
+    # Le nom du cache change automatiquement dès qu'un fichier public change.
+    # Le navigateur remplace alors l'ancien cache sans demander de manipulation.
+    empreinte_cache = hashlib.sha256()
+    for chemin, contenu in sorted(sorties.items()):
+        if chemin != "service-worker.js":
+            empreinte_cache.update(chemin.encode("utf-8"))
+            empreinte_cache.update(contenu.encode("utf-8"))
+    version_cache = empreinte_cache.hexdigest()[:12]
+    sorties["service-worker.js"] = sorties["service-worker.js"].replace(
+        "__VERSION_CACHE_PJJOUE__", version_cache
+    )
 
     # Dernier garde-fou : aucun marqueur de construction ne doit sortir du dossier code.
     for sortie, contenu in sorties.items():
