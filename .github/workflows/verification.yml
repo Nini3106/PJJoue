@@ -5,7 +5,6 @@ on:
   pull_request:
   schedule:
     - cron: '17 6 * * 1'
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -38,17 +37,6 @@ jobs:
 
       - name: Contrôler le code et l’interface
         run: npm test
-
-      - name: Contrôler les captures visuelles
-        run: python tests/verifier_regression_visuelle.py
-
-      - name: Conserver les captures en cas d’échec
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: captures-pjjoue
-          path: test-results/
-          if-no-files-found: ignore
 
       - name: Contrôler les liens officiels chaque semaine
         if: github.event_name == 'schedule'

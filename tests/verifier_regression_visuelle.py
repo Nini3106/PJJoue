@@ -295,15 +295,9 @@ def pixels_identiques(image_a: bytes, image_b: bytes) -> bool:
 
 
 def lancer_chromium(automate):
-    candidats = [Path("/usr/bin/chromium"), Path("/usr/bin/chromium-browser"), Path("/tmp/chromium")]
-    for candidat in candidats:
-        if candidat.exists():
-            return automate.chromium.launch(
-                headless=True,
-                executable_path=str(candidat),
-                args=["--no-sandbox", "--no-zygote", "--single-process", "--disable-gpu", "--disable-webgl"],
-                env={"LD_LIBRARY_PATH": "/tmp/al2023/lib", "FONTCONFIG_PATH": "/tmp/fonts"},
-            )
+    # Playwright installe sa propre version de Chromium dans la CI. L’utiliser
+    # directement évite le mode « single-process », instable pendant la série
+    # de captures et responsable de fermetures brutales du navigateur.
     return automate.chromium.launch(headless=True)
 
 
