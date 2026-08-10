@@ -1006,8 +1006,8 @@
       "sha256": "73d192124fdc9321502ceed92a30d89640eb237bcb556545349e69f35fe06912"
     },
     "tests/verifier_regression_visuelle.py": {
-      "tailleOctets": 18182,
-      "sha256": "2cba0a3547c9df5f72e271aba022a9d31fa2daf47848da7ed6e64bd455c67284"
+      "tailleOctets": 17913,
+      "sha256": "088c14880b0d94e3afe25b1945c9f5e640c48419c9d11f490b48922751b8ab01"
     }
   }
 }

@@ -84,7 +84,7 @@
     max-width: 560px;
     margin: 22px 0 0;
     color: #e8f2ff;
-    font-size: clamp(.92rem,1.25vw,1.2rem);
+    font-size: clamp(1rem,1.35vw,1.3rem);
     line-height: 1.52;
 }
 .accueil-action-principale {
