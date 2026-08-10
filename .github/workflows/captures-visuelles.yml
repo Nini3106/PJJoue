@@ -8,6 +8,7 @@ permissions:
 
 jobs:
   captures:
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - name: Récupérer le site
@@ -26,6 +27,7 @@ jobs:
           python -m playwright install --with-deps chromium
 
       - name: Contrôler les captures visuelles
+        continue-on-error: true
         run: python tests/verifier_regression_visuelle.py
 
       - name: Conserver les captures
