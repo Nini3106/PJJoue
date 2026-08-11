@@ -362,12 +362,12 @@
       "sha256": "5efd5912e1072d496ffc695c4ab25e915f26fb37ed389a8dce856b74185443c2"
     },
     "code/11 - Guides pour découvrir la PJJ/Organisation de la PJJ/page.html": {
-      "tailleOctets": 11821,
-      "sha256": "e4dbfaf49a26ce0b0a40cd83fb7e0ea4b72894c92a5c4ff5ec1a41156a800372"
+      "tailleOctets": 11006,
+      "sha256": "e27871e9800b59e094c8a206b5310917ce579d8cc6008bd47fe70f09accf914a"
     },
     "code/11 - Guides pour découvrir la PJJ/Organisation de la PJJ/style-de-la-page.css": {
-      "tailleOctets": 3364,
-      "sha256": "de4d2a7f5e1065338e2566481255cc26d70b9139c215532c96e32f990e4db258"
+      "tailleOctets": 2968,
+      "sha256": "88b3da0f8e1d3312dda24997f1ec39ac73bfac7b311f8434c362d14e7b619635"
     },
     "code/11 - Guides pour découvrir la PJJ/Préparer le concours d’éducateur de la PJJ/page.html": {
       "tailleOctets": 15068,
@@ -666,12 +666,12 @@
       "sha256": "c0f89869dcedde7309df4c4caaaf4541e063d730425b2f5f9cbdda16b3e124db"
     },
     "organisation-pjj/index.html": {
-      "tailleOctets": 11821,
-      "sha256": "e4dbfaf49a26ce0b0a40cd83fb7e0ea4b72894c92a5c4ff5ec1a41156a800372"
+      "tailleOctets": 11006,
+      "sha256": "e27871e9800b59e094c8a206b5310917ce579d8cc6008bd47fe70f09accf914a"
     },
     "organisation-pjj/style-de-la-page.css": {
-      "tailleOctets": 3364,
-      "sha256": "de4d2a7f5e1065338e2566481255cc26d70b9139c215532c96e32f990e4db258"
+      "tailleOctets": 2968,
+      "sha256": "88b3da0f8e1d3312dda24997f1ec39ac73bfac7b311f8434c362d14e7b619635"
     },
     "outils/analyser_doublons_css.js": {
       "tailleOctets": 4182,
@@ -848,10 +848,6 @@
     "ressources/navigation-locale.js": {
       "tailleOctets": 5840,
       "sha256": "d86b594fba101eb89e376ae07475794bbef971c2242fe4a46b0838301bf996a8"
-    },
-    "ressources/organisation-territoriale-pjj.png": {
-      "tailleOctets": 1413264,
-      "sha256": "b8dc0de3017e0acce2c9426b3d5dfc898438e061cbddb98dd76d155923b420c3"
     },
     "ressources/panorama-accueil-calme.png": {
       "tailleOctets": 1811539,
