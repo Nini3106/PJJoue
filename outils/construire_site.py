@@ -274,7 +274,14 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
                 f"Ressource précachée introuvable : {chemin_relatif}"
             )
         empreinte_cache.update(chemin_relatif.encode("utf-8"))
-        empreinte_cache.update(chemin.read_bytes())
+        if chemin.suffix.lower() in {
+            ".css", ".html", ".js", ".json", ".svg",
+            ".txt", ".webmanifest", ".xml"
+        }:
+            contenu_cache = chemin.read_text(encoding="utf-8").encode("utf-8")
+        else:
+            contenu_cache = chemin.read_bytes()
+        empreinte_cache.update(contenu_cache)
     version_cache = empreinte_cache.hexdigest()[:12]
     sorties["service-worker.js"] = sorties["service-worker.js"].replace(
         "__VERSION_CACHE_PJJOUE__", version_cache

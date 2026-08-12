@@ -694,8 +694,8 @@
       "sha256": "907efdb6922f9f8c87f03e5ab46709177d321c818c7f332f834fb3348560eb30"
     },
     "outils/construire_site.py": {
-      "tailleOctets": 15132,
-      "sha256": "55de7e342386a53a2e6be3fcfa9d61782108768ce7b4478650c73f4d9f884f8f"
+      "tailleOctets": 15419,
+      "sha256": "60f787dd682c82dcd213e5fa27b3a3a2dd4d9c4abde691ab64ddfd854d8befc2"
     },
     "outils/controler_css.js": {
       "tailleOctets": 1628,
@@ -963,7 +963,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 4116,
-      "sha256": "a9f88126bd32bf49bb698b9ab79f43bbc01d90fbc2ce304aaff1160891bfb60c"
+      "sha256": "e5cc36eea3cd4b1161e3ae2e5ed1088caf123dff824c1e4f694d53edb9e55adc"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 11365,
