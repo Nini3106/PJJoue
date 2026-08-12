@@ -88,31 +88,12 @@
     height: 34px;
 }
 
-.page-organisation-pjj .organisation-schema figcaption,
-.page-organisation-pjj .organisation-carte figcaption {
+.page-organisation-pjj .organisation-schema figcaption {
     margin-top: 14px;
     color: var(--texte-secondaire);
     font-size: .9rem;
     line-height: 1.5;
     text-align: center;
-}
-
-.page-organisation-pjj .organisation-carte {
-    max-width: 680px;
-    margin: 20px auto 0;
-}
-
-.page-organisation-pjj .organisation-carte a {
-    display: block;
-    border-radius: 18px;
-    background: #fff;
-    overflow: hidden;
-}
-
-.page-organisation-pjj .organisation-carte img {
-    display: block;
-    width: 100%;
-    height: auto;
 }
 
 @media (max-width:580px) {
