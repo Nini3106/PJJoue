@@ -121,7 +121,7 @@
     display: block;
     width: 76px;
     height: 5px;
-    margin: 18px 0 0;
+    margin: 6px 0 16px;
     border-radius: 999px;
     background: var(--jaune-interface);
 }
@@ -418,10 +418,10 @@
         order: 1;
     }
     #accueil .accueil-contenu h1 {
-        order: 2;
+        order: 3;
     }
     #accueil .surligne-titre-accueil {
-        order: 3;
+        order: 2;
     }
     #accueil .accueil-introduction {
         order: 4;

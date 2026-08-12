@@ -80,7 +80,7 @@
     display: block;
     width: 76px;
     height: 5px;
-    margin: 18px 0 0;
+    margin: 6px 0 16px;
     border-radius: 999px;
     background: var(--jaune-interface);
 }

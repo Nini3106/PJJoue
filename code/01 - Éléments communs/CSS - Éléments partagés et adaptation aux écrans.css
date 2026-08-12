@@ -170,8 +170,8 @@ body[data-ecran-actif="accueil"] #accueil .accueil-presentation {
         font-size: clamp(1.35rem, 2.45vw, 2.8rem);
     }
 
-    #accueil .accueil-accent {
-        margin-top: clamp(8px, 1.35vw, 16px);
+    #accueil .surligne-titre-accueil {
+        margin-top: 6px;
     }
 
     #accueil .accueil-introduction,
@@ -336,12 +336,12 @@ body[data-ecran-actif="accueil"] #accueil .accueil-presentation {
     }
 
     #accueil .accueil-contenu h1 {
-        order: 2;
+        order: 3;
     }
 
-    #accueil .accueil-accent {
-        order: 3;
-        margin-top: 14px;
+    #accueil .surligne-titre-accueil {
+        order: 2;
+        margin-top: 6px;
     }
 
     #accueil .accueil-introduction {
@@ -524,12 +524,12 @@ body[data-ecran-actif="accueil"] #accueil {
     }
 
     #accueil .accueil-contenu h1 {
-        order: 2;
+        order: 3;
     }
 
-    #accueil .accueil-accent {
-        order: 3;
-        margin-top: 14px;
+    #accueil .surligne-titre-accueil {
+        order: 2;
+        margin-top: 6px;
     }
 
     #accueil .accueil-introduction {
@@ -4251,10 +4251,10 @@ header.entete .navigation button[aria-current="page"] {
         font-size: clamp(1.05rem,4.6vw,2.25rem);
         line-height: 1.08;
     }
-    #accueil .accueil-texte-image .accueil-accent {
+    #accueil .accueil-texte-image .surligne-titre-accueil {
         width: clamp(42px,13vw,70px);
         height: 4px;
-        margin: 9px 0 0;
+        margin: 5px 0 12px;
     }
     #accueil .accueil-action-principale {
         width: 100%;

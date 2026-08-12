@@ -724,10 +724,10 @@ header.entete .navigation button[aria-current="page"] {
         font-size: clamp(1.05rem,4.6vw,2.25rem);
         line-height: 1.08;
     }
-    #accueil .accueil-texte-image .accueil-accent {
+    #accueil .accueil-texte-image .surligne-titre-accueil {
         width: clamp(42px,13vw,70px);
         height: 4px;
-        margin: 9px 0 0;
+        margin: 5px 0 12px;
     }
     #accueil .accueil-action-principale {
         width: 100%;
@@ -1068,10 +1068,10 @@ header.entete .marque > span {
         order: 1;
     }
     #accueil .accueil-contenu h1 {
-        order: 2;
+        order: 3;
     }
     #accueil .surligne-titre-accueil {
-        order: 3;
+        order: 2;
     }
     #accueil .accueil-introduction {
         order: 4;

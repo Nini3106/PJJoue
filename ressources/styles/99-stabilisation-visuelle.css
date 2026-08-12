@@ -118,12 +118,12 @@ body[data-ecran-actif="accueil"] #accueil {
     }
 
     #accueil .accueil-contenu h1 {
-        order: 2;
+        order: 3;
     }
 
-    #accueil .accueil-accent {
-        order: 3;
-        margin-top: 14px;
+    #accueil .surligne-titre-accueil {
+        order: 2;
+        margin-top: 6px;
     }
 
     #accueil .accueil-introduction {
