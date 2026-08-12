@@ -225,7 +225,6 @@ const MESSAGES_REUSSITE = [
 ];
 const MESSAGES_ERREUR = [
     'Une erreur ici, c’est une erreur évitée sur le terrain.',
-    'Respire : relis l’acteur, la source, l’échéance et la limite de ton rôle.',
     'Ce piège était crédible. C’est précisément pour ça qu’il faut l’entraîner.',
     'Pas grave : transforme l’erreur en règle de contrôle.',
     'Tu n’as pas raté la PJJ : tu viens de trouver un point à consolider.'

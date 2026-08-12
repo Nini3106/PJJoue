@@ -935,3 +935,48 @@
     }
 }
 /* Retour à la ligne naturel des énoncés. */
+
+/* PJJOUE MOBILE CORRECTION FLUIDE
+   Pendant la correction, celle-ci remplace visuellement la zone de réponses.
+   Sa hauteur est uniquement celle de son contenu et le scroll appartient à la page. */
+@media (max-width:760px) {
+
+    /* Quand la correction est visible, la carte prend exactement
+       la hauteur nécessaire à cette correction. */
+    #question .question-carte:has(> #zoneCorrection:not(.masque)) {
+        height: auto;
+        min-height: 0;
+        max-height: none;
+        padding: 0;
+        justify-content: flex-start;
+        overflow: visible;
+    }
+
+    /* La question et son mode disparaissent seulement LE TEMPS
+       de la correction. Leur CSS normal reste intact avant/après. */
+    #question .question-carte:has(> #zoneCorrection:not(.masque)) > .reperes,
+    #question .question-carte:has(> #zoneCorrection:not(.masque)) > #zoneReponses {
+        display: none !important;
+    }
+
+    /* La correction devient le contenu réel de la carte.
+       Elle commence donc tout en haut, exactement à la place des réponses. */
+    #question .question-carte > #zoneCorrection:not(.masque) {
+        position: relative;
+        inset: auto;
+        z-index: 40;
+
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        max-height: none;
+
+        margin: 0;
+        box-sizing: border-box;
+
+        overflow: visible;
+        overscroll-behavior: auto;
+        scrollbar-gutter: auto;
+        touch-action: pan-y;
+    }
+}
