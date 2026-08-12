@@ -794,7 +794,7 @@ header.entete .navigation button[aria-current="page"] {
     #accueil .accueil-texte-image .accueil-marque {
         margin-bottom: 5px;
     }
-    #accueil .accueil-texte-image .accueil-accent {
+    #accueil .accueil-texte-image .surligne-titre-accueil {
         margin-top: 7px;
     }
 }
@@ -1070,7 +1070,7 @@ header.entete .marque > span {
     #accueil .accueil-contenu h1 {
         order: 2;
     }
-    #accueil .accueil-accent {
+    #accueil .surligne-titre-accueil {
         order: 3;
     }
     #accueil .accueil-introduction {

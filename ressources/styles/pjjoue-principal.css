@@ -2898,7 +2898,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     line-height: 1.08;
     letter-spacing: -.035em;
 }
-.accueil-accent {
+
+#accueil h1[tabindex="-1"]:focus {
+    outline: 0;
+}
+.surligne-titre-accueil {
     display: block;
     width: 76px;
     height: 5px;
@@ -8699,7 +8703,7 @@ header.entete .navigation button[aria-current="page"] {
     #accueil .accueil-texte-image .accueil-marque {
         margin-bottom: 5px;
     }
-    #accueil .accueil-texte-image .accueil-accent {
+    #accueil .accueil-texte-image .surligne-titre-accueil {
         margin-top: 7px;
     }
 }
@@ -8975,7 +8979,7 @@ header.entete .marque > span {
     #accueil .accueil-contenu h1 {
         order: 2;
     }
-    #accueil .accueil-accent {
+    #accueil .surligne-titre-accueil {
         order: 3;
     }
     #accueil .accueil-introduction {

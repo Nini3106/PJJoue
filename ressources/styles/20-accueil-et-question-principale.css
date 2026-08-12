@@ -72,7 +72,11 @@
     line-height: 1.08;
     letter-spacing: -.035em;
 }
-.accueil-accent {
+
+#accueil h1[tabindex="-1"]:focus {
+    outline: 0;
+}
+.surligne-titre-accueil {
     display: block;
     width: 76px;
     height: 5px;

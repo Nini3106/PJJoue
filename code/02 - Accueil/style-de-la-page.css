@@ -110,10 +110,14 @@
     letter-spacing: -.035em;
 }
 
+#accueil h1[tabindex="-1"]:focus {
+    outline: 0;
+}
+
 /* === FIN MORCEAU CSS === */
 
 /* === MORCEAU CSS | sortie=20-accueil-et-question-principale.css | ordre=0009 === */
-.accueil-accent {
+.surligne-titre-accueil {
     display: block;
     width: 76px;
     height: 5px;
@@ -391,7 +395,7 @@
     #accueil .accueil-texte-image .accueil-marque {
         margin-bottom: 5px;
     }
-    #accueil .accueil-texte-image .accueil-accent {
+    #accueil .accueil-texte-image .surligne-titre-accueil {
         margin-top: 7px;
     }
 }
@@ -416,7 +420,7 @@
     #accueil .accueil-contenu h1 {
         order: 2;
     }
-    #accueil .accueil-accent {
+    #accueil .surligne-titre-accueil {
         order: 3;
     }
     #accueil .accueil-introduction {
