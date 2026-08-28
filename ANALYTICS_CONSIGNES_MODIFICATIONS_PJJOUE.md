@@ -279,17 +279,17 @@ Ne pas renuméroter les anciennes questions uniquement pour rendre la liste « p
 
 ### Contrainte actuelle du projet
 
-PJJoue contient 160 questions actives, mais les identifiants ne sont volontairement pas continus : un identifiant retiré n’est jamais recyclé. L’évaluation finale est repérée par `estEvaluationFinale: true` et non par une plage numérique fixe.
+PJJoue V1 contient **960 questions actives réparties sur six parcours**. Chaque parcours comporte 110 questions d’apprentissage et 50 questions d’évaluation finale. L’évaluation finale est repérée par `estEvaluationFinale: true` et non par une plage numérique fixe.
 
-IDs actuellement retirés et réservés définitivement : Q043, Q101 à Q110, Q145, Q154, Q155 et Q157 à Q160. Les nouvelles questions créées dans cette refonte utilisent Q161 à Q178.
+Le parcours historique `commun` est protégé par empreinte et conserve ses identifiants permanents. Les cinq autres parcours utilisent leurs propres plages d’identifiants ; aucun identifiant retiré ou déjà utilisé ne doit être recyclé.
 
 Donc ajouter une nouvelle question peut nécessiter, en plus de `donnees/questions.json` :
 
 - d'adapter les règles dans `outils/validation_donnees.py` ;
-- d'adapter `tests/verifier_pjjoue.py` ;
-- d'adapter les textes publics annonçant « 160 questions » ;
-- d'adapter la logique de l'Évaluation finale si son périmètre change ;
-- de reconstruire `donnees/donnees-pjj.js` et `MANIFESTE.json` avec les scripts du projet.
+- d'adapter `tests/verifier_pjjoue.py` et `tests/verifier_interface.py` ;
+- d'adapter les textes publics annonçant « 960 questions », « 66 étapes » ou « 6 parcours » si la structure change ;
+- d'adapter la logique de l’évaluation finale du parcours concerné si son périmètre change ;
+- de reconstruire `donnees/donnees-pjj.js`, le site public et `MANIFESTE.json` avec les scripts du projet.
 
 **Cette contrainte concerne la structure de PJJoue, pas Analytics.** Le suivi Analytics accepte un nouvel identifiant dès lors qu'il n'est pas recyclé.
 
@@ -409,7 +409,7 @@ Pour préserver l’historique, **ne jamais recycler une identité Analytics per
 
 Une nouvelle étape doit recevoir un identifiant qui n'a jamais été utilisé.
 
-PJJoue comporte actuellement 11 étapes d'apprentissage puis l'étape 12 pour l'Évaluation finale. Ajouter une étape demande donc une modification structurelle plus large :
+PJJoue V1 comporte **six parcours**. Chacun contient 11 étapes d’apprentissage et une évaluation finale logique portée par `etape: 12`. Ajouter une étape à l’un des parcours demande donc une modification structurelle plus large :
 
 - programme ;
 - navigation ;
@@ -536,7 +536,7 @@ Cela permet de comparer la même question lorsqu'elle est rencontrée dans le Pa
 
 ## 28. Modifier l'Évaluation finale
 
-L’Évaluation finale attend 50 questions écrites et sélectionne les questions portant `estEvaluationFinale: true`. Elle ne dépend plus d’une plage Q111–Q160, ce qui permet de retirer une ancienne question sans recycler son ID et d’ajouter son remplacement avec un nouvel identifiant permanent.
+L’Évaluation finale attend 50 questions et sélectionne les questions portant `estEvaluationFinale: true`. Le parcours 1 conserve son évaluation écrite validée ; les parcours 2 à 6 peuvent employer plusieurs modes selon la nature du savoir évalué. Elle ne dépend plus d’une plage Q111–Q160, ce qui permet de retirer une ancienne question sans recycler son ID et d’ajouter son remplacement avec un nouvel identifiant permanent.
 
 Modifier l'énoncé, la correction, la bonne réponse ou l'indice d'une question d'évaluation suit les mêmes règles d'identifiant que toutes les autres questions.
 
@@ -888,7 +888,7 @@ La banque peut contenir :
 
 Ces éléments peuvent évoluer comme des distracteurs ou une règle de validation. L'identifiant de la question reste le même tant que le fond ne change pas.
 
-### Champs propres aux réponses écrites et à l'Évaluation finale
+### Champs propres aux réponses écrites et au statut d'Évaluation finale
 
 La banque peut contenir :
 
@@ -906,7 +906,7 @@ La banque peut contenir :
 - `sansJokers` ;
 - `estEvaluationFinale`.
 
-Ces champs constituent les règles de validation d'une réponse écrite. Ils peuvent être ajustés pour mieux accepter une réponse correcte, éviter un faux positif, corriger une règle trop stricte ou suivre une évolution du contenu.
+Les champs allant de `reponsesAcceptees` à `conceptsOrdonnes` constituent les règles de validation d'une réponse écrite. `sansJokers` et `estEvaluationFinale` décrivent séparément le statut d’une question d’évaluation, quel que soit son mode. Ces champs peuvent être ajustés pour mieux accepter une réponse correcte, éviter un faux positif, corriger une règle trop stricte ou suivre une évolution du contenu.
 
 **Ils ne créent pas une nouvelle identité Analytics à eux seuls.** Garder Qxxx si le sens de la question reste le même. Créer un nouvel ID si la question évalue désormais un autre concept.
 
@@ -931,7 +931,7 @@ Chaque étape contient actuellement notamment :
 - `id` : numéro structurel de l'étape ;
 - `titre` : nom visible de l'étape ;
 - `couleur` : identité visuelle ;
-- `souvenirs` : repères pédagogiques conservés dans le Carnet de voyage ;
+- `souvenirs` : repères pédagogiques conservés dans le Carnet de parcours ;
 - `sousTitre` : texte complémentaire éventuel ;
 - `modules` : structure éditoriale éventuelle ;
 - `sources` : références documentaires ;

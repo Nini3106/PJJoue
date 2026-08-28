@@ -8,9 +8,15 @@
 // -----------------------------------------------------------------------------
 // Sauvegarde locale et état général
 // -----------------------------------------------------------------------------
+function creerEtatEvaluationFinale() {
+    return { meilleurScore: 0, nombreTentatives: 0, reussie: false };
+}
+function creerEvaluationsFinalesInitiales() {
+    return Object.fromEntries(THEMES.map(theme => [theme.id, creerEtatEvaluationFinale()]));
+}
 function creerSauvegardeInitiale() {
     return {
-        version: 'V3-activites-educatives',
+        version: 'V1',
         xp: 0,
         meilleureSerie: 0,
         nombreQuestionsJouees: 0,
@@ -21,7 +27,7 @@ function creerSauvegardeInitiale() {
         dernierTheme: null,
         etapesDecouvertes: {},
         questionsJouees: {},
-        evaluationFinale: { meilleurScore: 0, nombreTentatives: 0, reussie: false }
+        evaluationsFinales: creerEvaluationsFinalesInitiales()
     };
 }
 function estObjetSimple(valeur) {
@@ -68,29 +74,18 @@ function nettoyerProgression(progression) {
             const etape = Number(numeroEtape);
             const questionsEtape = QUESTIONS.filter(question =>
                 question.theme === theme && Number(question.etape) === etape
+                && question.estEvaluationFinale !== true
             );
             if (!Number.isInteger(etape)
                 || !PROGRAMMES[theme]?.etapes?.some(element => Number(element.id) === etape)
                 || !estObjetSimple(enregistrement))
                 continue;
-            const identifiantsQuestions = new Set(
-                questionsEtape.map(question => String(question.id))
-            );
+            const identifiantsQuestions = new Set(questionsEtape.map(question => String(question.id)));
             progressionNettoyee.apprenant[theme][numeroEtape] = {
-                meilleurScore: convertirEntierBorne(
-                    enregistrement.meilleurScore,
-                    0,
-                    questionsEtape.length
-                ),
+                meilleurScore: convertirEntierBorne(enregistrement.meilleurScore, 0, 100),
                 nombreTentatives: convertirEntierBorne(enregistrement.nombreTentatives),
-                questionsTraitees: filtrerIndicateurs(
-                    enregistrement.questionsTraitees,
-                    identifiantsQuestions
-                ),
-                resultats: filtrerResultats(
-                    enregistrement.resultats,
-                    identifiantsQuestions
-                ),
+                questionsTraitees: filtrerIndicateurs(enregistrement.questionsTraitees, identifiantsQuestions),
+                resultats: filtrerResultats(enregistrement.resultats, identifiantsQuestions),
                 termineeSansJoker: enregistrement.termineeSansJoker === true,
                 jokersUtilises: enregistrement.termineeSansJoker !== true
             };
@@ -116,80 +111,54 @@ function nettoyerErreurs(erreurs) {
             maitrisee: enregistrement.maitrisee === true,
             nombreErreurs: convertirEntierBorne(enregistrement.nombreErreurs),
             nombrePassages: convertirEntierBorne(enregistrement.nombrePassages),
-            theme: estThemeConnu(enregistrement.theme) ? enregistrement.theme : 'commun'
+            theme: estThemeConnu(enregistrement.theme) ? enregistrement.theme : questionCorrespondante.theme
         };
     }
     return erreursNettoyees;
 }
-
-function migrerSauvegardeV1VersV2(sauvegardeBrute) {
-    if (!estObjetSimple(sauvegardeBrute) || ['V2-12-etapes', 'V3-activites-educatives'].includes(sauvegardeBrute.version))
-        return sauvegardeBrute;
-    const copie = JSON.parse(JSON.stringify(sauvegardeBrute));
-    copie.version = 'V2-12-etapes';
-    copie.erreurs = {};
-    copie.progression = { apprenant: {} };
-    copie.etapesDecouvertes = {};
-    copie.questionsJouees = {};
-    copie.evaluationFinale = { meilleurScore: 0, nombreTentatives: 0, reussie: false };
-    return copie;
+function nettoyerEvaluationsFinales(sauvegardeBrute) {
+    const nettoyees = creerEvaluationsFinalesInitiales();
+    const nouvelles = estObjetSimple(sauvegardeBrute?.evaluationsFinales)
+        ? sauvegardeBrute.evaluationsFinales
+        : {};
+    THEMES.forEach(theme => {
+        const brute = estObjetSimple(nouvelles[theme.id]) ? nouvelles[theme.id] : {};
+        nettoyees[theme.id] = {
+            meilleurScore: convertirEntierBorne(brute.meilleurScore, 0, 100),
+            nombreTentatives: convertirEntierBorne(brute.nombreTentatives),
+            reussie: brute.reussie === true
+        };
+    });
+    return nettoyees;
 }
-function migrerSauvegardeV2VersV3(sauvegardeBrute) {
-    if (!estObjetSimple(sauvegardeBrute) || sauvegardeBrute.version === 'V3-activites-educatives')
-        return sauvegardeBrute;
-    if (sauvegardeBrute.version !== 'V2-12-etapes')
-        return sauvegardeBrute;
-    const copie = JSON.parse(JSON.stringify(sauvegardeBrute));
-    const progressionCommun = copie.progression?.apprenant?.commun;
-    if (estObjetSimple(progressionCommun)) {
-        const ancienne8 = progressionCommun['8'];
-        const ancienne9 = progressionCommun['9'];
-        const ancienne10 = progressionCommun['10'];
-        // L'ancienne étape 11 est remplacée par un nouveau thème : son progrès n'est pas transféré.
-        delete progressionCommun['11'];
-        delete progressionCommun['8'];
-        delete progressionCommun['9'];
-        delete progressionCommun['10'];
-        if (ancienne8) progressionCommun['9'] = ancienne8;
-        if (ancienne9) progressionCommun['10'] = ancienne9;
-        if (ancienne10) progressionCommun['11'] = ancienne10;
+function normaliserEtapesDecouvertes(sauvegardeBrute) {
+    const resultat = {};
+    const etapesDecouvertesEnregistrees = estObjetSimple(sauvegardeBrute?.etapesDecouvertes)
+        ? sauvegardeBrute.etapesDecouvertes
+        : {};
+    for (const [cle, actif] of Object.entries(etapesDecouvertesEnregistrees)) {
+        if (actif !== true)
+            continue;
+        if (cle.includes(':')) {
+            const [theme, numero] = cle.split(':');
+            if (estThemeConnu(theme) && obtenirEtapeProgramme?.(theme, Number(numero)))
+                resultat[`${theme}:${Number(numero)}`] = true;
+        }
     }
-    if (estObjetSimple(copie.etapesDecouvertes)) {
-        const anciennes = { ...copie.etapesDecouvertes };
-        delete copie.etapesDecouvertes['8'];
-        delete copie.etapesDecouvertes['9'];
-        delete copie.etapesDecouvertes['10'];
-        delete copie.etapesDecouvertes['11'];
-        if (anciennes['8']) copie.etapesDecouvertes['9'] = true;
-        if (anciennes['9']) copie.etapesDecouvertes['10'] = true;
-        if (anciennes['10']) copie.etapesDecouvertes['11'] = true;
-    }
-    copie.version = 'V3-activites-educatives';
-    return copie;
+    return resultat;
 }
-
 function nettoyerSauvegarde(sauvegardeBrute) {
-    sauvegardeBrute = migrerSauvegardeV1VersV2(sauvegardeBrute);
-    sauvegardeBrute = migrerSauvegardeV2VersV3(sauvegardeBrute);
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
         return sauvegardeInitiale;
     const parametres = estObjetSimple(sauvegardeBrute.parametres)
         ? sauvegardeBrute.parametres
         : {};
-    const evaluationFinale = estObjetSimple(sauvegardeBrute.evaluationFinale)
-        ? sauvegardeBrute.evaluationFinale
-        : {};
     const nombreQuestionsJouees = convertirEntierBorne(sauvegardeBrute.nombreQuestionsJouees);
-    const identifiantsEtapes = new Set(
-        Object.values(PROGRAMMES)
-            .flatMap(programme => programme.etapes || [])
-            .map(etape => String(etape.id))
-    );
     const identifiantsQuestions = new Set(QUESTIONS.map(question => String(question.id)));
     return {
         ...sauvegardeInitiale,
-        version: 'V3-activites-educatives',
+        version: 'V1',
         xp: convertirEntierBorne(sauvegardeBrute.xp),
         meilleureSerie: convertirEntierBorne(sauvegardeBrute.meilleureSerie),
         nombreQuestionsJouees,
@@ -208,25 +177,17 @@ function nettoyerSauvegarde(sauvegardeBrute) {
         dernierTheme: estThemeConnu(sauvegardeBrute.dernierTheme)
             ? sauvegardeBrute.dernierTheme
             : null,
-        etapesDecouvertes: filtrerIndicateurs(
-            sauvegardeBrute.etapesDecouvertes,
-            identifiantsEtapes
-        ),
-        questionsJouees: filtrerIndicateurs(
-            sauvegardeBrute.questionsJouees,
-            identifiantsQuestions
-        ),
-        evaluationFinale: {
-            meilleurScore: convertirEntierBorne(evaluationFinale.meilleurScore, 0, 50),
-            nombreTentatives: convertirEntierBorne(evaluationFinale.nombreTentatives),
-            reussie: evaluationFinale.reussie === true
-        }
+        etapesDecouvertes: normaliserEtapesDecouvertes(sauvegardeBrute),
+        questionsJouees: filtrerIndicateurs(sauvegardeBrute.questionsJouees, identifiantsQuestions),
+        evaluationsFinales: nettoyerEvaluationsFinales(sauvegardeBrute)
     };
 }
 function chargerSauvegarde() {
     try {
         const contenu = localStorage.getItem(CLE_SAUVEGARDE);
-        return contenu ? nettoyerSauvegarde(JSON.parse(contenu)) : creerSauvegardeInitiale();
+        return contenu
+            ? nettoyerSauvegarde(JSON.parse(contenu))
+            : creerSauvegardeInitiale();
     }
     catch (erreur) {
         return creerSauvegardeInitiale();
@@ -249,11 +210,7 @@ let etat = {
     questionsPassees: new Set(),
     reponsesSession: new Map(),
     optionsSession: new Map(),
-    jokers: {
-        cinquanteCinquante: true,
-        indice: true,
-        langueAuChat: true
-    },
+    jokers: { cinquanteCinquante: true, indice: true, langueAuChat: true },
     identifiantMinuteur: null,
     tempsRestant: 0,
     organisationSession: 'melange',
@@ -264,12 +221,14 @@ let etat = {
     dureeChronometreParcours: 15,
     nombreQuestionsTirageDe: 0,
     origineSessionAnalytics: null,
+    perimetreEntrainement: 'tous',
     brouillonsEcrits: new Map()
 };
 let minuteurRappelJokers = null;
 let minuteurFinRappelJokers = null;
 let minuteurTransitionParcours = null;
-function effacerSauvegardeV1DuNavigateur() {
+let stockageLocalAverti = false;
+function effacerSauvegardeDuNavigateur() {
     try {
         localStorage.removeItem(CLE_SAUVEGARDE);
     }
@@ -278,13 +237,16 @@ function effacerSauvegardeV1DuNavigateur() {
     }
 }
 function enregistrerSauvegarde() {
-    sauvegarde.version = 'V3-activites-educatives';
+    sauvegarde.version = 'V1';
     try {
         localStorage.setItem(CLE_SAUVEGARDE, JSON.stringify(sauvegarde));
         return true;
     }
     catch (erreur) {
-        afficherNotification('La sauvegarde locale est indisponible. Exporte ta progression avant de fermer la page.');
+        if (!stockageLocalAverti) {
+            stockageLocalAverti = true;
+            afficherNotification('Sauvegarde locale indisponible · pense à exporter ta progression avant de fermer PJJoue.');
+        }
         return false;
     }
 }

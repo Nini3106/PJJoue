@@ -18,15 +18,126 @@
 if ('scrollRestoration' in history)
     history.scrollRestoration = 'manual';
 const { THEMES, PROGRAMMES, SOURCES, QUESTIONS } = window.DONNEES_PJJ;
-const TRACES_ICONE_THEME = {
-    commun: '<path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7z"/>'
-        + '<path d="M8 12h8M12 8v8"/>'
-};
+const TRACES_PICTOGRAMMES = Object.freeze({
+    decouvertePjj: '<path d="M4 5.5h6.2c1.1 0 1.8.3 1.8 1.3v12.7c0-1-.7-1.5-1.8-1.5H4z"/><path d="M20 5.5h-6.2c-1.1 0-1.8.3-1.8 1.3v12.7c0-1 .7-1.5 1.8-1.5H20z"/><path d="M7 9h2.5M14.5 9H17M7 12h2.5M14.5 12H17"/>',
+    procedureOrdinaire: '<path d="M5 3.5h9l4 4V20.5H5z"/><path d="M14 3.5v4h4M8 11h5M8 15h3"/><circle cx="16.5" cy="15.5" r="3.5"/><path d="m15 15.5 1 1 2-2"/>',
+    informationJudiciaire: '<path d="M4 4h10l3 3v4.5M4 4v16h7"/><path d="M14 4v3h3M7 9h6M7 13h3"/><circle cx="16" cy="16" r="3.5"/><path d="m18.5 18.5 2 2"/>',
+    jugementEducatif: '<circle cx="7.5" cy="7" r="2.5"/><path d="M3.5 17.5v-1c0-3 1.5-5 4-5 1.8 0 3.1 1 3.7 2.5"/><path d="M16 5v14M12 8h8M13.5 8 11 12h5zM18.5 8 16 12h5zM12.5 19h7"/>',
+    crimesSanctionsPeines: '<path d="m7 5 4 4-2 2-4-4zM5.5 8.5 2.5 12M10 3.5l3-3"/><path d="M12 19.5h9M14 16.5h5"/><path d="M16.5 5.5v5M16.5 13.5h.01"/><path d="M13 3.5h7l2 3.5-2 7h-7l-2-7z"/>',
+    executionDesPeines: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M7 3v4M17 3v4M3.5 9h17M8 13h3M8 16h2"/><path d="m14 15 1.5 1.5 3-3"/>',
+    reperesDossier: '<path d="M4 4h9l3 3v13H4zM13 4v3h3M7 11h6M7 15h4"/><path d="m18 12 2-2 2 2M20 10v8"/>',
+    orientationParquet: '<path d="M3 5h7c3 0 3 5 6 5h5M3 19h7c3 0 3-5 6-5h5"/><path d="m18 7 3 3-3 3M18 11l3 3-3 3"/>',
+    saisineJuridiction: '<path d="M3 9h15M5 9v9M9 9v9M14 9v9M18 9v9M2 18h18M10.5 3l8 4h-16z"/><path d="m19 14 3 2-3 2"/>',
+    culpabiliteMiseEpreuve: '<path d="m5 4 5 5-2 2-5-5zM4 11l-2 2M10 3l2-2M3 20h9"/><path d="M17 20v-7M17 16c-3 0-4-2-4-4 3 0 4 2 4 4ZM17 15c3 0 4-2 4-4-3 0-4 2-4 4Z"/>',
+    suiviMiseEpreuve: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 9h18M7 13h3M7 17h3"/><path d="m14 16 2 2 4-5"/>',
+    audienceSanction: '<path d="M3 20h18M6 17h12M8 4h8v5c0 3-2 5-4 5s-4-2-4-5z"/><path d="M8 6H5v2c0 2 1 3 3 3M16 6h3v2c0 2-1 3-3 3"/>',
+    audienceUnique: '<path d="M3 9h18M5 9v9M10 9v9M15 9v9M20 9v9M2 18h20M12 3l9 4H3z"/><circle cx="18" cy="5" r="3"/><path d="M18 3.5v3M16.5 5h3"/>',
+    comparerProcedures: '<path d="M4 4v4c0 3 2 4 5 4h11M4 20v-4c0-3 2-4 5-4"/><path d="m17 9 3 3-3 3M11 7l2-2 2 2M11 17l2 2 2-2"/>',
+    dossiersProcedure: '<path d="M3 7h7l2 2h9v11H3z"/><path d="m7 15 2 2 4-4M15 13h3M15 16h3"/>',
+    voieJugement: '<path d="M12 21V9M12 12 5 7M12 15l7-5"/><path d="m3 5 2 2-2 2M17 8l2 2-2 2"/><circle cx="12" cy="4" r="2"/>',
+    parcoursOrdinaireComplet: '<circle cx="5" cy="18" r="2"/><circle cx="19" cy="5" r="2"/><path d="M7 18h3c3 0 4-2 4-5V9c0-2 1-4 3-4"/><path d="m16 17 2 2 4-5"/>',
+    ouvertureInformation: '<path d="M3 5h10l3 3v12H3zM13 5v3h3M6 11h5M6 15h3"/><circle cx="17" cy="16" r="3"/><path d="m19 18 2 2"/>',
+    jugeInstructionEnquete: '<circle cx="9" cy="9" r="5"/><path d="m13 13 5 5M6 9h6"/><path d="M18 4v7M15 7h6"/>',
+    mjieInformation: '<circle cx="7" cy="7" r="2.5"/><path d="M3 16c0-3 1.5-5 4-5s4 2 4 5"/><path d="M14 4h7v15h-7zM16.5 8h2M16.5 12h2M16.5 16h2"/>',
+    mejpInformation: '<path d="M12 3 4 7v5c0 5 3 8 8 9 4.6-1 8-4 8-9V7z"/><path d="M8 11h8M8 15h5"/>',
+    controleJudiciaire: '<path d="M12 3v18M5 7h14M7 7l-4 7h8zM17 7l-4 7h8zM7 21h10"/><circle cx="19" cy="18" r="2"/>',
+    arseInformation: '<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 3h6v4M9 17v4h6v-4M3 12h4M17 12h4M10 12h4"/>',
+    detentionEnvisagee: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v18M15 3v18M5 9h14M5 15h14"/><path d="M21 7v5M21 15h.01"/>',
+    jiSaisitJldStatue: '<circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h5c3 0 5 2 5 5v5M15 13l3 3 3-3"/><path d="M4 18h8"/>',
+    dureesEtDeferrement: '<circle cx="8" cy="12" r="5"/><path d="M8 9v3l2 1.5M15 5h6v14h-6M17 9h2M17 13h2"/>',
+    finInformation: '<path d="M4 4h11l3 3v13H4zM15 4v3h3M7 11h8M7 15h5"/><path d="m15 17 2 2 4-5"/>',
+    dossierInstructionComplet: '<path d="M3 7h7l2 2h9v11H3zM3 7V5h7l2 2"/><circle cx="15" cy="14" r="3"/><path d="m17 16 3 3"/>',
+    jugeChambreConseil: '<path d="M3 10h18M5 10v9M10 10v9M15 10v9M20 10v9M2 19h20M12 4l9 4H3z"/><path d="M9 14h6"/>',
+    mesureEducativeJudiciaire: '<path d="M12 21s-8-5-8-12a4 4 0 0 1 7-2.5A4 4 0 0 1 20 9c0 7-8 12-8 12z"/><path d="M9 12h6M12 9v6"/>',
+    distinguerMejMejp: '<path d="M4 5h6v14H4zM14 5h6v14h-6z"/><path d="M6 9h2M6 13h2M16 9h2M16 13h2M10 12h4"/>',
+    quatreModules: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="m5 6 1 1 2-2M16 6h3M5 17h3M17.5 16v3"/>',
+    moduleInsertion: '<path d="M4 20V8h16v12M8 8V5h8v3"/><path d="M8 13h8M12 10v6M15 17l2 2 4-5"/>',
+    moduleReparation: '<path d="m4 15 5-5 5 5-5 5zM12 7l2-2 5 5-2 2M13 12l4 4"/><path d="M3 5h5"/>',
+    moduleSante: '<path d="M12 20S4 15 4 9a4 4 0 0 1 7-2.5A4 4 0 0 1 20 9c0 6-8 11-8 11z"/><path d="M9 12h6M12 9v6"/><circle cx="20" cy="5" r="2"/>',
+    modulePlacement: '<path d="M3 11 12 4l9 7v9H3zM9 20v-6h6v6"/><path d="M17 7v4h4"/>',
+    obligationsMej: '<path d="M7 6h13M7 12h13M7 18h13"/><path d="m2.5 6 1 1 2-2M2.5 12l1 1 2-2M2.5 18l1 1 2-2"/><path d="M18 15v6"/>',
+    tribunalEnfantsOrdinaire: '<path d="M3 9h18M5 9v9M9 9v9M15 9v9M19 9v9M2 18h20M12 3l9 4H3z"/><circle cx="12" cy="13" r="2"/>',
+    tribunalPoliceCompetence: '<path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h4"/><path d="m16 15 2 2 4-5"/>',
+    qualificationCrimeAge: '<path d="M12 3 2.5 20h19zM12 9v4M12 17h.01"/><circle cx="19" cy="6" r="3"/><path d="M19 4.5v3"/>',
+    tpeCrimeMoinsSeize: '<path d="M3 9h18M5 9v9M10 9v9M15 9v9M20 9v9M2 18h20M12 3l9 4H3z"/><path d="M6 5h4M8 3v4"/>',
+    courAssisesMineurs: '<path d="M2 9h20M4 9v10M9 9v10M15 9v10M20 9v10M2 19h20M12 2l10 5H2z"/><path d="M10 13h4"/>',
+    avertissementConfiscationStage: '<path d="M12 3 3 20h18zM12 9v4M12 17h.01"/><path d="M16 4h5v5M18.5 4v5"/>',
+    tigSanctionReparation: '<path d="M4 20V8h16v12M8 8V5h8v3M8 13h8"/><path d="m14 17 2 2 5-6"/>',
+    amendePeinesComplementaires: '<circle cx="9" cy="12" r="6"/><path d="M12 9c-.8-.8-1.6-1-2.7-1A4 4 0 0 0 9.3 16c1.1 0 2-.3 2.7-1M4 10h7M4 14h7"/><path d="M17 6h4M19 4v4M17 14h4M17 18h4"/>',
+    emprisonnementAttenuation: '<rect x="4" y="3" width="12" height="18" rx="2"/><path d="M8 3v18M12 3v18M4 9h12M4 15h12"/><path d="m18 15 2 2 2-4"/>',
+    ddseEtArse: '<rect x="4" y="7" width="9" height="10" rx="2"/><path d="M6 3h5v4M6 17v4h5v-4M13 12h3"/><circle cx="19" cy="12" r="3"/>',
+    sursisEtSuivi: '<circle cx="8" cy="12" r="5"/><path d="M8 9v3l2 2M15 5h6v14h-6M17 9h2M17 13h2"/><path d="m17 17 1 1 2-2"/>',
+    comparerJuridictionsPeines: '<path d="M3 9h8M5 9v8M9 9v8M2 17h10M7 4l5 3H2z"/><path d="M15 5h6M15 10h6M15 15h6M15 20h6"/>',
+    juridictionReponsePossible: '<path d="M3 7h7l2 2h9v11H3z"/><path d="M7 14h5M7 17h3M15 13l2 2 4-5"/>',
+    apresCondamnation: '<path d="m4 5 5 5-2 2-5-5zM3 13l-2 2M9 4l2-2"/><path d="M13 19h9M15 16h5"/><path d="m16 9 2 2 4-5"/>',
+    jeVersJap: '<circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h4c4 0 6 2 6 6v4M15 13l3 3 3-3"/><path d="M3 18h8"/>',
+    suiviPeine: '<path d="M4 4h16v16H4zM8 8h8M8 12h5M8 16h4"/><path d="m15 16 2 2 4-5"/>',
+    jugeEtCollege: '<circle cx="7" cy="7" r="2.5"/><path d="M3 16c0-3 1.5-5 4-5s4 2 4 5"/><circle cx="16" cy="8" r="2"/><circle cx="21" cy="9" r="1.5"/><path d="M13 17c0-3 1-5 3-5s3 2 3 5M18 17c0-2 1-3.5 3-3.5"/>',
+    amenagementsHebergement: '<path d="M3 11 10 5l7 6v9H3zM7 20v-5h6v5"/><path d="M17 8h4v12h-4M17 12h4M17 16h4"/>',
+    suspensionLiberation: '<circle cx="8" cy="12" r="6"/><path d="M6 9v6M10 9v6"/><path d="M15 7h6v10h-6M18 4v6M15 7l3-3 3 3"/>',
+    conversionPermissions: '<path d="M4 7h12l-3-3M20 17H8l3 3M16 4l3 3-3 3M8 14l-3 3 3 3"/><path d="M12 11h5v5"/>',
+    incidentsRevocation: '<path d="M12 3 2.5 20h19zM12 9v4M12 17h.01"/><path d="M18 4v5h-5M18 9a6 6 0 0 0-8-3"/>',
+    majoriteDessaisissement: '<circle cx="7" cy="7" r="2.5"/><path d="M3 17c0-4 1.5-6 4-6s4 2 4 6"/><path d="M13 12h8M18 8l4 4-4 4"/><path d="M15 20h6"/>',
+    articulationsCompetence: '<circle cx="12" cy="4" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><circle cx="12" cy="13" r="2"/><path d="M12 6v5M10 14l-4 3M14 14l4 3M7 19h10"/>',
+    parcoursJusquaExecution: '<circle cx="4" cy="18" r="2"/><circle cx="20" cy="5" r="2"/><path d="M6 18h3c4 0 4-5 8-5h3M17 10l3 3-3 3"/><path d="M8 5h6M11 2v6"/>',
+    boussole: '<circle cx="12" cy="12" r="8.5"/><path d="m15.4 8.6-2.1 4.7-4.7 2.1 2.1-4.7z"/>',
+    itineraire: '<circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h2.5a3.5 3.5 0 0 0 3.5-3.5v-5A3.5 3.5 0 0 1 17.5 6H18"/>',
+    dossierRecherche: '<path d="M3.5 7.5h6l2 2H20v5.2"/><path d="M3.5 7.5v11h9"/><circle cx="16.5" cy="16.5" r="3.2"/><path d="m18.9 18.9 2 2"/>',
+    decisionEducative: '<circle cx="8.5" cy="7.5" r="3"/><path d="M3.5 20v-1.8c0-3 2-5 5-5 2 0 3.4.8 4.3 2"/><path d="m14.5 17 2 2 4-5"/>',
+    justicePenale: '<path d="m13.8 4.2 6 6-2.8 2.8-6-6z"/><path d="m11.8 7.2-7.6 7.6"/><path d="m3 16 5 5"/><path d="M12.5 20.5H21"/>',
+    execution: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 1.8"/><path d="m8.5 16 1.8 1.8 4.2-4.2"/>',
+    bouclier: '<path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7z"/><path d="m8.5 12 2.2 2.2 4.8-5"/>',
+    balance: '<path d="M12 3v18M5 7h14M7 7l-4 7h8zM17 7l-4 7h8zM7 21h10"/>',
+    loupe: '<circle cx="10.5" cy="10.5" r="5.5"/><path d="m14.5 14.5 5 5M8 10.5h5"/>',
+    tribunal: '<path d="M3 9h18M5 9v9M9 9v9M15 9v9M19 9v9M2 18h20M12 3l9 4H3z"/>',
+    marteau: '<path d="m14 4 6 6-3 3-6-6zM10 8l-6 6M3 15l6 6M13 20h8"/>',
+    horloge: '<circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/>',
+    dossier: '<path d="M3 7h7l2 2h9v10H3z"/><path d="M3 7V5h7l2 2"/>',
+    dossierValide: '<path d="M3 7h7l2 2h9v10H3z"/><path d="m8 14 2 2 5-5"/>',
+    dossierLoupe: '<path d="M3 7h7l2 2h7v5"/><circle cx="16" cy="16" r="3.5"/><path d="m18.5 18.5 2 2"/>',
+    personnes: '<circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-4 2-6 5-6s5 2 5 6M13 20c.2-3 1.6-4.5 4-4.5 2.5 0 4 1.7 4 4.5"/>',
+    professionnel: '<circle cx="9" cy="7" r="3"/><path d="M4 20v-2c0-3 2-5 5-5s5 2 5 5v2"/><path d="M16 7h5M18.5 4.5v5"/>',
+    organigramme: '<path d="M12 3v4M5 10h14M5 10v4M12 10v4M19 10v4"/><rect x="2" y="14" width="6" height="6" rx="1.5"/><rect x="9" y="14" width="6" height="6" rx="1.5"/><rect x="16" y="14" width="6" height="6" rx="1.5"/>',
+    maison: '<path d="M3 11 12 4l9 7v9H3z"/><path d="M9 20v-6h6v6"/>',
+    soleil: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/>',
+    etoiles: '<path d="m12 3 1.4 4.1L17.5 8.5l-4.1 1.4L12 14l-1.4-4.1-4.1-1.4 4.1-1.4zM18 14l.8 2.2L21 17l-2.2.8L18 20l-.8-2.2L15 17l2.2-.8z"/>',
+    reseau: '<circle cx="12" cy="5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="m11 7-5 9M13 7l5 9M7 18h10"/>',
+    fleches: '<path d="M4 7h12l-3-3M20 17H8l3 3"/><path d="m16 4 3 3-3 3M8 14l-3 3 3 3"/>',
+    bifurcation: '<path d="M5 4v4c0 3 2 4 5 4h8M5 20v-4c0-3 2-4 5-4"/><path d="m15 9 3 3-3 3"/>',
+    validation: '<circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.2 2.2 4.8-5"/>',
+    alerte: '<path d="M12 3 2.5 20h19z"/><path d="M12 9v4M12 17h.01"/>',
+    cadenas: '<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2"/>',
+    bracelet: '<path d="M7 7h10v10H7z"/><path d="M9 3h6v4M9 17v4h6v-4M3 12h4M17 12h4"/>',
+    liste: '<path d="M8 6h12M8 12h12M8 18h12"/><path d="m3.5 6 1 1 2-2M3.5 12l1 1 2-2M3.5 18l1 1 2-2"/>',
+    modules: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+    insertion: '<path d="M4 20V8h16v12M8 8V5h8v3"/><path d="M8 13h8M12 10v6"/>',
+    reparation: '<path d="m4 15 5-5 5 5-5 5zM12 7l2-2 5 5-2 2"/><path d="m13 12 4 4"/>',
+    sante: '<path d="M12 20S4 15 4 9a4 4 0 0 1 7-2.5A4 4 0 0 1 20 9c0 6-8 11-8 11z"/><path d="M9 12h6M12 9v6"/>',
+    euro: '<circle cx="12" cy="12" r="8"/><path d="M16 8.5c-1-1-2.1-1.5-3.5-1.5-2.8 0-5 2.2-5 5s2.2 5 5 5c1.4 0 2.5-.5 3.5-1.5M6 10h7M6 14h7"/>',
+    barreaux: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v18M15 3v18M4 9h16M4 15h16"/>',
+    pause: '<circle cx="12" cy="12" r="8"/><path d="M10 9v6M14 9v6"/>',
+    actualiser: '<path d="M20 7v5h-5M4 17v-5h5"/><path d="M18.5 10A7 7 0 0 0 6 7M5.5 14A7 7 0 0 0 18 17"/>',
+    utilisateurFleche: '<circle cx="9" cy="8" r="3"/><path d="M4 20v-2c0-3 2-5 5-5 2 0 3.5.8 4.4 2"/><path d="M14 17h7M18 14l3 3-3 3"/>',
+    drapeau: '<path d="M5 21V4M5 5h11l-2 3 2 3H5"/>',
+    cible: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 6-6M16 6h2v2"/>',
+    trophee: '<path d="M8 4h8v5c0 3-1.8 5-4 5S8 12 8 9z"/><path d="M8 6H4v2c0 2 1.5 3 4 3M16 6h4v2c0 2-1.5 3-4 3M12 14v4M8 21h8M9 18h6"/>'
+});
+const ICONES_THEMES = Object.freeze({
+    commun: 'decouvertePjj',
+    procedure_ordinaire: 'procedureOrdinaire',
+    information_judiciaire: 'informationJudiciaire',
+    jugement_educatif_ordinaire: 'jugementEducatif',
+    matiere_criminelle_peines: 'crimesSanctionsPeines',
+    application_execution_peines: 'executionDesPeines'
+});
+function creerPictogrammeAuTrait(nomIcone, classeCss = 'pictogramme-au-trait', libelle = '') {
+    const trace = TRACES_PICTOGRAMMES[nomIcone] || TRACES_PICTOGRAMMES.bouclier;
+    const role = libelle ? ' role="img"' : '';
+    const aria = libelle ? ` aria-label="${libelle}"` : ' aria-hidden="true"';
+    return `<span class="${classeCss}"${role}${aria}><svg viewBox="0 0 24 24" focusable="false">${trace}</svg></span>`;
+}
 function creerIconeTheme(identifiant, libelle = '') {
-    const trace = TRACES_ICONE_THEME[identifiant] || TRACES_ICONE_THEME.commun;
-    return `<span class="theme-icone theme-icone-${identifiant}" role="img"`
-        + ` aria-label="${libelle}"><svg viewBox="0 0 24 24" aria-hidden="true">`
-        + `${trace}</svg></span>`;
+    return creerPictogrammeAuTrait(ICONES_THEMES[identifiant] || 'bouclier', `theme-icone theme-icone-${identifiant}`, libelle);
 }
 const selectionner = selecteur => document.querySelector(selecteur);
 const selectionnerTous = selecteur => [...document.querySelectorAll(selecteur)];
@@ -36,9 +147,10 @@ function envoyerEvenementPJJ(nom, parametres = {}) {
 const LIBELLES_PAGES_ANALYTICS = Object.freeze({
     accueil: 'Accueil',
     parcours: 'Parcours PJJ',
-    carnet: 'Carnet de voyage',
+    carnet: 'Carnet de parcours',
     entrainement: 'Entraînement libre',
     erreurs: 'Mes erreurs à retravailler',
+    supports: 'Supports de révision',
     progression: 'Progression',
     parametres: 'Paramètres',
     question: 'Question',
@@ -84,9 +196,8 @@ function obtenirInformationsEtapeAnalytics(question = null) {
     const identifiantTheme = question?.theme || etat?.theme || 'commun';
     const etapeProgramme = obtenirEtapeProgramme(identifiantTheme, numeroVisible)
         || obtenirEtapeProgramme('commun', numeroVisible);
-    // L'ordre visible peut évoluer sans recycler l'identité Analytics historique.
-    // Ex. l'ancienne étape 8 de placement est désormais visible en étape 9,
-    // mais conserve l'identité permanente Analytics 8.
+    // L'ordre visible peut évoluer sans recycler l'identité Analytics permanente.
+    // L'identifiant permanent reste stable même si l'ordre d'affichage d'une étape change.
     const numeroPermanent = Number(
         question?.etapeAnalyticsPermanent
         ?? etapeProgramme?.idAnalyticsPermanent
@@ -124,8 +235,12 @@ function obtenirContexteSessionAnalytics() {
     const modeDeJeu = obtenirLibelleModeJeuAnalytics();
     if (!modeDeJeu)
         return {};
+    const identifiantTheme = etat?.theme || etat?.questionCourante?.theme || null;
     const contexte = {
         pjjoue_mode_de_jeu: modeDeJeu,
+        pjjoue_parcours: identifiantTheme && PROGRAMMES[identifiantTheme]
+            ? PROGRAMMES[identifiantTheme].titre
+            : (etat?.perimetreEntrainement === 'tous' ? 'Parcours complet' : null),
         pjjoue_nombre_questions: Array.isArray(etat?.questionsSession) && etat.questionsSession.length
             ? etat.questionsSession.length
             : null,
@@ -225,18 +340,25 @@ const MESSAGES_REUSSITE = [
 ];
 const MESSAGES_ERREUR = [
     'Une erreur ici, c’est une erreur évitée sur le terrain.',
-    'Ce piège était crédible. C’est précisément pour ça qu’il faut l’entraîner.',
-    'Pas grave : transforme l’erreur en règle de contrôle.',
-    'Tu n’as pas raté la PJJ : tu viens de trouver un point à consolider.'
-];
-const CLE_SAUVEGARDE = 'pjjoue_V1_sauvegarde';
-const CLE_SESSION_EN_COURS = 'pjjoue_session_en_cours_v1';
+    'Relis l’acteur, la source, l’échéance et la limite du rôle concerné.',
+    'Ce piège était crédible : repère l’indice qui permet de le distinguer.',
+    'L’objectif maintenant : comprendre l’erreur et recommencer.',
+    'Repère ce qui a orienté la réponse, puis vérifie la bonne règle.'
+]
+const CLE_SAUVEGARDE = 'pjjoue_v1_sauvegarde';
+const CLE_SESSION_EN_COURS = 'pjjoue_v1_session_en_cours';
 // -----------------------------------------------------------------------------
 // Sauvegarde locale et état général
 // -----------------------------------------------------------------------------
+function creerEtatEvaluationFinale() {
+    return { meilleurScore: 0, nombreTentatives: 0, reussie: false };
+}
+function creerEvaluationsFinalesInitiales() {
+    return Object.fromEntries(THEMES.map(theme => [theme.id, creerEtatEvaluationFinale()]));
+}
 function creerSauvegardeInitiale() {
     return {
-        version: 'V3-activites-educatives',
+        version: 'V1',
         xp: 0,
         meilleureSerie: 0,
         nombreQuestionsJouees: 0,
@@ -247,7 +369,7 @@ function creerSauvegardeInitiale() {
         dernierTheme: null,
         etapesDecouvertes: {},
         questionsJouees: {},
-        evaluationFinale: { meilleurScore: 0, nombreTentatives: 0, reussie: false }
+        evaluationsFinales: creerEvaluationsFinalesInitiales()
     };
 }
 function estObjetSimple(valeur) {
@@ -294,29 +416,18 @@ function nettoyerProgression(progression) {
             const etape = Number(numeroEtape);
             const questionsEtape = QUESTIONS.filter(question =>
                 question.theme === theme && Number(question.etape) === etape
+                && question.estEvaluationFinale !== true
             );
             if (!Number.isInteger(etape)
                 || !PROGRAMMES[theme]?.etapes?.some(element => Number(element.id) === etape)
                 || !estObjetSimple(enregistrement))
                 continue;
-            const identifiantsQuestions = new Set(
-                questionsEtape.map(question => String(question.id))
-            );
+            const identifiantsQuestions = new Set(questionsEtape.map(question => String(question.id)));
             progressionNettoyee.apprenant[theme][numeroEtape] = {
-                meilleurScore: convertirEntierBorne(
-                    enregistrement.meilleurScore,
-                    0,
-                    questionsEtape.length
-                ),
+                meilleurScore: convertirEntierBorne(enregistrement.meilleurScore, 0, 100),
                 nombreTentatives: convertirEntierBorne(enregistrement.nombreTentatives),
-                questionsTraitees: filtrerIndicateurs(
-                    enregistrement.questionsTraitees,
-                    identifiantsQuestions
-                ),
-                resultats: filtrerResultats(
-                    enregistrement.resultats,
-                    identifiantsQuestions
-                ),
+                questionsTraitees: filtrerIndicateurs(enregistrement.questionsTraitees, identifiantsQuestions),
+                resultats: filtrerResultats(enregistrement.resultats, identifiantsQuestions),
                 termineeSansJoker: enregistrement.termineeSansJoker === true,
                 jokersUtilises: enregistrement.termineeSansJoker !== true
             };
@@ -342,80 +453,54 @@ function nettoyerErreurs(erreurs) {
             maitrisee: enregistrement.maitrisee === true,
             nombreErreurs: convertirEntierBorne(enregistrement.nombreErreurs),
             nombrePassages: convertirEntierBorne(enregistrement.nombrePassages),
-            theme: estThemeConnu(enregistrement.theme) ? enregistrement.theme : 'commun'
+            theme: estThemeConnu(enregistrement.theme) ? enregistrement.theme : questionCorrespondante.theme
         };
     }
     return erreursNettoyees;
 }
-
-function migrerSauvegardeV1VersV2(sauvegardeBrute) {
-    if (!estObjetSimple(sauvegardeBrute) || ['V2-12-etapes', 'V3-activites-educatives'].includes(sauvegardeBrute.version))
-        return sauvegardeBrute;
-    const copie = JSON.parse(JSON.stringify(sauvegardeBrute));
-    copie.version = 'V2-12-etapes';
-    copie.erreurs = {};
-    copie.progression = { apprenant: {} };
-    copie.etapesDecouvertes = {};
-    copie.questionsJouees = {};
-    copie.evaluationFinale = { meilleurScore: 0, nombreTentatives: 0, reussie: false };
-    return copie;
+function nettoyerEvaluationsFinales(sauvegardeBrute) {
+    const nettoyees = creerEvaluationsFinalesInitiales();
+    const nouvelles = estObjetSimple(sauvegardeBrute?.evaluationsFinales)
+        ? sauvegardeBrute.evaluationsFinales
+        : {};
+    THEMES.forEach(theme => {
+        const brute = estObjetSimple(nouvelles[theme.id]) ? nouvelles[theme.id] : {};
+        nettoyees[theme.id] = {
+            meilleurScore: convertirEntierBorne(brute.meilleurScore, 0, 100),
+            nombreTentatives: convertirEntierBorne(brute.nombreTentatives),
+            reussie: brute.reussie === true
+        };
+    });
+    return nettoyees;
 }
-function migrerSauvegardeV2VersV3(sauvegardeBrute) {
-    if (!estObjetSimple(sauvegardeBrute) || sauvegardeBrute.version === 'V3-activites-educatives')
-        return sauvegardeBrute;
-    if (sauvegardeBrute.version !== 'V2-12-etapes')
-        return sauvegardeBrute;
-    const copie = JSON.parse(JSON.stringify(sauvegardeBrute));
-    const progressionCommun = copie.progression?.apprenant?.commun;
-    if (estObjetSimple(progressionCommun)) {
-        const ancienne8 = progressionCommun['8'];
-        const ancienne9 = progressionCommun['9'];
-        const ancienne10 = progressionCommun['10'];
-        // L'ancienne étape 11 est remplacée par un nouveau thème : son progrès n'est pas transféré.
-        delete progressionCommun['11'];
-        delete progressionCommun['8'];
-        delete progressionCommun['9'];
-        delete progressionCommun['10'];
-        if (ancienne8) progressionCommun['9'] = ancienne8;
-        if (ancienne9) progressionCommun['10'] = ancienne9;
-        if (ancienne10) progressionCommun['11'] = ancienne10;
+function normaliserEtapesDecouvertes(sauvegardeBrute) {
+    const resultat = {};
+    const etapesDecouvertesEnregistrees = estObjetSimple(sauvegardeBrute?.etapesDecouvertes)
+        ? sauvegardeBrute.etapesDecouvertes
+        : {};
+    for (const [cle, actif] of Object.entries(etapesDecouvertesEnregistrees)) {
+        if (actif !== true)
+            continue;
+        if (cle.includes(':')) {
+            const [theme, numero] = cle.split(':');
+            if (estThemeConnu(theme) && obtenirEtapeProgramme?.(theme, Number(numero)))
+                resultat[`${theme}:${Number(numero)}`] = true;
+        }
     }
-    if (estObjetSimple(copie.etapesDecouvertes)) {
-        const anciennes = { ...copie.etapesDecouvertes };
-        delete copie.etapesDecouvertes['8'];
-        delete copie.etapesDecouvertes['9'];
-        delete copie.etapesDecouvertes['10'];
-        delete copie.etapesDecouvertes['11'];
-        if (anciennes['8']) copie.etapesDecouvertes['9'] = true;
-        if (anciennes['9']) copie.etapesDecouvertes['10'] = true;
-        if (anciennes['10']) copie.etapesDecouvertes['11'] = true;
-    }
-    copie.version = 'V3-activites-educatives';
-    return copie;
+    return resultat;
 }
-
 function nettoyerSauvegarde(sauvegardeBrute) {
-    sauvegardeBrute = migrerSauvegardeV1VersV2(sauvegardeBrute);
-    sauvegardeBrute = migrerSauvegardeV2VersV3(sauvegardeBrute);
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
         return sauvegardeInitiale;
     const parametres = estObjetSimple(sauvegardeBrute.parametres)
         ? sauvegardeBrute.parametres
         : {};
-    const evaluationFinale = estObjetSimple(sauvegardeBrute.evaluationFinale)
-        ? sauvegardeBrute.evaluationFinale
-        : {};
     const nombreQuestionsJouees = convertirEntierBorne(sauvegardeBrute.nombreQuestionsJouees);
-    const identifiantsEtapes = new Set(
-        Object.values(PROGRAMMES)
-            .flatMap(programme => programme.etapes || [])
-            .map(etape => String(etape.id))
-    );
     const identifiantsQuestions = new Set(QUESTIONS.map(question => String(question.id)));
     return {
         ...sauvegardeInitiale,
-        version: 'V3-activites-educatives',
+        version: 'V1',
         xp: convertirEntierBorne(sauvegardeBrute.xp),
         meilleureSerie: convertirEntierBorne(sauvegardeBrute.meilleureSerie),
         nombreQuestionsJouees,
@@ -434,25 +519,17 @@ function nettoyerSauvegarde(sauvegardeBrute) {
         dernierTheme: estThemeConnu(sauvegardeBrute.dernierTheme)
             ? sauvegardeBrute.dernierTheme
             : null,
-        etapesDecouvertes: filtrerIndicateurs(
-            sauvegardeBrute.etapesDecouvertes,
-            identifiantsEtapes
-        ),
-        questionsJouees: filtrerIndicateurs(
-            sauvegardeBrute.questionsJouees,
-            identifiantsQuestions
-        ),
-        evaluationFinale: {
-            meilleurScore: convertirEntierBorne(evaluationFinale.meilleurScore, 0, 50),
-            nombreTentatives: convertirEntierBorne(evaluationFinale.nombreTentatives),
-            reussie: evaluationFinale.reussie === true
-        }
+        etapesDecouvertes: normaliserEtapesDecouvertes(sauvegardeBrute),
+        questionsJouees: filtrerIndicateurs(sauvegardeBrute.questionsJouees, identifiantsQuestions),
+        evaluationsFinales: nettoyerEvaluationsFinales(sauvegardeBrute)
     };
 }
 function chargerSauvegarde() {
     try {
         const contenu = localStorage.getItem(CLE_SAUVEGARDE);
-        return contenu ? nettoyerSauvegarde(JSON.parse(contenu)) : creerSauvegardeInitiale();
+        return contenu
+            ? nettoyerSauvegarde(JSON.parse(contenu))
+            : creerSauvegardeInitiale();
     }
     catch (erreur) {
         return creerSauvegardeInitiale();
@@ -475,11 +552,7 @@ let etat = {
     questionsPassees: new Set(),
     reponsesSession: new Map(),
     optionsSession: new Map(),
-    jokers: {
-        cinquanteCinquante: true,
-        indice: true,
-        langueAuChat: true
-    },
+    jokers: { cinquanteCinquante: true, indice: true, langueAuChat: true },
     identifiantMinuteur: null,
     tempsRestant: 0,
     organisationSession: 'melange',
@@ -490,12 +563,14 @@ let etat = {
     dureeChronometreParcours: 15,
     nombreQuestionsTirageDe: 0,
     origineSessionAnalytics: null,
+    perimetreEntrainement: 'tous',
     brouillonsEcrits: new Map()
 };
 let minuteurRappelJokers = null;
 let minuteurFinRappelJokers = null;
 let minuteurTransitionParcours = null;
-function effacerSauvegardeV1DuNavigateur() {
+let stockageLocalAverti = false;
+function effacerSauvegardeDuNavigateur() {
     try {
         localStorage.removeItem(CLE_SAUVEGARDE);
     }
@@ -504,13 +579,16 @@ function effacerSauvegardeV1DuNavigateur() {
     }
 }
 function enregistrerSauvegarde() {
-    sauvegarde.version = 'V3-activites-educatives';
+    sauvegarde.version = 'V1';
     try {
         localStorage.setItem(CLE_SAUVEGARDE, JSON.stringify(sauvegarde));
         return true;
     }
     catch (erreur) {
-        afficherNotification('La sauvegarde locale est indisponible. Exporte ta progression avant de fermer la page.');
+        if (!stockageLocalAverti) {
+            stockageLocalAverti = true;
+            afficherNotification('Sauvegarde locale indisponible · pense à exporter ta progression avant de fermer PJJoue.');
+        }
         return false;
     }
 }
@@ -766,6 +844,7 @@ let restaurationNavigation = false;
 // -----------------------------------------------------------------------------
 // Navigation, historique et fenêtres de confirmation
 // -----------------------------------------------------------------------------
+let navigationInterneParFragment = false;
 function routePourEcran(identifiant) {
     if (identifiant === 'parcours' && etat.theme)
         return '#parcours/' + encodeURIComponent(etat.theme);
@@ -779,11 +858,31 @@ function creerEtatNavigation(identifiant) {
         etape: etat.etape
     };
 }
+function mettreAJourAdresseNavigation(identifiant, remplacer = false) {
+    const route = routePourEcran(identifiant);
+    // Un fichier ouvert directement dans Chrome n’a pas une origine HTTP classique.
+    // On utilise donc uniquement son fragment (#...) et jamais pushState avec une URL file://.
+    if (window.location.protocol === 'file:') {
+        if (window.location.hash === route)
+            return;
+        navigationInterneParFragment = true;
+        if (remplacer)
+            window.location.replace(route);
+        else
+            window.location.hash = route;
+        window.setTimeout(() => { navigationInterneParFragment = false; }, 0);
+        return;
+    }
+    const methode = remplacer ? 'replaceState' : 'pushState';
+    history[methode](creerEtatNavigation(identifiant), '', route);
+}
 function actualiserBoutonRetour() {
     const boutonRetour = selectionner('#boutonRetour');
     if (!boutonRetour)
         return;
-    const retourDisponible = etat.ecran !== 'accueil';
+    const detailParcoursOuvert = etat.ecran === 'parcours'
+        && !selectionner('#vueDetailParcours')?.classList.contains('masque');
+    const retourDisponible = etat.ecran !== 'accueil' && !detailParcoursOuvert;
     boutonRetour.classList.toggle('masque', !retourDisponible);
     boutonRetour.disabled = !retourDisponible;
 }
@@ -792,37 +891,38 @@ function mesurerHauteurEntete() {
     const hauteur = Math.ceil(entete?.getBoundingClientRect().height || 66);
     document.documentElement.style.setProperty('--hauteur-entete', hauteur + 'px');
 }
-function fermerMenuMobile() {
+function fermerMenuPrincipal() {
     const entete = document.querySelector('header.entete');
     const bouton = selectionner('#boutonMenuMobile');
     entete?.classList.remove('menu-mobile-ouvert');
     document.documentElement.classList.remove('menu-principal-ouvert');
     bouton?.setAttribute('aria-expanded', 'false');
-    bouton?.setAttribute('aria-label', 'Ouvrir le menu');
+    bouton?.setAttribute('aria-label', 'Ouvrir le menu principal');
     const libelle = bouton?.querySelector('.bouton-menu-libelle');
     if (libelle)
         libelle.textContent = 'Menu';
 }
-function basculerMenuMobile() {
+function basculerMenuPrincipal() {
     const entete = document.querySelector('header.entete');
     const bouton = selectionner('#boutonMenuMobile');
     const navigation = selectionner('#menuPrincipal');
-    if (!entete || !bouton)
+    if (!entete || !bouton || !navigation)
         return;
     const ouvert = entete.classList.toggle('menu-mobile-ouvert');
     document.documentElement.classList.toggle('menu-principal-ouvert', ouvert);
     bouton.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
-    bouton.setAttribute('aria-label', ouvert ? 'Fermer le menu' : 'Ouvrir le menu');
+    bouton.setAttribute('aria-label', ouvert ? 'Fermer le menu principal' : 'Ouvrir le menu principal');
     const libelle = bouton.querySelector('.bouton-menu-libelle');
     if (libelle)
         libelle.textContent = ouvert ? 'Fermer' : 'Menu';
     mesurerHauteurEntete();
     if (ouvert)
-        requestAnimationFrame(() => navigation?.querySelector('button:not(:disabled)')?.focus());
+        requestAnimationFrame(() => navigation.querySelector('button:not(:disabled), a[href]')?.focus());
 }
 function actualiserNavigation(identifiant) {
     selectionnerTous('.navigation [data-ecran]').forEach(bouton => {
         const actif = bouton.dataset.ecran === identifiant;
+        bouton.classList.toggle('actif', actif);
         if (actif)
             bouton.setAttribute('aria-current', 'page');
         else
@@ -861,9 +961,10 @@ function ajusterQuestionAEcran() {
 const TITRES_ECRANS = {
     accueil: 'Accueil',
     parcours: 'Parcours PJJ',
-    carnet: 'Carnet de voyage',
+    carnet: 'Carnet de parcours',
     entrainement: 'Choisis ton mode d’entraînement',
     erreurs: 'Mes erreurs à retravailler',
+    supports: 'Supports de révision',
     progression: 'Progression',
     parametres: 'Paramètres',
     question: 'Question',
@@ -873,7 +974,9 @@ function actualiserTitrePage(ecran) {
     document.title = `${TITRES_ECRANS[ecran] || 'PJJoue'} — PJJoue`;
 }
 function afficherEcran(identifiant, optionsAffichage = {}) {
-    fermerMenuMobile();
+    fermerMenuPrincipal();
+    if (identifiant === 'supports')
+        initialiserRechercheSupports();
     clearInterval(etat.identifiantMinuteur);
     if (identifiant !== 'question')
         fermerFenetreJokers({ restaurerFocus: false });
@@ -929,23 +1032,22 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     if (identifiant === 'progression')
         afficherProgression();
     if (identifiant === 'carnet') {
-        initialiserProgression('commun');
-        actualiserCarnetParcours(PROGRAMMES.commun);
+        THEMES.forEach(theme => initialiserProgression(theme.id));
+        actualiserCarnetParcours();
     }
     actualiserGroupesChoix();
     actualiserNavigation(identifiant);
     actualiserBoutonRetour();
-    if (!optionsAffichage.depuisHistorique && !restaurationNavigation) {
-        const methode = optionsAffichage.remplacerHistorique ? 'replaceState' : 'pushState';
-        history[methode](creerEtatNavigation(identifiant), '', routePourEcran(identifiant));
-    }
+    if (!optionsAffichage.depuisHistorique && !restaurationNavigation)
+        mettreAJourAdresseNavigation(identifiant, Boolean(optionsAffichage.remplacerHistorique));
     if (identifiant === 'accueil')
         garantirAccueilEnHaut();
     else
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     if (identifiant !== 'question') {
         requestAnimationFrame(() => {
-            const titre = cible.querySelector('h1,h2');
+            const titre = [...cible.querySelectorAll('h1,h2')]
+                .find(element => !element.closest('.masque'));
             titre?.setAttribute('tabindex', '-1');
             titre?.focus?.({ preventScroll: true });
         });
@@ -1092,7 +1194,7 @@ function revenirEnArriere() {
     if (etat.ecran === 'question') {
         const secours = etat.mode === 'parcours' || etat.mode === 'evaluation-finale' ? 'parcours' : (etat.mode === 'revision' ? 'erreurs' : 'entrainement');
         if (secours === 'parcours') {
-            ouvrirParcours('commun', { remplacerHistorique: true });
+            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
             return;
         }
         afficherEcran(secours, { forcerSortieQuestion: true, remplacerHistorique: true });
@@ -1104,7 +1206,7 @@ function revenirEnArriere() {
     }
     if (etat.ecran === 'bilan') {
         if (etat.mode === 'parcours' || etat.mode === 'evaluation-finale') {
-            ouvrirParcours('commun', { remplacerHistorique: true });
+            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
             return;
         }
         afficherEcran(etat.mode === 'revision' ? 'erreurs' : 'entrainement', { forcerSortieQuestion: true, remplacerHistorique: true });
@@ -1113,10 +1215,18 @@ function revenirEnArriere() {
     afficherEcran('accueil', { forcerSortieQuestion: true, remplacerHistorique: true });
 }
 function lireRoute() {
-    const parties = location.hash.replace(/^#/, '').split('/').map(decodeURIComponent);
+    const decoderSegment = segment => {
+        try {
+            return decodeURIComponent(segment);
+        }
+        catch (erreur) {
+            return '';
+        }
+    };
+    const parties = location.hash.replace(/^#/, '').split('/').map(decoderSegment);
     if (parties[0] === 'parcours')
-        return { pjjoue: true, ecran: 'parcours', theme: parties[1] || 'commun' };
-    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'progression', 'parametres', 'question'];
+        return { pjjoue: true, ecran: 'parcours', theme: parties[1] || null };
+    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'supports', 'progression', 'parametres', 'question'];
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
 }
 function restaurerRoute(route) {
@@ -1135,14 +1245,33 @@ function restaurerRoute(route) {
             ouvrirParcours(etatRoute.theme || 'commun', { remplacerHistorique: true });
         }
     }
-    else if (etatRoute.ecran === 'parcours' && etatRoute.theme)
-        ouvrirParcours(etatRoute.theme);
+    else if (etatRoute.ecran === 'parcours') {
+        if (etatRoute.theme)
+            ouvrirParcours(etatRoute.theme);
+        else
+            ouvrirChoixParcours({ depuisHistorique: true, forcerSortieQuestion: true });
+    }
     else
         afficherEcran(etatRoute.ecran || 'accueil', { depuisHistorique: true, forcerSortieQuestion: true });
     restaurationNavigation = false;
-    history.replaceState(creerEtatNavigation(etat.ecran), '', routePourEcran(etat.ecran));
+    if (window.location.protocol !== 'file:')
+        history.replaceState(creerEtatNavigation(etat.ecran), '', routePourEcran(etat.ecran));
 }
+window.addEventListener('hashchange', () => {
+    if (window.location.protocol !== 'file:' || restaurationNavigation || navigationInterneParFragment)
+        return;
+    const fragmentCourant = window.location.hash || '#accueil';
+    if (fragmentCourant === routePourEcran(etat.ecran))
+        return;
+    restaurerRoute(lireRoute());
+});
 window.addEventListener('popstate', evenement => {
+    if (navigationInterneParFragment)
+        return;
+    // Chrome peut émettre popstate lors d'un simple changement de fragment sur un fichier local.
+    // Si l'adresse correspond déjà à l'écran affiché, ce n'est pas une demande de sortie utilisateur.
+    if (window.location.protocol === 'file:' && window.location.hash === routePourEcran(etat.ecran))
+        return;
     if (etat.ecran === 'question' && etat.questionsSession?.length) {
         history.forward();
         ouvrirFenetreQuitterSession({
@@ -1306,38 +1435,58 @@ function marquerEtapeDecouverte(question) {
     if (!question)
         return;
     const etape = Number(question.etape);
-    if (!Number.isFinite(etape) || etape < 1 || !obtenirEtapeProgramme(question.theme, etape))
+    const theme = question.theme;
+    if (!estThemeConnu(theme) || !Number.isFinite(etape) || etape < 1 || !obtenirEtapeProgramme(theme, etape))
         return;
     sauvegarde.etapesDecouvertes = sauvegarde.etapesDecouvertes || {};
-    sauvegarde.etapesDecouvertes[etape] = true;
+    sauvegarde.etapesDecouvertes[`${theme}:${etape}`] = true;
 }
 function compterEtapesDecouvertes() {
     const etapes = new Set();
-    sauvegarde.questionsJouees = sauvegarde.questionsJouees || {};
-    Object.keys(sauvegarde.questionsJouees).forEach(identifiant => {
-        if (!sauvegarde.questionsJouees[identifiant])
+    const ajouterQuestion = question => {
+        if (!question || question.estEvaluationFinale === true)
             return;
-        const question = QUESTIONS.find(element => String(element.id) === String(identifiant));
-        if (question && Number.isFinite(Number(question.etape))) {
-            etapes.add(Number(question.etape));
-        }
+        const etape = Number(question.etape);
+        if (estThemeConnu(question.theme) && Number.isFinite(etape))
+            etapes.add(`${question.theme}:${etape}`);
+    };
+    Object.keys(sauvegarde.questionsJouees || {}).forEach(identifiant => {
+        if (sauvegarde.questionsJouees[identifiant])
+            ajouterQuestion(QUESTIONS.find(element => String(element.id) === String(identifiant)));
     });
-    Object.keys(sauvegarde.erreurs || {}).forEach(identifiant => {
-        const question = QUESTIONS.find(element => String(element.id) === String(identifiant));
-        if (question && Number.isFinite(Number(question.etape))) {
-            etapes.add(Number(question.etape));
-        }
-    });
-    const identifiantTheme = 'commun';
-    const etapesProgramme = obtenirEtapesProgramme(identifiantTheme);
-    if (Array.isArray(etapesProgramme)) {
-        etapesProgramme.forEach(etapeProgramme => {
-            if ((Number(compterQuestionsTraiteesEtape(identifiantTheme, etapeProgramme.id)) || 0) > 0) {
-                etapes.add(Number(etapeProgramme.id));
-            }
+    Object.keys(sauvegarde.erreurs || {}).forEach(identifiant =>
+        ajouterQuestion(QUESTIONS.find(element => String(element.id) === String(identifiant)))
+    );
+    THEMES.forEach(theme => {
+        obtenirEtapesProgramme(theme.id).forEach(etapeProgramme => {
+            if ((Number(compterQuestionsTraiteesEtape(theme.id, etapeProgramme.id)) || 0) > 0)
+                etapes.add(`${theme.id}:${etapeProgramme.id}`);
         });
-    }
+    });
+    Object.entries(sauvegarde.etapesDecouvertes || {}).forEach(([cle, actif]) => {
+        if (actif === true && cle.includes(':'))
+            etapes.add(cle);
+    });
     return etapes.size;
+}
+function estProgrammeMaitrise(identifiantTheme) {
+    const programme = PROGRAMMES[identifiantTheme];
+    return Boolean(programme?.etapes?.length)
+        && programme.etapes.every(etapeProgramme => estEtapeMaitrisee(identifiantTheme, etapeProgramme.id));
+}
+function obtenirEvaluationFinaleTheme(identifiantTheme) {
+    sauvegarde.evaluationsFinales = sauvegarde.evaluationsFinales || creerEvaluationsFinalesInitiales();
+    sauvegarde.evaluationsFinales[identifiantTheme] = sauvegarde.evaluationsFinales[identifiantTheme] || creerEtatEvaluationFinale();
+    return sauvegarde.evaluationsFinales[identifiantTheme];
+}
+function estEvaluationFinaleReussie(identifiantTheme) {
+    return obtenirEvaluationFinaleTheme(identifiantTheme)?.reussie === true;
+}
+function estParcoursCompletReussi() {
+    return THEMES.every(theme => estProgrammeMaitrise(theme.id) && estEvaluationFinaleReussie(theme.id));
+}
+function obtenirProchainThemeIncomplet() {
+    return THEMES.find(theme => !estProgrammeMaitrise(theme.id) || !estEvaluationFinaleReussie(theme.id))?.id || null;
 }
 function accorderLibelle(nombre, singulier, pluriel) {
     return Number(nombre) === 1 ? singulier : pluriel;
@@ -1346,20 +1495,15 @@ function actualiserLibellesProgression() {
     const experience = selectionner('#experienceProgression');
     if (experience) {
         const nombreDecouvertes = Number((experience.textContent || '').match(/\d+/)?.[0] || 0);
-        const libelleDecouvertes = accorderLibelle(
-            nombreDecouvertes,
-            'découverte',
-            'découvertes'
-        );
-        experience.innerHTML = `
-            <span class="experience-valeur">${nombreDecouvertes}</span>
-            <span class="experience-libelle">${libelleDecouvertes}</span>
-        `;
+        experience.textContent = String(nombreDecouvertes);
+        const libelleExperience = experience.parentElement?.querySelector(':scope > span');
+        if (libelleExperience)
+            libelleExperience.textContent = accorderLibelle(nombreDecouvertes, 'Étape abordée', 'Étapes abordées');
     }
     const configurations = [
-        ['questionsJoueesProgression', 'activité réalisée', 'activités réalisées'],
-        ['erreursProgression', 'erreur active', 'erreurs actives'],
-        ['etapesMaitriseesProgression', 'étape maîtrisée', 'étapes maîtrisées']
+        ['questionsJoueesProgression', 'Question travaillée', 'Questions travaillées'],
+        ['erreursProgression', 'Question à revoir', 'Questions à revoir'],
+        ['etapesMaitriseesProgression', 'Étape maîtrisée', 'Étapes maîtrisées']
     ];
     configurations.forEach(([identifiant, singulier, pluriel]) => {
         const valeur = selectionner('#' + identifiant);
@@ -1369,15 +1513,14 @@ function actualiserLibellesProgression() {
     });
 }
 function actualiserAccueil() {
-    if (PROGRAMMES.commun)
-        synchroniserEtapesReussiesEnAutonomie(PROGRAMMES.commun);
+    Object.values(PROGRAMMES).forEach(programme => synchroniserEtapesReussiesEnAutonomie(programme));
     const experience = selectionner('#experienceProgression');
     const jouees = selectionner('#questionsJoueesProgression');
     const erreurs = selectionner('#erreursProgression');
     const maitrisees = selectionner('#etapesMaitriseesProgression');
     const decouvertes = compterEtapesDecouvertes();
     if (experience)
-        experience.innerHTML = `<span class="experience-valeur">${decouvertes}</span><span class="experience-libelle">${accorderLibelle(decouvertes, 'découverte', 'découvertes')}</span>`;
+        experience.textContent = String(decouvertes);
     if (jouees)
         jouees.textContent = String(sauvegarde.nombreQuestionsJouees || 0);
     if (erreurs)
@@ -1386,6 +1529,9 @@ function actualiserAccueil() {
         maitrisees.textContent = String(compterEtapesMaitrisees());
     actualiserLibellesProgression();
     actualiserBoutonCommencer();
+    const boutonEntrainementLibreAccueil = selectionner('#boutonEntrainementLibreAccueil');
+    if (boutonEntrainementLibreAccueil)
+        boutonEntrainementLibreAccueil.hidden = sauvegarde.aDejaJoue !== true;
     chargerParametres();
 }
 function calculerProgressionTheme(identifiantTheme) {
@@ -1402,7 +1548,11 @@ function calculerProgressionTheme(identifiantTheme) {
     return Math.round(nombreQuestionsTraitees / questionsTheme.length * 100);
 }
 function obtenirTitreSymboliqueParcours(nombreEtapesMaitrisees) {
-    if (nombreEtapesMaitrisees >= 10)
+    if (nombreEtapesMaitrisees >= 22)
+        return 'Éclaireur complet de la PJJ';
+    if (nombreEtapesMaitrisees >= 17)
+        return 'Guide du parcours judiciaire';
+    if (nombreEtapesMaitrisees >= 11)
         return 'Éclaireur de la PJJ';
     if (nombreEtapesMaitrisees >= 7)
         return 'Guide en devenir';
@@ -1420,28 +1570,44 @@ function obtenirEtapeAReprendre(programme) {
         return nombreQuestionsTraitees < nombreQuestions || bilanEtape.termineeSansJoker !== true;
     }) || null;
 }
+function obtenirProchaineActionParcoursComplet() {
+    for (const theme of THEMES) {
+        const programme = PROGRAMMES[theme.id];
+        const etapeAReprendre = obtenirEtapeAReprendre(programme);
+        if (etapeAReprendre)
+            return { type: 'etape', theme: theme.id, etape: etapeAReprendre };
+        if (!estEvaluationFinaleReussie(theme.id))
+            return { type: 'evaluation', theme: theme.id };
+    }
+    return { type: 'carnet' };
+}
 function actualiserBoutonCommencer() {
     const bouton = selectionner('#boutonCommencer');
-    const programme = PROGRAMMES.commun;
-    if (!bouton || !programme)
+    if (!bouton)
         return;
-    initialiserProgression(programme.id);
-    const nombreQuestionsTraitees = programme.etapes.reduce(
-        (total, etapeProgramme) => total + compterQuestionsTraiteesEtape(programme.id, etapeProgramme.id),
-        0
+    const action = obtenirProchaineActionParcoursComplet();
+    const aucuneQuestionTraitee = THEMES.every(theme =>
+        obtenirEtapesProgramme(theme.id).every(etape => compterQuestionsTraiteesEtape(theme.id, etape.id) === 0)
     );
-    if (nombreQuestionsTraitees === 0) {
-        bouton.innerHTML = 'Commencer <span aria-hidden="true">→</span>';
-        bouton.onclick = () => ouvrirParcours(programme.id);
+    if (aucuneQuestionTraitee) {
+        bouton.innerHTML = 'Choisir mon parcours <span aria-hidden="true">→</span>';
+        bouton.onclick = () => ouvrirChoixParcours();
         return;
     }
-    const etapeAReprendre = obtenirEtapeAReprendre(programme);
-    bouton.innerHTML = etapeAReprendre
-        ? `Reprendre l’étape ${etapeAReprendre.id} <span aria-hidden="true">→</span>`
-        : 'Voir mon carnet <span aria-hidden="true">→</span>';
-    bouton.onclick = etapeAReprendre
-        ? () => ouvrirParcours(programme.id)
-        : () => afficherEcran('carnet');
+    if (action.type === 'etape') {
+        const numeroParcours = obtenirOrdreTheme(action.theme) + 1;
+        bouton.innerHTML = `Reprendre le parcours ${numeroParcours} · étape ${action.etape.id} <span aria-hidden="true">→</span>`;
+        bouton.onclick = () => ouvrirParcours(action.theme);
+        return;
+    }
+    if (action.type === 'evaluation') {
+        const numeroParcours = obtenirOrdreTheme(action.theme) + 1;
+        bouton.innerHTML = `Passer l’évaluation du parcours ${numeroParcours} <span aria-hidden="true">→</span>`;
+        bouton.onclick = () => ouvrirParcours(action.theme);
+        return;
+    }
+    bouton.innerHTML = 'Voir mon carnet complet <span aria-hidden="true">→</span>';
+    bouton.onclick = () => afficherEcran('carnet');
 }
 function obtenirProchaineDestinationParcours(programme) {
     const etapeAReprendre = obtenirEtapeAReprendre(programme);
@@ -1449,75 +1615,98 @@ function obtenirProchaineDestinationParcours(programme) {
         const nombreQuestions = obtenirQuestionsEtape(programme.id, etapeAReprendre.id).length;
         const nombreQuestionsTraitees = compterQuestionsTraiteesEtape(programme.id, etapeAReprendre.id);
         if (nombreQuestionsTraitees < nombreQuestions)
-            return `Prochaine destination : étape ${etapeAReprendre.id} · ${etapeAReprendre.titre}`;
-        return `Défi d’autonomie : rejoue l’étape ${etapeAReprendre.id} sans joker.`;
+            return `Parcours ${obtenirOrdreTheme(programme.id) + 1} · étape ${etapeAReprendre.id} · ${etapeAReprendre.titre}`;
+        return `Parcours ${obtenirOrdreTheme(programme.id) + 1} · rejoue l’étape ${etapeAReprendre.id} sans aide pour la consolider.`;
     }
-    return 'Toutes les étapes sont maîtrisées : l’évaluation finale t’attend.';
+    if (!estEvaluationFinaleReussie(programme.id))
+        return `Parcours ${obtenirOrdreTheme(programme.id) + 1} · évaluation finale à réussir.`;
+    return null;
 }
-function calculerAvancementCarnetParcours(programme) {
-    const questionsParcours = programme.etapes.flatMap(etapeProgramme =>
-        obtenirQuestionsEtape(programme.id, etapeProgramme.id)
-    );
-    if (!questionsParcours.length)
+function obtenirProchaineDestinationComplete() {
+    for (const theme of THEMES) {
+        const destination = obtenirProchaineDestinationParcours(PROGRAMMES[theme.id]);
+        if (destination)
+            return `Prochaine destination : ${destination}`;
+    }
+    const totalEtapes = THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0);
+    return `Parcours complet réussi : les ${totalEtapes} étapes et les ${THEMES.length} évaluations sont validées.`;
+}
+function calculerAvancementCarnetComplet() {
+    const questionsApprentissage = QUESTIONS.filter(question => !question.estEvaluationFinale);
+    if (!questionsApprentissage.length)
         return 0;
-    const nombreQuestionsTraitees = programme.etapes.reduce(
-        (total, etapeProgramme) => total + compterQuestionsTraiteesEtape(programme.id, etapeProgramme.id),
-        0
-    );
-    return Math.round(nombreQuestionsTraitees / questionsParcours.length * 100);
+    const traitees = THEMES.reduce((total, theme) => total + obtenirEtapesProgramme(theme.id).reduce(
+        (sousTotal, etape) => sousTotal + compterQuestionsTraiteesEtape(theme.id, etape.id), 0
+    ), 0);
+    return Math.round(traitees / questionsApprentissage.length * 100);
 }
-function actualiserCarnetParcours(programme) {
+function actualiserCarnetParcours(_programmeIgnore = null) {
     const titreSymbolique = selectionner('#titreSymboliqueParcours');
     const prochaineDestination = selectionner('#prochaineDestinationParcours');
     const route = selectionner('#routeCarnetParcours');
+    const journal = selectionner('.carnet-journal');
     if (!titreSymbolique || !prochaineDestination || !route)
         return;
-    const nombreEtapesMaitrisees = programme.etapes.filter(etapeProgramme =>
-        estEtapeMaitrisee(programme.id, etapeProgramme.id)
-    ).length;
-    const avancement = calculerAvancementCarnetParcours(programme);
+    const prochainTheme = THEMES.find(theme => obtenirProchaineDestinationParcours(PROGRAMMES[theme.id]));
+    const identiteProchainParcours = obtenirIdentiteParcours(prochainTheme?.id || 'commun');
+    const nombreEtapesMaitrisees = compterEtapesMaitrisees();
+    const avancement = calculerAvancementCarnetComplet();
     titreSymbolique.textContent = obtenirTitreSymboliqueParcours(nombreEtapesMaitrisees);
-    prochaineDestination.textContent = obtenirProchaineDestinationParcours(programme);
+    prochaineDestination.textContent = obtenirProchaineDestinationComplete();
+    journal?.style.setProperty('--parcours-accent', identiteProchainParcours.couleur);
     route.style.setProperty('--avancement-carnet', `${avancement}%`);
     route.setAttribute('aria-valuenow', String(avancement));
-    afficherSouvenirsParcours(programme);
-    afficherDefisParcours(programme);
+    route.setAttribute('aria-label', `Avancement dans l’ensemble des parcours : ${avancement}%`);
+    afficherSouvenirsParcoursComplet();
+    afficherDefisParcoursComplet();
 }
 function actualiserResumeCarteParcours(programme) {
     const resumeCarte = selectionner('#resumeCarteParcours');
-    if (!resumeCarte)
+    if (!resumeCarte || !programme)
         return;
     const nombreEtapesMaitrisees = programme.etapes.filter(etapeProgramme =>
         estEtapeMaitrisee(programme.id, etapeProgramme.id)
     ).length;
-    const evaluationOuverte = nombreEtapesMaitrisees === programme.etapes.length;
-    resumeCarte.textContent = evaluationOuverte
-        ? `${nombreEtapesMaitrisees}/${programme.etapes.length} destinations maîtrisées sans joker · Évaluation finale ouverte.`
-        : `${nombreEtapesMaitrisees}/${programme.etapes.length} destinations maîtrisées sans joker · Le prochain jalon t’attend sur la carte.`;
+    const nombreEtapesTerminees = programme.etapes.filter(etapeProgramme => {
+        const total = obtenirQuestionsEtape(programme.id, etapeProgramme.id).length;
+        return total > 0 && compterQuestionsTraiteesEtape(programme.id, etapeProgramme.id) >= total;
+    }).length;
+    const evaluationOuverte = nombreEtapesTerminees === programme.etapes.length;
+    const evaluationReussie = estEvaluationFinaleReussie(programme.id);
+    resumeCarte.textContent = evaluationReussie
+        ? `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · évaluation réussie.`
+        : evaluationOuverte
+            ? `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · évaluation ouverte.`
+            : `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · ${nombreEtapesMaitrisees} maîtrisées sans aide.`;
 }
-function afficherSouvenirsParcours(programme) {
+function afficherSouvenirsParcoursComplet() {
     const zone = selectionner('#souvenirsParcours');
     if (!zone)
         return;
-    const etapesMaitrisees = programme.etapes.filter(etapeProgramme =>
-        estEtapeMaitrisee(programme.id, etapeProgramme.id)
-    );
+    const souvenirs = [];
+    THEMES.forEach((theme, indexTheme) => {
+        PROGRAMMES[theme.id].etapes.forEach(etapeProgramme => {
+            if (estEtapeMaitrisee(theme.id, etapeProgramme.id))
+                souvenirs.push({ theme, indexTheme, etapeProgramme });
+        });
+    });
     zone.innerHTML = '';
-    if (!etapesMaitrisees.length) {
+    if (!souvenirs.length) {
         const message = document.createElement('p');
         message.className = 'carnet-vide';
         message.textContent = 'Maîtrise une étape pour conserver ses trois repères essentiels.';
         zone.appendChild(message);
         return;
     }
-    etapesMaitrisees.forEach((etapeProgramme, indice) => {
+    souvenirs.forEach(({ theme, indexTheme, etapeProgramme }, indice) => {
         const fiche = document.createElement('details');
         fiche.className = 'souvenir-etape';
         fiche.dataset.etape = String(etapeProgramme.id);
-        fiche.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#ffc83d');
-        fiche.open = indice === etapesMaitrisees.length - 1;
+        fiche.dataset.theme = theme.id;
+        fiche.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#2d7379');
+        fiche.open = indice === souvenirs.length - 1;
         const titre = document.createElement('summary');
-        titre.textContent = `Étape ${etapeProgramme.id} · ${etapeProgramme.titre}`;
+        titre.textContent = `Parcours ${indexTheme + 1} · Étape ${etapeProgramme.id} · ${etapeProgramme.titre}`;
         const liste = document.createElement('ul');
         (etapeProgramme.souvenirs || []).forEach(souvenir => {
             const element = document.createElement('li');
@@ -1528,20 +1717,24 @@ function afficherSouvenirsParcours(programme) {
         zone.appendChild(fiche);
     });
 }
-function afficherDefisParcours(programme) {
+function afficherDefisParcoursComplet() {
     const zone = selectionner('#defisParcours');
     if (!zone)
         return;
-    const etapeAReprendre = obtenirEtapeAReprendre(programme);
+    const nombreEtapesMaitrisees = compterEtapesMaitrisees();
+    const evaluationsReussies = THEMES.filter(theme => estEvaluationFinaleReussie(theme.id)).length;
     const meilleureSerie = Number(sauvegarde.meilleureSerie) || 0;
     const aucuneErreurActive = sauvegarde.aDejaJoue && compterErreursActives() === 0;
     const defis = [
         {
-            libelle: etapeAReprendre
-                ? `Valider l’étape ${etapeAReprendre.id} sans joker`
-                : 'Valider les onze étapes sans joker',
-            termine: !etapeAReprendre,
-            progression: etapeAReprendre ? 'En cours' : 'Réussi'
+            libelle: `Valider les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes sans joker`,
+            termine: nombreEtapesMaitrisees === THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0),
+            progression: `${nombreEtapesMaitrisees}/${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)}`
+        },
+        {
+            libelle: `Réussir les ${THEMES.length} évaluations finales`,
+            termine: evaluationsReussies === THEMES.length,
+            progression: `${evaluationsReussies}/${THEMES.length}`
         },
         {
             libelle: 'Enchaîner 5 réussites autonomes',
@@ -1570,18 +1763,234 @@ function afficherDefisParcours(programme) {
         zone.appendChild(element);
     });
 }
-function ouvrirParcours(identifiantTheme, optionsAffichage = {}) {
+const IDENTITES_PARCOURS = Object.freeze({
+    commun: {
+        numero: '01',
+        titre: 'Découvrir la PJJ',
+        chapitre: 'Point de départ',
+        description: 'Missions, publics, professionnels, structures et logique éducative de la PJJ.',
+        niveau: 'Débutant',
+        duree: '≈ 1 h 20',
+        couleur: '#4f8cff',
+        couleurTexte: '#9fc2ff',
+        couleurRgb: '79,140,255'
+    },
+    procedure_ordinaire: {
+        numero: '02',
+        titre: 'Du parquet à la sanction',
+        chapitre: 'Procédure ordinaire',
+        description: 'Suis le dossier depuis l’orientation du parquet jusqu’au jugement et à la sanction.',
+        niveau: 'Intermédiaire',
+        duree: '≈ 1 h 40',
+        couleur: '#d49a00',
+        couleurTexte: '#ffd36a',
+        couleurRgb: '212,154,0'
+    },
+    information_judiciaire: {
+        numero: '03',
+        titre: 'Comprendre l’information judiciaire',
+        chapitre: 'Instruction',
+        description: 'Repère le rôle du JI, du JLD et les principales décisions provisoires pendant l’instruction.',
+        niveau: 'Intermédiaire',
+        duree: '≈ 1 h 45',
+        couleur: '#0891b2',
+        couleurTexte: '#70d7ea',
+        couleurRgb: '8,145,178'
+    },
+    jugement_educatif_ordinaire: {
+        numero: '04',
+        titre: 'Juger et construire la réponse éducative',
+        chapitre: 'Jugement éducatif',
+        description: 'Comprends le rôle du JE et du TPE, les mesures éducatives et les réponses ordinaires.',
+        niveau: 'Intermédiaire',
+        duree: '≈ 1 h 45',
+        couleur: '#8b5cf6',
+        couleurTexte: '#c7afff',
+        couleurRgb: '139,92,246'
+    },
+    matiere_criminelle_peines: {
+        numero: '05',
+        titre: 'Crimes, sanctions et peines',
+        chapitre: 'Matière criminelle',
+        description: 'Distingue les juridictions compétentes et les sanctions ou peines applicables aux mineurs.',
+        niveau: 'Avancé',
+        duree: '≈ 1 h 50',
+        couleur: '#e11d48',
+        couleurTexte: '#ff91a8',
+        couleurRgb: '225,29,72'
+    },
+    application_execution_peines: {
+        numero: '06',
+        titre: 'De la décision à l’exécution',
+        chapitre: 'Application des peines',
+        description: 'Suis la décision après le jugement : exécution, aménagements, incidents et articulation JE / JAP.',
+        niveau: 'Avancé',
+        duree: '≈ 1 h 40',
+        couleur: '#0f766e',
+        couleurTexte: '#70d6ca',
+        couleurRgb: '15,118,110'
+    }
+});
+function obtenirIdentiteParcours(identifiantTheme) {
+    return IDENTITES_PARCOURS[identifiantTheme] || IDENTITES_PARCOURS.commun;
+}
+function calculerProgressionParcours(identifiantTheme) {
+    const programme = PROGRAMMES[identifiantTheme];
+    if (!programme)
+        return { maitrisees: 0, total: 0, pourcentage: 0 };
+    synchroniserEtapesReussiesEnAutonomie(programme);
+    const maitrisees = programme.etapes.filter(etapeProgramme => estEtapeMaitrisee(identifiantTheme, etapeProgramme.id)).length;
+    const total = programme.etapes.length;
+    return { maitrisees, total, pourcentage: total ? Math.round(maitrisees / total * 100) : 0 };
+}
+function actualiserSelecteurParcours() {
+    const zone = selectionner('#selecteurParcours');
+    if (!zone)
+        return;
+    zone.innerHTML = '';
+    THEMES.forEach(theme => {
+        const identite = obtenirIdentiteParcours(theme.id);
+        const progression = calculerProgressionParcours(theme.id);
+        const bouton = document.createElement('button');
+        const statut = progression.pourcentage === 100 ? 'Terminé' : progression.pourcentage > 0 ? 'En cours' : 'À découvrir';
+        bouton.type = 'button';
+        const estDernierParcours = theme.id === THEMES[THEMES.length - 1].id;
+        bouton.className = `selecteur-parcours-bouton${theme.id === 'commun' ? ' parcours-recommande' : ''}${estDernierParcours ? ' parcours-cloture' : ''}`;
+        bouton.dataset.theme = theme.id;
+        bouton.style.setProperty('--parcours-accent', identite.couleur);
+        bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
+        bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
+        bouton.setAttribute('aria-label', `${identite.titre}. ${progression.maitrisees} étapes maîtrisées sur ${progression.total}.`);
+        bouton.innerHTML = `
+            <span class="selecteur-parcours-numero">Parcours ${identite.numero}</span>
+            <span class="selecteur-parcours-icone">${creerIconeTheme(theme.id, '')}</span>
+            <span class="selecteur-parcours-statut">${statut}</span>
+            <span class="selecteur-parcours-texte">
+                <b>${theme.id === 'commun' ? 'Recommandé pour commencer' : identite.chapitre}</b>
+                <strong>${identite.titre}</strong>
+                <small>${identite.description}</small>
+            </span>
+            <span class="selecteur-parcours-informations"><span>${identite.niveau}</span><span>${identite.duree}</span></span>
+            <span class="selecteur-parcours-progression" aria-hidden="true"><i style="width:${progression.pourcentage}%"></i></span>
+            <span class="selecteur-parcours-pied"><span>${progression.maitrisees}/${progression.total} étapes</span><span>Explorer →</span></span>`;
+        bouton.onclick = () => ouvrirParcours(theme.id);
+        zone.appendChild(bouton);
+    });
+}
+function ouvrirChoixParcours(optionsAffichage = {}) {
+    etat.theme = null;
+    selectionner('#vueChoixParcours')?.classList.remove('masque');
+    selectionner('#vueDetailParcours')?.classList.add('masque');
+    actualiserSelecteurParcours();
+    afficherEcran('parcours', optionsAffichage);
+}
+function actualiserEnteteParcours(programme) {
+    const identite = obtenirIdentiteParcours(programme.id);
+    const progression = calculerProgressionParcours(programme.id);
+    const prochaineEtape = obtenirEtapeAReprendre(programme);
+    const detail = selectionner('#vueDetailParcours');
+    if (detail) {
+        detail.style.setProperty('--parcours-accent', identite.couleur);
+        detail.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
+        detail.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
+    }
+    const titre = selectionner('#titreParcours');
+    const sousTitre = selectionner('#sousTitreParcours');
+    const surtitre = selectionner('#surtitreParcours');
+    const icone = selectionner('#iconeParcoursSelectionne');
+    if (titre) titre.textContent = identite.titre;
+    if (sousTitre) sousTitre.textContent = identite.description;
+    if (surtitre) surtitre.textContent = `${identite.chapitre} · parcours ${obtenirOrdreTheme(programme.id) + 1} sur ${THEMES.length}`;
+    if (icone) icone.innerHTML = creerIconeTheme(programme.id, '');
+    const libelleProgression = selectionner('#libelleProgressionParcours');
+    const pourcentageProgression = selectionner('#pourcentageProgressionParcours');
+    const barre = selectionner('#progressionParcoursSelectionne');
+    if (libelleProgression) libelleProgression.textContent = `${progression.maitrisees} / ${progression.total} étapes maîtrisées`;
+    if (pourcentageProgression) pourcentageProgression.textContent = `${progression.pourcentage}%`;
+    if (barre) {
+        barre.setAttribute('aria-valuenow', String(progression.pourcentage));
+        barre.querySelector('i')?.style.setProperty('width', `${progression.pourcentage}%`);
+    }
+    const boutonAction = selectionner('#boutonActionParcours');
+    if (!boutonAction)
+        return;
+    boutonAction.disabled = false;
+    if (prochaineEtape) {
+        const dejaCommencee = compterQuestionsTraiteesEtape(programme.id, prochaineEtape.id) > 0;
+        boutonAction.textContent = `${dejaCommencee ? 'Reprendre' : 'Commencer'} l’étape ${prochaineEtape.id} →`;
+        boutonAction.onclick = () => lancerEtape(programme.id, prochaineEtape.id);
+    }
+    else if (!estEvaluationFinaleReussie(programme.id)) {
+        boutonAction.textContent = 'Passer l’évaluation finale →';
+        boutonAction.onclick = () => lancerEvaluationFinale(programme.id);
+    }
+    else {
+        boutonAction.textContent = 'Parcours terminé ✓';
+        boutonAction.disabled = true;
+        boutonAction.onclick = null;
+    }
+}
+function ouvrirParcours(identifiantTheme = sauvegarde.dernierTheme || 'commun', optionsAffichage = {}) {
+    if (!PROGRAMMES[identifiantTheme]) {
+        ouvrirChoixParcours(optionsAffichage);
+        return;
+    }
     etat.theme = identifiantTheme;
     sauvegarde.dernierTheme = identifiantTheme;
     enregistrerSauvegarde();
     const programme = PROGRAMMES[identifiantTheme];
-    selectionner('#titreParcours').textContent = 'Parcours PJJ';
-    selectionner('#sousTitreParcours').textContent = 'Explore, comprends et progresse à ton rythme à travers 11 étapes clés.';
+    selectionner('#vueChoixParcours')?.classList.add('masque');
+    selectionner('#vueDetailParcours')?.classList.remove('masque');
+    const boutonChangerParcours = selectionner('#boutonChangerParcours');
+    if (boutonChangerParcours) boutonChangerParcours.onclick = () => ouvrirChoixParcours();
+    const objectif = selectionner('#texteObjectifParcours');
+    if (objectif) objectif.textContent = `Complète les ${programme.etapes.length} étapes pour ouvrir l’évaluation finale. Les réussites sans aide restent distinguées dans ta progression.`;
+    const titreDestinations = selectionner('#titreDestinationsParcours');
+    if (titreDestinations) titreDestinations.textContent = `Les ${programme.etapes.length} étapes`;
+    actualiserEnteteParcours(programme);
     actualiserResumeCarteParcours(programme);
     afficherEtapes();
     afficherEcran('parcours', optionsAffichage);
 }
-const FICHIERS_ICONES_ETAPES = Object.freeze({
+const ICONES_ETAPES_PARCOURS = Object.freeze({
+    commun: {
+        1: 'loupe', 2: 'personnes', 3: 'balance', 4: 'professionnel', 5: 'organigramme',
+        6: 'reseau', 7: 'soleil', 8: 'etoiles', 9: 'maison', 10: 'dossierValide', 11: 'reseau'
+    },
+    procedure_ordinaire: {
+        1: 'reperesDossier', 2: 'orientationParquet', 3: 'saisineJuridiction', 4: 'culpabiliteMiseEpreuve', 5: 'suiviMiseEpreuve',
+        6: 'audienceSanction', 7: 'audienceUnique', 8: 'comparerProcedures', 9: 'dossiersProcedure', 10: 'voieJugement', 11: 'parcoursOrdinaireComplet'
+    },
+    information_judiciaire: {
+        1: 'ouvertureInformation', 2: 'jugeInstructionEnquete', 3: 'mjieInformation', 4: 'mejpInformation', 5: 'controleJudiciaire',
+        6: 'arseInformation', 7: 'detentionEnvisagee', 8: 'jiSaisitJldStatue', 9: 'dureesEtDeferrement', 10: 'finInformation', 11: 'dossierInstructionComplet'
+    },
+    jugement_educatif_ordinaire: {
+        1: 'jugeChambreConseil', 2: 'mesureEducativeJudiciaire', 3: 'distinguerMejMejp', 4: 'quatreModules', 5: 'moduleInsertion',
+        6: 'moduleReparation', 7: 'moduleSante', 8: 'modulePlacement', 9: 'obligationsMej', 10: 'tribunalEnfantsOrdinaire', 11: 'tribunalPoliceCompetence'
+    },
+    matiere_criminelle_peines: {
+        1: 'qualificationCrimeAge', 2: 'tpeCrimeMoinsSeize', 3: 'courAssisesMineurs', 4: 'avertissementConfiscationStage', 5: 'tigSanctionReparation',
+        6: 'amendePeinesComplementaires', 7: 'emprisonnementAttenuation', 8: 'ddseEtArse', 9: 'sursisEtSuivi', 10: 'comparerJuridictionsPeines', 11: 'juridictionReponsePossible'
+    },
+    application_execution_peines: {
+        1: 'apresCondamnation', 2: 'jeVersJap', 3: 'suiviPeine', 4: 'jugeEtCollege', 5: 'amenagementsHebergement',
+        6: 'suspensionLiberation', 7: 'conversionPermissions', 8: 'incidentsRevocation', 9: 'majoriteDessaisissement', 10: 'articulationsCompetence', 11: 'parcoursJusquaExecution'
+    }
+});
+/* Séquence visuelle héritée du parcours 1. Le pictogramme annonce la couleur
+   du thème suivant ; le titre conserve la couleur de son propre thème. */
+const COULEURS_THEMES_ETAPES = Object.freeze([
+    '#ffc83d', '#a986ff', '#62c5ff', '#ff9e5e', '#5fe0a0', '#ffcf66',
+    '#f49ac2', '#52d6c8', '#78aef5', '#c59cff', '#ffc83d'
+]);
+function obtenirCouleurTitreEtape(numeroEtape) {
+    return COULEURS_THEMES_ETAPES[(Number(numeroEtape) - 1) % COULEURS_THEMES_ETAPES.length];
+}
+function obtenirCouleurIconeEtape(numeroEtape) {
+    return COULEURS_THEMES_ETAPES[Number(numeroEtape) % COULEURS_THEMES_ETAPES.length];
+}
+const FICHIERS_ICONES_PARCOURS_DECOUVERTE = Object.freeze({
     1: 'icone-loupe-decouverte.svg',
     2: 'icone-public-accompagne.svg',
     3: 'icone-acteurs-justice.svg',
@@ -1594,11 +2003,19 @@ const FICHIERS_ICONES_ETAPES = Object.freeze({
     10: 'icone-mesures-judiciaires.svg',
     11: 'icone-partenaires.svg'
 });
-function obtenirBaliseIconeEtape(numeroEtape) {
-    const nomFichier = FICHIERS_ICONES_ETAPES[Number(numeroEtape)];
-    if (!nomFichier)
-        return '';
-    return `<img src="ressources/icones-parcours/${nomFichier}" alt="" aria-hidden="true">`;
+function obtenirNomIconeEtape(numeroEtape, identifiantTheme = etat.theme || 'commun') {
+    return ICONES_ETAPES_PARCOURS[identifiantTheme]?.[Number(numeroEtape)]
+        || ICONES_ETAPES_PARCOURS.commun[Number(numeroEtape)]
+        || 'dossier';
+}
+function obtenirBaliseIconeEtape(numeroEtape, identifiantTheme = etat.theme || 'commun') {
+    if (identifiantTheme === 'commun') {
+        const nomFichier = FICHIERS_ICONES_PARCOURS_DECOUVERTE[Number(numeroEtape)];
+        return nomFichier
+            ? `<img src="ressources/icones-parcours/${nomFichier}" alt="" aria-hidden="true">`
+            : '';
+    }
+    return creerPictogrammeAuTrait(obtenirNomIconeEtape(numeroEtape, identifiantTheme), 'pictogramme-etape');
 }
 function afficherEtapes() {
     initialiserProgression(etat.theme);
@@ -1606,13 +2023,15 @@ function afficherEtapes() {
     const ligneParcours2 = selectionner('#ligneParcours2');
     const ligneParcours3 = selectionner('#ligneParcours3');
     const cartesEtapesFinales = selectionner('#cartesEtapesFinales');
-    ligneParcours1.innerHTML = '';
-    ligneParcours2.innerHTML = '';
-    ligneParcours3.innerHTML = '';
-    cartesEtapesFinales.innerHTML = '';
+    [ligneParcours1, ligneParcours2, ligneParcours3, cartesEtapesFinales].forEach(zone => {
+        if (zone) zone.innerHTML = '';
+    });
     const programme = PROGRAMMES[etat.theme];
+    if (!programme)
+        return;
     synchroniserEtapesReussiesEnAutonomie(programme);
     let destinationActuelleSignalee = false;
+    actualiserSelecteurParcours();
     actualiserResumeCarteParcours(programme);
     function creerCarteEtape(etapeProgramme) {
         const nombreTraitees = compterQuestionsTraiteesEtape(etat.theme, etapeProgramme.id);
@@ -1626,7 +2045,11 @@ function afficherEtapes() {
         const carte = document.createElement('button');
         carte.type = 'button';
         carte.dataset.etape = String(etapeProgramme.id);
-        carte.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#ffc83d');
+        carte.dataset.theme = etat.theme;
+        if (etat.theme !== 'commun') {
+            carte.style.setProperty('--couleur-etape', obtenirCouleurTitreEtape(etapeProgramme.id));
+            carte.style.setProperty('--couleur-icone-etape', obtenirCouleurIconeEtape(etapeProgramme.id));
+        }
         carte.className = [
             'chemin-etape-carte',
             pourcentageTermine === 100 ? 'complete' : '',
@@ -1636,46 +2059,165 @@ function afficherEtapes() {
         ].filter(Boolean).join(' ');
         carte.setAttribute('aria-label', `Étape ${etapeProgramme.id} — ${etapeProgramme.titre} — ${nombreTraitees} questions réalisées sur ${total}`);
         carte.innerHTML = `
-      <span class="chemin-etape-icone" aria-hidden="true">${obtenirBaliseIconeEtape(etapeProgramme.id)}</span>
-      <span class="chemin-etape-texte">
-        <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
-        <span class="chemin-etape-titre">${etapeProgramme.titre}</span>
-      </span>
-      ${estDestinationActuelle ? '<span class="chemin-position-actuelle">Tu es ici</span>' : ''}
-      <span class="chemin-progression"><i style="width:${pourcentageTermine}%"></i></span>
-      <span class="chemin-nombre">${etapeValideeEnAutonomie
-            ? '<b>Validées sans jokers</b>'
-            : `<b>${nombreTraitees}/${total}</b> questions`}</span>
-    `;
+          <span class="chemin-etape-icone" aria-hidden="true">${obtenirBaliseIconeEtape(etapeProgramme.id, etat.theme)}</span>
+          <span class="chemin-etape-texte">
+            <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
+            <span class="chemin-etape-titre">${etapeProgramme.titre}</span>
+          </span>
+          ${estDestinationActuelle ? '<span class="chemin-position-actuelle">À travailler</span>' : ''}
+          <span class="chemin-progression"><i style="width:${pourcentageTermine}%"></i></span>
+          <span class="chemin-nombre">${etapeValideeEnAutonomie
+            ? '<b>Maîtrisée sans aide</b>'
+            : `<b>${nombreTraitees}/${total}</b> questions · environ 8 min`}</span>`;
         carte.onclick = () => lancerEtape(etat.theme, etapeProgramme.id);
         return carte;
     }
     for (const etapeProgramme of programme.etapes) {
         const carte = creerCarteEtape(etapeProgramme);
         if (etapeProgramme.id <= 3)
-            ligneParcours1.appendChild(carte);
+            ligneParcours1?.appendChild(carte);
         else if (etapeProgramme.id <= 6)
-            ligneParcours2.appendChild(carte);
+            ligneParcours2?.appendChild(carte);
         else if (etapeProgramme.id <= 9)
-            ligneParcours3.appendChild(carte);
+            ligneParcours3?.appendChild(carte);
         else
-            cartesEtapesFinales.appendChild(carte);
+            cartesEtapesFinales?.appendChild(carte);
     }
     const evaluation = selectionner('#carteEvaluationFinale');
-    const etapesTerminees = programme.etapes.filter(etapeProgramme =>
-        compterQuestionsTraiteesEtape(etat.theme, etapeProgramme.id)
-        === obtenirQuestionsEtape(etat.theme, etapeProgramme.id).length
-    ).length;
-    const parcoursSansJoker = programme.etapes.every(etapeProgramme => obtenirBilanEtape(etat.theme, etapeProgramme.id)?.termineeSansJoker === true);
-    const evaluationDeverrouillee = etapesTerminees === programme.etapes.length && parcoursSansJoker;
+    if (!evaluation)
+        return;
+    const evaluationDeverrouillee = programme.etapes.every(etapeProgramme => {
+        const total = obtenirQuestionsEtape(etat.theme, etapeProgramme.id).length;
+        return total > 0 && compterQuestionsTraiteesEtape(etat.theme, etapeProgramme.id) >= total;
+    });
+    const evaluationReussie = estEvaluationFinaleReussie(etat.theme);
     evaluation.disabled = !evaluationDeverrouillee;
     evaluation.setAttribute('aria-disabled', String(!evaluationDeverrouillee));
     evaluation.classList.toggle('deverrouillee', evaluationDeverrouillee);
-    evaluation.querySelector('.evaluation-statut').textContent = evaluationDeverrouillee ? '50 questions · sans jokers' : 'Parcours sans jokers requis';
-    evaluation.onclick = evaluationDeverrouillee ? lancerEvaluationFinale : null;
-    actualiserCarnetParcours(programme);
+    evaluation.classList.toggle('complete', evaluationReussie);
+    const iconeEvaluation = evaluation.querySelector('.icone-evaluation');
+    if (iconeEvaluation) iconeEvaluation.innerHTML = creerPictogrammeAuTrait('trophee', 'pictogramme-evaluation');
+    evaluation.querySelector('.evaluation-etape-numero').textContent = 'ÉTAPE 12';
+    evaluation.querySelector('.evaluation-titre').textContent = `Évaluation du parcours ${obtenirOrdreTheme(etat.theme) + 1}`;
+    evaluation.querySelector('.evaluation-statut').textContent = evaluationReussie
+        ? `Réussie · meilleur score ${obtenirEvaluationFinaleTheme(etat.theme).meilleurScore}%`
+        : (evaluationDeverrouillee ? '50 questions · évaluation complète' : 'Termine les 11 étapes pour l’ouvrir');
+    evaluation.onclick = evaluationDeverrouillee ? () => lancerEvaluationFinale(etat.theme) : null;
     enregistrerSauvegarde();
 }
+function synchroniserCurseurNombreQuestions(nombreMax = null) {
+    const selectNombre = selectionner('#nombreQuestionsEntrainement');
+    const curseur = selectionner('#curseurNombreQuestions');
+    const sortie = selectionner('#valeurNombreQuestions');
+    const borne = selectionner('#borneMaxQuestions');
+    if (!selectNombre || !curseur)
+        return;
+    const max = Number(nombreMax) || Number(curseur.max) || 660;
+    curseur.max = String(max);
+    const valeur = Math.min(max, Math.max(10, Number(selectNombre.value) || 10));
+    curseur.value = String(valeur);
+    if (sortie)
+        sortie.textContent = `${valeur} question${valeur === 1 ? '' : 's'}`;
+    if (borne)
+        borne.textContent = `${max} max`;
+}
+function initialiserCurseurNombreQuestions() {
+    const selectNombre = selectionner('#nombreQuestionsEntrainement');
+    const curseur = selectionner('#curseurNombreQuestions');
+    const groupe = document.querySelector('[data-groupe-choix="nombreQuestionsEntrainement"]');
+    if (!selectNombre || !curseur || curseur.dataset.initialise === 'true')
+        return;
+    curseur.dataset.initialise = 'true';
+    if (groupe)
+        groupe.dataset.selectionEffectuee = 'true';
+    curseur.oninput = () => {
+        const valeur = Number(curseur.value) || 10;
+        selectNombre.value = String(valeur);
+        groupe?.setAttribute('data-selection-effectuee', 'true');
+        groupe?.querySelectorAll('.choix-bouton').forEach(bouton => {
+            const actif = Number(bouton.dataset.valeur) === valeur;
+            bouton.classList.toggle('actif', actif);
+            bouton.classList.toggle('selectionne', actif);
+            bouton.setAttribute('aria-pressed', String(actif));
+        });
+        synchroniserCurseurNombreQuestions();
+    };
+    const positionnerCurseurAuPointeur = evenement => {
+        if (evenement.button !== undefined && evenement.button !== 0)
+            return;
+        const limites = curseur.getBoundingClientRect();
+        if (!limites.width)
+            return;
+        const minimum = Number(curseur.min) || 10;
+        const maximum = Number(curseur.max) || 660;
+        const pas = Number(curseur.step) || 10;
+        const proportion = Math.min(1, Math.max(0, (evenement.clientX - limites.left) / limites.width));
+        const valeurBrute = minimum + proportion * (maximum - minimum);
+        const valeur = Math.min(maximum, Math.max(minimum, minimum + Math.round((valeurBrute - minimum) / pas) * pas));
+        if (Number(curseur.value) !== valeur) {
+            curseur.value = String(valeur);
+            curseur.oninput();
+        }
+    };
+    curseur.addEventListener('pointerdown', positionnerCurseurAuPointeur);
+    synchroniserCurseurNombreQuestions();
+}
+function appliquerCouleursParcoursEntrainement() {
+    const groupe = document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
+    if (!groupe)
+        return;
+    groupe.querySelectorAll('.choix-bouton[data-valeur]').forEach(bouton => {
+        const theme = bouton.dataset.valeur;
+        if (!theme || theme === 'tous')
+            return;
+        const identite = obtenirIdentiteParcours(theme);
+        bouton.style.setProperty('--parcours-accent', identite.couleur);
+        bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte || identite.couleur);
+        bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
+    });
+}
+
+function actualiserLimiteQuestionsEntrainement() {
+    const selectPerimetre = selectionner('#perimetreEntrainement');
+    const selectNombre = selectionner('#nombreQuestionsEntrainement');
+    const groupeNombre = document.querySelector('[data-groupe-choix="nombreQuestionsEntrainement"]');
+    if (!selectPerimetre || !selectNombre || !groupeNombre)
+        return;
+    const perimetre = selectPerimetre.value || 'tous';
+    const reserve = obtenirQuestionsEntrainement(perimetre);
+    const nombreMax = reserve.length;
+    const libellePerimetre = perimetre === 'tous'
+        ? 'le parcours complet'
+        : `le parcours ${obtenirOrdreTheme(perimetre) + 1}`;
+    Array.from(selectNombre.options).forEach(option => {
+        const disponible = Number(option.value) <= nombreMax;
+        option.disabled = !disponible;
+        option.hidden = !disponible;
+    });
+    groupeNombre.querySelectorAll('.choix-bouton').forEach(bouton => {
+        const disponible = Number(bouton.dataset.valeur) <= nombreMax;
+        bouton.hidden = !disponible;
+        bouton.disabled = !disponible;
+    });
+    let nombreSelectionne = Number(selectNombre.value) || 10;
+    if (nombreSelectionne > nombreMax) {
+        nombreSelectionne = nombreMax;
+        selectNombre.value = String(nombreMax);
+        groupeNombre.dataset.selectionEffectuee = 'true';
+    }
+    groupeNombre.querySelectorAll('.choix-bouton:not([hidden])').forEach(bouton => {
+        const actif = groupeNombre.dataset.selectionEffectuee === 'true'
+            && Number(bouton.dataset.valeur) === nombreSelectionne;
+        bouton.classList.toggle('actif', actif);
+        bouton.classList.toggle('selectionne', actif);
+        bouton.setAttribute('aria-pressed', String(actif));
+    });
+    const resume = selectionner('#limiteQuestionsEntrainement');
+    if (resume)
+        resume.textContent = `${nombreMax} questions d’apprentissage disponibles dans ${libellePerimetre}.`;
+    synchroniserCurseurNombreQuestions(nombreMax);
+}
+
 function initialiserGroupesChoix() {
     selectionnerTous('[data-groupe-choix]').forEach(groupe => {
         const listeDeroulante = selectionner('#' + groupe.dataset.groupeChoix);
@@ -1691,11 +2233,15 @@ function initialiserGroupesChoix() {
                     proposition.classList.toggle('selectionne', actif);
                     proposition.setAttribute('aria-pressed', String(actif));
                 });
+                if (listeDeroulante.id === 'perimetreEntrainement')
+                    actualiserLimiteQuestionsEntrainement();
                 if (listeDeroulante.id === 'echelleTexte' || listeDeroulante.id === 'sonActif')
                     enregistrerParametres();
             };
         });
     });
+    appliquerCouleursParcoursEntrainement();
+    initialiserCurseurNombreQuestions();
 }
 function actualiserGroupesChoix() {
     selectionnerTous('[data-groupe-choix]').forEach(groupe => {
@@ -1712,6 +2258,8 @@ function actualiserGroupesChoix() {
             bouton.setAttribute('aria-pressed', String(actif));
         });
     });
+    appliquerCouleursParcoursEntrainement();
+    actualiserLimiteQuestionsEntrainement();
 }
 // -----------------------------------------------------------------------------
 // Sélection des questions et préparation des sessions
@@ -1810,6 +2358,14 @@ function obtenirQuestionsSessionEtape(identifiantTheme, etape, chapitre) {
     return questionsEtape;
 }
 function lancerEtape(identifiantTheme, etape, chapitre = null) {
+    // Une étape demandée explicitement remplace toute ancienne session mémorisée.
+    // Cela évite qu'une session précédente intercepte l'ouverture de la nouvelle étape.
+    clearInterval(etat.identifiantMinuteur);
+    etat.identifiantMinuteur = null;
+    etat.questionsSession = [];
+    etat.questionCourante = null;
+    etat.questionValidee = false;
+    effacerSessionEnCours();
     etat.theme = identifiantTheme;
     etat.etape = Number(etape);
     etat.etapeAvecJoker = false;
@@ -1827,21 +2383,23 @@ function lancerEtape(identifiantTheme, etape, chapitre = null) {
     const reserve = obtenirQuestionsSessionEtape(identifiantTheme, etape, etat.chapitre);
     lancerSession(ordonnerQuestionsParcours(reserve));
 }
-function obtenirQuestionsEvaluationFinale() {
+function obtenirQuestionsEvaluationFinale(identifiantTheme = etat.theme || 'commun') {
     return QUESTIONS
-        .filter(question => question.estEvaluationFinale === true)
+        .filter(question => question.estEvaluationFinale === true && question.theme === identifiantTheme)
         .sort((questionA, questionB) =>
             obtenirOrdrePedagogiqueQuestion(questionA) - obtenirOrdrePedagogiqueQuestion(questionB)
             || questionA.id - questionB.id
         );
 }
-function lancerEvaluationFinale() {
-    const session = obtenirQuestionsEvaluationFinale();
+function lancerEvaluationFinale(identifiantTheme = etat.theme || sauvegarde.dernierTheme || 'commun') {
+    if (!PROGRAMMES[identifiantTheme])
+        identifiantTheme = 'commun';
+    const session = obtenirQuestionsEvaluationFinale(identifiantTheme);
     if (session.length !== 50) {
-        afficherNotification('L’évaluation finale est indisponible : banque incomplète.');
+        afficherNotification('L’évaluation finale de ce parcours est indisponible : banque incomplète.');
         return;
     }
-    etat.theme = 'commun';
+    etat.theme = identifiantTheme;
     etat.etape = 12;
     etat.chapitre = 1;
     etat.mode = 'evaluation-finale';
@@ -1851,22 +2409,38 @@ function lancerEvaluationFinale() {
     etat.chronometreSessionActif = false;
     lancerSession(session);
 }
+function obtenirQuestionsEntrainement(perimetre = 'tous') {
+    const reserve = QUESTIONS.filter(question => !question.estEvaluationFinale);
+    if (perimetre === 'tous')
+        return reserve;
+    return reserve.filter(question => question.theme === perimetre);
+}
+function obtenirOrdreTheme(identifiantTheme) {
+    const index = THEMES.findIndex(theme => theme.id === identifiantTheme);
+    return index < 0 ? 999 : index;
+}
 function lancerEntrainementLibre() {
     etat.mode = 'libre';
     etat.origineSessionAnalytics = 'entrainement_libre';
-    etat.theme = null;
+    const perimetre = selectionner('#perimetreEntrainement')?.value || etat.perimetreEntrainement || 'tous';
+    etat.perimetreEntrainement = perimetre;
+    etat.theme = perimetre === 'tous' ? null : perimetre;
     const style = etat.organisationSession || 'ordonne';
-    const nombre = Math.min(110, Math.max(10, Number(selectionner('#nombreQuestionsEntrainement')?.value) || 10));
+    const reserve = obtenirQuestionsEntrainement(perimetre);
+    const nombreMax = reserve.length;
+    const nombre = Math.min(nombreMax, Math.max(10, Number(selectionner('#nombreQuestionsEntrainement')?.value) || 10));
     let session = [];
     if (style === 'ordonne') {
-        session = [...QUESTIONS.filter(question => !question.estEvaluationFinale)]
-            .sort((questionA, questionB) => (Number(questionA.etape) || 0) - (Number(questionB.etape) || 0) ||
-            obtenirOrdrePedagogiqueQuestion(questionA) - obtenirOrdrePedagogiqueQuestion(questionB) ||
-            (Number(questionA.id) || 0) - (Number(questionB.id) || 0))
+        session = [...reserve]
+            .sort((questionA, questionB) =>
+                obtenirOrdreTheme(questionA.theme) - obtenirOrdreTheme(questionB.theme)
+                || (Number(questionA.etape) || 0) - (Number(questionB.etape) || 0)
+                || obtenirOrdrePedagogiqueQuestion(questionA) - obtenirOrdrePedagogiqueQuestion(questionB)
+                || (Number(questionA.id) || 0) - (Number(questionB.id) || 0))
             .slice(0, nombre);
     }
     else {
-        const candidats = selectionnerQuestionsEquilibrees(QUESTIONS, Math.min(QUESTIONS.length, Math.max(nombre, nombre * 4)));
+        const candidats = selectionnerQuestionsEquilibrees(reserve, Math.min(reserve.length, Math.max(nombre, nombre * 4)));
         session = selectionnerSansIndiceLongueur(candidats, Math.min(nombre, candidats.length));
     }
     lancerSession(session);
@@ -1888,25 +2462,30 @@ function lancerDeParcours() {
         etat.nombreQuestionsTirageDe = nombreTire;
         envoyerEvenementPJJ('defi_du_hasard_lance', {
             pjjoue_mode_de_jeu: 'Défi du hasard',
+            pjjoue_parcours: 'Parcours complet',
             pjjoue_nombre_questions_defi_du_hasard: nombreTire
         });
         face.dataset.face = String(nombreTire);
         face.classList.remove('de-en-lancer');
-        resultat.textContent = `${nombreTire} question${nombreTire === 1 ? '' : 's'} aléatoire${nombreTire === 1 ? '' : 's'} à relever.`;
+        resultat.textContent = `${nombreTire} question${nombreTire === 1 ? '' : 's'} aléatoire${nombreTire === 1 ? '' : 's'} tirée${nombreTire === 1 ? '' : 's'} dans les six parcours.`;
         boutonJouer.textContent = `Jouer ${nombreTire} question${nombreTire === 1 ? '' : 's'}`;
+        boutonLancer.textContent = 'Relancer le dé';
+        boutonLancer.classList.remove('principal');
+        boutonLancer.classList.add('secondaire');
         boutonJouer.classList.remove('masque');
         boutonLancer.disabled = false;
         boutonJouer.focus({ preventScroll: true });
-        annoncer(`Le dé indique ${nombreTire}. ${nombreTire} question${nombreTire === 1 ? '' : 's'} aléatoire${nombreTire === 1 ? '' : 's'}.`);
+        annoncer(`Le dé indique ${nombreTire}. Questions tirées dans les six parcours.`);
     }, 420);
 }
 function jouerTirageDeParcours() {
     const nombreQuestions = Math.min(6, Math.max(1, Number(etat.nombreQuestionsTirageDe) || 1));
     const reserve = QUESTIONS.filter(question => !question.estEvaluationFinale);
-    const session = melanger(reserve).slice(0, nombreQuestions);
+    const session = selectionnerQuestionsEquilibrees(reserve, nombreQuestions);
     etat.mode = 'libre';
     etat.origineSessionAnalytics = 'defi_du_hasard';
     etat.theme = null;
+    etat.perimetreEntrainement = 'tous';
     etat.organisationSession = 'melange';
     etat.jokersSessionActifs = true;
     etat.chronometreSessionActif = false;
@@ -1939,7 +2518,12 @@ function lancerRevision(identifiantTheme = 'toutes') {
     etat.chronometreSessionActif = false;
     lancerSession(melanger(reserve));
 }
-function lancerRevisionEtape(etape) {
+function lancerRevisionEtape(identifiantTheme, etape = null) {
+    // Accepte aussi l’appel avec uniquement le numéro de l’étape.
+    if (etape === null) {
+        etape = identifiantTheme;
+        identifiantTheme = etat.theme || sauvegarde.dernierTheme || 'commun';
+    }
     const etapeCible = Number(etape);
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
     if (!sauvegarde.aDejaJoue && actif.length === 0) {
@@ -1947,15 +2531,20 @@ function lancerRevisionEtape(etape) {
         return;
     }
     const identifiants = actif.map(([id]) => Number(id));
-    const reserve = QUESTIONS.filter(question => identifiants.includes(question.id) && Number(question.etape) === etapeCible && !question.estEvaluationFinale);
+    const reserve = QUESTIONS.filter(question =>
+        identifiants.includes(question.id)
+        && question.theme === identifiantTheme
+        && Number(question.etape) === etapeCible
+        && !question.estEvaluationFinale
+    );
     if (!reserve.length) {
-        afficherNotification(`Aucune erreur active à l’étape ${etapeCible}.`);
+        afficherNotification(`Aucune erreur active à l’étape ${etapeCible} de ce parcours.`);
         return;
     }
     etat.mode = 'revision';
     etat.origineSessionAnalytics = 'revision_des_erreurs';
-    etat.theme = null;
-    etat.perimetreRevision = 'etape:' + etapeCible;
+    etat.theme = identifiantTheme;
+    etat.perimetreRevision = `${identifiantTheme}:etape:${etapeCible}`;
     etat.jokersSessionActifs = true;
     etat.chronometreSessionActif = false;
     lancerSession(melanger(reserve));
@@ -2659,7 +3248,7 @@ function afficherCorrectionEnregistree(question, reponse) {
         ? 'Langue au chat — réponse dévoilée'
         : (estCorrecte ? 'Réussite autonome' : (estAidee ? 'Réussite avec aide — à consolider' : 'Réponse incorrecte'));
     zoneCorrection.innerHTML = `<div class="correction-corps">
-        <div class="retournee-note">Tu consultes une activité déjà jouée. La réponse reste verrouillée afin de préserver le résultat de la session.</div>
+        <div class="retournee-note">Cette activité a déjà été jouée. Tu peux la relire, mais son résultat ne peut plus être modifié.</div>
         <h3>${titreStatut}</h3>
         ${ligneReponseUtilisateur}${reponseAttendueDetaillee}
         <p><b>Explication :</b> ${question.explication}</p>
@@ -3250,17 +3839,13 @@ function preparerQuestionCourante() {
 
 function afficherReperesQuestion(question) {
     const theme = THEMES.find(themeCandidat => themeCandidat.id === question.theme);
-    const etapeProgramme = obtenirEtapeProgramme(question.theme, question.etape);
+    const identite = obtenirIdentiteParcours(question.theme);
+    const ecranQuestion = selectionner('#question');
+    ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
+    ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
     const valeurProgression = Math.round(
         (etat.indexQuestion + 1) / etat.questionsSession.length * 100
     );
-    const modeEvaluationFinale = etat.mode === 'evaluation-finale';
-    const positionParcours = modeEvaluationFinale
-        ? `Évaluation finale · Défi ${etat.indexQuestion + 1}/${etat.questionsSession.length}`
-        : `Étape ${question.etape} · Défi ${etat.indexQuestion + 1}/${etat.questionsSession.length}`;
-    const nomDestination = modeEvaluationFinale
-        ? 'Destination finale'
-        : (etapeProgramme?.titre || 'Parcours guidé');
     const repereProcedureLocale = question.procedureLocale
         ? '<span class="repere local repere-locale">Procédure locale</span>'
         : '';
@@ -3274,10 +3859,8 @@ function afficherReperesQuestion(question) {
     );
     selectionner('#enonceQuestion').textContent = nettoyerEnonce(question);
     selectionner('#reperesQuestion').innerHTML =
-        `<span class="repere repere-position"><small>Position actuelle</small>`
-        + `<b>${positionParcours}</b></span>`
-        + `<span class="repere repere-theme">${creerIconeTheme(theme.id, theme.titre)}`
-        + `<span><small>${nomDestination}</small><b>${theme.titre}</b></span></span>`
+        `<span class="repere repere-theme">${creerIconeTheme(theme.id, identite.titre)}`
+        + `<b>Parcours ${identite.numero} · ${identite.titre}</b></span>`
         + repereProcedureLocale;
 }
 
@@ -3328,10 +3911,12 @@ function afficherModeReponseQuestion(question, reponse, dejaPassee) {
 
     const modePresentation = question.modePresentation || obtenirModeQuestion(question);
     const libelleMode = question.libelleMode || obtenirLibelleMode(modePresentation);
-    selectionner('#reperesQuestion').insertAdjacentHTML(
-        'beforeend',
-        `<span class="repere mode-repere">${libelleMode}</span>`
-    );
+    if (modePresentation === 'choix-unique') {
+        selectionner('#reperesQuestion').insertAdjacentHTML(
+            'beforeend',
+            `<span class="repere mode-repere">${libelleMode}</span>`
+        );
+    }
 
     if (modePresentation === 'reponse-ecrite') {
         afficherActiviteEcrite(reponse);
@@ -3415,7 +4000,7 @@ function appliquerIdentiteVisuelleEtape(question) {
     );
     document.documentElement.style.setProperty(
         '--couleur-etape-active',
-        etapeProgramme?.couleur || '#ffc83d'
+        etapeProgramme?.couleur || '#2d7379'
     );
     document.body.dataset.etapeActive = String(question?.etape || 'libre');
 }
@@ -3430,6 +4015,10 @@ function actualiserSuiviEtapeQuestion(question) {
         return;
     const finale = etat.mode === 'evaluation-finale' || Number(question.etape) === 12;
     const etapeProgramme = obtenirEtapeProgramme(question.theme, question.etape);
+    const identite = obtenirIdentiteParcours(question.theme);
+    const ecranQuestion = selectionner('#question');
+    ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
+    ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
     numero.textContent = finale ? 'Étape 12' : `Étape ${question.etape}`;
     titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours PJJ');
     suivi.classList.toggle('masque', finale || etat.mode !== 'parcours');
@@ -3441,7 +4030,7 @@ function actualiserSuiviEtapeQuestion(question) {
     boutonReinitialiser.disabled = nombreAutonomes === 0;
     boutonReinitialiser.setAttribute(
         'aria-label',
-        `Réinitialiser les ${nombreAutonomes} questions validées sans joker de l’étape ${question.etape}`
+        `Réinitialiser les ${nombreAutonomes} questions maîtrisées sans aide de l’étape ${question.etape}`
     );
 }
 function demanderReinitialisationSansJoker() {
@@ -3452,8 +4041,8 @@ function demanderReinitialisationSansJoker() {
     if (!nombreAutonomes)
         return;
     ouvrirFenetreMessage({
-        titre: 'Réinitialiser le compteur sans joker ?',
-        message: `Les ${nombreAutonomes} validations sans joker de cette étape ne compteront plus pour ouvrir l’évaluation finale. Ta progression générale reste conservée.`,
+        titre: 'Réinitialiser la maîtrise sans aide ?',
+        message: `Les ${nombreAutonomes} validations autonomes de cette étape seront effacées. Les questions déjà travaillées et ta progression générale restent conservées.`,
         libelleConfirmer: 'Réinitialiser',
         libelleAnnuler: 'Annuler',
         afficherAnnuler: true,
@@ -3640,9 +4229,9 @@ function traiterReussiteAutonome(question, etaitPassee) {
     }
     if (etat.mode === 'revision' && sauvegarde.erreurs[question.id]) {
         const suiviErreur = sauvegarde.erreurs[question.id];
-        suiviErreur.reussites = (suiviErreur.reussites || 0) + 1;
-        if (suiviErreur.reussites >= 2)
-            suiviErreur.maitrisee = true;
+        // En mode Révision, une réussite autonome suffit : la question n’a plus besoin de rester active.
+        suiviErreur.reussites = 1;
+        suiviErreur.maitrisee = true;
     }
 }
 function traiterReussiteAidee(question, etaitPassee) {
@@ -3780,6 +4369,14 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
         reussiteAidee,
         reussiteAutonome: estCorrecte && !reussiteAidee
     };
+    if (bouton?.classList.contains('reponse')) {
+        bouton.classList.add(estCorrecte ? 'bonne-reponse' : 'mauvaise-reponse');
+        if (!estCorrecte) {
+            document.querySelectorAll('#zoneReponses .reponse[data-est-correcte="1"]').forEach(
+                bonneReponse => bonneReponse.classList.add('bonne-reponse')
+            );
+        }
+    }
     envoyerEvenementPJJ('reponse_validee', {
         ...obtenirContexteQuestionAnalytics(question),
         pjjoue_resultat_reponse: resultat.reussiteAutonome
@@ -4183,7 +4780,7 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
     if (jokerUtilise) {
         return {
             titre: `Étape ${etapeProgramme} explorée`,
-            message: `Ton carnet avance. Reviens sur cette étape sans joker pour valider cette destination et poursuivre le parcours en autonomie.`,
+            message: `Ton carnet avance. Tu pourras rejouer cette étape sans aide pour consolider sa maîtrise.`,
             confetti: false
         };
     }
@@ -4191,7 +4788,7 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
     if (evaluationDeverrouillee) {
         return {
             titre: 'Destination finale atteinte !',
-            message: `Les onze étapes sont validées en autonomie. Ton carnet te reconnaît comme « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
+            message: `Les onze étapes de ce parcours sont validées en autonomie. Ton carnet te reconnaît comme « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
             confetti: true
         };
     }
@@ -4232,8 +4829,15 @@ function obtenirStatutErreurBilan(reponse, estQuestionPassee) {
 function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const zone = selectionner('#listeErreursBilan');
     const nombre = selectionner('#nombreErreursBilan');
+    const boutonContinuer = selectionner('#boutonContinuer');
+    const boutonRejouer = selectionner('#boutonRejouerMesErreurs');
+    const aDesQuestionsAReprendre = questionsAReprendre.length > 0;
+    boutonContinuer?.classList.toggle('principal', !aDesQuestionsAReprendre);
+    boutonContinuer?.classList.toggle('secondaire', aDesQuestionsAReprendre);
+    boutonRejouer?.classList.toggle('principal', aDesQuestionsAReprendre);
+    boutonRejouer?.classList.toggle('secondaire', !aDesQuestionsAReprendre);
     if (nombre)
-        nombre.textContent = `${questionsAReprendre.length} question${questionsAReprendre.length > 1 ? 's' : ''} à reprendre`;
+        nombre.textContent = `${questionsAReprendre.length} question${questionsAReprendre.length === 1 ? '' : 's'} à reprendre`;
     if (!zone)
         return;
     const regleLecture = `<div class="bilan-correction-regle">
@@ -4297,53 +4901,49 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
             const etaitDejaValideeSansJoker = bilanEtape.termineeSansJoker === true;
             bilanEtape.termineeSansJoker = etaitDejaValideeSansJoker || toutesReussiesEnAutonomie;
             bilanEtape.jokersUtilises = !bilanEtape.termineeSansJoker;
-            const evaluationDeverrouillee = obtenirEtapesProgramme(etat.theme).every(etapeProgramme =>
-                obtenirBilanEtape(etat.theme, etapeProgramme.id)?.termineeSansJoker === true
-            );
-            if (toutesReussiesEnAutonomie && !etaitDejaValideeSansJoker) {
-                celebration = obtenirCelebrationEtape(
-                    etat.etape,
-                    false,
-                    evaluationDeverrouillee
-                );
-            }
+            const evaluationDeverrouillee = estProgrammeMaitrise(etat.theme);
+            if (toutesReussiesEnAutonomie && !etaitDejaValideeSansJoker)
+                celebration = obtenirCelebrationEtape(etat.etape, false, evaluationDeverrouillee);
         }
     }
     if (etat.mode === 'evaluation-finale') {
         const seuil = obtenirSeuilMaitrise();
-        sauvegarde.evaluationFinale = sauvegarde.evaluationFinale || {
-            meilleurScore: 0,
-            nombreTentatives: 0,
-            reussie: false
-        };
-        sauvegarde.evaluationFinale.meilleurScore = Math.max(
-            sauvegarde.evaluationFinale.meilleurScore || 0,
-            pourcentage
-        );
-        sauvegarde.evaluationFinale.nombreTentatives =
-            (sauvegarde.evaluationFinale.nombreTentatives || 0) + 1;
+        const evaluation = obtenirEvaluationFinaleTheme(etat.theme);
+        evaluation.meilleurScore = Math.max(evaluation.meilleurScore || 0, pourcentage);
+        evaluation.nombreTentatives = (evaluation.nombreTentatives || 0) + 1;
         evaluationFinaleReussie = pourcentage >= seuil && nombreQuestionsPassees === 0;
-        sauvegarde.evaluationFinale.reussie = Boolean(sauvegarde.evaluationFinale.reussie)
-            || evaluationFinaleReussie;
+        evaluation.reussie = Boolean(evaluation.reussie) || evaluationFinaleReussie;
     }
     return { evaluationFinaleReussie, celebration };
 }
 function construireBilanEvaluationFinale(pourcentage, evaluationFinaleReussie) {
+    const numeroParcours = obtenirOrdreTheme(etat.theme) + 1;
     if (evaluationFinaleReussie) {
+        const toutReussi = estParcoursCompletReussi();
         return {
-            titre: 'Évaluation terminée',
-            messageResultat: `Résultat : ${pourcentage} %. Les connaissances du parcours sont validées.`,
-            celebration: {
-                titre: 'Voyage accompli !',
-                message: 'Tu as parcouru les onze étapes et réussi l’évaluation finale. Ton carnet est complet : tu es désormais Éclaireur de la PJJ.',
+            titre: `Évaluation du parcours ${numeroParcours} terminée`,
+            messageResultat: `Résultat : ${pourcentage} %. Les connaissances de ce parcours sont validées.`,
+            celebration: toutReussi ? {
+                titre: 'Parcours complet accompli !',
+                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Ton carnet PJJoue est complet.`,
                 confetti: true,
                 finale: true
+            } : {
+                titre: `Parcours ${numeroParcours} validé !`,
+                message: (() => {
+                    const prochainTheme = THEMES[numeroParcours];
+                    if (!prochainTheme) return 'L’évaluation de ce parcours est validée.';
+                    const titreSuivant = (PROGRAMMES[prochainTheme.id]?.titre || prochainTheme.titre || `Parcours ${numeroParcours + 1}`).replace(/^Parcours \d+ ·\s*/, '');
+                    return `Ce parcours est validé. Le parcours ${numeroParcours + 1} « ${titreSuivant} » est maintenant ta prochaine destination.`;
+                })(),
+                confetti: true,
+                finale: false
             }
         };
     }
     jouerSonErreur();
     return {
-        titre: 'Évaluation terminée',
+        titre: `Évaluation du parcours ${numeroParcours} terminée`,
         messageResultat: `Résultat : ${pourcentage} %. Le seuil attendu est de ${obtenirSeuilMaitrise()} %.`,
         celebration: null
     };
@@ -4386,39 +4986,51 @@ function construireBilanSessionOrdinaire({
 }
 function configurerBoutonContinuerBilan() {
     const boutonContinuer = selectionner('#boutonContinuer');
-    if (etat.mode === 'evaluation-finale')
-        boutonContinuer.textContent = 'Refaire l’évaluation';
-    else if (etat.mode === 'parcours') {
+    if (!boutonContinuer)
+        return;
+    const programme = PROGRAMMES[etat.theme];
+    if (etat.mode === 'evaluation-finale') {
+        const evaluationReussie = estEvaluationFinaleReussie(etat.theme);
+        const indexTheme = obtenirOrdreTheme(etat.theme);
+        const themeSuivant = THEMES[indexTheme + 1]?.id;
+        if (evaluationReussie && themeSuivant) {
+            boutonContinuer.textContent = `Commencer le parcours ${indexTheme + 2} →`;
+            boutonContinuer.onclick = () => ouvrirParcours(themeSuivant, { remplacerHistorique: true });
+        }
+        else if (evaluationReussie && estParcoursCompletReussi()) {
+            boutonContinuer.textContent = 'Voir le carnet complet →';
+            boutonContinuer.onclick = () => afficherEcran('carnet', { remplacerHistorique: true });
+        }
+        else {
+            boutonContinuer.textContent = 'Refaire cette évaluation';
+            boutonContinuer.onclick = () => lancerEvaluationFinale(etat.theme);
+        }
+        return;
+    }
+    if (etat.mode === 'parcours') {
         const etapeCourante = Number(etat.etape);
+        const nombreEtapes = programme?.etapes?.length || 11;
         if (etapeNecessiteAutreChapitre(etat.theme, etat.etape))
             boutonContinuer.textContent = 'Continuer l’étape →';
-        else if (etapeCourante < 11)
+        else if (etapeCourante < nombreEtapes)
             boutonContinuer.textContent = `Passer à l’étape ${etapeCourante + 1} →`;
         else
             boutonContinuer.textContent = 'Retour au parcours →';
-    }
-    else
-        boutonContinuer.textContent = 'Retour à l’accueil';
-    boutonContinuer.onclick = () => {
-        if (etat.mode === 'evaluation-finale') {
-            lancerEvaluationFinale();
-            return;
-        }
-        if (etat.mode === 'parcours') {
+        boutonContinuer.onclick = () => {
             if (etapeNecessiteAutreChapitre(etat.theme, etat.etape)) {
                 lancerEtape(etat.theme, etat.etape);
                 return;
             }
-            const etapeCourante = Number(etat.etape);
-            if (etapeCourante < 11) {
+            if (etapeCourante < nombreEtapes) {
                 lancerTransitionVersEtape(etat.theme, etapeCourante + 1);
                 return;
             }
-            ouvrirParcours('commun', { remplacerHistorique: true });
-            return;
-        }
-        afficherEcran('accueil');
-    };
+            ouvrirParcours(etat.theme, { remplacerHistorique: true });
+        };
+        return;
+    }
+    boutonContinuer.textContent = 'Retour à l’accueil';
+    boutonContinuer.onclick = () => afficherEcran('accueil');
 }
 function lancerTransitionVersEtape(identifiantTheme, numeroEtape) {
     clearTimeout(minuteurTransitionParcours);
@@ -4439,20 +5051,25 @@ function actualiserProchaineDestinationBilan() {
     if (!destination)
         return;
     if (etat.mode === 'evaluation-finale') {
-        destination.textContent = 'Ton carnet est complet. Tu peux refaire l’évaluation ou revoir le parcours.';
+        const indexTheme = obtenirOrdreTheme(etat.theme);
+        const suivant = THEMES[indexTheme + 1];
+        destination.textContent = estEvaluationFinaleReussie(etat.theme) && suivant
+            ? `Prochaine destination : parcours ${indexTheme + 2} · ${PROGRAMMES[suivant.id].titre}.`
+            : (estParcoursCompletReussi() ? 'Ton parcours complet est validé.' : 'Tu peux retravailler les erreurs puis refaire cette évaluation.');
         return;
     }
     if (etat.mode === 'parcours') {
         if (etapeNecessiteAutreChapitre(etat.theme, etat.etape)) {
-            destination.textContent = `Poursuis l’étape ${etat.etape} pour découvrir les questions restantes.`;
+            destination.textContent = `Reprends les activités non maîtrisées de l’étape ${etat.etape}.`;
             return;
         }
-        if (Number(etat.etape) < 11) {
+        const programme = PROGRAMMES[etat.theme];
+        if (Number(etat.etape) < programme.etapes.length) {
             const prochaineEtape = obtenirEtapeProgramme(etat.theme, Number(etat.etape) + 1);
             destination.textContent = `Étape ${prochaineEtape.id} · ${prochaineEtape.titre}`;
             return;
         }
-        destination.textContent = 'Retourne au carnet pour vérifier l’ouverture de l’évaluation finale.';
+        destination.textContent = 'Retourne au parcours : son évaluation finale devient disponible dès que les 11 étapes sont terminées.';
         return;
     }
     if (etat.mode === 'revision') {
@@ -4461,10 +5078,10 @@ function actualiserProchaineDestinationBilan() {
     }
     destination.textContent = 'Choisis une nouvelle session ou rejoins le parcours guidé.';
 }
-function ouvrirSouvenirDepuisCarteFinale(numeroEtape) {
-    ouvrirParcours('commun', { remplacerHistorique: true });
+function ouvrirSouvenirDepuisCarteFinale(identifiantTheme, numeroEtape) {
+    afficherEcran('carnet', { remplacerHistorique: true });
     requestAnimationFrame(() => {
-        const souvenir = selectionner(`#souvenirsParcours [data-etape="${numeroEtape}"]`);
+        const souvenir = selectionner(`#souvenirsParcours [data-theme="${identifiantTheme}"][data-etape="${numeroEtape}"]`);
         if (!souvenir)
             return;
         souvenir.open = true;
@@ -4475,30 +5092,31 @@ function ouvrirSouvenirDepuisCarteFinale(numeroEtape) {
 function afficherCarteVoyageFinale() {
     const carte = selectionner('#carteVoyageFinale');
     const destinations = selectionner('#destinationsVoyageFinal');
-    const doitAfficher = etat.mode === 'evaluation-finale'
-        && sauvegarde.evaluationFinale?.reussie === true;
+    const doitAfficher = etat.mode === 'evaluation-finale' && estParcoursCompletReussi();
     if (!carte || !destinations)
         return;
     carte.classList.toggle('masque', !doitAfficher);
     destinations.innerHTML = '';
     if (!doitAfficher)
         return;
-    PROGRAMMES.commun.etapes.forEach(etapeProgramme => {
-        const bouton = document.createElement('button');
-        bouton.type = 'button';
-        bouton.className = 'carte-voyage-etape';
-        bouton.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#ffc83d');
-        bouton.innerHTML = `${obtenirBaliseIconeEtape(etapeProgramme.id)}<span>${etapeProgramme.id}</span>`;
-        bouton.setAttribute('aria-label', `Ouvrir les souvenirs de l’étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
-        bouton.onclick = () => ouvrirSouvenirDepuisCarteFinale(etapeProgramme.id);
-        destinations.appendChild(bouton);
+    THEMES.forEach((theme, indexTheme) => {
+        PROGRAMMES[theme.id].etapes.forEach(etapeProgramme => {
+            const bouton = document.createElement('button');
+            bouton.type = 'button';
+            bouton.className = 'carte-voyage-etape';
+            bouton.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#2d7379');
+            bouton.innerHTML = `${obtenirBaliseIconeEtape(etapeProgramme.id, theme.id)}<span>P${indexTheme + 1}·${etapeProgramme.id}</span>`;
+            bouton.setAttribute('aria-label', `Ouvrir les souvenirs du parcours ${indexTheme + 1}, étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
+            bouton.onclick = () => ouvrirSouvenirDepuisCarteFinale(theme.id, etapeProgramme.id);
+            destinations.appendChild(bouton);
+        });
+        const finaleParcours = document.createElement('span');
+        finaleParcours.className = 'carte-voyage-etape carte-voyage-evaluation';
+        finaleParcours.innerHTML = `<span aria-hidden="true">★</span><strong>P${indexTheme + 1}</strong>`;
+        finaleParcours.setAttribute('role', 'img');
+        finaleParcours.setAttribute('aria-label', `Évaluation finale du parcours ${indexTheme + 1} réussie`);
+        destinations.appendChild(finaleParcours);
     });
-    const finale = document.createElement('span');
-    finale.className = 'carte-voyage-etape carte-voyage-evaluation';
-    finale.innerHTML = '<span aria-hidden="true">★</span><strong>12</strong>';
-    finale.setAttribute('role', 'img');
-    finale.setAttribute('aria-label', 'Évaluation finale réussie');
-    destinations.appendChild(finale);
 }
 function lancerCelebrationBilan(celebration) {
     if (!celebration)
@@ -4576,33 +5194,22 @@ function terminerSession() {
 }
 function afficherEtatVideErreurs(zone, aucunePartieJouee) {
     if (aucunePartieJouee) {
-        zone.innerHTML = `
-            <div class="carte vide">
-                <div class="vide-icone" aria-hidden="true">
-                    <svg viewBox="0 0 48 48">
-                        <path d="M10 14h18a10 10 0 0 1 10 10v10"/>
-                        <path d="m32 28 6 6 6-6"/>
-                        <path d="M31 38H20A10 10 0 0 1 10 28v-4"/>
-                        <circle cx="10" cy="12" r="4"/>
-                        <path d="M18 12h7"/>
-                    </svg>
-                </div>
-                <h2>Tu n’as pas encore joué.</h2>
-                <p>Commence une partie avant de pouvoir rejouer tes erreurs.</p>
-                <button class="principal" data-action="ouvrir-parcours-depuis-erreurs">
-                    Commencer le parcours
-                </button>
-            </div>`;
+        zone.innerHTML = `<div class="revision-vide">
+            <span class="revision-vide-icone" aria-hidden="true">↺</span>
+            <span class="surtitre">Révision</span>
+            <h2>Tu n’as pas encore joué.</h2>
+            <p>Commence un parcours : les erreurs à consolider apparaîtront ici automatiquement.</p>
+            <button class="principal" data-action="ouvrir-parcours-depuis-erreurs">Commencer un parcours →</button>
+        </div>`;
         return;
     }
-    zone.innerHTML = `
-        <div class="carte vide">
-            <div class="resultat-icone" aria-hidden="true"></div>
-            <h2>Aucune erreur active</h2>
-            <p>Pour le moment, tout ce que tu as raté a été retravaillé avec succès.</p>
-        </div>`;
+    zone.innerHTML = `<div class="revision-vide revision-vide-ok">
+        <span class="revision-vide-icone" aria-hidden="true">✓</span>
+        <span class="surtitre">À jour</span>
+        <h2>Aucune erreur active.</h2>
+        <p>Tout ce qui avait besoin d’être retravaillé a été consolidé.</p>
+    </div>`;
 }
-
 function obtenirQuestionsAvecErreursActives() {
     return Object.entries(sauvegarde.erreurs || {})
         .filter(([_identifiantQuestion, suiviErreur]) => !suiviErreur.maitrisee)
@@ -4610,117 +5217,105 @@ function obtenirQuestionsAvecErreursActives() {
             question: QUESTIONS.find(question => question.id === Number(identifiantQuestion)),
             suiviErreur
         }))
-        .filter(element => element.question);
+        .filter(element => element.question && !element.question.estEvaluationFinale);
 }
-
-function regrouperErreursParEtape(questionsAvecErreurs) {
-    const erreursParEtape = {};
-    questionsAvecErreurs.forEach(element => {
+function regrouperErreursParParcoursEtEtape(elements) {
+    const resultat = {};
+    elements.forEach(element => {
+        const theme = element.question.theme;
         const numeroEtape = Number(element.question.etape);
-        (erreursParEtape[numeroEtape] = erreursParEtape[numeroEtape] || []).push(element);
+        resultat[theme] = resultat[theme] || {};
+        (resultat[theme][numeroEtape] = resultat[theme][numeroEtape] || []).push(element);
     });
-    return erreursParEtape;
+    return resultat;
 }
-
-function obtenirNumerosEtapesAvecErreurs(erreursParEtape) {
-    return Object.keys(erreursParEtape)
-        .sort((etapeA, etapeB) => Number(etapeA) - Number(etapeB));
+function construireBoutonsRevisionParcours(groupes) {
+    return THEMES.map((theme, index) => {
+        const total = Object.values(groupes[theme.id] || {}).reduce((somme, liste) => somme + liste.length, 0);
+        if (!total)
+            return '';
+        const identite = obtenirIdentiteParcours(theme.id);
+        return `<button class="revision-parcours-bouton" data-action="reviser-theme" data-theme="${theme.id}" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}">
+            <span class="revision-parcours-numero">${String(index + 1).padStart(2, '0')}</span>
+            <span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'erreur', 'erreurs')}</small></span>
+            <span class="revision-parcours-action">Réviser →</span>
+        </button>`;
+    }).join('');
 }
-
-function construireBoutonsRevisionParEtape(erreursParEtape) {
-    return obtenirNumerosEtapesAvecErreurs(erreursParEtape)
-        .map(numeroEtape => `
-            <button class="revision-etape-bouton"
-                data-action="reviser-etape" data-etape="${numeroEtape}">
-                <span>Étape ${numeroEtape}</span>
-                <b>${erreursParEtape[numeroEtape].length}</b>
-            </button>`)
-        .join('');
+function construireBoutonsRevisionParEtape(groupes) {
+    return THEMES.map((theme, index) => {
+        const erreursParEtape = groupes[theme.id] || {};
+        return Object.keys(erreursParEtape).sort((a, b) => Number(a) - Number(b)).map(numeroEtape => {
+            const total = erreursParEtape[numeroEtape].length;
+            return `<button class="revision-etape-bouton" data-action="reviser-etape" data-theme="${theme.id}" data-etape="${numeroEtape}">
+                <span>P${index + 1} · Étape ${numeroEtape}</span><strong>${total}</strong>
+            </button>`;
+        }).join('');
+    }).join('');
 }
-
-function construireModesRevisionErreurs(total, erreursParEtape) {
+function construireModesRevisionErreurs(total, groupes) {
     const libelleErreurs = accorderLibelle(total, 'erreur active', 'erreurs actives');
-    const boutonsEtapes = construireBoutonsRevisionParEtape(erreursParEtape);
-    return `
-        <div class="revision-mode-grille">
-            <div class="carte revision-mode-carte revision-toutes-carte">
-                <div>
-                    <h2>
-                        <span class="revision-mode-icone revision-mode-icone-aleatoire"
-                            aria-hidden="true">
-                            <svg viewBox="0 0 64 64">
-                                <path d="M48 20a21 21 0 1 0 4 25"/>
-                                <path d="m43 13 6 8 9-5"/>
-                                <path d="M25 27a7 7 0 0 1 14 1c0 6-7 6-7 11"/>
-                                <circle cx="32" cy="47" r="1.5"/>
-                            </svg>
-                        </span>
-                        <span>Révision aléatoire — Toutes mes erreurs</span>
-                    </h2>
-                    <p>Mélange tes ${total} ${libelleErreurs}, toutes étapes confondues.</p>
-                </div>
-                <button class="principal" data-action="reviser-toutes-erreurs">
-                    Lancer (${total})
-                </button>
+    return `<div class="revision-workspace">
+        <article class="revision-toutes-erreurs">
+            <div class="revision-toutes-erreurs-icone" aria-hidden="true">↻</div>
+            <div class="revision-toutes-erreurs-texte">
+                <span class="surtitre">Révision rapide</span>
+                <h2>Mélange mes erreurs</h2>
+                <p>Une session aléatoire avec tes ${total} ${libelleErreurs}, tous parcours confondus.</p>
             </div>
+            <button class="principal" data-action="reviser-toutes-erreurs">Lancer ${total} ${total > 1 ? 'questions' : 'question'} →</button>
+        </article>
 
-            <div class="carte revision-mode-carte revision-par-etape-carte">
-                <div>
-                    <h2>
-                        <span class="revision-mode-icone revision-mode-icone-etapes"
-                            aria-hidden="true">
-                            <svg viewBox="0 0 64 64">
-                                <path d="M13 11h34a5 5 0 0 1 5 5v37H18a5 5 0 0 1-5-5z"/>
-                                <path d="M18 53a5 5 0 0 1 0-10h34M23 11v32"/>
-                                <path d="M32 21h12M32 29h9"/>
-                            </svg>
-                        </span>
-                        <span>Révision par étape — Mes erreurs par étape</span>
-                    </h2>
-                    <p>Choisis une étape pour retravailler uniquement les erreurs encore actives de cette partie du parcours.</p>
-                </div>
-                <div class="revision-etape-boutons">${boutonsEtapes}</div>
+        <section class="revision-choix" aria-labelledby="titreRevisionParcours">
+            <div class="revision-section-entete">
+                <div><span class="surtitre">Cibler</span><h2 id="titreRevisionParcours">Choisis ce que tu veux renforcer</h2></div>
+                <p>Un parcours complet ou une étape précise.</p>
             </div>
-        </div>`;
+            <div class="revision-parcours-boutons">${construireBoutonsRevisionParcours(groupes)}</div>
+            <details class="revision-etapes-details">
+                <summary>Choisir directement une étape</summary>
+                <div class="revision-etape-boutons">${construireBoutonsRevisionParEtape(groupes)}</div>
+            </details>
+        </section>
+    </div>`;
 }
-
-function construireListeErreursEtape(numeroEtape, elements) {
-    const cartesErreurs = elements.map(({ question, suiviErreur }) => `
-        <div class="erreur-element erreurs-parcours-element">
-            <div class="erreurs-parcours-enonce">${question.enonce.split('\\n')[0]}</div>
-            <div class="mini">Ratée ${suiviErreur.nombreErreurs || 1} fois · révision ${suiviErreur.reussites || 0}/2</div>
-        </div>`).join('');
-    return `
-        <section class="erreurs-parcours-etape">
-            <div class="erreurs-parcours-etape-entete">
-                <h4>Étape ${numeroEtape}</h4>
-                <span>${elements.length} erreur${elements.length > 1 ? 's' : ''}</span>
-            </div>
-            <div class="erreurs-parcours-liste">${cartesErreurs}</div>
-        </section>`;
+function construireListeErreursEtape(theme, numeroEtape, elements) {
+    const titreEtape = obtenirEtapeProgramme(theme, numeroEtape)?.titre || '';
+    const cartes = elements.map(({ question, suiviErreur }) => `
+        <li class="revision-erreur-ligne">
+            <span>${question.enonce.split('\n')[0]}</span>
+            <small>Ratée ${suiviErreur.nombreErreurs || 1} fois · à revoir jusqu’à réussite</small>
+        </li>`).join('');
+    return `<div class="revision-etape-groupe">
+        <div class="revision-etape-groupe-entete"><strong>Étape ${numeroEtape} · ${titreEtape}</strong><span>${elements.length}</span></div>
+        <ul>${cartes}</ul>
+    </div>`;
 }
-
-function construireParcoursErreurs(total, erreursParEtape) {
-    const sectionsEtapes = obtenirNumerosEtapesAvecErreurs(erreursParEtape)
-        .map(numeroEtape => construireListeErreursEtape(
-            numeroEtape,
-            erreursParEtape[numeroEtape]
-        ))
-        .join('');
-    const libelleErreurs = accorderLibelle(total, 'erreur active', 'erreurs actives');
-    return `
-        <div class="carte erreurs-parcours">
-            <div class="erreurs-parcours-entete">
-                <div>
-                    <h2>Parcours PJJ</h2>
-                    <p>${total} ${libelleErreurs} dans le parcours.</p>
-                </div>
-            </div>
-            <h3 class="erreurs-parcours-titre">Visualiser mes erreurs</h3>
-            <div class="erreurs-parcours-etapes">${sectionsEtapes}</div>
-        </div>`;
+function construireParcoursErreurs(groupes) {
+    const dossiers = THEMES.map((theme, index) => {
+        const erreursParEtape = groupes[theme.id] || {};
+        const total = Object.values(erreursParEtape).reduce((somme, liste) => somme + liste.length, 0);
+        if (!total)
+            return '';
+        const identite = obtenirIdentiteParcours(theme.id);
+        const etapes = Object.keys(erreursParEtape)
+            .sort((a, b) => Number(a) - Number(b))
+            .map(numero => construireListeErreursEtape(theme.id, numero, erreursParEtape[numero]))
+            .join('');
+        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}">
+            <summary>
+                <span class="revision-dossier-numero">${String(index + 1).padStart(2, '0')}</span>
+                <span><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'erreur active', 'erreurs actives')}</small></span>
+                <span class="revision-dossier-chevron" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="revision-dossier-contenu">${etapes}</div>
+        </details>`;
+    }).join('');
+    return `<section class="revision-inventaire" aria-labelledby="titreInventaireErreurs">
+        <div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreurs">Tes erreurs actives</h2></div><p>Consulte les questions qui restent à consolider, parcours par parcours.</p></div>
+        <div class="revision-dossiers">${dossiers}</div>
+    </section>`;
 }
-
 function afficherErreurs() {
     const zone = selectionner('#contenuErreurs');
     const questionsAvecErreurs = obtenirQuestionsAvecErreursActives();
@@ -4728,42 +5323,346 @@ function afficherErreurs() {
         afficherEtatVideErreurs(zone, !sauvegarde.aDejaJoue);
         return;
     }
-
-    const erreursParEtape = regrouperErreursParEtape(questionsAvecErreurs);
-    const total = questionsAvecErreurs.length;
-    zone.innerHTML = construireModesRevisionErreurs(total, erreursParEtape)
-        + construireParcoursErreurs(total, erreursParEtape);
+    const groupes = regrouperErreursParParcoursEtEtape(questionsAvecErreurs);
+    zone.innerHTML = construireModesRevisionErreurs(questionsAvecErreurs.length, groupes) + construireParcoursErreurs(groupes);
 }
 
+function normaliserRechercheSupports(texte) {
+    return String(texte || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+const PARCOURS_PAR_CATEGORIE_SUPPORT = Object.freeze({
+    'supports-reperes-pjj': ['1', '4'],
+    'supports-je': ['2', '4', '6'],
+    'supports-tpe': ['2', '4', '5', '6'],
+    'supports-ji': ['3'],
+    'supports-jld': ['3'],
+    'supports-cam': ['5'],
+    'supports-jap': ['6'],
+    'supports-transversaux': ['2', '3', '4', '5', '6']
+});
+function obtenirIndexRechercheCategorie(categorie) {
+    const titreCategorie = categorie.querySelector(':scope > summary')?.textContent || '';
+    const motsCles = categorie.dataset.motsCles || '';
+    const parcours = (categorie.dataset.parcoursSupports || '')
+        .split(' ')
+        .filter(Boolean)
+        .map(numero => `P${numero} parcours ${numero}`)
+        .join(' ');
+    return normaliserRechercheSupports(`${titreCategorie} ${motsCles} ${parcours}`);
+}
+function obtenirIndexRechercheSupport(categorie, ressource) {
+    return normaliserRechercheSupports(`${obtenirIndexRechercheCategorie(categorie)} ${ressource.textContent}`);
+}
+function correspondARechercheSupport(indexRecherche, termesRecherches) {
+    if (!termesRecherches.length)
+        return true;
+    const motsIndex = new Set(indexRecherche.split(' ').filter(Boolean));
+    return termesRecherches.every(terme => terme.length <= 3
+        ? motsIndex.has(terme)
+        : indexRecherche.includes(terme));
+}
+function synchroniserFiltreSupports(zone, filtre) {
+    const filtreActif = filtre || 'tous';
+    zone.dataset.filtreSupports = filtreActif;
+    zone.querySelectorAll('[data-filtre-supports]').forEach(bouton => {
+        const actif = bouton.dataset.filtreSupports === filtreActif;
+        bouton.classList.toggle('actif', actif);
+        bouton.setAttribute('aria-pressed', actif ? 'true' : 'false');
+    });
+}
+function synchroniserOuvertureSupports(zone) {
+    zone.querySelectorAll('.supports-juridiction').forEach(categorie => {
+        const action = categorie.querySelector(':scope > summary .support-juridiction-action');
+        if (action)
+            action.textContent = categorie.open ? 'Fermer' : 'Ouvrir';
+    });
+    const boutonRefermer = selectionner('#boutonRefermerSupports');
+    if (boutonRefermer)
+        boutonRefermer.disabled = !zone.querySelector('details[open]');
+}
+function initialiserClassementSupports() {
+    const zone = selectionner('#supports');
+    if (!zone || zone.dataset.classementInitialise === 'true')
+        return;
+    zone.dataset.classementInitialise = 'true';
+    zone.querySelectorAll('.supports-juridiction').forEach(categorie => {
+        const parcours = PARCOURS_PAR_CATEGORIE_SUPPORT[categorie.id] || [];
+        categorie.dataset.parcoursSupports = parcours.join(' ');
+        const titre = categorie.querySelector('.support-juridiction-titre');
+        if (!titre || !parcours.length)
+            return;
+        const badges = document.createElement('span');
+        badges.className = 'supports-parcours-badges';
+        badges.innerHTML = parcours.map(numero => `<i class="support-parcours-badge support-parcours-${numero}">P${numero}</i>`).join('');
+        titre.appendChild(badges);
+    });
+}
+function appliquerRechercheSupports() {
+    const zone = selectionner('#supports');
+    const champ = selectionner('#rechercheSupports');
+    if (!zone || !champ)
+        return;
+    const recherche = normaliserRechercheSupports(champ.value);
+    const termesRecherches = recherche.split(' ').filter(Boolean);
+    const filtre = zone.dataset.filtreSupports || 'tous';
+    let categoriesVisibles = 0;
+    let ressourcesVisibles = 0;
+    const categories = [...zone.querySelectorAll('.supports-juridiction')];
+    const correspondancesDirectes = new Map(categories.map(categorie => [
+        categorie,
+        correspondARechercheSupport(obtenirIndexRechercheCategorie(categorie), termesRecherches)
+    ]));
+    const rechercheCourte = termesRecherches.length === 1 && termesRecherches[0].length <= 3;
+    const limiterAuxCategoriesDirectes = rechercheCourte
+        && [...correspondancesDirectes.values()].some(Boolean);
+    categories.forEach((categorie, ordreInitial) => {
+        const correspondAuFiltre = filtre === 'tous'
+            || (categorie.dataset.parcoursSupports || '').split(' ').includes(filtre);
+        const correspondDirectement = correspondancesDirectes.get(categorie);
+        let ressourcesCorrespondantes = 0;
+        categorie.querySelectorAll(':scope > .supports-juridiction-contenu > .support-revision').forEach(ressource => {
+            const indexRecherche = obtenirIndexRechercheSupport(categorie, ressource);
+            const correspond = !termesRecherches.length
+                || correspondDirectement
+                || (!limiterAuxCategoriesDirectes && correspondARechercheSupport(indexRecherche, termesRecherches));
+            ressource.classList.toggle('masque-recherche-support', !correspond);
+            if (correspond)
+                ressourcesCorrespondantes += 1;
+        });
+        const categorieVisible = correspondAuFiltre && ressourcesCorrespondantes > 0;
+        categorie.classList.toggle('masque-recherche-support', !categorieVisible);
+        categorie.style.order = termesRecherches.length
+            ? String((correspondDirectement ? 0 : categories.length) + ordreInitial)
+            : '';
+        if (categorieVisible) {
+            categoriesVisibles += 1;
+            ressourcesVisibles += ressourcesCorrespondantes;
+            if (termesRecherches.length)
+                categorie.open = true;
+        }
+    });
+    const statut = selectionner('#statutRechercheSupports');
+    if (statut)
+        statut.textContent = ressourcesVisibles
+            ? `${categoriesVisibles} ${accorderLibelle(categoriesVisibles, 'catégorie', 'catégories')} · ${ressourcesVisibles} ${accorderLibelle(ressourcesVisibles, 'ressource', 'ressources')}`
+            : 'Aucune ressource ne correspond à cette recherche.';
+    synchroniserOuvertureSupports(zone);
+}
+function rechercherDansSupportsFiltres() {
+    appliquerRechercheSupports();
+}
+function initialiserRechercheSupports() {
+    const zone = selectionner('#supports');
+    if (!zone || zone.dataset.rechercheInitialisee === 'true') {
+        appliquerRechercheSupports();
+        return;
+    }
+    zone.dataset.rechercheInitialisee = 'true';
+    initialiserClassementSupports();
+    const filtreInitial = zone.dataset.filtreSupports
+        || zone.querySelector('[data-filtre-supports][aria-pressed="true"]')?.dataset.filtreSupports
+        || 'tous';
+    synchroniserFiltreSupports(zone, filtreInitial);
+    const champ = selectionner('#rechercheSupports');
+    champ?.addEventListener('input', rechercherDansSupportsFiltres);
+    champ?.addEventListener('search', rechercherDansSupportsFiltres);
+    zone.querySelectorAll('[data-filtre-supports]').forEach(bouton => bouton.addEventListener('click', () => {
+        synchroniserFiltreSupports(zone, bouton.dataset.filtreSupports);
+        appliquerRechercheSupports();
+    }));
+    zone.querySelectorAll('details').forEach(detail => detail.addEventListener('toggle', () => {
+        synchroniserOuvertureSupports(zone);
+    }));
+    selectionner('#boutonRefermerSupports')?.addEventListener('click', () => {
+        zone.querySelectorAll('details[open]').forEach(detail => detail.open = false);
+        synchroniserOuvertureSupports(zone);
+        selectionner('#rechercheSupports')?.focus();
+    });
+    appliquerRechercheSupports();
+    synchroniserOuvertureSupports(zone);
+}
+function obtenirEtatEvaluationProgression(theme) {
+    const evaluation = obtenirEvaluationFinaleTheme(theme.id);
+    if (evaluation.reussie)
+        return { libelle: `Évaluation réussie · ${evaluation.meilleurScore}%`, classe: 'reussie' };
+    const programmeTermine = obtenirEtapesProgramme(theme.id).every(etape => {
+        const total = obtenirQuestionsEtape(theme.id, etape.id).length;
+        return total > 0 && compterQuestionsTraiteesEtape(theme.id, etape.id) >= total;
+    });
+    if (programmeTermine)
+        return { libelle: 'Évaluation ouverte', classe: 'ouverte' };
+    return { libelle: 'Évaluation verrouillée', classe: 'verrouillee' };
+}
+function obtenirAvanceeJalonsProgression(identifiantTheme) {
+    initialiserProgression(identifiantTheme);
+    const etapes = obtenirEtapesProgramme(identifiantTheme);
+    const etapesMaitrisees = etapes.filter(etape => estEtapeMaitrisee(identifiantTheme, etape.id)).length;
+    const evaluation = obtenirEvaluationFinaleTheme(identifiantTheme);
+    const evaluationReussie = evaluation.reussie === true;
+    const jalonsTotal = etapes.length + 1;
+    const jalonsValides = etapesMaitrisees + Number(evaluationReussie);
+    const aCommence = jalonsValides > 0
+        || Number(evaluation.nombreTentatives) > 0
+        || etapes.some(etape => compterQuestionsTraiteesEtape(identifiantTheme, etape.id) > 0);
+    const estComplet = jalonsTotal > 0 && jalonsValides === jalonsTotal;
+    return {
+        etapes,
+        etapesMaitrisees,
+        evaluationReussie,
+        jalonsTotal,
+        jalonsValides,
+        aCommence,
+        estComplet,
+        pourcentage: jalonsTotal ? Math.round(jalonsValides / jalonsTotal * 100) : 0,
+        classe: estComplet ? 'est-complet' : (aCommence ? 'est-entame' : 'est-a-decouvrir'),
+        libelle: estComplet ? 'Complet' : (aCommence ? 'Entamé' : 'À découvrir')
+    };
+}
 function construireCarteProgression(theme) {
-    const progression = calculerProgressionTheme(theme.id);
-    initialiserProgression(theme.id);
-    const etapesProgramme = obtenirEtapesProgramme(theme.id);
-    const nombreEtapesMaitrisees = etapesProgramme.filter(etapeProgramme =>
-        estEtapeMaitrisee(theme.id, etapeProgramme.id)
-    ).length;
-    const carte = document.createElement('div');
-    carte.className = 'carte tableau-carte';
+    const identite = obtenirIdentiteParcours(theme.id);
+    const avancee = obtenirAvanceeJalonsProgression(theme.id);
+    const evaluation = obtenirEtatEvaluationProgression(theme);
+    const carte = document.createElement('article');
+    carte.className = `progression-parcours-mis-en-avant ${avancee.classe}`;
+    carte.style.setProperty('--parcours-accent', identite.couleur);
+    carte.style.setProperty('--parcours-accent-lisible', identite.couleurTexte || identite.couleur);
+    carte.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
+    const libelleObjectifs = accorderLibelle(avancee.jalonsValides, 'objectif validé', 'objectifs validés');
     carte.innerHTML = `
-        <h3 class="tableau-titre">
-            ${creerIconeTheme(theme.id, theme.titre)}
-            <span>${theme.titre}</span>
-        </h3>
-        <div class="barre" role="progressbar" aria-label="Progression dans ${theme.titre}"
-            aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progression}">
-            <i style="width:${progression}%"></i>
+        <div class="progression-parcours-mis-en-avant-identite">
+            <span class="progression-parcours-mis-en-avant-icone">${creerIconeTheme(theme.id, '')}</span>
+            <div><span class="progression-parcours-mis-en-avant-chapitre">${identite.chapitre}</span><h3>${identite.titre}</h3></div>
         </div>
-        <p><b>${progression}%</b> du parcours guidé ${nombreEtapesMaitrisees}/${etapesProgramme.length} étapes terminées sans joker</p>`;
+        <div class="progression-etats">
+            <span class="progression-parcours-statut ${avancee.classe}">${avancee.libelle}</span>
+            <span class="progression-etat progression-etat-${evaluation.classe}">${evaluation.libelle}</span>
+        </div>
+        <div class="progression-parcours-mis-en-avant-avancee">
+            <div class="progression-parcours-mis-en-avant-pourcentage"><strong>${avancee.pourcentage}%</strong><span>du parcours</span></div>
+            <div class="progression-parcours-mis-en-avant-etapes"><strong>${avancee.jalonsValides}/${avancee.jalonsTotal}</strong><span>${libelleObjectifs}</span></div>
+        </div>
+        <div class="barre" role="progressbar" aria-label="Progression dans ${identite.titre}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${avancee.pourcentage}" aria-valuetext="${avancee.jalonsValides} ${libelleObjectifs} sur ${avancee.jalonsTotal}"><i style="width:${avancee.pourcentage}%"></i></div>`;
     return carte;
 }
-
+function construireCarteProgressionComplete() {
+    const avancees = THEMES.map(theme => ({
+        theme,
+        avancee: obtenirAvanceeJalonsProgression(theme.id)
+    }));
+    const totalEtapes = avancees.reduce((somme, element) => somme + element.avancee.etapes.length, 0);
+    const totalEvaluations = THEMES.length;
+    const totalJalons = totalEtapes + totalEvaluations;
+    const maitrisees = avancees.reduce((somme, element) => somme + element.avancee.etapesMaitrisees, 0);
+    const evaluations = avancees.filter(element => element.avancee.evaluationReussie).length;
+    const jalonsValides = maitrisees + evaluations;
+    const libelleObjectifs = accorderLibelle(jalonsValides, 'objectif validé', 'objectifs validés');
+    const progression = totalJalons ? Math.round(jalonsValides / totalJalons * 100) : 0;
+    const jalons = avancees.map(({ theme, avancee }, index) => {
+        const identite = obtenirIdentiteParcours(theme.id);
+        const libelleObjectifsParcours = accorderLibelle(avancee.jalonsValides, 'objectif validé', 'objectifs validés');
+        return `<span class="progression-jalon ${avancee.classe}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte || identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}" aria-label="${identite.titre} : ${avancee.libelle.toLowerCase()}, ${avancee.jalonsValides} ${libelleObjectifsParcours} sur ${avancee.jalonsTotal}">
+            <i aria-hidden="true">${String(index + 1).padStart(2, '0')}</i><b aria-hidden="true"></b>
+        </span>`;
+    }).join('');
+    const parcoursComplet = estParcoursCompletReussi();
+    const carte = document.createElement('div');
+    carte.className = 'progression-global';
+    carte.innerHTML = `
+        <div class="progression-score">
+            <strong>${progression}%</strong>
+            <span>progression globale</span>
+        </div>
+        <div class="progression-global-corps">
+            <div class="progression-global-entete">
+                <div><strong>${jalonsValides}/${totalJalons} ${libelleObjectifs}</strong><span>${totalEtapes} étapes · ${totalEvaluations} évaluations</span></div>
+                <span class="progression-global-statut">${parcoursComplet ? 'Parcours complet validé ✓' : 'En cours'}</span>
+            </div>
+            <div class="progression-rail" role="progressbar" aria-label="Progression globale" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progression}" aria-valuetext="${jalonsValides} ${libelleObjectifs} sur ${totalJalons} : ${totalEtapes} étapes et ${totalEvaluations} évaluations">
+                <span class="progression-rail-remplissage" style="width:${progression}%"></span>
+                <div class="progression-jalons">${jalons}</div>
+            </div>
+            <p>${parcoursComplet ? 'Les six parcours sont validés.' : 'Chaque parcours avance indépendamment et contribue à ta progression globale.'}</p>
+        </div>`;
+    return carte;
+}
+function obtenirThemeProgressionParDefaut() {
+    const courant = THEMES.find(theme => theme.id === etat.theme);
+    if (courant)
+        return courant.id;
+    const entame = THEMES.find(theme => obtenirAvanceeJalonsProgression(theme.id).aCommence);
+    return (entame || THEMES[0]).id;
+}
+function activerPastilleProgression(identifiantTheme) {
+    document.querySelectorAll('#listeProgressionParcours .progression-pastille').forEach(bouton => {
+        const active = bouton.dataset.theme === identifiantTheme;
+        bouton.classList.toggle('est-active', active);
+        bouton.setAttribute('aria-selected', String(active));
+        bouton.tabIndex = active ? 0 : -1;
+    });
+}
+function afficherDetailProgressionParcours(identifiantTheme) {
+    const zone = selectionner('#detailProgressionParcours');
+    const theme = THEMES.find(candidat => candidat.id === identifiantTheme) || THEMES[0];
+    if (!zone)
+        return;
+    zone.replaceChildren(construireCarteProgression(theme));
+    zone.setAttribute('aria-labelledby', `ongletProgressionParcours-${theme.id}`);
+    activerPastilleProgression(theme.id);
+}
+function gererClavierPastillesProgression(event) {
+    const boutons = [...document.querySelectorAll('#listeProgressionParcours .progression-pastille')];
+    const index = boutons.indexOf(event.currentTarget);
+    if (!boutons.length || index < 0)
+        return;
+    let suivant = null;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') suivant = (index + 1) % boutons.length;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') suivant = (index - 1 + boutons.length) % boutons.length;
+    if (event.key === 'Home') suivant = 0;
+    if (event.key === 'End') suivant = boutons.length - 1;
+    if (suivant === null) return;
+    event.preventDefault();
+    boutons[suivant].focus();
+    afficherDetailProgressionParcours(boutons[suivant].dataset.theme);
+}
+function remplirPastillesProgression() {
+    const zone = selectionner('#listeProgressionParcours');
+    if (!zone)
+        return;
+    zone.innerHTML = '';
+    THEMES.forEach(theme => {
+        const identite = obtenirIdentiteParcours(theme.id);
+        const bouton = document.createElement('button');
+        bouton.type = 'button';
+        bouton.className = 'progression-pastille';
+        bouton.dataset.theme = theme.id;
+        bouton.id = `ongletProgressionParcours-${theme.id}`;
+        bouton.style.setProperty('--parcours-accent', identite.couleur);
+        bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte || identite.couleur);
+        bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
+        bouton.setAttribute('role', 'tab');
+        bouton.setAttribute('aria-controls', 'detailProgressionParcours');
+        bouton.setAttribute('aria-selected', 'false');
+        bouton.tabIndex = -1;
+        bouton.innerHTML = `<span>${identite.numero}</span><strong>${identite.titre}</strong>`;
+        bouton.onclick = () => afficherDetailProgressionParcours(theme.id);
+        bouton.onkeydown = gererClavierPastillesProgression;
+        zone.appendChild(bouton);
+    });
+    afficherDetailProgressionParcours(obtenirThemeProgressionParDefaut());
+}
 function afficherProgression() {
     actualiserAccueil();
     const zone = selectionner('#tableauProgression');
-    zone.innerHTML = '';
-    THEMES.forEach(theme => zone.appendChild(construireCarteProgression(theme)));
+    if (!zone)
+        return;
+    zone.replaceChildren(construireCarteProgressionComplete());
+    remplirPastillesProgression();
 }
-
 // -----------------------------------------------------------------------------
 // Paramètres, import/export, sons et effets de célébration
 // -----------------------------------------------------------------------------
@@ -4835,7 +5734,7 @@ function importerProgression(fichier) {
             if (importee.erreurs != null && !estObjetSimple(importee.erreurs))
                 throw Error('la banque de révision est mal structurée');
             sauvegarde = nettoyerSauvegarde(importee);
-            effacerSauvegardeV1DuNavigateur();
+            effacerSauvegardeDuNavigateur();
             enregistrerSauvegarde();
             actualiserAccueil();
             envoyerEvenementPJJ('progression_importee', {
@@ -4968,7 +5867,7 @@ selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => {
     if (etat.ecran === 'parametres')
         enregistrerParametres();
     if (bouton.dataset.ecran === 'parcours') {
-        ouvrirParcours('commun');
+        ouvrirChoixParcours();
         return;
     }
     afficherEcran(bouton.dataset.ecran);
@@ -5005,10 +5904,17 @@ function initialiserFenetreJokers() {
 initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
 selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
-selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours('commun', { remplacerHistorique: true });
-selectionner('#boutonOuvrirParcours').onclick = () => ouvrirParcours('commun');
+selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
+selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
 selectionner('#boutonExporterMaProgression').onclick = exporterProgression;
-selectionner('#fichierImporterProgression').onchange = evenement => evenement.target.files[0] && importerProgression(evenement.target.files[0]);
+const boutonImporterProgression = selectionner('#boutonImporterProgression');
+const fichierImporterProgression = selectionner('#fichierImporterProgression');
+boutonImporterProgression.onclick = () => {
+    fichierImporterProgression.value = '';
+    fichierImporterProgression.click();
+};
+fichierImporterProgression.onchange = evenement => evenement.target.files[0] && importerProgression(evenement.target.files[0]);
+selectionner('#volumeSon').onchange = enregistrerParametres;
 selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFenetreMessage({
     titre: 'Réinitialiser toute la progression ?',
     message: 'Les scores, les étapes validées et les erreurs enregistrées seront définitivement supprimés de ce navigateur.',
@@ -5021,7 +5927,7 @@ selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFen
             pjjoue_page_consultee: 'Progression'
         });
         sauvegarde = creerSauvegardeInitiale();
-        effacerSauvegardeV1DuNavigateur();
+        effacerSauvegardeDuNavigateur();
         effacerSessionEnCours();
         enregistrerSauvegarde();
         actualiserAccueil();
@@ -5104,20 +6010,27 @@ document.addEventListener('click', evenement => {
         lancerRevision('toutes');
     else if (action === 'reviser-theme')
         lancerRevision(cible.dataset.theme);
+    else if (action === 'reviser-etape')
+        lancerRevisionEtape(cible.dataset.theme || 'commun', cible.dataset.etape);
+    else if (action === 'ouvrir-parcours-depuis-erreurs')
+        ouvrirChoixParcours();
 });
 mesurerHauteurEntete();
-selectionner('#boutonMenuMobile')?.addEventListener('click', basculerMenuMobile);
+selectionner('#boutonMenuMobile')?.addEventListener('click', evenement => {
+    evenement.stopPropagation();
+    basculerMenuPrincipal();
+});
 document.addEventListener('click', evenement => {
     const entete = document.querySelector('header.entete');
     if (entete?.classList.contains('menu-mobile-ouvert') && !entete.contains(evenement.target))
-        fermerMenuMobile();
+        fermerMenuPrincipal();
 });
 document.addEventListener('keydown', evenement => {
     const entete = document.querySelector('header.entete');
     if (!entete?.classList.contains('menu-mobile-ouvert'))
         return;
     if (evenement.key === 'Escape') {
-        fermerMenuMobile();
+        fermerMenuPrincipal();
         selectionner('#boutonMenuMobile')?.focus();
         return;
     }
@@ -5125,7 +6038,7 @@ document.addEventListener('keydown', evenement => {
         return;
     const elements = [
         selectionner('#boutonMenuMobile'),
-        ...selectionnerTous('#menuPrincipal button:not(:disabled)')
+        ...selectionnerTous('#menuPrincipal button:not(:disabled), #menuPrincipal a[href]')
     ].filter(Boolean);
     if (!elements.length)
         return;
@@ -5141,6 +6054,7 @@ document.addEventListener('keydown', evenement => {
 });
 window.addEventListener('resize', mesurerHauteurEntete, { passive: true });
 initialiserGroupesChoix();
+initialiserRechercheSupports();
 actualiserAccueil();
 restaurerRoute(history.state || lireRoute());
 garantirAccueilEnHaut();
@@ -5190,11 +6104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(ajusterQuestionAEcran, 80);
 });
 document.addEventListener('click', evenement => {
-    const boutonRevisionEtape = evenement.target.closest('[data-action="reviser-etape"]');
-    if (boutonRevisionEtape) {
-        lancerRevisionEtape(boutonRevisionEtape.dataset.etape);
-        return;
-    }
     const boutonBascule = evenement.target.closest('.entrainement-bascule-groupe .option-bouton');
     if (boutonBascule) {
         const groupe = boutonBascule.closest('.entrainement-bascule-groupe');
@@ -5244,11 +6153,4 @@ document.addEventListener('click', evenement => {
         etat.dureeChronometreParcours = Math.min(30, Math.max(5, Number.isFinite(secondes) ? secondes : 15));
         return;
     }
-});
-document.addEventListener('click', evenement => {
-    const ouvrirParcoursDepuisErreurs = evenement.target.closest('[data-action="ouvrir-parcours-depuis-erreurs"]');
-    if (!ouvrirParcoursDepuisErreurs)
-        return;
-    evenement.preventDefault();
-    ouvrirParcours('commun');
 });

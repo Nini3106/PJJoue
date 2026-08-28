@@ -19,11 +19,13 @@
     const titre = document.createElement('h2');
     const lien = document.createElement('a');
     const details = document.createElement('dl');
+    const libelle = source.titre || 'Source officielle';
     fiche.className = 'source-fiche';
-    lien.textContent = source.titre || 'Source officielle';
+    lien.textContent = libelle;
     lien.href = source.url || '#';
     lien.target = '_blank';
     lien.rel = 'noopener noreferrer';
+    lien.setAttribute('aria-label', `${libelle} (nouvel onglet)`);
     titre.appendChild(lien);
     ajouterTexteDefinition(details, 'Repère précis', source.repere);
     ajouterTexteDefinition(details, 'Date de vérification', source.dateVerification);

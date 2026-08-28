@@ -57,7 +57,6 @@ def charger_et_verifier_plan() -> dict:
 
     cles_obligatoires = {
         "pages_principales",
-        "encadrement_guides_accueil",
         "gabarit_page_principale",
         "pages_autonomes",
         "javascript",
@@ -68,7 +67,7 @@ def charger_et_verifier_plan() -> dict:
         raise ErreurConstruction("Éléments manquants dans le plan : " + ", ".join(manquantes))
 
     # Toutes les sources déclarées doivent exister.
-    sources: list[str] = [plan["gabarit_page_principale"], plan["encadrement_guides_accueil"]]
+    sources: list[str] = [plan["gabarit_page_principale"]]
     sources += list(plan["pages_principales"].values())
     for page in plan["pages_autonomes"]:
         sources.append(page["source"])
@@ -114,13 +113,6 @@ def construire_page_principale(plan: dict) -> str:
             )
         page = page.replace(repere, lire_texte(chemin_contenu), 1)
 
-    repere_guides = "{{ENCADREMENT_GUIDES_ACCUEIL}}"
-    nombre_guides = page.count(repere_guides)
-    if nombre_guides != 1:
-        raise ErreurConstruction(
-            f"Le repère {repere_guides} doit apparaître exactement une fois ; trouvé : {nombre_guides}."
-        )
-    page = page.replace(repere_guides, lire_texte(plan["encadrement_guides_accueil"]), 1)
 
     restants = sorted(set(MOTIF_MARQUEUR_HTML.findall(page)))
     if restants:
@@ -225,32 +217,10 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
             ajouter(ressource["sortie"], lire_texte(ressource["source"]))
 
     ajouter("ressources/moteur-jeu.js", construire_javascript(plan))
-    feuilles_css = construire_css(plan)
-    for sortie, contenu in feuilles_css.items():
+    # Le plan produit directement l’unique feuille de l’application principale.
+    # Aucun alias ni assemblage CSS parallèle n’est conservé.
+    for sortie, contenu in construire_css(plan).items():
         ajouter(sortie, contenu)
-    # La page principale charge une seule feuille afin de limiter les requêtes
-    # bloquant son premier affichage. Les feuilles séparées restent disponibles
-    # pour les guides et pour faciliter le diagnostic du code source.
-    ordre_feuilles_principales = [
-        "00-fondations-et-composants.css",
-        "10-parcours-principal.css",
-        "20-accueil-et-question-principale.css",
-        "30-revision-parcours-et-parametres.css",
-        "40-progression-et-erreurs.css",
-        "50-carte-question-et-correction.css",
-        "60-parcours-modes-et-chronometre.css",
-        "70-celebrations-bilan-et-fenetres.css",
-        "80-finitions-de-l-interface.css",
-        "85-guides-pedagogiques.css",
-        "90-adaptation-ecrans-et-etats-finaux.css",
-        "95-consentement.css",
-        "96-icones-et-defi-hasard.css",
-        "99-stabilisation-visuelle.css",
-    ]
-    ajouter(
-        "ressources/styles/pjjoue-principal.css",
-        "".join(feuilles_css[f"ressources/styles/{nom}"] for nom in ordre_feuilles_principales),
-    )
 
     # Le nom du cache change automatiquement dès qu'un fichier public généré
     # ou qu'une ressource précachée change. Cela couvre notamment
@@ -274,14 +244,7 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
                 f"Ressource précachée introuvable : {chemin_relatif}"
             )
         empreinte_cache.update(chemin_relatif.encode("utf-8"))
-        if chemin.suffix.lower() in {
-            ".css", ".html", ".js", ".json", ".svg",
-            ".txt", ".webmanifest", ".xml"
-        }:
-            contenu_cache = chemin.read_text(encoding="utf-8").encode("utf-8")
-        else:
-            contenu_cache = chemin.read_bytes()
-        empreinte_cache.update(contenu_cache)
+        empreinte_cache.update(chemin.read_bytes())
     version_cache = empreinte_cache.hexdigest()[:12]
     sorties["service-worker.js"] = sorties["service-worker.js"].replace(
         "__VERSION_CACHE_PJJOUE__", version_cache

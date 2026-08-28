@@ -8,7 +8,7 @@ L’idée est simple : **on part du nom visible dans le site, puis on ouvre le d
 
 1. `02 - Accueil`
 2. `03 - Parcours PJJ`
-3. `04 - Carnet de voyage`
+3. `04 - Carnet de parcours`
 4. `05 - Entraînement libre`
 5. `06 - Question`
 6. `07 - Bilan de la session`
@@ -49,7 +49,7 @@ On préfère un seul fichier commun bien nommé à cinq copies du même code.
 - Mesures éducatives ;
 - Sigles essentiels ;
 - Préparer son arrivée à la PJJ ;
-- Quiz PJJ - 160 questions.
+- Quiz PJJ — banque complète à 960 questions.
 
 Chaque guide possède son `page.html`, son `style-de-la-page.css` et son `LIRE-MOI.md`.
 

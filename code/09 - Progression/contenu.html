@@ -1,91 +1,47 @@
 <section class="ecran" id="progression">
-    <div class="page-entete progression-entete">
-     <h1>
-      Progression
-     </h1>
-     <p>
-      Retrouve ton activité générale, tes erreurs actives et ton avancée dans le parcours PJJ.
-     </p>
-    </div>
-    <div class="progression-grille">
-     <article class="progression-carte progression-activite">
-      <div class="progression-carte-entete">
-       <div aria-hidden="true" class="progression-icone">
-        <img src="ressources/icones-interface/icone-mon-activite.svg" alt="" aria-hidden="true">
-       </div>
-       <div>
-        <h2>
-         Mon activité
-        </h2>
-        <p>
-         Les principaux repères de ton entraînement.
-        </p>
-       </div>
+  <header class="page-entete progression-entete">
+    <span class="surtitre">Progression</span>
+    <h1>Tes parcours prennent forme.</h1>
+    <p>Retrouve ta progression globale, tes repères d’activité et l’avancée de chaque parcours.</p>
+  </header>
+
+  <div class="progression-studio">
+    <section class="progression-vue-ensemble" aria-labelledby="titreActiviteProgression">
+      <header class="progression-vue-ensemble-entete">
+        <div>
+          <span class="surtitre">Vue d’ensemble</span>
+          <h2 id="titreActiviteProgression">Ta trajectoire</h2>
+          <p>Visualise tes repères d’activité, les questions travaillées et les étapes maîtrisées.</p>
+        </div>
+      </header>
+
+      <div class="progression-colonne-contenu">
+        <div class="progression-tableau-bord" id="tableauProgression"></div>
+        <div class="progression-vue-ensemble-metrics" aria-label="Indicateurs d’activité">
+          <div class="progression-statistique progression-decouverte-statistique">
+            <span>Étapes abordées</span>
+            <strong id="experienceProgression">0</strong>
+          </div>
+          <div class="progression-statistique"><span>Questions travaillées</span><strong id="questionsJoueesProgression">0</strong></div>
+          <div class="progression-statistique"><span>Questions à revoir</span><strong id="erreursProgression">0</strong></div>
+          <div class="progression-statistique"><span>Étapes maîtrisées</span><strong id="etapesMaitriseesProgression">0</strong></div>
+        </div>
       </div>
-      <div class="progression-statistiques">
-       <div class="progression-statistique progression-decouverte-statistique">
-        <strong id="experienceProgression">
-         <span class="experience-valeur">0</span>
-         <span class="experience-libelle">découvertes</span>
-        </strong>
-       </div>
-       <div class="progression-statistique">
-        <strong id="questionsJoueesProgression">
-         0
-        </strong>
-        <span>
-         activités réalisées
-        </span>
-       </div>
-       <div class="progression-statistique">
-        <strong id="erreursProgression">
-         0
-        </strong>
-        <span>
-         erreurs actives
-        </span>
-       </div>
-       <div class="progression-statistique">
-        <strong id="etapesMaitriseesProgression">
-         0
-        </strong>
-        <span>
-         étapes maîtrisées
-        </span>
-       </div>
+    </section>
+
+    <section class="progression-explorateur" aria-labelledby="titreParcoursProgression">
+      <header class="progression-explorateur-entete">
+        <div>
+          <span class="surtitre">Parcours</span>
+          <h2 id="titreParcoursProgression">Voir un parcours en détail</h2>
+          <p>Consulte son avancement, les étapes maîtrisées et l’état de son évaluation.</p>
+        </div>
+        <button class="secondaire" id="boutonOuvrirParcours" type="button">Tous les parcours →</button>
+      </header>
+      <div class="progression-colonne-contenu">
+        <div class="progression-pastilles" id="listeProgressionParcours" role="tablist" aria-label="Choisir un parcours à afficher"></div>
+        <div class="progression-detail-parcours" id="detailProgressionParcours" role="tabpanel" tabindex="0" aria-labelledby="ongletProgressionParcours-commun"></div>
       </div>
-      <div class="progression-actions">
-       <button class="secondaire" id="boutonExporterMaProgression">
-        Exporter ma progression
-       </button>
-       <label class="secondaire progression-importation" for="fichierImporterProgression">
-        Importer
-        <input accept="application/json" hidden="" id="fichierImporterProgression" type="file"/>
-       </label>
-      </div>
-     </article>
-     <article class="progression-carte progression-parcours">
-      <div class="progression-carte-entete">
-       <div aria-hidden="true" class="progression-icone progression-icone-parcours">
-        <img src="ressources/icones-interface/icone-carte-du-parcours.svg" alt="" aria-hidden="true">
-       </div>
-       <div>
-        <h2>
-         Ma progression dans le parcours PJJ
-        </h2>
-        <p>
-         Ton avancement est enregistré étape par étape.
-        </p>
-       </div>
-      </div>
-      <div class="tableau-bord progression-tableau-bord" id="tableauProgression">
-      </div>
-      <div class="progression-actions progression-actions-parcours">
-       <button class="secondaire" id="boutonOuvrirParcours" type="button">
-        Ouvrir
-       </button>
-      </div>
-     </article>
-    </div>
-   </section>
-   
+    </section>
+  </div>
+</section>

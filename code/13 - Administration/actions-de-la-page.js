@@ -7,7 +7,8 @@
  * fichier JSON qui doit être contrôlé avant d’être réintégré au projet.
  */
 
-const CLE_BROUILLON_ADMINISTRATION = 'pjjoue_V1_brouillon_administration';
+const CLE_BROUILLON_ADMINISTRATION = 'pjjoue_v1_brouillon_administration';
+const themesAdministration = window.DONNEES_PJJ?.THEMES || [];
 const questionsOriginales = window.DONNEES_PJJ?.QUESTIONS || [];
 let questionsModifiables = structuredClone(questionsOriginales);
 
@@ -41,7 +42,7 @@ function validerBrouillon(brouillon) {
       ...structuredClone(questionOriginale),
       ...structuredClone(questionBrouillon),
       id: questionOriginale.id,
-      versionContenu: 'V1'
+      versionContenu: questionBrouillon.versionContenu || questionOriginale.versionContenu || 'V1'
     });
   }
   return questionsValidees;
@@ -100,7 +101,8 @@ function creerCarteQuestion(question) {
   const carte = document.createElement('article');
   carte.className = 'carte-question';
   const distracteurs = (question.mauvaisesReponses || []).join('\n');
-  carte.innerHTML = `<h2>Q${question.id} · Étape ${question.etape}</h2><div class="grille-question">
+  const numeroParcours = Math.max(1, themesAdministration.findIndex(theme => theme.id === question.theme) + 1);
+  carte.innerHTML = `<h2>Q${question.id} · Parcours ${numeroParcours} · Étape ${question.etape}</h2><div class="grille-question">
    <label class="pleine-largeur">Énoncé<textarea data-champ="enonce"></textarea></label>
    <label>Bonne réponse<textarea data-champ="bonneReponse"></textarea></label>
    <label>Distracteurs (1 par ligne)<textarea data-champ="mauvaisesReponses"></textarea></label>
@@ -128,10 +130,12 @@ function creerCarteQuestion(question) {
 }
 
 function afficherQuestions() {
+  const theme = selectionner('#filtreParcours')?.value || 'tous';
   const etape = Number(selectionner('#filtreEtape').value || 0);
   const recherche = selectionner('#rechercheQuestions').value.toLowerCase().trim();
   const questionsFiltrees = questionsModifiables.filter(question =>
-    (!etape || Number(question.etape) === etape)
+    (theme === 'tous' || question.theme === theme)
+    && (!etape || Number(question.etape) === etape)
     && (!recherche || JSON.stringify(question).toLowerCase().includes(recherche))
   );
   selectionner('#nombreQuestionsAffichees').textContent = `${questionsFiltrees.length} question(s) affichée(s)`;
@@ -164,6 +168,7 @@ function ouvrirFenetreReinitialisation() {
 }
 
 chargerBrouillon();
+selectionner('#filtreParcours')?.addEventListener('change', afficherQuestions);
 selectionner('#filtreEtape').addEventListener('change', afficherQuestions);
 selectionner('#rechercheQuestions').addEventListener('input', afficherQuestions);
 selectionner('#boutonControler').addEventListener('click', controlerQuestions);

@@ -37,7 +37,7 @@ Créer une variable **Variable de couche de données** pour chacun des paramètr
 
 | Nom conseillé dans GTM | Paramètre Data Layer | Ce qu'il contient |
 |---|---|---|
-| DLV - Page PJJoue consultée | `pjjoue_page_consultee` | Accueil, Parcours PJJ, Carnet de voyage, etc. |
+| DLV - Page PJJoue consultée | `pjjoue_page_consultee` | Accueil, Parcours PJJ, Carnet de parcours, etc. |
 | DLV - Page PJJoue précédente | `pjjoue_page_precedente` | page interne précédente |
 | DLV - Mode de jeu | `pjjoue_mode_de_jeu` | Parcours PJJ, Entraînement libre, Révision des erreurs, Évaluation finale, Défi du hasard |
 | DLV - Mode d'entraînement | `pjjoue_mode_entrainement` | Par ordre d'étapes ou Mélangé |
@@ -79,7 +79,7 @@ Créer ou modifier le déclencheur d'événement personnalisé PJJoue :
 3. Cocher l'utilisation d'une expression régulière si l'interface GTM le demande.
 4. Déclencher sur **Tous les événements personnalisés** correspondant à cette expression.
 
-Ne plus utiliser l'ancienne expression `^pjj_.*`.
+Ne pas utiliser l’expression `^pjj_.*`.
 
 ## Balise d'événement GA4
 
@@ -183,4 +183,4 @@ Après modification du conteneur GTM :
 9. tester un Défi chrono avec une question allant jusqu'à « Temps écoulé » ;
 10. vérifier les paramètres dans DebugView / Temps réel avant de publier GTM.
 
-Les anciennes données utilisant les noms `pjj_...` restent dans l'historique GA4, mais les nouvelles données utilisent exclusivement la nouvelle nomenclature `pjjoue_...`.
+Les événements PJJoue utilisent exclusivement la nomenclature `pjjoue_...`.

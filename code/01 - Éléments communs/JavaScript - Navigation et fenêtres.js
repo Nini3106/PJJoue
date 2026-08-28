@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 // Navigation, historique et fenêtres de confirmation
 // -----------------------------------------------------------------------------
+let navigationInterneParFragment = false;
 function routePourEcran(identifiant) {
     if (identifiant === 'parcours' && etat.theme)
         return '#parcours/' + encodeURIComponent(etat.theme);
@@ -21,11 +22,31 @@ function creerEtatNavigation(identifiant) {
         etape: etat.etape
     };
 }
+function mettreAJourAdresseNavigation(identifiant, remplacer = false) {
+    const route = routePourEcran(identifiant);
+    // Un fichier ouvert directement dans Chrome n’a pas une origine HTTP classique.
+    // On utilise donc uniquement son fragment (#...) et jamais pushState avec une URL file://.
+    if (window.location.protocol === 'file:') {
+        if (window.location.hash === route)
+            return;
+        navigationInterneParFragment = true;
+        if (remplacer)
+            window.location.replace(route);
+        else
+            window.location.hash = route;
+        window.setTimeout(() => { navigationInterneParFragment = false; }, 0);
+        return;
+    }
+    const methode = remplacer ? 'replaceState' : 'pushState';
+    history[methode](creerEtatNavigation(identifiant), '', route);
+}
 function actualiserBoutonRetour() {
     const boutonRetour = selectionner('#boutonRetour');
     if (!boutonRetour)
         return;
-    const retourDisponible = etat.ecran !== 'accueil';
+    const detailParcoursOuvert = etat.ecran === 'parcours'
+        && !selectionner('#vueDetailParcours')?.classList.contains('masque');
+    const retourDisponible = etat.ecran !== 'accueil' && !detailParcoursOuvert;
     boutonRetour.classList.toggle('masque', !retourDisponible);
     boutonRetour.disabled = !retourDisponible;
 }
@@ -34,37 +55,38 @@ function mesurerHauteurEntete() {
     const hauteur = Math.ceil(entete?.getBoundingClientRect().height || 66);
     document.documentElement.style.setProperty('--hauteur-entete', hauteur + 'px');
 }
-function fermerMenuMobile() {
+function fermerMenuPrincipal() {
     const entete = document.querySelector('header.entete');
     const bouton = selectionner('#boutonMenuMobile');
     entete?.classList.remove('menu-mobile-ouvert');
     document.documentElement.classList.remove('menu-principal-ouvert');
     bouton?.setAttribute('aria-expanded', 'false');
-    bouton?.setAttribute('aria-label', 'Ouvrir le menu');
+    bouton?.setAttribute('aria-label', 'Ouvrir le menu principal');
     const libelle = bouton?.querySelector('.bouton-menu-libelle');
     if (libelle)
         libelle.textContent = 'Menu';
 }
-function basculerMenuMobile() {
+function basculerMenuPrincipal() {
     const entete = document.querySelector('header.entete');
     const bouton = selectionner('#boutonMenuMobile');
     const navigation = selectionner('#menuPrincipal');
-    if (!entete || !bouton)
+    if (!entete || !bouton || !navigation)
         return;
     const ouvert = entete.classList.toggle('menu-mobile-ouvert');
     document.documentElement.classList.toggle('menu-principal-ouvert', ouvert);
     bouton.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
-    bouton.setAttribute('aria-label', ouvert ? 'Fermer le menu' : 'Ouvrir le menu');
+    bouton.setAttribute('aria-label', ouvert ? 'Fermer le menu principal' : 'Ouvrir le menu principal');
     const libelle = bouton.querySelector('.bouton-menu-libelle');
     if (libelle)
         libelle.textContent = ouvert ? 'Fermer' : 'Menu';
     mesurerHauteurEntete();
     if (ouvert)
-        requestAnimationFrame(() => navigation?.querySelector('button:not(:disabled)')?.focus());
+        requestAnimationFrame(() => navigation.querySelector('button:not(:disabled), a[href]')?.focus());
 }
 function actualiserNavigation(identifiant) {
     selectionnerTous('.navigation [data-ecran]').forEach(bouton => {
         const actif = bouton.dataset.ecran === identifiant;
+        bouton.classList.toggle('actif', actif);
         if (actif)
             bouton.setAttribute('aria-current', 'page');
         else
@@ -103,9 +125,10 @@ function ajusterQuestionAEcran() {
 const TITRES_ECRANS = {
     accueil: 'Accueil',
     parcours: 'Parcours PJJ',
-    carnet: 'Carnet de voyage',
+    carnet: 'Carnet de parcours',
     entrainement: 'Choisis ton mode d’entraînement',
     erreurs: 'Mes erreurs à retravailler',
+    supports: 'Supports de révision',
     progression: 'Progression',
     parametres: 'Paramètres',
     question: 'Question',
@@ -115,7 +138,9 @@ function actualiserTitrePage(ecran) {
     document.title = `${TITRES_ECRANS[ecran] || 'PJJoue'} — PJJoue`;
 }
 function afficherEcran(identifiant, optionsAffichage = {}) {
-    fermerMenuMobile();
+    fermerMenuPrincipal();
+    if (identifiant === 'supports')
+        initialiserRechercheSupports();
     clearInterval(etat.identifiantMinuteur);
     if (identifiant !== 'question')
         fermerFenetreJokers({ restaurerFocus: false });
@@ -171,23 +196,22 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     if (identifiant === 'progression')
         afficherProgression();
     if (identifiant === 'carnet') {
-        initialiserProgression('commun');
-        actualiserCarnetParcours(PROGRAMMES.commun);
+        THEMES.forEach(theme => initialiserProgression(theme.id));
+        actualiserCarnetParcours();
     }
     actualiserGroupesChoix();
     actualiserNavigation(identifiant);
     actualiserBoutonRetour();
-    if (!optionsAffichage.depuisHistorique && !restaurationNavigation) {
-        const methode = optionsAffichage.remplacerHistorique ? 'replaceState' : 'pushState';
-        history[methode](creerEtatNavigation(identifiant), '', routePourEcran(identifiant));
-    }
+    if (!optionsAffichage.depuisHistorique && !restaurationNavigation)
+        mettreAJourAdresseNavigation(identifiant, Boolean(optionsAffichage.remplacerHistorique));
     if (identifiant === 'accueil')
         garantirAccueilEnHaut();
     else
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     if (identifiant !== 'question') {
         requestAnimationFrame(() => {
-            const titre = cible.querySelector('h1,h2');
+            const titre = [...cible.querySelectorAll('h1,h2')]
+                .find(element => !element.closest('.masque'));
             titre?.setAttribute('tabindex', '-1');
             titre?.focus?.({ preventScroll: true });
         });
@@ -334,7 +358,7 @@ function revenirEnArriere() {
     if (etat.ecran === 'question') {
         const secours = etat.mode === 'parcours' || etat.mode === 'evaluation-finale' ? 'parcours' : (etat.mode === 'revision' ? 'erreurs' : 'entrainement');
         if (secours === 'parcours') {
-            ouvrirParcours('commun', { remplacerHistorique: true });
+            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
             return;
         }
         afficherEcran(secours, { forcerSortieQuestion: true, remplacerHistorique: true });
@@ -346,7 +370,7 @@ function revenirEnArriere() {
     }
     if (etat.ecran === 'bilan') {
         if (etat.mode === 'parcours' || etat.mode === 'evaluation-finale') {
-            ouvrirParcours('commun', { remplacerHistorique: true });
+            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
             return;
         }
         afficherEcran(etat.mode === 'revision' ? 'erreurs' : 'entrainement', { forcerSortieQuestion: true, remplacerHistorique: true });
@@ -355,10 +379,18 @@ function revenirEnArriere() {
     afficherEcran('accueil', { forcerSortieQuestion: true, remplacerHistorique: true });
 }
 function lireRoute() {
-    const parties = location.hash.replace(/^#/, '').split('/').map(decodeURIComponent);
+    const decoderSegment = segment => {
+        try {
+            return decodeURIComponent(segment);
+        }
+        catch (erreur) {
+            return '';
+        }
+    };
+    const parties = location.hash.replace(/^#/, '').split('/').map(decoderSegment);
     if (parties[0] === 'parcours')
-        return { pjjoue: true, ecran: 'parcours', theme: parties[1] || 'commun' };
-    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'progression', 'parametres', 'question'];
+        return { pjjoue: true, ecran: 'parcours', theme: parties[1] || null };
+    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'supports', 'progression', 'parametres', 'question'];
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
 }
 function restaurerRoute(route) {
@@ -377,14 +409,33 @@ function restaurerRoute(route) {
             ouvrirParcours(etatRoute.theme || 'commun', { remplacerHistorique: true });
         }
     }
-    else if (etatRoute.ecran === 'parcours' && etatRoute.theme)
-        ouvrirParcours(etatRoute.theme);
+    else if (etatRoute.ecran === 'parcours') {
+        if (etatRoute.theme)
+            ouvrirParcours(etatRoute.theme);
+        else
+            ouvrirChoixParcours({ depuisHistorique: true, forcerSortieQuestion: true });
+    }
     else
         afficherEcran(etatRoute.ecran || 'accueil', { depuisHistorique: true, forcerSortieQuestion: true });
     restaurationNavigation = false;
-    history.replaceState(creerEtatNavigation(etat.ecran), '', routePourEcran(etat.ecran));
+    if (window.location.protocol !== 'file:')
+        history.replaceState(creerEtatNavigation(etat.ecran), '', routePourEcran(etat.ecran));
 }
+window.addEventListener('hashchange', () => {
+    if (window.location.protocol !== 'file:' || restaurationNavigation || navigationInterneParFragment)
+        return;
+    const fragmentCourant = window.location.hash || '#accueil';
+    if (fragmentCourant === routePourEcran(etat.ecran))
+        return;
+    restaurerRoute(lireRoute());
+});
 window.addEventListener('popstate', evenement => {
+    if (navigationInterneParFragment)
+        return;
+    // Chrome peut émettre popstate lors d'un simple changement de fragment sur un fichier local.
+    // Si l'adresse correspond déjà à l'écran affiché, ce n'est pas une demande de sortie utilisateur.
+    if (window.location.protocol === 'file:' && window.location.hash === routePourEcran(etat.ecran))
+        return;
     if (etat.ecran === 'question' && etat.questionsSession?.length) {
         history.forward();
         ouvrirFenetreQuitterSession({

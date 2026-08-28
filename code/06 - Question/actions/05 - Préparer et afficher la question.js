@@ -71,17 +71,13 @@ function preparerQuestionCourante() {
 
 function afficherReperesQuestion(question) {
     const theme = THEMES.find(themeCandidat => themeCandidat.id === question.theme);
-    const etapeProgramme = obtenirEtapeProgramme(question.theme, question.etape);
+    const identite = obtenirIdentiteParcours(question.theme);
+    const ecranQuestion = selectionner('#question');
+    ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
+    ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
     const valeurProgression = Math.round(
         (etat.indexQuestion + 1) / etat.questionsSession.length * 100
     );
-    const modeEvaluationFinale = etat.mode === 'evaluation-finale';
-    const positionParcours = modeEvaluationFinale
-        ? `Évaluation finale · Défi ${etat.indexQuestion + 1}/${etat.questionsSession.length}`
-        : `Étape ${question.etape} · Défi ${etat.indexQuestion + 1}/${etat.questionsSession.length}`;
-    const nomDestination = modeEvaluationFinale
-        ? 'Destination finale'
-        : (etapeProgramme?.titre || 'Parcours guidé');
     const repereProcedureLocale = question.procedureLocale
         ? '<span class="repere local repere-locale">Procédure locale</span>'
         : '';
@@ -95,10 +91,8 @@ function afficherReperesQuestion(question) {
     );
     selectionner('#enonceQuestion').textContent = nettoyerEnonce(question);
     selectionner('#reperesQuestion').innerHTML =
-        `<span class="repere repere-position"><small>Position actuelle</small>`
-        + `<b>${positionParcours}</b></span>`
-        + `<span class="repere repere-theme">${creerIconeTheme(theme.id, theme.titre)}`
-        + `<span><small>${nomDestination}</small><b>${theme.titre}</b></span></span>`
+        `<span class="repere repere-theme">${creerIconeTheme(theme.id, identite.titre)}`
+        + `<b>Parcours ${identite.numero} · ${identite.titre}</b></span>`
         + repereProcedureLocale;
 }
 
@@ -149,10 +143,12 @@ function afficherModeReponseQuestion(question, reponse, dejaPassee) {
 
     const modePresentation = question.modePresentation || obtenirModeQuestion(question);
     const libelleMode = question.libelleMode || obtenirLibelleMode(modePresentation);
-    selectionner('#reperesQuestion').insertAdjacentHTML(
-        'beforeend',
-        `<span class="repere mode-repere">${libelleMode}</span>`
-    );
+    if (modePresentation === 'choix-unique') {
+        selectionner('#reperesQuestion').insertAdjacentHTML(
+            'beforeend',
+            `<span class="repere mode-repere">${libelleMode}</span>`
+        );
+    }
 
     if (modePresentation === 'reponse-ecrite') {
         afficherActiviteEcrite(reponse);
@@ -236,7 +232,7 @@ function appliquerIdentiteVisuelleEtape(question) {
     );
     document.documentElement.style.setProperty(
         '--couleur-etape-active',
-        etapeProgramme?.couleur || '#ffc83d'
+        etapeProgramme?.couleur || '#2d7379'
     );
     document.body.dataset.etapeActive = String(question?.etape || 'libre');
 }
@@ -251,6 +247,10 @@ function actualiserSuiviEtapeQuestion(question) {
         return;
     const finale = etat.mode === 'evaluation-finale' || Number(question.etape) === 12;
     const etapeProgramme = obtenirEtapeProgramme(question.theme, question.etape);
+    const identite = obtenirIdentiteParcours(question.theme);
+    const ecranQuestion = selectionner('#question');
+    ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
+    ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
     numero.textContent = finale ? 'Étape 12' : `Étape ${question.etape}`;
     titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours PJJ');
     suivi.classList.toggle('masque', finale || etat.mode !== 'parcours');
@@ -262,7 +262,7 @@ function actualiserSuiviEtapeQuestion(question) {
     boutonReinitialiser.disabled = nombreAutonomes === 0;
     boutonReinitialiser.setAttribute(
         'aria-label',
-        `Réinitialiser les ${nombreAutonomes} questions validées sans joker de l’étape ${question.etape}`
+        `Réinitialiser les ${nombreAutonomes} questions maîtrisées sans aide de l’étape ${question.etape}`
     );
 }
 function demanderReinitialisationSansJoker() {
@@ -273,8 +273,8 @@ function demanderReinitialisationSansJoker() {
     if (!nombreAutonomes)
         return;
     ouvrirFenetreMessage({
-        titre: 'Réinitialiser le compteur sans joker ?',
-        message: `Les ${nombreAutonomes} validations sans joker de cette étape ne compteront plus pour ouvrir l’évaluation finale. Ta progression générale reste conservée.`,
+        titre: 'Réinitialiser la maîtrise sans aide ?',
+        message: `Les ${nombreAutonomes} validations autonomes de cette étape seront effacées. Les questions déjà travaillées et ta progression générale restent conservées.`,
         libelleConfirmer: 'Réinitialiser',
         libelleAnnuler: 'Annuler',
         afficherAnnuler: true,

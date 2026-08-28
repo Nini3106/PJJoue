@@ -5,12 +5,11 @@
  <script src="ressources/navigation-locale.js" defer></script>
 <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 160 questions et 7 modes de jeu." name="description"/>
+  <meta content="PJJoue propose six parcours pédagogiques interactifs pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 960 questions, 66 étapes, 6 évaluations et 7 modes de jeu." name="description"/>
   <link rel="icon" href="favicon.ico" sizes="any"/>
   <link rel="icon" href="favicon-48x48.png" type="image/png" sizes="48x48"/>
   <link rel="icon" href="favicon-96x96.png" type="image/png" sizes="96x96"/>
   <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180"/>
-  <link rel="manifest" href="manifest.webmanifest"/>
   <meta content="#0b315d" name="theme-color"/>
   <meta content="no-referrer" name="referrer"/>
   <meta content="dark" name="color-scheme"/>
@@ -20,7 +19,7 @@
   <meta content="PJJoue" property="og:site_name"/>
   <meta content="fr_FR" property="og:locale"/>
   <meta content="PJJoue — Découvrir et comprendre la PJJ" property="og:title"/>
-  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 160 questions et 7 modes de jeu." property="og:description"/>
+  <meta content="PJJoue propose six parcours pédagogiques interactifs pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 960 questions, 66 étapes, 6 évaluations et 7 modes de jeu." property="og:description"/>
   <meta content="https://pjjoue.fr/" property="og:url"/>
   <meta content="https://pjjoue.fr/ressources/panorama-accueil-calme.png" property="og:image"/>
   <meta content="summary_large_image" name="twitter:card"/>
@@ -28,7 +27,8 @@
   <title>
    PJJoue — Découvrir et comprendre la PJJ
   </title>
-  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=20260809-1">
+  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=20260828-coherence11">
+  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=20260827-final1">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PJJoue","alternateName":"PJJoue — Découvrir et comprendre la PJJ","url":"https://pjjoue.fr/","description":"Parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
 </head>
  <body data-ecran-actif="accueil">
@@ -38,47 +38,25 @@
   <div aria-atomic="true" aria-live="polite" class="lecteur-ecran-seulement" id="statutAccessibilite">
   </div>
   <header class="entete">
-   <button aria-label="PJJoue — Découvrir et comprendre la PJJ, revenir à l’accueil" class="marque bouton-marque" data-ecran="accueil" type="button">
-    <b>
-     <span>PJJ</span>oue
-    </b>
-    <span>
-     Découvrir et comprendre la PJJ
-    </span>
+   <button aria-label="PJJoue — revenir à l’accueil" class="marque bouton-marque" data-ecran="accueil" type="button">
+    <b><span>PJJ</span>oue</b>
+    <span>Découvrir et comprendre la PJJ</span>
    </button>
    <button aria-controls="menuPrincipal" aria-expanded="false" aria-label="Ouvrir le menu" class="bouton-menu-mobile" id="boutonMenuMobile" type="button">
     <span class="bouton-menu-libelle">Menu</span>
-    <span class="bouton-menu-icone" aria-hidden="true">
-     <span></span>
-     <span></span>
-     <span></span>
-    </span>
+    <span class="bouton-menu-icone" aria-hidden="true"><span></span><span></span><span></span></span>
    </button>
-   <nav class="navigation" id="menuPrincipal">
-    <button id="boutonAccueil" data-ecran="accueil" type="button">
-     Accueil
-    </button>
-    <button id="boutonParcoursPJJ" data-ecran="parcours" type="button">
-     Parcours PJJ
-    </button>
-    <button id="boutonCarnetDeVoyage" data-ecran="carnet" type="button">
-     Carnet de voyage
-    </button>
-    <button id="boutonEntrainementLibre" data-ecran="entrainement" type="button">
-     Entraînement libre
-    </button>
-    <button id="boutonReviser" data-ecran="erreurs" type="button">
-     Réviser
-    </button>
-    <button id="boutonProgression" data-ecran="progression" type="button">
-     Progression
-    </button>
-    <button id="boutonParametres" data-ecran="parametres" type="button">
-     Paramètres
-    </button>
-    <button class="bouton-installer-pjjoue" hidden id="boutonInstallerPJJoue" type="button">
-     Installer PJJoue
-    </button>
+   <nav class="navigation" id="menuPrincipal" aria-label="Navigation principale">
+    <button id="boutonAccueil" data-ecran="accueil" type="button">Accueil</button>
+    <button id="boutonParcoursPJJ" data-ecran="parcours" type="button">Parcours PJJ</button>
+    <button id="boutonReviser" data-ecran="erreurs" type="button">Réviser</button>
+    <button id="boutonSupportsRevision" data-ecran="supports" type="button">Supports</button>
+    <button id="boutonEntrainementLibre" data-ecran="entrainement" type="button">Entraînement libre</button>
+    <button id="boutonProgression" data-ecran="progression" type="button">Progression</button>
+    <a class="navigation-lien" id="lienGuides" href="guides/index.html">Guides</a>
+    <button id="boutonCarnetDeParcours" data-ecran="carnet" type="button">Carnet de parcours</button>
+    <button id="boutonParametres" data-ecran="parametres" type="button">Paramètres</button>
+    <button class="bouton-installer-pjjoue" hidden id="boutonInstallerPJJoue" type="button">Installer PJJoue</button>
    </nav>
   </header>
   <main class="conteneur" id="contenuPrincipal" tabindex="-1">
@@ -96,416 +74,321 @@
        <h1>Entre dans l’univers de la PJJ</h1>
        <span aria-hidden="true" class="surligne-titre-accueil"></span>
        <div class="accueil-action-principale">
-        <button class="bouton-commencer bouton-commencer-principal" id="boutonCommencer" type="button">Commencer <span aria-hidden="true">→</span></button>
+        <button class="bouton-commencer bouton-commencer-principal" id="boutonCommencer" type="button">Choisir mon parcours <span aria-hidden="true">→</span></button>
        </div>
       </div>
-      <p class="accueil-introduction">Découvre la Protection judiciaire de la jeunesse, comprends son fonctionnement et progresse à ton rythme à travers un parcours structuré et interactif.</p>
+      <p class="accueil-introduction">Découvre la Protection judiciaire de la jeunesse, comprends son fonctionnement et progresse à ton rythme à travers six parcours structurés et interactifs.</p>
       <ul class="accueil-statistiques" aria-label="Contenu du jeu">
        <li>
         <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-turquoise" viewBox="0 0 48 48"><path d="M6 10c7-2 13 0 18 5v25c-5-5-11-7-18-5zM42 10c-7-2-13 0-18 5v25c5-5 11-7 18-5z"/></svg>
-        <strong>11</strong><span>étapes</span>
+        <strong>6</strong><span>parcours</span>
        </li>
        <li>
         <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-jaune" viewBox="0 0 48 48"><path d="M25 7c-9 0-16 6-16 14 0 4 2 8 5 10l-2 8 9-4h4c9 0 16-6 16-14S34 7 25 7z"/><path class="accueil-icone-detail" d="M21 18c0-3 2-5 5-5s5 2 5 5c0 4-5 4-5 8M26 31h.01"/></svg>
-        <strong>160</strong><span>questions</span>
+        <strong>960</strong><span>questions</span>
        </li>
        <li>
         <svg aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-turquoise" viewBox="0 0 48 48"><path d="M14 15h20c4 0 7 3 8 8l2 10c1 5-5 8-8 4l-5-6H17l-5 6c-3 4-9 1-8-4l2-10c1-5 4-8 8-8z"/><path class="accueil-icone-detail" d="M15 21v8M11 25h8M33 22h.01M37 27h.01"/></svg>
         <strong>7</strong><span>modes de jeu</span>
        </li>
        <li>
-        <img src="ressources/icones-interface/icone-trophee-evaluation-finale.svg" alt="" aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-violette accueil-statistique-image">
-        <strong>1</strong><span>évaluation</span>
+        <img src="ressources/icone-trophee-accueil.svg" alt="" aria-hidden="true" class="accueil-statistique-icone accueil-statistique-icone-violette accueil-statistique-image">
+        <strong>6</strong><span>évaluations</span>
        </li>
       </ul>
      </div>
     </div>
    </section>
    
-<section class="ecran" id="parcours">
-    <div class="programme-presentation chemin-programme-presentation">
-     <div class="programme-presentation-principal">
-      <h1 id="titreParcours">
-       Parcours PJJ
-      </h1>
-      <p id="sousTitreParcours">
-       Explore, comprends et progresse à ton rythme à travers 11 étapes clés.
-      </p>
-     </div>
-     <div class="programme-objectif programme-objectif-simple">
-      <div class="programme-objectif-interieur">
-       <span aria-hidden="true" class="objectif-icone">
-        <img src="ressources/icones-interface/icone-cible.svg" alt="" aria-hidden="true" class="objectif-cible-reference">
-       </span>
-       <span class="programme-objectif-texte">
-        Complète les 11 étapes sans joker pour accéder à l’évaluation finale.
-       </span>
-      </div>
-     </div>
-    </div>
-    <div class="chemin-chemin">
-     <div class="carte-parcours-entete chemin-carte-parcours-entete">
-      <span aria-hidden="true" class="carte-parcours-icone">
-       <img src="ressources/icones-interface/icone-carte-du-parcours.svg" alt="" aria-hidden="true">
-      </span>
-      <div class="carte-parcours-titres">
-       <span class="carte-parcours-surtitre">Carte du parcours</span>
-       <h2>Les 11 destinations</h2>
-       <p id="resumeCarteParcours"></p>
-      </div>
-      <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
-       <span aria-hidden="true" class="parcours-chronometre-icone">
-        <img src="ressources/icones-interface/icone-defi-chrono.svg" alt="" aria-hidden="true">
-       </span>
-       <div class="parcours-chronometre-texte">
-        <strong id="titreChronometreParcours">Défi chrono</strong>
-        <span>Ajoute du rythme à la prochaine étape si tu en as envie.</span>
-       </div>
-       <div class="parcours-chronometre-commandes">
-        <div class="parcours-bascule-groupe" id="choixChronometreParcours">
-         <button id="boutonParcoursLibre" class="option-bouton actif" data-valeur="non" type="button">Libre</button>
-         <button id="boutonParcoursChronometre" class="option-bouton" data-valeur="oui" type="button">Chronométré</button>
+<section class="ecran parcours-ecran" id="parcours">
+  <section class="parcours-selection-vue" id="vueChoixParcours" aria-labelledby="titreChoixParcours">
+    <header class="presentation-page parcours-selection-entete">
+      <span class="surtitre">Ton apprentissage</span>
+      <h1 id="titreChoixParcours">Choisis ton itinéraire.</h1>
+      <p>Tu peux suivre l’ordre proposé pour avancer pas à pas, ou commencer directement par le parcours qui correspond le mieux à tes connaissances et à tes besoins. Chaque parcours est autonome : tu ne rates rien d’indispensable en choisissant un autre point de départ.</p>
+    </header>
+    <div class="selecteur-parcours selecteur-parcours-grille" id="selecteurParcours" aria-label="Choisir un parcours"></div>
+  </section>
+
+  <section class="parcours-detail-vue masque" id="vueDetailParcours" aria-labelledby="titreParcours">
+    <button class="discret parcours-retour-liste" id="boutonChangerParcours" type="button">← Choisir un autre parcours</button>
+    <header class="parcours-detail-entete">
+      <div class="parcours-detail-identite">
+        <span class="parcours-detail-icone" id="iconeParcoursSelectionne" aria-hidden="true"></span>
+        <div class="parcours-detail-titres">
+          <span class="surtitre" id="surtitreParcours">Parcours 1 sur 6</span>
+          <h1 id="titreParcours">Découvrir la PJJ</h1>
+          <p id="sousTitreParcours">Comprendre les missions, les publics, les professionnels et l’organisation de la PJJ.</p>
+          <div class="parcours-detail-repere">
+            <span aria-hidden="true" class="parcours-detail-repere-icone"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 6-6M16 6h2v2"/></svg></span>
+            <span id="texteObjectifParcours">Complète les 11 étapes pour accéder à l’évaluation finale. Les réussites sans aide sont distinguées dans ta progression.</span>
+          </div>
         </div>
-        <div class="parcours-secondes masque" id="secondesChronometreParcours">
-         <span>Secondes</span>
-         <div class="entrainement-secondes-groupe">
-          <button id="boutonParcours5Secondes" class="choix-bouton" data-secondes="5" type="button">5 s</button>
-          <button id="boutonParcours10Secondes" class="choix-bouton" data-secondes="10" type="button">10 s</button>
-          <button id="boutonParcours15Secondes" class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
-          <button id="boutonParcours20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button>
-          <button id="boutonParcours25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button>
-          <button id="boutonParcours30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button>
-         </div>
+      </div>
+
+      <aside class="parcours-detail-actions">
+        <div class="parcours-detail-progression">
+          <div class="parcours-detail-progression-ligne">
+            <span id="libelleProgressionParcours">0 / 11 étapes maîtrisées</span>
+            <strong id="pourcentageProgressionParcours">0%</strong>
+          </div>
+          <div class="parcours-detail-barre" role="progressbar" aria-label="Progression du parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressionParcoursSelectionne"><i></i></div>
         </div>
-       </div>
-      </section>
-     </div>
-     <div class="chemin-ligne" id="ligneParcours1">
-     </div>
-     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
-     </div>
-     <div class="chemin-ligne" id="ligneParcours2">
-     </div>
-     <div aria-hidden="true" class="chemin-virage chemin-virage-gauche">
-     </div>
-     <div class="chemin-ligne chemin-ligne-inverse" id="ligneParcours3">
-     </div>
-     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
-     </div>
+        <button class="principal parcours-action-principale" id="boutonActionParcours" type="button">Commencer l’étape 1 →</button>
+      </aside>
+    </header>
+
+    <section class="parcours-carte-zone" aria-labelledby="titreDestinationsParcours">
+      <div class="parcours-carte-entete-v1">
+        <div class="carte-parcours-titres">
+          <h2 id="titreDestinationsParcours">Les 11 étapes</h2>
+          <p id="resumeCarteParcours"></p>
+        </div>
+        <details class="parcours-options-session">
+          <summary>
+            <span class="parcours-options-session-titre">Chronomètre</span>
+            <span class="parcours-options-session-statut">Optionnel</span>
+          </summary>
+          <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
+            <div class="parcours-chronometre-texte">
+              <strong id="titreChronometreParcours">Rythme de la session</strong>
+              <span>Tu peux limiter le temps de réponse pour cette étape.</span>
+            </div>
+            <div class="parcours-chronometre-commandes">
+              <div class="parcours-bascule-groupe" id="choixChronometreParcours">
+                <button id="boutonParcoursLibre" class="option-bouton actif" data-valeur="non" type="button">Sans chrono</button>
+                <button id="boutonParcoursChronometre" class="option-bouton" data-valeur="oui" type="button">Avec chrono</button>
+              </div>
+              <div class="parcours-secondes masque" id="secondesChronometreParcours">
+                <span>Temps par question</span>
+                <div class="entrainement-secondes-groupe">
+                  <button id="boutonParcours15Secondes" class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
+                  <button id="boutonParcours20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button>
+                  <button id="boutonParcours25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button>
+                  <button id="boutonParcours30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </details>
+      </div>
+
+      <div class="chemin-ligne" id="ligneParcours1"></div>
+      <div class="chemin-ligne" id="ligneParcours2"></div>
+      <div class="chemin-ligne" id="ligneParcours3"></div>
       <div class="chemin-finale-ligne">
-      <div class="chemin-finale-espace">
+        <div id="cartesEtapesFinales"></div>
+        <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled id="carteEvaluationFinale" type="button">
+          <span aria-hidden="true" class="icone-evaluation"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8v5c0 3-1.8 5-4 5S8 12 8 9z"/><path d="M8 6H4v2c0 2 1.5 3 4 3M16 6h4v2c0 2-1.5 3-4 3M12 14v4M8 21h8M9 18h6"/></svg></span>
+          <span class="evaluation-etape-numero">ÉTAPE 12</span>
+          <span class="evaluation-titre">Évaluation finale</span>
+          <span class="evaluation-statut">Disponible après les 11 étapes</span>
+        </button>
       </div>
-      <div id="cartesEtapesFinales">
-      </div>
-      <div aria-hidden="true" class="chemin-finale-lien">
-      </div>
-      <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled="" id="carteEvaluationFinale" type="button">
-       <span aria-hidden="true" class="icone-evaluation">
-        <img src="ressources/icones-interface/icone-trophee-evaluation-finale.svg" alt="" aria-hidden="true">
-       </span>
-       <span class="evaluation-etape-numero">
-        ÉTAPE 12
-       </span>
-       <span class="evaluation-titre">
-        Évaluation
-       </span>
-       <span class="evaluation-statut">
-        Parcours sans jokers requis
-       </span>
-      </button>
-     </div>
-    </div>
-   </section>
-   <section class="ecran" id="carnet">
-    <div class="page-entete carnet-page-entete">
-     <h1>
-      Carnet de voyage
-     </h1>
-     <p>
-      Retrouve ta prochaine destination, tes souvenirs et tes défis personnels.
-     </p>
-    </div>
-    <section class="carnet-parcours" aria-labelledby="titreCarnetParcours">
-     <div class="carnet-parcours-contenu">
-      <div class="carnet-parcours-entete">
-       <div aria-hidden="true" class="carnet-parcours-icone">
-        <img src="ressources/icones-interface/icone-boussole.svg" alt="" aria-hidden="true">
-       </div>
-       <div>
-        <span class="carnet-parcours-surtitre">Ton parcours</span>
-        <h2 id="titreCarnetParcours">Ton aventure dans l’univers de la PJJ</h2>
-       </div>
-       <section class="carnet-defi-hasard carnet-defi-hasard-parcours" aria-labelledby="titreDefiDe">
-        <span aria-hidden="true" class="de-objet" data-face="1" id="faceDeParcours">
-         <svg viewBox="0 0 72 72">
-          <path class="de-contour" d="M10 22 25 10h33v35L43 57H10V22Zm0 0h33l15-12M43 22v35"></path>
-          <g class="de-points-avant"><circle cx="18" cy="30" r="2.7"></circle><circle cx="26.5" cy="30" r="2.7"></circle><circle cx="35" cy="30" r="2.7"></circle><circle cx="18" cy="39.5" r="2.7"></circle><circle cx="26.5" cy="39.5" r="2.7"></circle><circle cx="35" cy="39.5" r="2.7"></circle><circle cx="18" cy="49" r="2.7"></circle><circle cx="26.5" cy="49" r="2.7"></circle><circle cx="35" cy="49" r="2.7"></circle></g>
-          <g class="de-points-dessus"><circle cx="27" cy="16" r="2"></circle><circle cx="43" cy="16" r="2"></circle></g>
-          <g class="de-points-cote"><circle cx="50" cy="25" r="2"></circle><circle cx="50" cy="34" r="2"></circle><circle cx="50" cy="43" r="2"></circle></g>
-         </svg>
-        </span>
-        <div class="carnet-defi-hasard-texte">
-         <strong id="titreDefiDe">Défi du hasard</strong>
-         <span id="resultatDeParcours">Lance le dé pour tirer de 1 à 6 questions aléatoires.</span>
-        </div>
-        <div class="carnet-defi-hasard-actions">
-         <button aria-label="Lancer le dé" class="secondaire" id="boutonLancerLeDe" type="button">
-          <span class="libelle-bureau">Lancer le dé</span><span aria-hidden="true" class="libelle-mobile">Lancer</span>
-         </button>
-         <button class="principal masque" id="boutonJouerLeTirage" type="button">Jouer le tirage</button>
-        </div>
-       </section>
-      </div>
-      <div class="carnet-parcours-prochaine-ligne">
-       <p id="prochaineDestinationParcours">Ta première destination t’attend.</p>
-       <span class="carnet-parcours-titre" id="titreSymboliqueParcours">Nouveau départ</span>
-      </div>
-      <div class="carnet-parcours-route" id="routeCarnetParcours" role="progressbar" aria-label="Avancement dans le parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-       <span class="carnet-parcours-trace"><i></i></span>
-       <span aria-hidden="true" class="carnet-parcours-position">●</span>
-      </div>
-      <div class="carnet-parcours-reperes" aria-hidden="true"><span>Départ</span><span>Étape 6</span><span>Évaluation</span></div>
-      <div class="carnet-parcours-details">
-       <section aria-labelledby="titreSouvenirsParcours" class="carnet-souvenirs">
-        <div class="carnet-section-entete"><span aria-hidden="true">◇</span><h3 id="titreSouvenirsParcours">Souvenirs de parcours</h3></div>
-        <div id="souvenirsParcours"><p class="carnet-vide">Maîtrise une étape pour conserver ses trois repères essentiels.</p></div>
-       </section>
-       <section aria-labelledby="titreDefisParcours" class="carnet-defis">
-        <div class="carnet-section-entete"><span aria-hidden="true">⚑</span><h3 id="titreDefisParcours">Défis personnels</h3></div>
-        <ul id="defisParcours"></ul>
-       </section>
-      </div>
-     </div>
     </section>
-   </section>
-   <section class="ecran" id="entrainement">
-    <div class="page-entete entrainement-entete progression-entete">
-     <h1>
-      Entraînement libre
-     </h1>
-     <p>
-      Choisis ton mode d’entraînement
-     </p>
+  </section>
+</section>
+<section class="ecran" id="carnet">
+  <header class="page-entete carnet-page-entete">
+    <span class="surtitre">Journal du joueur</span>
+    <h1>Carnet de parcours</h1>
+    <p>Retrouve les repères que tu as réellement consolidés et les défis qui jalonnent ta progression.</p>
+  </header>
+
+  <section class="carnet-journal" aria-labelledby="titreCarnetParcours">
+    <div class="carnet-journal-entete">
+      <div>
+        <span class="surtitre">Ton chemin</span>
+        <h2 id="titreCarnetParcours">Les traces de tes parcours</h2>
+      </div>
+      <span class="carnet-parcours-titre" id="titreSymboliqueParcours">Nouveau départ</span>
     </div>
-    <div class="entrainement-nombre">
-     <div class="choix-libelle">
-      Nombre de questions
-     </div>
-     <select aria-hidden="true" class="natif-masque" id="nombreQuestionsEntrainement" tabindex="-1">
-      <option selected="" value="10">
-       10
-      </option>
-      <option value="20">
-       20
-      </option>
-      <option value="30">
-       30
-      </option>
-      <option value="40">
-       40
-      </option>
-      <option value="50">
-       50
-      </option>
-      <option value="60">
-       60
-      </option>
-      <option value="70">
-       70
-      </option>
-      <option value="80">
-       80
-      </option>
-      <option value="90">
-       90
-      </option>
-      <option value="100">
-       100
-      </option>
-      <option value="110">
-       110
-      </option>
-     </select>
-     <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement" data-selection-visuelle="au-clic">
-      <button id="boutonEntrainement10Questions" class="choix-bouton" data-valeur="10" type="button">
-       10
-      </button>
-      <button id="boutonEntrainement20Questions" class="choix-bouton" data-valeur="20" type="button">
-       20
-      </button>
-      <button id="boutonEntrainement30Questions" class="choix-bouton" data-valeur="30" type="button">
-       30
-      </button>
-      <button id="boutonEntrainement40Questions" class="choix-bouton" data-valeur="40" type="button">
-       40
-      </button>
-      <button id="boutonEntrainement50Questions" class="choix-bouton" data-valeur="50" type="button">
-       50
-      </button>
-      <button id="boutonEntrainement60Questions" class="choix-bouton" data-valeur="60" type="button">
-       60
-      </button>
-      <button id="boutonEntrainement70Questions" class="choix-bouton" data-valeur="70" type="button">
-       70
-      </button>
-      <button id="boutonEntrainement80Questions" class="choix-bouton" data-valeur="80" type="button">
-       80
-      </button>
-      <button id="boutonEntrainement90Questions" class="choix-bouton" data-valeur="90" type="button">
-       90
-      </button>
-      <button id="boutonEntrainement100Questions" class="choix-bouton" data-valeur="100" type="button">
-       100
-      </button>
-      <button id="boutonEntrainement110Questions" class="choix-bouton" data-valeur="110" type="button">
-       110
-      </button>
-     </div>
+
+    <div class="carnet-prochaine-destination">
+      <span aria-hidden="true">→</span>
+      <p id="prochaineDestinationParcours">Ta première destination t’attend.</p>
     </div>
-    <div class="entrainement-grille">
-     <article class="entrainement-carte entrainement-ordonne" data-carte-entrainement="ordonne">
-      <div aria-hidden="true" class="entrainement-icone entrainement-icone-ordonne">
-       <img src="ressources/icones-interface/icone-par-ordre-des-etapes.svg" alt="" aria-hidden="true">
-      </div>
-      <h2>
-       Par ordre d’étapes
-      </h2>
-      <p>
-       Les questions suivent la progression du programme, de l’étape 1 à l’étape 11.
-      </p>
-      <div class="entrainement-details">
-       Étape 1 → Étape 11
-      </div>
-      <div class="entrainement-options">
-       <div class="entrainement-option">
-        <span>
-         Jokers
-        </span>
-        <div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic">
-         <button id="boutonEntrainementOrdonneAvecJokers" class="option-bouton" data-valeur="oui" type="button">
-          Avec
-         </button>
-         <button id="boutonEntrainementOrdonneSansJokers" class="option-bouton" data-valeur="non" type="button">
-          Sans
-         </button>
-        </div>
-       </div>
-       <div class="entrainement-option">
-        <span>
-         Chrono
-        </span>
-        <div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic">
-         <button id="boutonEntrainementOrdonneSansChronometre" class="option-bouton" data-valeur="non" type="button">
-          Sans
-         </button>
-         <button id="boutonEntrainementOrdonneAvecChronometre" class="option-bouton" data-valeur="oui" type="button">
-          Avec
-         </button>
-        </div>
-       </div>
-       <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre="">
-        <span>
-         Temps par question
-        </span>
-        <div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic">
-         <button id="boutonEntrainementOrdonne5Secondes" class="choix-bouton" data-secondes="5" type="button">
-          5 s
-         </button>
-         <button id="boutonEntrainementOrdonne10Secondes" class="choix-bouton" data-secondes="10" type="button">
-          10 s
-         </button>
-         <button id="boutonEntrainementOrdonne15Secondes" class="choix-bouton" data-secondes="15" type="button">
-          15 s
-         </button>
-         <button id="boutonEntrainementOrdonne20Secondes" class="choix-bouton" data-secondes="20" type="button">
-          20 s
-         </button>
-         <button id="boutonEntrainementOrdonne25Secondes" class="choix-bouton" data-secondes="25" type="button">
-          25 s
-         </button>
-         <button id="boutonEntrainementOrdonne30Secondes" class="choix-bouton" data-secondes="30" type="button">
-          30 s
-         </button>
-        </div>
-       </div>
-      </div>
-      <button id="boutonLancerEntrainementOrdonne" class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">
-       Lancer l’entraînement
-      </button>
-     </article>
-     <article class="entrainement-carte entrainement-melange" data-carte-entrainement="melange">
-      <div aria-hidden="true" class="entrainement-icone entrainement-icone-melange">
-       <img src="ressources/icones-interface/icone-melanger.svg" alt="" aria-hidden="true">
-      </div>
-      <h2>
-       Mélangé
-      </h2>
-      <p>
-       Les questions proviennent de toutes les étapes et sont présentées dans un ordre aléatoire.
-      </p>
-      <div class="entrainement-details">
-       Toutes les étapes · ordre mélangé
-      </div>
-      <div class="entrainement-options">
-       <div class="entrainement-option">
-        <span>
-         Jokers
-        </span>
-        <div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic">
-         <button id="boutonEntrainementMelangeAvecJokers" class="option-bouton" data-valeur="oui" type="button">
-          Avec
-         </button>
-         <button id="boutonEntrainementMelangeSansJokers" class="option-bouton" data-valeur="non" type="button">
-          Sans
-         </button>
-        </div>
-       </div>
-       <div class="entrainement-option">
-        <span>
-         Chrono
-        </span>
-        <div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic">
-         <button id="boutonEntrainementMelangeSansChronometre" class="option-bouton" data-valeur="non" type="button">
-          Sans
-         </button>
-         <button id="boutonEntrainementMelangeAvecChronometre" class="option-bouton" data-valeur="oui" type="button">
-          Avec
-         </button>
-        </div>
-       </div>
-       <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre="">
-        <span>
-         Temps par question
-        </span>
-        <div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic">
-         <button id="boutonEntrainementMelange5Secondes" class="choix-bouton" data-secondes="5" type="button">
-          5 s
-         </button>
-         <button id="boutonEntrainementMelange10Secondes" class="choix-bouton" data-secondes="10" type="button">
-          10 s
-         </button>
-         <button id="boutonEntrainementMelange15Secondes" class="choix-bouton" data-secondes="15" type="button">
-          15 s
-         </button>
-         <button id="boutonEntrainementMelange20Secondes" class="choix-bouton" data-secondes="20" type="button">
-          20 s
-         </button>
-         <button id="boutonEntrainementMelange25Secondes" class="choix-bouton" data-secondes="25" type="button">
-          25 s
-         </button>
-         <button id="boutonEntrainementMelange30Secondes" class="choix-bouton" data-secondes="30" type="button">
-          30 s
-         </button>
-        </div>
-       </div>
-      </div>
-      <button id="boutonLancerEntrainementMelange" class="entrainement-lancer principal" data-organisation-session="melange" type="button">
-       Lancer l’entraînement
-      </button>
-     </article>
+
+    <div class="carnet-parcours-route" id="routeCarnetParcours" role="progressbar" aria-label="Avancement dans l’ensemble des parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <span class="carnet-parcours-trace"><i></i></span>
+      <span aria-hidden="true" class="carnet-parcours-position">●</span>
     </div>
-   </section>
-   
+    <div class="carnet-parcours-reperes" aria-hidden="true"><span>Départ</span><span>66 étapes</span><span>6 évaluations</span></div>
+
+    <div class="carnet-parcours-details">
+      <section aria-labelledby="titreSouvenirsParcours" class="carnet-souvenirs">
+        <div class="carnet-section-entete"><span aria-hidden="true">◇</span><div><span class="surtitre">Ce que tu as débloqué</span><h3 id="titreSouvenirsParcours">Souvenirs de parcours</h3></div></div>
+        <div id="souvenirsParcours"><p class="carnet-vide">Maîtrise une étape pour conserver ses trois repères essentiels.</p></div>
+      </section>
+      <section aria-labelledby="titreDefisParcours" class="carnet-defis">
+        <div class="carnet-section-entete"><span aria-hidden="true">⚑</span><div><span class="surtitre">À accomplir</span><h3 id="titreDefisParcours">Défis personnels</h3></div></div>
+        <ul id="defisParcours"></ul>
+      </section>
+    </div>
+  </section>
+</section>
+<section class="ecran" id="entrainement">
+  <header class="page-entete entrainement-entete">
+    <span class="surtitre">Entraînement libre</span>
+    <h1>Choisis ta session</h1>
+    <p>Lance un défi surprise en un clic ou compose précisément ce que tu veux travailler, la durée et l’ordre des questions.</p>
+  </header>
+
+  <section class="entrainement-hasard" aria-labelledby="titreDefiDe">
+    <span aria-hidden="true" class="de-objet" data-face="1" id="faceDeParcours">
+      <svg viewBox="0 0 72 72"><path class="de-contour" d="M10 22 25 10h33v35L43 57H10V22Zm0 0h33l15-12M43 22v35"></path><g class="de-points-avant"><circle cx="18" cy="30" r="2.7"></circle><circle cx="26.5" cy="30" r="2.7"></circle><circle cx="35" cy="30" r="2.7"></circle><circle cx="18" cy="39.5" r="2.7"></circle><circle cx="26.5" cy="39.5" r="2.7"></circle><circle cx="35" cy="39.5" r="2.7"></circle><circle cx="18" cy="49" r="2.7"></circle><circle cx="26.5" cy="49" r="2.7"></circle><circle cx="35" cy="49" r="2.7"></circle></g><g class="de-points-dessus"><circle cx="27" cy="16" r="2"></circle><circle cx="43" cy="16" r="2"></circle></g><g class="de-points-cote"><circle cx="50" cy="25" r="2"></circle><circle cx="50" cy="34" r="2"></circle><circle cx="50" cy="43" r="2"></circle></g></svg>
+    </span>
+    <div class="entrainement-hasard-texte"><span class="surtitre">Mode surprise</span><h2 id="titreDefiDe">Défi du hasard</h2><p id="resultatDeParcours">Lance le dé pour tirer de 1 à 6 questions aléatoires dans les six parcours.</p></div>
+    <div class="entrainement-hasard-actions"><button class="principal" id="boutonLancerLeDe" type="button">Lancer le dé</button><button class="principal masque" id="boutonJouerLeTirage" type="button">Jouer le défi</button></div>
+  </section>
+
+  <div class="entrainement-configurateur">
+    <section class="entrainement-etape-config" aria-labelledby="titrePerimetreEntrainement">
+      <span class="entrainement-etape-numero">1</span>
+      <div>
+        <h2 id="titrePerimetreEntrainement">Sur quoi veux-tu t’entraîner ?</h2>
+        <select aria-hidden="true" class="natif-masque" id="perimetreEntrainement" tabindex="-1">
+          <option selected value="tous">Parcours complet</option>
+          <option value="commun">Découvrir la PJJ</option>
+          <option value="procedure_ordinaire">Du parquet à la sanction</option>
+          <option value="information_judiciaire">Information judiciaire</option>
+          <option value="jugement_educatif_ordinaire">Réponse éducative</option>
+          <option value="matiere_criminelle_peines">Crimes et peines</option>
+          <option value="application_execution_peines">Décision à l’exécution</option>
+        </select>
+        <div class="choix-groupe entrainement-perimetre-choix" data-groupe-choix="perimetreEntrainement">
+          <button class="choix-bouton actif entrainement-perimetre-global" data-valeur="tous" type="button"><b>Tout PJJoue</b><span>Les 6 parcours</span></button>
+          <button class="choix-bouton" data-valeur="commun" type="button"><b>01 · Découvrir la PJJ</b><span>Point de départ</span></button>
+          <button class="choix-bouton" data-valeur="procedure_ordinaire" type="button"><b>02 · Du parquet à la sanction</b><span>Procédure ordinaire</span></button>
+          <button class="choix-bouton" data-valeur="information_judiciaire" type="button"><b>03 · Information judiciaire</b><span>Instruction</span></button>
+          <button class="choix-bouton" data-valeur="jugement_educatif_ordinaire" type="button"><b>04 · Réponse éducative</b><span>Jugement</span></button>
+          <button class="choix-bouton" data-valeur="matiere_criminelle_peines" type="button"><b>05 · Crimes et peines</b><span>Matière criminelle</span></button>
+          <button class="choix-bouton" data-valeur="application_execution_peines" type="button"><b>06 · Décision à l’exécution</b><span>Application des peines</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="entrainement-etape-config" aria-labelledby="titreNombreEntrainement">
+      <span class="entrainement-etape-numero">2</span>
+      <div>
+        <h2 id="titreNombreEntrainement">Combien de questions ?</h2>
+        <p class="entrainement-limite" id="limiteQuestionsEntrainement" aria-live="polite">660 questions d’apprentissage disponibles.</p>
+        <select aria-hidden="true" class="natif-masque" id="nombreQuestionsEntrainement" tabindex="-1">
+       <option value="10" selected>10</option>
+       <option value="20">20</option>
+       <option value="30">30</option>
+       <option value="40">40</option>
+       <option value="50">50</option>
+       <option value="60">60</option>
+       <option value="70">70</option>
+       <option value="80">80</option>
+       <option value="90">90</option>
+       <option value="100">100</option>
+       <option value="110">110</option>
+       <option value="120">120</option>
+       <option value="130">130</option>
+       <option value="140">140</option>
+       <option value="150">150</option>
+       <option value="160">160</option>
+       <option value="170">170</option>
+       <option value="180">180</option>
+       <option value="190">190</option>
+       <option value="200">200</option>
+       <option value="210">210</option>
+       <option value="220">220</option>
+       <option value="230">230</option>
+       <option value="240">240</option>
+       <option value="250">250</option>
+       <option value="260">260</option>
+       <option value="270">270</option>
+       <option value="280">280</option>
+       <option value="290">290</option>
+       <option value="300">300</option>
+       <option value="310">310</option>
+       <option value="320">320</option>
+       <option value="330">330</option>
+       <option value="340">340</option>
+       <option value="350">350</option>
+       <option value="360">360</option>
+       <option value="370">370</option>
+       <option value="380">380</option>
+       <option value="390">390</option>
+       <option value="400">400</option>
+       <option value="410">410</option>
+       <option value="420">420</option>
+       <option value="430">430</option>
+       <option value="440">440</option>
+       <option value="450">450</option>
+       <option value="460">460</option>
+       <option value="470">470</option>
+       <option value="480">480</option>
+       <option value="490">490</option>
+       <option value="500">500</option>
+       <option value="510">510</option>
+       <option value="520">520</option>
+       <option value="530">530</option>
+       <option value="540">540</option>
+       <option value="660">660</option>
+        </select>
+        <div class="entrainement-nombre-config">
+          <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement" data-selection-visuelle="au-clic">
+            <button id="boutonEntrainement10Questions" class="choix-bouton" data-valeur="10" type="button">10</button>
+            <button id="boutonEntrainement20Questions" class="choix-bouton" data-valeur="20" type="button">20</button>
+            <button id="boutonEntrainement50Questions" class="choix-bouton" data-valeur="50" type="button">50</button>
+            <button id="boutonEntrainement100Questions" class="choix-bouton" data-valeur="100" type="button">100</button>
+          </div>
+          <div class="entrainement-personnalise">
+            <div class="entrainement-personnalise-entete"><span>Personnaliser</span><strong id="valeurNombreQuestions">10 questions</strong></div>
+            <input id="curseurNombreQuestions" type="range" min="10" max="660" step="10" value="10" aria-label="Nombre personnalisé de questions — clique ou fais glisser sur la barre">
+            <div class="entrainement-personnalise-bornes"><span>10</span><span id="borneMaxQuestions">660 max</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="entrainement-etape-config entrainement-etape-modes" aria-labelledby="titreModeEntrainement">
+      <span class="entrainement-etape-numero">3</span>
+      <div>
+        <h2 id="titreModeEntrainement">Comment veux-tu jouer ?</h2>
+        <div class="entrainement-grille">
+          <article class="entrainement-carte entrainement-ordonne" data-carte-entrainement="ordonne">
+            <div aria-hidden="true" class="entrainement-icone">
+              <svg viewBox="0 0 32 32" focusable="false"><path d="M11 7h15M11 16h15M11 25h15"/><circle cx="5.5" cy="7" r="2.25"/><circle cx="5.5" cy="16" r="2.25"/><circle cx="5.5" cy="25" r="2.25"/><path d="m4.5 7 1 1 2-2M4.5 16l1 1 2-2M4.5 25l1 1 2-2"/></svg>
+            </div>
+            <h3>Par ordre d’étapes</h3>
+            <p>Suis la progression pédagogique du parcours choisi.</p>
+            <details class="entrainement-options-avancees">
+              <summary>Options avancées</summary>
+              <div class="entrainement-options">
+                <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic"><button id="boutonEntrainementOrdonneAvecJokers" class="option-bouton" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementOrdonneSansJokers" class="option-bouton" data-valeur="non" type="button">Sans</button></div></div>
+                <div class="entrainement-option"><span>Chrono</span><div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic"><button id="boutonEntrainementOrdonneSansChronometre" class="option-bouton" data-valeur="non" type="button">Sans</button><button id="boutonEntrainementOrdonneAvecChronometre" class="option-bouton" data-valeur="oui" type="button">Avec</button></div></div>
+                <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre=""><span>Temps par question</span><div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic"><button id="boutonEntrainementOrdonne15Secondes" class="choix-bouton" data-secondes="15" type="button">15 s</button><button id="boutonEntrainementOrdonne20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button><button id="boutonEntrainementOrdonne25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button><button id="boutonEntrainementOrdonne30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button></div></div>
+              </div>
+            </details>
+            <button id="boutonLancerEntrainementOrdonne" class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">Commencer →</button>
+          </article>
+          <article class="entrainement-carte entrainement-melange" data-carte-entrainement="melange">
+            <div aria-hidden="true" class="entrainement-icone">
+              <svg viewBox="0 0 32 32" focusable="false"><path d="M4 9h4c6 0 6 14 13 14h6"/><path d="m23 19 4 4-4 4"/><path d="M4 23h4c2.8 0 4.4-3.1 6.2-6.4"/><path d="M16.8 12.1C18.7 9.8 20.3 9 23 9h4"/><path d="m23 5 4 4-4 4"/></svg>
+            </div>
+            <h3>Mélangé</h3>
+            <p>Brasse les questions du périmètre choisi.</p>
+            <details class="entrainement-options-avancees">
+              <summary>Options avancées</summary>
+              <div class="entrainement-options">
+                <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic"><button id="boutonEntrainementMelangeAvecJokers" class="option-bouton" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementMelangeSansJokers" class="option-bouton" data-valeur="non" type="button">Sans</button></div></div>
+                <div class="entrainement-option"><span>Chrono</span><div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic"><button id="boutonEntrainementMelangeSansChronometre" class="option-bouton" data-valeur="non" type="button">Sans</button><button id="boutonEntrainementMelangeAvecChronometre" class="option-bouton" data-valeur="oui" type="button">Avec</button></div></div>
+                <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre=""><span>Temps par question</span><div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic"><button id="boutonEntrainementMelange15Secondes" class="choix-bouton" data-secondes="15" type="button">15 s</button><button id="boutonEntrainementMelange20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button><button id="boutonEntrainementMelange25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button><button id="boutonEntrainementMelange30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button></div></div>
+              </div>
+            </details>
+            <button id="boutonLancerEntrainementMelange" class="entrainement-lancer principal" data-organisation-session="melange" type="button">Commencer →</button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</section>
 <section class="ecran" id="question">
     <div class="question-conteneur">
      <div class="question-entete">
@@ -528,7 +411,7 @@
        <strong id="titreEtapeQuestion">Parcours PJJ</strong>
       </div>
       <div class="question-autonomie" id="suiviSansJokerQuestion">
-       <span>Validées sans joker <strong id="compteurSansJokerQuestion">0/10</strong></span>
+       <span>Maîtrisées sans aide <strong id="compteurSansJokerQuestion">0/10</strong></span>
        <button class="question-autonomie-reinitialiser" id="boutonReinitialiserValidationsSansJoker" type="button">Réinitialiser</button>
       </div>
      </div>
@@ -557,7 +440,7 @@
        <div class="navigation-question-groupe">
         <button aria-controls="fenetreJokers" aria-expanded="false" aria-haspopup="dialog" class="joker-menu-bouton masque" id="boutonJokers" type="button">
          <span aria-hidden="true" class="joker-onglet-icone">
-          <svg viewBox="0 0 24 24"><path d="M5 8h14v10H5zM9 8V6h6v2"></path><path d="M12 11v4M10 13h4"></path></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2.8l2.72 5.51 6.08.88-4.4 4.29 1.04 6.05L12 16.67l-5.44 2.86 1.04-6.05-4.4-4.29 6.08-.88L12 2.8z"></path></svg>
          </span>
          <span>Jokers</span>
         </button>
@@ -572,7 +455,8 @@
      </div>
     </div>
    </section>
-   <section class="ecran" id="bilan">
+   
+<section class="ecran" id="bilan">
     <div class="bilan-resume-carte">
      <header class="bilan-resume-entete">
       <div aria-hidden="true" class="resultat-icone">
@@ -626,6 +510,7 @@
       <span aria-hidden="true" class="bilan-destination-icone">➜</span>
       <div><strong>Prochaine destination</strong><span id="prochaineDestinationBilan">Continue ton parcours.</span></div>
      </aside>
+    </div>
      <section aria-labelledby="titreCarteVoyageFinale" class="carte-voyage-finale masque" id="carteVoyageFinale">
       <div class="carte-voyage-entete">
        <div><span>Ton carnet complet</span><h2 id="titreCarteVoyageFinale">La carte de ton voyage</h2></div>
@@ -645,128 +530,344 @@
         </h2>
        </div>
        <span class="bilan-erreurs-nombre" id="nombreErreursBilan">
-        0 question ratée
+        0 question à reprendre
        </span>
       </div>
       <div id="listeErreursBilan">
       </div>
      </section>
      <div class="actions bilan-actions">
-      <button class="principal" id="boutonContinuer">
+      <button class="principal" id="boutonContinuer" type="button">
        Continuer
       </button>
-      <button class="secondaire" id="boutonRejouerMesErreurs">
+      <button class="secondaire" id="boutonRejouerMesErreurs" type="button">
        Rejouer mes erreurs
       </button>
-      <button class="discret" id="boutonRevenirAuParcours" type="button">
+     <button class="discret" id="boutonRevenirAuParcours" type="button">
        Revenir au parcours
       </button>
      </div>
-    </div>
    </section>
-   <section class="ecran" id="erreurs">
-    <div class="page-entete">
-     <h1>
-      Mes erreurs à retravailler
-     </h1>
-     <p>
-      Choisis un thème précis à retravailler ou mélange toutes tes erreurs en mode aléatoire. Une erreur reste active jusqu’à deux réussites ultérieures en mode révision.
-     </p>
-    </div>
-    <div id="contenuErreurs">
-    </div>
-   </section>
-   <section class="ecran" id="progression">
-    <div class="page-entete progression-entete">
-     <h1>
-      Progression
-     </h1>
-     <p>
-      Retrouve ton activité générale, tes erreurs actives et ton avancée dans le parcours PJJ.
-     </p>
-    </div>
-    <div class="progression-grille">
-     <article class="progression-carte progression-activite">
-      <div class="progression-carte-entete">
-       <div aria-hidden="true" class="progression-icone">
-        <img src="ressources/icones-interface/icone-mon-activite.svg" alt="" aria-hidden="true">
-       </div>
-       <div>
-        <h2>
-         Mon activité
-        </h2>
-        <p>
-         Les principaux repères de ton entraînement.
-        </p>
-       </div>
+   
+<section class="ecran" id="erreurs">
+<div class="page-entete">
+<h1>Réviser</h1>
+<p>Retravaille les questions qui t’ont posé problème jusqu’à ce que les notions deviennent solides.</p>
+</div>
+<section aria-labelledby="titreErreursRevision" class="revision-erreurs">
+<div class="revision-section-entete">
+<div><span class="surtitre">Tes erreurs</span><h2 id="titreErreursRevision">Questions à retravailler</h2></div>
+<p>Une erreur disparaît dès que tu la réussis en révision.</p>
+</div>
+<div id="contenuErreurs"></div>
+</section>
+</section>
+<section class="ecran" id="supports">
+<header class="page-entete">
+<span class="surtitre">Bibliothèque de référence</span>
+<h1>Supports de révision</h1>
+<p>Retrouve les ressources utiles à tes révisions et identifie immédiatement les parcours auxquels elles se rapportent.</p>
+</header>
+<section aria-labelledby="titreSupportsRevision" class="revision-supports">
+<div class="revision-section-entete revision-supports-entete">
+<div><h2 id="titreSupportsRevision">Choisir une ressource</h2></div>
+<p>Filtre par parcours, puis ouvre uniquement la ressource dont tu as besoin.</p>
+</div>
+<div class="supports-outils">
+<label class="supports-recherche" for="rechercheSupports"><span>Rechercher dans les ressources</span><input id="rechercheSupports" type="search" placeholder="Ex. détention provisoire, JLD, MEJ…" autocomplete="off"/></label>
+<div class="supports-filtres" aria-label="Filtrer les ressources" role="group">
+<button aria-pressed="true" class="actif" data-filtre-supports="tous" type="button">Tous</button>
+<button aria-label="Filtrer par le parcours 1" aria-pressed="false" data-filtre-supports="1" title="Parcours 1" type="button">P1</button>
+<button aria-label="Filtrer par le parcours 2" aria-pressed="false" data-filtre-supports="2" title="Parcours 2" type="button">P2</button>
+<button aria-label="Filtrer par le parcours 3" aria-pressed="false" data-filtre-supports="3" title="Parcours 3" type="button">P3</button>
+<button aria-label="Filtrer par le parcours 4" aria-pressed="false" data-filtre-supports="4" title="Parcours 4" type="button">P4</button>
+<button aria-label="Filtrer par le parcours 5" aria-pressed="false" data-filtre-supports="5" title="Parcours 5" type="button">P5</button>
+<button aria-label="Filtrer par le parcours 6" aria-pressed="false" data-filtre-supports="6" title="Parcours 6" type="button">P6</button>
+</div>
+<button class="discret supports-tout-refermer" disabled id="boutonRefermerSupports" type="button">Tout refermer</button>
+<p id="statutRechercheSupports" class="supports-statut" aria-live="polite">8 catégories · 18 ressources</p>
+</div>
+<div class="supports-revision-groupes">
+<details class="supports-juridiction" id="supports-reperes-pjj" data-mots-cles="PJJ protection judiciaire de la jeunesse DPJJ administration centrale direction interrégionale direction territoriale service unité éducative organisation hiérarchie mesures éducatives sigles vocabulaire">
+<summary>
+<span class="support-juridiction-abreviation">PJJ</span>
+<span class="support-juridiction-titre"><strong>Organisation et repères de la PJJ</strong><small>3 ressources de révision</small></span>
+<span class="support-juridiction-action">Ouvrir</span><span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<a class="support-revision support-ressource-guide" id="support-organisation-pjj" href="organisation-pjj/index.html"><span class="support-revision-type">Organisation</span><span class="support-revision-titre"><strong>Organisation hiérarchique de la PJJ</strong><small>Directions, territoires, services et articulation.</small></span><span aria-hidden="true">→</span></a>
+<a class="support-revision support-ressource-guide" id="support-mesures-educatives" href="mesures-educatives-pjj/index.html"><span class="support-revision-type">Mesures</span><span class="support-revision-titre"><strong>Mesures éducatives</strong><small>Repères utiles pour distinguer les mesures et leur logique.</small></span><span aria-hidden="true">→</span></a>
+<a class="support-revision support-ressource-guide" id="support-sigles-essentiels" href="sigles-pjj/index.html"><span class="support-revision-type">Vocabulaire</span><span class="support-revision-titre"><strong>Sigles essentiels</strong><small>Retrouver rapidement les abréviations fréquentes.</small></span><span aria-hidden="true">→</span></a>
+</div></details>
+<details class="supports-juridiction" id="supports-je" data-mots-cles="JE juge des enfants chambre du conseil culpabilité mise à l’épreuve éducative MEE sanction mesure éducative MEJ justice des mineurs">
+<summary>
+<span class="support-juridiction-abreviation">JE</span>
+<span class="support-juridiction-titre"><strong>Juge des enfants</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-je">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Juge des enfants (JE)</strong><small>Quand intervient-il et que peut-il décider ?</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Juge spécialisé des mineurs.</li><li>Intervient avant la culpabilité, à l’audience de culpabilité, pendant la mise à l’épreuve éducative (MEE) et à l’audience de sanction.</li><li>Suit la MEE même lorsque la culpabilité a été jugée par le TPE.</li><li>Après condamnation, exerce en principe les fonctions du JAP pour les mineurs.</li></ul></section><ol class="support-frise"><li><h4>1. Avant la culpabilité</h4><ul><li>Peut être saisi pour juger certains délits de mineurs.</li><li>Peut ordonner une MJIE et une MEJP.</li><li>La MEJP peut comporter les modules insertion, réparation, santé et placement.</li><li>Selon le cadre légal, certaines mesures de sûreté sont possibles : CJ ou ARSE.</li></ul></li><li><h4>2. Audience de culpabilité</h4><ul><li>Statue sur la culpabilité et l’action civile.</li><li>Peut ouvrir une MEE de 6 à 9 mois.</li><li>Fixe la future audience de sanction devant le JE ou le TPE selon le dossier.</li></ul></li><li><h4>3. Pendant la MEE</h4><ul><li>Contrôle le suivi de la MEE.</li><li>Peut maintenir, modifier ou lever une MEJP, un CJ ou une ARSE.</li><li>Peut réagir en cas d’incident.</li><li>Dans les cas prévus, peut révoquer CJ ou ARSE et ordonner une détention provisoire après débat contradictoire.</li><li>Peut modifier la date de l’audience de sanction dans les cas prévus.</li><li>Si le TPE a expressément fixé la sanction devant le TPE, le JE ne récupère pas seul cette audience.</li></ul></li><li><h4>4. Audience de sanction — chambre du conseil</h4><ul><li>Prononce la sanction.</li><li>Peut prononcer un avertissement judiciaire ou une MEJ.</li><li>La MEJ peut comprendre les quatre modules et les obligations/interdictions prévues par le CJPM.</li><li>Sur réquisitions et selon les conditions légales : confiscation, peine de stage, TIG.</li><li>Ne peut pas prononcer lui-même une peine d’emprisonnement.</li></ul></li><li><h4>5. Après sanction / application des peines</h4><ul><li>Contrôle l’exécution de la MEJ.</li><li>Exerce en principe les fonctions du JAP pour le mineur condamné.</li><li>Suit l’exécution de certaines peines et aménagements selon la décision.</li></ul></li></ol><aside class="support-attention"><strong>Repères rapides</strong><ul class="support-liste"><li>MEJP = provisoire.</li><li>MEJ = sanction éducative.</li><li>Chambre du conseil = audience du JE.</li><li>Le JE ne conduit pas l’instruction : ce rôle appartient au JI.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-je">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Juge des enfants (JE)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Avant la culpabilité / avant sanction</h4><ul><li>MJIE ; MEJP avec modules et interdictions autorisées.</li><li>CJ ou ARSE selon conditions.</li><li>Au défèrement, le JE peut statuer sur les réquisitions MEJP/CJ/ARSE dans la branche prévue.</li></ul></li><li><h4>2. Audience de culpabilité</h4><ul><li>Statue sur culpabilité et action civile.</li><li>Ouvre la MEE et fixe la sanction devant JE ou TPE.</li><li>Peut ordonner MJIE, MEJP, CJ ou ARSE pendant la période.</li></ul></li><li><h4>3. Pendant la MEE</h4><ul><li>Contrôle la MEE.</li><li>Modifie ou lève MEJP, CJ, ARSE.</li><li>En cas légal de révocation CJ/ARSE : débat contradictoire et DP possible.</li></ul></li><li><h4>4. Sanction — chambre du conseil</h4><ul><li>Avertissement judiciaire ; MEJ avec modules, interdictions et obligations.</li><li>Peines limitées : confiscation, stage, TIG sous conditions.</li><li>Pas d’emprisonnement.</li></ul></li><li><h4>5. Après sanction</h4><ul><li>Contrôle l’exécution de la MEJ.</li><li>Exerce en principe les fonctions du JAP pour le mineur condamné jusqu’à 21 ans.</li><li>Peut se dessaisir au profit du JAP dans les cas prévus.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-tpe" data-mots-cles="TPE tribunal pour enfants juridiction de jugement procédure ordinaire audience unique culpabilité sanction tribunal de l’application des peines TAP">
+<summary>
+<span class="support-juridiction-abreviation">TPE</span>
+<span class="support-juridiction-titre"><strong>Tribunal pour enfants</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-tpe">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Tribunal pour enfants (TPE)</strong><small>Procédure ordinaire, audience unique, sanction et application des peines.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Juridiction de jugement des mineurs.</li><li>Peut juger en procédure ordinaire, en audience unique et après renvoi du JI.</li><li>Peut intervenir avant, pendant et à l’issue du jugement.</li><li>Après condamnation, exerce les fonctions du tribunal de l’application des peines pour les mineurs dans les cas prévus.</li></ul></section><ol class="support-frise"><li><h4>1. Saisine / avant sanction</h4><ul><li>Peut être saisi directement pour certains délits.</li><li>Après renvoi du JI, juge les délits des mineurs de 13 ans et plus et les crimes commis avant 16 ans.</li><li>Peut ordonner MJIE, MEJP et, selon le cadre, CJ ou ARSE.</li></ul></li><li><h4>2. Audience de culpabilité — procédure ordinaire</h4><ul><li>Statue sur la culpabilité et l’action civile.</li><li>Peut ouvrir une MEE de 6 à 9 mois.</li><li>Fixe la future audience de sanction devant le JE ou le TPE.</li></ul></li><li><h4>3. Audience unique</h4><ul><li>Culpabilité, action civile et sanction sont jugées lors de la même audience.</li><li>Peut prononcer avertissement judiciaire, MEJ et les peines prévues par le CJPM.</li><li>Peut exceptionnellement revenir vers une MEE si une observation éducative supplémentaire est nécessaire.</li></ul></li><li><h4>4. Audience de sanction</h4><ul><li>Peut prononcer avertissement, MEJ et un éventail plus large de peines : amende, confiscation, stage, TIG, DDSE, sursis probatoire, suivi socio-judiciaire, sanction-réparation et emprisonnement lorsque la loi le permet.</li></ul></li><li><h4>5. Après sanction / application des peines</h4><ul><li>Exerce les fonctions du tribunal de l’application des peines pour les mineurs dans les cas prévus.</li><li>Intervient pour certaines décisions collégiales d’application des peines.</li></ul></li></ol><aside class="support-attention"><strong>À retenir</strong><ul class="support-liste"><li>Le TPE ne conduit pas l’instruction.</li><li>Le JLD reste le magistrat compétent lorsqu’une décision sur la détention lui est confiée.</li><li>Si le TPE fixe expressément la sanction devant le TPE, le JE ne reprend pas cette audience.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-tpe">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Tribunal pour enfants (TPE)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Culpabilité — procédure MEE</h4><ul><li>Culpabilité et action civile ; ouvre la MEE.</li><li>MJIE / MEJP / CJ / ARSE possibles selon le cadre.</li><li>Fixe la sanction devant JE ou TPE.</li></ul></li><li><h4>2. Audience unique</h4><ul><li>Culpabilité, action civile et sanction le même jour.</li><li>Peut exceptionnellement basculer vers MEE dans les cas prévus.</li></ul></li><li><h4>3. Sanction</h4><ul><li>Avertissement ; MEJ et contenus autorisés.</li><li>Peines : confiscation, stage, TIG, amende, DDSE, sursis probatoire, SSJ, sanction-réparation, restrictions de droits, emprisonnement et autres peines légalement applicables.</li></ul></li><li><h4>4. Crime commis avant 16 ans</h4><ul><li>Après instruction : le TPE peut juger le crime commis par un mineur de moins de 16 ans.</li><li>Appellation officielle : Tribunal pour enfants.</li></ul></li><li><h4>5. Après sanction</h4><ul><li>Exerce les fonctions du TAP pour les mineurs condamnés.</li><li>Ne remplace pas le JE/JAP pour les décisions relevant du juge seul.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-ji" data-mots-cles="JI juge d’instruction information judiciaire instruction mise en examen ordonnance non-lieu renvoi investigation expertise">
+<summary>
+<span class="support-juridiction-abreviation">JI</span>
+<span class="support-juridiction-titre"><strong>Juge d’instruction</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-ji">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Juge d’instruction (JI)</strong><small>Information judiciaire, mesures provisoires et règlement de l’instruction.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Magistrat chargé de l’information judiciaire.</li><li>Instruit les affaires nécessitant une information judiciaire.</li><li>Ne prononce ni la culpabilité définitive ni la sanction.</li></ul></section><ol class="support-frise"><li><h4>1. Ouverture de l’information</h4><ul><li>Dirige l’instruction.</li><li>Peut mettre en examen le mineur.</li><li>Peut ordonner une MJIE.</li><li>Peut prononcer une MEJP avec les contenus autorisés.</li></ul></li><li><h4>2. Pendant l’instruction</h4><ul><li>Mène les investigations : auditions, expertises et vérifications.</li><li>Peut maintenir, modifier ou lever une MEJP.</li><li>Peut ordonner ou requérir les investigations utiles.</li><li>Peut, selon le cadre légal, prononcer certaines mesures de sûreté : CJ ou ARSE.</li><li>Pour une détention provisoire, saisit le JLD lorsque la loi le prévoit.</li></ul></li><li><h4>3. Fin de l’instruction</h4><ul><li>Peut rendre une ordonnance de non-lieu.</li><li>Pour un délit : renvoi devant le JE si le mineur avait moins de 13 ans au moment des faits, ou vers le TPE dans les autres cas prévus.</li><li>Pour un crime commis avant 16 ans : renvoi devant le TPE.</li><li>Pour un crime commis à partir de 16 ans : ordonnance de mise en accusation devant la cour d’assises des mineurs.</li></ul></li></ol><aside class="support-attention"><strong>Ce que le JI ne fait pas</strong><ul class="support-liste"><li>Ne juge pas la culpabilité définitive.</li><li>Ne prononce pas la sanction.</li><li>Ne statue pas lui-même sur la détention provisoire lorsqu’il doit saisir le JLD.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-ji">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Juge d’instruction (JI)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Ouverture de l’information</h4><ul><li>Dirige l’instruction ; peut mettre en examen.</li><li>Ordonne investigations et expertises.</li></ul></li><li><h4>2. Mesures pendant l’instruction</h4><ul><li>MJIE ; MEJP avec modules/interdictions.</li><li>CJ ; ARSE selon conditions.</li><li>Pour la DP : saisit le JLD.</li></ul></li><li><h4>3. Fin de l’instruction</h4><ul><li>Non-lieu.</li><li>Délit : renvoi JE (&lt;13 aux faits) ou TPE (≥13) selon le cadre.</li><li>Crime &lt;16 : TPE ; crime ≥16 : mise en accusation CAM.</li></ul></li><li><h4>4. Ce qu’il ne fait pas</h4><ul><li>Ne juge pas définitivement la culpabilité.</li><li>Ne prononce pas MEJ, avertissement ou peine.</li><li>Ne décide pas lui-même la DP pendant l’instruction.</li></ul></li><li><h4>5. Repère</h4><ul><li>Instruction = avant jugement.</li><li>Toujours raisonner avec âge aux faits et qualification finale.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-jld" data-mots-cles="JLD juge des libertés et de la détention détention provisoire DP contrôle judiciaire CJ assignation à résidence sous surveillance électronique ARSE sûreté défèrement">
+<summary>
+<span class="support-juridiction-abreviation">JLD</span>
+<span class="support-juridiction-titre"><strong>Juge des libertés et de la détention</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-jld">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Juge des libertés et de la détention (JLD)</strong><small>Mesures de sûreté et détention provisoire lorsqu’il est saisi.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Magistrat centré sur les questions de liberté et de sûreté du mineur.</li><li>Intervient avant la sanction, selon le cadre de la procédure.</li><li>Ne juge ni la culpabilité ni la sanction.</li></ul></section><ol class="support-frise"><li><h4>1. Quand il intervient</h4><ul><li>Intervient sur les questions de liberté et de sûreté dans les cas prévus par la loi.</li><li>Peut être saisi lors d’un déferrement ou pendant une information judiciaire.</li><li>Intervient avant le prononcé de la sanction.</li></ul></li><li><h4>2. Ce qu’il peut décider</h4><ul><li>Peut statuer sur certaines mesures de sûreté selon le cadre légal.</li><li>Peut décider une détention provisoire lorsque les conditions sont réunies.</li><li>Peut intervenir sur une MEJP selon le stade procédural prévu.</li><li>Peut, selon les cas prévus, intervenir sur CJ ou ARSE.</li></ul></li><li><h4>3. Détention provisoire</h4><ul><li>Décide du placement en détention provisoire dans les hypothèses prévues par le CJPM.</li><li>Peut intervenir sur le maintien, la prolongation, la mainlevée ou le rejet lorsque le texte le prévoit.</li><li>La détention provisoire reste une mesure de sûreté provisoire : ce n’est pas une peine.</li></ul></li><li><h4>4. Repères de procédure</h4><ul><li>Audience ou débat contradictoire selon la procédure applicable.</li><li>Toujours identifier la saisine exacte et le stade procédural.</li><li>Ne pas confondre détention provisoire et peine d’emprisonnement.</li></ul></li></ol><aside class="support-attention"><strong>Ce que le JLD ne peut pas faire</strong><ul class="support-liste"><li>Ne conduit pas l’instruction au fond.</li><li>Ne juge pas la culpabilité.</li><li>Ne prononce pas la sanction, la MEJ ou une peine.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-jld">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Juge des libertés et de la détention (JLD)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Instruction — lorsqu’il est saisi</h4><ul><li>Statue sur DP.</li><li>Peut statuer sur CJ / ARSE / MEJP lorsqu’il est légalement compétent et saisi.</li></ul></li><li><h4>2. Déferrement avant audience unique TPE</h4><ul><li>Mineur ≥16 : peut statuer sur réquisitions de DP dans la branche L423-9.</li><li>Dans cette branche, le JE statue sur MEJP / CJ / ARSE.</li></ul></li><li><h4>3. DP</h4><ul><li>Mesure de sûreté privative de liberté, jamais une peine.</li><li>Conditions strictes : nécessité, insuffisance CJ/ARSE, règles d’âge et de nature des faits.</li></ul></li><li><h4>4. Autres mesures</h4><ul><li>CJ et ARSE : selon saisine et compétence.</li><li>MEJP : possible dans le cadre légal.</li><li>MJIE : non attribuée au JLD par L322-7.</li></ul></li><li><h4>5. Ce qu’il ne fait pas</h4><ul><li>Pas d’instruction au fond.</li><li>Pas de culpabilité / action civile.</li><li>Pas de MEJ / avertissement / peine.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-cam" data-mots-cles="CAM cour d’assises des mineurs juridiction criminelle crime mise en accusation procès criminel réclusion détention criminelle">
+<summary>
+<span class="support-juridiction-abreviation">CAM</span>
+<span class="support-juridiction-titre"><strong>Cour d’assises des mineurs</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-cam">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Cour d’assises des mineurs (CAM)</strong><small>Jugement des crimes commis à partir de 16 ans.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Juridiction criminelle des mineurs.</li><li>Juge les crimes commis par les mineurs âgés d’au moins 16 ans au moment des faits.</li><li>Intervient après information judiciaire et mise en accusation.</li><li>Est saisie après ordonnance de mise en accusation.</li></ul></section><ol class="support-frise"><li><h4>1. Saisine / avant l’audience</h4><ul><li>Le parquet requiert une information judiciaire.</li><li>Le JI mène l’instruction et le dossier arrive après une qualification criminelle retenue et une mise en accusation.</li></ul></li><li><h4>2. Audience</h4><ul><li>Statue normalement en audience unique après mise en accusation.</li><li>Juge la culpabilité, l’action civile et la sanction.</li><li>Peut ordonner une MJIE si nécessaire comme juridiction de jugement.</li></ul></li><li><h4>3. Réponses éducatives possibles</h4><ul><li>Peut prononcer avertissement judiciaire et MEJ.</li><li>La MEJ peut comprendre les modules et les interdictions/obligations prévues par le CJPM.</li></ul></li><li><h4>4. Peines possibles</h4><ul><li>Peut prononcer les peines prévues pour les mineurs dans le respect du CJPM : confiscation, stage, TIG, DDSE, sursis probatoire, suivi socio-judiciaire, sanction-réparation, amende et peine privative de liberté selon la qualification et l’atténuation.</li></ul></li></ol><aside class="support-attention"><strong>À ne pas confondre</strong><ul class="support-liste"><li>La CAM ne conduit pas l’instruction.</li><li>Ne pas transposer automatiquement la MEE de la procédure JE/TPE au procès criminel.</li><li>Ne pas attribuer une MEJP à la CAM sans base dans la décision ou le texte applicable.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-cam">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Cour d’assises des mineurs (CAM)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Saisine</h4><ul><li>Crime commis à partir de 16 ans aux faits.</li><li>Saisie après information judiciaire et mise en accusation.</li></ul></li><li><h4>2. Avant / pendant le procès</h4><ul><li>MJIE possible comme juridiction de jugement.</li><li>Âge aux faits = repère de compétence.</li></ul></li><li><h4>3. Jugement</h4><ul><li>Juge culpabilité, action civile et sanction dans le procès criminel.</li><li>Ne conduit pas l’instruction.</li></ul></li><li><h4>4. Sanctions / peines</h4><ul><li>Avertissement ; MEJ avec contenus autorisés.</li><li>Confiscation, stage, TIG, amende, DDSE, sursis probatoire, SSJ, sanction-réparation et peines complémentaires.</li><li>Emprisonnement, réclusion ou détention criminelle selon qualification et atténuation CJPM.</li></ul></li><li><h4>5. À ne pas inventer</h4><ul><li>Ne pas transposer automatiquement la MEE JE/TPE à la CAM.</li><li>Ne pas attribuer une MEJP à la CAM sans base dans la pièce ou le texte applicable.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-jap" data-mots-cles="JAP juge de l’application des peines application exécution aménagement peine probation libération conditionnelle bracelet électronique DDSE">
+<summary>
+<span class="support-juridiction-abreviation">JAP</span>
+<span class="support-juridiction-titre"><strong>Application des peines</strong><small>4 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-jap">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Juge de l’application des peines (JAP)</strong><small>Suivi, exécution et aménagement des peines après condamnation.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Intervient après la sanction, dans l’application et l’exécution de certaines peines.</li><li>Suit le respect des obligations, interdictions et aménagements décidés après condamnation.</li><li>Toujours vérifier la compétence JE-JAP ou JAP selon l’âge et la décision.</li></ul></section><ol class="support-frise"><li><h4>1. Après la sanction / exécution de la peine</h4><ul><li>On ne rejoue pas la culpabilité ni la sanction déjà prononcées.</li><li>Le dossier concerne alors le suivi post-condamnation et non une MEE.</li></ul></li><li><h4>2. Suivis et peines à rattacher au JAP</h4><ul><li>Sursis probatoire.</li><li>TIG.</li><li>DDSE.</li><li>Suivi socio-judiciaire.</li><li>Contrôle du respect des obligations et interdictions post-condamnation.</li></ul></li><li><h4>3. Aménagements et décisions possibles</h4><ul><li>Placement extérieur.</li><li>Semi-liberté.</li><li>Libération conditionnelle.</li><li>Fractionnement ou suspension de peine.</li><li>Conversion de peine.</li><li>Réductions de peine et permissions de sortir selon le cadre légal.</li><li>Adaptation, modification ou révocation de certaines modalités d’exécution.</li></ul></li><li><h4>4. Repères spéciaux pour les mineurs</h4><ul><li>Le JE exerce en principe les fonctions du JAP pour les peines concernant un mineur.</li><li>Dessaisissement possible vers le JAP à partir de 18 ans dans les conditions prévues.</li><li>Si la personne est majeure au jour du jugement, le JAP est en principe compétent sauf décision spéciale maintenant le JE.</li><li>Le TPE exerce les fonctions du TAP pour les mineurs condamnés.</li></ul></li></ol><aside class="support-attention"><strong>Ce que le JAP ne fait pas</strong><ul class="support-liste"><li>Ne juge pas la culpabilité.</li><li>Ne prononce pas une MEJ ou une MEJP comme sanction initiale.</li><li>Ne remplace pas automatiquement le JE lorsque celui-ci reste compétent.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-jap">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Juge de l’application des peines (JAP)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Après condamnation</h4><ul><li>Application / exécution d’une peine déjà prononcée.</li><li>Ne rejuge pas la culpabilité ni la sanction initiale.</li></ul></li><li><h4>2. Suivis</h4><ul><li>Sursis probatoire ; TIG ; suivi socio-judiciaire.</li><li>Obligations / interdictions ; incidents et adaptations selon compétence.</li></ul></li><li><h4>3. Aménagements</h4><ul><li>Placement extérieur ; semi-liberté ; DDSE.</li><li>Fractionnement / suspension ; libération conditionnelle.</li><li>Retrait / révocation d’un aménagement dans les cas prévus.</li></ul></li><li><h4>4. Autres décisions d’exécution</h4><ul><li>Conversion de peine dans les cas prévus.</li><li>Réductions de peine ; permissions de sortir.</li><li>Décisions sur incidents d’exécution.</li></ul></li><li><h4>5. Mineurs : JE ou JAP ?</h4><ul><li>JE = fonctions du JAP jusqu’à 21 ans en principe.</li><li>Dessaisissement possible vers JAP à partir de 18 ans.</li><li>Majeur au jour du jugement : JAP en principe, sauf maintien spécial du JE.</li><li>Décision TAP = TPE pour le mineur condamné.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-fiche-jap">
+<summary>
+<span class="support-revision-type">Fiche récapitulative</span>
+<span class="support-revision-titre"><strong>JAP — repères de compétence</strong><small>JE-JAP, JAP de droit commun et TAP.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Quand intervient le JAP ?</h3><ul class="support-liste"><li>Au stade de l’exécution ou de l’application des peines, une fois la condamnation devenue définitive ou exécutoire.</li><li>Il ne statue pas sur la culpabilité ni sur la sanction : ces décisions relèvent du jugement.</li></ul></section><section><h3>Ce qu’il suit</h3><ul class="support-liste"><li>Sursis avec mise à l’épreuve / sursis probatoire.</li><li>Travail d’intérêt général (TIG).</li><li>Détention à domicile sous surveillance électronique (DDSE).</li><li>Peines de stage et autres peines dont la loi prévoit le contrôle.</li></ul></section><section><h3>Ce qu’il peut décider</h3><ul class="support-liste"><li>Contrôler le respect des obligations et interdictions.</li><li>Adapter ou aménager les modalités d’exécution : durée, rythme, lieu, horaires.</li><li>Autoriser certaines permissions de sortir, déplacements ou absences dans les conditions légales.</li><li>Statuer sur des incidents d’exécution : avertissement, modification, mise en demeure, révocation.</li><li>Décider une révocation de sursis et, dans les cas prévus, l’aménagement de l’emprisonnement.</li></ul></section><section><h3>Qui est compétent ?</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Situation</th><th>Compétence</th><th>Précision</th></tr></thead><tbody>
+<tr><td>Mineur au jour du jugement</td><td>JE faisant fonction de JAP</td><td>En principe jusqu’à 21 ans, sauf dessaisissement.</td></tr>
+<tr><td>Mineur au jugement puis majeur</td><td>JE faisant fonction de JAP</td><td>Le JE reste en principe compétent jusqu’à 21 ans, sauf dessaisissement.</td></tr>
+<tr><td>18 ans ou plus au jour du jugement</td><td>JAP de droit commun</td><td>Sauf décision spéciale maintenant le JE compétent.</td></tr>
+<tr><td>18 ans ou plus au jugement avec maintien spécial du JE</td><td>JE pour l’application des peines</td><td>Décision expresse de la juridiction pour mineurs.</td></tr>
+<tr><td>Dessaisissement du JE après la majorité</td><td>JAP de droit commun</td><td>Le JE peut se dessaisir lorsque le suivi n’est plus adapté.</td></tr>
+<tr><td>21 ans atteints</td><td>JAP de droit commun</td><td>Fin de la compétence spéciale du JE.</td></tr>
+</tbody></table></div></section><section><h3>TAP — tribunal de l’application des peines</h3><ul class="support-liste"><li>Formation collégiale du tribunal judiciaire qui se substitue au JAP dans certains cas.</li><li>Intervient notamment pour certaines peines d’emprisonnement ferme de 2 ans ou plus, certaines révocations de sursis entraînant une peine ferme d’au moins 2 ans et d’autres décisions particulièrement graves prévues par la loi.</li></ul></section><p class="support-revision-date">Synthèse de formation · vérifiée le 24/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-complement-jap">
+<summary>
+<span class="support-revision-type">Tableau complémentaire</span>
+<span class="support-revision-titre"><strong>JAP — compétences et repères</strong><small>Comprendre les décisions prises après le prononcé de la peine.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Repère essentiel</h3><ul class="support-liste"><li>Pour les condamnations prononcées contre un mineur, le JE exerce en principe les fonctions du JAP jusqu’à 21 ans, sous réserve des règles de compétence et de dessaisissement.</li><li>Si le condamné a déjà 18 ans au jour du jugement, le JAP est en principe compétent, sauf décision spéciale maintenant le JE.</li></ul></section><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Moment</th><th>Ce qui peut être décidé</th><th>Limite clé</th></tr></thead><tbody>
+<tr><td>Suivi post-condamnation</td><td>Suivre l’exécution ; modifier ou adapter obligations/modalités ; statuer sur incidents et révocations lorsqu’il est compétent.</td><td>La peine est déjà prononcée : la culpabilité n’est pas rejugée.</td></tr>
+<tr><td>Aménagement d’emprisonnement</td><td>Placement extérieur ; semi-liberté ; DDSE ; fractionnement ou suspension ; libération conditionnelle.</td><td>Toujours vérifier seuils, durée de peine et compétence.</td></tr>
+<tr><td>Autres décisions d’exécution</td><td>Conversion de peine, réductions de peine, permissions de sortir, modification/levée d’obligations, retrait/révocation d’un aménagement selon le texte.</td><td>Certaines décisions relèvent du TAP/TPE plutôt que du juge seul.</td></tr>
+<tr><td>Mineurs / majorité</td><td>JE = JAP jusqu’à 21 ans en principe ; dessaisissement possible dès 18 ans ; majeur au jugement = JAP en principe sauf maintien spécial.</td><td>18 ans ne signifie pas toujours transfert automatique.</td></tr>
+<tr><td>Compétence collégiale</td><td>Quand le droit commun confie la décision au TAP, le TPE exerce ces fonctions pour les mineurs condamnés.</td><td>Ne pas confondre JAP (juge seul) et TAP (collégial).</td></tr>
+</tbody></table></div><section><h3>À ne pas confondre</h3><ul class="support-liste"><li>Audience de sanction ≠ application des peines.</li><li>MEJP / MEJ ≠ DDSE / sursis probatoire / TIG / SSJ.</li><li>ARSE = mesure de sûreté provisoire ; DDSE = peine ou aménagement selon le cas.</li><li>JAP / JE-JAP = juge seul ; TAP / TPE-application = formation collégiale.</li></ul></section><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-transversaux" data-mots-cles="CJPM code de la justice pénale des mineurs MEJP MEJ MJIE MEE CJ ARSE DP TIG DDSE SSJ procédure délais mesures peines sanctions">
+<summary>
+<span class="support-juridiction-abreviation">CJPM</span>
+<span class="support-juridiction-titre"><strong>Repères transversaux</strong><small>1 tableau</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-tableau-maitre">
+<summary>
+<span class="support-revision-type">Tableau maître</span>
+<span class="support-revision-titre"><strong>CJPM — juridictions, mesures, modules, sûreté, peines et moments procéduraux</strong><small>Vue d’ensemble des acteurs, des décisions et des étapes de la procédure.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu">
+<section class="support-repere"><h3>Comment lire le tableau maître</h3><p>Toujours identifier dans cet ordre : <strong>âge au moment pertinent → nature des faits → stade procédural → acteur compétent → nature de la décision → conditions particulières</strong>.</p></section>
+<section><h3>Sigles essentiels</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Sigle</th><th>Signification</th><th>Repère</th></tr></thead><tbody>
+<tr><td>MEJP</td><td>Mesure éducative judiciaire provisoire</td><td>Avant le prononcé de la sanction.</td></tr><tr><td>MEJ</td><td>Mesure éducative judiciaire</td><td>Mesure éducative prononcée comme sanction.</td></tr><tr><td>MJIE</td><td>Mesure judiciaire d’investigation éducative</td><td>Investigation approfondie et interdisciplinaire.</td></tr><tr><td>MEE</td><td>Mise à l’épreuve éducative</td><td>Période entre culpabilité et sanction dans la procédure ordinaire.</td></tr><tr><td>CJ</td><td>Contrôle judiciaire</td><td>Mesure de sûreté, liberté sous obligations/interdictions.</td></tr><tr><td>ARSE</td><td>Assignation à résidence avec surveillance électronique</td><td>Mesure de sûreté provisoire avec surveillance électronique.</td></tr><tr><td>DP</td><td>Détention provisoire</td><td>Mesure de sûreté privative de liberté, jamais une peine.</td></tr>
+</tbody></table></div></section>
+<section><h3>Acteurs et stades — repères</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Acteur</th><th>Stade</th><th>Peut décider / faire</th><th>Limite clé</th></tr></thead><tbody>
+<tr><td>Parquet</td><td>Après enquête / orientation</td><td>Classement, alternatives, poursuites, choix du mode de saisine, réquisitions.</td><td>Ne juge ni culpabilité ni sanction ; ne décide pas lui-même DP ou MEJ.</td></tr>
+<tr><td>JE</td><td>Avant culpabilité</td><td>MJIE, MEJP, CJ ou ARSE selon le cadre.</td><td>La MEJ comme sanction n’est pas prononcée à ce stade.</td></tr>
+<tr><td>JE</td><td>Culpabilité / MEE / sanction</td><td>Culpabilité et action civile ; ouverture et suivi MEE ; avertissement, MEJ et peines limitées à la sanction.</td><td>Pas d’emprisonnement.</td></tr>
+<tr><td>TPE</td><td>Culpabilité / audience unique / sanction</td><td>Jugement complet, MEE, MEJ et peines légalement applicables.</td><td>Le suivi courant de la MEE relève ensuite du JE.</td></tr>
+<tr><td>JI</td><td>Information judiciaire</td><td>Mise en examen, MJIE, MEJP, CJ, ARSE, investigations ; règlement de l’instruction.</td><td>Ne prononce pas la sanction ; saisit le JLD pour DP.</td></tr>
+<tr><td>JLD</td><td>Liberté / sûreté</td><td>DP et, selon saisine/compétence, MEJP, CJ ou ARSE.</td><td>Ne juge pas l’affaire au fond.</td></tr>
+<tr><td>CAM</td><td>Crime commis à partir de 16 ans</td><td>Culpabilité, action civile, MEJ et peines criminelles applicables.</td><td>Intervient après mise en accusation.</td></tr>
+</tbody></table></div></section>
+<section><h3>MEJ et MEJP — distinction centrale</h3><div class="support-comparaison"><article><h4>MEJ</h4><ul class="support-liste"><li>Sanction éducative.</li><li>Modules insertion, réparation, santé et placement.</li><li>Interdictions 5 à 7 bis et obligations 8 et 9 prévues à l’article L112-2.</li><li>Les éléments peuvent être prononcés dans les limites et conditions du CJPM.</li></ul></article><article><h4>MEJP</h4><ul class="support-liste"><li>Avant le prononcé de la sanction.</li><li>Modules 1 à 4 et interdictions 5 à 7 bis.</li><li>Ne reprend pas les obligations 8 et 9 de la MEJ définitive.</li><li>Peut comporter l’obligation spécifique de présentation périodique prévue par L323-1.</li><li>Modifiable ou levable à tout moment dans le cadre légal ; ne peut se poursuivre au-delà de 21 ans.</li></ul></article></div><p class="support-piege"><strong>Piège :</strong> ne jamais réduire la MEJP à « une MEJ avant sanction » : leur contenu juridique n’est pas strictement identique.</p></section>
+<section><h3>Les quatre modules</h3><div class="support-modules"><article><h4>Insertion</h4><p>Prise en charge scolaire ou visant l’insertion sociale, scolaire ou professionnelle ; peut inclure accueil de jour, internat scolaire ou établissement d’enseignement/formation. Réf. L112-5 à L112-7.</p></article><article><h4>Réparation</h4><p>Activité d’aide ou de réparation envers la victime ou dans l’intérêt de la collectivité, ou médiation. Durée maximale du module : 1 an ; accord de la victime requis pour la réparation directe ou la médiation. Réf. L112-8 à L112-10.</p></article><article><h4>Santé</h4><p>Orientation vers une prise en charge sanitaire adaptée ; certains placements nécessitent avis médical ou orientation spécifique. Réf. L112-11 à L112-13.</p></article><article><h4>Placement</h4><p>Accueil hors du milieu de vie habituel auprès des personnes, services ou établissements autorisés ; décision fixant lieu, durée et modalités. Réf. L112-14 à L112-15 et L113-*.</p></article></div></section>
+<section><h3>MJIE et MEE</h3><ul class="support-liste"><li>La MJIE est une investigation approfondie, pas une sanction ni une mesure de sûreté.</li><li>Elle peut être ordonnée par le JE, le JI et les juridictions de jugement pour mineurs aux stades prévus.</li><li>Pendant la MEE, le suivi est placé sous le contrôle du JE après déclaration de culpabilité.</li><li>Expertise, MJIE, MEJP, CJ ou ARSE peuvent être articulés pendant la MEE selon le cadre légal.</li><li>Un manquement à CJ/ARSE ne crée jamais automatiquement une escalade vers la DP : chaque décision exige son propre cadre légal.</li></ul></section>
+<section><h3>Contrôle judiciaire (CJ)</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Âge / situation</th><th>CJ ?</th><th>Condition clé</th></tr></thead><tbody><tr><td>&lt; 13 ans</td><td>Non</td><td>CJ impossible.</td></tr><tr><td>13–15 ans — crime</td><td>Possible</td><td>Peine criminelle encourue.</td></tr><tr><td>13–15 ans — délit ≥ 7 ans</td><td>Possible</td><td>Seuil correctionnel autonome.</td></tr><tr><td>13–15 ans — délit ≥ 5 ans avec antécédent procédural et rapport &lt; 1 an</td><td>Possible</td><td>Conditions spécifiques du CJPM.</td></tr><tr><td>16 ans et +</td><td>Possible selon conditions</td><td>Crime ou conditions correctionnelles prévues par le CPP/CJPM.</td></tr></tbody></table></div></section>
+<section><h3>ARSE et détention provisoire</h3><div class="support-comparaison"><article><h4>ARSE</h4><ul class="support-liste"><li>Régime général : 16 ans et plus et peine d’emprisonnement encourue d’au moins 3 ans.</li><li>Exceptions prévues à partir de 13 ans pour certaines infractions terroristes ou commises en bande organisée, avec seuils spécifiques.</li><li>Si l’ARSE est exécutée au domicile des représentants légaux, leur accord écrit est requis dans le cadre prévu.</li></ul></article><article><h4>DP</h4><ul class="support-liste"><li>Impossible avant 13 ans.</li><li>Ne peut être décidée ou prolongée que si elle est indispensable et si CJ/ARSE sont insuffisants.</li><li>Pendant l’instruction, le JI saisit le JLD.</li><li>Lorsqu’une DP est ordonnée, une MEJP doit être prononcée.</li><li>Pour les moins de 16 ans, la DP correctionnelle est très encadrée.</li><li>DP = mesure de sûreté provisoire ; emprisonnement = peine.</li></ul></article></div></section>
+<section><h3>Sanctions et peines par juridiction</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Juridiction</th><th>Sanctions / peines — synthèse</th><th>Limite clé</th></tr></thead><tbody><tr><td>Tribunal de police</td><td>Avertissement judiciaire ; pour mineur ≥13 dans le cadre contraventionnel : dispense de peine, amende atténuée, certaines peines complémentaires.</td><td>Compétence contraventionnelle.</td></tr><tr><td>JE</td><td>Avertissement ; MEJ ; sur réquisitions et conditions : confiscation, stage, TIG.</td><td>Pas d’emprisonnement.</td></tr><tr><td>TPE</td><td>Avertissement ; MEJ ; amende, TIG, stage, confiscation, DDSE, sursis probatoire, SSJ, sanction-réparation, restrictions de droits et emprisonnement lorsque légalement applicables.</td><td>Aucune peine pour faits commis avant 13 ans.</td></tr><tr><td>CAM</td><td>Avertissement ; MEJ ; peines criminelles applicables aux mineurs, dont réclusion/détention dans les limites CJPM.</td><td>Crime commis à partir de 16 ans.</td></tr></tbody></table></div><p><strong>Atténuation :</strong> en principe, pour le TPE et la CAM, la peine privative de liberté ne dépasse pas la moitié de la peine encourue ; si la perpétuité est encourue, le plafond est de 20 ans, sous réserve des règles permettant exceptionnellement d’écarter l’atténuation pour certains mineurs de plus de 16 ans.</p></section>
+<section><h3>Après la sanction</h3><ul class="support-liste"><li>Le JE contrôle l’exécution de la MEJ.</li><li>Pour les peines prononcées contre un mineur, le JE exerce en principe les fonctions du JAP dans les limites prévues.</li><li>Le TPE exerce les fonctions du tribunal de l’application des peines pour les mineurs condamnés.</li><li>Un dessaisissement vers le JAP de droit commun est possible dans les cas prévus après la majorité.</li></ul></section>
+<section><h3>Checklist anti-erreur</h3><ol class="support-checklist"><li>Quel âge avait le jeune au moment des faits ?</li><li>Les faits sont-ils une contravention, un délit ou un crime ?</li><li>Quel est le stade : enquête, défèrement, instruction, culpabilité, MEE, audience unique, sanction ou exécution ?</li><li>Qui est saisi ou a rendu la décision ?</li><li>S’agit-il d’une investigation, d’une mesure éducative provisoire, d’une mesure de sûreté, d’une sanction éducative ou d’une peine ?</li><li>Pour CJ/ARSE/DP : quelles conditions d’âge, de seuil et de nature des faits s’appliquent ?</li><li>Pour une MEJP : le contenu reste-t-il dans les limites prévues par L323-1 ?</li><li>Pour une MEJ : quels modules, interdictions ou obligations sont effectivement prononcés ?</li><li>Est-ce écrit dans la décision ou s’agit-il d’une hypothèse ?</li><li>Si l’information manque, ne pas inventer.</li></ol></section>
+<section><h3>Sources indiquées dans le document</h3><p>Documents de formation du projet et Code de la justice pénale des mineurs consulté sur Légifrance au 24/08/2026. Ensembles principalement mobilisés : L111-1 à L113-8 ; L121-1 à L124-2 ; L322-7 ; L323-1 à L323-3 ; L331-1 à L334-6 ; L423-9 et suivants ; L432-1 à L434-* ; L521-1 à L521-27 ; L611-1 à L611-6.</p></section>
+<p class="support-revision-date">Synthèse de formation · vérifiée le 24/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+</div></section>
+</section>
+<section class="ecran" id="progression">
+  <header class="page-entete progression-entete">
+    <span class="surtitre">Progression</span>
+    <h1>Tes parcours prennent forme.</h1>
+    <p>Retrouve ta progression globale, tes repères d’activité et l’avancée de chaque parcours.</p>
+  </header>
+
+  <div class="progression-studio">
+    <section class="progression-vue-ensemble" aria-labelledby="titreActiviteProgression">
+      <header class="progression-vue-ensemble-entete">
+        <div>
+          <span class="surtitre">Vue d’ensemble</span>
+          <h2 id="titreActiviteProgression">Ta trajectoire</h2>
+          <p>Visualise tes repères d’activité, les questions travaillées et les étapes maîtrisées.</p>
+        </div>
+      </header>
+
+      <div class="progression-colonne-contenu">
+        <div class="progression-tableau-bord" id="tableauProgression"></div>
+        <div class="progression-vue-ensemble-metrics" aria-label="Indicateurs d’activité">
+          <div class="progression-statistique progression-decouverte-statistique">
+            <span>Étapes abordées</span>
+            <strong id="experienceProgression">0</strong>
+          </div>
+          <div class="progression-statistique"><span>Questions travaillées</span><strong id="questionsJoueesProgression">0</strong></div>
+          <div class="progression-statistique"><span>Questions à revoir</span><strong id="erreursProgression">0</strong></div>
+          <div class="progression-statistique"><span>Étapes maîtrisées</span><strong id="etapesMaitriseesProgression">0</strong></div>
+        </div>
       </div>
-      <div class="progression-statistiques">
-       <div class="progression-statistique progression-decouverte-statistique">
-        <strong id="experienceProgression">
-         <span class="experience-valeur">0</span>
-         <span class="experience-libelle">découvertes</span>
-        </strong>
-       </div>
-       <div class="progression-statistique">
-        <strong id="questionsJoueesProgression">
-         0
-        </strong>
-        <span>
-         activités réalisées
-        </span>
-       </div>
-       <div class="progression-statistique">
-        <strong id="erreursProgression">
-         0
-        </strong>
-        <span>
-         erreurs actives
-        </span>
-       </div>
-       <div class="progression-statistique">
-        <strong id="etapesMaitriseesProgression">
-         0
-        </strong>
-        <span>
-         étapes maîtrisées
-        </span>
-       </div>
+    </section>
+
+    <section class="progression-explorateur" aria-labelledby="titreParcoursProgression">
+      <header class="progression-explorateur-entete">
+        <div>
+          <span class="surtitre">Parcours</span>
+          <h2 id="titreParcoursProgression">Voir un parcours en détail</h2>
+          <p>Consulte son avancement, les étapes maîtrisées et l’état de son évaluation.</p>
+        </div>
+        <button class="secondaire" id="boutonOuvrirParcours" type="button">Tous les parcours →</button>
+      </header>
+      <div class="progression-colonne-contenu">
+        <div class="progression-pastilles" id="listeProgressionParcours" role="tablist" aria-label="Choisir un parcours à afficher"></div>
+        <div class="progression-detail-parcours" id="detailProgressionParcours" role="tabpanel" tabindex="0" aria-labelledby="ongletProgressionParcours-commun"></div>
       </div>
-      <div class="progression-actions">
-       <button class="secondaire" id="boutonExporterMaProgression">
-        Exporter ma progression
-       </button>
-       <label class="secondaire progression-importation" for="fichierImporterProgression">
-        Importer
-        <input accept="application/json" hidden="" id="fichierImporterProgression" type="file"/>
-       </label>
-      </div>
-     </article>
-     <article class="progression-carte progression-parcours">
-      <div class="progression-carte-entete">
-       <div aria-hidden="true" class="progression-icone progression-icone-parcours">
-        <img src="ressources/icones-interface/icone-carte-du-parcours.svg" alt="" aria-hidden="true">
-       </div>
-       <div>
-        <h2>
-         Ma progression dans le parcours PJJ
-        </h2>
-        <p>
-         Ton avancement est enregistré étape par étape.
-        </p>
-       </div>
-      </div>
-      <div class="tableau-bord progression-tableau-bord" id="tableauProgression">
-      </div>
-      <div class="progression-actions progression-actions-parcours">
-       <button class="secondaire" id="boutonOuvrirParcours" type="button">
-        Ouvrir
-       </button>
-      </div>
-     </article>
-    </div>
-   </section>
-   <section class="ecran" id="parametres">
+    </section>
+  </div>
+</section>
+<section class="ecran" id="parametres">
     <div class="page-entete">
      <h1>
       Paramètres
@@ -777,7 +878,7 @@
     </div>
     <div class="formulaire-grille">
      <div class="parametre parametres-choix parametre-son">
-      <div class="choix-libelle">
+      <div class="choix-libelle" id="libelleChoixSon">
        Son
       </div>
       <select aria-hidden="true" class="natif-masque" id="sonActif" tabindex="-1">
@@ -788,7 +889,7 @@
         Désactivé
        </option>
       </select>
-      <div class="choix-groupe" data-groupe-choix="sonActif" data-selection-visuelle="au-clic">
+      <div aria-labelledby="libelleChoixSon" class="choix-groupe" data-groupe-choix="sonActif" role="group">
        <button id="boutonSonActive" class="choix-bouton" data-valeur="true" type="button">
         Activé
        </button>
@@ -804,7 +905,7 @@
       <input class="curseur" id="volumeSon" max="1" min="0" step="0.05" type="range"/>
      </div>
      <div class="parametre parametres-choix">
-      <div class="choix-libelle">
+      <div class="choix-libelle" id="libelleChoixTailleTexte">
        Taille du texte
       </div>
       <select aria-hidden="true" class="natif-masque" id="echelleTexte" tabindex="-1">
@@ -818,72 +919,56 @@
         Grande
        </option>
       </select>
-      <div class="choix-groupe" data-groupe-choix="echelleTexte" data-selection-visuelle="au-clic">
-       <button id="boutonTailleTexteCompacte" class="choix-bouton" data-valeur="0.9">
+      <div aria-labelledby="libelleChoixTailleTexte" class="choix-groupe" data-groupe-choix="echelleTexte" role="group">
+       <button id="boutonTailleTexteCompacte" class="choix-bouton" data-valeur="0.9" type="button">
         Compacte
        </button>
-       <button id="boutonTailleTexteNormale" class="choix-bouton" data-valeur="1">
+       <button id="boutonTailleTexteNormale" class="choix-bouton" data-valeur="1" type="button">
         Normale
        </button>
-       <button id="boutonTailleTexteGrande" class="choix-bouton" data-valeur="1.15">
+       <button id="boutonTailleTexteGrande" class="choix-bouton" data-valeur="1.15" type="button">
         Grande
        </button>
       </div>
      </div>
-     <div class="parametre parametres-actions-carte">
+     <div class="parametre parametre-sauvegarde">
+      <div class="choix-libelle">Sauvegarde et transfert</div>
+      <p>Conserve une copie de ta progression ou récupère-la sur un autre appareil.</p>
       <div class="parametres-actions-boutons">
-       <button class="principal" data-ecran="accueil" id="boutonEnregistrerEtRevenir">
-        Enregistrer et revenir
-       </button>
-       <button class="danger" id="boutonReinitialiserTouteLaProgression">
-        Réinitialiser toute la progression
-       </button>
+       <button class="secondaire" id="boutonExporterMaProgression" type="button">Exporter ma progression</button>
+       <button aria-controls="fichierImporterProgression" class="secondaire progression-importation" id="boutonImporterProgression" type="button">Importer une progression</button>
+       <input accept="application/json" aria-hidden="true" class="fichier-importation-visuellement-cache" id="fichierImporterProgression" tabindex="-1" type="file">
       </div>
      </div>
+     <div class="parametres-actions-principales">
+       <button class="principal" data-ecran="accueil" id="boutonEnregistrerEtRevenir" type="button">
+        Terminé
+       </button>
+     </div>
+     <section aria-labelledby="titreZoneSensibleParametres" class="parametres-zone-sensible">
+      <div class="parametres-zone-sensible-texte">
+       <h2 id="titreZoneSensibleParametres">Zone sensible</h2>
+       <p>Cette action supprime les scores, les étapes validées et les erreurs enregistrées sur cet appareil.</p>
+      </div>
+       <button class="danger" id="boutonReinitialiserTouteLaProgression" type="button">
+        Réinitialiser toute la progression
+       </button>
+     </section>
     </div>
    </section>
   </main>
-  <section class="guides-publics-accueil" aria-labelledby="titreGuidesPublics">
-   <div class="guides-publics-accueil-entete">
-    <h2 id="titreGuidesPublics">Guides pour découvrir la PJJ</h2>
-    <p><strong>Tu prépares ton arrivée à la PJJ ou tu veux mieux comprendre son fonctionnement ?</strong><br>Explore les guides à ton rythme, puis teste tes connaissances dans le parcours.</p>
-   </div>
-   <nav class="guides-publics-accueil-grille" aria-label="Guides pédagogiques sur la PJJ">
-    <a href="decouvrir-la-pjj/">Qu’est-ce que la PJJ ?</a>
-    <a href="organisation-pjj/">Organisation de la PJJ</a>
-    <a href="metiers-pjj/">Métiers de la PJJ</a>
-    <a href="structures-pjj/">Structures de la PJJ</a>
-    <a href="mesures-educatives-pjj/">Mesures éducatives</a>
-    <a href="sigles-pjj/">Sigles essentiels</a>
-    <a href="preparer-arrivee-pjj/">Préparer son arrivée à la PJJ</a>
-    <a href="concours-educateur-pjj/">Préparer le concours d’éducateur PJJ</a>
-    <a href="quiz-pjj/">Quiz PJJ : 160 questions</a>
-   </nav>
-  </section>
   <div aria-atomic="true" aria-live="polite" class="notification" id="notification" role="status">
   </div>
   <footer class="produit-pied-page">
-   <div class="produit-repere">
-    Version 1 · Août 2026
-   </div>
-   <p class="pied-page-independance">
-     <strong>PJJoue est un site personnel, pédagogique, indépendant et non officiel.</strong> Il est sans lien institutionnel avec le Gouvernement français, le ministère de la Justice, la PJJ ou l’ENPJJ. Les réponses s’appuient sur des sources officielles consultables depuis le site.
-    </p>
-   <p class="pied-page-credit">
-    Création, conception et développement : <strong>Dev'Ines</strong>
-   </p>
-   <p class="pied-page-contact">
-    Contact : <a href="mailto:contact.pjjoue@gmail.com">contact.pjjoue@gmail.com</a>
-   </p>
+   <div class="produit-repere">Version 1 · Août 2026</div>
+   <p class="pied-page-independance"><strong>PJJoue est un site personnel, pédagogique, indépendant et non officiel.</strong> Il est sans lien institutionnel avec le Gouvernement français, le ministère de la Justice, la PJJ ou l’ENPJJ. Les réponses s’appuient sur des sources officielles consultables depuis le site.</p>
+   <p class="pied-page-credit">Création, conception et développement : <strong>Dev'Ines</strong></p>
+   <p class="pied-page-contact">Contact : <a href="mailto:contact.pjjoue@gmail.com">contact.pjjoue@gmail.com</a></p>
    <nav aria-label="Informations légales et pratiques">
    <a href="sources.html">Sources officielles</a>
    <a href="accessibilite.html">Accessibilité</a>
-    <a href="confidentialite.html">
-     Confidentialité
-    </a>
-    <a href="mentions-legales.html">
-     Mentions légales
-    </a>
+    <a href="confidentialite.html">Confidentialité</a>
+    <a href="mentions-legales.html">Mentions légales</a>
    </nav>
   </footer>
   <script defer="" src="donnees/donnees-pjj.js">
@@ -958,15 +1043,13 @@
      ×
     </button>
     <div aria-hidden="true" class="pjj-fenetre-icone joker-fenetre-icone">
-     <svg focusable="false" viewbox="0 0 48 48">
-      <path d="M9 16h30v22H9zM18 16v-5h12v5"></path><path d="M24 23v9M19.5 27.5h9"></path>
-     </svg>
+     ★
     </div>
     <h2 id="titreFenetreJokers">
      Choisis un joker
     </h2>
     <p id="texteFenetreJokers">
-     Chaque joker utilisé rend la réussite assistée. Tu pourras rejouer l’étape sans aide pour déverrouiller l’évaluation finale.
+     Chaque joker t’aide à comprendre. La réussite sera simplement indiquée comme assistée et tu pourras rejouer l’étape sans aide plus tard.
     </p>
      <div aria-label="Jokers disponibles" class="jokers joker-choix" role="group">
      <button class="joker" id="boutonJoker5050" type="button">

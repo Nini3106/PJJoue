@@ -12,7 +12,7 @@ selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => {
     if (etat.ecran === 'parametres')
         enregistrerParametres();
     if (bouton.dataset.ecran === 'parcours') {
-        ouvrirParcours('commun');
+        ouvrirChoixParcours();
         return;
     }
     afficherEcran(bouton.dataset.ecran);
@@ -49,10 +49,17 @@ function initialiserFenetreJokers() {
 initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
 selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
-selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours('commun', { remplacerHistorique: true });
-selectionner('#boutonOuvrirParcours').onclick = () => ouvrirParcours('commun');
+selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
+selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
 selectionner('#boutonExporterMaProgression').onclick = exporterProgression;
-selectionner('#fichierImporterProgression').onchange = evenement => evenement.target.files[0] && importerProgression(evenement.target.files[0]);
+const boutonImporterProgression = selectionner('#boutonImporterProgression');
+const fichierImporterProgression = selectionner('#fichierImporterProgression');
+boutonImporterProgression.onclick = () => {
+    fichierImporterProgression.value = '';
+    fichierImporterProgression.click();
+};
+fichierImporterProgression.onchange = evenement => evenement.target.files[0] && importerProgression(evenement.target.files[0]);
+selectionner('#volumeSon').onchange = enregistrerParametres;
 selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFenetreMessage({
     titre: 'Réinitialiser toute la progression ?',
     message: 'Les scores, les étapes validées et les erreurs enregistrées seront définitivement supprimés de ce navigateur.',
@@ -65,7 +72,7 @@ selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFen
             pjjoue_page_consultee: 'Progression'
         });
         sauvegarde = creerSauvegardeInitiale();
-        effacerSauvegardeV1DuNavigateur();
+        effacerSauvegardeDuNavigateur();
         effacerSessionEnCours();
         enregistrerSauvegarde();
         actualiserAccueil();
@@ -148,20 +155,27 @@ document.addEventListener('click', evenement => {
         lancerRevision('toutes');
     else if (action === 'reviser-theme')
         lancerRevision(cible.dataset.theme);
+    else if (action === 'reviser-etape')
+        lancerRevisionEtape(cible.dataset.theme || 'commun', cible.dataset.etape);
+    else if (action === 'ouvrir-parcours-depuis-erreurs')
+        ouvrirChoixParcours();
 });
 mesurerHauteurEntete();
-selectionner('#boutonMenuMobile')?.addEventListener('click', basculerMenuMobile);
+selectionner('#boutonMenuMobile')?.addEventListener('click', evenement => {
+    evenement.stopPropagation();
+    basculerMenuPrincipal();
+});
 document.addEventListener('click', evenement => {
     const entete = document.querySelector('header.entete');
     if (entete?.classList.contains('menu-mobile-ouvert') && !entete.contains(evenement.target))
-        fermerMenuMobile();
+        fermerMenuPrincipal();
 });
 document.addEventListener('keydown', evenement => {
     const entete = document.querySelector('header.entete');
     if (!entete?.classList.contains('menu-mobile-ouvert'))
         return;
     if (evenement.key === 'Escape') {
-        fermerMenuMobile();
+        fermerMenuPrincipal();
         selectionner('#boutonMenuMobile')?.focus();
         return;
     }
@@ -169,7 +183,7 @@ document.addEventListener('keydown', evenement => {
         return;
     const elements = [
         selectionner('#boutonMenuMobile'),
-        ...selectionnerTous('#menuPrincipal button:not(:disabled)')
+        ...selectionnerTous('#menuPrincipal button:not(:disabled), #menuPrincipal a[href]')
     ].filter(Boolean);
     if (!elements.length)
         return;
@@ -185,6 +199,7 @@ document.addEventListener('keydown', evenement => {
 });
 window.addEventListener('resize', mesurerHauteurEntete, { passive: true });
 initialiserGroupesChoix();
+initialiserRechercheSupports();
 actualiserAccueil();
 restaurerRoute(history.state || lireRoute());
 garantirAccueilEnHaut();
@@ -234,11 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(ajusterQuestionAEcran, 80);
 });
 document.addEventListener('click', evenement => {
-    const boutonRevisionEtape = evenement.target.closest('[data-action="reviser-etape"]');
-    if (boutonRevisionEtape) {
-        lancerRevisionEtape(boutonRevisionEtape.dataset.etape);
-        return;
-    }
     const boutonBascule = evenement.target.closest('.entrainement-bascule-groupe .option-bouton');
     if (boutonBascule) {
         const groupe = boutonBascule.closest('.entrainement-bascule-groupe');
@@ -288,11 +298,4 @@ document.addEventListener('click', evenement => {
         etat.dureeChronometreParcours = Math.min(30, Math.max(5, Number.isFinite(secondes) ? secondes : 15));
         return;
     }
-});
-document.addEventListener('click', evenement => {
-    const ouvrirParcoursDepuisErreurs = evenement.target.closest('[data-action="ouvrir-parcours-depuis-erreurs"]');
-    if (!ouvrirParcoursDepuisErreurs)
-        return;
-    evenement.preventDefault();
-    ouvrirParcours('commun');
 });

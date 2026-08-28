@@ -15,15 +15,19 @@ RACINE_PROJET = Path(__file__).resolve().parents[1]
 DOSSIER_DONNEES = RACINE_PROJET / "donnees"
 FICHIER_DESTINATION = DOSSIER_DONNEES / "donnees-pjj.js"
 
-THEMES = [
-    {
-        "id": "commun",
-        "icone": "",
-        "titre": "Parcours PJJ",
-        "sousTitre": "Découvre la PJJ à travers 11 étapes progressives",
-        "categorie": "socle",
-    }
-]
+def construire_themes(programme: dict[str, Any]) -> list[dict[str, str]]:
+    """Construit le catalogue des parcours depuis le programme de référence."""
+    return [
+        {
+            "id": identifiant,
+            "icone": "",
+            "titre": contenu.get("titre", identifiant),
+            "sousTitre": contenu.get("sousTitre", ""),
+            "categorie": contenu.get("categorie", "parcours"),
+        }
+        for identifiant, contenu in programme.items()
+    ]
+
 
 
 def lire_json(nom_fichier: str) -> Any:
@@ -50,7 +54,7 @@ def preparer_donnees() -> tuple[str, int, int]:
     exiger_donnees_valides(programme, sources, questions)
 
     ensembles = (
-        ("THEMES", THEMES),
+        ("THEMES", construire_themes(programme)),
         ("PROGRAMMES", programme),
         ("SOURCES", sources),
         ("QUESTIONS", questions),

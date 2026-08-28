@@ -42,7 +42,7 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
     if (jokerUtilise) {
         return {
             titre: `Étape ${etapeProgramme} explorée`,
-            message: `Ton carnet avance. Reviens sur cette étape sans joker pour valider cette destination et poursuivre le parcours en autonomie.`,
+            message: `Ton carnet avance. Tu pourras rejouer cette étape sans aide pour consolider sa maîtrise.`,
             confetti: false
         };
     }
@@ -50,7 +50,7 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
     if (evaluationDeverrouillee) {
         return {
             titre: 'Destination finale atteinte !',
-            message: `Les onze étapes sont validées en autonomie. Ton carnet te reconnaît comme « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
+            message: `Les onze étapes de ce parcours sont validées en autonomie. Ton carnet te reconnaît comme « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
             confetti: true
         };
     }
@@ -91,8 +91,15 @@ function obtenirStatutErreurBilan(reponse, estQuestionPassee) {
 function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const zone = selectionner('#listeErreursBilan');
     const nombre = selectionner('#nombreErreursBilan');
+    const boutonContinuer = selectionner('#boutonContinuer');
+    const boutonRejouer = selectionner('#boutonRejouerMesErreurs');
+    const aDesQuestionsAReprendre = questionsAReprendre.length > 0;
+    boutonContinuer?.classList.toggle('principal', !aDesQuestionsAReprendre);
+    boutonContinuer?.classList.toggle('secondaire', aDesQuestionsAReprendre);
+    boutonRejouer?.classList.toggle('principal', aDesQuestionsAReprendre);
+    boutonRejouer?.classList.toggle('secondaire', !aDesQuestionsAReprendre);
     if (nombre)
-        nombre.textContent = `${questionsAReprendre.length} question${questionsAReprendre.length > 1 ? 's' : ''} à reprendre`;
+        nombre.textContent = `${questionsAReprendre.length} question${questionsAReprendre.length === 1 ? '' : 's'} à reprendre`;
     if (!zone)
         return;
     const regleLecture = `<div class="bilan-correction-regle">
@@ -156,53 +163,49 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
             const etaitDejaValideeSansJoker = bilanEtape.termineeSansJoker === true;
             bilanEtape.termineeSansJoker = etaitDejaValideeSansJoker || toutesReussiesEnAutonomie;
             bilanEtape.jokersUtilises = !bilanEtape.termineeSansJoker;
-            const evaluationDeverrouillee = obtenirEtapesProgramme(etat.theme).every(etapeProgramme =>
-                obtenirBilanEtape(etat.theme, etapeProgramme.id)?.termineeSansJoker === true
-            );
-            if (toutesReussiesEnAutonomie && !etaitDejaValideeSansJoker) {
-                celebration = obtenirCelebrationEtape(
-                    etat.etape,
-                    false,
-                    evaluationDeverrouillee
-                );
-            }
+            const evaluationDeverrouillee = estProgrammeMaitrise(etat.theme);
+            if (toutesReussiesEnAutonomie && !etaitDejaValideeSansJoker)
+                celebration = obtenirCelebrationEtape(etat.etape, false, evaluationDeverrouillee);
         }
     }
     if (etat.mode === 'evaluation-finale') {
         const seuil = obtenirSeuilMaitrise();
-        sauvegarde.evaluationFinale = sauvegarde.evaluationFinale || {
-            meilleurScore: 0,
-            nombreTentatives: 0,
-            reussie: false
-        };
-        sauvegarde.evaluationFinale.meilleurScore = Math.max(
-            sauvegarde.evaluationFinale.meilleurScore || 0,
-            pourcentage
-        );
-        sauvegarde.evaluationFinale.nombreTentatives =
-            (sauvegarde.evaluationFinale.nombreTentatives || 0) + 1;
+        const evaluation = obtenirEvaluationFinaleTheme(etat.theme);
+        evaluation.meilleurScore = Math.max(evaluation.meilleurScore || 0, pourcentage);
+        evaluation.nombreTentatives = (evaluation.nombreTentatives || 0) + 1;
         evaluationFinaleReussie = pourcentage >= seuil && nombreQuestionsPassees === 0;
-        sauvegarde.evaluationFinale.reussie = Boolean(sauvegarde.evaluationFinale.reussie)
-            || evaluationFinaleReussie;
+        evaluation.reussie = Boolean(evaluation.reussie) || evaluationFinaleReussie;
     }
     return { evaluationFinaleReussie, celebration };
 }
 function construireBilanEvaluationFinale(pourcentage, evaluationFinaleReussie) {
+    const numeroParcours = obtenirOrdreTheme(etat.theme) + 1;
     if (evaluationFinaleReussie) {
+        const toutReussi = estParcoursCompletReussi();
         return {
-            titre: 'Évaluation terminée',
-            messageResultat: `Résultat : ${pourcentage} %. Les connaissances du parcours sont validées.`,
-            celebration: {
-                titre: 'Voyage accompli !',
-                message: 'Tu as parcouru les onze étapes et réussi l’évaluation finale. Ton carnet est complet : tu es désormais Éclaireur de la PJJ.',
+            titre: `Évaluation du parcours ${numeroParcours} terminée`,
+            messageResultat: `Résultat : ${pourcentage} %. Les connaissances de ce parcours sont validées.`,
+            celebration: toutReussi ? {
+                titre: 'Parcours complet accompli !',
+                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Ton carnet PJJoue est complet.`,
                 confetti: true,
                 finale: true
+            } : {
+                titre: `Parcours ${numeroParcours} validé !`,
+                message: (() => {
+                    const prochainTheme = THEMES[numeroParcours];
+                    if (!prochainTheme) return 'L’évaluation de ce parcours est validée.';
+                    const titreSuivant = (PROGRAMMES[prochainTheme.id]?.titre || prochainTheme.titre || `Parcours ${numeroParcours + 1}`).replace(/^Parcours \d+ ·\s*/, '');
+                    return `Ce parcours est validé. Le parcours ${numeroParcours + 1} « ${titreSuivant} » est maintenant ta prochaine destination.`;
+                })(),
+                confetti: true,
+                finale: false
             }
         };
     }
     jouerSonErreur();
     return {
-        titre: 'Évaluation terminée',
+        titre: `Évaluation du parcours ${numeroParcours} terminée`,
         messageResultat: `Résultat : ${pourcentage} %. Le seuil attendu est de ${obtenirSeuilMaitrise()} %.`,
         celebration: null
     };
@@ -245,39 +248,51 @@ function construireBilanSessionOrdinaire({
 }
 function configurerBoutonContinuerBilan() {
     const boutonContinuer = selectionner('#boutonContinuer');
-    if (etat.mode === 'evaluation-finale')
-        boutonContinuer.textContent = 'Refaire l’évaluation';
-    else if (etat.mode === 'parcours') {
+    if (!boutonContinuer)
+        return;
+    const programme = PROGRAMMES[etat.theme];
+    if (etat.mode === 'evaluation-finale') {
+        const evaluationReussie = estEvaluationFinaleReussie(etat.theme);
+        const indexTheme = obtenirOrdreTheme(etat.theme);
+        const themeSuivant = THEMES[indexTheme + 1]?.id;
+        if (evaluationReussie && themeSuivant) {
+            boutonContinuer.textContent = `Commencer le parcours ${indexTheme + 2} →`;
+            boutonContinuer.onclick = () => ouvrirParcours(themeSuivant, { remplacerHistorique: true });
+        }
+        else if (evaluationReussie && estParcoursCompletReussi()) {
+            boutonContinuer.textContent = 'Voir le carnet complet →';
+            boutonContinuer.onclick = () => afficherEcran('carnet', { remplacerHistorique: true });
+        }
+        else {
+            boutonContinuer.textContent = 'Refaire cette évaluation';
+            boutonContinuer.onclick = () => lancerEvaluationFinale(etat.theme);
+        }
+        return;
+    }
+    if (etat.mode === 'parcours') {
         const etapeCourante = Number(etat.etape);
+        const nombreEtapes = programme?.etapes?.length || 11;
         if (etapeNecessiteAutreChapitre(etat.theme, etat.etape))
             boutonContinuer.textContent = 'Continuer l’étape →';
-        else if (etapeCourante < 11)
+        else if (etapeCourante < nombreEtapes)
             boutonContinuer.textContent = `Passer à l’étape ${etapeCourante + 1} →`;
         else
             boutonContinuer.textContent = 'Retour au parcours →';
-    }
-    else
-        boutonContinuer.textContent = 'Retour à l’accueil';
-    boutonContinuer.onclick = () => {
-        if (etat.mode === 'evaluation-finale') {
-            lancerEvaluationFinale();
-            return;
-        }
-        if (etat.mode === 'parcours') {
+        boutonContinuer.onclick = () => {
             if (etapeNecessiteAutreChapitre(etat.theme, etat.etape)) {
                 lancerEtape(etat.theme, etat.etape);
                 return;
             }
-            const etapeCourante = Number(etat.etape);
-            if (etapeCourante < 11) {
+            if (etapeCourante < nombreEtapes) {
                 lancerTransitionVersEtape(etat.theme, etapeCourante + 1);
                 return;
             }
-            ouvrirParcours('commun', { remplacerHistorique: true });
-            return;
-        }
-        afficherEcran('accueil');
-    };
+            ouvrirParcours(etat.theme, { remplacerHistorique: true });
+        };
+        return;
+    }
+    boutonContinuer.textContent = 'Retour à l’accueil';
+    boutonContinuer.onclick = () => afficherEcran('accueil');
 }
 function lancerTransitionVersEtape(identifiantTheme, numeroEtape) {
     clearTimeout(minuteurTransitionParcours);
@@ -298,20 +313,25 @@ function actualiserProchaineDestinationBilan() {
     if (!destination)
         return;
     if (etat.mode === 'evaluation-finale') {
-        destination.textContent = 'Ton carnet est complet. Tu peux refaire l’évaluation ou revoir le parcours.';
+        const indexTheme = obtenirOrdreTheme(etat.theme);
+        const suivant = THEMES[indexTheme + 1];
+        destination.textContent = estEvaluationFinaleReussie(etat.theme) && suivant
+            ? `Prochaine destination : parcours ${indexTheme + 2} · ${PROGRAMMES[suivant.id].titre}.`
+            : (estParcoursCompletReussi() ? 'Ton parcours complet est validé.' : 'Tu peux retravailler les erreurs puis refaire cette évaluation.');
         return;
     }
     if (etat.mode === 'parcours') {
         if (etapeNecessiteAutreChapitre(etat.theme, etat.etape)) {
-            destination.textContent = `Poursuis l’étape ${etat.etape} pour découvrir les questions restantes.`;
+            destination.textContent = `Reprends les activités non maîtrisées de l’étape ${etat.etape}.`;
             return;
         }
-        if (Number(etat.etape) < 11) {
+        const programme = PROGRAMMES[etat.theme];
+        if (Number(etat.etape) < programme.etapes.length) {
             const prochaineEtape = obtenirEtapeProgramme(etat.theme, Number(etat.etape) + 1);
             destination.textContent = `Étape ${prochaineEtape.id} · ${prochaineEtape.titre}`;
             return;
         }
-        destination.textContent = 'Retourne au carnet pour vérifier l’ouverture de l’évaluation finale.';
+        destination.textContent = 'Retourne au parcours : son évaluation finale devient disponible dès que les 11 étapes sont terminées.';
         return;
     }
     if (etat.mode === 'revision') {
@@ -320,10 +340,10 @@ function actualiserProchaineDestinationBilan() {
     }
     destination.textContent = 'Choisis une nouvelle session ou rejoins le parcours guidé.';
 }
-function ouvrirSouvenirDepuisCarteFinale(numeroEtape) {
-    ouvrirParcours('commun', { remplacerHistorique: true });
+function ouvrirSouvenirDepuisCarteFinale(identifiantTheme, numeroEtape) {
+    afficherEcran('carnet', { remplacerHistorique: true });
     requestAnimationFrame(() => {
-        const souvenir = selectionner(`#souvenirsParcours [data-etape="${numeroEtape}"]`);
+        const souvenir = selectionner(`#souvenirsParcours [data-theme="${identifiantTheme}"][data-etape="${numeroEtape}"]`);
         if (!souvenir)
             return;
         souvenir.open = true;
@@ -334,30 +354,31 @@ function ouvrirSouvenirDepuisCarteFinale(numeroEtape) {
 function afficherCarteVoyageFinale() {
     const carte = selectionner('#carteVoyageFinale');
     const destinations = selectionner('#destinationsVoyageFinal');
-    const doitAfficher = etat.mode === 'evaluation-finale'
-        && sauvegarde.evaluationFinale?.reussie === true;
+    const doitAfficher = etat.mode === 'evaluation-finale' && estParcoursCompletReussi();
     if (!carte || !destinations)
         return;
     carte.classList.toggle('masque', !doitAfficher);
     destinations.innerHTML = '';
     if (!doitAfficher)
         return;
-    PROGRAMMES.commun.etapes.forEach(etapeProgramme => {
-        const bouton = document.createElement('button');
-        bouton.type = 'button';
-        bouton.className = 'carte-voyage-etape';
-        bouton.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#ffc83d');
-        bouton.innerHTML = `${obtenirBaliseIconeEtape(etapeProgramme.id)}<span>${etapeProgramme.id}</span>`;
-        bouton.setAttribute('aria-label', `Ouvrir les souvenirs de l’étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
-        bouton.onclick = () => ouvrirSouvenirDepuisCarteFinale(etapeProgramme.id);
-        destinations.appendChild(bouton);
+    THEMES.forEach((theme, indexTheme) => {
+        PROGRAMMES[theme.id].etapes.forEach(etapeProgramme => {
+            const bouton = document.createElement('button');
+            bouton.type = 'button';
+            bouton.className = 'carte-voyage-etape';
+            bouton.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#2d7379');
+            bouton.innerHTML = `${obtenirBaliseIconeEtape(etapeProgramme.id, theme.id)}<span>P${indexTheme + 1}·${etapeProgramme.id}</span>`;
+            bouton.setAttribute('aria-label', `Ouvrir les souvenirs du parcours ${indexTheme + 1}, étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
+            bouton.onclick = () => ouvrirSouvenirDepuisCarteFinale(theme.id, etapeProgramme.id);
+            destinations.appendChild(bouton);
+        });
+        const finaleParcours = document.createElement('span');
+        finaleParcours.className = 'carte-voyage-etape carte-voyage-evaluation';
+        finaleParcours.innerHTML = `<span aria-hidden="true">★</span><strong>P${indexTheme + 1}</strong>`;
+        finaleParcours.setAttribute('role', 'img');
+        finaleParcours.setAttribute('aria-label', `Évaluation finale du parcours ${indexTheme + 1} réussie`);
+        destinations.appendChild(finaleParcours);
     });
-    const finale = document.createElement('span');
-    finale.className = 'carte-voyage-etape carte-voyage-evaluation';
-    finale.innerHTML = '<span aria-hidden="true">★</span><strong>12</strong>';
-    finale.setAttribute('role', 'img');
-    finale.setAttribute('aria-label', 'Évaluation finale réussie');
-    destinations.appendChild(finale);
 }
 function lancerCelebrationBilan(celebration) {
     if (!celebration)

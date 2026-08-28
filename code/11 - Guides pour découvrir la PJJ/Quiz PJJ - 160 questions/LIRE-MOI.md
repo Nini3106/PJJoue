@@ -1,4 +1,4 @@
-# Quiz PJJ - 160 questions
+# Quiz PJJ — 960 questions
 
 - `page.html` contient toute la page.
 - `style-de-la-page.css` est réservé aux différences visuelles propres à cette page.

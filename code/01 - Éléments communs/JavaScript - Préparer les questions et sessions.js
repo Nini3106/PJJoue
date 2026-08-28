@@ -102,6 +102,14 @@ function obtenirQuestionsSessionEtape(identifiantTheme, etape, chapitre) {
     return questionsEtape;
 }
 function lancerEtape(identifiantTheme, etape, chapitre = null) {
+    // Une étape demandée explicitement remplace toute ancienne session mémorisée.
+    // Cela évite qu'une session précédente intercepte l'ouverture de la nouvelle étape.
+    clearInterval(etat.identifiantMinuteur);
+    etat.identifiantMinuteur = null;
+    etat.questionsSession = [];
+    etat.questionCourante = null;
+    etat.questionValidee = false;
+    effacerSessionEnCours();
     etat.theme = identifiantTheme;
     etat.etape = Number(etape);
     etat.etapeAvecJoker = false;
@@ -119,21 +127,23 @@ function lancerEtape(identifiantTheme, etape, chapitre = null) {
     const reserve = obtenirQuestionsSessionEtape(identifiantTheme, etape, etat.chapitre);
     lancerSession(ordonnerQuestionsParcours(reserve));
 }
-function obtenirQuestionsEvaluationFinale() {
+function obtenirQuestionsEvaluationFinale(identifiantTheme = etat.theme || 'commun') {
     return QUESTIONS
-        .filter(question => question.estEvaluationFinale === true)
+        .filter(question => question.estEvaluationFinale === true && question.theme === identifiantTheme)
         .sort((questionA, questionB) =>
             obtenirOrdrePedagogiqueQuestion(questionA) - obtenirOrdrePedagogiqueQuestion(questionB)
             || questionA.id - questionB.id
         );
 }
-function lancerEvaluationFinale() {
-    const session = obtenirQuestionsEvaluationFinale();
+function lancerEvaluationFinale(identifiantTheme = etat.theme || sauvegarde.dernierTheme || 'commun') {
+    if (!PROGRAMMES[identifiantTheme])
+        identifiantTheme = 'commun';
+    const session = obtenirQuestionsEvaluationFinale(identifiantTheme);
     if (session.length !== 50) {
-        afficherNotification('L’évaluation finale est indisponible : banque incomplète.');
+        afficherNotification('L’évaluation finale de ce parcours est indisponible : banque incomplète.');
         return;
     }
-    etat.theme = 'commun';
+    etat.theme = identifiantTheme;
     etat.etape = 12;
     etat.chapitre = 1;
     etat.mode = 'evaluation-finale';
@@ -143,22 +153,38 @@ function lancerEvaluationFinale() {
     etat.chronometreSessionActif = false;
     lancerSession(session);
 }
+function obtenirQuestionsEntrainement(perimetre = 'tous') {
+    const reserve = QUESTIONS.filter(question => !question.estEvaluationFinale);
+    if (perimetre === 'tous')
+        return reserve;
+    return reserve.filter(question => question.theme === perimetre);
+}
+function obtenirOrdreTheme(identifiantTheme) {
+    const index = THEMES.findIndex(theme => theme.id === identifiantTheme);
+    return index < 0 ? 999 : index;
+}
 function lancerEntrainementLibre() {
     etat.mode = 'libre';
     etat.origineSessionAnalytics = 'entrainement_libre';
-    etat.theme = null;
+    const perimetre = selectionner('#perimetreEntrainement')?.value || etat.perimetreEntrainement || 'tous';
+    etat.perimetreEntrainement = perimetre;
+    etat.theme = perimetre === 'tous' ? null : perimetre;
     const style = etat.organisationSession || 'ordonne';
-    const nombre = Math.min(110, Math.max(10, Number(selectionner('#nombreQuestionsEntrainement')?.value) || 10));
+    const reserve = obtenirQuestionsEntrainement(perimetre);
+    const nombreMax = reserve.length;
+    const nombre = Math.min(nombreMax, Math.max(10, Number(selectionner('#nombreQuestionsEntrainement')?.value) || 10));
     let session = [];
     if (style === 'ordonne') {
-        session = [...QUESTIONS.filter(question => !question.estEvaluationFinale)]
-            .sort((questionA, questionB) => (Number(questionA.etape) || 0) - (Number(questionB.etape) || 0) ||
-            obtenirOrdrePedagogiqueQuestion(questionA) - obtenirOrdrePedagogiqueQuestion(questionB) ||
-            (Number(questionA.id) || 0) - (Number(questionB.id) || 0))
+        session = [...reserve]
+            .sort((questionA, questionB) =>
+                obtenirOrdreTheme(questionA.theme) - obtenirOrdreTheme(questionB.theme)
+                || (Number(questionA.etape) || 0) - (Number(questionB.etape) || 0)
+                || obtenirOrdrePedagogiqueQuestion(questionA) - obtenirOrdrePedagogiqueQuestion(questionB)
+                || (Number(questionA.id) || 0) - (Number(questionB.id) || 0))
             .slice(0, nombre);
     }
     else {
-        const candidats = selectionnerQuestionsEquilibrees(QUESTIONS, Math.min(QUESTIONS.length, Math.max(nombre, nombre * 4)));
+        const candidats = selectionnerQuestionsEquilibrees(reserve, Math.min(reserve.length, Math.max(nombre, nombre * 4)));
         session = selectionnerSansIndiceLongueur(candidats, Math.min(nombre, candidats.length));
     }
     lancerSession(session);
@@ -180,25 +206,30 @@ function lancerDeParcours() {
         etat.nombreQuestionsTirageDe = nombreTire;
         envoyerEvenementPJJ('defi_du_hasard_lance', {
             pjjoue_mode_de_jeu: 'Défi du hasard',
+            pjjoue_parcours: 'Parcours complet',
             pjjoue_nombre_questions_defi_du_hasard: nombreTire
         });
         face.dataset.face = String(nombreTire);
         face.classList.remove('de-en-lancer');
-        resultat.textContent = `${nombreTire} question${nombreTire === 1 ? '' : 's'} aléatoire${nombreTire === 1 ? '' : 's'} à relever.`;
+        resultat.textContent = `${nombreTire} question${nombreTire === 1 ? '' : 's'} aléatoire${nombreTire === 1 ? '' : 's'} tirée${nombreTire === 1 ? '' : 's'} dans les six parcours.`;
         boutonJouer.textContent = `Jouer ${nombreTire} question${nombreTire === 1 ? '' : 's'}`;
+        boutonLancer.textContent = 'Relancer le dé';
+        boutonLancer.classList.remove('principal');
+        boutonLancer.classList.add('secondaire');
         boutonJouer.classList.remove('masque');
         boutonLancer.disabled = false;
         boutonJouer.focus({ preventScroll: true });
-        annoncer(`Le dé indique ${nombreTire}. ${nombreTire} question${nombreTire === 1 ? '' : 's'} aléatoire${nombreTire === 1 ? '' : 's'}.`);
+        annoncer(`Le dé indique ${nombreTire}. Questions tirées dans les six parcours.`);
     }, 420);
 }
 function jouerTirageDeParcours() {
     const nombreQuestions = Math.min(6, Math.max(1, Number(etat.nombreQuestionsTirageDe) || 1));
     const reserve = QUESTIONS.filter(question => !question.estEvaluationFinale);
-    const session = melanger(reserve).slice(0, nombreQuestions);
+    const session = selectionnerQuestionsEquilibrees(reserve, nombreQuestions);
     etat.mode = 'libre';
     etat.origineSessionAnalytics = 'defi_du_hasard';
     etat.theme = null;
+    etat.perimetreEntrainement = 'tous';
     etat.organisationSession = 'melange';
     etat.jokersSessionActifs = true;
     etat.chronometreSessionActif = false;
@@ -231,7 +262,12 @@ function lancerRevision(identifiantTheme = 'toutes') {
     etat.chronometreSessionActif = false;
     lancerSession(melanger(reserve));
 }
-function lancerRevisionEtape(etape) {
+function lancerRevisionEtape(identifiantTheme, etape = null) {
+    // Accepte aussi l’appel avec uniquement le numéro de l’étape.
+    if (etape === null) {
+        etape = identifiantTheme;
+        identifiantTheme = etat.theme || sauvegarde.dernierTheme || 'commun';
+    }
     const etapeCible = Number(etape);
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
     if (!sauvegarde.aDejaJoue && actif.length === 0) {
@@ -239,15 +275,20 @@ function lancerRevisionEtape(etape) {
         return;
     }
     const identifiants = actif.map(([id]) => Number(id));
-    const reserve = QUESTIONS.filter(question => identifiants.includes(question.id) && Number(question.etape) === etapeCible && !question.estEvaluationFinale);
+    const reserve = QUESTIONS.filter(question =>
+        identifiants.includes(question.id)
+        && question.theme === identifiantTheme
+        && Number(question.etape) === etapeCible
+        && !question.estEvaluationFinale
+    );
     if (!reserve.length) {
-        afficherNotification(`Aucune erreur active à l’étape ${etapeCible}.`);
+        afficherNotification(`Aucune erreur active à l’étape ${etapeCible} de ce parcours.`);
         return;
     }
     etat.mode = 'revision';
     etat.origineSessionAnalytics = 'revision_des_erreurs';
-    etat.theme = null;
-    etat.perimetreRevision = 'etape:' + etapeCible;
+    etat.theme = identifiantTheme;
+    etat.perimetreRevision = `${identifiantTheme}:etape:${etapeCible}`;
     etat.jokersSessionActifs = true;
     etat.chronometreSessionActif = false;
     lancerSession(melanger(reserve));

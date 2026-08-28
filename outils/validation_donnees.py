@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 from typing import Any
+import re
+import unicodedata
 
 
 MODES_QUESTION = {
@@ -21,6 +23,34 @@ TYPES_ACTIVITE = {
     "classer",
     "remettre-ordre",
     "selection-multiple",
+}
+LIBELLES_MODES = {
+    "association": "Relier / Association",
+    "choix-unique": "Choix unique",
+    "classer": "Classer",
+    "eliminer": "Retirer des choix",
+    "remettre-ordre": "Remettre dans l’ordre",
+    "reponse-ecrite": "Réponse écrite",
+    "selection-multiple": "Sélection multiple",
+}
+CHAMPS_REPONSE_ECRITE = {
+    "reponsesAcceptees",
+    "typeReponseAttendue",
+    "sigleAttendu",
+    "sigleSeulRefuse",
+    "nombreSiglesRequis",
+    "siglesDistinctsAttendus",
+    "conceptsEvaluation",
+    "nombreConceptsRequis",
+    "conceptsInterdits",
+    "expressionsInterditesExactes",
+    "conceptsOrdonnes",
+}
+CHAMPS_ELIMINATION = {
+    "propositionsAConserver",
+    "propositionsAEliminer",
+    "nombreEliminationsAttendues",
+    "consigneElimination",
 }
 
 
@@ -85,6 +115,7 @@ def valider_elements(
         erreurs.append(f"{emplacement} doit être une liste non vide.")
         return set()
     identifiants: list[str] = []
+    textes_visibles: list[str] = []
     for indice, element in enumerate(elements):
         if not isinstance(element, dict):
             erreurs.append(f"{emplacement}[{indice}] doit être un objet.")
@@ -95,9 +126,18 @@ def valider_elements(
         valider_texte(texte, f"{emplacement}[{indice}].texte", erreurs)
         if isinstance(identifiant, str) and identifiant.strip():
             identifiants.append(identifiant)
+        if isinstance(texte, str) and texte.strip():
+            textes_visibles.append(normaliser_choix(texte))
     doublons = sorted({identifiant for identifiant in identifiants if identifiants.count(identifiant) > 1})
     if doublons:
         erreurs.append(f"{emplacement} contient des identifiants dupliqués : {doublons}.")
+    doublons_visibles = sorted(
+        {texte for texte in textes_visibles if textes_visibles.count(texte) > 1}
+    )
+    if doublons_visibles:
+        erreurs.append(
+            f"{emplacement} contient des libellés visibles dupliqués : {doublons_visibles}."
+        )
     return set(identifiants)
 
 
@@ -128,12 +168,23 @@ def valider_activite(question: dict[str, Any], erreurs: list[str]) -> None:
 
     if type_activite == "selection-multiple":
         propositions = valider_elements(activite, "propositions", contexte, erreurs)
-        reponses = set(valider_liste_textes(
+        reponses_liste = valider_liste_textes(
             activite.get("reponses"),
             f"{contexte}.reponses",
             erreurs,
             vide_autorise=False,
-        ))
+        )
+        reponses = set(reponses_liste)
+        if len(reponses_liste) < 2:
+            erreurs.append(
+                f"{contexte}.reponses doit contenir au moins deux choix : "
+                "une seule bonne réponse relève du choix unique."
+            )
+        consigne = str(activite.get("consigne", ""))
+        if re.search(rf"\b{len(reponses_liste)}\b", consigne) is None:
+            erreurs.append(
+                f"{contexte}.consigne doit annoncer les {len(reponses_liste)} réponses attendues."
+            )
         if not reponses.issubset(propositions):
             erreurs.append(f"{contexte}.reponses référence une proposition inconnue.")
     elif type_activite == "association":
@@ -177,6 +228,72 @@ def valider_activite(question: dict[str, Any], erreurs: list[str]) -> None:
                 erreurs.append(f"{contexte}.classements référence une catégorie inconnue.")
 
 
+def normaliser_choix(valeur: object) -> str:
+    """Normalise un choix pour repérer les doublons invisibles à la lecture."""
+    texte = unicodedata.normalize("NFKD", str(valeur).casefold())
+    texte = "".join(caractere for caractere in texte if not unicodedata.combining(caractere))
+    return re.sub(r"[^a-z0-9]+", " ", texte).strip()
+
+
+def valider_schema_mode(question: dict[str, Any], erreurs: list[str]) -> None:
+    """Refuse les champs contradictoires laissés par un changement de mode."""
+    identifiant = question.get("id", "?")
+    contexte = f"Q{identifiant}"
+    mode = question.get("modePrefere")
+    if mode not in MODES_QUESTION:
+        return
+    if question.get("libelleMode") != LIBELLES_MODES[mode]:
+        erreurs.append(f"{contexte}.libelleMode ne correspond pas au mode {mode!r}.")
+
+    if mode != "reponse-ecrite":
+        champs_residuels = sorted(champ for champ in CHAMPS_REPONSE_ECRITE if champ in question)
+        if champs_residuels:
+            erreurs.append(f"{contexte} conserve des champs de réponse écrite incompatibles : {champs_residuels}.")
+    if mode != "eliminer":
+        champs_residuels = sorted(champ for champ in CHAMPS_ELIMINATION if champ in question)
+        if champs_residuels:
+            erreurs.append(f"{contexte} conserve des champs d’élimination incompatibles : {champs_residuels}.")
+
+    mauvaises = question.get("mauvaisesReponses")
+    if mode == "choix-unique":
+        if question.get("activite") is not None:
+            erreurs.append(f"{contexte}.activite doit être absent en choix unique.")
+        if not isinstance(mauvaises, list) or len(mauvaises) != 3:
+            erreurs.append(f"{contexte}.mauvaisesReponses doit contenir exactement trois distracteurs.")
+        else:
+            choix = [question.get("bonneReponse"), *mauvaises]
+            choix_normalises = [normaliser_choix(choix_visible) for choix_visible in choix]
+            if len(set(choix_normalises)) != 4:
+                erreurs.append(f"{contexte} contient des choix identiques après normalisation.")
+    elif mode == "reponse-ecrite":
+        if question.get("activite") is not None:
+            erreurs.append(f"{contexte}.activite doit être absent en réponse écrite.")
+        if mauvaises != []:
+            erreurs.append(f"{contexte}.mauvaisesReponses doit être vide en réponse écrite.")
+        valider_liste_textes(
+            question.get("reponsesAcceptees"),
+            f"{contexte}.reponsesAcceptees",
+            erreurs,
+            vide_autorise=False,
+        )
+    elif mode in {"selection-multiple", "association", "classer", "remettre-ordre"}:
+        if mauvaises != []:
+            erreurs.append(f"{contexte}.mauvaisesReponses doit être vide pour une activité structurée.")
+        if not isinstance(question.get("activite"), dict):
+            erreurs.append(f"{contexte}.activite est obligatoire pour le mode {mode!r}.")
+    elif mode == "eliminer":
+        if question.get("activite") is not None:
+            erreurs.append(f"{contexte}.activite doit être absent en mode élimination.")
+        affichees = question.get("propositionsAEliminer")
+        conservees = question.get("propositionsAConserver")
+        if not isinstance(affichees, list) or not affichees:
+            erreurs.append(f"{contexte}.propositionsAEliminer doit contenir les choix affichés.")
+        if not isinstance(conservees, list) or not conservees:
+            erreurs.append(f"{contexte}.propositionsAConserver doit être une liste non vide.")
+        elif isinstance(affichees, list) and not set(conservees).issubset(set(affichees)):
+            erreurs.append(f"{contexte}.propositionsAConserver contient un choix non affiché.")
+
+
 def valider_donnees(
     programme: object,
     sources: object,
@@ -196,31 +313,48 @@ def valider_donnees(
             for champ in ("titre", "url", "repere", "dateVerification", "statutSource", "traitementEditorial"):
                 valider_texte(source.get(champ), f"Source {identifiant}.{champ}", erreurs)
 
-    if not isinstance(programme, dict):
-        erreurs.append("programme.json doit contenir un objet.")
+    themes_programme: set[str] = set()
+    if not isinstance(programme, dict) or not programme:
+        erreurs.append("programme.json doit contenir au moins un parcours.")
     else:
-        etapes = programme.get("commun", {}).get("etapes") if isinstance(programme.get("commun"), dict) else None
-        if not isinstance(etapes, list) or len(etapes) != 11:
-            erreurs.append("programme.commun.etapes doit contenir onze étapes.")
-        else:
+        themes_programme = set(programme)
+        for identifiant_programme, fiche_programme in programme.items():
+            contexte_programme = f"programme.{identifiant_programme}"
+            if not isinstance(fiche_programme, dict):
+                erreurs.append(f"{contexte_programme} doit être un objet.")
+                continue
+            if fiche_programme.get("id") != identifiant_programme:
+                erreurs.append(f"{contexte_programme}.id doit être {identifiant_programme!r}.")
+            for champ in ("titre", "sousTitre", "categorie", "sequence"):
+                valider_texte(fiche_programme.get(champ), f"{contexte_programme}.{champ}", erreurs)
+            etapes = fiche_programme.get("etapes")
+            if not isinstance(etapes, list) or len(etapes) != 11:
+                erreurs.append(f"{contexte_programme}.etapes doit contenir onze étapes.")
+                continue
             identifiants_etapes = [etape.get("id") for etape in etapes if isinstance(etape, dict)]
             if identifiants_etapes != list(range(1, 12)):
-                erreurs.append("Les étapes du programme doivent être numérotées de 1 à 11 dans l’ordre.")
+                erreurs.append(f"Les étapes de {contexte_programme} doivent être numérotées de 1 à 11 dans l’ordre.")
             for indice, etape in enumerate(etapes, start=1):
                 if not isinstance(etape, dict):
-                    erreurs.append(f"Étape {indice} : la fiche doit être un objet.")
+                    erreurs.append(f"{contexte_programme}.étape {indice} : la fiche doit être un objet.")
                     continue
-                valider_texte(etape.get("titre"), f"Étape {indice}.titre", erreurs)
-                valider_texte(etape.get("couleur"), f"Étape {indice}.couleur", erreurs)
-                valider_liste_textes(
+                valider_texte(etape.get("titre"), f"{contexte_programme}.étape {indice}.titre", erreurs)
+                valider_texte(etape.get("couleur"), f"{contexte_programme}.étape {indice}.couleur", erreurs)
+                souvenirs = valider_liste_textes(
                     etape.get("souvenirs"),
-                    f"Étape {indice}.souvenirs",
+                    f"{contexte_programme}.étape {indice}.souvenirs",
                     erreurs,
                     vide_autorise=False,
                 )
-                references = valider_liste_textes(etape.get("sources"), f"Étape {indice}.sources", erreurs)
+                if len(souvenirs) != 3:
+                    erreurs.append(f"{contexte_programme}.étape {indice}.souvenirs doit contenir exactement trois repères.")
+                references = valider_liste_textes(
+                    etape.get("sources"),
+                    f"{contexte_programme}.étape {indice}.sources",
+                    erreurs,
+                )
                 if not set(references).issubset(sources_connues):
-                    erreurs.append(f"Étape {indice}.sources référence une source inconnue.")
+                    erreurs.append(f"{contexte_programme}.étape {indice}.sources référence une source inconnue.")
 
     if not isinstance(questions, list) or not questions:
         erreurs.append("questions.json doit contenir une liste non vide.")
@@ -245,6 +379,8 @@ def valider_donnees(
             "statutContenu", "versionContenu", "derniereVerification", "bonneReponse",
         ):
             valider_texte(question.get(champ), f"{contexte}.{champ}", erreurs)
+        if question.get("theme") not in themes_programme:
+            erreurs.append(f"{contexte}.theme référence un parcours inconnu : {question.get('theme')!r}.")
         valider_texte(question.get("indice"), f"{contexte}.indice", erreurs, vide_autorise=True)
         if not est_entier(question.get("etape")) or not 1 <= question["etape"] <= 12:
             erreurs.append(f"{contexte}.etape doit être un entier de 1 à 12.")
@@ -259,6 +395,7 @@ def valider_donnees(
         if question.get("source") not in sources_connues or not set(references).issubset(sources_connues):
             erreurs.append(f"{contexte} référence une source inconnue.")
         valider_activite(question, erreurs)
+        valider_schema_mode(question, erreurs)
 
     doublons = sorted({identifiant for identifiant in identifiants if identifiants.count(identifiant) > 1})
     if doublons:

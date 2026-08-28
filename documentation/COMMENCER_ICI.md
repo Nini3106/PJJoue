@@ -14,7 +14,7 @@ Ouvre le dossier qui porte le nom de la page :
 
 - `code/02 - Accueil/`
 - `code/03 - Parcours PJJ/`
-- `code/04 - Carnet de voyage/`
+- `code/04 - Carnet de parcours/`
 - `code/05 - Entraînement libre/`
 - `code/06 - Question/`
 - `code/07 - Bilan de la session/`
@@ -73,6 +73,8 @@ Pour produire de vraies captures Chromium sur ordinateur, portable et mobile :
 npm run test:visuel
 ```
 
+Guide détaillé pour une reprise humaine ou par IA : **`code/00 - LIRE EN PREMIER/CAPTURES_VISUELLES_ET_TESTS_NAVIGATEUR.md`**. Les outils de capture font partie du projet ; seul `test-results/` est jetable et régénérable.
+
 Pour comparer deux versions pixel par pixel :
 
 ```bash
@@ -91,4 +93,4 @@ Tout ce qui sert à travailler aujourd’hui se trouve dans :
 - clés de sauvegarde locale ;
 - identifiants permanents des questions ;
 - URL publiques déjà indexées ;
-- migrations des anciennes sauvegardes.
+- format des sauvegardes locales et compatibilité des données enregistrées.

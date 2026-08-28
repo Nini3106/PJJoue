@@ -31,9 +31,10 @@ Cela détecte notamment un fichier public modifié directement au lieu d’être
 - contrôle JavaScript avec ESLint ;
 - contrôle CSS des doublons stricts ;
 - contrôle de la structure CSS ;
-- 6 tests unitaires ;
-- vérification des 160 questions, 11 étapes et 50 questions finales ;
-- recette réelle de l’interface dans Chromium, y compris les réponses écrites et les principaux garde-fous du parcours.
+- 7 tests unitaires ;
+- vérification des **960 questions**, **66 étapes**, **6 parcours** et **300 questions finales** ;
+- recette de structure et d’interface, y compris les six parcours, les réponses, les évaluations, les prérequis pédagogiques et les principaux garde-fous ;
+- la recette visuelle Chromium reste un contrôle séparé via `npm run test:visuel`.
 
 ## Vérification visuelle réelle
 

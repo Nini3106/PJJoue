@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Construit le manifeste d’intégrité de la V1 de PJJoue."""
+"""Construit le manifeste d’intégrité de la livraison à six parcours de PJJoue."""
 from __future__ import annotations
 
 from datetime import date
@@ -14,6 +14,7 @@ DOSSIERS_IGNORES = {
     ".pytest_cache",
     ".venv",
     "__pycache__",
+    "audit-resultats",
     "node_modules",
     "test-results",
 }
@@ -55,12 +56,15 @@ def construire_manifeste() -> dict[str, object]:
     return {
         "produit": "PJJoue",
         "version": "V1",
+        "dateCreation": "août 2026",
         "dateConsolidation": date.today().isoformat(),
         "composition": {
             "questionsTotales": len(questions),
             "questionsParcours": len(questions_parcours),
-            "etapesParcours": len({question["etape"] for question in questions_parcours}),
+            "etapesParcours": len({(question["theme"], question["etape"]) for question in questions_parcours}),
+            "nombreParcours": len({question["theme"] for question in questions_parcours}),
             "questionsEvaluationFinale": len(questions_evaluation),
+            "evaluationsFinales": len({question["theme"] for question in questions_evaluation}),
         },
         "fichiers": fichiers,
     }

@@ -2,7 +2,22 @@
   'use strict';
 
   let propositionInstallation = null;
+  const scriptNavigation = document.currentScript;
+  const racineApplication = scriptNavigation?.src
+    ? new URL('../', scriptNavigation.src)
+    : new URL('./', document.baseURI);
 
+
+  function activerManifesteApplication() {
+    if (!/^https?:$/.test(window.location.protocol))
+      return;
+    if (document.querySelector('link[rel="manifest"]'))
+      return;
+    const manifeste = document.createElement('link');
+    manifeste.rel = 'manifest';
+    manifeste.href = new URL('manifest.webmanifest', racineApplication).href;
+    document.head.appendChild(manifeste);
+  }
   function creerMessagesConnexion() {
     const message = document.createElement('div');
     message.className = 'message-connexion';
@@ -42,6 +57,71 @@
     window.addEventListener('appinstalled', () => {
       propositionInstallation = null;
       bouton.hidden = true;
+    });
+  }
+
+  function initialiserMenuPrincipalGuides() {
+    const entete = document.querySelector('.guide-site-entete');
+    const navigation = entete?.querySelector('nav');
+    const marque = entete?.querySelector('.guide-site-marque');
+    if (!entete || !navigation || !marque || entete.dataset.menuInitialise === 'true')
+      return;
+
+    entete.dataset.menuInitialise = 'true';
+    entete.classList.add('menu-guide-actif');
+    navigation.classList.add('guide-navigation-principale');
+    navigation.id = navigation.id || 'navigationPrincipaleGuides';
+
+    const lienApplication = ancre => `${racineApplication.href}index.html${ancre}`;
+    const lienGuides = `${racineApplication.href}guides/index.html`;
+    const entrees = [
+      ['Accueil', lienApplication('#accueil')],
+      ['Apprendre', lienApplication('#parcours')],
+      ['Réviser', lienApplication('#erreurs')],
+      ['Supports', lienApplication('#supports')],
+      ['S’entraîner', lienApplication('#entrainement')],
+      ['Progression', lienApplication('#progression')],
+      ['Guides', lienGuides],
+      ['Carnet', lienApplication('#carnet')],
+      ['Paramètres', lienApplication('#parametres')]
+    ];
+
+    navigation.innerHTML = entrees.map(([libelle, href]) => {
+      const actif = libelle === 'Guides' ? ' aria-current="page"' : '';
+      return `<a href="${href}"${actif}>${libelle}</a>`;
+    }).join('');
+
+    const bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'guide-bouton-menu-principal';
+    bouton.setAttribute('aria-controls', navigation.id);
+    bouton.setAttribute('aria-expanded', 'false');
+    bouton.innerHTML = '<span>Menu</span><span class="guide-bouton-menu-icone" aria-hidden="true"><i></i><i></i><i></i></span>';
+    entete.insertBefore(bouton, navigation);
+
+    const fermerMenu = () => {
+      entete.classList.remove('menu-guide-ouvert');
+      bouton.setAttribute('aria-expanded', 'false');
+    };
+
+    bouton.addEventListener('click', evenement => {
+      evenement.stopPropagation();
+      const ouvert = entete.classList.toggle('menu-guide-ouvert');
+      bouton.setAttribute('aria-expanded', String(ouvert));
+    });
+    navigation.addEventListener('click', evenement => {
+      if (evenement.target.closest('a'))
+        fermerMenu();
+    });
+    document.addEventListener('click', evenement => {
+      if (!entete.contains(evenement.target))
+        fermerMenu();
+    });
+    document.addEventListener('keydown', evenement => {
+      if (evenement.key === 'Escape' && entete.classList.contains('menu-guide-ouvert')) {
+        fermerMenu();
+        bouton.focus();
+      }
     });
   }
 
@@ -107,7 +187,11 @@
           lien.target || lien.hasAttribute('download'))
         return;
       const destination = new URL(lien.href, window.location.href);
-      if (destination.origin !== window.location.origin || destination.hash && destination.pathname === window.location.pathname)
+      const protocolePage = ['http:', 'https:', 'file:'].includes(destination.protocol);
+      const fichierDansApplication = destination.protocol !== 'file:'
+        || destination.pathname.startsWith(racineApplication.pathname);
+      if (!protocolePage || !fichierDansApplication || destination.origin !== window.location.origin
+          || destination.hash && destination.pathname === window.location.pathname)
         return;
       evenement.preventDefault();
       document.body.classList.add('guide-quitte-page');
@@ -116,14 +200,17 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    activerManifesteApplication();
     creerMessagesConnexion();
     preparerInstallation();
+    initialiserMenuPrincipalGuides();
     creerOutilsDeLectureGuide();
   });
 
   if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js').catch(() => {
+      const adresseServiceWorker = new URL('service-worker.js', racineApplication).href;
+      navigator.serviceWorker.register(adresseServiceWorker).catch(() => {
         // Le site reste entièrement utilisable si le navigateur refuse ce mode.
       });
     });

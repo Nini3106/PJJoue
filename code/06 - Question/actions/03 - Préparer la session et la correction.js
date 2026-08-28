@@ -213,7 +213,7 @@ function afficherCorrectionEnregistree(question, reponse) {
         ? 'Langue au chat — réponse dévoilée'
         : (estCorrecte ? 'Réussite autonome' : (estAidee ? 'Réussite avec aide — à consolider' : 'Réponse incorrecte'));
     zoneCorrection.innerHTML = `<div class="correction-corps">
-        <div class="retournee-note">Tu consultes une activité déjà jouée. La réponse reste verrouillée afin de préserver le résultat de la session.</div>
+        <div class="retournee-note">Cette activité a déjà été jouée. Tu peux la relire, mais son résultat ne peut plus être modifié.</div>
         <h3>${titreStatut}</h3>
         ${ligneReponseUtilisateur}${reponseAttendueDetaillee}
         <p><b>Explication :</b> ${question.explication}</p>

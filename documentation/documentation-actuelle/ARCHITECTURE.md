@@ -44,16 +44,13 @@ Une fonction doit porter le nom exact de son action. Par exemple : `afficherQues
 
 ### `ressources/styles/`
 
-Les dix feuilles historiques sont des tranches continues de l’ancienne cascade. Leur
-préfixe numérique définit leur ordre de chargement et ne doit pas être
-modifié. La feuille `85-guides-pedagogiques.css`, ajoutée après cette séparation,
-regroupe uniquement les pages pédagogiques publiques et leur maillage interne.
-Aucune règle historique n’y a été déplacée.
+La feuille publique `pjjoue-principal.css` est construite à partir des sources
+CSS déclarées dans `code/plan-construction.json`. Le style général conserve
+l’identité visuelle d’origine ; les composants propres aux six parcours, à
+l’entraînement et à la progression restent dans leurs sources fonctionnelles.
 
 Le fichier `ressources/styles/README.md` indique le contenu et les bornes
-fonctionnelles de chaque feuille. Les ajustements adaptation aux écrans restent dans la
-tranche où ils intervenaient historiquement lorsque leur déplacement aurait
-changé la cascade.
+fonctionnelles de chaque feuille. Les ajustements d’adaptation aux écrans restent dans leur tranche dédiée lorsque leur déplacement modifierait la cascade CSS.
 
 Les classes et variables appartenant à PJJoue sont en français. Les propriétés
 CSS imposées par le standard web ne sont pas traduites.
@@ -79,7 +76,7 @@ Toute donnée importée passe par `nettoyerSauvegarde` avant d’être utilisée
 
 Une session de question active dispose en plus d’un instantané technique séparé (`pjjoue_session_en_cours_v1`). Il sert uniquement à reconstruire la même question, son brouillon et son état d’interface après un rechargement ou une reconstruction adaptation aux écrans. Il ne remplace pas la progression principale et sa restauration ne doit jamais déclencher artificiellement un nouvel événement Analytics `question_affichee`.
 
-La sauvegarde persistante est écrite avec le marqueur `V2-12-etapes`, identique à celui attendu par le chargeur. Les réussites autonomes sont conservées question par question dans le bilan de l’étape. Une réussite déjà obtenue sans joker reste acquise lors d’une nouvelle tentative aidée ; seule l’action explicite **Réinitialiser** de l’étape retire ces validations autonomes sans effacer la progression générale.
+La sauvegarde persistante de PJJoue V1 utilise la clé `pjjoue_v1_sauvegarde`. Les réussites autonomes sont conservées question par question dans le bilan de l’étape. Une réussite déjà obtenue sans joker reste acquise lors d’une nouvelle tentative aidée ; seule l’action explicite **Réinitialiser** de l’étape retire ces validations autonomes sans effacer la progression générale.
 
 
 ## Navigation
@@ -131,30 +128,31 @@ Pendant une session, `actualiserIndicateurSerie` rend visible la série déjà c
 
 ## Système visuel des composants
 
-Les cartes, boutons et choix racontent le voyage sans ajouter de décoration gratuite :
+Les cartes, boutons et choix suivent une hiérarchie simple et stable :
 
-- les cartes principales utilisent une surface bleue calme, une bordure claire fine et une ombre légère ;
-- les surfaces internes utilisent un bleu plus profond pour montrer leur appartenance à la carte ;
-- la couleur propre à l’étape représente la destination active et marque le haut de la carte de question ;
-- le jaune indique un choix actif, une direction ou l’action principale à poursuivre ;
-- le vert et le rouge sont réservés aux résultats corrects et incorrects ;
-- les boutons restent bleus au repos, obtiennent un contour jaune au survol et un fond jaune lorsqu’ils sont sélectionnés.
+- le bleu nuit porte la marque, l’en-tête et les repères structurants ;
+- le fond de page reste bleu très pâle afin de conserver l’identité sans alourdir la lecture ;
+- les cartes principales sont blanches, bordées finement et légèrement ombrées ;
+- le jaune est réservé à l’action principale et aux points d’attention ;
+- chaque parcours possède une couleur d’accent qui marque son bord supérieur, son pictogramme, son statut et sa progression sans teinter toute la carte ;
+- le vert et le rouge restent réservés aux résultats corrects et incorrects ;
+- les boutons secondaires restent clairs avec une bordure ou un texte bleu.
 
-Les variables `--surface-carte`, `--surface-carte-profonde`, `--bordure-carte` et `--ombre-carte` centralisent cette grammaire. Une nouvelle carte doit les réutiliser au lieu de recréer un dégradé ou une ombre isolée.
+Les variables `--surface-page`, `--surface-carte`, `--surface-carte-profonde`, `--bordure-carte`, `--jaune-interface` et `--ombre-carte` centralisent cette grammaire. Une nouvelle carte doit les réutiliser au lieu de recréer une couleur, un dégradé ou une ombre isolée.
 
 Dans l’écran de question, `afficherReperesQuestion` rassemble les informations utiles en trois repères : la position actuelle, la destination et le mode de réponse. Après une réussite autonome, la classe `jalon-valide` allume brièvement un jalon vert sur la carte. Ce jalon reste uniquement visuel : le résultat est toujours annoncé par la zone de correction accessible.
 
 Les transitions de question et de correction sont volontairement courtes. Elles sont neutralisées par la préférence système de réduction des animations. Sur mobile, la carte conserve une hauteur minimale mais peut grandir pour accueillir les énoncés et réponses longues sans les comprimer.
 
-Le Carnet de voyage est un écran indépendant accessible depuis la navigation principale. Il regroupe uniquement la prochaine destination, la progression du voyage, les souvenirs et les défis personnels. Les deux outils facultatifs sont intégrés à la carte de Parcours PJJ : le défi chrono configure seulement les prochaines étapes du parcours, tandis que le défi du hasard appelle `lancerDeParcours`, mémorise temporairement une face de 1 à 6 puis `jouerTirageDeParcours` lance exactement le même nombre de questions aléatoires en mode libre. Ce tirage ne modifie pas les règles de validation des onze étapes.
+Le Carnet de parcours est un écran indépendant accessible depuis la navigation principale. Il regroupe uniquement la prochaine destination, la progression du voyage, les souvenirs et les défis personnels. Les deux outils facultatifs sont intégrés à la carte de Parcours PJJ : le défi chrono configure seulement les prochaines étapes du parcours, tandis que le défi du hasard appelle `lancerDeParcours`, mémorise temporairement une face de 1 à 6 puis `jouerTirageDeParcours` lance exactement le même nombre de questions aléatoires en mode libre. Ce tirage ne modifie pas les règles de validation des onze étapes.
 
 Le dé du hasard est un SVG en perspective. La propriété `data-face` portée par `de-objet` commande uniquement les points de la face avant ; les faces supérieure et latérale restent décoratives. La zone `souvenirsParcours` possède une hauteur maximale et un défilement vertical automatique : la barre latérale n’apparaît que lorsque les fiches dépassent l’espace prévu.
 
-`actualiserResumeCarteParcours` alimente l’en-tête intégré à l’encadrement de la carte des destinations avec un résumé utile : nombre de destinations maîtrisées sans joker et état d’ouverture de l’évaluation. Le carnet de voyage reste consacré aux informations personnelles du joueur. Les titres des écrans secondaires partagent enfin le même espace supérieur sous la navigation.
+`actualiserResumeCarteParcours` alimente l’en-tête intégré à l’encadrement de la carte des destinations avec un résumé utile : nombre de destinations maîtrisées sans joker et état d’ouverture de l’évaluation. Le carnet de parcours reste consacré aux informations personnelles du joueur. Les titres des écrans secondaires partagent enfin le même espace supérieur sous la navigation.
 
 L’en-tête de la carte utilise une icône de plan dessinée directement en SVG, tandis que le carnet conserve sa boussole. Ces deux icônes ont le même gabarit mais des rôles distincts. Une marge structurelle sépare l’objectif général du carnet afin que la cible ne touche jamais l’encadrement suivant.
 
-`sessionAUtiliseJoker` lit uniquement `etat.sessionAvecJoker`, activé par `marquerJokerUtilise` au moment réel où une aide est consommée. `synchroniserEtapesReussiesEnAutonomie` répare les anciennes sauvegardes lorsque toutes les réponses d’une étape sont déjà enregistrées comme autonomes. Ainsi, le défi personnel, les souvenirs, la destination suivante et la carte d’étape utilisent toujours le même état `termineeSansJoker`.
+`sessionAUtiliseJoker` lit uniquement `etat.sessionAvecJoker`, activé par `marquerJokerUtilise` au moment réel où une aide est consommée. `synchroniserEtapesReussiesEnAutonomie` normalise la progression enregistrée lorsque toutes les réponses d’une étape sont déjà enregistrées comme autonomes. Ainsi, le défi personnel, les souvenirs, la destination suivante et la carte d’étape utilisent toujours le même état `termineeSansJoker`.
 
 Dans Progression, la fiche compacte du parcours ne contient aucune action. Le bouton statique `boutonOuvrirParcours` appartient à la zone d’actions de la grande carte et s’aligne avec les commandes Exporter et Importer de la carte voisine.
 
@@ -176,11 +174,11 @@ La grille de Progression est limitée à `1080px`. Ses deux cartes principales u
 
 ## Système adaptation aux écrans mobile
 
-Le dernier bloc mobile de `ressources/styles/` sert de référence finale entre `320px` et `820px`. Il neutralise les anciennes adaptations contradictoires. La navigation reste sur une ligne défilable avec des zones tactiles de `42px` à `44px`, les cartes passent en colonne avec un espacement constant et les actions occupent toute la largeur disponible. Sous `420px`, les commandes de question passent sur une seule colonne. Le bouton `boutonJokers` reste toujours dans la barre d’actions et ne redevient jamais un onglet latéral.
+Le dernier bloc mobile de `ressources/styles/` sert de référence finale entre `320px` et `820px`. Il évite les adaptations contradictoires. La navigation reste sur une ligne défilable avec des zones tactiles de `42px` à `44px`, les cartes passent en colonne avec un espacement constant et les actions occupent toute la largeur disponible. Sous `420px`, les commandes de question passent sur une seule colonne. Le bouton `boutonJokers` reste toujours dans la barre d’actions et ne redevient jamais un onglet latéral.
 
 Sous `580px`, la navigation utilise une grille de six colonnes : les trois premiers boutons occupent chacun deux colonnes et les deux derniers trois colonnes. Les cinq destinations sont donc entièrement visibles sur deux lignes, sans texte coupé. Les cartes d’entraînement prennent une hauteur naturelle ; chaque libellé précède sa bascule « Avec / Sans », puis le bouton de lancement reste dans le flux avec une marge propre.
 
-Les icônes `entrainement-icone-ordonne` et `entrainement-icone-melange` utilisent le même trait `2.6` que les autres pictogrammes narratifs. Leurs couleurs historiques, jaune et turquoise, sont conservées.
+Les icônes `entrainement-icone-ordonne` et `entrainement-icone-melange` utilisent le même trait `2.6` que les autres pictogrammes narratifs. Leurs couleurs de référence, jaune et turquoise, sont conservées.
 
 Sur téléphone, les boutons du menu sont des pastilles compactes dimensionnées par leur texte et réparties automatiquement sur plusieurs lignes. L’accueil n’utilise plus de hauteur fixe avec contenu masqué : sa hauteur est naturelle et son contenu reste dans le flux. Le pied de page mobile conserve uniquement les liens juridiques, sur une zone compacte située après l’accueil.
 

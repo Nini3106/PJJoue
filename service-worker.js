@@ -1,5 +1,5 @@
 /* PJJoue garde son application principale disponible après une première visite. */
-const NOM_CACHE = 'pjjoue-application-590172e98a43';
+const NOM_CACHE = 'pjjoue-application-906278cb5810';
 const RESSOURCES_ESSENTIELLES = [
   './',
   './index.html',
@@ -7,14 +7,15 @@ const RESSOURCES_ESSENTIELLES = [
   './donnees/donnees-pjj.js',
   './ressources/moteur-jeu.js',
   './ressources/navigation-locale.js',
+  './ressources/navigation-locale.js?v=20260828-menu2',
   './ressources/consentement-analytics.js',
   './ressources/videos-guides.js',
-  './ressources/styles/pjjoue-principal.css?v=20260809-1',
-  './ressources/styles/00-fondations-et-composants.css',
-  './ressources/styles/80-finitions-de-l-interface.css',
-  './ressources/styles/85-guides-pedagogiques.css',
-  './ressources/styles/90-adaptation-ecrans-et-etats-finaux.css',
+  './ressources/styles/pjjoue-principal.css?v=20260828-coherence11',
+  './ressources/styles/pjjoue-static.css?v=20260828-menu2',
   './ressources/styles/95-consentement.css',
+  './ressources/styles/95-consentement.css?v=20260827-final1',
+  './guides/index.html',
+  './guides/style-de-la-page.css',
   './decouvrir-la-pjj/index.html',
   './decouvrir-la-pjj/style-de-la-page.css',
   './organisation-pjj/index.html',
@@ -38,14 +39,17 @@ const RESSOURCES_ESSENTIELLES = [
   './favicon.ico',
   './icone-pjjoue-192.png',
   './icone-pjjoue-512.png',
-  './ressources/icones-interface/icone-boussole.svg',
-  './ressources/icones-interface/icone-carte-du-parcours.svg',
-  './ressources/icones-interface/icone-cible.svg',
-  './ressources/icones-interface/icone-defi-chrono.svg',
-  './ressources/icones-interface/icone-melanger.svg',
-  './ressources/icones-interface/icone-mon-activite.svg',
-  './ressources/icones-interface/icone-par-ordre-des-etapes.svg',
-  './ressources/icones-interface/icone-trophee-evaluation-finale.svg'
+  './ressources/icones-parcours/icone-loupe-decouverte.svg',
+  './ressources/icones-parcours/icone-public-accompagne.svg',
+  './ressources/icones-parcours/icone-acteurs-justice.svg',
+  './ressources/icones-parcours/icone-professionnels-pjj.svg',
+  './ressources/icones-parcours/icone-organisation-pjj.svg',
+  './ressources/icones-parcours/icone-formes-prise-en-charge.svg',
+  './ressources/icones-parcours/icone-structure-ouverte-de-jour.svg',
+  './ressources/icones-parcours/icone-activites-educatives.svg',
+  './ressources/icones-parcours/icone-structures-placement.svg',
+  './ressources/icones-parcours/icone-mesures-judiciaires.svg',
+  './ressources/icones-parcours/icone-partenaires.svg',
 ];
 
 async function precacherSeparément(cache) {

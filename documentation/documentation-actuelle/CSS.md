@@ -1,6 +1,6 @@
 # CSS — règle de travail actuelle
 
-Le CSS de PJJoue est organisé par page, mais la cascade publique reste volontairement conservée dans ses fichiers historiques générés.
+Le CSS de PJJoue est organisé par page, tandis que la cascade publique reste assemblée dans des fichiers générés et ordonnés.
 
 Les **25 déclarations strictement répétées** qui étaient prouvées inutiles ont été retirées de leurs sources. Le contrôle structurel ne signale plus de déclaration répétée ni de paire de blocs `@media` adjacents ayant exactement la même condition.
 

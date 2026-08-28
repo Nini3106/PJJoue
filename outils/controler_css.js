@@ -4,6 +4,7 @@ const { spawnSync } = require('child_process');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const postcss = require('postcss');
 
 const mode = process.argv[2];
 const analyseurs = {
@@ -16,8 +17,9 @@ if (!analyseurs[mode]) {
 }
 
 const dossierStyles = path.resolve('ressources/styles');
+const feuillePrincipale = path.join(dossierStyles, 'pjjoue-principal.css');
 const feuillesInterface = fs.readdirSync(dossierStyles)
-    // Le paquet principal est une copie optimisée des feuilles contrôlées ici.
+    // La feuille principale est contrôlée séparément : elle est produite par le constructeur.
     .filter(nom => nom.endsWith('.css') && nom !== 'pjjoue-principal.css')
     .sort()
     .map(nom => path.join(dossierStyles, nom));
@@ -31,7 +33,33 @@ fs.writeFileSync(
 
 try {
     const [analyseur, option] = analyseurs[mode];
-    for (const feuille of [interfaceComplete, path.resolve('ressources/administration.css')]) {
+    const feuillesControlees = [
+        feuillePrincipale,
+        interfaceComplete,
+        path.resolve('ressources/administration.css'),
+    ];
+    const selecteursSemantiques = new Set([
+        '.masque',
+        '.pjj-consentement[hidden],.pjj-consentement-preferences[hidden]',
+    ]);
+    const prioritesInterdites = [];
+    for (const feuille of feuillesControlees) {
+        const racine = postcss.parse(fs.readFileSync(feuille, 'utf8'), { from: feuille });
+        racine.walkDecls(declaration => {
+            if (!declaration.important) return;
+            const selecteur = declaration.parent.selector?.replace(/\s+/g, '') || '';
+            const exceptionValide = selecteursSemantiques.has(selecteur)
+                && declaration.prop === 'display'
+                && declaration.value.trim() === 'none';
+            if (!exceptionValide)
+                prioritesInterdites.push(`${path.relative(process.cwd(), feuille)}:${declaration.source.start.line}`);
+        });
+    }
+    if (prioritesInterdites.length) {
+        console.error(`CSS refusé : priorité forcée non sémantique : ${prioritesInterdites.join(', ')}`);
+        process.exit(1);
+    }
+    for (const feuille of feuillesControlees) {
         const resultat = spawnSync(
             process.execPath,
             [path.resolve('outils', analyseur), feuille, option],

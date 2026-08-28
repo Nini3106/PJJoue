@@ -10,14 +10,14 @@ La colonne **Repère** contient le nom exact à rechercher. Les boutons statique
 |---|---|
 | Accueil | `code/02 - Accueil/` |
 | Parcours PJJ | `code/03 - Parcours PJJ/` |
-| Carnet de voyage | `code/04 - Carnet de voyage/` |
+| Carnet de parcours | `code/04 - Carnet de parcours/` |
 | Entraînement libre | `code/05 - Entraînement libre/` |
 | Question | `code/06 - Question/` |
 | Bilan de la session | `code/07 - Bilan de la session/` |
 | Réviser | `code/08 - Réviser/` |
 | Progression | `code/09 - Progression/` |
 | Paramètres | `code/10 - Paramètres/` |
-| Guides pour découvrir la PJJ | `code/11 - Guides pour découvrir la PJJ/` |
+| Guides pour découvrir la PJJ | `code/11 - Guides pour découvrir la PJJ/Accueil des guides/` |
 | Informations légales | `code/12 - Informations légales/` |
 | Administration | `code/13 - Administration/` |
 
@@ -25,14 +25,15 @@ La colonne **Repère** contient le nom exact à rechercher. Les boutons statique
 
 | Page | Ce que l’on voit | Repère exact | Dossier source |
 |---|---|---|---|
-| Éléments communs | Ouvrir le menu | `#boutonMenuMobile` | `code/01 - Éléments communs/` |
+| Éléments communs | Ouvrir le menu principal | `#boutonMenuPrincipal` | `code/01 - Éléments communs/` |
 | Éléments communs | Accueil | `#boutonAccueil` | `code/01 - Éléments communs/` |
 | Éléments communs | Parcours PJJ | `#boutonParcoursPJJ` | `code/01 - Éléments communs/` |
-| Éléments communs | Carnet de voyage | `#boutonCarnetDeVoyage` | `code/01 - Éléments communs/` |
+| Éléments communs | Carnet de parcours | `#boutonCarnetDeParcours` | `code/01 - Éléments communs/` |
 | Éléments communs | Entraînement libre | `#boutonEntrainementLibre` | `code/01 - Éléments communs/` |
 | Éléments communs | Réviser | `#boutonReviser` | `code/01 - Éléments communs/` |
 | Éléments communs | Progression | `#boutonProgression` | `code/01 - Éléments communs/` |
 | Éléments communs | Paramètres | `#boutonParametres` | `code/01 - Éléments communs/` |
+| Éléments communs | Guides | `#lienGuides` | `code/01 - Éléments communs/` + `code/11 - Guides pour découvrir la PJJ/Accueil des guides/` |
 | Éléments communs | ← Retour | `#boutonRetour` | `code/01 - Éléments communs/` |
 | Accueil | Commencer → | `#boutonCommencer` | `code/02 - Accueil/` |
 | Parcours PJJ | Libre | `#boutonParcoursLibre` | `code/03 - Parcours PJJ/` |
@@ -44,8 +45,8 @@ La colonne **Repère** contient le nom exact à rechercher. Les boutons statique
 | Parcours PJJ | 25 s | `#boutonParcours25Secondes` | `code/03 - Parcours PJJ/` |
 | Parcours PJJ | 30 s | `#boutonParcours30Secondes` | `code/03 - Parcours PJJ/` |
 | Parcours PJJ | ÉTAPE 12 Évaluation Parcours sans jokers requis | `#carteEvaluationFinale` | `code/03 - Parcours PJJ/` |
-| Carnet de voyage | Lancer le dé Lancer | `#boutonLancerLeDe` | `code/04 - Carnet de voyage/` |
-| Carnet de voyage | Jouer le tirage | `#boutonJouerLeTirage` | `code/04 - Carnet de voyage/` |
+| Carnet de parcours | Lancer le dé Lancer | `#boutonLancerLeDe` | `code/04 - Carnet de parcours/` |
+| Carnet de parcours | Jouer le tirage | `#boutonJouerLeTirage` | `code/04 - Carnet de parcours/` |
 | Entraînement libre | 10 | `#boutonEntrainement10Questions` | `code/05 - Entraînement libre/` |
 | Entraînement libre | 20 | `#boutonEntrainement20Questions` | `code/05 - Entraînement libre/` |
 | Entraînement libre | 30 | `#boutonEntrainement30Questions` | `code/05 - Entraînement libre/` |
@@ -120,31 +121,24 @@ La colonne **Repère** contient le nom exact à rechercher. Les boutons statique
 
 ## Icônes
 
-| Ce que représente l’icône | Nom du fichier | Dossier |
+Les icônes de l’interface principale utilisent désormais **un seul langage SVG au trait**, sans fichiers bitmap de parcours.
+
+| Ce que l’on voit | Repère à rechercher | Dossier source |
 |---|---|---|
-| Boussole | `icone-boussole.svg` | `ressources/icones-interface/` |
-| Carte du parcours | `icone-carte-du-parcours.svg` | `ressources/icones-interface/` |
-| Cible | `icone-cible.svg` | `ressources/icones-interface/` |
-| Defi chrono | `icone-defi-chrono.svg` | `ressources/icones-interface/` |
-| Melanger | `icone-melanger.svg` | `ressources/icones-interface/` |
-| Mon activite | `icone-mon-activite.svg` | `ressources/icones-interface/` |
-| Par ordre des etapes | `icone-par-ordre-des-etapes.svg` | `ressources/icones-interface/` |
-| Trophee evaluation finale | `icone-trophee-evaluation-finale.svg` | `ressources/icones-interface/` |
-| Acteurs justice | `icone-acteurs-justice.svg` | `ressources/icones-parcours/` |
-| Activites educatives | `icone-activites-educatives.svg` | `ressources/icones-parcours/` |
-| Formes prise en charge | `icone-formes-prise-en-charge.svg` | `ressources/icones-parcours/` |
-| Loupe decouverte | `icone-loupe-decouverte.svg` | `ressources/icones-parcours/` |
-| Mesures judiciaires | `icone-mesures-judiciaires.svg` | `ressources/icones-parcours/` |
-| Organisation pjj | `icone-organisation-pjj.svg` | `ressources/icones-parcours/` |
-| Partenaires | `icone-partenaires.svg` | `ressources/icones-parcours/` |
-| Professionnels pjj | `icone-professionnels-pjj.svg` | `ressources/icones-parcours/` |
-| Public accompagne | `icone-public-accompagne.svg` | `ressources/icones-parcours/` |
-| Structure ouverte de jour | `icone-structure-ouverte-de-jour.svg` | `ressources/icones-parcours/` |
-| Structures placement | `icone-structures-placement.svg` | `ressources/icones-parcours/` |
+| Icône d’un parcours | `ICONES_THEMES` | `code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js` |
+| Dessin SVG commun | `TRACES_PICTOGRAMMES` | `code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js` |
+| Icône d’une étape | `ICONES_ETAPES_PARCOURS` | `code/03 - Parcours PJJ/actions-de-la-page.js` |
+| Icône de l’évaluation finale | `trophee` | `code/03 - Parcours PJJ/` + bibliothèque commune |
+| Par ordre d’étapes | `entrainement-ordonne` / `entrainement-icone` | `code/05 - Entraînement libre/contenu.html` |
+| Mélangé | `entrainement-melange` / `entrainement-icone` | `code/05 - Entraînement libre/contenu.html` |
+| Défi du hasard | `#faceDeParcours` | `code/05 - Entraînement libre/contenu.html` |
+| Icônes des guides | `.guide-carte-icone` | `code/11 - Guides pour découvrir la PJJ/Accueil des guides/` |
+
+Les couleurs peuvent varier pour distinguer les parcours, mais **le dessin reste uniforme : trait fin, angles arrondis, fond clair et dimensions cohérentes**. Les anciennes icônes PNG/SVG de parcours ne sont plus utilisées.
 
 ## Règle simple
 
 - Si tu vois **un bouton**, cherche d’abord son `#bouton...` dans le dossier de sa page.
-- Si tu vois **une icône**, cherche son fichier `icone-...svg`.
+- Si tu vois **une icône**, cherche d’abord son repère dans la bibliothèque SVG commune ou dans le dossier de la page indiqué ci-dessus.
 - Si une action touche plusieurs pages, elle se trouve dans `code/01 - Éléments communs/`.
 - Si une règle CSS est partagée entre plusieurs écrans, elle reste dans les éléments communs pour ne pas casser la cascade.

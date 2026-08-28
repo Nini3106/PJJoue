@@ -76,7 +76,7 @@ function importerProgression(fichier) {
             if (importee.erreurs != null && !estObjetSimple(importee.erreurs))
                 throw Error('la banque de révision est mal structurée');
             sauvegarde = nettoyerSauvegarde(importee);
-            effacerSauvegardeV1DuNavigateur();
+            effacerSauvegardeDuNavigateur();
             enregistrerSauvegarde();
             actualiserAccueil();
             envoyerEvenementPJJ('progression_importee', {

@@ -8,4 +8,4 @@ Avant chaque publication :
 4. maintenir une formulation pédagogique indépendante, sans laisser entendre une validation institutionnelle ;
 5. reconstruire les données et exécuter tous les tests après chaque modification.
 
-`documentation/documentation-actuelle/audit_contenu.csv` peut servir de registre de suivi éditorial.
+`documentation/documentation-actuelle/audit_contenu_parcours_1.csv` peut servir de registre de suivi éditorial.

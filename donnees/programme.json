@@ -202,5 +202,985 @@
         "idAnalyticsPermanent": 10
       }
     ]
+  },
+  "procedure_ordinaire": {
+    "id": "procedure_ordinaire",
+    "categorie": "parcours",
+    "sequence": "Procédure ordinaire",
+    "titre": "Suivre la procédure ordinaire : du parquet à la sanction",
+    "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
+    "etapes": [
+      {
+        "id": 1,
+        "titre": "Les repères qui commandent le dossier",
+        "couleur": "#39d7c4",
+        "souvenirs": [
+          "Le CJPM est le code de référence.",
+          "Le droit indique ce qui est possible ; l’acte indique ce qui a réellement été décidé.",
+          "Âge aux faits, qualification, stade et acte sont les premiers repères à vérifier."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 21
+      },
+      {
+        "id": 2,
+        "titre": "Après l’enquête : le parquet oriente",
+        "couleur": "#ffc83d",
+        "souvenirs": [
+          "Ces orientations ne produisent pas la même suite procédurale.",
+          "Le parquet requiert ; le juge ou la juridiction conserve le pouvoir de décider.",
+          "Cette séquence situe le passage de l’enquête au jugement."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 22
+      },
+      {
+        "id": 3,
+        "titre": "Saisir le JE ou le TPE dans la procédure ordinaire",
+        "couleur": "#a986ff",
+        "souvenirs": [
+          "La convocation permet ici d’identifier qui va juger.",
+          "Cette différence de formation ne suffit pas encore à connaître toutes leurs compétences.",
+          "Dans la procédure en deux temps, la sanction est décidée lors d’une audience ultérieure."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 23
+      },
+      {
+        "id": 4,
+        "titre": "De la culpabilité à l’ouverture de la MEE",
+        "couleur": "#62c5ff",
+        "souvenirs": [
+          "La MEE est une période procédurale située entre culpabilité et sanction.",
+          "Le CJPM fixe cette fenêtre temporelle pour la procédure de MEE.",
+          "La logique de la MEE doit être distinguée des décisions prises pendant son suivi."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 24
+      },
+      {
+        "id": 5,
+        "titre": "Pendant la mise à l’épreuve éducative",
+        "couleur": "#ff9e5e",
+        "souvenirs": [
+          "Même si le TPE a statué sur la culpabilité, le suivi de la MEE relève du JE.",
+          "Le JE contrôle la MEE et dispose de pouvoirs spécifiques en cas d’incident.",
+          "La MEE est une période suivie et ajustable, pas un simple délai d’attente."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 25
+      },
+      {
+        "id": 6,
+        "titre": "L’audience de sanction après la MEE",
+        "couleur": "#5fe0a0",
+        "souvenirs": [
+          "Cette audience intervient après la période de MEE.",
+          "Dans ce cadre, le JE ne peut pas prononcer de peine d’emprisonnement.",
+          "L’audience unique concentre les décisions normalement séparées."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 26
+      },
+      {
+        "id": 7,
+        "titre": "Comprendre l’audience unique",
+        "couleur": "#ffcf66",
+        "souvenirs": [
+          "L’audience unique réunit les décisions sans passer par la période de MEE entre deux audiences.",
+          "Le CJPM exige un rapport récent lié à une mesure ou décision antérieure prévue par le texte.",
+          "La bascule vers la procédure de MEE entraîne cette remise en liberté dans le cas prévu."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 27
+      },
+      {
+        "id": 8,
+        "titre": "Comparer MEE et audience unique",
+        "couleur": "#eb78ac",
+        "souvenirs": [
+          "La procédure retrouve la séparation culpabilité/MEE/sanction.",
+          "Le document réunit expressément les deux décisions.",
+          "La bascule ne crée pas une troisième procédure : elle ramène vers la logique MEE."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 28
+      },
+      {
+        "id": 9,
+        "titre": "Appliquer la procédure ordinaire à des dossiers",
+        "couleur": "#74d4ff",
+        "souvenirs": [
+          "Le renvoi de la sanction après culpabilité correspond à la procédure de MEE.",
+          "Le JE dispose d’un pouvoir d’adaptation sur les mesures provisoires prévues.",
+          "Ce schéma correspond à la procédure ordinaire avec MEE."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 29
+      },
+      {
+        "id": 10,
+        "titre": "Choisir la bonne voie de jugement",
+        "couleur": "#a7df75",
+        "souvenirs": [
+          "Huit mois se situe dans la fenêtre ordinaire de six à neuf mois.",
+          "Les indices doivent être combinés plutôt que lus isolément.",
+          "Ce schéma distingue la procédure ordinaire d’une phase d’investigations située avant le jugement."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 30
+      },
+      {
+        "id": 11,
+        "titre": "Reconstruire un parcours ordinaire complet",
+        "couleur": "#ff8b73",
+        "souvenirs": [
+          "Le parquet ne prononce ni culpabilité ni sanction.",
+          "Le CJPM le permet à l’audience de sanction.",
+          "L’information judiciaire ajoute une phase avant le jugement sans effacer les repères déjà nécessaires à la lecture du dossier."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_JUGEMENT"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 31
+      }
+    ]
+  },
+  "information_judiciaire": {
+    "id": "information_judiciaire",
+    "categorie": "parcours",
+    "sequence": "Instruction et sûreté",
+    "titre": "Comprendre l’information judiciaire, le JI, le JLD et les décisions provisoires",
+    "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
+    "etapes": [
+      {
+        "id": 1,
+        "titre": "Pourquoi une information judiciaire ?",
+        "couleur": "#39d7c4",
+        "souvenirs": [
+          "L’information judiciaire appartient à la procédure préalable au jugement.",
+          "La mise en examen appartient à l’instruction ; la culpabilité est tranchée au jugement.",
+          "L’ordonnance de règlement peut clore l’affaire ou l’orienter vers une juridiction de jugement."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 41
+      },
+      {
+        "id": 2,
+        "titre": "Le JI enquête, il ne juge pas",
+        "couleur": "#ffc83d",
+        "souvenirs": [
+          "Les expertises font partie des investigations possibles.",
+          "La MEJ prononcée comme sanction et la peine appartiennent au jugement, non à l’instruction.",
+          "L’exception vise un rapport de moins d’un an."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 42
+      },
+      {
+        "id": 3,
+        "titre": "La MJIE pendant l’information",
+        "couleur": "#a986ff",
+        "souvenirs": [
+          "Le CJPM définit la MJIE comme une évaluation approfondie et interdisciplinaire.",
+          "La MJIE est une investigation.",
+          "L432-2 fixe une durée d’un an renouvelable pendant l’information."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 43
+      },
+      {
+        "id": 4,
+        "titre": "La MEJP pendant l’information",
+        "couleur": "#62c5ff",
+        "souvenirs": [
+          "L432-2 attribue expressément ce pouvoir au JI au cours de l’information.",
+          "L323-3 fixe cette limite.",
+          "Le contrôle judiciaire encadre la liberté sans être une peine."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 44
+      },
+      {
+        "id": 5,
+        "titre": "Le contrôle judiciaire pendant l’information",
+        "couleur": "#ff9e5e",
+        "souvenirs": [
+          "L331-1 réserve le CJ aux mineurs d’au moins treize ans.",
+          "L331-1 énumère plusieurs antécédents possibles, avec rapport récent.",
+          "L’ARSE se distingue du CJ par l’assignation et la surveillance électronique."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 45
+      },
+      {
+        "id": 6,
+        "titre": "L’ARSE pendant l’information",
+        "couleur": "#5fe0a0",
+        "souvenirs": [
+          "L333-1 fixe ce seuil pour le régime général.",
+          "L’âge et le seuil doivent être croisés.",
+          "La détention provisoire reste une mesure de sûreté, non une peine."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 46
+      },
+      {
+        "id": 7,
+        "titre": "Quand la détention provisoire est envisagée",
+        "couleur": "#ffcf66",
+        "souvenirs": [
+          "L334-1 pose une interdiction absolue avant 13 ans.",
+          "L334-3 impose une MEJP lors du placement en DP.",
+          "Le juge des libertés et de la détention statue sur la DP lorsqu’il est saisi."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 47
+      },
+      {
+        "id": 8,
+        "titre": "Le JI saisit, le JLD statue et contrôle la durée",
+        "couleur": "#eb78ac",
+        "souvenirs": [
+          "Cette séparation est centrale dans l’instruction.",
+          "L433-2 prévoit quinze jours, renouvelables une fois, lorsque la peine encourue est inférieure à dix ans.",
+          "Six mois initiaux et une prolongation maximale de six mois donnent un total d’un an."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 48
+      },
+      {
+        "id": 9,
+        "titre": "Durées criminelles, puis JLD au défèrement",
+        "couleur": "#74d4ff",
+        "souvenirs": [
+          "L433-5 fixe un maximum ordinaire de deux ans.",
+          "Cette bifurcation doit être lue dans les réquisitions et la saisine.",
+          "Il faut toujours lire le stade et la saisine."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 49
+      },
+      {
+        "id": 10,
+        "titre": "La fin de l’information judiciaire",
+        "couleur": "#a7df75",
+        "souvenirs": [
+          "Le non-lieu est l’une des ordonnances de règlement prévues par L434-1.",
+          "Pour un crime, L434-1 distingue l’âge de seize ans au moment des faits.",
+          "Le règlement fait le lien entre l’instruction et le jugement."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 50
+      },
+      {
+        "id": 11,
+        "titre": "Reconstruire un dossier d’instruction",
+        "couleur": "#ff8b73",
+        "souvenirs": [
+          "Le JI conduit l’information et la règle par une ordonnance adaptée aux charges et à la qualification retenue.",
+          "Depuis le 25 juillet 2026, L434-6 prévoit deux mois, renouvelables une fois pour un mois.",
+          "Cette chronologie sépare la conduite de l’information, les décisions de liberté et l’orientation finale vers le jugement."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_INSTRUCTION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 51
+      }
+    ]
+  },
+  "jugement_educatif_ordinaire": {
+    "id": "jugement_educatif_ordinaire",
+    "categorie": "parcours",
+    "sequence": "JE, TPE et mesures éducatives",
+    "titre": "Juger devant le JE et le TPE : mesures éducatives et sanctions ordinaires",
+    "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
+    "etapes": [
+      {
+        "id": 1,
+        "titre": "Le juge des enfants en chambre du conseil",
+        "couleur": "#39d7c4",
+        "souvenirs": [
+          "En chambre du conseil, le juge des enfants statue seul ; cette formation se distingue du TPE collégial.",
+          "Le seuil de seize ans au prononcé concerne le TIG ; le stage peut relever du JE dès treize ans sous les autres conditions.",
+          "Le TPE dispose d’un éventail pénal plus large que le JE."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 61
+      },
+      {
+        "id": 2,
+        "titre": "La MEJ : nature, finalités et contenu",
+        "couleur": "#ffc83d",
+        "souvenirs": [
+          "Leur contenu peut se recouper, mais leur place procédurale n’est pas la même.",
+          "L112-2 complète les modules par plusieurs interdictions et obligations.",
+          "La limite générale est 21 ans, avec les réserves prévues par certains articles."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 62
+      },
+      {
+        "id": 3,
+        "titre": "MEJ et MEJP : distinguer les deux moments",
+        "couleur": "#a986ff",
+        "souvenirs": [
+          "Avant le prononcé de la sanction, la mesure éducative prend la forme provisoire : la MEJP.",
+          "Cette obligation figure dans L323-1 et ne constitue pas un cinquième module de la MEJ.",
+          "Le CJPM les appelle des modules."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 63
+      },
+      {
+        "id": 4,
+        "titre": "Les quatre modules : choisir selon les besoins",
+        "couleur": "#62c5ff",
+        "souvenirs": [
+          "Les quatre modules ne sont pas interchangeables : chacun répond à une logique précise.",
+          "Le module complète la mesure éducative judiciaire ; il ne change pas de famille juridique.",
+          "Le module d’insertion est plus large qu’une simple recherche d’emploi ; il peut concerner la scolarité, le social ou la formation."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 64
+      },
+      {
+        "id": 5,
+        "titre": "Le module insertion",
+        "couleur": "#ff9e5e",
+        "souvenirs": [
+          "L112-5 donne au module d’insertion une finalité adaptée aux besoins du mineur dans ces trois dimensions.",
+          "La limite d’un an concerne cette modalité d’accueil de jour.",
+          "La finalité permet de distinguer insertion et réparation même lorsque les deux ont une dimension éducative."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 65
+      },
+      {
+        "id": 6,
+        "titre": "Le module de réparation",
+        "couleur": "#5fe0a0",
+        "souvenirs": [
+          "L112-8 distingue l’activité d’aide/réparation et la médiation mineur-victime.",
+          "L112-9 limite le module réparation à un an.",
+          "L’article L112-10 impose une information écrite de la juridiction à la fin du délai fixé pour le module."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 66
+      },
+      {
+        "id": 7,
+        "titre": "Le module de santé",
+        "couleur": "#ffcf66",
+        "souvenirs": [
+          "L112-11 prévoit ces trois formes, avec des conditions particulières pour les placements.",
+          "Le placement médico-social s’appuie sur la décision d’orientation compétente en matière de handicap.",
+          "Deux modules peuvent modifier le lieu de vie."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 67
+      },
+      {
+        "id": 8,
+        "titre": "Le module de placement",
+        "couleur": "#eb78ac",
+        "souvenirs": [
+          "L112-14 énumère trois grandes catégories de lieux ou personnes auxquels le mineur peut être confié.",
+          "Le cadre du placement doit être formalisé dans l’ordonnance.",
+          "Une même MEJ peut combiner plusieurs modules, interdictions ou obligations autorisés."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 68
+      },
+      {
+        "id": 9,
+        "titre": "Obligations, interdictions et synthèse de la MEJ",
+        "couleur": "#74d4ff",
+        "souvenirs": [
+          "Une restriction peut exister à l’intérieur d’une mesure éducative sans devenir pour autant une peine autonome.",
+          "L’interdiction numérique est ciblée et limitée dans le temps.",
+          "Une interdiction peut apparaître dans plusieurs cadres juridiques ; son nom seul ne suffit pas à identifier la nature de la décision."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 69
+      },
+      {
+        "id": 10,
+        "titre": "Le tribunal pour enfants en matière ordinaire",
+        "couleur": "#a7df75",
+        "souvenirs": [
+          "La collégialité du TPE réunit un juge des enfants président et deux assesseurs.",
+          "La compétence du TPE ne fait pas disparaître la protection liée à l’âge.",
+          "L’avertissement appartient aux mesures éducatives ; les autres possibilités relèvent du régime pénal du tribunal de police."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 70
+      },
+      {
+        "id": 11,
+        "titre": "Le tribunal de police et les frontières de compétence",
+        "couleur": "#ff8b73",
+        "souvenirs": [
+          "L’article L121-3 fixe ces trois possibilités pour le tribunal de police.",
+          "Le seuil porte sur l’âge au moment des faits.",
+          "Cette synthèse s’arrête au prononcé de la réponse."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_MEJ"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 71
+      }
+    ]
+  },
+  "matiere_criminelle_peines": {
+    "id": "matiere_criminelle_peines",
+    "categorie": "parcours",
+    "sequence": "Matière criminelle et peines",
+    "titre": "Juger la matière criminelle et comprendre les sanctions et peines",
+    "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
+    "etapes": [
+      {
+        "id": 1,
+        "titre": "Qualification criminelle et âge au moment des faits",
+        "couleur": "#39d7c4",
+        "souvenirs": [
+          "La compétence criminelle dépend d’abord de l’âge du mineur au moment où le crime a été commis.",
+          "L’instruction préparatoire est obligatoire en matière de crime ; le dossier n’arrive donc pas directement au jugement.",
+          "Cette synthèse fixe le critère central : en matière criminelle, l’âge au moment des faits commande la juridiction compétente."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 81
+      },
+      {
+        "id": 2,
+        "titre": "Le TPE jugeant un crime commis avant seize ans",
+        "couleur": "#ffc83d",
+        "souvenirs": [
+          "Même lorsqu’il juge un crime commis avant seize ans, son appellation juridique reste « tribunal pour enfants ».",
+          "Pour le crime commis avant seize ans, le JI renvoie le dossier devant le TPE ; il ne déclare pas le mineur coupable.",
+          "Le TPE juge les crimes commis avant seize ans ; le seuil de treize ans détermine séparément si une peine est juridiquement possible."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 82
+      },
+      {
+        "id": 3,
+        "titre": "La cour d’assises des mineurs : saisine et procès",
+        "couleur": "#a986ff",
+        "souvenirs": [
+          "La CAM connaît en principe des crimes commis par les mineurs âgés d’au moins seize ans au moment des faits.",
+          "Les règles de la cour d’assises s’appliquent sous réserve du CJPM : la cour comprend un président et deux assesseurs, et le procès fait intervenir un jury.",
+          "La CAM intervient après l’information et juge le fond."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 83
+      },
+      {
+        "id": 4,
+        "titre": "Avertissement judiciaire, confiscation et peine de stage",
+        "couleur": "#62c5ff",
+        "souvenirs": [
+          "Le CJPM classe l’avertissement judiciaire parmi les mesures éducatives encourues à titre de sanction ; il ne s’agit pas d’une peine.",
+          "Dans cette situation rapprochée, un nouvel avertissement reste possible mais il ne peut plus constituer à lui seul la réponse prononcée.",
+          "Pour une infraction commise dans le cadre de la scolarité, le stage de citoyenneté peut comporter un volet spécifique sur les risques liés au harcèlement scolaire."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 84
+      },
+      {
+        "id": 5,
+        "titre": "TIG et sanction-réparation",
+        "couleur": "#ff9e5e",
+        "souvenirs": [
+          "Le TIG du mineur combine deux repères d’âge distincts : treize ans au minimum lors des faits et seize ans au minimum lorsque la peine est prononcée.",
+          "Le TIG est une peine ; le module réparation appartient à la MEJ ou à la MEJP ; les dommages-intérêts relèvent de l’action civile.",
+          "La sanction-réparation est une peine et peut, avec les accords requis, être exécutée en nature."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 85
+      },
+      {
+        "id": 6,
+        "titre": "Amende, peines complémentaires et peines inapplicables",
+        "couleur": "#5fe0a0",
+        "souvenirs": [
+          "Dans ce régime d’atténuation, l’amende ne peut pas dépasser la moitié de l’amende encourue.",
+          "Une peine complémentaire doit avoir une base légale applicable à l’infraction et rester compatible avec les exclusions propres aux mineurs.",
+          "Le texte écarte les conséquences automatiques attachées à la seule condamnation ; les peines privatives de liberté obéissent, elles, à leurs propres règles d’atténuation."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 86
+      },
+      {
+        "id": 7,
+        "titre": "Emprisonnement, réclusion et atténuation",
+        "couleur": "#ffcf66",
+        "souvenirs": [
+          "Le TPE et la CAM peuvent prononcer une peine privative de liberté dans les conditions du CJPM ; le JE statuant seul ne dispose pas de ce pouvoir de sanction.",
+          "Lorsque la perpétuité est encourue, le maximum applicable au mineur est de vingt ans tant que l'atténuation reste appliquée.",
+          "L'atténuation reste le principe."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 87
+      },
+      {
+        "id": 8,
+        "titre": "DDSE : reconnaître la peine sans la confondre avec l'ARSE",
+        "couleur": "#eb78ac",
+        "souvenirs": [
+          "L'ARSE intervient avant le jugement ou la sanction dans les cadres prévus ; la DDSE, lorsqu'elle est prononcée par la juridiction de jugement, relève de la peine.",
+          "Leur accord est requis, sauf carence de leur part ou impossibilité de donner leur consentement.",
+          "La décision de condamnation fixe la peine ; son exécution et son aménagement appartiennent à un temps procédural distinct après le jugement."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 88
+      },
+      {
+        "id": 9,
+        "titre": "Sursis probatoire et suivi socio-judiciaire",
+        "couleur": "#74d4ff",
+        "souvenirs": [
+          "L122-2 vise la condamnation du mineur à une peine d'emprisonnement assortie d'un sursis probatoire.",
+          "Cette obligation est ouverte à partir de seize ans et suppose notamment que le prévenu ne la refuse pas et soit présent à l'audience.",
+          "Ces dispositifs se situent après la culpabilité, mais leur base légale et leurs conditions ne sont pas interchangeables."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 89
+      },
+      {
+        "id": 10,
+        "titre": "Comparer les juridictions et les peines",
+        "couleur": "#a7df75",
+        "souvenirs": [
+          "L121-8 rend cette peine applicable aux mineurs de plus de seize ans lorsque les conditions de l'article L1633-3 du code des transports sont réunies.",
+          "L'emprisonnement relève du TPE ou de la CAM et doit être spécialement motivé lorsqu'il est prononcé contre un mineur.",
+          "Le prononcé de la réponse et son application sont deux temps distincts : après la condamnation viennent les décisions de suivi, d'adaptation ou d'aménagement."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 90
+      },
+      {
+        "id": 11,
+        "titre": "Synthèse : retrouver la juridiction et la réponse possible",
+        "couleur": "#ff8b73",
+        "souvenirs": [
+          "L'âge au moment des faits est le premier filtre : avant treize ans, une peine est exclue même si une réponse éducative reste possible.",
+          "Hors cas particulier de la perpétuité, l'atténuation réduit en principe de moitié le maximum de la peine privative de liberté encourue.",
+          "Le choix et le prononcé de la réponse précèdent sa phase d'application et d'exécution, pendant laquelle la peine peut être suivie, adaptée ou aménagée."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 91
+      }
+    ]
+  },
+  "application_execution_peines": {
+    "id": "application_execution_peines",
+    "categorie": "parcours",
+    "sequence": "Application des peines",
+    "titre": "Appliquer, exécuter et aménager les mesures et les peines",
+    "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
+    "etapes": [
+      {
+        "id": 1,
+        "titre": "Après condamnation : situer l’application et l’exécution",
+        "couleur": "#39d7c4",
+        "souvenirs": [
+          "L’application et l’exécution viennent après le prononcé de la peine : elles organisent sa mise en œuvre sans recommencer le jugement initial.",
+          "L611-1 place le déroulement de la MEJ sous le contrôle du juge des enfants.",
+          "L'application et l'exécution commencent lorsqu'une condamnation existe et que se pose la question de sa mise en œuvre."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 101
+      },
+      {
+        "id": 2,
+        "titre": "JE faisant fonction de JAP et passage au JAP",
+        "couleur": "#ffc83d",
+        "souvenirs": [
+          "Pour les condamnations prononcées contre un mineur, L611-2 confie en principe au JE les fonctions normalement exercées par le JAP.",
+          "Le dessaisissement organise la compétence de suivi ; il ne modifie ni la culpabilité ni la peine prononcée.",
+          "Le JE préside la commission de l’application des peines lorsque celle-ci examine un condamné relevant de sa compétence."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 102
+      },
+      {
+        "id": 3,
+        "titre": "Suivre une peine déjà prononcée",
+        "couleur": "#a986ff",
+        "souvenirs": [
+          "L’article 712-6 s’applique notamment aux décisions concernant le sursis probatoire, le TIG et le suivi socio-judiciaire.",
+          "La DDSE-peine est prononcée au jugement ; l’application en organise ensuite les modalités.",
+          "L’application des peines n’est pas une gestion informelle : les décisions sont prises selon des compétences et procédures fixées par la loi."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 103
+      },
+      {
+        "id": 4,
+        "titre": "Juge seul, formation collégiale et garanties",
+        "couleur": "#62c5ff",
+        "souvenirs": [
+          "L611-3 prévoit que le TPE exerce, à l’égard des mineurs condamnés, les attributions dévolues au TAP.",
+          "Au-delà de dix ans, si le reliquat dépasse trois ans, la libération conditionnelle relève du TAP ; pour le mineur relevant encore du CJPM, le TPE exerce cette attribution.",
+          "L611-4 transpose au contentieux des mineurs les compétences de la chambre de l’application des peines et de son président."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 104
+      },
+      {
+        "id": 5,
+        "titre": "Placement extérieur, semi-liberté et DDSE-aménagement",
+        "couleur": "#ff9e5e",
+        "souvenirs": [
+          "Ces trois régimes organisent l’exécution d’une peine déjà prononcée ; l’ARSE reste une mesure de sûreté provisoire.",
+          "En régime ordinaire, l’article 723-1 permet semi-liberté ou placement à l’extérieur si le total des peines ou le reliquat n’excède pas deux ans, sous réserve des exclusions légales.",
+          "Ces modes aménagent tous une peine privative de liberté, mais organisent différemment le lieu, les sorties et le contrôle."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 105
+      },
+      {
+        "id": 6,
+        "titre": "Fractionnement, suspension et libération conditionnelle",
+        "couleur": "#5fe0a0",
+        "souvenirs": [
+          "Le fractionnement répartit l’exécution dans le temps ; la suspension l’interrompt temporairement dans les conditions prévues par la loi.",
+          "Suspension ou fractionnement s’inscrivent dans une période n’excédant pas quatre ans et aucune fraction ne peut être inférieure à deux jours.",
+          "L’article 730-2-1 confie alors la libération conditionnelle au TAP quelle que soit la durée restant à exécuter, après l’évaluation prévue par le texte ; pour le condamné relevant encore de la justice des mineurs, le TPE "
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 106
+      },
+      {
+        "id": 7,
+        "titre": "Conversion, réductions de peine et permissions de sortir",
+        "couleur": "#ffcf66",
+        "souvenirs": [
+          "La conversion agit sur la peine à exécuter ; elle ne remet pas en cause le jugement de culpabilité.",
+          "Le droit commun de l’application s’applique sous réserve des règles spéciales des mineurs, notamment l’exclusion des jours-amende et les seuils propres au TIG.",
+          "L’article 712-5 prévoit l’avis de la CAP pour ces décisions, sauf urgence."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 107
+      },
+      {
+        "id": 8,
+        "titre": "Incidents, modification, retrait et révocation",
+        "couleur": "#eb78ac",
+        "souvenirs": [
+          "Les conséquences d’un incident varient selon le dispositif : il faut d’abord savoir quel cadre est en cours d’exécution.",
+          "La révocation peut rendre exécutoire une peine ferme ; celle-ci reste susceptible d’aménagement ou de conversion lorsque les textes le permettent.",
+          "La qualification « incident » décrit une difficulté, pas une réponse juridique unique."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 108
+      },
+      {
+        "id": 9,
+        "titre": "Majorité, maintien, dessaisissement et articulation entre JE",
+        "couleur": "#74d4ff",
+        "souvenirs": [
+          "Le JE reste en principe compétent jusqu’à vingt-et-un ans lorsque la condamnation a été prononcée contre un mineur, sauf dessaisissement.",
+          "Ces repères permettent de résoudre la plupart des situations de passage entre compétence spéciale du JE et JAP de droit commun.",
+          "La compétence ne se déduit jamais du seul âge actuel : il faut reconstruire l’histoire du suivi."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 109
+      },
+      {
+        "id": 10,
+        "titre": "Articulations complexes de compétence",
+        "couleur": "#a7df75",
+        "souvenirs": [
+          "Le JE remplit les fonctions du JAP ; lorsque le droit commun appelle le TAP, le CJPM confie ses attributions au TPE.",
+          "Le CJPM prévoit que les appels des décisions du JE ou du TPE relèvent de la chambre spéciale des mineurs ou de son président selon le cas.",
+          "Les bonnes réponses viennent du croisement des textes et de l’acte, jamais d’un seuil unique appliqué à tous les dossiers."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 110
+      },
+      {
+        "id": 11,
+        "titre": "Synthèse : le parcours complet jusqu’à l’exécution",
+        "couleur": "#ff8b73",
+        "souvenirs": [
+          "L’application commence par une condamnation existante, puis impose d’identifier l’autorité compétente avant toute décision de suivi ou d’adaptation.",
+          "La conversion vers un TIG suppose seize ans à la décision et treize ans aux faits ; le second seuil manque ici.",
+          "L’application des peines intervient après les phases d’enquête, de jugement et de prononcé de la réponse."
+        ],
+        "sousTitre": "",
+        "modules": [],
+        "sources": [
+          "LEGIFRANCE_CJPM_APPLICATION"
+        ],
+        "fondement": "direct",
+        "idAnalyticsPermanent": 111
+      }
+    ]
   }
 }

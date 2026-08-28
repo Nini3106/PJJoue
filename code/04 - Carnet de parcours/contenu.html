@@ -1,0 +1,39 @@
+<section class="ecran" id="carnet">
+  <header class="page-entete carnet-page-entete">
+    <span class="surtitre">Journal du joueur</span>
+    <h1>Carnet de parcours</h1>
+    <p>Retrouve les repères que tu as réellement consolidés et les défis qui jalonnent ta progression.</p>
+  </header>
+
+  <section class="carnet-journal" aria-labelledby="titreCarnetParcours">
+    <div class="carnet-journal-entete">
+      <div>
+        <span class="surtitre">Ton chemin</span>
+        <h2 id="titreCarnetParcours">Les traces de tes parcours</h2>
+      </div>
+      <span class="carnet-parcours-titre" id="titreSymboliqueParcours">Nouveau départ</span>
+    </div>
+
+    <div class="carnet-prochaine-destination">
+      <span aria-hidden="true">→</span>
+      <p id="prochaineDestinationParcours">Ta première destination t’attend.</p>
+    </div>
+
+    <div class="carnet-parcours-route" id="routeCarnetParcours" role="progressbar" aria-label="Avancement dans l’ensemble des parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <span class="carnet-parcours-trace"><i></i></span>
+      <span aria-hidden="true" class="carnet-parcours-position">●</span>
+    </div>
+    <div class="carnet-parcours-reperes" aria-hidden="true"><span>Départ</span><span>66 étapes</span><span>6 évaluations</span></div>
+
+    <div class="carnet-parcours-details">
+      <section aria-labelledby="titreSouvenirsParcours" class="carnet-souvenirs">
+        <div class="carnet-section-entete"><span aria-hidden="true">◇</span><div><span class="surtitre">Ce que tu as débloqué</span><h3 id="titreSouvenirsParcours">Souvenirs de parcours</h3></div></div>
+        <div id="souvenirsParcours"><p class="carnet-vide">Maîtrise une étape pour conserver ses trois repères essentiels.</p></div>
+      </section>
+      <section aria-labelledby="titreDefisParcours" class="carnet-defis">
+        <div class="carnet-section-entete"><span aria-hidden="true">⚑</span><div><span class="surtitre">À accomplir</span><h3 id="titreDefisParcours">Défis personnels</h3></div></div>
+        <ul id="defisParcours"></ul>
+      </section>
+    </div>
+  </section>
+</section>

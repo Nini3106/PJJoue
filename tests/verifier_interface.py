@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recette navigateur actuelle de PJJoue — 11 étapes et évaluation finale écrite."""
+"""Recette navigateur PJJoue — 6 parcours, 66 étapes et 6 évaluations finales."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -20,19 +20,8 @@ except ModuleNotFoundError as erreur:
 
 RACINE = Path(__file__).resolve().parents[1]
 FEUILLES_INTERFACE = (
-    "ressources/styles/00-fondations-et-composants.css",
-    "ressources/styles/10-parcours-principal.css",
-    "ressources/styles/20-accueil-et-question-principale.css",
-    "ressources/styles/30-revision-parcours-et-parametres.css",
-    "ressources/styles/40-progression-et-erreurs.css",
-    "ressources/styles/50-carte-question-et-correction.css",
-    "ressources/styles/60-parcours-modes-et-chronometre.css",
-    "ressources/styles/70-celebrations-bilan-et-fenetres.css",
-    "ressources/styles/80-finitions-de-l-interface.css",
-    "ressources/styles/85-guides-pedagogiques.css",
-    "ressources/styles/90-adaptation-ecrans-et-etats-finaux.css",
+    "ressources/styles/pjjoue-principal.css",
     "ressources/styles/95-consentement.css",
-    "ressources/styles/96-icones-et-defi-hasard.css",
 )
 
 
@@ -46,7 +35,7 @@ def construire_page_jeu() -> str:
     page = re.sub(r'<!-- Google Tag Manager -->.*?<!-- End Google Tag Manager -->\s*', "", page, count=1, flags=re.S | re.I)
     page = re.sub(r'<!-- Google Tag Manager \(noscript\) -->.*?<!-- End Google Tag Manager \(noscript\) -->\s*', "", page, count=1, flags=re.S | re.I)
     page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue)\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue|navigation-locale)\.js")[^>]*>\s*</script>',
         "", page, flags=re.I,
     )
     page = re.sub(r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css")[^>]*>\s*', "", page, flags=re.I)
@@ -86,22 +75,184 @@ def lancer_chromium(automate):
     return automate.chromium.launch(headless=True, args=arguments)
 
 
+def verifier_ouverture_locale(navigateur) -> None:
+    """Vérifier le vrai index en file://, avec un consentement déjà accepté."""
+    page = navigateur.new_page(viewport={"width": 1440, "height": 1000})
+    erreurs: list[str] = []
+    requetes_externes: list[str] = []
+    page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
+    page.on(
+        "console",
+        lambda message: erreurs.append(f"console:{message.type}:{message.text}")
+        if message.type == "error" else None,
+    )
+    page.on(
+        "requestfailed",
+        lambda requete: erreurs.append(f"requête:{requete.url}:{requete.failure}"),
+    )
+    page.on(
+        "request",
+        lambda requete: requetes_externes.append(requete.url)
+        if requete.url.startswith(("http://", "https://")) else None,
+    )
+
+    page.goto((RACINE / "index.html").resolve().as_uri(), wait_until="domcontentloaded")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+    page.evaluate(
+        "() => localStorage.setItem('pjjoue_consentement_analytics_v1', 'accepte')"
+    )
+    erreurs.clear()
+    requetes_externes.clear()
+    page.reload(wait_until="domcontentloaded")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+
+    page.goto(f"{(RACINE / 'index.html').resolve().as_uri()}#supports", wait_until="domcontentloaded")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+    assert page.locator("body").get_attribute("data-ecran-actif") == "supports", (
+        "La route file:// #supports doit ouvrir les supports depuis le menu des guides."
+    )
+
+    page.goto(f"{(RACINE / 'index.html').resolve().as_uri()}#%E0%A4%A", wait_until="domcontentloaded")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+    assert page.locator("body").get_attribute("data-ecran-actif") == "accueil", (
+        "Un fragment d'adresse mal encodé doit revenir à l'accueil sans interrompre le site."
+    )
+
+    for ecran in ("parcours", "supports", "entrainement", "progression", "carnet", "parametres"):
+        page.evaluate("ecran => afficherEcran(ecran)", ecran)
+    page.evaluate("() => ouvrirParcours('matiere_criminelle_peines')")
+    page.wait_for_timeout(150)
+
+    assert page.url.startswith("file:") and "#parcours/matiere_criminelle_peines" in page.url, page.url
+    assert page.locator("#pjjoue-google-tag-manager").count() == 0, (
+        "Google Tag Manager ne doit pas être injecté depuis une page file://."
+    )
+    assert not requetes_externes, f"Requêtes externes inattendues en file:// : {requetes_externes}"
+    assert not erreurs, erreurs
+    page.close()
+
+
+def verifier_liens_guides_locaux(navigateur) -> None:
+    """Ne pas transformer un lien externe opaque en navigation file:// différée."""
+    page = navigateur.new_page(viewport={"width": 1440, "height": 1000})
+    erreurs: list[str] = []
+    page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
+    page.on(
+        "console",
+        lambda message: erreurs.append(f"console:{message.type}:{message.text}")
+        if message.type == "error" else None,
+    )
+    page.goto((RACINE / "guides" / "index.html").resolve().as_uri(), wait_until="domcontentloaded")
+    page.wait_for_function("() => Boolean(document.querySelector('.guide-bouton-menu-principal'))")
+    observation = page.evaluate("""() => new Promise(resolve => {
+        const lien = document.querySelector('a[href^="mailto:"]');
+        if (!lien) {
+            resolve(null);
+            return;
+        }
+        document.addEventListener('click', evenement => {
+            if (evenement.target.closest('a[href^="mailto:"]'))
+                resolve({ annule: evenement.defaultPrevented, adresse: location.href });
+        }, { once: true });
+        lien.click();
+    })""")
+    page.wait_for_timeout(180)
+    assert observation and not observation["annule"], (
+        "Le script de transition des guides ne doit pas intercepter les liens mailto: en file://."
+    )
+    assert page.url.startswith("file:") and "/guides/index.html" in page.url, page.url
+    assert not erreurs, erreurs
+    page.close()
+
+
 def verifier_jeu(navigateur, page_html: str) -> int:
+    index_public = (RACINE / "index.html").read_text(encoding="utf-8")
+    navigation_locale = (RACINE / "ressources/navigation-locale.js").read_text(encoding="utf-8")
+    moteur_public = (RACINE / "ressources/moteur-jeu.js").read_text(encoding="utf-8")
+    assert not re.search(r'<link\b[^>]*rel=["\']manifest["\']', index_public, re.I), (
+        "Le manifeste ne doit pas être chargé directement en file:// : navigation-locale.js l’active seulement en HTTP(S)."
+    )
+    assert "activerManifesteApplication" in navigation_locale and "^https?:$" in navigation_locale, (
+        "La protection du manifeste pour l’ouverture locale est absente."
+    )
+    assert "new URL('../', scriptNavigation.src)" in navigation_locale, (
+        "La racine de l’application doit rester compatible avec un sous-chemin GitHub Pages."
+    )
+    assert "new URL('service-worker.js', racineApplication)" in navigation_locale, (
+        "Le service worker doit rester compatible avec un sous-chemin GitHub Pages."
+    )
+    assert "['http:', 'https:', 'file:'].includes(destination.protocol)" in navigation_locale, (
+        "Les transitions des guides ne doivent pas intercepter mailto:, tel: ou un autre protocole opaque."
+    )
+    assert "destination.pathname.startsWith(racineApplication.pathname)" in navigation_locale, (
+        "En file://, une transition animée ne doit pas sortir du dossier de l'application."
+    )
+    assert "function mettreAJourAdresseNavigation" in moteur_public and "window.location.protocol === 'file:'" in moteur_public, (
+        "La navigation par fragment dédiée aux fichiers locaux est absente."
+    )
+    assert re.search(r"ecransAutorises\s*=\s*\[[^\]]*['\"]supports['\"]", moteur_public), (
+        "La route directe #supports doit rester autorisée, notamment depuis le menu des guides."
+    )
+    assert "decodeURIComponent(segment)" in moteur_public and "catch (erreur)" in moteur_public, (
+        "Un fragment d'adresse mal encodé ne doit pas interrompre le démarrage de PJJoue."
+    )
+
     page = navigateur.new_page(viewport={"width": 1440, "height": 1000})
     erreurs: list[str] = []
     page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
     page.on("console", lambda message: erreurs.append(f"console:{message.type}:{message.text}") if message.type == "error" else None)
     page.set_content(page_html, wait_until="domcontentloaded")
-    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 160 && typeof ouvrirParcours === 'function'")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960 && typeof ouvrirParcours === 'function'")
     page.evaluate("() => ouvrirParcours('commun', {remplacerHistorique:true})")
     page.wait_for_timeout(150)
     cartes = page.locator('.chemin-etape-carte[data-etape]')
     identifiants = cartes.evaluate_all("elements => elements.map(element => element.dataset.etape)")
-    assert cartes.count() == 11, "Le parcours n’affiche pas 11 étapes d’apprentissage."
+    assert cartes.count() == 11, "Le parcours 1 n’affiche pas 11 étapes d’apprentissage."
     assert identifiants == [str(i) for i in range(1, 12)], identifiants
     texte_final = page.locator('.chemin-evaluation-carte').inner_text().upper()
     assert "ÉTAPE 12" in texte_final, texte_final
     assert not page.locator('.chemin-evaluation-carte').evaluate("element => element.classList.contains('deverrouillee')"), "L’évaluation est déverrouillée trop tôt."
+
+    # Le sélecteur doit exposer six parcours séparés, chacun avec 11 étapes.
+    selecteurs = page.locator('#selecteurParcours .selecteur-parcours-bouton')
+    assert selecteurs.count() == 6, "Le sélecteur ne propose pas les six parcours."
+    themes_attendus = ["commun", "procedure_ordinaire", "information_judiciaire", "jugement_educatif_ordinaire", "matiere_criminelle_peines", "application_execution_peines"]
+    for index, theme_attendu in enumerate(themes_attendus):
+        page.evaluate("() => ouvrirChoixParcours({remplacerHistorique:true})")
+        page.wait_for_timeout(40)
+        selecteurs.nth(index).click()
+        page.wait_for_timeout(70)
+        cartes_theme = page.locator('.chemin-etape-carte[data-etape]')
+        assert cartes_theme.count() == 11, f"Le parcours {index + 1} n’affiche pas 11 étapes d’apprentissage."
+        assert page.evaluate("() => etat.theme") == theme_attendu
+    page.evaluate("() => ouvrirParcours('commun', {remplacerHistorique:true})")
+    page.wait_for_timeout(80)
+
+    # Navigation libre : avec une sauvegarde vierge, chacun des six parcours
+    # doit pouvoir démarrer directement à son étape 1, sans prérequis de parcours.
+    premieres_questions = {
+        "commun": 1,
+        "procedure_ordinaire": 1001,
+        "information_judiciaire": 1201,
+        "jugement_educatif_ordinaire": 1401,
+        "matiere_criminelle_peines": 1601,
+        "application_execution_peines": 1801,
+    }
+    for theme, question_attendue in premieres_questions.items():
+        page.evaluate("theme => ouvrirParcours(theme, {remplacerHistorique:true})", theme)
+        page.wait_for_timeout(70)
+        premiere_carte = page.locator('.chemin-etape-carte[data-etape="1"]')
+        assert premiere_carte.count() == 1, f"L’étape 1 du parcours {theme} n’est pas affichée."
+        assert premiere_carte.is_visible() and premiere_carte.is_enabled(), (
+            f"L’étape 1 du parcours {theme} n’est pas directement accessible avec une sauvegarde vierge."
+        )
+        assert premiere_carte.get_attribute("data-theme") == theme
+        premiere_carte.click()
+        page.wait_for_timeout(70)
+        lancement = page.evaluate("() => ({theme: etat.theme, etape: etat.etape, question: etat.questionCourante?.id})")
+        assert lancement == {"theme": theme, "etape": 1, "question": question_attendue}, lancement
+    page.evaluate("() => ouvrirParcours('commun', {remplacerHistorique:true})")
+    page.wait_for_timeout(80)
 
     page.evaluate("() => { etapeNecessiteAutreChapitre=()=>false; etat.mode='parcours'; etat.theme='commun'; etat.etape=10; etat.chapitre=1; configurerBoutonContinuerBilan(); }")
     assert "étape 11" in page.locator('#boutonContinuer').inner_text().lower()
@@ -175,7 +326,7 @@ def verifier_jeu(navigateur, page_html: str) -> int:
     })""")
     assert contexte["numero"] == "Étape 2", contexte
     assert contexte["titre"], contexte
-    assert "Validées sans joker" in contexte["suivi"], contexte
+    assert "Maîtrisées sans aide" in contexte["suivi"], contexte
 
     identifiant_avant_resize = contexte["id"]
     page.evaluate("""() => {
@@ -231,15 +382,88 @@ def verifier_jeu(navigateur, page_html: str) -> int:
     erreurs_mobile: list[str] = []
     page_mobile.on("pageerror", lambda erreur: erreurs_mobile.append(str(erreur)))
     page_mobile.set_content(page_html, wait_until="domcontentloaded")
-    page_mobile.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 160")
+    page_mobile.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
     page_mobile.evaluate("() => ouvrirParcours('commun', {remplacerHistorique:true})")
     page_mobile.wait_for_timeout(100)
     dimensions = page_mobile.evaluate("() => ({document: document.documentElement.scrollWidth, fenetre: window.innerWidth})")
     assert dimensions["document"] <= dimensions["fenetre"] + 2, dimensions
-    page_mobile.evaluate("() => lancerEvaluationFinale()")
+    page_mobile.evaluate("() => lancerEvaluationFinale('commun')")
     page_mobile.wait_for_timeout(80)
-    evaluation = page_mobile.evaluate("() => ({mode: etat.mode, nombre: etat.questionsSession.length, etape: etat.etape, jokers: etat.jokersSessionActifs, saisie: document.querySelector('#zoneReponses input')?.type || null})")
-    assert evaluation == {"mode": "evaluation-finale", "nombre": 50, "etape": 12, "jokers": False, "saisie": "text"}, evaluation
+    evaluation = page_mobile.evaluate("""() => ({
+        mode: etat.mode,
+        nombre: etat.questionsSession.length,
+        etape: etat.etape,
+        jokers: etat.jokersSessionActifs,
+        modes: [...new Set(etat.questionsSession.map(question => question.modePresentation || question.modePrefere))],
+        rendu: Boolean(document.querySelector('#zoneReponses')?.children.length)
+    })""")
+    assert evaluation["mode"] == "evaluation-finale" and evaluation["nombre"] == 50, evaluation
+    assert evaluation["etape"] == 12 and evaluation["jokers"] is False, evaluation
+    assert len(evaluation["modes"]) >= 3 and evaluation["rendu"], evaluation
+
+    # Les 960 questions des six parcours sont rendues réellement dans l’interface.
+    # Ce contrôle couvre les 66 étapes et les six évaluations,
+    # afin de détecter un champ résiduel ou une activité impossible à afficher.
+    parcours_rendus = page_mobile.evaluate(r"""() => {
+        const themes = [
+            'commun',
+            'procedure_ordinaire',
+            'information_judiciaire',
+            'jugement_educatif_ordinaire',
+            'matiere_criminelle_peines',
+            'application_execution_peines'
+        ];
+        const resultats = [];
+        const verifierSession = (anomalies, modesTous, modesEvaluation, evaluation) => {
+            let nombre = 0;
+            etat.chronometreSessionActif = false;
+            for (let index = 0; index < etat.questionsSession.length; index++) {
+                etat.indexQuestion = index;
+                afficherQuestion({ suivreAnalytics: false });
+                clearInterval(etat.identifiantMinuteur);
+                etat.identifiantMinuteur = null;
+                const question = etat.questionCourante;
+                const mode = question.modePresentation || question.modePrefere;
+                const zone = document.querySelector('#zoneReponses');
+                modesTous[mode] = (modesTous[mode] || 0) + 1;
+                if (evaluation) modesEvaluation[mode] = (modesEvaluation[mode] || 0) + 1;
+                const compter = selecteur => zone?.querySelectorAll(selecteur).length || 0;
+                let renduValide = Boolean(
+                    document.querySelector('#enonceQuestion')?.textContent.trim()
+                    && zone?.textContent.trim()
+                    && zone.children.length
+                );
+                if (mode === 'choix-unique') renduValide = renduValide && compter('button.reponse') === 4;
+                if (mode === 'reponse-ecrite') renduValide = renduValide && compter('#reponseEcrite') === 1;
+                if (mode === 'selection-multiple') renduValide = renduValide && compter('button.multiple-choix') >= 3;
+                if (mode === 'association') renduValide = renduValide && compter('.association-panneau button') >= 4;
+                if (mode === 'classer') renduValide = renduValide && compter('.classement-element') >= 2;
+                if (mode === 'remettre-ordre') renduValide = renduValide && compter('.ordre-liste li') >= 2;
+                if (mode === 'eliminer') renduValide = renduValide && compter('button.elimination-choix') >= 2;
+                if (!renduValide) anomalies.push({ id: question.id, mode });
+                nombre++;
+            }
+            return nombre;
+        };
+        for (const theme of themes) {
+            const anomalies = [];
+            const modesTous = {};
+            const modesEvaluation = {};
+            let nombre = 0;
+            for (let etape = 1; etape <= 11; etape++) {
+                lancerEtape(theme, etape);
+                nombre += verifierSession(anomalies, modesTous, modesEvaluation, false);
+            }
+            lancerEvaluationFinale(theme);
+            nombre += verifierSession(anomalies, modesTous, modesEvaluation, true);
+            resultats.push({ theme, nombre, modesTous, modesEvaluation, anomalies });
+        }
+        return resultats;
+    }""")
+    for resultat in parcours_rendus:
+        assert resultat["nombre"] == 160, resultat
+        assert len(resultat["modesEvaluation"]) >= 3, resultat
+        assert not resultat["anomalies"], resultat["anomalies"][:20]
     assert not erreurs_mobile, erreurs_mobile
     page_mobile.close()
     assert not erreurs, erreurs
@@ -253,10 +477,13 @@ def verifier_administration(navigateur, page_html: str) -> None:
     page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
     page.set_content(page_html, wait_until="domcontentloaded")
     page.wait_for_timeout(100)
-    assert page.locator('.carte-question').count() == 160, "L’administration n’affiche pas 160 questions."
+    assert page.locator('.carte-question').count() == 960, "L’administration n’affiche pas 960 questions."
     page.locator('#filtreEtape').select_option('12')
     page.wait_for_timeout(50)
-    assert page.locator('.carte-question').count() == 50, "Le filtre de l’étape 12 n’affiche pas 50 questions."
+    assert page.locator('.carte-question').count() == 300, "Le filtre de l’étape 12 n’affiche pas les 300 questions des six évaluations."
+    page.locator('#filtreParcours').select_option('application_execution_peines')
+    page.wait_for_timeout(50)
+    assert page.locator('.carte-question').count() == 50, "Le filtre Parcours 6 + étape 12 n’affiche pas ses 50 questions."
     page.locator('#boutonControler').click()
     assert "OK" in page.locator('#etatAdministration').inner_text(), "Le contrôle structurel de l’administration échoue."
     assert not erreurs, erreurs
@@ -267,10 +494,12 @@ def principal() -> int:
     try:
         with sync_playwright() as automate:
             navigateur = lancer_chromium(automate)
+            verifier_ouverture_locale(navigateur)
+            verifier_liens_guides_locaux(navigateur)
             controles = verifier_jeu(navigateur, construire_page_jeu())
             verifier_administration(navigateur, construire_page_administration())
             navigateur.close()
-        print(f"OK — interface V1 : 11 étapes, évaluation écrite et {controles} contrôles de réponses réussis")
+        print(f"OK — interface : 6 parcours, 66 étapes, 6 évaluations et {controles} contrôles de réponses réussis")
         return 0
     except (AssertionError, ErreurPlaywright, OSError) as erreur:
         print(f"ÉCHEC — {erreur}", file=sys.stderr)

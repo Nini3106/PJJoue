@@ -16,7 +16,7 @@ Les explications sont volontairement simples. Les mots techniques imposés par J
 
 | Action dans le code | Explication simple |
 |---|---|
-| `creerIconeTheme()` | Crée icone theme. |
+| `creerIconeTheme()` | Crée l’icône du parcours. |
 | `envoyerEvenementPJJ()` | Envoie evenement pjj. |
 | `obtenirLibellePageAnalytics()` | Cherche ou calcule libelle page analytics. |
 | `obtenirLibelleTailleTexteAnalytics()` | Cherche ou calcule libelle taille texte analytics. |
@@ -41,8 +41,8 @@ Les explications sont volontairement simples. Les mots techniques imposés par J
 | `creerEtatNavigation()` | Crée etat navigation. |
 | `actualiserBoutonRetour()` | Met à jour bouton retour. |
 | `mesurerHauteurEntete()` | Action interne : mesurer hauteur entete. |
-| `fermerMenuMobile()` | Ferme menu mobile. |
-| `basculerMenuMobile()` | Change l’état de menu mobile. |
+| `fermerMenuPrincipal()` | Ferme le menu principal. |
+| `basculerMenuPrincipal()` | Ouvre ou ferme le menu principal. |
 | `actualiserNavigation()` | Met à jour navigation. |
 | `ajusterQuestionAEcran()` | Action interne : ajuster question aecran. |
 | `actualiserTitrePage()` | Met à jour titre page. |
@@ -85,11 +85,9 @@ Les explications sont volontairement simples. Les mots techniques imposés par J
 | `filtrerResultats()` | Action interne : filtrer resultats. |
 | `nettoyerProgression()` | Nettoie progression. |
 | `nettoyerErreurs()` | Nettoie erreurs. |
-| `migrerSauvegardeV1VersV2()` | Action interne : migrer sauvegarde v1 vers v2. |
-| `migrerSauvegardeV2VersV3()` | Action interne : migrer sauvegarde v2 vers v3. |
 | `nettoyerSauvegarde()` | Nettoie sauvegarde. |
 | `chargerSauvegarde()` | Charge sauvegarde. |
-| `effacerSauvegardeV1DuNavigateur()` | Efface sauvegarde v1 du navigateur. |
+| `effacerSauvegardeDuNavigateur()` | Efface la sauvegarde locale du navigateur. |
 | `enregistrerSauvegarde()` | Enregistre sauvegarde. |
 | `serialiserTableauAssociatif()` | Prépare pour l’enregistrement tableau associatif. |
 | `serialiserEnsemble()` | Prépare pour l’enregistrement ensemble. |
@@ -141,7 +139,7 @@ Les explications sont volontairement simples. Les mots techniques imposés par J
 | `obtenirBaliseIconeEtape()` | Cherche ou calcule balise icone etape. |
 | `afficherEtapes()` | Affiche etapes. |
 
-## `code/04 - Carnet de voyage/actions-de-la-page.js`
+## `code/04 - Carnet de parcours/actions-de-la-page.js`
 
 | Action dans le code | Explication simple |
 |---|---|
@@ -149,8 +147,6 @@ Les explications sont volontairement simples. Les mots techniques imposés par J
 | `calculerAvancementCarnetParcours()` | Calcule avancement carnet parcours. |
 | `actualiserCarnetParcours()` | Met à jour carnet parcours. |
 | `actualiserResumeCarteParcours()` | Met à jour resume carte parcours. |
-| `afficherSouvenirsParcours()` | Affiche souvenirs parcours. |
-| `afficherDefisParcours()` | Affiche defis parcours. |
 
 ## `code/05 - Entraînement libre/actions-de-la-page.js`
 

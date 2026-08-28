@@ -1,95 +1,88 @@
-<section class="ecran" id="parcours">
-    <div class="programme-presentation chemin-programme-presentation">
-     <div class="programme-presentation-principal">
-      <h1 id="titreParcours">
-       Parcours PJJ
-      </h1>
-      <p id="sousTitreParcours">
-       Explore, comprends et progresse à ton rythme à travers 11 étapes clés.
-      </p>
-     </div>
-     <div class="programme-objectif programme-objectif-simple">
-      <div class="programme-objectif-interieur">
-       <span aria-hidden="true" class="objectif-icone">
-        <img src="ressources/icones-interface/icone-cible.svg" alt="" aria-hidden="true" class="objectif-cible-reference">
-       </span>
-       <span class="programme-objectif-texte">
-        Complète les 11 étapes sans joker pour accéder à l’évaluation finale.
-       </span>
-      </div>
-     </div>
-    </div>
-    <div class="chemin-chemin">
-     <div class="carte-parcours-entete chemin-carte-parcours-entete">
-      <span aria-hidden="true" class="carte-parcours-icone">
-       <img src="ressources/icones-interface/icone-carte-du-parcours.svg" alt="" aria-hidden="true">
-      </span>
-      <div class="carte-parcours-titres">
-       <span class="carte-parcours-surtitre">Carte du parcours</span>
-       <h2>Les 11 destinations</h2>
-       <p id="resumeCarteParcours"></p>
-      </div>
-      <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
-       <span aria-hidden="true" class="parcours-chronometre-icone">
-        <img src="ressources/icones-interface/icone-defi-chrono.svg" alt="" aria-hidden="true">
-       </span>
-       <div class="parcours-chronometre-texte">
-        <strong id="titreChronometreParcours">Défi chrono</strong>
-        <span>Ajoute du rythme à la prochaine étape si tu en as envie.</span>
-       </div>
-       <div class="parcours-chronometre-commandes">
-        <div class="parcours-bascule-groupe" id="choixChronometreParcours">
-         <button id="boutonParcoursLibre" class="option-bouton actif" data-valeur="non" type="button">Libre</button>
-         <button id="boutonParcoursChronometre" class="option-bouton" data-valeur="oui" type="button">Chronométré</button>
+<section class="ecran parcours-ecran" id="parcours">
+  <section class="parcours-selection-vue" id="vueChoixParcours" aria-labelledby="titreChoixParcours">
+    <header class="presentation-page parcours-selection-entete">
+      <span class="surtitre">Ton apprentissage</span>
+      <h1 id="titreChoixParcours">Choisis ton itinéraire.</h1>
+      <p>Tu peux suivre l’ordre proposé pour avancer pas à pas, ou commencer directement par le parcours qui correspond le mieux à tes connaissances et à tes besoins. Chaque parcours est autonome : tu ne rates rien d’indispensable en choisissant un autre point de départ.</p>
+    </header>
+    <div class="selecteur-parcours selecteur-parcours-grille" id="selecteurParcours" aria-label="Choisir un parcours"></div>
+  </section>
+
+  <section class="parcours-detail-vue masque" id="vueDetailParcours" aria-labelledby="titreParcours">
+    <button class="discret parcours-retour-liste" id="boutonChangerParcours" type="button">← Choisir un autre parcours</button>
+    <header class="parcours-detail-entete">
+      <div class="parcours-detail-identite">
+        <span class="parcours-detail-icone" id="iconeParcoursSelectionne" aria-hidden="true"></span>
+        <div class="parcours-detail-titres">
+          <span class="surtitre" id="surtitreParcours">Parcours 1 sur 6</span>
+          <h1 id="titreParcours">Découvrir la PJJ</h1>
+          <p id="sousTitreParcours">Comprendre les missions, les publics, les professionnels et l’organisation de la PJJ.</p>
+          <div class="parcours-detail-repere">
+            <span aria-hidden="true" class="parcours-detail-repere-icone"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 6-6M16 6h2v2"/></svg></span>
+            <span id="texteObjectifParcours">Complète les 11 étapes pour accéder à l’évaluation finale. Les réussites sans aide sont distinguées dans ta progression.</span>
+          </div>
         </div>
-        <div class="parcours-secondes masque" id="secondesChronometreParcours">
-         <span>Secondes</span>
-         <div class="entrainement-secondes-groupe">
-          <button id="boutonParcours5Secondes" class="choix-bouton" data-secondes="5" type="button">5 s</button>
-          <button id="boutonParcours10Secondes" class="choix-bouton" data-secondes="10" type="button">10 s</button>
-          <button id="boutonParcours15Secondes" class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
-          <button id="boutonParcours20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button>
-          <button id="boutonParcours25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button>
-          <button id="boutonParcours30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button>
-         </div>
+      </div>
+
+      <aside class="parcours-detail-actions">
+        <div class="parcours-detail-progression">
+          <div class="parcours-detail-progression-ligne">
+            <span id="libelleProgressionParcours">0 / 11 étapes maîtrisées</span>
+            <strong id="pourcentageProgressionParcours">0%</strong>
+          </div>
+          <div class="parcours-detail-barre" role="progressbar" aria-label="Progression du parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressionParcoursSelectionne"><i></i></div>
         </div>
-       </div>
-      </section>
-     </div>
-     <div class="chemin-ligne" id="ligneParcours1">
-     </div>
-     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
-     </div>
-     <div class="chemin-ligne" id="ligneParcours2">
-     </div>
-     <div aria-hidden="true" class="chemin-virage chemin-virage-gauche">
-     </div>
-     <div class="chemin-ligne chemin-ligne-inverse" id="ligneParcours3">
-     </div>
-     <div aria-hidden="true" class="chemin-virage chemin-virage-droite">
-     </div>
+        <button class="principal parcours-action-principale" id="boutonActionParcours" type="button">Commencer l’étape 1 →</button>
+      </aside>
+    </header>
+
+    <section class="parcours-carte-zone" aria-labelledby="titreDestinationsParcours">
+      <div class="parcours-carte-entete-v1">
+        <div class="carte-parcours-titres">
+          <h2 id="titreDestinationsParcours">Les 11 étapes</h2>
+          <p id="resumeCarteParcours"></p>
+        </div>
+        <details class="parcours-options-session">
+          <summary>
+            <span class="parcours-options-session-titre">Chronomètre</span>
+            <span class="parcours-options-session-statut">Optionnel</span>
+          </summary>
+          <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
+            <div class="parcours-chronometre-texte">
+              <strong id="titreChronometreParcours">Rythme de la session</strong>
+              <span>Tu peux limiter le temps de réponse pour cette étape.</span>
+            </div>
+            <div class="parcours-chronometre-commandes">
+              <div class="parcours-bascule-groupe" id="choixChronometreParcours">
+                <button id="boutonParcoursLibre" class="option-bouton actif" data-valeur="non" type="button">Sans chrono</button>
+                <button id="boutonParcoursChronometre" class="option-bouton" data-valeur="oui" type="button">Avec chrono</button>
+              </div>
+              <div class="parcours-secondes masque" id="secondesChronometreParcours">
+                <span>Temps par question</span>
+                <div class="entrainement-secondes-groupe">
+                  <button id="boutonParcours15Secondes" class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
+                  <button id="boutonParcours20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button>
+                  <button id="boutonParcours25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button>
+                  <button id="boutonParcours30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </details>
+      </div>
+
+      <div class="chemin-ligne" id="ligneParcours1"></div>
+      <div class="chemin-ligne" id="ligneParcours2"></div>
+      <div class="chemin-ligne" id="ligneParcours3"></div>
       <div class="chemin-finale-ligne">
-      <div class="chemin-finale-espace">
+        <div id="cartesEtapesFinales"></div>
+        <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled id="carteEvaluationFinale" type="button">
+          <span aria-hidden="true" class="icone-evaluation"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8v5c0 3-1.8 5-4 5S8 12 8 9z"/><path d="M8 6H4v2c0 2 1.5 3 4 3M16 6h4v2c0 2-1.5 3-4 3M12 14v4M8 21h8M9 18h6"/></svg></span>
+          <span class="evaluation-etape-numero">ÉTAPE 12</span>
+          <span class="evaluation-titre">Évaluation finale</span>
+          <span class="evaluation-statut">Disponible après les 11 étapes</span>
+        </button>
       </div>
-      <div id="cartesEtapesFinales">
-      </div>
-      <div aria-hidden="true" class="chemin-finale-lien">
-      </div>
-      <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled="" id="carteEvaluationFinale" type="button">
-       <span aria-hidden="true" class="icone-evaluation">
-        <img src="ressources/icones-interface/icone-trophee-evaluation-finale.svg" alt="" aria-hidden="true">
-       </span>
-       <span class="evaluation-etape-numero">
-        ÉTAPE 12
-       </span>
-       <span class="evaluation-titre">
-        Évaluation
-       </span>
-       <span class="evaluation-statut">
-        Parcours sans jokers requis
-       </span>
-      </button>
-     </div>
-    </div>
-   </section>
-   
+    </section>
+  </section>
+</section>

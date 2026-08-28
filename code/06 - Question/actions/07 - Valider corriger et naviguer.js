@@ -81,9 +81,9 @@ function traiterReussiteAutonome(question, etaitPassee) {
     }
     if (etat.mode === 'revision' && sauvegarde.erreurs[question.id]) {
         const suiviErreur = sauvegarde.erreurs[question.id];
-        suiviErreur.reussites = (suiviErreur.reussites || 0) + 1;
-        if (suiviErreur.reussites >= 2)
-            suiviErreur.maitrisee = true;
+        // En mode Révision, une réussite autonome suffit : la question n’a plus besoin de rester active.
+        suiviErreur.reussites = 1;
+        suiviErreur.maitrisee = true;
     }
 }
 function traiterReussiteAidee(question, etaitPassee) {
@@ -221,6 +221,14 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
         reussiteAidee,
         reussiteAutonome: estCorrecte && !reussiteAidee
     };
+    if (bouton?.classList.contains('reponse')) {
+        bouton.classList.add(estCorrecte ? 'bonne-reponse' : 'mauvaise-reponse');
+        if (!estCorrecte) {
+            document.querySelectorAll('#zoneReponses .reponse[data-est-correcte="1"]').forEach(
+                bonneReponse => bonneReponse.classList.add('bonne-reponse')
+            );
+        }
+    }
     envoyerEvenementPJJ('reponse_validee', {
         ...obtenirContexteQuestionAnalytics(question),
         pjjoue_resultat_reponse: resultat.reussiteAutonome

@@ -1,9 +1,9 @@
 /**
- * Mettre à jour l’accueil et le bouton Commencer.
+ * PJJoue V1 — 02 - Accueil.
  *
- * Lis ce fichier comme une histoire : une fonction explique une petite action.
- * Les mots imposés par le navigateur (document, window, localStorage, history...)
- * gardent leur nom technique, car le navigateur ne comprendrait pas leur traduction.
+ * Ce fichier est assemblé dans le moteur principal par le constructeur du site.
+ * Les fonctions restent volontairement lisibles et nommées en français.
+ * Les API natives du navigateur conservent leur nom technique.
  */
 function accorderLibelle(nombre, singulier, pluriel) {
     return Number(nombre) === 1 ? singulier : pluriel;
@@ -12,20 +12,15 @@ function actualiserLibellesProgression() {
     const experience = selectionner('#experienceProgression');
     if (experience) {
         const nombreDecouvertes = Number((experience.textContent || '').match(/\d+/)?.[0] || 0);
-        const libelleDecouvertes = accorderLibelle(
-            nombreDecouvertes,
-            'découverte',
-            'découvertes'
-        );
-        experience.innerHTML = `
-            <span class="experience-valeur">${nombreDecouvertes}</span>
-            <span class="experience-libelle">${libelleDecouvertes}</span>
-        `;
+        experience.textContent = String(nombreDecouvertes);
+        const libelleExperience = experience.parentElement?.querySelector(':scope > span');
+        if (libelleExperience)
+            libelleExperience.textContent = accorderLibelle(nombreDecouvertes, 'Étape abordée', 'Étapes abordées');
     }
     const configurations = [
-        ['questionsJoueesProgression', 'activité réalisée', 'activités réalisées'],
-        ['erreursProgression', 'erreur active', 'erreurs actives'],
-        ['etapesMaitriseesProgression', 'étape maîtrisée', 'étapes maîtrisées']
+        ['questionsJoueesProgression', 'Question travaillée', 'Questions travaillées'],
+        ['erreursProgression', 'Question à revoir', 'Questions à revoir'],
+        ['etapesMaitriseesProgression', 'Étape maîtrisée', 'Étapes maîtrisées']
     ];
     configurations.forEach(([identifiant, singulier, pluriel]) => {
         const valeur = selectionner('#' + identifiant);
@@ -35,15 +30,14 @@ function actualiserLibellesProgression() {
     });
 }
 function actualiserAccueil() {
-    if (PROGRAMMES.commun)
-        synchroniserEtapesReussiesEnAutonomie(PROGRAMMES.commun);
+    Object.values(PROGRAMMES).forEach(programme => synchroniserEtapesReussiesEnAutonomie(programme));
     const experience = selectionner('#experienceProgression');
     const jouees = selectionner('#questionsJoueesProgression');
     const erreurs = selectionner('#erreursProgression');
     const maitrisees = selectionner('#etapesMaitriseesProgression');
     const decouvertes = compterEtapesDecouvertes();
     if (experience)
-        experience.innerHTML = `<span class="experience-valeur">${decouvertes}</span><span class="experience-libelle">${accorderLibelle(decouvertes, 'découverte', 'découvertes')}</span>`;
+        experience.textContent = String(decouvertes);
     if (jouees)
         jouees.textContent = String(sauvegarde.nombreQuestionsJouees || 0);
     if (erreurs)
@@ -52,6 +46,9 @@ function actualiserAccueil() {
         maitrisees.textContent = String(compterEtapesMaitrisees());
     actualiserLibellesProgression();
     actualiserBoutonCommencer();
+    const boutonEntrainementLibreAccueil = selectionner('#boutonEntrainementLibreAccueil');
+    if (boutonEntrainementLibreAccueil)
+        boutonEntrainementLibreAccueil.hidden = sauvegarde.aDejaJoue !== true;
     chargerParametres();
 }
 function calculerProgressionTheme(identifiantTheme) {
@@ -68,7 +65,11 @@ function calculerProgressionTheme(identifiantTheme) {
     return Math.round(nombreQuestionsTraitees / questionsTheme.length * 100);
 }
 function obtenirTitreSymboliqueParcours(nombreEtapesMaitrisees) {
-    if (nombreEtapesMaitrisees >= 10)
+    if (nombreEtapesMaitrisees >= 22)
+        return 'Éclaireur complet de la PJJ';
+    if (nombreEtapesMaitrisees >= 17)
+        return 'Guide du parcours judiciaire';
+    if (nombreEtapesMaitrisees >= 11)
         return 'Éclaireur de la PJJ';
     if (nombreEtapesMaitrisees >= 7)
         return 'Guide en devenir';
@@ -86,26 +87,42 @@ function obtenirEtapeAReprendre(programme) {
         return nombreQuestionsTraitees < nombreQuestions || bilanEtape.termineeSansJoker !== true;
     }) || null;
 }
+function obtenirProchaineActionParcoursComplet() {
+    for (const theme of THEMES) {
+        const programme = PROGRAMMES[theme.id];
+        const etapeAReprendre = obtenirEtapeAReprendre(programme);
+        if (etapeAReprendre)
+            return { type: 'etape', theme: theme.id, etape: etapeAReprendre };
+        if (!estEvaluationFinaleReussie(theme.id))
+            return { type: 'evaluation', theme: theme.id };
+    }
+    return { type: 'carnet' };
+}
 function actualiserBoutonCommencer() {
     const bouton = selectionner('#boutonCommencer');
-    const programme = PROGRAMMES.commun;
-    if (!bouton || !programme)
+    if (!bouton)
         return;
-    initialiserProgression(programme.id);
-    const nombreQuestionsTraitees = programme.etapes.reduce(
-        (total, etapeProgramme) => total + compterQuestionsTraiteesEtape(programme.id, etapeProgramme.id),
-        0
+    const action = obtenirProchaineActionParcoursComplet();
+    const aucuneQuestionTraitee = THEMES.every(theme =>
+        obtenirEtapesProgramme(theme.id).every(etape => compterQuestionsTraiteesEtape(theme.id, etape.id) === 0)
     );
-    if (nombreQuestionsTraitees === 0) {
-        bouton.innerHTML = 'Commencer <span aria-hidden="true">→</span>';
-        bouton.onclick = () => ouvrirParcours(programme.id);
+    if (aucuneQuestionTraitee) {
+        bouton.innerHTML = 'Choisir mon parcours <span aria-hidden="true">→</span>';
+        bouton.onclick = () => ouvrirChoixParcours();
         return;
     }
-    const etapeAReprendre = obtenirEtapeAReprendre(programme);
-    bouton.innerHTML = etapeAReprendre
-        ? `Reprendre l’étape ${etapeAReprendre.id} <span aria-hidden="true">→</span>`
-        : 'Voir mon carnet <span aria-hidden="true">→</span>';
-    bouton.onclick = etapeAReprendre
-        ? () => ouvrirParcours(programme.id)
-        : () => afficherEcran('carnet');
+    if (action.type === 'etape') {
+        const numeroParcours = obtenirOrdreTheme(action.theme) + 1;
+        bouton.innerHTML = `Reprendre le parcours ${numeroParcours} · étape ${action.etape.id} <span aria-hidden="true">→</span>`;
+        bouton.onclick = () => ouvrirParcours(action.theme);
+        return;
+    }
+    if (action.type === 'evaluation') {
+        const numeroParcours = obtenirOrdreTheme(action.theme) + 1;
+        bouton.innerHTML = `Passer l’évaluation du parcours ${numeroParcours} <span aria-hidden="true">→</span>`;
+        bouton.onclick = () => ouvrirParcours(action.theme);
+        return;
+    }
+    bouton.innerHTML = 'Voir mon carnet complet <span aria-hidden="true">→</span>';
+    bouton.onclick = () => afficherEcran('carnet');
 }

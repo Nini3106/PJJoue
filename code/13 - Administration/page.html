@@ -9,6 +9,7 @@
   <link rel="icon" href="favicon-96x96.png" type="image/png" sizes="96x96"/>
   <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180"/>
   <title>Administration de contenu — PJJoue</title>
+  <link rel="stylesheet" href="ressources/styles/pjjoue-static.css">
   <link rel="stylesheet" href="ressources/administration.css">
 </head>
 <body>
@@ -16,6 +17,9 @@
   <h1>Administration de contenu — PJJoue</h1>
   <p>Éditeur local de la banque. Il n’envoie aucune donnée et n’écrit pas directement dans le paquet livré : il exporte un JSON à valider puis intégrer dans une nouvelle version.</p>
   <div class="barre-outils">
+    <label>Parcours
+      <select id="filtreParcours"><option value="tous">Tous</option><option value="commun">Découvrir la PJJ</option><option value="procedure_ordinaire">Procédure ordinaire</option><option value="information_judiciaire">Instruction et sûreté</option><option value="jugement_educatif_ordinaire">JE, TPE et mesures éducatives</option><option value="matiere_criminelle_peines">Matière criminelle et peines</option><option value="application_execution_peines">Application des peines</option></select>
+    </label>
     <label>Étape
       <select id="filtreEtape">
         <option value="0">Toutes</option>

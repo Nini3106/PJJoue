@@ -12,6 +12,7 @@
     const CLE_CONSENTEMENT = 'pjjoue_consentement_analytics_v1';
     const CHOIX_ACCEPTE = 'accepte';
     const CHOIX_REFUSE = 'refuse';
+    const CONTEXTE_WEB = /^https?:$/.test(window.location.protocol);
     const scriptCourant = document.currentScript;
     const urlConfidentialite = scriptCourant?.src
         ? new URL('../confidentialite.html', scriptCourant.src).href
@@ -67,7 +68,11 @@
     let boutonPreferences = null;
 
     function chargerGoogleTagManager() {
-        if (gtmCharge || document.getElementById('pjjoue-google-tag-manager'))
+        // Une page ouverte directement depuis le disque possède une origine
+        // file:// opaque. Google Tag Manager n'a aucune visite publique à y
+        // mesurer et certains conteneurs tiers tentent alors de charger une URL
+        // locale depuis un contexte HTTPS, ce que Chrome signale comme dangereux.
+        if (!CONTEXTE_WEB || gtmCharge || document.getElementById('pjjoue-google-tag-manager'))
             return;
         gtmCharge = true;
         window.dataLayer.push({

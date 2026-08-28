@@ -1,662 +1,106 @@
-/* ==========================================================
-   Bilan de la session
-   ==========================================================
-   Cette fiche est rangée ici pour que tu saches immédiatement où chercher.
-   Le script de construction remet chaque morceau dans son ordre d’origine.
-   Ne supprime pas les repères MORCEAU : ils protègent l’ordre du CSS.
-   ========================================================== */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0015 === */
-/* Récapitulatif encadré de la session. */
-#bilan {
-    width: min(1120px,100%);
-    margin: 0 auto;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0016 === */
-#bilan .bilan-resume-carte {
-    overflow: hidden;
-    padding: clamp(22px,3vw,38px);
-    border: 1px solid var(--bordure-carte);
-    border-left: 5px solid var(--jaune-interface);
-    border-radius: 20px;
-    background: var(--surface-carte);
-    box-shadow: var(--ombre-carte);
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0017 === */
-#bilan .bilan-resume-entete {
+/* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=42 === */
+/* Finitions du bilan : un résumé, puis des sections sœurs non imbriquées. */
+#bilan.ecran.actif {
     display: grid;
-    grid-template-columns: auto minmax(0,1fr);
-    align-items: center;
     gap: 24px;
-    padding-bottom: 26px;
-    border-bottom: 1px solid rgba(142,199,251,.28);
 }
 
-/* === FIN MORCEAU CSS === */
+#bilan .bilan-resume-carte {
+    overflow: visible;
+}
 
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0018 === */
-#bilan .resultat-icone {
-    width: 72px;
-    height: 72px;
+#bilan .carte-voyage-finale,
+#bilan .bilan-erreurs-panneau,
+#bilan .bilan-actions {
     margin: 0;
-    flex: none;
 }
 
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0019 === */
-#bilan .bilan-resume-titre {
-    min-width: 0;
+#bilan #listeErreursBilan {
+    max-height: none;
+    overflow: visible;
+    overscroll-behavior: auto;
+    padding-right: 0;
+    scrollbar-gutter: auto;
 }
 
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0020 === */
-#bilan .bilan-contexte {
-    display: inline-flex;
-    align-items: center;
-    min-height: 30px;
-    margin-bottom: 9px;
-    padding: 5px 12px;
-    border: 1px solid rgba(255,200,87,.48);
-    border-radius: 999px;
-    color: #ffe49b;
-    background: rgba(255,200,87,.08);
-    font-size: .82rem;
-    font-weight: 900;
-    letter-spacing: .035em;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0021 === */
-#bilan #titreBilan {
-    margin: 0 0 10px;
-    font-size: clamp(2rem,4vw,3.35rem);
-    line-height: 1.06;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0022 === */
-#bilan #rangBilan {
-    max-width: 900px;
-    margin: 0;
-    color: #d8e8f8;
-    font-size: 1rem;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0023 === */
-#bilan .bilan-statistiques {
-    margin: 24px 0;
-    gap: 12px;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0024 === */
-#bilan .bilan-statistiques .statistique {
-    min-height: 108px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    padding: 16px;
-    border-color: rgba(142,199,251,.32);
-    background: rgba(13,60,112,.66);
+/* Comme sur la question, le titre est focalisé pour annoncer le changement
+   d’écran, mais ce titre non interactif ne ressemble pas à un bouton. */
+#bilan #titreBilan[tabindex="-1"]:focus,
+#bilan #titreBilan[tabindex="-1"]:focus-visible {
+    outline: none;
     box-shadow: none;
 }
 
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0025 === */
-#bilan .bilan-statistiques strong {
-    color: #fff;
-    font-size: clamp(1.55rem,2.6vw,2.1rem);
-    line-height: 1;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0026 === */
-#bilan .bilan-statistiques span {
-    color: #cfe2f5;
-    font-size: .88rem;
-    font-weight: 750;
-    text-align: center;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0027 === */
-#bilan .bilan-prochaine-destination {
-    margin: 0 0 24px;
-    padding: 15px 17px;
-    border: 1px solid rgba(255,200,61,.42);
-    border-radius: 16px;
-    background: rgba(6,47,96,.48);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0028 === */
-#bilan .bilan-destination-icone {
-    width: 38px;
-    height: 38px;
-    flex: 0 0 38px;
-    border-radius: 50%;
-    color: var(--bleu-nuit-950);
-    background: var(--jaune-interface);
-    display: grid;
-    place-items: center;
-    font-size: 1.25rem;
-    font-weight: 900;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0029 === */
-#bilan .bilan-prochaine-destination div {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0030 === */
-#bilan .bilan-prochaine-destination strong {
-    color: var(--jaune-interface);
-    font-size: .78rem;
-    letter-spacing: .055em;
-    text-transform: uppercase;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0031 === */
-#bilan .bilan-prochaine-destination span:last-child {
-    color: #edf6ff;
-    line-height: 1.4;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0032 === */
-#bilan .carte-voyage-finale {
-    margin: 0 0 24px;
-    padding: 20px;
-    border: 1px solid rgba(255,200,61,.44);
-    border-radius: 20px;
-    background: rgba(6,47,96,.52);
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0033 === */
-#bilan .carte-voyage-finale.masque {
-    display: none;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0034 === */
-#bilan .carte-voyage-entete {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 17px;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0035 === */
-#bilan .carte-voyage-entete span {
-    color: #a9c9e9;
-    font-size: .76rem;
-    font-weight: 850;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0036 === */
-#bilan .carte-voyage-entete h2 {
-    margin: 3px 0 0;
-    color: #fff;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0037 === */
-#bilan .carte-voyage-entete > strong {
-    color: var(--jaune-interface);
-    font-size: .85rem;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0038 === */
-#bilan .carte-voyage-destinations {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(11,minmax(44px,1fr));
-    gap: 8px;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0039 === */
-#bilan .carte-voyage-destinations::before {
-    content: "";
-    position: absolute;
-    z-index: 0;
-    top: 50%;
-    left: 3%;
-    right: 3%;
-    border-top: 2px dashed rgba(255,200,61,.50);
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0040 === */
-#bilan .carte-voyage-etape {
-    position: relative;
-    z-index: 1;
-    min-width: 0;
-    height: 58px;
-    padding: 7px;
-    border: 2px solid var(--couleur-etape,var(--jaune-interface));
-    border-radius: 15px;
-    color: var(--couleur-etape,var(--jaune-interface));
-    background: var(--surface-carte);
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0041 === */
-#bilan .carte-voyage-etape img {
-    width: 27px;
-    height: 27px;
-    display: block;
-    object-fit: contain;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0042 === */
-#bilan .carte-voyage-etape > span {
-    position: absolute;
-    right: 4px;
-    bottom: 2px;
-    font-size: .65rem;
-    font-weight: 900;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0043 === */
-#bilan button.carte-voyage-etape:hover,
-#bilan button.carte-voyage-etape:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: 0 7px 18px rgba(0,19,52,.24);
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0044 === */
-#bilan .carte-voyage-evaluation {
-    color: var(--jaune-interface);
-    background: #4c347b;
-    cursor: default;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0045 === */
-#bilan .carte-voyage-evaluation > span {
-    position: static;
-    font-size: 1.25rem;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0046 === */
-#bilan .carte-voyage-evaluation strong {
-    position: absolute;
-    right: 4px;
-    bottom: 2px;
-    font-size: .65rem;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0047 === */
-#bilan .carte-voyage-finale > p {
-    margin: 13px 0 0;
-    color: #bfd9f0;
-    font-size: .82rem;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0048 === */
-@media (max-width:900px) {
-    #bilan .carte-voyage-destinations {
-        grid-template-columns: repeat(6,minmax(44px,1fr));
-    }
-    #bilan .carte-voyage-destinations::before {
-        content: none;
-    }
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0049 === */
-@media (max-width:560px) {
-    #bilan .carte-voyage-entete {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-    #bilan .carte-voyage-destinations {
-        grid-template-columns: repeat(4,minmax(44px,1fr));
-    }
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0050 === */
-#bilan .bilan-erreurs-panneau {
-    padding: clamp(18px,2.6vw,28px);
-    border: 1px solid rgba(142,199,251,.34);
-    border-radius: 20px;
-    background: rgba(5,38,80,.42);
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0051 === */
-#bilan .bilan-section-entete {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 18px;
-    margin-bottom: 18px;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0052 === */
-#bilan .bilan-section-surtitre {
-    display: block;
-    margin-bottom: 4px;
-    color: #a9c9e9;
-    font-size: .78rem;
-    font-weight: 850;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0053 === */
-#bilan .bilan-section-entete h2 {
-    margin: 0;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0054 === */
-#bilan .bilan-erreurs-nombre {
-    flex: none;
-    padding: 6px 11px;
-    border: 1px solid rgba(142,199,251,.34);
-    border-radius: 999px;
-    color: #e8f4ff;
-    background: rgba(24,79,136,.62);
-    font-size: .82rem;
-    font-weight: 850;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0055 === */
-#bilan #listeErreursBilan {
-    max-height: min(380px,45vh);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding-right: 7px;
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
-    scrollbar-color: #5f98c8 rgba(7,48,97,.42);
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0056 === */
-#bilan #listeErreursBilan::-webkit-scrollbar {
-    width: 9px;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0057 === */
-#bilan #listeErreursBilan::-webkit-scrollbar-track {
-    border-radius: 999px;
-    background: rgba(7,48,97,.42);
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0058 === */
-#bilan #listeErreursBilan::-webkit-scrollbar-thumb {
-    border: 2px solid rgba(7,48,97,.42);
-    border-radius: 999px;
-    background: #5f98c8;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0059 === */
-#bilan #listeErreursBilan::-webkit-scrollbar-thumb:hover {
-    background: #85b9e4;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0060 === */
-#bilan .bilan-attendue-reponse .detaillee-correction {
-    margin: 0;
-    border-color: rgba(142,199,251,.28);
-    background: rgba(4,35,74,.42);
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0061 === */
-#bilan .bilan-attendue-reponse .detaillee-correction-titre {
-    color: #ffe093;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0062 === */
-#bilan .bilan-parfait {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    min-height: 150px;
-    padding: 26px;
-    text-align: left;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0063 === */
-#bilan .bilan-parfait>span {
-    width: 52px;
-    height: 52px;
-    display: grid;
-    place-items: center;
-    flex: none;
-    border: 1px solid rgba(53,208,127,.65);
-    border-radius: 50%;
-    color: #062e28;
-    background: #5fe0a0;
-    font-size: 1.55rem;
-    font-weight: 950;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0064 === */
-#bilan .bilan-parfait h3 {
-    margin: 0 0 5px;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0065 === */
-#bilan .bilan-parfait p {
-    margin: 0;
-    color: #cfe2f5;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0066 === */
 #bilan .bilan-actions {
-    justify-content: flex-end;
-    margin: 24px 0 0;
-    padding-top: 22px;
-    border-top: 1px solid rgba(142,199,251,.28);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding-top: 0;
+    border-top: 0;
 }
 
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0067 === */
 #bilan .bilan-actions button {
-    min-height: 46px;
-    padding-inline: 19px;
+    min-height: 44px;
+    height: auto;
+    margin: 0;
+    padding: 9px 18px;
 }
 
-/* === FIN MORCEAU CSS === */
+#bilan .bilan-actions .principal {
+    order: -1;
+    color: var(--texte-sur-jaune);
+    border-color: #ffe7a7;
+    background: var(--jaune-interface);
+}
 
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0068 === */
-#bilan #boutonRevenirAuParcours {
-    color: #e7f3ff;
-    border-color: rgba(142,199,251,.48);
+#bilan .bilan-actions .principal:hover,
+#bilan .bilan-actions .principal:focus-visible {
+    color: var(--texte-sur-jaune);
+    border-color: #fff1c7;
+    background: var(--accent-survol);
+}
+
+#bilan .bilan-actions .secondaire {
+    color: var(--texte);
+    border-color: rgba(142,199,251,.52);
     background: rgba(8,56,108,.66);
 }
 
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0069 === */
-#bilan #boutonRevenirAuParcours:hover,
-#bilan #boutonRevenirAuParcours:focus-visible {
+#bilan .bilan-actions .secondaire:hover,
+#bilan .bilan-actions .secondaire:focus-visible {
     color: #fff;
     border-color: var(--accent);
     background: #174f89;
 }
 
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0074 === */
 @media (max-width:760px) {
-    #bilan .bilan-resume-carte {
-        padding: 20px 16px;
-        border-radius: 22px;
-    }
-    #bilan .bilan-resume-entete {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
-    #bilan .resultat-icone {
-        width: 62px;
-        height: 62px;
-    }
-    #bilan .bilan-statistiques {
+    #bilan .bilan-resume-carte .bilan-statistiques {
         grid-template-columns: repeat(2,minmax(0,1fr));
-    }
-    #bilan .bilan-section-entete {
-        align-items: flex-start;
-        flex-direction: column;
         gap: 10px;
     }
+
     #bilan .bilan-actions {
-        justify-content: stretch;
+        display: grid;
+        grid-template-columns: repeat(2,minmax(0,1fr));
+        gap: 10px;
     }
-    #bilan .bilan-actions button {
+
+    #bilan .bilan-actions.actions button {
         width: 100%;
+        max-width: none;
+        min-width: 0;
+        min-height: 44px;
+        margin: 0;
+    }
+
+    #bilan .bilan-actions .principal {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    #bilan .bilan-erreurs-panneau {
+        padding: 18px 16px;
     }
 }
-
 /* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=70-celebrations-bilan-et-fenetres.css | ordre=0075 === */
-@media (max-width:480px) {
-    #bilan .bilan-statistiques {
-        grid-template-columns: 1fr;
-    }
-    #bilan .bilan-parfait {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=90-adaptation-ecrans-et-etats-finaux.css | ordre=0024 === */
-/* ==========================================================
-   PJJoue V1 — bilan : questions passées sans réponse dévoilée
-   ========================================================== */
-.bilan-correction-regle {
-    display: flex;
-    flex-direction: column;
-    gap: .35rem;
-    margin: 0 0 1rem;
-    padding: .9rem 1rem;
-    border: 1px solid rgba(116,183,255,.34);
-    border-radius: 16px;
-    background: rgba(15,69,126,.42);
-    color: #eef7ff;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=90-adaptation-ecrans-et-etats-finaux.css | ordre=0025 === */
-.bilan-correction-regle strong {
-    color: #ffd05a;
-    font-size: 1rem;
-}
-
-/* === FIN MORCEAU CSS === */
-
-/* === MORCEAU CSS | sortie=90-adaptation-ecrans-et-etats-finaux.css | ordre=0026 === */
-.bilan-correction-regle span {
-    font-size: .95rem;
-    line-height: 1.5;
-}
-
-
-/* === FIN MORCEAU CSS === */
-

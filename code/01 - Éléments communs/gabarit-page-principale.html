@@ -5,12 +5,11 @@
  <script src="ressources/navigation-locale.js" defer></script>
 <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 160 questions et 7 modes de jeu." name="description"/>
+  <meta content="PJJoue propose six parcours pédagogiques interactifs pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 960 questions, 66 étapes, 6 évaluations et 7 modes de jeu." name="description"/>
   <link rel="icon" href="favicon.ico" sizes="any"/>
   <link rel="icon" href="favicon-48x48.png" type="image/png" sizes="48x48"/>
   <link rel="icon" href="favicon-96x96.png" type="image/png" sizes="96x96"/>
   <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180"/>
-  <link rel="manifest" href="manifest.webmanifest"/>
   <meta content="#0b315d" name="theme-color"/>
   <meta content="no-referrer" name="referrer"/>
   <meta content="dark" name="color-scheme"/>
@@ -20,7 +19,7 @@
   <meta content="PJJoue" property="og:site_name"/>
   <meta content="fr_FR" property="og:locale"/>
   <meta content="PJJoue — Découvrir et comprendre la PJJ" property="og:title"/>
-  <meta content="PJJoue est un parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 160 questions et 7 modes de jeu." property="og:description"/>
+  <meta content="PJJoue propose six parcours pédagogiques interactifs pour découvrir et comprendre la Protection judiciaire de la jeunesse à travers 960 questions, 66 étapes, 6 évaluations et 7 modes de jeu." property="og:description"/>
   <meta content="https://pjjoue.fr/" property="og:url"/>
   <meta content="https://pjjoue.fr/ressources/panorama-accueil-calme.png" property="og:image"/>
   <meta content="summary_large_image" name="twitter:card"/>
@@ -28,7 +27,8 @@
   <title>
    PJJoue — Découvrir et comprendre la PJJ
   </title>
-  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=20260809-1">
+  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=20260828-coherence11">
+  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=20260827-final1">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PJJoue","alternateName":"PJJoue — Découvrir et comprendre la PJJ","url":"https://pjjoue.fr/","description":"Parcours pédagogique interactif pour découvrir et comprendre la Protection judiciaire de la jeunesse.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
 </head>
  <body data-ecran-actif="accueil">
@@ -38,47 +38,25 @@
   <div aria-atomic="true" aria-live="polite" class="lecteur-ecran-seulement" id="statutAccessibilite">
   </div>
   <header class="entete">
-   <button aria-label="PJJoue — Découvrir et comprendre la PJJ, revenir à l’accueil" class="marque bouton-marque" data-ecran="accueil" type="button">
-    <b>
-     <span>PJJ</span>oue
-    </b>
-    <span>
-     Découvrir et comprendre la PJJ
-    </span>
+   <button aria-label="PJJoue — revenir à l’accueil" class="marque bouton-marque" data-ecran="accueil" type="button">
+    <b><span>PJJ</span>oue</b>
+    <span>Découvrir et comprendre la PJJ</span>
    </button>
    <button aria-controls="menuPrincipal" aria-expanded="false" aria-label="Ouvrir le menu" class="bouton-menu-mobile" id="boutonMenuMobile" type="button">
     <span class="bouton-menu-libelle">Menu</span>
-    <span class="bouton-menu-icone" aria-hidden="true">
-     <span></span>
-     <span></span>
-     <span></span>
-    </span>
+    <span class="bouton-menu-icone" aria-hidden="true"><span></span><span></span><span></span></span>
    </button>
-   <nav class="navigation" id="menuPrincipal">
-    <button id="boutonAccueil" data-ecran="accueil" type="button">
-     Accueil
-    </button>
-    <button id="boutonParcoursPJJ" data-ecran="parcours" type="button">
-     Parcours PJJ
-    </button>
-    <button id="boutonCarnetDeVoyage" data-ecran="carnet" type="button">
-     Carnet de voyage
-    </button>
-    <button id="boutonEntrainementLibre" data-ecran="entrainement" type="button">
-     Entraînement libre
-    </button>
-    <button id="boutonReviser" data-ecran="erreurs" type="button">
-     Réviser
-    </button>
-    <button id="boutonProgression" data-ecran="progression" type="button">
-     Progression
-    </button>
-    <button id="boutonParametres" data-ecran="parametres" type="button">
-     Paramètres
-    </button>
-    <button class="bouton-installer-pjjoue" hidden id="boutonInstallerPJJoue" type="button">
-     Installer PJJoue
-    </button>
+   <nav class="navigation" id="menuPrincipal" aria-label="Navigation principale">
+    <button id="boutonAccueil" data-ecran="accueil" type="button">Accueil</button>
+    <button id="boutonParcoursPJJ" data-ecran="parcours" type="button">Parcours PJJ</button>
+    <button id="boutonReviser" data-ecran="erreurs" type="button">Réviser</button>
+    <button id="boutonSupportsRevision" data-ecran="supports" type="button">Supports</button>
+    <button id="boutonEntrainementLibre" data-ecran="entrainement" type="button">Entraînement libre</button>
+    <button id="boutonProgression" data-ecran="progression" type="button">Progression</button>
+    <a class="navigation-lien" id="lienGuides" href="guides/index.html">Guides</a>
+    <button id="boutonCarnetDeParcours" data-ecran="carnet" type="button">Carnet de parcours</button>
+    <button id="boutonParametres" data-ecran="parametres" type="button">Paramètres</button>
+    <button class="bouton-installer-pjjoue" hidden id="boutonInstallerPJJoue" type="button">Installer PJJoue</button>
    </nav>
   </header>
   <main class="conteneur" id="contenuPrincipal" tabindex="-1">
@@ -88,30 +66,18 @@
     </button>
    </div>
    {{PAGE_ACCUEIL}}{{PAGE_PARCOURS}}{{PAGE_CARNET}}{{PAGE_ENTRAINEMENT}}{{PAGE_QUESTION}}{{PAGE_BILAN}}{{PAGE_ERREURS}}{{PAGE_PROGRESSION}}{{PAGE_PARAMETRES}}  </main>
-{{ENCADREMENT_GUIDES_ACCUEIL}}  <div aria-atomic="true" aria-live="polite" class="notification" id="notification" role="status">
+  <div aria-atomic="true" aria-live="polite" class="notification" id="notification" role="status">
   </div>
   <footer class="produit-pied-page">
-   <div class="produit-repere">
-    Version 1 · Août 2026
-   </div>
-   <p class="pied-page-independance">
-     <strong>PJJoue est un site personnel, pédagogique, indépendant et non officiel.</strong> Il est sans lien institutionnel avec le Gouvernement français, le ministère de la Justice, la PJJ ou l’ENPJJ. Les réponses s’appuient sur des sources officielles consultables depuis le site.
-    </p>
-   <p class="pied-page-credit">
-    Création, conception et développement : <strong>Dev'Ines</strong>
-   </p>
-   <p class="pied-page-contact">
-    Contact : <a href="mailto:contact.pjjoue@gmail.com">contact.pjjoue@gmail.com</a>
-   </p>
+   <div class="produit-repere">Version 1 · Août 2026</div>
+   <p class="pied-page-independance"><strong>PJJoue est un site personnel, pédagogique, indépendant et non officiel.</strong> Il est sans lien institutionnel avec le Gouvernement français, le ministère de la Justice, la PJJ ou l’ENPJJ. Les réponses s’appuient sur des sources officielles consultables depuis le site.</p>
+   <p class="pied-page-credit">Création, conception et développement : <strong>Dev'Ines</strong></p>
+   <p class="pied-page-contact">Contact : <a href="mailto:contact.pjjoue@gmail.com">contact.pjjoue@gmail.com</a></p>
    <nav aria-label="Informations légales et pratiques">
    <a href="sources.html">Sources officielles</a>
    <a href="accessibilite.html">Accessibilité</a>
-    <a href="confidentialite.html">
-     Confidentialité
-    </a>
-    <a href="mentions-legales.html">
-     Mentions légales
-    </a>
+    <a href="confidentialite.html">Confidentialité</a>
+    <a href="mentions-legales.html">Mentions légales</a>
    </nav>
   </footer>
   <script defer="" src="donnees/donnees-pjj.js">
@@ -186,15 +152,13 @@
      ×
     </button>
     <div aria-hidden="true" class="pjj-fenetre-icone joker-fenetre-icone">
-     <svg focusable="false" viewbox="0 0 48 48">
-      <path d="M9 16h30v22H9zM18 16v-5h12v5"></path><path d="M24 23v9M19.5 27.5h9"></path>
-     </svg>
+     ★
     </div>
     <h2 id="titreFenetreJokers">
      Choisis un joker
     </h2>
     <p id="texteFenetreJokers">
-     Chaque joker utilisé rend la réussite assistée. Tu pourras rejouer l’étape sans aide pour déverrouiller l’évaluation finale.
+     Chaque joker t’aide à comprendre. La réussite sera simplement indiquée comme assistée et tu pourras rejouer l’étape sans aide plus tard.
     </p>
      <div aria-label="Jokers disponibles" class="jokers joker-choix" role="group">
      <button class="joker" id="boutonJoker5050" type="button">

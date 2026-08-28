@@ -1,101 +1,107 @@
-# PJJoue — reprendre le code sans se perdre
+# PJJoue V1 — 6 parcours pédagogiques
 
-PJJoue est un site web pédagogique statique consacré à la Protection judiciaire de la jeunesse.
+**Création : août 2026.**
 
-## Première chose à ouvrir
+PJJoue est un site web pédagogique consacré à la Protection judiciaire de la jeunesse. La V1 contient six parcours utilisables librement : le joueur peut suivre la progression complète ou ouvrir directement le parcours de son choix.
 
-👉 **`code/00 - LIRE EN PREMIER/`**
+## Parcours
 
-Commence par :
+1. **PJJoue — Parcours PJJ** — découvrir la PJJ ;
+2. **Suivre la procédure ordinaire : du parquet à la sanction** ;
+3. **Comprendre l’information judiciaire, le JI, le JLD et les décisions provisoires** ;
+4. **Juger devant le JE et le TPE : mesures éducatives et sanctions ordinaires** ;
+5. **Juger la matière criminelle et comprendre les sanctions et peines** ;
+6. **Appliquer, exécuter et aménager les mesures et les peines**.
+
+Chaque parcours comporte **11 étapes de 10 questions d’apprentissage**, puis **une évaluation finale de 50 questions**. Dans les six parcours, le mode de réponse est choisi selon l’action réellement demandée ; les évaluations alternent elles aussi plusieurs modes naturels. La V1 contient donc :
+
+- **660 questions d’apprentissage** ;
+- **300 questions d’évaluation** ;
+- **960 questions au total** ;
+- **66 étapes d’apprentissage** ;
+- **6 évaluations finales**.
+
+La progression entre les parcours reste pédagogique et implicite : aucun texte visible n’oblige le joueur à avoir suivi un autre parcours auparavant.
+
+PJJoue reste transversal : aucun contenu spécifique à un poste d’assistante administrative ni aucune procédure locale de service n’est intégré aux parcours judiciaires.
+
+## Organisation du code
+
+Le français est la langue de référence du projet. La règle centrale est :
+
+> **Ce que l’on voit dans PJJoue doit porter le même nom dans le code.**
+
+Pour reprendre le projet, ouvrir d’abord :
+
+`code/00 - LIRE EN PREMIER/`
+
+puis lire :
 
 1. `REGLES_OBLIGATOIRES_ORGANISATION_ET_NOMMAGE.md` ;
 2. `INDEX_VISUEL_VERS_CODE.md` ;
 3. `CARTE_DES_ACTIONS_JAVASCRIPT.md`.
 
-La règle centrale est : **ce que l’on voit dans PJJoue doit porter le même nom dans le code.**
-
-## Organisation
-
-Le dossier `code/` suit les pages visibles : Accueil, Parcours PJJ, Carnet de voyage, Entraînement libre, Question, Bilan de la session, Réviser, Progression, Paramètres, Guides, Informations légales et Administration.
-
-Les éléments réellement partagés restent dans `code/01 - Éléments communs/`.
-
-La page **Question** possède un sous-dossier `actions/` qui sépare sa logique en huit familles lisibles : réponses écrites, activités écrites, session/correction, activités interactives, affichage, chronomètre, validation/navigation et jokers.
-
-## Fichiers publics générés
-
-`index.html`, `ressources/moteur-jeu.js`, les feuilles CSS publiques, les guides et plusieurs autres fichiers sont reconstruits depuis `code/`.
-
-Pour construire :
+Les fichiers publics (`index.html`, `ressources/moteur-jeu.js`, les feuilles CSS, les guides, etc.) sont reconstruits depuis `code/`.
 
 ```bash
+python outils/construire_donnees.py
 python outils/construire_site.py
+python outils/construire_manifeste.py
 ```
 
-Pour vérifier que personne n’a modifié un fichier généré à la main :
+Pour prévisualiser le site dans un navigateur :
 
 ```bash
-python outils/construire_site.py --verifier
+npm run dev
 ```
 
-## Tests
+Puis ouvrir **http://localhost:4173/**. L’ouverture directe de `index.html` reste prise en charge, mais le serveur local permet aussi de vérifier le manifeste et le fonctionnement hors connexion dans les conditions normales d’un site web.
 
-Sous Windows :
+## Publication sur GitHub Pages
 
-- `INSTALLER_OUTILS_DE_DEVELOPPEMENT.bat` installe les outils nécessaires ;
-- `VERIFIER_PJJOUE.bat` lance les contrôles avant publication.
+Le contenu du projet peut être placé à la racine d’une branche, puis publié depuis **Settings → Pages → Deploy from a branch → /(root)**. Le fichier `.nojekyll` est déjà présent. Les chemins du manifeste, du service worker et des ressources fonctionnent aussi lorsque GitHub Pages publie le site sous `/nom-du-depot/`.
 
-En ligne de commande :
+Les URL canoniques, le sitemap et le fichier `robots.txt` ciblent `https://pjjoue.fr/`. Si ce domaine personnalisé est utilisé, il doit être configuré dans les paramètres GitHub Pages du dépôt. Sinon, ces trois éléments doivent être adaptés à l’adresse publique retenue avant l’indexation du site.
+
+## Vérifications
+
+Sous Windows, `VERIFIER_PJJOUE.bat` lance la recette. En ligne de commande :
 
 ```bash
 npm ci
 npm test
 ```
 
-Pour les captures visuelles Chromium :
+Les tests Python et Chromium peuvent également être lancés séparément depuis le dossier `tests/`.
 
-```bash
-npm run test:visuel
-```
+## Sources et droit applicable
 
-Pour comparer une version avec une référence :
+Le corpus juridique transmis est recroisé avec les sources officielles. En cas de divergence entre une synthèse pédagogique et un texte en vigueur, la source officielle actuelle prime. La couverture est documentée dans `AUDIT_COUVERTURE_CORPUS_V1.md`.
 
-```bash
-python tests/verifier_regression_visuelle.py --reference-projet CHEMIN_DE_LA_VERSION_REFERENCE
-```
+## Validation technique finale
 
-Contrôles complémentaires :
+La version consolidée du 28 août 2026 a été contrôlée sur ses données, ses 960 questions, sa construction, ses pages, sa navigation, son identité, son iconographie et son interface Chromium. Le détail est consigné dans `ETAT_VALIDATION_V1.md`.
 
-```bash
-python outils/auditer_accessibilite_statique.py
-python outils/verifier_fraicheur_sources.py
-python outils/verifier_liens_officiels.py
-```
 
-Le rappel éditorial des sources se déclenche 365 jours après leur dernière
-date de vérification. Le contrôle des liens peut être lancé indépendamment à
-n’importe quel moment.
+## Architecture visuelle moderne
 
-## Installation et fonctionnement hors connexion
+L’interface principale est construite à partir des fragments HTML, JavaScript et CSS déclarés dans `code/plan-construction.json`. La base commune se trouve dans `code/01 - Éléments communs/style-general-pjjoue.css`, puis les styles propres aux pages complètent cette base. Le constructeur assemble ces sources dans l’unique feuille publique `ressources/styles/pjjoue-principal.css`. Les pages autonomes partagent `static-pages.css`, et le consentement Analytics possède son composant dédié.
+L’identité repose sur un bleu PJJoue profond et un jaune franc : fond général `#16477d`, en-tête `#0b315d`, texte principal `#f7f8ff`, cartes bleues `#10477f` ou `#0b3d70` et action principale `#ffc83d`. Les six parcours possèdent chacun leur couleur d’accent. Ces choix sont définis directement dans le design system, sans feuille de surcharge ajoutée en fin de cascade.
+Les questions, réponses, modes de jeu et données pédagogiques restent gérés par
+le moteur V1.
 
-PJJoue contient un manifeste d’application et un service worker. Depuis un
-navigateur compatible et une adresse HTTPS, le site peut être installé. Après
-une première visite en ligne, l’application principale peut être rouverte sans
-connexion. Les guides déjà consultés sont également conservés par le cache.
+La navigation principale est regroupée dans un menu unique ouvrable et repliable.
+Le **Carnet de parcours** y possède sa propre entrée. Sur l'accueil,
+**S'entraîner librement** n'est proposé qu'aux utilisateurs dont une progression
+a déjà été enregistrée. La page **Réviser** rassemble les questions à retravailler. La page **Supports** classe les ressources par juridiction, avec la fiche pratique puis la fiche synthétique avant les éventuels compléments.
 
-## Documentation
+## Tests et captures visuelles
 
-Le seul point d’entrée est :
+Les outils de recette Chromium sont livrés avec le projet afin qu’une personne ou une IA puisse contrôler le rendu réel après modification.
 
-**`documentation/COMMENCER_ICI.md`**
+- première installation : `INSTALLER_OUTILS_DE_DEVELOPPEMENT.bat` ;
+- captures desktop/mobile : `CAPTURER_PJJOUE.bat` ;
+- contrôle complet avant publication : `VERIFIER_PJJOUE.bat` ;
+- guide détaillé : `code/00 - LIRE EN PREMIER/CAPTURES_VISUELLES_ET_TESTS_NAVIGATEUR.md`.
 
-La documentation utile aujourd’hui est dans `documentation/documentation-actuelle/`.
-
-## Noms à protéger
-
-Ne jamais renommer au hasard :
-
-- les paramètres Analytics `pjjoue_...` ;
-- les clés de sauvegarde locale ;
-- les identifiants permanents des questions ;
-- les URL publiques indexées par Google.
+Le dossier `test-results/` n’est pas livré : il est recréé automatiquement par les scripts.

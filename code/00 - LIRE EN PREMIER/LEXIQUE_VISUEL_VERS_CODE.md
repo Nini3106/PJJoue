@@ -4,7 +4,7 @@
 |---|---|
 | Accueil | `boutonAccueil` / page `accueil` |
 | Parcours PJJ | `boutonParcoursPJJ` / page `parcours` |
-| Carnet de voyage | `boutonCarnetDeVoyage` / page `carnet` |
+| Carnet de parcours | `boutonCarnetDeParcours` / page `carnet` |
 | Entraînement libre | `boutonEntrainementLibre` / page `entrainement` |
 | Réviser | `boutonReviser` / page `erreurs` |
 | Progression | `boutonProgression` / page `progression` |

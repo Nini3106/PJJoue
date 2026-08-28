@@ -150,36 +150,56 @@ function marquerEtapeDecouverte(question) {
     if (!question)
         return;
     const etape = Number(question.etape);
-    if (!Number.isFinite(etape) || etape < 1 || !obtenirEtapeProgramme(question.theme, etape))
+    const theme = question.theme;
+    if (!estThemeConnu(theme) || !Number.isFinite(etape) || etape < 1 || !obtenirEtapeProgramme(theme, etape))
         return;
     sauvegarde.etapesDecouvertes = sauvegarde.etapesDecouvertes || {};
-    sauvegarde.etapesDecouvertes[etape] = true;
+    sauvegarde.etapesDecouvertes[`${theme}:${etape}`] = true;
 }
 function compterEtapesDecouvertes() {
     const etapes = new Set();
-    sauvegarde.questionsJouees = sauvegarde.questionsJouees || {};
-    Object.keys(sauvegarde.questionsJouees).forEach(identifiant => {
-        if (!sauvegarde.questionsJouees[identifiant])
+    const ajouterQuestion = question => {
+        if (!question || question.estEvaluationFinale === true)
             return;
-        const question = QUESTIONS.find(element => String(element.id) === String(identifiant));
-        if (question && Number.isFinite(Number(question.etape))) {
-            etapes.add(Number(question.etape));
-        }
+        const etape = Number(question.etape);
+        if (estThemeConnu(question.theme) && Number.isFinite(etape))
+            etapes.add(`${question.theme}:${etape}`);
+    };
+    Object.keys(sauvegarde.questionsJouees || {}).forEach(identifiant => {
+        if (sauvegarde.questionsJouees[identifiant])
+            ajouterQuestion(QUESTIONS.find(element => String(element.id) === String(identifiant)));
     });
-    Object.keys(sauvegarde.erreurs || {}).forEach(identifiant => {
-        const question = QUESTIONS.find(element => String(element.id) === String(identifiant));
-        if (question && Number.isFinite(Number(question.etape))) {
-            etapes.add(Number(question.etape));
-        }
-    });
-    const identifiantTheme = 'commun';
-    const etapesProgramme = obtenirEtapesProgramme(identifiantTheme);
-    if (Array.isArray(etapesProgramme)) {
-        etapesProgramme.forEach(etapeProgramme => {
-            if ((Number(compterQuestionsTraiteesEtape(identifiantTheme, etapeProgramme.id)) || 0) > 0) {
-                etapes.add(Number(etapeProgramme.id));
-            }
+    Object.keys(sauvegarde.erreurs || {}).forEach(identifiant =>
+        ajouterQuestion(QUESTIONS.find(element => String(element.id) === String(identifiant)))
+    );
+    THEMES.forEach(theme => {
+        obtenirEtapesProgramme(theme.id).forEach(etapeProgramme => {
+            if ((Number(compterQuestionsTraiteesEtape(theme.id, etapeProgramme.id)) || 0) > 0)
+                etapes.add(`${theme.id}:${etapeProgramme.id}`);
         });
-    }
+    });
+    Object.entries(sauvegarde.etapesDecouvertes || {}).forEach(([cle, actif]) => {
+        if (actif === true && cle.includes(':'))
+            etapes.add(cle);
+    });
     return etapes.size;
+}
+function estProgrammeMaitrise(identifiantTheme) {
+    const programme = PROGRAMMES[identifiantTheme];
+    return Boolean(programme?.etapes?.length)
+        && programme.etapes.every(etapeProgramme => estEtapeMaitrisee(identifiantTheme, etapeProgramme.id));
+}
+function obtenirEvaluationFinaleTheme(identifiantTheme) {
+    sauvegarde.evaluationsFinales = sauvegarde.evaluationsFinales || creerEvaluationsFinalesInitiales();
+    sauvegarde.evaluationsFinales[identifiantTheme] = sauvegarde.evaluationsFinales[identifiantTheme] || creerEtatEvaluationFinale();
+    return sauvegarde.evaluationsFinales[identifiantTheme];
+}
+function estEvaluationFinaleReussie(identifiantTheme) {
+    return obtenirEvaluationFinaleTheme(identifiantTheme)?.reussie === true;
+}
+function estParcoursCompletReussi() {
+    return THEMES.every(theme => estProgrammeMaitrise(theme.id) && estEvaluationFinaleReussie(theme.id));
+}
+function obtenirProchainThemeIncomplet() {
+    return THEMES.find(theme => !estProgrammeMaitrise(theme.id) || !estEvaluationFinaleReussie(theme.id))?.id || null;
 }

@@ -172,7 +172,7 @@ code/
 
 ├── Accueil/
 ├── Parcours PJJ/
-├── Carnet de voyage/
+├── Carnet de parcours/
 ├── Entraînement libre/
 ├── Question/
 ├── Bilan de la session/
@@ -338,10 +338,10 @@ Les noms visibles dans le code ne doivent pas conduire à modifier arbitrairemen
 - Google Tag Manager ;
 - Search Console ;
 - sauvegardes des utilisateurs ;
-- migrations ;
+- structure des sauvegardes ;
 - stockage local ;
 - événements déjà exploités ;
-- compatibilité avec les anciennes progressions.
+- stabilité des progressions déjà enregistrées.
 
 Par exemple :
 
