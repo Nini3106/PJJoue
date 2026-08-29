@@ -1,0 +1,40 @@
+/* PJJoue V1 — consentement Analytics : surface claire, structure gris ardoise neutre et action principale lisible. */
+.pjj-consentement,
+.pjj-consentement-preferences { font-family: inherit; }
+.pjj-consentement {
+  position: fixed; z-index: 2147483000; right: clamp(12px,3vw,34px); bottom: clamp(12px,3vw,30px);
+  width: min(620px,calc(100vw - 24px)); display: grid; grid-template-columns: auto minmax(0,1fr) auto;
+  align-items: center; gap: 15px; padding: 18px 54px 18px 18px;
+  color: #356986; background: rgba(255,255,255,.98); border: 1px solid #cfe0e8; border-radius: 22px;
+  box-shadow: 0 5px 0 rgba(74,119,154,.09);
+}
+.pjj-consentement[hidden], .pjj-consentement-preferences[hidden] { display: none !important; }
+.pjj-consentement-repere {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 88px; height: 52px; padding: 0 14px;
+  border-radius: 16px; color: #fffefa; background: #5d96c8; border: 1px solid #4f86b7;
+}
+.pjj-consentement-marque { display: inline-flex; align-items: baseline; white-space: nowrap; font-size: 1rem; font-weight: 900; letter-spacing: -.04em; }
+.pjj-consentement-marque-pjj { color: #fffefa; }
+.pjj-consentement-marque-oue { color: #ffd35c; }
+.pjj-consentement-contenu h2 { margin: 0 0 5px; color: #356986; font-size: 1.04rem; }
+.pjj-consentement-contenu p { margin: 0; color: #5f7f95; line-height: 1.45; font-size: .9rem; }
+.pjj-consentement-lien { display: inline-block; margin-top: 7px; color: #5B7DE0; font-weight: 780; text-underline-offset: 3px; }
+.pjj-consentement-actions { display: grid; gap: 7px; min-width: 116px; }
+.pjj-consentement-bouton { min-height: 40px; width: 100%; border-radius: 12px; padding: 8px 14px; font-weight: 820; cursor: pointer; transition: transform .16s ease,box-shadow .16s ease,background .16s ease; }
+.pjj-consentement-bouton:hover { transform: translateY(-1px); }
+.pjj-consentement-refuser { color: #5B7DE0; background: #fffefa; border: 1px solid #CDD9F0; }
+.pjj-consentement-refuser:hover { background: #f8f4ee; border-color: #9CB2E6; }
+.pjj-consentement-accepter { color: #fffefa; background: #2563EB; border: 1px solid #2586aa; box-shadow: 0 8px 20px rgba(37,99,235,.18); }
+.pjj-consentement-accepter:hover { background: #2586aa; }
+.pjj-consentement-fermer { position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border: 0; border-radius: 50%; color: #5f7f95; background: #edf6fa; font-size: 1.25rem; line-height: 1; cursor: pointer; }
+.pjj-consentement-fermer:hover { color: #5C76C9; background: #eef6fa; }
+.pjj-consentement-preferences { position: fixed; z-index: 2147482999; right: 14px; bottom: 14px; min-height: 38px; border: 1px solid #cfe0e8; border-radius: 999px; padding: 7px 13px; color: #5B7DE0; background: rgba(255,255,255,.96); box-shadow: 0 8px 24px rgba(74,119,154,.10); font-size: .8rem; font-weight: 820; cursor: pointer; }
+.pjj-consentement-preferences:hover { color: #5C76C9; border-color: #2b88aa; background: #edf6fa; }
+.pjj-consentement :focus-visible, .pjj-consentement-preferences:focus-visible { outline: 3px solid rgba(214,166,46,.52); outline-offset: 3px; }
+@media (max-width:680px) {
+  .pjj-consentement { left: 10px; right: 10px; bottom: 10px; width: auto; grid-template-columns: minmax(0,1fr); gap: 11px; padding: 16px; border-radius: 19px; }
+  .pjj-consentement-repere { min-width: 78px; width: fit-content; height: 42px; padding: 0 11px; border-radius: 13px; }
+  .pjj-consentement-contenu { padding-right: 28px; }
+  .pjj-consentement-actions { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; min-width: 0; }
+}
+@media (prefers-reduced-motion:reduce) { .pjj-consentement-bouton { transition: none; } }

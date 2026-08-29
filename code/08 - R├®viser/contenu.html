@@ -1,0 +1,272 @@
+<section class="ecran" id="erreurs">
+<div class="page-entete">
+<h1>Réviser</h1>
+<p>Retravaille les questions qui t’ont posé problème jusqu’à ce que les notions deviennent solides.</p>
+</div>
+<section aria-labelledby="titreErreursRevision" class="revision-erreurs">
+<div class="revision-section-entete">
+<div><span class="surtitre">Tes erreurs</span><h2 id="titreErreursRevision">Questions à retravailler</h2></div>
+<p>Une erreur disparaît dès que tu la réussis en révision.</p>
+</div>
+<div id="contenuErreurs"></div>
+</section>
+</section>
+<section class="ecran" id="supports">
+<header class="page-entete">
+<span class="surtitre">Bibliothèque de référence</span>
+<h1>Supports de révision</h1>
+<p>Retrouve les ressources utiles à tes révisions et identifie immédiatement les parcours auxquels elles se rapportent.</p>
+</header>
+<section aria-labelledby="titreSupportsRevision" class="revision-supports">
+<div class="revision-section-entete revision-supports-entete">
+<div><h2 id="titreSupportsRevision">Choisir une ressource</h2></div>
+<p>Filtre par parcours, puis ouvre uniquement la ressource dont tu as besoin.</p>
+</div>
+<div class="supports-outils">
+<label class="supports-recherche" for="rechercheSupports"><span>Rechercher dans les ressources</span><input id="rechercheSupports" type="search" placeholder="Ex. détention provisoire, JLD, MEJ…" autocomplete="off"/></label>
+<div class="supports-filtres" aria-label="Filtrer les ressources" role="group">
+<button aria-pressed="true" class="actif" data-filtre-supports="tous" type="button">Tous</button>
+<button aria-label="Filtrer par le parcours 1" aria-pressed="false" data-filtre-supports="1" title="Parcours 1" type="button">P1</button>
+<button aria-label="Filtrer par le parcours 2" aria-pressed="false" data-filtre-supports="2" title="Parcours 2" type="button">P2</button>
+<button aria-label="Filtrer par le parcours 3" aria-pressed="false" data-filtre-supports="3" title="Parcours 3" type="button">P3</button>
+<button aria-label="Filtrer par le parcours 4" aria-pressed="false" data-filtre-supports="4" title="Parcours 4" type="button">P4</button>
+<button aria-label="Filtrer par le parcours 5" aria-pressed="false" data-filtre-supports="5" title="Parcours 5" type="button">P5</button>
+<button aria-label="Filtrer par le parcours 6" aria-pressed="false" data-filtre-supports="6" title="Parcours 6" type="button">P6</button>
+</div>
+<button class="discret supports-tout-refermer" disabled id="boutonRefermerSupports" type="button">Tout refermer</button>
+<p id="statutRechercheSupports" class="supports-statut" aria-live="polite">8 catégories · 19 ressources</p>
+</div>
+<div class="supports-revision-groupes">
+<details class="supports-juridiction" id="supports-reperes-pjj" data-mots-cles="PJJ protection judiciaire de la jeunesse DPJJ administration centrale direction interrégionale direction territoriale service unité éducative organisation hiérarchie mesures éducatives sigles vocabulaire">
+<summary>
+<span class="support-juridiction-abreviation">PJJ</span>
+<span class="support-juridiction-titre"><strong>Organisation et repères de la PJJ</strong><small>4 ressources de révision</small></span>
+<span class="support-juridiction-action">Ouvrir</span><span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<a class="support-revision support-ressource-guide" id="support-organisation-pjj" href="organisation-pjj/"><span class="support-revision-type">Organisation</span><span class="support-revision-titre"><strong>Organisation hiérarchique de la PJJ</strong><small>Directions, territoires, services et articulation.</small></span><span aria-hidden="true">→</span></a>
+<a class="support-revision support-ressource-guide" id="support-mesures-educatives" href="mesures-educatives-pjj/"><span class="support-revision-type">Mesures</span><span class="support-revision-titre"><strong>Mesures éducatives</strong><small>Repères utiles pour distinguer les mesures et leur logique.</small></span><span aria-hidden="true">→</span></a>
+<a class="support-revision support-ressource-guide" id="support-sigles-essentiels" href="sigles-pjj/"><span class="support-revision-type">Vocabulaire</span><span class="support-revision-titre"><strong>Sigles essentiels</strong><small>Retrouver rapidement les abréviations fréquentes.</small></span><span aria-hidden="true">→</span></a>
+<button class="support-revision support-ressource-guide support-jeu-sigles" id="support-jeu-sigles" data-ecran="sigles" type="button"><span class="support-revision-type">Mini‑jeu</span><span class="support-revision-titre"><strong>Mission Sigles</strong><small>Parcours, entraînement, dé du hasard, révision et évaluation sur les 72 sigles.</small></span><span aria-hidden="true">→</span></button>
+</div></details>
+<details class="supports-juridiction" id="supports-je" data-mots-cles="JE juge des enfants chambre du conseil culpabilité mise à l’épreuve éducative MEE sanction mesure éducative MEJ justice des mineurs">
+<summary>
+<span class="support-juridiction-abreviation">JE</span>
+<span class="support-juridiction-titre"><strong>Juge des enfants</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-je">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Juge des enfants (JE)</strong><small>Quand intervient-il et que peut-il décider ?</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Juge spécialisé des mineurs.</li><li>Intervient avant la culpabilité, à l’audience de culpabilité, pendant la mise à l’épreuve éducative (MEE) et à l’audience de sanction.</li><li>Suit la MEE même lorsque la culpabilité a été jugée par le TPE.</li><li>Après condamnation, exerce en principe les fonctions du JAP pour les mineurs.</li></ul></section><ol class="support-frise"><li><h4>1. Avant la culpabilité</h4><ul><li>Peut être saisi pour juger certains délits de mineurs.</li><li>Peut ordonner une MJIE et une MEJP.</li><li>La MEJP peut comporter les modules insertion, réparation, santé et placement.</li><li>Selon le cadre légal, certaines mesures de sûreté sont possibles : CJ ou ARSE.</li></ul></li><li><h4>2. Audience de culpabilité</h4><ul><li>Statue sur la culpabilité et l’action civile.</li><li>Peut ouvrir une MEE de 6 à 9 mois.</li><li>Fixe la future audience de sanction devant le JE ou le TPE selon le dossier.</li></ul></li><li><h4>3. Pendant la MEE</h4><ul><li>Contrôle le suivi de la MEE.</li><li>Peut maintenir, modifier ou lever une MEJP, un CJ ou une ARSE.</li><li>Peut réagir en cas d’incident.</li><li>Dans les cas prévus, peut révoquer CJ ou ARSE et ordonner une détention provisoire après débat contradictoire.</li><li>Peut modifier la date de l’audience de sanction dans les cas prévus.</li><li>Si le TPE a expressément fixé la sanction devant le TPE, le JE ne récupère pas seul cette audience.</li></ul></li><li><h4>4. Audience de sanction — chambre du conseil</h4><ul><li>Prononce la sanction.</li><li>Peut prononcer un avertissement judiciaire ou une MEJ.</li><li>La MEJ peut comprendre les quatre modules et les obligations/interdictions prévues par le CJPM.</li><li>Sur réquisitions et selon les conditions légales : confiscation, peine de stage, TIG.</li><li>Ne peut pas prononcer lui-même une peine d’emprisonnement.</li></ul></li><li><h4>5. Après sanction / application des peines</h4><ul><li>Contrôle l’exécution de la MEJ.</li><li>Exerce en principe les fonctions du JAP pour le mineur condamné.</li><li>Suit l’exécution de certaines peines et aménagements selon la décision.</li></ul></li></ol><aside class="support-attention"><strong>Repères rapides</strong><ul class="support-liste"><li>MEJP = provisoire.</li><li>MEJ = sanction éducative.</li><li>Chambre du conseil = audience du JE.</li><li>Le JE ne conduit pas l’instruction : ce rôle appartient au JI.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-je">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Juge des enfants (JE)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Avant la culpabilité / avant sanction</h4><ul><li>MJIE ; MEJP avec modules et interdictions autorisées.</li><li>CJ ou ARSE selon conditions.</li><li>Au défèrement, le JE peut statuer sur les réquisitions MEJP/CJ/ARSE dans la branche prévue.</li></ul></li><li><h4>2. Audience de culpabilité</h4><ul><li>Statue sur culpabilité et action civile.</li><li>Ouvre la MEE et fixe la sanction devant JE ou TPE.</li><li>Peut ordonner MJIE, MEJP, CJ ou ARSE pendant la période.</li></ul></li><li><h4>3. Pendant la MEE</h4><ul><li>Contrôle la MEE.</li><li>Modifie ou lève MEJP, CJ, ARSE.</li><li>En cas légal de révocation CJ/ARSE : débat contradictoire et DP possible.</li></ul></li><li><h4>4. Sanction — chambre du conseil</h4><ul><li>Avertissement judiciaire ; MEJ avec modules, interdictions et obligations.</li><li>Peines limitées : confiscation, stage, TIG sous conditions.</li><li>Pas d’emprisonnement.</li></ul></li><li><h4>5. Après sanction</h4><ul><li>Contrôle l’exécution de la MEJ.</li><li>Exerce en principe les fonctions du JAP pour le mineur condamné jusqu’à 21 ans.</li><li>Peut se dessaisir au profit du JAP dans les cas prévus.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-tpe" data-mots-cles="TPE tribunal pour enfants juridiction de jugement procédure ordinaire audience unique culpabilité sanction tribunal de l’application des peines TAP">
+<summary>
+<span class="support-juridiction-abreviation">TPE</span>
+<span class="support-juridiction-titre"><strong>Tribunal pour enfants</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-tpe">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Tribunal pour enfants (TPE)</strong><small>Procédure ordinaire, audience unique, sanction et application des peines.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Juridiction de jugement des mineurs.</li><li>Peut juger en procédure ordinaire, en audience unique et après renvoi du JI.</li><li>Peut intervenir avant, pendant et à l’issue du jugement.</li><li>Après condamnation, exerce les fonctions du tribunal de l’application des peines pour les mineurs dans les cas prévus.</li></ul></section><ol class="support-frise"><li><h4>1. Saisine / avant sanction</h4><ul><li>Peut être saisi directement pour certains délits.</li><li>Après renvoi du JI, juge les délits des mineurs de 13 ans et plus et les crimes commis avant 16 ans.</li><li>Peut ordonner MJIE, MEJP et, selon le cadre, CJ ou ARSE.</li></ul></li><li><h4>2. Audience de culpabilité — procédure ordinaire</h4><ul><li>Statue sur la culpabilité et l’action civile.</li><li>Peut ouvrir une MEE de 6 à 9 mois.</li><li>Fixe la future audience de sanction devant le JE ou le TPE.</li></ul></li><li><h4>3. Audience unique</h4><ul><li>Culpabilité, action civile et sanction sont jugées lors de la même audience.</li><li>Peut prononcer avertissement judiciaire, MEJ et les peines prévues par le CJPM.</li><li>Peut exceptionnellement revenir vers une MEE si une observation éducative supplémentaire est nécessaire.</li></ul></li><li><h4>4. Audience de sanction</h4><ul><li>Peut prononcer avertissement, MEJ et un éventail plus large de peines : amende, confiscation, stage, TIG, DDSE, sursis probatoire, suivi socio-judiciaire, sanction-réparation et emprisonnement lorsque la loi le permet.</li></ul></li><li><h4>5. Après sanction / application des peines</h4><ul><li>Exerce les fonctions du tribunal de l’application des peines pour les mineurs dans les cas prévus.</li><li>Intervient pour certaines décisions collégiales d’application des peines.</li></ul></li></ol><aside class="support-attention"><strong>À retenir</strong><ul class="support-liste"><li>Le TPE ne conduit pas l’instruction.</li><li>Le JLD reste le magistrat compétent lorsqu’une décision sur la détention lui est confiée.</li><li>Si le TPE fixe expressément la sanction devant le TPE, le JE ne reprend pas cette audience.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-tpe">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Tribunal pour enfants (TPE)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Culpabilité — procédure MEE</h4><ul><li>Culpabilité et action civile ; ouvre la MEE.</li><li>MJIE / MEJP / CJ / ARSE possibles selon le cadre.</li><li>Fixe la sanction devant JE ou TPE.</li></ul></li><li><h4>2. Audience unique</h4><ul><li>Culpabilité, action civile et sanction le même jour.</li><li>Peut exceptionnellement basculer vers MEE dans les cas prévus.</li></ul></li><li><h4>3. Sanction</h4><ul><li>Avertissement ; MEJ et contenus autorisés.</li><li>Peines : confiscation, stage, TIG, amende, DDSE, sursis probatoire, SSJ, sanction-réparation, restrictions de droits, emprisonnement et autres peines légalement applicables.</li></ul></li><li><h4>4. Crime commis avant 16 ans</h4><ul><li>Après instruction : le TPE peut juger le crime commis par un mineur de moins de 16 ans.</li><li>Appellation officielle : Tribunal pour enfants.</li></ul></li><li><h4>5. Après sanction</h4><ul><li>Exerce les fonctions du TAP pour les mineurs condamnés.</li><li>Ne remplace pas le JE/JAP pour les décisions relevant du juge seul.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-ji" data-mots-cles="JI juge d’instruction information judiciaire instruction mise en examen ordonnance non-lieu renvoi investigation expertise">
+<summary>
+<span class="support-juridiction-abreviation">JI</span>
+<span class="support-juridiction-titre"><strong>Juge d’instruction</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-ji">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Juge d’instruction (JI)</strong><small>Information judiciaire, mesures provisoires et règlement de l’instruction.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Magistrat chargé de l’information judiciaire.</li><li>Instruit les affaires nécessitant une information judiciaire.</li><li>Ne prononce ni la culpabilité définitive ni la sanction.</li></ul></section><ol class="support-frise"><li><h4>1. Ouverture de l’information</h4><ul><li>Dirige l’instruction.</li><li>Peut mettre en examen le mineur.</li><li>Peut ordonner une MJIE.</li><li>Peut prononcer une MEJP avec les contenus autorisés.</li></ul></li><li><h4>2. Pendant l’instruction</h4><ul><li>Mène les investigations : auditions, expertises et vérifications.</li><li>Peut maintenir, modifier ou lever une MEJP.</li><li>Peut ordonner ou requérir les investigations utiles.</li><li>Peut, selon le cadre légal, prononcer certaines mesures de sûreté : CJ ou ARSE.</li><li>Pour une détention provisoire, saisit le JLD lorsque la loi le prévoit.</li></ul></li><li><h4>3. Fin de l’instruction</h4><ul><li>Peut rendre une ordonnance de non-lieu.</li><li>Pour un délit : renvoi devant le JE si le mineur avait moins de 13 ans au moment des faits, ou vers le TPE dans les autres cas prévus.</li><li>Pour un crime commis avant 16 ans : renvoi devant le TPE.</li><li>Pour un crime commis à partir de 16 ans : ordonnance de mise en accusation devant la cour d’assises des mineurs.</li></ul></li></ol><aside class="support-attention"><strong>Ce que le JI ne fait pas</strong><ul class="support-liste"><li>Ne juge pas la culpabilité définitive.</li><li>Ne prononce pas la sanction.</li><li>Ne statue pas lui-même sur la détention provisoire lorsqu’il doit saisir le JLD.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-ji">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Juge d’instruction (JI)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Ouverture de l’information</h4><ul><li>Dirige l’instruction ; peut mettre en examen.</li><li>Ordonne investigations et expertises.</li></ul></li><li><h4>2. Mesures pendant l’instruction</h4><ul><li>MJIE ; MEJP avec modules/interdictions.</li><li>CJ ; ARSE selon conditions.</li><li>Pour la DP : saisit le JLD.</li></ul></li><li><h4>3. Fin de l’instruction</h4><ul><li>Non-lieu.</li><li>Délit : renvoi JE (&lt;13 aux faits) ou TPE (≥13) selon le cadre.</li><li>Crime &lt;16 : TPE ; crime ≥16 : mise en accusation CAM.</li></ul></li><li><h4>4. Ce qu’il ne fait pas</h4><ul><li>Ne juge pas définitivement la culpabilité.</li><li>Ne prononce pas MEJ, avertissement ou peine.</li><li>Ne décide pas lui-même la DP pendant l’instruction.</li></ul></li><li><h4>5. Repère</h4><ul><li>Instruction = avant jugement.</li><li>Toujours raisonner avec âge aux faits et qualification finale.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-jld" data-mots-cles="JLD juge des libertés et de la détention détention provisoire DP contrôle judiciaire CJ assignation à résidence sous surveillance électronique ARSE sûreté défèrement">
+<summary>
+<span class="support-juridiction-abreviation">JLD</span>
+<span class="support-juridiction-titre"><strong>Juge des libertés et de la détention</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-jld">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Juge des libertés et de la détention (JLD)</strong><small>Mesures de sûreté et détention provisoire lorsqu’il est saisi.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Magistrat centré sur les questions de liberté et de sûreté du mineur.</li><li>Intervient avant la sanction, selon le cadre de la procédure.</li><li>Ne juge ni la culpabilité ni la sanction.</li></ul></section><ol class="support-frise"><li><h4>1. Quand il intervient</h4><ul><li>Intervient sur les questions de liberté et de sûreté dans les cas prévus par la loi.</li><li>Peut être saisi lors d’un déferrement ou pendant une information judiciaire.</li><li>Intervient avant le prononcé de la sanction.</li></ul></li><li><h4>2. Ce qu’il peut décider</h4><ul><li>Peut statuer sur certaines mesures de sûreté selon le cadre légal.</li><li>Peut décider une détention provisoire lorsque les conditions sont réunies.</li><li>Peut intervenir sur une MEJP selon le stade procédural prévu.</li><li>Peut, selon les cas prévus, intervenir sur CJ ou ARSE.</li></ul></li><li><h4>3. Détention provisoire</h4><ul><li>Décide du placement en détention provisoire dans les hypothèses prévues par le CJPM.</li><li>Peut intervenir sur le maintien, la prolongation, la mainlevée ou le rejet lorsque le texte le prévoit.</li><li>La détention provisoire reste une mesure de sûreté provisoire : ce n’est pas une peine.</li></ul></li><li><h4>4. Repères de procédure</h4><ul><li>Audience ou débat contradictoire selon la procédure applicable.</li><li>Toujours identifier la saisine exacte et le stade procédural.</li><li>Ne pas confondre détention provisoire et peine d’emprisonnement.</li></ul></li></ol><aside class="support-attention"><strong>Ce que le JLD ne peut pas faire</strong><ul class="support-liste"><li>Ne conduit pas l’instruction au fond.</li><li>Ne juge pas la culpabilité.</li><li>Ne prononce pas la sanction, la MEJ ou une peine.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-jld">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Juge des libertés et de la détention (JLD)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Instruction — lorsqu’il est saisi</h4><ul><li>Statue sur DP.</li><li>Peut statuer sur CJ / ARSE / MEJP lorsqu’il est légalement compétent et saisi.</li></ul></li><li><h4>2. Déferrement avant audience unique TPE</h4><ul><li>Mineur ≥16 : peut statuer sur réquisitions de DP dans la branche L423-9.</li><li>Dans cette branche, le JE statue sur MEJP / CJ / ARSE.</li></ul></li><li><h4>3. DP</h4><ul><li>Mesure de sûreté privative de liberté, jamais une peine.</li><li>Conditions strictes : nécessité, insuffisance CJ/ARSE, règles d’âge et de nature des faits.</li></ul></li><li><h4>4. Autres mesures</h4><ul><li>CJ et ARSE : selon saisine et compétence.</li><li>MEJP : possible dans le cadre légal.</li><li>MJIE : non attribuée au JLD par L322-7.</li></ul></li><li><h4>5. Ce qu’il ne fait pas</h4><ul><li>Pas d’instruction au fond.</li><li>Pas de culpabilité / action civile.</li><li>Pas de MEJ / avertissement / peine.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-cam" data-mots-cles="CAM cour d’assises des mineurs juridiction criminelle crime mise en accusation procès criminel réclusion détention criminelle">
+<summary>
+<span class="support-juridiction-abreviation">CAM</span>
+<span class="support-juridiction-titre"><strong>Cour d’assises des mineurs</strong><small>2 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-cam">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Cour d’assises des mineurs (CAM)</strong><small>Jugement des crimes commis à partir de 16 ans.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Juridiction criminelle des mineurs.</li><li>Juge les crimes commis par les mineurs âgés d’au moins 16 ans au moment des faits.</li><li>Intervient après information judiciaire et mise en accusation.</li><li>Est saisie après ordonnance de mise en accusation.</li></ul></section><ol class="support-frise"><li><h4>1. Saisine / avant l’audience</h4><ul><li>Le parquet requiert une information judiciaire.</li><li>Le JI mène l’instruction et le dossier arrive après une qualification criminelle retenue et une mise en accusation.</li></ul></li><li><h4>2. Audience</h4><ul><li>Statue normalement en audience unique après mise en accusation.</li><li>Juge la culpabilité, l’action civile et la sanction.</li><li>Peut ordonner une MJIE si nécessaire comme juridiction de jugement.</li></ul></li><li><h4>3. Réponses éducatives possibles</h4><ul><li>Peut prononcer avertissement judiciaire et MEJ.</li><li>La MEJ peut comprendre les modules et les interdictions/obligations prévues par le CJPM.</li></ul></li><li><h4>4. Peines possibles</h4><ul><li>Peut prononcer les peines prévues pour les mineurs dans le respect du CJPM : confiscation, stage, TIG, DDSE, sursis probatoire, suivi socio-judiciaire, sanction-réparation, amende et peine privative de liberté selon la qualification et l’atténuation.</li></ul></li></ol><aside class="support-attention"><strong>À ne pas confondre</strong><ul class="support-liste"><li>La CAM ne conduit pas l’instruction.</li><li>Ne pas transposer automatiquement la MEE de la procédure JE/TPE au procès criminel.</li><li>Ne pas attribuer une MEJP à la CAM sans base dans la décision ou le texte applicable.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-cam">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Cour d’assises des mineurs (CAM)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Saisine</h4><ul><li>Crime commis à partir de 16 ans aux faits.</li><li>Saisie après information judiciaire et mise en accusation.</li></ul></li><li><h4>2. Avant / pendant le procès</h4><ul><li>MJIE possible comme juridiction de jugement.</li><li>Âge aux faits = repère de compétence.</li></ul></li><li><h4>3. Jugement</h4><ul><li>Juge culpabilité, action civile et sanction dans le procès criminel.</li><li>Ne conduit pas l’instruction.</li></ul></li><li><h4>4. Sanctions / peines</h4><ul><li>Avertissement ; MEJ avec contenus autorisés.</li><li>Confiscation, stage, TIG, amende, DDSE, sursis probatoire, SSJ, sanction-réparation et peines complémentaires.</li><li>Emprisonnement, réclusion ou détention criminelle selon qualification et atténuation CJPM.</li></ul></li><li><h4>5. À ne pas inventer</h4><ul><li>Ne pas transposer automatiquement la MEE JE/TPE à la CAM.</li><li>Ne pas attribuer une MEJP à la CAM sans base dans la pièce ou le texte applicable.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-jap" data-mots-cles="JAP juge de l’application des peines application exécution aménagement peine probation libération conditionnelle bracelet électronique DDSE">
+<summary>
+<span class="support-juridiction-abreviation">JAP</span>
+<span class="support-juridiction-titre"><strong>Application des peines</strong><small>4 ressources</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-pratique-jap">
+<summary>
+<span class="support-revision-type">Frise pratique</span>
+<span class="support-revision-titre"><strong>Juge de l’application des peines (JAP)</strong><small>Suivi, exécution et aménagement des peines après condamnation.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Rôle général</h3><ul class="support-liste"><li>Intervient après la sanction, dans l’application et l’exécution de certaines peines.</li><li>Suit le respect des obligations, interdictions et aménagements décidés après condamnation.</li><li>Toujours vérifier la compétence JE-JAP ou JAP selon l’âge et la décision.</li></ul></section><ol class="support-frise"><li><h4>1. Après la sanction / exécution de la peine</h4><ul><li>On ne rejoue pas la culpabilité ni la sanction déjà prononcées.</li><li>Le dossier concerne alors le suivi post-condamnation et non une MEE.</li></ul></li><li><h4>2. Suivis et peines à rattacher au JAP</h4><ul><li>Sursis probatoire.</li><li>TIG.</li><li>DDSE.</li><li>Suivi socio-judiciaire.</li><li>Contrôle du respect des obligations et interdictions post-condamnation.</li></ul></li><li><h4>3. Aménagements et décisions possibles</h4><ul><li>Placement extérieur.</li><li>Semi-liberté.</li><li>Libération conditionnelle.</li><li>Fractionnement ou suspension de peine.</li><li>Conversion de peine.</li><li>Réductions de peine et permissions de sortir selon le cadre légal.</li><li>Adaptation, modification ou révocation de certaines modalités d’exécution.</li></ul></li><li><h4>4. Repères spéciaux pour les mineurs</h4><ul><li>Le JE exerce en principe les fonctions du JAP pour les peines concernant un mineur.</li><li>Dessaisissement possible vers le JAP à partir de 18 ans dans les conditions prévues.</li><li>Si la personne est majeure au jour du jugement, le JAP est en principe compétent sauf décision spéciale maintenant le JE.</li><li>Le TPE exerce les fonctions du TAP pour les mineurs condamnés.</li></ul></li></ol><aside class="support-attention"><strong>Ce que le JAP ne fait pas</strong><ul class="support-liste"><li>Ne juge pas la culpabilité.</li><li>Ne prononce pas une MEJ ou une MEJP comme sanction initiale.</li><li>Ne remplace pas automatiquement le JE lorsque celui-ci reste compétent.</li></ul></aside><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-synthese-jap">
+<summary>
+<span class="support-revision-type">Frise synthétique</span>
+<span class="support-revision-titre"><strong>Juge de l’application des peines (JAP)</strong><small>Repère procédural condensé.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><ol class="support-frise"><li><h4>1. Après condamnation</h4><ul><li>Application / exécution d’une peine déjà prononcée.</li><li>Ne rejuge pas la culpabilité ni la sanction initiale.</li></ul></li><li><h4>2. Suivis</h4><ul><li>Sursis probatoire ; TIG ; suivi socio-judiciaire.</li><li>Obligations / interdictions ; incidents et adaptations selon compétence.</li></ul></li><li><h4>3. Aménagements</h4><ul><li>Placement extérieur ; semi-liberté ; DDSE.</li><li>Fractionnement / suspension ; libération conditionnelle.</li><li>Retrait / révocation d’un aménagement dans les cas prévus.</li></ul></li><li><h4>4. Autres décisions d’exécution</h4><ul><li>Conversion de peine dans les cas prévus.</li><li>Réductions de peine ; permissions de sortir.</li><li>Décisions sur incidents d’exécution.</li></ul></li><li><h4>5. Mineurs : JE ou JAP ?</h4><ul><li>JE = fonctions du JAP jusqu’à 21 ans en principe.</li><li>Dessaisissement possible vers JAP à partir de 18 ans.</li><li>Majeur au jour du jugement : JAP en principe, sauf maintien spécial du JE.</li><li>Décision TAP = TPE pour le mineur condamné.</li></ul></li></ol><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-fiche-jap">
+<summary>
+<span class="support-revision-type">Fiche récapitulative</span>
+<span class="support-revision-titre"><strong>JAP — repères de compétence</strong><small>JE-JAP, JAP de droit commun et TAP.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Quand intervient le JAP ?</h3><ul class="support-liste"><li>Au stade de l’exécution ou de l’application des peines, une fois la condamnation devenue définitive ou exécutoire.</li><li>Il ne statue pas sur la culpabilité ni sur la sanction : ces décisions relèvent du jugement.</li></ul></section><section><h3>Ce qu’il suit</h3><ul class="support-liste"><li>Sursis avec mise à l’épreuve / sursis probatoire.</li><li>Travail d’intérêt général (TIG).</li><li>Détention à domicile sous surveillance électronique (DDSE).</li><li>Peines de stage et autres peines dont la loi prévoit le contrôle.</li></ul></section><section><h3>Ce qu’il peut décider</h3><ul class="support-liste"><li>Contrôler le respect des obligations et interdictions.</li><li>Adapter ou aménager les modalités d’exécution : durée, rythme, lieu, horaires.</li><li>Autoriser certaines permissions de sortir, déplacements ou absences dans les conditions légales.</li><li>Statuer sur des incidents d’exécution : avertissement, modification, mise en demeure, révocation.</li><li>Décider une révocation de sursis et, dans les cas prévus, l’aménagement de l’emprisonnement.</li></ul></section><section><h3>Qui est compétent ?</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Situation</th><th>Compétence</th><th>Précision</th></tr></thead><tbody>
+<tr><td>Mineur au jour du jugement</td><td>JE faisant fonction de JAP</td><td>En principe jusqu’à 21 ans, sauf dessaisissement.</td></tr>
+<tr><td>Mineur au jugement puis majeur</td><td>JE faisant fonction de JAP</td><td>Le JE reste en principe compétent jusqu’à 21 ans, sauf dessaisissement.</td></tr>
+<tr><td>18 ans ou plus au jour du jugement</td><td>JAP de droit commun</td><td>Sauf décision spéciale maintenant le JE compétent.</td></tr>
+<tr><td>18 ans ou plus au jugement avec maintien spécial du JE</td><td>JE pour l’application des peines</td><td>Décision expresse de la juridiction pour mineurs.</td></tr>
+<tr><td>Dessaisissement du JE après la majorité</td><td>JAP de droit commun</td><td>Le JE peut se dessaisir lorsque le suivi n’est plus adapté.</td></tr>
+<tr><td>21 ans atteints</td><td>JAP de droit commun</td><td>Fin de la compétence spéciale du JE.</td></tr>
+</tbody></table></div></section><section><h3>TAP — tribunal de l’application des peines</h3><ul class="support-liste"><li>Formation collégiale du tribunal judiciaire qui se substitue au JAP dans certains cas.</li><li>Intervient notamment pour certaines peines d’emprisonnement ferme de 2 ans ou plus, certaines révocations de sursis entraînant une peine ferme d’au moins 2 ans et d’autres décisions particulièrement graves prévues par la loi.</li></ul></section><p class="support-revision-date">Synthèse de formation · vérifiée le 24/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+<details class="support-revision" id="support-complement-jap">
+<summary>
+<span class="support-revision-type">Tableau complémentaire</span>
+<span class="support-revision-titre"><strong>JAP — compétences et repères</strong><small>Comprendre les décisions prises après le prononcé de la peine.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu"><section class="support-repere"><h3>Repère essentiel</h3><ul class="support-liste"><li>Pour les condamnations prononcées contre un mineur, le JE exerce en principe les fonctions du JAP jusqu’à 21 ans, sous réserve des règles de compétence et de dessaisissement.</li><li>Si le condamné a déjà 18 ans au jour du jugement, le JAP est en principe compétent, sauf décision spéciale maintenant le JE.</li></ul></section><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Moment</th><th>Ce qui peut être décidé</th><th>Limite clé</th></tr></thead><tbody>
+<tr><td>Suivi post-condamnation</td><td>Suivre l’exécution ; modifier ou adapter obligations/modalités ; statuer sur incidents et révocations lorsqu’il est compétent.</td><td>La peine est déjà prononcée : la culpabilité n’est pas rejugée.</td></tr>
+<tr><td>Aménagement d’emprisonnement</td><td>Placement extérieur ; semi-liberté ; DDSE ; fractionnement ou suspension ; libération conditionnelle.</td><td>Toujours vérifier seuils, durée de peine et compétence.</td></tr>
+<tr><td>Autres décisions d’exécution</td><td>Conversion de peine, réductions de peine, permissions de sortir, modification/levée d’obligations, retrait/révocation d’un aménagement selon le texte.</td><td>Certaines décisions relèvent du TAP/TPE plutôt que du juge seul.</td></tr>
+<tr><td>Mineurs / majorité</td><td>JE = JAP jusqu’à 21 ans en principe ; dessaisissement possible dès 18 ans ; majeur au jugement = JAP en principe sauf maintien spécial.</td><td>18 ans ne signifie pas toujours transfert automatique.</td></tr>
+<tr><td>Compétence collégiale</td><td>Quand le droit commun confie la décision au TAP, le TPE exerce ces fonctions pour les mineurs condamnés.</td><td>Ne pas confondre JAP (juge seul) et TAP (collégial).</td></tr>
+</tbody></table></div><section><h3>À ne pas confondre</h3><ul class="support-liste"><li>Audience de sanction ≠ application des peines.</li><li>MEJP / MEJ ≠ DDSE / sursis probatoire / TIG / SSJ.</li><li>ARSE = mesure de sûreté provisoire ; DDSE = peine ou aménagement selon le cas.</li><li>JAP / JE-JAP = juge seul ; TAP / TPE-application = formation collégiale.</li></ul></section><p class="support-revision-date">Synthèse de formation · vérifiée le 25/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+<details class="supports-juridiction" id="supports-transversaux" data-mots-cles="CJPM code de la justice pénale des mineurs MEJP MEJ MJIE MEE CJ ARSE DP TIG DDSE SSJ procédure délais mesures peines sanctions">
+<summary>
+<span class="support-juridiction-abreviation">CJPM</span>
+<span class="support-juridiction-titre"><strong>Repères transversaux</strong><small>1 tableau</small></span>
+<span class="support-juridiction-action">Ouvrir</span>
+<span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
+</summary>
+<div class="supports-juridiction-contenu">
+<details class="support-revision" id="support-tableau-maitre">
+<summary>
+<span class="support-revision-type">Tableau maître</span>
+<span class="support-revision-titre"><strong>CJPM — juridictions, mesures, modules, sûreté, peines et moments procéduraux</strong><small>Vue d’ensemble des acteurs, des décisions et des étapes de la procédure.</small></span>
+<span aria-hidden="true" class="support-revision-chevron">⌄</span>
+</summary>
+<div class="support-revision-contenu">
+<section class="support-repere"><h3>Comment lire le tableau maître</h3><p>Toujours identifier dans cet ordre : <strong>âge au moment pertinent → nature des faits → stade procédural → acteur compétent → nature de la décision → conditions particulières</strong>.</p></section>
+<section><h3>Sigles essentiels</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Sigle</th><th>Signification</th><th>Repère</th></tr></thead><tbody>
+{{TABLE_SIGLES_REVISION}}
+</tbody></table></div></section>
+<section><h3>Acteurs et stades — repères</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Acteur</th><th>Stade</th><th>Peut décider / faire</th><th>Limite clé</th></tr></thead><tbody>
+<tr><td>Parquet</td><td>Après enquête / orientation</td><td>Classement, alternatives, poursuites, choix du mode de saisine, réquisitions.</td><td>Ne juge ni culpabilité ni sanction ; ne décide pas lui-même DP ou MEJ.</td></tr>
+<tr><td>JE</td><td>Avant culpabilité</td><td>MJIE, MEJP, CJ ou ARSE selon le cadre.</td><td>La MEJ comme sanction n’est pas prononcée à ce stade.</td></tr>
+<tr><td>JE</td><td>Culpabilité / MEE / sanction</td><td>Culpabilité et action civile ; ouverture et suivi MEE ; avertissement, MEJ et peines limitées à la sanction.</td><td>Pas d’emprisonnement.</td></tr>
+<tr><td>TPE</td><td>Culpabilité / audience unique / sanction</td><td>Jugement complet, MEE, MEJ et peines légalement applicables.</td><td>Le suivi courant de la MEE relève ensuite du JE.</td></tr>
+<tr><td>JI</td><td>Information judiciaire</td><td>Mise en examen, MJIE, MEJP, CJ, ARSE, investigations ; règlement de l’instruction.</td><td>Ne prononce pas la sanction ; saisit le JLD pour DP.</td></tr>
+<tr><td>JLD</td><td>Liberté / sûreté</td><td>DP et, selon saisine/compétence, MEJP, CJ ou ARSE.</td><td>Ne juge pas l’affaire au fond.</td></tr>
+<tr><td>CAM</td><td>Crime commis à partir de 16 ans</td><td>Culpabilité, action civile, MEJ et peines criminelles applicables.</td><td>Intervient après mise en accusation.</td></tr>
+</tbody></table></div></section>
+<section><h3>MEJ et MEJP — distinction centrale</h3><div class="support-comparaison"><article><h4>MEJ</h4><ul class="support-liste"><li>Sanction éducative.</li><li>Modules insertion, réparation, santé et placement.</li><li>Interdictions 5 à 7 bis et obligations 8 et 9 prévues à l’article L112-2.</li><li>Les éléments peuvent être prononcés dans les limites et conditions du CJPM.</li></ul></article><article><h4>MEJP</h4><ul class="support-liste"><li>Avant le prononcé de la sanction.</li><li>Modules 1 à 4 et interdictions 5 à 7 bis.</li><li>Ne reprend pas les obligations 8 et 9 de la MEJ définitive.</li><li>Peut comporter l’obligation spécifique de présentation périodique prévue par L323-1.</li><li>Modifiable ou levable à tout moment dans le cadre légal ; ne peut se poursuivre au-delà de 21 ans.</li></ul></article></div><p class="support-piege"><strong>Piège :</strong> ne jamais réduire la MEJP à « une MEJ avant sanction » : leur contenu juridique n’est pas strictement identique.</p></section>
+<section><h3>Les quatre modules</h3><div class="support-modules"><article><h4>Insertion</h4><p>Prise en charge scolaire ou visant l’insertion sociale, scolaire ou professionnelle ; peut inclure accueil de jour, internat scolaire ou établissement d’enseignement/formation. Réf. L112-5 à L112-7.</p></article><article><h4>Réparation</h4><p>Activité d’aide ou de réparation envers la victime ou dans l’intérêt de la collectivité, ou médiation. Durée maximale du module : 1 an ; accord de la victime requis pour la réparation directe ou la médiation. Réf. L112-8 à L112-10.</p></article><article><h4>Santé</h4><p>Orientation vers une prise en charge sanitaire adaptée ; certains placements nécessitent avis médical ou orientation spécifique. Réf. L112-11 à L112-13.</p></article><article><h4>Placement</h4><p>Accueil hors du milieu de vie habituel auprès des personnes, services ou établissements autorisés ; décision fixant lieu, durée et modalités. Réf. L112-14 à L112-15 et L113-*.</p></article></div></section>
+<section><h3>MJIE et MEE</h3><ul class="support-liste"><li>La MJIE est une investigation approfondie, pas une sanction ni une mesure de sûreté.</li><li>Elle peut être ordonnée par le JE, le JI et les juridictions de jugement pour mineurs aux stades prévus.</li><li>Pendant la MEE, le suivi est placé sous le contrôle du JE après déclaration de culpabilité.</li><li>Expertise, MJIE, MEJP, CJ ou ARSE peuvent être articulés pendant la MEE selon le cadre légal.</li><li>Un manquement à CJ/ARSE ne crée jamais automatiquement une escalade vers la DP : chaque décision exige son propre cadre légal.</li></ul></section>
+<section><h3>Contrôle judiciaire (CJ)</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Âge / situation</th><th>CJ ?</th><th>Condition clé</th></tr></thead><tbody><tr><td>&lt; 13 ans</td><td>Non</td><td>CJ impossible.</td></tr><tr><td>13–15 ans — crime</td><td>Possible</td><td>Peine criminelle encourue.</td></tr><tr><td>13–15 ans — délit ≥ 7 ans</td><td>Possible</td><td>Seuil correctionnel autonome.</td></tr><tr><td>13–15 ans — délit ≥ 5 ans avec antécédent procédural et rapport &lt; 1 an</td><td>Possible</td><td>Conditions spécifiques du CJPM.</td></tr><tr><td>16 ans et +</td><td>Possible selon conditions</td><td>Crime ou conditions correctionnelles prévues par le CPP/CJPM.</td></tr></tbody></table></div></section>
+<section><h3>ARSE et détention provisoire</h3><div class="support-comparaison"><article><h4>ARSE</h4><ul class="support-liste"><li>Régime général : 16 ans et plus et peine d’emprisonnement encourue d’au moins 3 ans.</li><li>Exceptions prévues à partir de 13 ans pour certaines infractions terroristes ou commises en bande organisée, avec seuils spécifiques.</li><li>Si l’ARSE est exécutée au domicile des représentants légaux, leur accord écrit est requis dans le cadre prévu.</li></ul></article><article><h4>DP</h4><ul class="support-liste"><li>Impossible avant 13 ans.</li><li>Ne peut être décidée ou prolongée que si elle est indispensable et si CJ/ARSE sont insuffisants.</li><li>Pendant l’instruction, le JI saisit le JLD.</li><li>Lorsqu’une DP est ordonnée, une MEJP doit être prononcée.</li><li>Pour les moins de 16 ans, la DP correctionnelle est très encadrée.</li><li>DP = mesure de sûreté provisoire ; emprisonnement = peine.</li></ul></article></div></section>
+<section><h3>Sanctions et peines par juridiction</h3><div class="support-tableau-conteneur"><table class="support-tableau"><thead><tr><th>Juridiction</th><th>Sanctions / peines — synthèse</th><th>Limite clé</th></tr></thead><tbody><tr><td>Tribunal de police</td><td>Avertissement judiciaire ; pour mineur ≥13 dans le cadre contraventionnel : dispense de peine, amende atténuée, certaines peines complémentaires.</td><td>Compétence contraventionnelle.</td></tr><tr><td>JE</td><td>Avertissement ; MEJ ; sur réquisitions et conditions : confiscation, stage, TIG.</td><td>Pas d’emprisonnement.</td></tr><tr><td>TPE</td><td>Avertissement ; MEJ ; amende, TIG, stage, confiscation, DDSE, sursis probatoire, SSJ, sanction-réparation, restrictions de droits et emprisonnement lorsque légalement applicables.</td><td>Aucune peine pour faits commis avant 13 ans.</td></tr><tr><td>CAM</td><td>Avertissement ; MEJ ; peines criminelles applicables aux mineurs, dont réclusion/détention dans les limites CJPM.</td><td>Crime commis à partir de 16 ans.</td></tr></tbody></table></div><p><strong>Atténuation :</strong> en principe, pour le TPE et la CAM, la peine privative de liberté ne dépasse pas la moitié de la peine encourue ; si la perpétuité est encourue, le plafond est de 20 ans, sous réserve des règles permettant exceptionnellement d’écarter l’atténuation pour certains mineurs de plus de 16 ans.</p></section>
+<section><h3>Après la sanction</h3><ul class="support-liste"><li>Le JE contrôle l’exécution de la MEJ.</li><li>Pour les peines prononcées contre un mineur, le JE exerce en principe les fonctions du JAP dans les limites prévues.</li><li>Le TPE exerce les fonctions du tribunal de l’application des peines pour les mineurs condamnés.</li><li>Un dessaisissement vers le JAP de droit commun est possible dans les cas prévus après la majorité.</li></ul></section>
+<section><h3>Checklist anti-erreur</h3><ol class="support-checklist"><li>Quel âge avait le jeune au moment des faits ?</li><li>Les faits sont-ils une contravention, un délit ou un crime ?</li><li>Quel est le stade : enquête, défèrement, instruction, culpabilité, MEE, audience unique, sanction ou exécution ?</li><li>Qui est saisi ou a rendu la décision ?</li><li>S’agit-il d’une investigation, d’une mesure éducative provisoire, d’une mesure de sûreté, d’une sanction éducative ou d’une peine ?</li><li>Pour CJ/ARSE/DP : quelles conditions d’âge, de seuil et de nature des faits s’appliquent ?</li><li>Pour une MEJP : le contenu reste-t-il dans les limites prévues par L323-1 ?</li><li>Pour une MEJ : quels modules, interdictions ou obligations sont effectivement prononcés ?</li><li>Est-ce écrit dans la décision ou s’agit-il d’une hypothèse ?</li><li>Si l’information manque, ne pas inventer.</li></ol></section>
+<section><h3>Sources indiquées dans le document</h3><p>Documents de formation du projet et Code de la justice pénale des mineurs consulté sur Légifrance au 24/08/2026. Ensembles principalement mobilisés : L111-1 à L113-8 ; L121-1 à L124-2 ; L322-7 ; L323-1 à L323-3 ; L331-1 à L334-6 ; L423-9 et suivants ; L432-1 à L434-* ; L521-1 à L521-27 ; L611-1 à L611-6.</p></section>
+<p class="support-revision-date">Synthèse de formation · vérifiée le 24/08/2026 · le texte en vigueur prime.</p></div>
+</details>
+</div></details>
+</div></section>
+</section>
