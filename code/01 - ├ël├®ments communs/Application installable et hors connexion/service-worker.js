@@ -80,6 +80,23 @@ self.addEventListener('activate', evenement => {
   );
 });
 
+async function trouverNavigationEnCache(requete) {
+  const reponseExacte = await caches.match(requete);
+  if (reponseExacte)
+    return reponseExacte;
+
+  const adresse = new URL(requete.url);
+  if (adresse.pathname.endsWith('/')) {
+    const adresseIndex = new URL('index.html', adresse).href;
+    const reponseIndex = await caches.match(adresseIndex);
+    if (reponseIndex)
+      return reponseIndex;
+  }
+
+  const accueil = new URL('index.html', self.registration.scope).href;
+  return caches.match(accueil);
+}
+
 self.addEventListener('fetch', evenement => {
   const requete = evenement.request;
   const adresse = new URL(requete.url);
@@ -96,7 +113,7 @@ self.addEventListener('fetch', evenement => {
             .catch(() => undefined)
             .then(() => reponse);
         })
-        .catch(() => caches.match(requete).then(reponse => reponse || caches.match('./index.html')))
+        .catch(() => trouverNavigationEnCache(requete))
     );
     return;
   }
