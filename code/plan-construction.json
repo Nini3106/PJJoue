@@ -7,6 +7,7 @@
     "question": "code/06 - Question/contenu.html",
     "bilan": "code/07 - Bilan de la session/contenu.html",
     "erreurs": "code/08 - Réviser/contenu.html",
+    "sigles": "code/08 - Réviser/Jeu des sigles/contenu.html",
     "progression": "code/09 - Progression/contenu.html",
     "parametres": "code/10 - Paramètres/contenu.html"
   },
@@ -179,6 +180,10 @@
       "debut_code_apres_entete_lignes": 7
     },
     {
+      "source": "code/08 - Réviser/Jeu des sigles/actions-de-la-page.js",
+      "debut_code_apres_entete_lignes": 7
+    },
+    {
       "source": "code/09 - Progression/actions-affichage-progression.js",
       "debut_code_apres_entete_lignes": 4
     },
@@ -240,6 +245,11 @@
       "sortie": "pjjoue-principal.css",
       "ordre": 42,
       "source": "code/07 - Bilan de la session/style-de-la-page.css"
+    },
+    {
+      "sortie": "pjjoue-principal.css",
+      "ordre": 7,
+      "source": "code/08 - Réviser/Jeu des sigles/style-jeu-des-sigles.css"
     }
   ],
   "ressources_administration": [

@@ -41,8 +41,10 @@ function preparerQuestionCourante() {
 
     clearInterval(etat.identifiantMinuteur);
     etat.questionCourante = etat.questionsSession[etat.indexQuestion];
-    marquerEtapeDecouverte(etat.questionCourante);
-    marquerQuestionJouee(etat.questionCourante);
+    if (!etat.questionCourante?.missionSigles) {
+        marquerEtapeDecouverte(etat.questionCourante);
+        marquerQuestionJouee(etat.questionCourante);
+    }
     enregistrerSauvegarde();
 
     const question = etat.questionCourante;
@@ -70,6 +72,20 @@ function preparerQuestionCourante() {
 }
 
 function afficherReperesQuestion(question) {
+    if (question?.missionSigles) {
+        const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
+        const identite = obtenirIdentiteEtapeMissionSigles(numeroEtape);
+        const ecranQuestion = selectionner('#question');
+        ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
+        ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
+        const valeurProgression = Math.round((etat.indexQuestion + 1) / etat.questionsSession.length * 100);
+        selectionner('#compteurQuestion').textContent = `${etat.indexQuestion + 1} / ${etat.questionsSession.length}`;
+        selectionner('#progressionQuestion').style.width = `${valeurProgression}%`;
+        selectionner('#progressionQuestion').parentElement?.setAttribute('aria-valuenow', String(valeurProgression));
+        selectionner('#enonceQuestion').textContent = nettoyerEnonce(question);
+        selectionner('#reperesQuestion').innerHTML = `<span class="repere repere-theme"><span class="icone-theme" aria-hidden="true">Aa</span><b>Mission Sigles · Étape ${identite.numero}</b></span>`;
+        return;
+    }
     const theme = THEMES.find(themeCandidat => themeCandidat.id === question.theme);
     const identite = obtenirIdentiteParcours(question.theme);
     const ecranQuestion = selectionner('#question');
@@ -95,7 +111,6 @@ function afficherReperesQuestion(question) {
         + `<b>Parcours ${identite.numero} · ${identite.titre}</b></span>`
         + repereProcedureLocale;
 }
-
 function creerBoutonChoixUnique(proposition, indice, reponse, dejaPassee) {
     const bouton = document.createElement('button');
     bouton.className = 'reponse';
@@ -226,6 +241,12 @@ function configurerChronometreEtFocusQuestion(jokersActifs, modeEvaluationFinale
 }
 
 function appliquerIdentiteVisuelleEtape(question) {
+    if (question?.missionSigles) {
+        const identite = obtenirIdentiteEtapeMissionSigles(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
+        document.documentElement.style.setProperty('--couleur-etape-active', identite.couleur);
+        document.body.dataset.etapeActive = `sigles-${question.missionSiglesMeta?.numeroEtape || question.etape || 1}`;
+        return;
+    }
     const programme = PROGRAMMES[question?.theme];
     const etapeProgramme = programme?.etapes?.find(
         etape => Number(etape.id) === Number(question?.etape)
@@ -245,6 +266,19 @@ function actualiserSuiviEtapeQuestion(question) {
     const boutonReinitialiser = selectionner('#boutonReinitialiserValidationsSansJoker');
     if (!conteneur || !numero || !titre || !suivi || !compteur || !boutonReinitialiser || !question)
         return;
+    if (question.missionSigles) {
+        const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
+        const identite = obtenirIdentiteEtapeMissionSigles(numeroEtape);
+        const finaleMission = obtenirModeMissionSigles() === 'evaluation';
+        numero.textContent = finaleMission ? 'Évaluation finale' : `Étape ${numeroEtape}`;
+        titre.textContent = finaleMission ? 'Expert des sigles' : identite.titre;
+        suivi.classList.toggle('masque', finaleMission || obtenirModeMissionSigles() !== 'parcours');
+        if (!finaleMission && obtenirModeMissionSigles() === 'parcours') {
+            compteur.textContent = `${compterMaitrisesEtapeSigles(numeroEtape)}/${NOMBRE_SIGLES_PAR_ETAPE}`;
+            boutonReinitialiser.disabled = compterMaitrisesEtapeSigles(numeroEtape) === 0;
+        }
+        return;
+    }
     const finale = etat.mode === 'evaluation-finale' || Number(question.etape) === 12;
     const etapeProgramme = obtenirEtapeProgramme(question.theme, question.etape);
     const identite = obtenirIdentiteParcours(question.theme);
@@ -267,6 +301,18 @@ function actualiserSuiviEtapeQuestion(question) {
 }
 function demanderReinitialisationSansJoker() {
     const question = etat.questionCourante;
+    if (question?.missionSigles) {
+        const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
+        const nombreAutonomes = compterMaitrisesEtapeSigles(numeroEtape);
+        if (!nombreAutonomes) return;
+        ouvrirFenetreMessage({
+            titre:'Réinitialiser la maîtrise sans aide ?',
+            message:`Les ${nombreAutonomes} validations autonomes de cette étape Mission Sigles seront effacées.`,
+            libelleConfirmer:'Réinitialiser', libelleAnnuler:'Annuler', afficherAnnuler:true, variante:'avertissement',
+            apresConfirmation:()=>reinitialiserMaitriseEtapeMissionSigles(numeroEtape)
+        });
+        return;
+    }
     if (!question || etat.mode !== 'parcours')
         return;
     const nombreAutonomes = compterReussitesAutonomesEtape(question.theme, question.etape);

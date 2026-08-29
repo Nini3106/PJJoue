@@ -14,6 +14,21 @@ function creerEtatEvaluationFinale() {
 function creerEvaluationsFinalesInitiales() {
     return Object.fromEntries(THEMES.map(theme => [theme.id, creerEtatEvaluationFinale()]));
 }
+function creerProgressionSiglesInitiale() {
+    return {
+        decouverts: {},
+        etapes: Object.fromEntries([1, 2, 3, 4, 5, 6].map(numero => [String(numero), {
+            autonomes: {},
+            validationsSansJoker: {},
+            celebrationAffichee: false,
+            nombreTentatives: 0,
+            meilleurScore: 0
+        }])),
+        erreurs: {},
+        evaluation: { meilleurScore: 0, nombreTentatives: 0, reussie: false },
+        statistiques: { questionsJouees: 0 }
+    };
+}
 function creerSauvegardeInitiale() {
     return {
         version: 'V1',
@@ -27,7 +42,8 @@ function creerSauvegardeInitiale() {
         dernierTheme: null,
         etapesDecouvertes: {},
         questionsJouees: {},
-        evaluationsFinales: creerEvaluationsFinalesInitiales()
+        evaluationsFinales: creerEvaluationsFinalesInitiales(),
+        siglesJeu: creerProgressionSiglesInitiale()
     };
 }
 function estObjetSimple(valeur) {
@@ -156,6 +172,56 @@ function normaliserEtapesDecouvertes(sauvegardeBrute) {
     }
     return resultat;
 }
+function nettoyerProgressionSigles(sauvegardeBrute) {
+    const initiale = creerProgressionSiglesInitiale();
+    const brute = estObjetSimple(sauvegardeBrute?.siglesJeu) ? sauvegardeBrute.siglesJeu : {};
+    const identifiants = new Set((SIGLES || []).map(element => String(element.sigle || '').toUpperCase()));
+    const filtrerSiglesActifs = valeur => estObjetSimple(valeur)
+        ? Object.fromEntries(Object.entries(valeur).filter(([sigle, actif]) => identifiants.has(String(sigle).toUpperCase()) && actif === true))
+        : {};
+    const erreurs = {};
+    if (estObjetSimple(brute.erreurs)) {
+        for (const [sigle, valeur] of Object.entries(brute.erreurs)) {
+            const cle = String(sigle).toUpperCase();
+            if (!identifiants.has(cle) || !estObjetSimple(valeur))
+                continue;
+            erreurs[cle] = {
+                active: valeur.active === true,
+                nombreErreurs: convertirEntierBorne(valeur.nombreErreurs),
+                reussitesRevision: convertirEntierBorne(valeur.reussitesRevision, 0, 2)
+            };
+        }
+    }
+    const etapes = {};
+    for (let numero = 1; numero <= 6; numero += 1) {
+        const cle = String(numero);
+        const source = estObjetSimple(brute.etapes?.[cle]) ? brute.etapes[cle] : {};
+        const autorises = new Set((SIGLES || []).filter(element => Number(element.etape) === numero).map(element => String(element.sigle).toUpperCase()));
+        const filtrerEtape = valeur => estObjetSimple(valeur)
+            ? Object.fromEntries(Object.entries(valeur).filter(([sigle, actif]) => autorises.has(String(sigle).toUpperCase()) && actif === true))
+            : {};
+        etapes[cle] = {
+            autonomes: filtrerEtape(source.autonomes),
+            validationsSansJoker: filtrerEtape(source.validationsSansJoker),
+            celebrationAffichee: source.celebrationAffichee === true,
+            nombreTentatives: convertirEntierBorne(source.nombreTentatives),
+            meilleurScore: convertirEntierBorne(source.meilleurScore, 0, 100)
+        };
+    }
+    const evaluation = estObjetSimple(brute.evaluation) ? brute.evaluation : {};
+    const statistiques = estObjetSimple(brute.statistiques) ? brute.statistiques : {};
+    return {
+        decouverts: filtrerSiglesActifs(brute.decouverts),
+        etapes,
+        erreurs,
+        evaluation: {
+            meilleurScore: convertirEntierBorne(evaluation.meilleurScore, 0, 100),
+            nombreTentatives: convertirEntierBorne(evaluation.nombreTentatives),
+            reussie: evaluation.reussie === true
+        },
+        statistiques: { questionsJouees: convertirEntierBorne(statistiques.questionsJouees) }
+    };
+}
 function nettoyerSauvegarde(sauvegardeBrute) {
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
@@ -188,7 +254,8 @@ function nettoyerSauvegarde(sauvegardeBrute) {
             : null,
         etapesDecouvertes: normaliserEtapesDecouvertes(sauvegardeBrute),
         questionsJouees: filtrerIndicateurs(sauvegardeBrute.questionsJouees, identifiantsQuestions),
-        evaluationsFinales: nettoyerEvaluationsFinales(sauvegardeBrute)
+        evaluationsFinales: nettoyerEvaluationsFinales(sauvegardeBrute),
+        siglesJeu: nettoyerProgressionSigles(sauvegardeBrute)
     };
 }
 function chargerSauvegarde() {
@@ -280,6 +347,8 @@ function effacerSessionEnCours() {
     }
 }
 function enregistrerSessionEnCours() {
+    if (estSessionMissionSigles())
+        return false;
     if (etat.ecran !== 'question' || !etat.questionsSession?.length || !etat.questionCourante)
         return false;
     const saisieActive = selectionner('#reponseEcrite');

@@ -128,6 +128,8 @@ const TITRES_ECRANS = {
     carnet: 'Carnet de parcours',
     entrainement: 'Choisis ton mode d’entraînement',
     erreurs: 'Mes erreurs à retravailler',
+    sigles: 'Mission Sigles',
+    'sigles-revision': 'Réviser mes erreurs · Mission Sigles',
     supports: 'Supports de révision',
     progression: 'Progression',
     parametres: 'Paramètres',
@@ -193,8 +195,12 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     mesurerHauteurEntete();
     if (identifiant === 'erreurs')
         afficherErreurs();
+    if (identifiant === 'sigles-revision')
+        afficherRevisionMissionSigles();
     if (identifiant === 'progression')
         afficherProgression();
+    if (identifiant === 'sigles')
+        actualiserAccueilSigles();
     if (identifiant === 'carnet') {
         THEMES.forEach(theme => initialiserProgression(theme.id));
         actualiserCarnetParcours();
@@ -356,7 +362,7 @@ function revenirEnArriere() {
         return;
     }
     if (etat.ecran === 'question') {
-        const secours = etat.mode === 'parcours' || etat.mode === 'evaluation-finale' ? 'parcours' : (etat.mode === 'revision' ? 'erreurs' : 'entrainement');
+        const secours = etat.mode === 'parcours' || etat.mode === 'evaluation-finale' ? 'parcours' : (etat.mode === 'revision' ? 'erreurs' : (etat.mode === 'sigles-revision' ? 'sigles-revision' : 'entrainement'));
         if (secours === 'parcours') {
             ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
             return;
@@ -373,7 +379,7 @@ function revenirEnArriere() {
             ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
             return;
         }
-        afficherEcran(etat.mode === 'revision' ? 'erreurs' : 'entrainement', { forcerSortieQuestion: true, remplacerHistorique: true });
+        afficherEcran(etat.mode === 'revision' ? 'erreurs' : (etat.mode === 'sigles-revision' ? 'sigles-revision' : 'entrainement'), { forcerSortieQuestion: true, remplacerHistorique: true });
         return;
     }
     afficherEcran('accueil', { forcerSortieQuestion: true, remplacerHistorique: true });
@@ -390,7 +396,7 @@ function lireRoute() {
     const parties = location.hash.replace(/^#/, '').split('/').map(decoderSegment);
     if (parties[0] === 'parcours')
         return { pjjoue: true, ecran: 'parcours', theme: parties[1] || null };
-    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'supports', 'progression', 'parametres', 'question'];
+    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'sigles', 'sigles-revision', 'supports', 'progression', 'parametres', 'question'];
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
 }
 function restaurerRoute(route) {

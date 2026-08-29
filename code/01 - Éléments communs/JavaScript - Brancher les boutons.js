@@ -15,6 +15,10 @@ selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => {
         ouvrirChoixParcours();
         return;
     }
+    if (bouton.dataset.ecran === 'entrainement' && bouton.id === 'boutonEntrainementLibre')
+        restaurerEntrainementPJJoueNatif();
+    if (bouton.dataset.ecran === 'erreurs' && bouton.id === 'boutonReviser')
+        etat.contexteRevision = null;
     afficherEcran(bouton.dataset.ecran);
 });
 const boutonLancerLeDe = selectionner('#boutonLancerLeDe');
@@ -157,8 +161,14 @@ document.addEventListener('click', evenement => {
         lancerRevision(cible.dataset.theme);
     else if (action === 'reviser-etape')
         lancerRevisionEtape(cible.dataset.theme || 'commun', cible.dataset.etape);
+    else if (action === 'reviser-toutes-erreurs-sigles')
+        lancerToutesErreursSiglesDepuisRevision();
+    else if (action === 'reviser-etape-sigles')
+        lancerRevisionEtapeSiglesDepuisRevision(cible.dataset.etape);
     else if (action === 'ouvrir-parcours-depuis-erreurs')
         ouvrirChoixParcours();
+    else if (action === 'ouvrir-mission-sigles-depuis-erreurs')
+        afficherEcran('sigles');
 });
 mesurerHauteurEntete();
 selectionner('#boutonMenuMobile')?.addEventListener('click', evenement => {

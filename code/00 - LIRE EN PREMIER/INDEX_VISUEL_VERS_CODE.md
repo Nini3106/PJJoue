@@ -15,6 +15,7 @@ La colonne **Repère** contient le nom exact à rechercher. Les boutons statique
 | Question | `code/06 - Question/` |
 | Bilan de la session | `code/07 - Bilan de la session/` |
 | Réviser | `code/08 - Réviser/` |
+| Mission Sigles | `code/08 - Réviser/Jeu des sigles/` |
 | Progression | `code/09 - Progression/` |
 | Paramètres | `code/10 - Paramètres/` |
 | Guides pour découvrir la PJJ | `code/11 - Guides pour découvrir la PJJ/Accueil des guides/` |
@@ -142,3 +143,5 @@ Les couleurs peuvent varier pour distinguer les parcours, mais **le dessin reste
 - Si tu vois **une icône**, cherche d’abord son repère dans la bibliothèque SVG commune ou dans le dossier de la page indiqué ci-dessus.
 - Si une action touche plusieurs pages, elle se trouve dans `code/01 - Éléments communs/`.
 - Si une règle CSS est partagée entre plusieurs écrans, elle reste dans les éléments communs pour ne pas casser la cascade.
+
+| Réviser mes erreurs · Mission Sigles | `#sigles-revision` | `code/08 - Réviser/Jeu des sigles/` |

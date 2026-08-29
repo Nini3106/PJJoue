@@ -164,6 +164,10 @@ function obtenirOrdreTheme(identifiantTheme) {
     return index < 0 ? 999 : index;
 }
 function lancerEntrainementLibre() {
+    if (etat.contexteEntrainement === 'sigles') {
+        lancerEntrainementMissionSiglesNatif();
+        return;
+    }
     etat.mode = 'libre';
     etat.origineSessionAnalytics = 'entrainement_libre';
     const perimetre = selectionner('#perimetreEntrainement')?.value || etat.perimetreEntrainement || 'tous';

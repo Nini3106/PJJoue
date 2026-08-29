@@ -51,13 +51,22 @@ def preparer_donnees() -> tuple[str, int, int]:
     programme = lire_json("programme.json")
     sources = lire_json("sources.json")
     questions = lire_json("questions.json")
+    sigles = lire_json("sigles.json")
     exiger_donnees_valides(programme, sources, questions)
+    if not isinstance(sigles, list) or not sigles:
+        raise SystemExit("ÉCHEC — donnees/sigles.json doit contenir une liste non vide.")
+    sigles_normalises = [str(element.get("sigle", "")).strip().upper() for element in sigles if isinstance(element, dict)]
+    if len(sigles_normalises) != len(sigles) or any(not sigle for sigle in sigles_normalises):
+        raise SystemExit("ÉCHEC — chaque entrée de donnees/sigles.json doit contenir un sigle.")
+    if len(sigles_normalises) != len(set(sigles_normalises)):
+        raise SystemExit("ÉCHEC — donnees/sigles.json contient un doublon de sigle.")
 
     ensembles = (
         ("THEMES", construire_themes(programme)),
         ("PROGRAMMES", programme),
         ("SOURCES", sources),
         ("QUESTIONS", questions),
+        ("SIGLES", sigles),
     )
 
     lignes = [

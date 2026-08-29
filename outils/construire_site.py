@@ -12,6 +12,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 import argparse
 import hashlib
+import html
 import json
 import re
 import sys
@@ -32,11 +33,67 @@ class ErreurConstruction(RuntimeError):
     """Erreur expliquée simplement à la personne qui reprend PJJoue."""
 
 
+
+
+def charger_sigles() -> list[dict]:
+    chemin = RACINE / "donnees" / "sigles.json"
+    if not chemin.is_file():
+        raise ErreurConstruction("Le fichier donnees/sigles.json est introuvable.")
+    try:
+        sigles = json.loads(chemin.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as erreur:
+        raise ErreurConstruction(f"donnees/sigles.json n'est pas un JSON valide : {erreur}") from erreur
+    if not isinstance(sigles, list) or not sigles:
+        raise ErreurConstruction("donnees/sigles.json doit contenir une liste non vide.")
+    cles = [str(element.get("sigle", "")).strip().upper() for element in sigles if isinstance(element, dict)]
+    if len(cles) != len(sigles) or any(not cle for cle in cles):
+        raise ErreurConstruction("Chaque entrée de donnees/sigles.json doit contenir un sigle.")
+    verifier_aucun_doublon(cles, "Sigle")
+    return sigles
+
+
+def rendre_lignes_sigles_support(sigles: list[dict]) -> str:
+    return "\n".join(
+        "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(
+            html.escape(str(element.get("sigle", ""))),
+            html.escape(str(element.get("signification", ""))),
+            html.escape(str(element.get("repere", ""))),
+        )
+        for element in sigles
+    )
+
+
+def rendre_lignes_sigles_guide(sigles: list[dict], groupe: str) -> str:
+    selection = [element for element in sigles if element.get("guideGroupe") == groupe]
+    return "\n    ".join(
+        "<tr><td>{}</td><td>{}</td></tr>".format(
+            html.escape(str(element.get("sigle", ""))),
+            html.escape(str(element.get("signification", ""))),
+        )
+        for element in selection
+    )
+
+
+def remplacer_marqueurs_sigles(texte: str) -> str:
+    if "{{TABLE_SIGLES_" not in texte:
+        return texte
+    sigles = charger_sigles()
+    remplacements = {
+        "{{TABLE_SIGLES_REVISION}}": rendre_lignes_sigles_support(sigles),
+        "{{TABLE_SIGLES_GUIDE_ORGANISATION}}": rendre_lignes_sigles_guide(sigles, "Organisation et fonctions"),
+        "{{TABLE_SIGLES_GUIDE_SERVICES}}": rendre_lignes_sigles_guide(sigles, "Services, établissements et unités"),
+        "{{TABLE_SIGLES_GUIDE_MESURES}}": rendre_lignes_sigles_guide(sigles, "Mesures et justice des mineurs"),
+        "{{TABLE_SIGLES_GUIDE_AUTRES}}": rendre_lignes_sigles_guide(sigles, "Autres sigles utiles des glossaires PJJ"),
+    }
+    for marqueur, contenu in remplacements.items():
+        texte = texte.replace(marqueur, contenu)
+    return texte
+
 def lire_texte(chemin_relatif: str) -> str:
     chemin = RACINE / chemin_relatif
     if not chemin.is_file():
         raise ErreurConstruction(f"Fichier source introuvable : {chemin_relatif}")
-    return chemin.read_text(encoding="utf-8")
+    return remplacer_marqueurs_sigles(chemin.read_text(encoding="utf-8"))
 
 
 def verifier_aucun_doublon(valeurs: list[str], libelle: str) -> None:

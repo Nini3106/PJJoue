@@ -3379,7 +3379,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 #entrainement .entrainement-icone-melange {
     color: var(--icone-bleu-vert);
 }
-#erreurs .theme-icone,#erreurs .vide-icone {
+:is(#erreurs,#sigles-revision) .theme-icone,:is(#erreurs,#sigles-revision) .vide-icone {
     color: var(--icone-orange)
 }
 #progression .theme-icone,#progression .vide-icone {
@@ -3530,26 +3530,26 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     opacity: .42;
     cursor: default;
 }
-#erreurs .page-entete h1 {
+:is(#erreurs,#sigles-revision) .page-entete h1 {
     letter-spacing: -.03em;
 }
 #carnet > .page-entete,
-#erreurs > .page-entete,
+:is(#erreurs,#sigles-revision) > .page-entete,
 #parametres > .page-entete {
     text-align: center;
 }
 #carnet > .page-entete > p,
-#erreurs > .page-entete > p,
+:is(#erreurs,#sigles-revision) > .page-entete > p,
 #parametres > .page-entete > p {
     margin-inline: auto;
 }
-#erreurs .revision-mode-grille {
+:is(#erreurs,#sigles-revision) .revision-mode-grille {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 18px;
     margin-bottom: 22px;
 }
-#erreurs .revision-mode-carte {
+:is(#erreurs,#sigles-revision) .revision-mode-carte {
     min-height: 210px;
     padding: 24px;
     display: flex;
@@ -3558,7 +3558,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     justify-content: space-between;
     border-radius: 18px;
 }
-#erreurs .revision-mode-carte h2 {
+:is(#erreurs,#sigles-revision) .revision-mode-carte h2 {
     margin: 0 0 9px;
     color: #fff;
     font-size: 1.25rem;
@@ -3566,18 +3566,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     align-items: center;
     gap: 12px;
 }
-#erreurs .revision-mode-carte p {
+:is(#erreurs,#sigles-revision) .revision-mode-carte p {
     margin: 0;
     color: #cfe2f4;
     line-height: 1.5;
 }
-#erreurs .revision-etape-boutons {
+:is(#erreurs,#sigles-revision) .revision-etape-boutons {
     margin-top: 20px;
     width: 100%;
     grid-template-columns: repeat(4,minmax(0,1fr));
     gap: 9px;
 }
-#erreurs .revision-etape-bouton {
+:is(#erreurs,#sigles-revision) .revision-etape-bouton {
     min-height: 48px;
     padding: 8px 10px;
     border-radius: 12px;
@@ -3594,10 +3594,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding-left: 12px;
     padding-right: 10px;
 }
-#erreurs .revision-etape-bouton:hover {
+:is(#erreurs,#sigles-revision) .revision-etape-bouton:hover {
     border-color: var(--jaune-interface);
 }
-#erreurs .revision-etape-bouton b {
+:is(#erreurs,#sigles-revision) .revision-etape-bouton b {
     min-width: 25px;
     height: 25px;
     border-radius: 999px;
@@ -3948,7 +3948,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     }
 }
 @media (max-width:950px) {
-    #erreurs .revision-mode-grille,#entrainement .entrainement-grille {
+    :is(#erreurs,#sigles-revision) .revision-mode-grille,#entrainement .entrainement-grille {
         grid-template-columns: 1fr;
     }
     #carnet .carnet-parcours-details {
@@ -3975,7 +3975,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
         width: 44px;
         height: 44px;
     }
-    #erreurs .revision-etape-boutons {
+    :is(#erreurs,#sigles-revision) .revision-etape-boutons {
         grid-template-columns: repeat(2,1fr);
     }
 }
@@ -4299,12 +4299,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
         grid-template-columns: 1fr;
     }
 }
-#erreurs .erreurs-parcours {
+:is(#erreurs,#sigles-revision) .erreurs-parcours {
     margin-top: 22px;
     padding: 28px;
     border-radius: 24px;
 }
-#erreurs .erreurs-parcours-entete {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-entete {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -4312,21 +4312,21 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(145,198,245,.20);
 }
-#erreurs .erreurs-parcours-entete h2 {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-entete h2 {
     margin: 0 0 6px;
     color: #fff;
     font-size: 1.45rem;
 }
-#erreurs .erreurs-parcours-entete p {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-entete p {
     margin: 0;
     color: #cfe2f4;
 }
-#erreurs .erreurs-parcours-titre {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-titre {
     margin: 24px 0 16px;
     color: #fff;
     font-size: 1.18rem;
 }
-#erreurs .erreurs-parcours-etapes {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-etapes {
     display: grid;
     gap: 14px;
     max-height: 520px;
@@ -4335,7 +4335,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding-right: 8px;
     scrollbar-gutter: stable;
 }
-#erreurs .erreurs-parcours-etape {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-etape {
     padding: 17px 18px;
     border-radius: 17px;
     border: 1px solid rgba(145,198,245,.22);
@@ -4344,19 +4344,19 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     overflow: hidden;
     box-sizing: border-box;
 }
-#erreurs .erreurs-parcours-etape-entete {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-etape-entete {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 14px;
     margin-bottom: 11px;
 }
-#erreurs .erreurs-parcours-etape-entete h4 {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-etape-entete h4 {
     margin: 0;
     color: #fff;
     font-size: 1rem;
 }
-#erreurs .erreurs-parcours-etape-entete span {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-etape-entete span {
     padding: 5px 10px;
     border-radius: 999px;
     background: var(--jaune-interface);
@@ -4365,49 +4365,49 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     font-weight: 900;
     white-space: nowrap;
 }
-#erreurs .erreurs-parcours-liste {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-liste {
     display: grid;
     gap: 8px;
 }
-#erreurs .erreurs-parcours-element {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-element {
     margin: 0;
     padding: 11px 13px;
     border-radius: 11px;
     background: rgba(5,42,84,.34);
 }
-#erreurs .erreurs-parcours-enonce {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-enonce {
     color: #eef7ff;
     font-weight: 750;
     line-height: 1.35;
     margin-bottom: 4px;
     overflow-wrap: anywhere;
 }
-#erreurs .erreurs-parcours-etapes::-webkit-scrollbar {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-etapes::-webkit-scrollbar {
     width: 9px;
 }
-#erreurs .erreurs-parcours-etapes::-webkit-scrollbar-track {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-etapes::-webkit-scrollbar-track {
     background: rgba(5,42,84,.22);
     border-radius: 999px;
 }
-#erreurs .erreurs-parcours-etapes::-webkit-scrollbar-thumb {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-etapes::-webkit-scrollbar-thumb {
     background: rgba(145,198,245,.42);
     border-radius: 999px;
 }
-#erreurs .erreurs-parcours-etapes::-webkit-scrollbar-thumb:hover {
+:is(#erreurs,#sigles-revision) .erreurs-parcours-etapes::-webkit-scrollbar-thumb:hover {
     background: rgba(255,200,61,.58);
 }
 @media (max-width:950px) {
-    #erreurs .erreurs-parcours-etapes {
+    :is(#erreurs,#sigles-revision) .erreurs-parcours-etapes {
         max-height: 480px;
     }
 }
 @media (max-width:620px) {
-    #erreurs .erreurs-parcours-etapes {
+    :is(#erreurs,#sigles-revision) .erreurs-parcours-etapes {
         max-height: 430px;
         padding-right: 5px;
     }
 }
-#erreurs .revision-mode-icone {
+:is(#erreurs,#sigles-revision) .revision-mode-icone {
     width: 44px;
     height: 44px;
     min-width: 44px;
@@ -4416,14 +4416,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     border: 0;
     background: transparent;
 }
-#erreurs .revision-mode-icone svg {
+:is(#erreurs,#sigles-revision) .revision-mode-icone svg {
     overflow: visible;
     filter: drop-shadow(0 4px 8px rgba(0,20,55,.14));
 }
-#erreurs .revision-mode-icone-aleatoire {
+:is(#erreurs,#sigles-revision) .revision-mode-icone-aleatoire {
     color: #39d7c4;
 }
-#erreurs .revision-mode-icone-etapes {
+:is(#erreurs,#sigles-revision) .revision-mode-icone-etapes {
     color: var(--jaune-interface);
 }
 #accueil .accueil-presentation-image {
@@ -5545,19 +5545,19 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
    pour conserver toute la progression sur une ligne. */
 /* Mes erreurs par étape :
    4 boutons par ligne au lieu de 5 pour afficher clairement Étape + numéro. */
-#erreurs .revision-etape-bouton span {
+:is(#erreurs,#sigles-revision) .revision-etape-bouton span {
     min-width: max-content;
     overflow: visible;
     text-overflow: clip;
     white-space: nowrap;
 }
 @media (max-width:950px) {
-    #erreurs .revision-etape-boutons {
+    :is(#erreurs,#sigles-revision) .revision-etape-boutons {
         grid-template-columns: repeat(3,minmax(0,1fr));
     }
 }
 @media (max-width:620px) {
-    #erreurs .revision-etape-boutons {
+    :is(#erreurs,#sigles-revision) .revision-etape-boutons {
         grid-template-columns: repeat(2,minmax(0,1fr));
     }
     #parcours .chemin-carte-parcours-entete,
@@ -6719,7 +6719,7 @@ body:not([data-ecran-actif="accueil"])::before {
 }
 
 /* Pictogrammes narratifs : même finesse, couleurs historiques conservées. */
-#erreurs .revision-mode-icone svg,
+:is(#erreurs,#sigles-revision) .revision-mode-icone svg,
 #progression .progression-icone svg {
     fill: none;
     stroke: currentColor;
@@ -6810,7 +6810,7 @@ body:not([data-ecran-actif="accueil"])::before {
     #entrainement .entrainement-bascule-groupe,
     #entrainement .entrainement-secondes-groupe,
     #entrainement .entrainement-nombre-choix,
-    #erreurs .revision-etape-boutons,
+    :is(#erreurs,#sigles-revision) .revision-etape-boutons,
     #progression .progression-actions,
     #parametres .parametres-actions-boutons,
     .actions,
@@ -6823,7 +6823,7 @@ body:not([data-ecran-actif="accueil"])::before {
     }
     #entrainement .option-bouton,
     #entrainement .choix-bouton,
-    #erreurs .revision-etape-bouton,
+    :is(#erreurs,#sigles-revision) .revision-etape-bouton,
     #progression .progression-actions > *,
     #parametres .parametres-actions-boutons > *,
     .actions > *,
@@ -6842,7 +6842,7 @@ body:not([data-ecran-actif="accueil"])::before {
 }
 
 @media (max-width:820px) {
-    #erreurs .erreurs-parcours-etapes {
+    :is(#erreurs,#sigles-revision) .erreurs-parcours-etapes {
         max-height: min(42vh,360px);
         overflow-y: auto;
         overflow-x: hidden;
@@ -6933,7 +6933,7 @@ body:not([data-ecran-actif="accueil"])::before {
     }
 }
 
-#erreurs .revision-mode-icone svg {
+:is(#erreurs,#sigles-revision) .revision-mode-icone svg {
     width: 40px;
     height: 40px;
 }
@@ -8111,7 +8111,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
         min-height: 44px;
     }
     #entrainement .entrainement-grille,
-#erreurs .revision-mode-grille,
+:is(#erreurs,#sigles-revision) .revision-mode-grille,
 #progression .progression-grille {
         grid-template-columns: 1fr;
         gap: 16px;
@@ -8120,7 +8120,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     
     
     #entrainement .entrainement-carte,
-    #erreurs .revision-mode-carte,
+    :is(#erreurs,#sigles-revision) .revision-mode-carte,
     #progression .progression-carte,
     #parametres .parametre {
         min-width: 0;
@@ -8128,7 +8128,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
         padding: 21px 19px;
         border-radius: 19px;
     }
-    #erreurs .revision-mode-carte h2,
+    :is(#erreurs,#sigles-revision) .revision-mode-carte h2,
     #progression .progression-carte-entete {
         align-items: flex-start;
     }
@@ -8287,7 +8287,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
         width: calc(100% - 16px);
     }
     #entrainement .entrainement-carte,
-#erreurs .revision-mode-carte,
+:is(#erreurs,#sigles-revision) .revision-mode-carte,
 #progression .progression-carte,
 #parametres .parametre {
         padding: 18px 16px;
@@ -8803,7 +8803,7 @@ header.entete .navigation button[aria-current="page"] {
     }
     #entrainement .option-bouton,
     #entrainement .choix-bouton,
-    #erreurs .revision-etape-bouton,
+    :is(#erreurs,#sigles-revision) .revision-etape-bouton,
     #progression .progression-actions button,
     #parametres .parametres-actions-boutons button,
     .pjj-fenetre-actions button {
@@ -8868,7 +8868,7 @@ header.entete .navigation button[aria-current="page"] {
     #entrainement .option-bouton,
     #entrainement .choix-bouton,
     #parametres .choix-bouton,
-    #erreurs .revision-etape-bouton {
+    :is(#erreurs,#sigles-revision) .revision-etape-bouton {
         width: max-content;
         min-width: 0;
         min-height: 34px;
@@ -8952,7 +8952,7 @@ header.entete .marque > span {
         transform: translateY(-50%);
     }
     #progression .progression-importation,
-    #erreurs .revision-toutes-carte [data-action="reviser-toutes-erreurs"],
+    :is(#erreurs,#sigles-revision) .revision-toutes-carte [data-action="reviser-toutes-erreurs"],
     #question #boutonQuestionPrecedente,
     #question #boutonValider,
     #question #boutonJokers,
@@ -8974,11 +8974,11 @@ header.entete .marque > span {
         align-items: center;
         justify-content: center;
     }
-    #erreurs .revision-toutes-carte {
+    :is(#erreurs,#sigles-revision) .revision-toutes-carte {
         justify-content: flex-start;
         gap: 16px;
     }
-    #erreurs .revision-toutes-carte [data-action="reviser-toutes-erreurs"] {
+    :is(#erreurs,#sigles-revision) .revision-toutes-carte [data-action="reviser-toutes-erreurs"] {
         align-self: center;
         margin-top: 2px;
         font-size: .84rem;
@@ -9214,7 +9214,7 @@ header.entete .marque > span {
     #entrainement .option-bouton,
     #entrainement .choix-bouton,
     #parametres .choix-bouton,
-    #erreurs .revision-etape-bouton,
+    :is(#erreurs,#sigles-revision) .revision-etape-bouton,
     #question .question-commande-ligne button {
         min-height: 44px;
         height: auto;

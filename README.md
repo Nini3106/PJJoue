@@ -2,7 +2,7 @@
 
 **Création : août 2026.**
 
-PJJoue est un site web pédagogique consacré à la Protection judiciaire de la jeunesse. La V1 contient six parcours utilisables librement : le joueur peut suivre la progression complète ou ouvrir directement le parcours de son choix.
+PJJoue est un site web pédagogique consacré à la Protection judiciaire de la jeunesse. La V1 contient six parcours organisés selon une progression pédagogique recommandée. Un joueur qui maîtrise déjà certaines notions peut néanmoins ouvrir directement le parcours qui correspond à ses connaissances ou à ses besoins.
 
 ## Parcours
 
@@ -24,6 +24,15 @@ Chaque parcours comporte **11 étapes de 10 questions d’apprentissage**, puis 
 La progression entre les parcours reste pédagogique et implicite : aucun texte visible n’oblige le joueur à avoir suivi un autre parcours auparavant.
 
 PJJoue reste transversal : aucun contenu spécifique à un poste d’assistante administrative ni aucune procédure locale de service n’est intégré aux parcours judiciaires.
+
+
+## Mission Sigles
+
+La page **Réviser** donne accès à **Mission Sigles**, un mini-PJJoue consacré aux 72 sigles de référence. Le module comprend six étapes colorées de douze sigles, un entraînement configurable, un Défi du hasard, la révision des erreurs, une progression dédiée et une évaluation finale de 30 activités avec un seuil de réussite de 90 %.
+
+La progression pédagogique reprend la logique des parcours principaux : **un sigle n’est jamais demandé seul avant d’avoir été introduit dans une activité précédente avec son développement complet**. Les **72 premières questions sont contextualisées individuellement** : chacune possède un sujet explicite et trois distracteurs rédigés à la main ; les formulations génériques sans sujet sont interdites par les tests. Il n’existe pas d’écran qui donne les réponses avant de jouer. L’entraînement permet de choisir une étape ou tout Mission Sigles, 10 / 20 / 30 / Tous, un ordre par étapes ou mélangé, avec ou sans chrono et avec ou sans jokers. Le Défi du hasard utilise le même dé animé que PJJoue, tire de 1 à 6 questions puis attend le clic de l’utilisateur pour démarrer ; les jokers y sont autorisés.
+
+Le support de révision, le guide public et Mission Sigles utilisent tous la même source `donnees/sigles.json`, afin d’éviter les doublons et les divergences. **Réviser mes erreurs** possède sa propre page `#sigles-revision` : elle reprend le gabarit visuel de Réviser PJJoue mais conserve des données d’erreurs entièrement séparées dans la progression Mission Sigles.
 
 ## Organisation du code
 

@@ -443,7 +443,7 @@ def principal() -> int:
     exiger(composition.get("etapesParcours") == 66, "Le manifeste doit annoncer 66 étapes.")
     exiger(composition.get("evaluationsFinales") == 6, "Le manifeste doit annoncer 6 évaluations.")
 
-    print("OK — PJJoue livraison : 6 parcours autonomes · 66 étapes · 960 questions harmonisées · 6 évaluations finales multimodales · V1")
+    print("OK — PJJoue livraison : 6 parcours · progression pédagogique recommandée · 66 étapes · 960 questions harmonisées · 6 évaluations finales multimodales · V1")
     return 0
 
 

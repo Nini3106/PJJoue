@@ -17,7 +17,7 @@ function afficherQuestion({ suivreAnalytics = true, reprendreChronometre = false
     }
     appliquerIdentiteVisuelleEtape(question);
     actualiserSuiviEtapeQuestion(question);
-    const modeEvaluationFinale = etat.mode === 'evaluation-finale';
+    const modeEvaluationFinale = etat.mode === 'evaluation-finale' || etat.mode === 'sigles-evaluation';
     const jokersActifs = etat.jokersSessionActifs !== false;
 
     afficherReperesQuestion(question);

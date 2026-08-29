@@ -16,10 +16,12 @@ function preparerValidationReponse(question, bouton) {
     actualiserBoutonJokers();
     clearInterval(etat.identifiantMinuteur);
     sauvegarde.aDejaJoue = true;
-    marquerEtapeDecouverte(question);
-    marquerQuestionJouee(question);
-    if (!precedente)
-        sauvegarde.nombreQuestionsJouees = (sauvegarde.nombreQuestionsJouees || 0) + 1;
+    if (!question?.missionSigles) {
+        marquerEtapeDecouverte(question);
+        marquerQuestionJouee(question);
+        if (!precedente)
+            sauvegarde.nombreQuestionsJouees = (sauvegarde.nombreQuestionsJouees || 0) + 1;
+    }
     selectionnerTous(
         '.reponse,.multiple-choix,.activite-valider,.ordre-commandes button,'
         + '.association-colonne button,.classement-element button'
@@ -45,6 +47,11 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
     if (resultat.etaitPassee)
         etat.questionsPassees.delete(question.id);
     etat.brouillonsEcrits?.delete(question.id);
+    if (question?.missionSigles) {
+        enregistrerResultatMissionSiglesNatif(question, resultat);
+        enregistrerSessionEnCours();
+        return;
+    }
     if (etat.mode !== 'parcours') {
         enregistrerSessionEnCours();
         return;
@@ -96,7 +103,7 @@ function traiterReussiteAidee(question, etaitPassee) {
     etat.erreursSession.add(question.id);
     etat.serie = 0;
     jouerSonReussite();
-    if (etat.mode === 'evaluation-finale')
+    if (question?.missionSigles || etat.mode === 'evaluation-finale')
         return;
     const suiviErreur = obtenirSuiviErreur(question);
     if (!etaitPassee)
@@ -108,7 +115,7 @@ function traiterReponseIncorrecte(question, etaitPassee) {
     etat.erreursSession.add(question.id);
     etat.serie = 0;
     jouerSonErreur();
-    if (etat.mode === 'evaluation-finale')
+    if (question?.missionSigles || etat.mode === 'evaluation-finale')
         return;
     const suiviErreur = obtenirSuiviErreur(question);
     if (!etaitPassee)
@@ -298,22 +305,29 @@ function passerQuestion() {
     });
     clearInterval(etat.identifiantMinuteur);
     sauvegarde.aDejaJoue = true;
-    marquerEtapeDecouverte(question);
-    marquerQuestionJouee(question);
-    if (!precedente)
-        sauvegarde.nombreQuestionsJouees = (sauvegarde.nombreQuestionsJouees || 0) + 1;
+    if (question?.missionSigles) {
+        enregistrerPassageMissionSiglesNatif(question);
+    }
+    else {
+        marquerEtapeDecouverte(question);
+        marquerQuestionJouee(question);
+        if (!precedente)
+            sauvegarde.nombreQuestionsJouees = (sauvegarde.nombreQuestionsJouees || 0) + 1;
+    }
     etat.reponsesSession.set(question.id, { statut: 'passee', texteReponse: '' });
     etat.questionsPassees.add(question.id);
     etat.erreursSession.add(question.id);
     etat.serie = 0;
     actualiserIndicateurSerie();
-    sauvegarde.erreurs[question.id] = sauvegarde.erreurs[question.id] || { reussites: 0, maitrisee: false, nombreErreurs: 0, theme: question.theme };
-    if (!precedente) {
-        sauvegarde.erreurs[question.id].nombreErreurs = (sauvegarde.erreurs[question.id].nombreErreurs || 0) + 1;
-        sauvegarde.erreurs[question.id].nombrePassages = (sauvegarde.erreurs[question.id].nombrePassages || 0) + 1;
+    if (!question?.missionSigles) {
+        sauvegarde.erreurs[question.id] = sauvegarde.erreurs[question.id] || { reussites: 0, maitrisee: false, nombreErreurs: 0, theme: question.theme };
+        if (!precedente) {
+            sauvegarde.erreurs[question.id].nombreErreurs = (sauvegarde.erreurs[question.id].nombreErreurs || 0) + 1;
+            sauvegarde.erreurs[question.id].nombrePassages = (sauvegarde.erreurs[question.id].nombrePassages || 0) + 1;
+        }
+        sauvegarde.erreurs[question.id].reussites = 0;
+        sauvegarde.erreurs[question.id].maitrisee = false;
     }
-    sauvegarde.erreurs[question.id].reussites = 0;
-    sauvegarde.erreurs[question.id].maitrisee = false;
     enregistrerSauvegarde();
     enregistrerSessionEnCours();
     afficherQuestionSuivante();

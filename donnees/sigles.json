@@ -1,0 +1,1083 @@
+[
+  {
+    "id": 1,
+    "sigle": "MEJP",
+    "signification": "Mesure éducative judiciaire provisoire",
+    "repere": "Avant le prononcé de la sanction.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Mesures et justice des mineurs",
+    "questionIntroduction": "Quelle mesure éducative peut être prononcée à titre provisoire avant le jugement sur la sanction ?",
+    "distracteursIntroduction": [
+      "Mesure éducative judiciaire préalable",
+      "Mesure éducative juridictionnelle provisoire",
+      "Mission éducative judiciaire provisoire"
+    ]
+  },
+  {
+    "id": 2,
+    "sigle": "MEJ",
+    "signification": "Mesure éducative judiciaire",
+    "repere": "Mesure éducative prononcée comme sanction.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Mesures et justice des mineurs",
+    "questionIntroduction": "Quelle mesure éducative peut être prononcée au stade de la sanction ?",
+    "distracteursIntroduction": [
+      "Mesure éducative juridictionnelle",
+      "Mission éducative judiciaire",
+      "Mesure d’évaluation judiciaire"
+    ]
+  },
+  {
+    "id": 3,
+    "sigle": "MJIE",
+    "signification": "Mesure judiciaire d’investigation éducative",
+    "repere": "Investigation approfondie et interdisciplinaire.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Mesures et justice des mineurs",
+    "questionIntroduction": "Quelle mesure permet une investigation éducative approfondie et interdisciplinaire sur la situation d’un mineur ?",
+    "distracteursIntroduction": [
+      "Mesure judiciaire d’intervention éducative",
+      "Mission judiciaire d’investigation éducative",
+      "Mesure juridictionnelle d’investigation éducative"
+    ]
+  },
+  {
+    "id": 4,
+    "sigle": "MEE",
+    "signification": "Mise à l’épreuve éducative",
+    "repere": "Période entre culpabilité et sanction dans la procédure ordinaire.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on la période éducative qui s’ouvre après la déclaration de culpabilité et avant l’audience de sanction dans la procédure ordinaire ?",
+    "distracteursIntroduction": [
+      "Mesure d’évaluation éducative",
+      "Mise en évaluation éducative",
+      "Mission d’épreuve éducative"
+    ]
+  },
+  {
+    "id": 5,
+    "sigle": "CJ",
+    "signification": "Contrôle judiciaire",
+    "repere": "Mesure de sûreté, liberté sous obligations/interdictions.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle mesure de sûreté maintient le mineur en liberté tout en lui imposant des obligations ou des interdictions ?",
+    "distracteursIntroduction": [
+      "Cadre judiciaire",
+      "Contrôle juridictionnel",
+      "Suivi judiciaire"
+    ]
+  },
+  {
+    "id": 6,
+    "sigle": "ARSE",
+    "signification": "Assignation à résidence avec surveillance électronique",
+    "repere": "Mesure de sûreté provisoire avec surveillance électronique.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle mesure de sûreté impose de résider dans un lieu déterminé avec un dispositif de surveillance électronique ?",
+    "distracteursIntroduction": [
+      "Assignation à résidence sous contrôle éducatif",
+      "Assignation à résidence avec suivi judiciaire",
+      "Admission à résidence avec surveillance électronique"
+    ]
+  },
+  {
+    "id": 7,
+    "sigle": "DP",
+    "signification": "Détention provisoire",
+    "repere": "Mesure de sûreté privative de liberté, jamais une peine.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle mesure de sûreté consiste à incarcérer provisoirement un mineur avant son jugement, dans les cas prévus par la loi ?",
+    "distracteursIntroduction": [
+      "Détention préalable",
+      "Placement provisoire",
+      "Rétention provisoire"
+    ]
+  },
+  {
+    "id": 8,
+    "sigle": "PJJ",
+    "signification": "Protection judiciaire de la jeunesse",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Organisation et fonctions",
+    "questionIntroduction": "Quelle administration du ministère de la Justice intervient dans la justice des mineurs et met notamment en œuvre des missions éducatives ?",
+    "distracteursIntroduction": [
+      "Protection juridique de la jeunesse",
+      "Prévention judiciaire de la jeunesse",
+      "Protection judiciaire des jeunes"
+    ]
+  },
+  {
+    "id": 9,
+    "sigle": "DPJJ",
+    "signification": "Direction de la protection judiciaire de la jeunesse",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Organisation et fonctions",
+    "questionIntroduction": "Quelle direction nationale pilote la politique de la protection judiciaire de la jeunesse ?",
+    "distracteursIntroduction": [
+      "Direction de la protection juridique de la jeunesse",
+      "Délégation de la protection judiciaire de la jeunesse",
+      "Direction de la prévention judiciaire de la jeunesse"
+    ]
+  },
+  {
+    "id": 10,
+    "sigle": "DIR",
+    "signification": "Direction interrégionale",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Organisation et fonctions",
+    "questionIntroduction": "Comment appelle-t-on le niveau de direction situé entre l’administration centrale et les directions territoriales de la protection judiciaire de la jeunesse ?",
+    "distracteursIntroduction": [
+      "Direction interdépartementale",
+      "Délégation interrégionale",
+      "Direction régionale"
+    ]
+  },
+  {
+    "id": 11,
+    "sigle": "DT",
+    "signification": "Direction territoriale",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Organisation et fonctions",
+    "questionIntroduction": "Comment appelle-t-on la direction chargée du pilotage de la protection judiciaire de la jeunesse à l’échelle d’un territoire ?",
+    "distracteursIntroduction": [
+      "Délégation territoriale",
+      "Direction technique",
+      "Direction transversale"
+    ]
+  },
+  {
+    "id": 12,
+    "sigle": "RUE",
+    "signification": "Responsable d’unité éducative",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Organisation et fonctions",
+    "questionIntroduction": "Quel responsable encadre une unité éducative de la protection judiciaire de la jeunesse ?",
+    "distracteursIntroduction": [
+      "Référent d’unité éducative",
+      "Responsable éducatif d’unité",
+      "Référent unique éducatif"
+    ]
+  },
+  {
+    "id": 13,
+    "sigle": "SAH",
+    "signification": "Secteur associatif habilité",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Organisation et fonctions",
+    "questionIntroduction": "Comment appelle-t-on l’ensemble des structures associatives habilitées à participer aux missions de la protection judiciaire de la jeunesse ?",
+    "distracteursIntroduction": [
+      "Service associatif habilité",
+      "Secteur administratif habilité",
+      "Structure associative habilitée"
+    ]
+  },
+  {
+    "id": 14,
+    "sigle": "UEMO",
+    "signification": "Unité éducative de milieu ouvert",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Comment s’appelle une unité éducative qui met en œuvre des mesures auprès des jeunes dans leur milieu de vie ?",
+    "distracteursIntroduction": [
+      "Unité éducative de mission ouverte",
+      "Unité éducative de médiation ouverte",
+      "Unité éducative de milieu ordinaire"
+    ]
+  },
+  {
+    "id": 15,
+    "sigle": "UEAJ",
+    "signification": "Unité éducative d’activités de jour",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Comment s’appelle l’unité éducative centrée sur les activités de jour ?",
+    "distracteursIntroduction": [
+      "Unité éducative d’accompagnement de jour",
+      "Unité éducative d’accueil de jour",
+      "Unité éducative d’actions judiciaires"
+    ]
+  },
+  {
+    "id": 16,
+    "sigle": "UEAT",
+    "signification": "Unité éducative auprès du tribunal",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Comment s’appelle l’unité éducative de la protection judiciaire de la jeunesse implantée auprès d’un tribunal ?",
+    "distracteursIntroduction": [
+      "Unité éducative d’accueil au tribunal",
+      "Unité éducative d’assistance au tribunal",
+      "Unité éducative d’appui territorial"
+    ]
+  },
+  {
+    "id": 17,
+    "sigle": "STEMO",
+    "signification": "Service territorial éducatif de milieu ouvert",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Quel service territorial de la protection judiciaire de la jeunesse met en œuvre l’accompagnement éducatif en milieu ouvert ?",
+    "distracteursIntroduction": [
+      "Service territorial d’évaluation en milieu ouvert",
+      "Service technique éducatif de milieu ouvert",
+      "Service territorial éducatif de mission ouverte"
+    ]
+  },
+  {
+    "id": 18,
+    "sigle": "STEMOI",
+    "signification": "Service territorial éducatif de milieu ouvert et d’insertion",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Quel service territorial associe le suivi éducatif en milieu ouvert et l’accompagnement vers l’insertion ?",
+    "distracteursIntroduction": [
+      "Service territorial éducatif de milieu ouvert et d’orientation",
+      "Service territorial éducatif de milieu ouvert et d’intervention",
+      "Service territorial éducatif de milieu ouvert et d’intégration"
+    ]
+  },
+  {
+    "id": 19,
+    "sigle": "EPE",
+    "signification": "Établissement de placement éducatif",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Quel type d’établissement de la protection judiciaire de la jeunesse accueille des jeunes dans le cadre d’un placement éducatif ?",
+    "distracteursIntroduction": [
+      "Établissement de protection éducative",
+      "Établissement de parcours éducatif",
+      "Espace de placement éducatif"
+    ]
+  },
+  {
+    "id": 20,
+    "sigle": "EPEI",
+    "signification": "Établissement de placement éducatif et d’insertion",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Quel établissement associe le placement éducatif et des actions d’insertion ?",
+    "distracteursIntroduction": [
+      "Établissement de placement éducatif individualisé",
+      "Établissement de placement éducatif et d’intervention",
+      "Établissement de placement éducatif et d’intégration"
+    ]
+  },
+  {
+    "id": 21,
+    "sigle": "CER",
+    "signification": "Centre éducatif renforcé",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Quel centre de placement propose une prise en charge éducative intensive et renforcée ?",
+    "distracteursIntroduction": [
+      "Centre éducatif résidentiel",
+      "Centre éducatif de réinsertion",
+      "Centre d’encadrement renforcé"
+    ]
+  },
+  {
+    "id": 22,
+    "sigle": "CEF",
+    "signification": "Centre éducatif fermé",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Quel centre éducatif accueille des mineurs dans un cadre fermé avec un accompagnement éducatif renforcé ?",
+    "distracteursIntroduction": [
+      "Centre éducatif familial",
+      "Centre éducatif de formation",
+      "Centre d’encadrement fermé"
+    ]
+  },
+  {
+    "id": 23,
+    "sigle": "UJPE",
+    "signification": "Unité judiciaire à priorité éducative",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Services, établissements et unités",
+    "questionIntroduction": "Quelle unité de placement judiciaire met l’accent sur la priorité éducative ?",
+    "distracteursIntroduction": [
+      "Unité judiciaire de protection éducative",
+      "Unité judiciaire de placement extérieur",
+      "Unité judiciaire de parcours éducatif"
+    ]
+  },
+  {
+    "id": 24,
+    "sigle": "RRSE",
+    "signification": "Recueil de renseignements socio-éducatifs",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Mesures et justice des mineurs",
+    "questionIntroduction": "Quel recueil rapide apporte au magistrat des éléments sur la situation personnelle, familiale et sociale d’un mineur ?",
+    "distracteursIntroduction": [
+      "Rapport de renseignements socio-éducatifs",
+      "Recueil de repères socio-éducatifs",
+      "Relevé de renseignements socio-éducatifs"
+    ]
+  },
+  {
+    "id": 25,
+    "sigle": "CJPM",
+    "signification": "Code de la justice pénale des mineurs",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Mesures et justice des mineurs",
+    "questionIntroduction": "Quel code regroupe les règles applicables à la justice pénale des mineurs ?",
+    "distracteursIntroduction": [
+      "Code judiciaire de protection des mineurs",
+      "Code de justice pénale pour mineurs",
+      "Code de la juridiction pénale des mineurs"
+    ]
+  },
+  {
+    "id": 26,
+    "sigle": "TPE",
+    "signification": "Tribunal pour enfants",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Mesures et justice des mineurs",
+    "questionIntroduction": "Quelle juridiction spécialisée juge les mineurs dans les affaires relevant de sa compétence ?",
+    "distracteursIntroduction": [
+      "Tribunal pénal pour enfants",
+      "Tribunal de protection de l’enfance",
+      "Tribunal pour l’enfance"
+    ]
+  },
+  {
+    "id": 27,
+    "sigle": "ENPJJ",
+    "signification": "École nationale de protection judiciaire de la jeunesse",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Mesures et justice des mineurs",
+    "questionIntroduction": "Quelle école nationale forme notamment les professionnels de la protection judiciaire de la jeunesse ?",
+    "distracteursIntroduction": [
+      "École nationale de la justice des mineurs",
+      "École nationale de protection de la jeunesse",
+      "École nationale des professionnels de la justice des jeunes"
+    ]
+  },
+  {
+    "id": 28,
+    "sigle": "AC",
+    "signification": "Administration centrale",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on le niveau national constitué des services centraux d’un ministère ?",
+    "distracteursIntroduction": [
+      "Autorité centrale",
+      "Administration commune",
+      "Agence centrale"
+    ]
+  },
+  {
+    "id": 29,
+    "sigle": "AEMO",
+    "signification": "Assistance educative en Milieu Ouvert",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle mesure d’assistance éducative s’exerce dans le milieu de vie du jeune plutôt qu’en placement ?",
+    "distracteursIntroduction": [
+      "Accompagnement éducatif en milieu ouvert",
+      "Assistance éducative en milieu ordinaire",
+      "Action éducative en milieu ouvert"
+    ]
+  },
+  {
+    "id": 30,
+    "sigle": "AMP",
+    "signification": "Aménagement de Peine",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on l’adaptation des modalités d’exécution d’une peine décidée dans les conditions prévues ?",
+    "distracteursIntroduction": [
+      "Application de peine",
+      "Adaptation de peine",
+      "Accompagnement de peine"
+    ]
+  },
+  {
+    "id": 31,
+    "sigle": "ASE",
+    "signification": "Aide Sociale à l'Enfance",
+    "repere": "Public, partenaire ou repère transversal.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel service départemental exerce notamment des missions de protection de l’enfance ?",
+    "distracteursIntroduction": [
+      "Action sociale à l’enfance",
+      "Assistance sociale de l’enfance",
+      "Aide spécialisée à l’enfance"
+    ]
+  },
+  {
+    "id": 32,
+    "sigle": "CA",
+    "signification": "Cour d'Appel",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle juridiction examine les appels formés contre certaines décisions rendues en première instance ?",
+    "distracteursIntroduction": [
+      "Chambre de recours",
+      "Tribunal d’appel",
+      "Commission de recours"
+    ]
+  },
+  {
+    "id": 33,
+    "sigle": "CAM",
+    "signification": "Cour d'Assise des Mineurs",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle juridiction criminelle juge certains crimes commis par des mineurs âgés d’au moins seize ans au moment des faits ?",
+    "distracteursIntroduction": [
+      "Cour criminelle des mineurs",
+      "Tribunal d’assises des mineurs",
+      "Chambre criminelle des mineurs"
+    ]
+  },
+  {
+    "id": 34,
+    "sigle": "CI",
+    "signification": "Correspondant Insertion",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel intitulé désigne la personne chargée de faire le lien sur les questions d’insertion ?",
+    "distracteursIntroduction": [
+      "Chargé d’insertion",
+      "Référent insertion",
+      "Coordinateur insertion"
+    ]
+  },
+  {
+    "id": 35,
+    "sigle": "COPJ",
+    "signification": "Convocation par Officier de Police Judiciaire",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on la convocation remise par un officier de police judiciaire pour faire comparaître une personne devant une juridiction ?",
+    "distracteursIntroduction": [
+      "Convocation par agent de police judiciaire",
+      "Convocation par autorité judiciaire",
+      "Citation par officier de police judiciaire"
+    ]
+  },
+  {
+    "id": 36,
+    "sigle": "DDSE",
+    "signification": "Détention à Domicile Sous surveillance Electronique",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle modalité permet d’exécuter une peine privative de liberté au domicile avec un dispositif électronique de contrôle ?",
+    "distracteursIntroduction": [
+      "Détention à domicile avec suivi électronique",
+      "Détention domiciliaire sous contrôle électronique",
+      "Détention à domicile sous surveillance judiciaire"
+    ]
+  },
+  {
+    "id": 37,
+    "sigle": "DEPAFI",
+    "signification": "Direction de l’Evaluation, de la Programmation, des Affaires Financières",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle direction traite notamment de l’évaluation, de la programmation et des affaires financières ?",
+    "distracteursIntroduction": [
+      "Direction de l’évaluation, de la prospective et des affaires financières",
+      "Direction des études, de la programmation et des affaires financières",
+      "Direction de l’évaluation, de la programmation et de l’administration financière"
+    ]
+  },
+  {
+    "id": 38,
+    "sigle": "DME",
+    "signification": "Direction des Missions Educatives",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle direction est chargée du pilotage des missions éducatives ?",
+    "distracteursIntroduction": [
+      "Direction des mesures éducatives",
+      "Direction des missions d’évaluation",
+      "Direction des méthodes éducatives"
+    ]
+  },
+  {
+    "id": 39,
+    "sigle": "DIRA",
+    "signification": "Directeur Inter-Régional Adjoint",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel adjoint seconde le directeur interrégional dans ses fonctions ?",
+    "distracteursIntroduction": [
+      "Directeur interrégional associé",
+      "Délégué interrégional adjoint",
+      "Directeur territorial adjoint"
+    ]
+  },
+  {
+    "id": 40,
+    "sigle": "DS",
+    "signification": "Directeurs de Service",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on les responsables placés à la tête d’un service ?",
+    "distracteursIntroduction": [
+      "Délégués de service",
+      "Directeurs de secteur",
+      "Responsables de service"
+    ]
+  },
+  {
+    "id": 41,
+    "sigle": "EPM",
+    "signification": "Etablissement Pénitentiaire pour Mineurs",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel établissement pénitentiaire est spécifiquement destiné à l’incarcération des mineurs ?",
+    "distracteursIntroduction": [
+      "Établissement pénitentiaire de mineurs",
+      "Espace pénitentiaire pour mineurs",
+      "Établissement de placement pour mineurs"
+    ]
+  },
+  {
+    "id": 42,
+    "sigle": "JAF",
+    "signification": "Juge aux Affaires Familiales",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel juge traite notamment de l’autorité parentale, de la résidence des enfants et d’autres affaires familiales ?",
+    "distracteursIntroduction": [
+      "Juge de l’autorité familiale",
+      "Juge de l’accompagnement familial",
+      "Juge des affaires de la famille"
+    ]
+  },
+  {
+    "id": 43,
+    "sigle": "JAP",
+    "signification": "Juge d'Application des Peines",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel juge intervient dans l’application et l’aménagement des peines après condamnation ?",
+    "distracteursIntroduction": [
+      "Juge de l’aménagement des peines",
+      "Juge chargé de l’application pénale",
+      "Juge de l’exécution des peines"
+    ]
+  },
+  {
+    "id": 44,
+    "sigle": "JE",
+    "signification": "Juge des Enfants",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel magistrat spécialisé intervient dans la justice des mineurs, selon les compétences que la loi lui attribue ?",
+    "distracteursIntroduction": [
+      "Juge de l’enfance",
+      "Juge pour enfants",
+      "Juge de l’éducation"
+    ]
+  },
+  {
+    "id": 45,
+    "sigle": "JI",
+    "signification": "Juge d'Instruction",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel magistrat conduit une information judiciaire lorsqu’elle est ouverte ?",
+    "distracteursIntroduction": [
+      "Juge des investigations",
+      "Juge de l’information",
+      "Juge enquêteur"
+    ]
+  },
+  {
+    "id": 46,
+    "sigle": "JLD",
+    "signification": "Juge de la Liberté et de la Détention",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel magistrat statue sur certaines décisions concernant la liberté ou la détention ?",
+    "distracteursIntroduction": [
+      "Magistrat de la liberté et de la détention",
+      "Juge de la liberté et du placement",
+      "Juge des mesures de liberté"
+    ]
+  },
+  {
+    "id": 47,
+    "sigle": "JR",
+    "signification": "Justice Restaurative",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on la démarche qui permet, sous conditions, un travail autour des conséquences d’une infraction avec les personnes concernées ?",
+    "distracteursIntroduction": [
+      "Justice réparatrice",
+      "Justice relationnelle",
+      "Justice de réparation"
+    ]
+  },
+  {
+    "id": 48,
+    "sigle": "MEAT",
+    "signification": "Mission Educative Auprès du Tribunal",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on le dispositif éducatif de la protection judiciaire de la jeunesse présent auprès du tribunal pour assurer des missions liées à l’activité juridictionnelle ?",
+    "distracteursIntroduction": [
+      "Mission éducative d’appui au tribunal",
+      "Mission éducative auprès de la juridiction",
+      "Mesure éducative auprès du tribunal"
+    ]
+  },
+  {
+    "id": 49,
+    "sigle": "MISP",
+    "signification": "Mission d'Insertion Scolaire et Professionnelle",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel dispositif accompagne plus particulièrement la scolarité et l’insertion professionnelle des jeunes ?",
+    "distracteursIntroduction": [
+      "Mission d’insertion sociale et professionnelle",
+      "Mission d’intégration scolaire et professionnelle",
+      "Mission d’insertion scolaire et pédagogique"
+    ]
+  },
+  {
+    "id": 50,
+    "sigle": "MNA",
+    "signification": "Mineurs Non Accompagnés",
+    "repere": "Public, partenaire ou repère transversal.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on les mineurs présents sans représentant légal qui les accompagne ?",
+    "distracteursIntroduction": [
+      "Mineurs non assistés",
+      "Mineurs nouvellement accueillis",
+      "Mineurs sans accompagnement familial"
+    ]
+  },
+  {
+    "id": 51,
+    "sigle": "OPJ",
+    "signification": "Officier de Police Judiciaire",
+    "repere": "Justice, juridiction ou procédure.",
+    "etape": 4,
+    "etapeTitre": "Justice, juridictions et procédure",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel officier de police dispose de pouvoirs judiciaires particuliers pour constater des infractions et accomplir certains actes d’enquête ?",
+    "distracteursIntroduction": [
+      "Officier de procédure judiciaire",
+      "Officier de police juridictionnelle",
+      "Officier de poursuite judiciaire"
+    ]
+  },
+  {
+    "id": 52,
+    "sigle": "OPP",
+    "signification": "Ordonnance de Placement Provisoire",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle décision judiciaire permet d’ordonner provisoirement le placement d’un mineur ?",
+    "distracteursIntroduction": [
+      "Ordonnance de placement pénal",
+      "Ordonnance de protection provisoire",
+      "Ordre de placement provisoire"
+    ]
+  },
+  {
+    "id": 53,
+    "sigle": "PEAT",
+    "signification": "Permanence Educative auprès du Tribunal",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on le dispositif éducatif de permanence de la protection judiciaire de la jeunesse présent auprès du tribunal ?",
+    "distracteursIntroduction": [
+      "Permanence éducative au tribunal",
+      "Permanence éducative d’appui territorial",
+      "Permanence éducative auprès de la juridiction"
+    ]
+  },
+  {
+    "id": 54,
+    "sigle": "PE",
+    "signification": "Placement Extérieur",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel aménagement permet d’exécuter une peine hors établissement pénitentiaire dans un cadre déterminé ?",
+    "distracteursIntroduction": [
+      "Programme extérieur",
+      "Parcours extérieur",
+      "Placement encadré"
+    ]
+  },
+  {
+    "id": 55,
+    "sigle": "PEPAD",
+    "signification": "Placement Educatif avec Présence à Domicile",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel dispositif de placement éducatif maintient une présence et un accompagnement au domicile ?",
+    "distracteursIntroduction": [
+      "Placement éducatif avec présence familiale",
+      "Placement éducatif avec accompagnement à domicile",
+      "Placement éducatif avec permanence à domicile"
+    ]
+  },
+  {
+    "id": 56,
+    "sigle": "PPU",
+    "signification": "Projet Pédagogique d'Unité",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel document fixe les orientations pédagogiques d’une unité éducative ?",
+    "distracteursIntroduction": [
+      "Projet pédagogique de service",
+      "Programme pédagogique d’unité",
+      "Projet professionnel d’unité"
+    ]
+  },
+  {
+    "id": 57,
+    "sigle": "PTF",
+    "signification": "Pôle Territorial de Formation",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 2,
+    "etapeTitre": "Services, unités et formation",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel pôle territorial est chargé des actions de formation au plus près des professionnels ?",
+    "distracteursIntroduction": [
+      "Pôle technique de formation",
+      "Plateforme territoriale de formation",
+      "Pôle territorial de professionnalisation"
+    ]
+  },
+  {
+    "id": 58,
+    "sigle": "QM",
+    "signification": "Quartier Mineurs",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on l’espace spécifique d’un établissement pénitentiaire réservé aux mineurs ?",
+    "distracteursIntroduction": [
+      "Quartier des mineurs",
+      "Zone mineurs",
+      "Secteur mineurs"
+    ]
+  },
+  {
+    "id": 59,
+    "sigle": "MRZ",
+    "signification": "Mineurs de Retour de Zone de guerre",
+    "repere": "Public, partenaire ou repère transversal.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on les mineurs qui reviennent d’une zone de guerre ou d’un territoire de conflit ?",
+    "distracteursIntroduction": [
+      "Mineurs rapatriés de zone de guerre",
+      "Mineurs de retour de zone sensible",
+      "Mineurs revenus de zone de conflit"
+    ]
+  },
+  {
+    "id": 60,
+    "sigle": "RIS",
+    "signification": "Recueil d'Information en Santé",
+    "repere": "Public, partenaire ou repère transversal.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel recueil rassemble des informations utiles concernant la santé d’un jeune ?",
+    "distracteursIntroduction": [
+      "Rapport d’information en santé",
+      "Relevé d’information sanitaire",
+      "Recueil individuel de santé"
+    ]
+  },
+  {
+    "id": 61,
+    "sigle": "RLC",
+    "signification": "Référent Laïcité et Citoyenneté",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel référent accompagne les questions liées à la laïcité et à la citoyenneté ?",
+    "distracteursIntroduction": [
+      "Responsable laïcité et citoyenneté",
+      "Référent liberté et citoyenneté",
+      "Correspondant laïcité et citoyenneté"
+    ]
+  },
+  {
+    "id": 62,
+    "sigle": "RT",
+    "signification": "Référent Territorial (TIG)",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel référent territorial coordonne notamment les questions liées au travail d’intérêt général ?",
+    "distracteursIntroduction": [
+      "Responsable territorial du travail d’intérêt général",
+      "Référent technique du travail d’intérêt général",
+      "Référent territorial de l’insertion"
+    ],
+    "significationJeu": "Référent territorial du travail d’intérêt général"
+  },
+  {
+    "id": 63,
+    "sigle": "SL",
+    "signification": "Semi-Liberté",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel aménagement permet à une personne détenue de sortir de l’établissement selon des horaires fixés pour exercer une activité ou préparer sa réinsertion ?",
+    "distracteursIntroduction": [
+      "Sortie libre",
+      "Semi-détention",
+      "Liberté partielle"
+    ]
+  },
+  {
+    "id": 64,
+    "sigle": "SP",
+    "signification": "Secteur Public",
+    "repere": "Organisation, fonctions ou pilotage PJJ.",
+    "etape": 1,
+    "etapeTitre": "Organisation de la PJJ",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment appelle-t-on l’ensemble des services et établissements directement gérés par la protection judiciaire de la jeunesse, par opposition au secteur associatif habilité ?",
+    "distracteursIntroduction": [
+      "Service public",
+      "Secteur pénal",
+      "Système public"
+    ]
+  },
+  {
+    "id": 65,
+    "sigle": "SP/R",
+    "signification": "Sursis Probatoire/ Sursis Probatoire Renforcé",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel dispositif de sursis assortit la peine d’une période probatoire, éventuellement renforcée ?",
+    "distracteursIntroduction": [
+      "Sursis probatoire avec renforcement",
+      "Suivi probatoire / suivi probatoire renforcé",
+      "Sursis pénal / sursis pénal renforcé"
+    ]
+  },
+  {
+    "id": 66,
+    "sigle": "SSJ",
+    "signification": "Suivi Socio Judiciaire",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel dispositif de suivi après condamnation peut imposer des obligations pendant une durée fixée par la juridiction ?",
+    "distracteursIntroduction": [
+      "Suivi social judiciaire",
+      "Surveillance socio-judiciaire",
+      "Suivi judiciaire social"
+    ]
+  },
+  {
+    "id": 67,
+    "sigle": "SEEPM",
+    "signification": "Service Educatif d'Etablissement Pénitentiaire pour Mineurs",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel service éducatif de la protection judiciaire de la jeunesse intervient au sein d’un établissement pénitentiaire pour mineurs ?",
+    "distracteursIntroduction": [
+      "Service éducatif en établissement pénitentiaire pour mineurs",
+      "Service éducatif des établissements pénitentiaires pour mineurs",
+      "Service d’éducation en établissement pénitentiaire pour mineurs"
+    ]
+  },
+  {
+    "id": 68,
+    "sigle": "STEI",
+    "signification": "Service Territorial Educatif d'Insertion",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 6,
+    "etapeTitre": "Partenaires, publics et repères professionnels",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quel service territorial éducatif est spécialisé dans l’insertion ?",
+    "distracteursIntroduction": [
+      "Service territorial d’éducation et d’insertion",
+      "Service territorial éducatif d’intégration",
+      "Service territorial d’insertion éducative"
+    ]
+  },
+  {
+    "id": 69,
+    "sigle": "TIG",
+    "signification": "Travail d'Intérêt Général",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle peine consiste à accomplir gratuitement un travail au profit de la collectivité ou d’un organisme habilité ?",
+    "distracteursIntroduction": [
+      "Travail d’utilité générale",
+      "Travail d’intérêt collectif",
+      "Travail au service général"
+    ]
+  },
+  {
+    "id": 70,
+    "sigle": "TNR",
+    "signification": "Travail Non Rémunéré",
+    "repere": "Mesure, peine, aménagement ou modalité de prise en charge.",
+    "etape": 5,
+    "etapeTitre": "Mesures, sûreté et sanctions",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Quelle sanction peut imposer l’accomplissement d’un travail sans rémunération dans les conditions prévues ?",
+    "distracteursIntroduction": [
+      "Travail sans rémunération",
+      "Travail non rétribué",
+      "Travail d’intérêt non rémunéré"
+    ]
+  },
+  {
+    "id": 71,
+    "sigle": "UEHC",
+    "signification": "Unité Educative d'Hébergement Collectif",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment s’appelle l’unité éducative qui assure un hébergement collectif ?",
+    "distracteursIntroduction": [
+      "Unité éducative d’hébergement commun",
+      "Unité éducative d’accueil collectif",
+      "Unité éducative d’hébergement continu"
+    ]
+  },
+  {
+    "id": 72,
+    "sigle": "UEHD",
+    "signification": "Unité Educative d'Hébergement Diversifié",
+    "repere": "Service, établissement, unité ou dispositif de prise en charge.",
+    "etape": 3,
+    "etapeTitre": "Placement, hébergement et détention",
+    "guideGroupe": "Autres sigles utiles des glossaires PJJ",
+    "questionIntroduction": "Comment s’appelle l’unité éducative qui organise un hébergement diversifié ?",
+    "distracteursIntroduction": [
+      "Unité éducative d’hébergement diffus",
+      "Unité éducative d’hébergement différencié",
+      "Unité éducative d’accueil diversifié"
+    ]
+  }
+]

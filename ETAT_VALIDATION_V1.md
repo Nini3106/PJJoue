@@ -124,3 +124,24 @@ Le dossier `test-results/` est volontairement absent de la livraison : il est re
 - Les restitutions écrites de l’évaluation finale ont été remplacées par des modes structurés lorsqu’elles exposaient à une réponse trop opaque.
 - Les prérequis P2 à P6 sont vérifiés sans notion orpheline.
 - Le parcours 2 validé le 29 août 2026 a été conservé strictement inchangé pendant cette passe.
+
+## Mission Sigles — 29 août 2026
+
+Mission Sigles est intégré à la V1 à partir d’une source centrale unique de **72 sigles**. Le support de révision, le guide public et le mini-jeu sont reconstruits depuis `donnees/sigles.json`, ce qui garantit l’absence de doublons entre ces trois usages.
+
+Fonctionnalités contrôlées :
+
+- **6 étapes de 12 sigles**, repérées par les six couleurs des parcours PJJoue ;
+- chaîne pédagogique stricte : introduction du développement complet dans une activité → rappel du sigle dans une activité ultérieure ;
+- aucun écran préalable ne donne les réponses avant de jouer ;
+- entraînement libre **10 / 20 / 30 / Tous**, sur une étape ou tout le module, par étapes ou mélangé, avec ou sans chrono (15 / 20 / 25 / 30 s) et avec ou sans jokers ;
+- **Défi du hasard** utilisant le même dé animé que PJJoue, en vert du parcours 6, avec tirage de 1 à 6 questions puis lancement manuel ; jokers autorisés ;
+- **Réviser mes erreurs** sur une page Mission Sigles indépendante (`#sigles-revision`), visuellement et fonctionnellement alignée sur Réviser PJJoue, mais alimentée uniquement par les erreurs Sigles ;
+- progression et sauvegarde intégrées à la sauvegarde V1 ;
+- célébration d’étape par **confettis + son** après validation finale sans joker, même après une nouvelle tentative ;
+- évaluation finale de **30 activités**, sans joker ni passage, réussie à partir de **90 %**, avec célébration et fanfare ;
+- célébration spéciale du 100 % avec le message « 72 sigles. Même pas peur. ».
+
+Contrôles exécutés après reconstruction : **72/72 sigles uniques**, six étapes de douze, **72 questions d’introduction contextualisées et 216 distracteurs rédigés explicitement**, support et guide synchronisés sans doublon, **20 tests unitaires réussis**, accessibilité statique **16 pages**, structure V1 conforme, iconographie conforme, pages annexes **19 scénarios PC/mobile**, recette Chromium autonome Mission Sigles réussie et syntaxe JavaScript publique vérifiée par `node --check`.
+
+Les recettes qui naviguent directement vers `file://` ou `http://pjjoue.test/` restent bloquées par la politique de l’environnement de contrôle (`ERR_BLOCKED_BY_ADMINISTRATOR`). La recette autonome de Mission Sigles utilise la même page construite injectée dans Chromium et passe intégralement, y compris en largeur mobile 390 px.

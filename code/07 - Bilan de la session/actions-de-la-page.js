@@ -409,6 +409,10 @@ function lancerCelebrationBilan(celebration) {
     }, 180);
 }
 function terminerSession() {
+    if (estSessionMissionSigles()) {
+        terminerSessionMissionSiglesNative();
+        return;
+    }
     clearInterval(etat.identifiantMinuteur);
     const total = etat.questionsSession.length;
     const nombreQuestionsPassees = etat.questionsPassees?.size || 0;

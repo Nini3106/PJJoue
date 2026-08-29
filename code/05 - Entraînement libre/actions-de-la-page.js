@@ -66,6 +66,18 @@ function appliquerCouleursParcoursEntrainement() {
     const groupe = document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
     if (!groupe)
         return;
+    if (etat.contexteEntrainement === 'sigles') {
+        groupe.querySelectorAll('.choix-bouton[data-valeur]').forEach(bouton => {
+            const numero = Number(bouton.dataset.valeur);
+            if (!Number.isFinite(numero) || numero < 1 || numero > 6)
+                return;
+            const identite = obtenirIdentiteEtapeMissionSigles(numero);
+            bouton.style.setProperty('--parcours-accent', identite.couleur);
+            bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
+            bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
+        });
+        return;
+    }
     groupe.querySelectorAll('.choix-bouton[data-valeur]').forEach(bouton => {
         const theme = bouton.dataset.valeur;
         if (!theme || theme === 'tous')
@@ -83,6 +95,45 @@ function actualiserLimiteQuestionsEntrainement() {
     const groupeNombre = document.querySelector('[data-groupe-choix="nombreQuestionsEntrainement"]');
     if (!selectPerimetre || !selectNombre || !groupeNombre)
         return;
+    if (etat.contexteEntrainement === 'sigles') {
+        const perimetre = selectPerimetre.value || 'tous';
+        const reserve = obtenirPoolEntrainementMissionSigles(perimetre);
+        const nombreMax = reserve.length;
+        const libellePerimetre = perimetre === 'tous' ? 'Mission Sigles complète' : `l’étape ${Number(perimetre)}`;
+        const boutons = [...groupeNombre.querySelectorAll('.choix-bouton')];
+        boutons.forEach((bouton, index) => {
+            if (index === 3) {
+                bouton.dataset.valeur = String(nombreMax);
+                bouton.textContent = 'Tous';
+            }
+            const valeur = Number(bouton.dataset.valeur);
+            const disponible = valeur <= nombreMax;
+            bouton.hidden = !disponible;
+            bouton.disabled = !disponible;
+        });
+        let nombreSelectionne = Math.min(nombreMax, Math.max(1, Number(selectNombre.value) || 10));
+        if (nombreSelectionne > nombreMax || ![...selectNombre.options].some(option => Number(option.value) === nombreSelectionne))
+            nombreSelectionne = Math.min(10, nombreMax);
+        selectNombre.value = String(nombreSelectionne);
+        groupeNombre.querySelectorAll('.choix-bouton:not([hidden])').forEach(bouton => {
+            const actif = Number(bouton.dataset.valeur) === nombreSelectionne;
+            bouton.classList.toggle('actif', actif);
+            bouton.classList.toggle('selectionne', actif);
+            bouton.setAttribute('aria-pressed', String(actif));
+        });
+        const curseur = selectionner('#curseurNombreQuestions');
+        if (curseur) {
+            curseur.min = String(Math.min(10, nombreMax));
+            curseur.max = String(nombreMax);
+            curseur.step = '1';
+            curseur.value = String(nombreSelectionne);
+        }
+        const resume = selectionner('#limiteQuestionsEntrainement');
+        if (resume)
+            resume.textContent = `${nombreMax} sigles disponibles dans ${libellePerimetre}.`;
+        synchroniserCurseurNombreQuestions(nombreMax);
+        return;
+    }
     const perimetre = selectPerimetre.value || 'tous';
     const reserve = obtenirQuestionsEntrainement(perimetre);
     const nombreMax = reserve.length;
@@ -117,7 +168,6 @@ function actualiserLimiteQuestionsEntrainement() {
         resume.textContent = `${nombreMax} questions d’apprentissage disponibles dans ${libellePerimetre}.`;
     synchroniserCurseurNombreQuestions(nombreMax);
 }
-
 function initialiserGroupesChoix() {
     selectionnerTous('[data-groupe-choix]').forEach(groupe => {
         const listeDeroulante = selectionner('#' + groupe.dataset.groupeChoix);

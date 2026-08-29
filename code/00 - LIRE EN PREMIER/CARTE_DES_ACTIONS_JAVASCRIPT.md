@@ -404,3 +404,20 @@ Les explications sont volontairement simples. Les mots techniques imposés par J
 | `creerCarteQuestion()` | Crée carte question. |
 | `afficherQuestions()` | Affiche questions. |
 | `ouvrirFenetreReinitialisation()` | Ouvre fenetre reinitialisation. |
+
+
+## `code/08 - Réviser/Jeu des sigles/actions-de-la-page.js`
+
+| Action dans le code | Explication simple |
+|---|---|
+| `actualiserAccueilSigles()` | Met à jour le tableau de bord de Mission Sigles. |
+| `construireCartesEtapesSigles()` | Construit les six étapes de douze sigles. |
+| `creerQuestionIntroductionSigles()` | Introduit un sigle et son développement dans une activité avant tout rappel ultérieur. |
+| `lancerEtapeSigles()` | Lance une étape du parcours Sigles. |
+| `lancerEntrainementSigles()` | Lance un entraînement de 10, 20, 30 ou tous les sigles. |
+| `lancerDeSigles()` | Anime le dé et prépare un tirage de 1 à 6 questions sans démarrer la session. |
+| `jouerTirageDeSigles()` | Lance les questions tirées par le Défi du hasard avec jokers. |
+| `lancerRevisionSigles()` | Rejoue uniquement les sigles en erreur. |
+| `lancerEvaluationSigles()` | Lance l'évaluation finale de 30 activités sans joker ni passage. |
+| `verifierCelebrationEtapeSigles()` | Déclenche la célébration lorsque les douze sigles ont finalement été validés sans joker. |
+| `terminerSessionSigles()` | Enregistre le bilan, la progression et les célébrations. |

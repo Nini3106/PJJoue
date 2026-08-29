@@ -13,6 +13,7 @@ L’idée est simple : **on part du nom visible dans le site, puis on ouvre le d
 5. `06 - Question`
 6. `07 - Bilan de la session`
 7. `08 - Réviser`
+   - `08 - Réviser/Jeu des sigles` — Mission Sigles
 8. `09 - Progression`
 9. `10 - Paramètres`
 
@@ -23,6 +24,14 @@ Chaque dossier contient :
 - `actions-de-la-page.js` : les actions propres à cette page, quand elles peuvent être isolées proprement ;
 - exception : **Question** utilise `actions/` avec huit fichiers nommés par action visible, afin qu’aucun fichier géant ne soit nécessaire ;
 - `LIRE-MOI.md` : une explication courte du dossier.
+
+
+
+### Mission Sigles
+
+`08 - Réviser/Jeu des sigles` contient le mini-jeu **Mission Sigles**. Ses données ne sont pas dupliquées dans la page : la liste canonique des 72 sigles se trouve dans `donnees/sigles.json`. Le même fichier alimente le support de révision, le guide `sigles-pjj/` et les activités du mini-jeu lors de la construction.
+
+Le module possède une progression locale enregistrée dans la sauvegarde principale de PJJoue. Aucun sigle encore inconnu ne peut être utilisé comme question ou distracteur avant l'affichage de son développement complet.
 
 ## Éléments communs
 
