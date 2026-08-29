@@ -424,7 +424,10 @@ def principal() -> int:
     analytics = (RACINE / "ressources/analytics-pjjoue.js").read_text(encoding="utf-8")
     empreintes_analytics = lire("tests/empreintes_analytics.json")
     for chemin, empreinte_attendue in empreintes_analytics.items():
-        empreinte_actuelle = sha256((RACINE / chemin).read_bytes()).hexdigest()
+        # Git peut utiliser CRLF sous Windows et LF sur GitHub/Linux.
+        # Les fins de ligne ne doivent pas être interprétées comme une modification Analytics.
+        contenu_protege = (RACINE / chemin).read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        empreinte_actuelle = sha256(contenu_protege).hexdigest()
         exiger(empreinte_actuelle == empreinte_attendue, f"Le fichier Analytics protégé a changé : {chemin}.")
     exiger("GTM-M3LD4ZHK" in consentement and "consent', 'default'" in consentement, "Le consentement Analytics est incomplet.")
     exiger("PREFIXE_EVENEMENT = 'pjjoue_'" in analytics, "La couche Analytics PJJoue est incomplète.")

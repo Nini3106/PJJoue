@@ -84,7 +84,7 @@ def preparer_donnees() -> tuple[str, int, int]:
 def construire_donnees() -> tuple[int, int]:
     """Génère donnees-pjj.js et renvoie les nombres de questions et de sources."""
     contenu, nombre_questions, nombre_sources = preparer_donnees()
-    FICHIER_DESTINATION.write_text(contenu, encoding="utf-8")
+    FICHIER_DESTINATION.write_bytes(contenu.encode("utf-8"))
     return nombre_questions, nombre_sources
 
 

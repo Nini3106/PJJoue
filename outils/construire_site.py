@@ -28,6 +28,25 @@ MOTIF_REPERE_CSS = re.compile(
     re.S,
 )
 
+# Anciennes feuilles CSS publiques produites par une ancienne organisation du site.
+# Elles ne doivent plus exister : la V1 publie désormais une feuille principale assemblée.
+FICHIERS_PUBLICS_OBSOLETES = {
+    "ressources/styles/00-fondations-et-composants.css",
+    "ressources/styles/10-parcours-principal.css",
+    "ressources/styles/20-accueil-et-question-principale.css",
+    "ressources/styles/30-revision-parcours-et-parametres.css",
+    "ressources/styles/40-progression-et-erreurs.css",
+    "ressources/styles/50-carte-question-et-correction.css",
+    "ressources/styles/60-parcours-modes-et-chronometre.css",
+    "ressources/styles/70-celebrations-bilan-et-fenetres.css",
+    "ressources/styles/80-finitions-de-l-interface.css",
+    "ressources/styles/85-guides-pedagogiques.css",
+    "ressources/styles/90-adaptation-ecrans-et-etats-finaux.css",
+    "ressources/styles/96-icones-et-defi-hasard.css",
+    "ressources/styles/99-stabilisation-visuelle.css",
+}
+
+
 
 class ErreurConstruction(RuntimeError):
     """Erreur expliquée simplement à la personne qui reprend PJJoue."""
@@ -318,14 +337,30 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
     return sorties
 
 
+def supprimer_fichiers_publics_obsoletes() -> list[str]:
+    supprimes: list[str] = []
+    for chemin_relatif in sorted(FICHIERS_PUBLICS_OBSOLETES):
+        chemin = RACINE / chemin_relatif
+        if chemin.is_file():
+            chemin.unlink()
+            supprimes.append(chemin_relatif)
+    return supprimes
+
+
 def ecrire_fichiers(sorties: dict[str, str]) -> None:
+    supprimer_fichiers_publics_obsoletes()
     for chemin_relatif, contenu in sorties.items():
         chemin = RACINE / chemin_relatif
         chemin.parent.mkdir(parents=True, exist_ok=True)
-        chemin.write_text(contenu, encoding="utf-8")
+        chemin.write_bytes(contenu.encode("utf-8"))
 
 
 def verifier_fichiers(sorties: dict[str, str]) -> None:
+    obsoletes = [
+        chemin_relatif
+        for chemin_relatif in sorted(FICHIERS_PUBLICS_OBSOLETES)
+        if (RACINE / chemin_relatif).is_file()
+    ]
     differents: list[str] = []
     manquants: list[str] = []
     for chemin_relatif, contenu_attendu in sorties.items():
@@ -335,8 +370,12 @@ def verifier_fichiers(sorties: dict[str, str]) -> None:
             continue
         if chemin.read_text(encoding="utf-8") != contenu_attendu:
             differents.append(chemin_relatif)
-    if manquants or differents:
+    if obsoletes or manquants or differents:
         morceaux = []
+        if obsoletes:
+            morceaux.append(
+                "anciens fichiers publics obsolètes à supprimer : " + ", ".join(obsoletes)
+            )
         if manquants:
             morceaux.append("fichiers publics manquants : " + ", ".join(manquants))
         if differents:

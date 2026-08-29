@@ -34,6 +34,30 @@ La progression pédagogique reprend la logique des parcours principaux : **un si
 
 Le support de révision, le guide public et Mission Sigles utilisent tous la même source `donnees/sigles.json`, afin d’éviter les doublons et les divergences. **Réviser mes erreurs** possède sa propre page `#sigles-revision` : elle reprend le gabarit visuel de Réviser PJJoue mais conserve des données d’erreurs entièrement séparées dans la progression Mission Sigles.
 
+## ⚠️ Règle absolue avant toute modification ou publication
+
+Les fichiers publics à la racine du projet et dans les dossiers publiés sont **des fichiers générés**. Ils ne doivent jamais devenir la source de vérité.
+
+**Ne jamais modifier directement puis publier** `index.html`, les pages `*/index.html`, `ressources/navigation-locale.js`, `service-worker.js`, les pages légales ou tout autre fichier reconstruit par `outils/construire_site.py`.
+
+Toute correction doit suivre cet ordre, sans exception :
+
+1. modifier le fichier source correspondant dans `code/` ;
+2. lancer `CONSTRUIRE_PJJOUE.bat` ou `python outils/construire_site.py` ;
+3. lancer `VERIFIER_PJJOUE.bat` ou `npm test` ;
+4. vérifier que `python outils/construire_site.py --verifier` répond **OK** ;
+5. seulement ensuite faire le commit et le push.
+
+Le `service-worker.js` public doit donc toujours être régénéré à partir de sa source située dans `code/01 - Éléments communs/Application installable et hors connexion/`. Le même principe s’applique aux guides, à l’accueil, aux pages légales et à la navigation locale.
+
+### Archives ZIP et accents français
+
+Les noms de dossiers accentués (`Éléments communs`, `Métiers de la PJJ`, etc.) doivent rester strictement intacts. **Ne jamais publier un dossier dont le nom contient des caractères corrompus** comme `├`, `Ã`, `Â` ou `�`. Un tel dossier est généralement un doublon créé par un mauvais encodage ZIP et n’est pas utilisé par le constructeur.
+
+Le contrôle `python outils/verifier_noms_fichiers.py` est exécuté automatiquement par `npm test` et par la recette Windows. S’il échoue, **ne pas pousser**.
+
+Pour une publication normale, le réflexe recommandé est : **modifier dans `code/` → construire → vérifier → pousser**.
+
 ## Organisation du code
 
 Le français est la langue de référence du projet. La règle centrale est :
@@ -72,9 +96,26 @@ Le contenu du projet peut être placé à la racine d’une branche, puis publi�
 
 Les URL canoniques, le sitemap et le fichier `robots.txt` ciblent `https://pjjoue.fr/`. Si ce domaine personnalisé est utilisé, il doit être configuré dans les paramètres GitHub Pages du dépôt. Sinon, ces trois éléments doivent être adaptés à l’adresse publique retenue avant l’indexation du site.
 
+
+### Nettoyage automatique des anciens CSS publics
+
+Une ancienne organisation de PJJoue produisait plusieurs feuilles CSS publiques séparées (`00-fondations-et-composants.css`, `10-parcours-principal.css`, etc.). Elles sont désormais obsolètes.
+
+- `python outils/construire_site.py` les supprime automatiquement si elles sont encore présentes ;
+- `python outils/construire_site.py --verifier` échoue si l’une d’elles réapparaît ;
+- ne pas les restaurer ni les modifier : la feuille publique de référence est `ressources/styles/pjjoue-principal.css`, reconstruite depuis `code/`.
+
+## Construction reproductible sur Windows et Linux
+
+Les sorties générées sont écrites avec des fins de ligne LF déterministes afin qu'une reconstruction sous Windows produise les mêmes octets que sur GitHub/Linux. Les contrôles Analytics normalisent uniquement LF/CRLF avant de vérifier les empreintes : un simple changement de fin de ligne ne bloque donc plus la recette, tandis qu'une modification réelle du code Analytics reste détectée.
+
+Avant tout push, utiliser `PREPARER_PJJOUE_AVANT_PUSH.bat`. Ce script reconstruit `donnees/donnees-pjj.js`, les 44 fichiers publics (service worker compris) et `MANIFESTE.json`, puis lance la recette complète.
+
 ## Vérifications
 
-Sous Windows, `VERIFIER_PJJOUE.bat` lance la recette. En ligne de commande :
+Sous Windows, lancer de préférence `PREPARER_PJJOUE_AVANT_PUSH.bat` avant chaque commit/push. Il vérifie les noms, reconstruit le site et installe automatiquement les dépendances Node.js avec `npm ci` si ESLint est absent. Le dossier `node_modules/` ne doit jamais être livré dans une archive ni versionné.
+
+`VERIFIER_PJJOUE.bat` lance ensuite la recette. En ligne de commande :
 
 ```bash
 npm ci
@@ -114,3 +155,7 @@ Les outils de recette Chromium sont livrés avec le projet afin qu’une personn
 - guide détaillé : `code/00 - LIRE EN PREMIER/CAPTURES_VISUELLES_ET_TESTS_NAVIGATEUR.md`.
 
 Le dossier `test-results/` n’est pas livré : il est recréé automatiquement par les scripts.
+
+Les références visuelles pixel par pixel sont canoniques sous Linux/Chromium, comme la CI GitHub. Sous Windows, le moteur de rendu des polices système (DirectWrite/Segoe UI) peut produire des pixels et des retours à la ligne différents alors que le HTML, le CSS et le JavaScript sont identiques. La recette Windows exécute donc tous les scénarios, assertions DOM, dimensions critiques, contrôles de débordement et captures, tandis que la comparaison bitmap exacte reste bloquante sous Linux/CI. Les références ne doivent pas être régénérées depuis Windows.
+
+Le contrôle des liens officiels ne bloque que les anomalies confirmées (adresse invalide, HTTP 404 ou 410). Les refus anti-robot, délais réseau, erreurs DNS/SSL ou HTTP temporaires sont signalés pour contrôle humain sans rendre la publication rouge.

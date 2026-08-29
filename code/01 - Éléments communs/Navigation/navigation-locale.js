@@ -72,8 +72,9 @@
     navigation.classList.add('guide-navigation-principale');
     navigation.id = navigation.id || 'navigationPrincipaleGuides';
 
-    const lienApplication = ancre => `${racineApplication.href}index.html${ancre}`;
-    const lienGuides = `${racineApplication.href}guides/index.html`;
+    const navigationLocale = window.location.protocol === 'file:';
+    const lienApplication = ancre => `${racineApplication.href}${navigationLocale ? 'index.html' : ''}${ancre}`;
+    const lienGuides = `${racineApplication.href}guides/${navigationLocale ? 'index.html' : ''}`;
     const entrees = [
       ['Accueil', lienApplication('#accueil')],
       ['Apprendre', lienApplication('#parcours')],

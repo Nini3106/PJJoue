@@ -35,6 +35,26 @@ def verifier_lien(identifiant: str, source: dict) -> tuple[str, str, int | None,
         return identifiant, adresse, None, f"{titre} — {erreur}"
 
 
+
+
+def classer_resultat(resultat: tuple[str, str, int | None, str]) -> str:
+    """Classer un contrôle de lien en ``ok``, ``manuel`` ou ``echec``.
+
+    Seules les adresses invalides et les réponses 404/410 prouvent ici une
+    anomalie bloquante. Les erreurs réseau et refus anti-robot restent à
+    contrôler humainement sans produire de faux échec de publication.
+    """
+    adresse = resultat[1]
+    code = resultat[2]
+    if not adresse.startswith(("https://", "http://")):
+        return "echec"
+    if code in {404, 410}:
+        return "echec"
+    if code is None or code >= 300:
+        return "manuel"
+    return "ok"
+
+
 def main() -> int:
     sources = json.loads(CHEMIN_SOURCES.read_text(encoding="utf-8"))
     echecs: list[tuple[str, str, int | None, str]] = []
@@ -43,27 +63,25 @@ def main() -> int:
         travaux = [executant.submit(verifier_lien, identifiant, source) for identifiant, source in sources.items()]
         for travail in as_completed(travaux):
             resultat = travail.result()
-            code = resultat[2]
-            if code is None or code in {404, 410}:
+            classification = classer_resultat(resultat)
+            if classification == "echec":
                 echecs.append(resultat)
-            elif code >= 300:
-                # Plusieurs sites publics (notamment Légifrance) refusent les
-                # robots ou renvoient ponctuellement une erreur de passerelle.
-                # Cela exige un contrôle humain, mais ne prouve pas un lien mort.
+            elif classification == "manuel":
                 controles_manuels.append(resultat)
 
     for identifiant, adresse, code, detail in sorted(controles_manuels):
-        print(f"À CONTRÔLER — {identifiant} : HTTP {code} — {adresse} — {detail}")
+        etat = f"HTTP {code}" if code is not None else "aucune réponse"
+        print(f"À CONTRÔLER — {identifiant} : {etat} — {adresse} — {detail}")
     if echecs:
-        print(f"ERREUR — {len(echecs)} lien(s) officiel(s) à contrôler manuellement :")
+        print(f"ERREUR — {len(echecs)} lien(s) officiel(s) manifestement indisponible(s) :")
         for identifiant, adresse, code, detail in sorted(echecs):
             etat = f"HTTP {code}" if code is not None else "aucune réponse"
             print(f"- {identifiant} : {etat} — {adresse} — {detail}")
         return 1
-    nombre_repondant = len(sources) - len(controles_manuels)
+    nombre_repondant = len(sources) - len(controles_manuels) - len(echecs)
     print(
         f"OK — {nombre_repondant} liens répondent normalement ; "
-        f"{len(controles_manuels)} refus ou erreurs temporaires sont signalés sans faux échec."
+        f"{len(controles_manuels)} refus ou erreurs réseau temporaires sont signalés sans faux échec."
     )
     return 0
 

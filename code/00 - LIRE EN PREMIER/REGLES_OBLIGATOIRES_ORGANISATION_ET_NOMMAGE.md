@@ -400,6 +400,50 @@ Puis seulement écrire le code.
 
 ---
 
+## 13. Les fichiers publics sont générés : modification directe interdite
+
+Les fichiers servis par PJJoue ne sont pas la source de vérité lorsqu’ils sont reconstruits par `outils/construire_site.py`.
+
+Cela concerne notamment :
+
+- `index.html` ;
+- les pages `*/index.html` ;
+- `ressources/navigation-locale.js` ;
+- `service-worker.js` ;
+- les pages légales ;
+- tout autre fichier listé comme sortie du plan de construction.
+
+Une correction apportée directement à un fichier public peut fonctionner visuellement tout en étant perdue à la reconstruction suivante. Elle peut également provoquer l’échec de GitHub Actions avec le message **« fichiers publics modifiés directement ou non reconstruits »**.
+
+La procédure obligatoire est :
+
+1. identifier la vraie source dans `code/` ;
+2. modifier cette source ;
+3. reconstruire avec `CONSTRUIRE_PJJOUE.bat` ou `python outils/construire_site.py` ;
+4. exécuter `VERIFIER_PJJOUE.bat` ou `npm test` ;
+5. vérifier explicitement que `python outils/construire_site.py --verifier` est vert ;
+6. seulement ensuite publier.
+
+Le `service-worker.js` public ne doit jamais être corrigé seul : sa source se trouve dans `code/01 - Éléments communs/Application installable et hors connexion/`.
+
+---
+
+## 14. L’encodage des noms de fichiers et dossiers doit rester intact
+
+Les accents français font partie des vrais noms du projet. Une archive ou un outil qui transforme par exemple `Éléments communs` en `├ël├®ments communs` crée un **nouveau dossier erroné**, au lieu de mettre à jour le dossier source réel.
+
+Sont donc interdits avant publication :
+
+- noms contenant `├`, `Ã`, `Â`, `�` ou des séquences similaires ;
+- doublons de dossiers créés à cause d’un encodage ZIP incorrect ;
+- extraction d’une archive dont les noms accentués apparaissent déformés.
+
+Le script `outils/verifier_noms_fichiers.py` doit rester actif dans la chaîne de tests. Il est volontairement exécuté avant le contrôle de construction afin que le problème soit identifié immédiatement.
+
+En cas de nom corrompu : **ne pas renommer au hasard et ne pas pousser**. Repartir d’une copie propre, conserver les vrais noms Unicode, reconstruire, puis vérifier.
+
+---
+
 # Principe final
 
 > **Une personne doit pouvoir utiliser PJJoue pendant cinq minutes, ouvrir ensuite son code et retrouver naturellement les éléments qu’elle vient de voir.**
@@ -407,3 +451,24 @@ Puis seulement écrire le code.
 Le code de PJJoue ne doit pas demander au lecteur d’apprendre le vocabulaire personnel de son développeur.
 
 **C’est le code qui doit parler le langage de PJJoue.**
+
+---
+
+## 15. Les anciens fichiers publics générés doivent disparaître
+
+Les anciennes feuilles CSS publiques fragmentées de `ressources/styles/` (`00-...css`, `10-...css`, etc.) sont obsolètes.
+
+- ne jamais les modifier comme source ;
+- ne jamais les restaurer depuis une ancienne archive ;
+- la reconstruction complète les supprime automatiquement ;
+- le mode `--verifier` doit échouer si elles réapparaissent.
+
+Cette règle évite qu’une extraction ZIP par-dessus un ancien dossier laisse des fichiers fantômes qui perturbent les contrôles CSS ou GitHub Actions.
+
+---
+
+## 15. Les constructions doivent être identiques sous Windows et sur GitHub
+
+Les fichiers générés ne doivent pas dépendre des fins de ligne du système. Le constructeur écrit volontairement les sorties texte en LF. Les empreintes Analytics tolèrent uniquement la différence LF/CRLF ; elles continuent de bloquer toute modification réelle du contenu protégé.
+
+Avant publication, `PREPARER_PJJOUE_AVANT_PUSH.bat` doit reconstruire les données, le site, le service worker et le manifeste, puis terminer toute la recette sans erreur. Une empreinte protégée ne doit jamais être modifiée uniquement pour contourner un test.

@@ -10,57 +10,68 @@ echo.
 call :trouver_python
 if errorlevel 1 goto erreur_python
 
-echo 1/11 - Verification de la construction...
-%PYTHON_PJJOUE% outils\construire_site.py --verifier
+if not exist "node_modules\.bin\eslint.cmd" goto erreur_node
+
+echo 1/12 - Verification des noms de fichiers et dossiers...
+%PYTHON_PJJOUE% outils\verifier_noms_fichiers.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 2/11 - Controle du JavaScript...
+echo 2/12 - Verification des donnees, de la construction et du manifeste...
+%PYTHON_PJJOUE% outils\construire_donnees.py --verifier
+if errorlevel 1 goto erreur
+%PYTHON_PJJOUE% outils\construire_site.py --verifier
+if errorlevel 1 goto erreur
+%PYTHON_PJJOUE% outils\construire_manifeste.py --verifier
+if errorlevel 1 goto erreur
+
+echo.
+echo 3/12 - Controle du JavaScript...
 call npm.cmd run controle:javascript
 if errorlevel 1 goto erreur
 
 echo.
-echo 3/11 - Controle des doublons CSS...
+echo 4/12 - Controle des doublons CSS...
 call npm.cmd run controle:css:doublons
 if errorlevel 1 goto erreur
 
 echo.
-echo 4/11 - Controle de la structure CSS...
+echo 5/12 - Controle de la structure CSS...
 call npm.cmd run controle:css:structure
 if errorlevel 1 goto erreur
 
 echo.
-echo 5/11 - Tests unitaires des donnees...
+echo 6/12 - Tests unitaires des donnees...
 %PYTHON_PJJOUE% -m unittest discover -s tests -p test_*.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 6/11 - Verification des questions et des fichiers...
+echo 7/12 - Verification des questions et des fichiers...
 %PYTHON_PJJOUE% tests\verifier_pjjoue.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 7/11 - Recette de l'interface dans Chromium...
+echo 8/12 - Recette de l'interface dans Chromium...
 %PYTHON_PJJOUE% tests\verifier_interface.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 8/11 - Controle automatique de l'accessibilite...
+echo 9/12 - Controle automatique de l'accessibilite...
 %PYTHON_PJJOUE% outils\auditer_accessibilite_statique.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 9/11 - Rappel de verification des sources tous les 365 jours...
+echo 10/12 - Rappel de verification des sources tous les 365 jours...
 %PYTHON_PJJOUE% outils\verifier_fraicheur_sources.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 10/11 - Verification des liens officiels...
+echo 11/12 - Verification des liens officiels...
 %PYTHON_PJJOUE% outils\verifier_liens_officiels.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 11/11 - Captures visuelles ordinateur et mobile...
+echo 12/12 - Captures visuelles ordinateur et mobile...
 %PYTHON_PJJOUE% tests\verifier_regression_visuelle.py
 if errorlevel 1 goto erreur
 
@@ -88,6 +99,15 @@ if not errorlevel 1 (
   set "PYTHON_PJJOUE=python"
   exit /b 0
 )
+exit /b 1
+
+:erreur_node
+echo.
+echo ============================================================
+echo Les dependances Node.js ne sont pas installees ou sont incompletes.
+echo Lance PREPARER_PJJOUE_AVANT_PUSH.bat ^(recommande^) ou npm ci.
+echo ============================================================
+pause
 exit /b 1
 
 :erreur

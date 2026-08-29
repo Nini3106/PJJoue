@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date
+import argparse
 from hashlib import sha256
 from pathlib import Path
 import json
@@ -71,12 +72,27 @@ def construire_manifeste() -> dict[str, object]:
 
 
 def principal() -> None:
-    manifeste = construire_manifeste()
-    FICHIER_MANIFESTE.write_text(
-        json.dumps(manifeste, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
+    analyseur = argparse.ArgumentParser(description="Construire ou vérifier le manifeste de PJJoue.")
+    analyseur.add_argument(
+        "--verifier",
+        action="store_true",
+        help="vérifier que MANIFESTE.json correspond aux fichiers sans le réécrire",
     )
-    print(f"Manifeste construit : {len(manifeste['fichiers'])} fichiers recensés.")
+    options = analyseur.parse_args()
+
+    manifeste = construire_manifeste()
+    contenu = (json.dumps(manifeste, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    if options.verifier:
+        if not FICHIER_MANIFESTE.is_file():
+            raise SystemExit("ÉCHEC — MANIFESTE.json est absent. Lance python outils/construire_manifeste.py.")
+        if FICHIER_MANIFESTE.read_bytes() != contenu:
+            raise SystemExit(
+                "ÉCHEC — MANIFESTE.json n’est pas à jour. Lance python outils/construire_manifeste.py puis relance les contrôles."
+            )
+        print(f"Manifeste vérifié : {len(manifeste['fichiers'])} fichiers recensés.")
+    else:
+        FICHIER_MANIFESTE.write_bytes(contenu)
+        print(f"Manifeste construit : {len(manifeste['fichiers'])} fichiers recensés.")
 
 
 if __name__ == "__main__":
