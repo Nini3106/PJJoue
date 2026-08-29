@@ -55,8 +55,8 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
         };
     }
     return {
-        titre: `Étape ${etapeProgramme} validée en autonomie !`,
-        message: `Une nouvelle destination est inscrite dans ton carnet. Ton titre actuel : « ${titreSymbolique} ». Le chemin continue vers l’étape suivante.`,
+        titre: `Étape ${etapeProgramme} terminée sans joker !`,
+        message: `Toutes les questions de cette étape ont été validées sans joker. Ton titre actuel : « ${titreSymbolique} ». Le chemin continue vers l’étape suivante.`,
         confetti: true
     };
 }
@@ -163,9 +163,18 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
             const etaitDejaValideeSansJoker = bilanEtape.termineeSansJoker === true;
             bilanEtape.termineeSansJoker = etaitDejaValideeSansJoker || toutesReussiesEnAutonomie;
             bilanEtape.jokersUtilises = !bilanEtape.termineeSansJoker;
-            const evaluationDeverrouillee = estProgrammeMaitrise(etat.theme);
-            if (toutesReussiesEnAutonomie && !etaitDejaValideeSansJoker)
+            const validationsSansJoker = bilanEtape.validationsSansJoker || {};
+            const toutesValideesSansJoker = questionsEtape.length > 0
+                && questionsEtape.every(question => validationsSansJoker[question.id] === true);
+            const celebrationDejaAffichee = bilanEtape.celebrationSansJokerAffichee === true;
+            if (toutesValideesSansJoker && !celebrationDejaAffichee) {
+                // Mémoriser avant les calculs globaux : ceux-ci réinitialisent les objets
+                // de progression pour garantir leur structure et pourraient sinon perdre
+                // le drapeau porté par l'ancienne référence JavaScript.
+                bilanEtape.celebrationSansJokerAffichee = true;
+                const evaluationDeverrouillee = estProgrammeMaitrise(etat.theme);
                 celebration = obtenirCelebrationEtape(etat.etape, false, evaluationDeverrouillee);
+            }
         }
     }
     if (etat.mode === 'evaluation-finale') {

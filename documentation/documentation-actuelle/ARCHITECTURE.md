@@ -154,6 +154,8 @@ L’en-tête de la carte utilise une icône de plan dessinée directement en SVG
 
 `sessionAUtiliseJoker` lit uniquement `etat.sessionAvecJoker`, activé par `marquerJokerUtilise` au moment réel où une aide est consommée. `synchroniserEtapesReussiesEnAutonomie` normalise la progression enregistrée lorsque toutes les réponses d’une étape sont déjà enregistrées comme autonomes. Ainsi, le défi personnel, les souvenirs, la destination suivante et la carte d’étape utilisent toujours le même état `termineeSansJoker`.
 
+La célébration d’une étape suit une règle distincte de la maîtrise autonome : `validationsSansJoker` mémorise, question par question, qu’une réponse a finalement été réussie sans joker, même après une ou plusieurs reprises. Dès que toutes les questions d’une étape portent cette validation, `celebrationSansJokerAffichee` permet de déclencher une seule fois les confettis et la mélodie, y compris si l’étape a été complétée sur plusieurs sessions. Cette règle de célébration ne modifie pas `termineeSansJoker` ni les conditions de déverrouillage de l’évaluation finale.
+
 Dans Progression, la fiche compacte du parcours ne contient aucune action. Le bouton statique `boutonOuvrirParcours` appartient à la zone d’actions de la grande carte et s’aligne avec les commandes Exporter et Importer de la carte voisine.
 
 Le bouton `boutonRetour` est placé au début du contenu principal et non dans la navigation. Il reste dans le flux sur toutes les largeurs d’écran. `ajusterQuestionAEcran` déduit sa hauteur de l’espace disponible afin que cette commande contextuelle ne comprime pas les questions.

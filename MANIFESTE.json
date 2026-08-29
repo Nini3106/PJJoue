@@ -129,8 +129,8 @@
       "sha256": "eea93a5dd45d5e81a2a978bbf618d33344118157c16c0c865fc8883a11116552"
     },
     "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js": {
-      "tailleOctets": 21912,
-      "sha256": "72889b588b1e65beece5fb72233d11f1b23c1f084d71ced7319eaf7fb241c2f6"
+      "tailleOctets": 22574,
+      "sha256": "b987caf1c6decd5a711fb1fd1c85a46ac09d2805f6991822eed6720b42cee2f1"
     },
     "code/01 - Éléments communs/JavaScript - Sons et célébrations.js": {
       "tailleOctets": 6633,
@@ -189,8 +189,8 @@
       "sha256": "3e0561af42b73bf3899899eb48acc06f82c3aa478a71608bc00575feeed06948"
     },
     "code/03 - Parcours PJJ/contenu.html": {
-      "tailleOctets": 5752,
-      "sha256": "56df76cf502a215850892f09b05384d6b2aab341b2d2aec77c1cb967f92435f9"
+      "tailleOctets": 5747,
+      "sha256": "60bf7ef68708aca55cde6c7a8bd5fb1433c1e6a99787c6b0021ca93c8c3c1ffe"
     },
     "code/04 - Carnet de parcours/LIRE-MOI.md": {
       "tailleOctets": 578,
@@ -253,8 +253,8 @@
       "sha256": "8ad111ec360833c4e54a31e9d33840d67c7e17ae0c2f49e3964a9c05e66bb283"
     },
     "code/06 - Question/actions/07 - Valider corriger et naviguer.js": {
-      "tailleOctets": 15133,
-      "sha256": "8c10b49f9790646831eb5c7e33d23b10543f004faa5ef9d651fcb5e29eeca5ee"
+      "tailleOctets": 15530,
+      "sha256": "848628b72b416d7319fa505849c345784925a5ec4c4718f63fb056c7b0fa3400"
     },
     "code/06 - Question/actions/08 - Jokers de la question.js": {
       "tailleOctets": 12955,
@@ -273,8 +273,8 @@
       "sha256": "230495253dff79a7a29158036d6616cd8f50450fba20ebb30152992e90bc17ad"
     },
     "code/07 - Bilan de la session/actions-de-la-page.js": {
-      "tailleOctets": 23039,
-      "sha256": "a97f630a83872803b3311519756229900bdfb7c6415260239e14ab920b395075"
+      "tailleOctets": 23732,
+      "sha256": "d11d4e69e1fc74f8535746e7f1e80e0c8fcdb0dc451af9531717eec25b42ac10"
     },
     "code/07 - Bilan de la session/contenu.html": {
       "tailleOctets": 2909,
@@ -293,8 +293,8 @@
       "sha256": "f8e251e0f2e70fa5e551fccf385b6e083bf57a46babb62f8ede331bc4cdb39dd"
     },
     "code/08 - Réviser/contenu.html": {
-      "tailleOctets": 51334,
-      "sha256": "df6a4dfea8ca3e13bf324aebed9849eba8db0d1afea3fe35a6bc31ca1c6b0189"
+      "tailleOctets": 59339,
+      "sha256": "23699f6706f5fa558bafec646f8d02301e5378504cd6d2e395512b34babd9623"
     },
     "code/08 - Réviser/style-reviser-et-supports.css": {
       "tailleOctets": 10380,
@@ -309,8 +309,8 @@
       "sha256": "dff39b526d1926747061d3c4b0c50dda49a7a3faa097bd466812effb1a60195e"
     },
     "code/09 - Progression/actions-de-la-page.js": {
-      "tailleOctets": 9630,
-      "sha256": "ab3f53e788dfc700c93b9440c1eac2546c56bf11f85e0cd0020301fc1575c851"
+      "tailleOctets": 10038,
+      "sha256": "053ab33c2e95bf9d4d2b77d3b72364dcb603668689cd17ee6d571c04d8adf59a"
     },
     "code/09 - Progression/contenu.html": {
       "tailleOctets": 2549,
@@ -445,8 +445,8 @@
       "sha256": "4c79fe990c9646fa10840f5d737569d6a0c13039b32a60b412355a4de3bf78a4"
     },
     "code/11 - Guides pour découvrir la PJJ/Sigles essentiels/page.html": {
-      "tailleOctets": 11305,
-      "sha256": "7ca7ce09defdb360be306380223b6fdc76d444d994c2db40f2046c7c9af7d483"
+      "tailleOctets": 14818,
+      "sha256": "4113677d5beff6be1dfbad9e84ba7f7cdb347d787ba154130c1be877aea82a85"
     },
     "code/11 - Guides pour découvrir la PJJ/Sigles essentiels/style-de-la-page.css": {
       "tailleOctets": 204,
@@ -561,8 +561,8 @@
       "sha256": "61766372d1d4b51838b37eed10012c193f3775508bc2355f7ff568bad9fe1ab9"
     },
     "documentation/documentation-actuelle/ARCHITECTURE.md": {
-      "tailleOctets": 19235,
-      "sha256": "0e844090d38989813ef30e2c7fe5f8bd6d3e2081c98c9dbbfd7fda44d56f29ef"
+      "tailleOctets": 19842,
+      "sha256": "3601b8b751383cc4facb4037393000c67187b05be25df0f25a610a9114359e74"
     },
     "documentation/documentation-actuelle/ARCHITECTURE_CODE_PAR_PAGE.md": {
       "tailleOctets": 3160,
@@ -685,8 +685,8 @@
       "sha256": "eb8f549047310bf9cd0b8c4300bf72284fecc5d83cf7330e4da716260387db07"
     },
     "index.html": {
-      "tailleOctets": 98239,
-      "sha256": "1c066f9ae541537fa53e3b90734bd518c888ec4c1ead5222e41ffd9bf95e4af8"
+      "tailleOctets": 106239,
+      "sha256": "028816351f72fa40d1ceb41124e935058889ddb6b0ac4c01e68747113c44daca"
     },
     "manifest.webmanifest": {
       "tailleOctets": 663,
@@ -869,8 +869,8 @@
       "sha256": "e5b93e7037f2f2615ededb2d3d4b0fc7b0371f68ac239683b72973c3a6c70c93"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 305676,
-      "sha256": "69289bb6c480d470d75f8421df5d13cbdd42f3637b957cb62046f6dc88b7fa6f"
+      "tailleOctets": 307836,
+      "sha256": "2a7c166ce74406bcb7bd847ac35780346d0cd84f31947dbb015291673004b336"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 9501,
@@ -938,11 +938,11 @@
     },
     "service-worker.js": {
       "tailleOctets": 4238,
-      "sha256": "48e7e76225ffa0de4017fb8f2ce43184a5d34136e2aa6e0181b9bd0b67cc3364"
+      "sha256": "7cb84111f778faa22a5ff231f4e85da42ba05c5453667c2fd093834138b1666e"
     },
     "sigles-pjj/index.html": {
-      "tailleOctets": 11305,
-      "sha256": "7ca7ce09defdb360be306380223b6fdc76d444d994c2db40f2046c7c9af7d483"
+      "tailleOctets": 14818,
+      "sha256": "4113677d5beff6be1dfbad9e84ba7f7cdb347d787ba154130c1be877aea82a85"
     },
     "sigles-pjj/style-de-la-page.css": {
       "tailleOctets": 204,
@@ -1161,8 +1161,8 @@
       "sha256": "bc4335a9ed5889e4a6dc6dca74caf042babe04687318fadaf7bc8e7a55fdd7fd"
     },
     "tests/verifier_interface.py": {
-      "tailleOctets": 28443,
-      "sha256": "c26218f28c92477107c75a4fc1834be0b4313497ea2a17a12c66fd7f0641a44f"
+      "tailleOctets": 33679,
+      "sha256": "82ca8806d6478bf514102fe96cbbcff9b1bdb6101812c5060b47eb97d64c25d9"
     },
     "tests/verifier_navigation_libre.py": {
       "tailleOctets": 3060,
@@ -1173,8 +1173,8 @@
       "sha256": "34e520a4ef342358aafe3dae2066a01b0c1e54a9b7d35ca610b772928073b1fd"
     },
     "tests/verifier_pjjoue.py": {
-      "tailleOctets": 27422,
-      "sha256": "3535c03a8c0e62b60b73e809093afe407eaf2a09e3ccad5a53b04cdec8e3ebbf"
+      "tailleOctets": 27446,
+      "sha256": "134f4f580b630a0a6cb290ee0a8716400823a2c7dbfe5b365647bdd347d07c62"
     },
     "tests/verifier_regression_visuelle.py": {
       "tailleOctets": 74306,

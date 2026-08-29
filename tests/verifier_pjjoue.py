@@ -381,7 +381,7 @@ def principal() -> int:
         categorie = next((balise for balise in categories_supports if f'id="{identifiant}"' in balise), "")
         exiger(bool(categorie) and bool(re.search(rf'\b{sigle}\b', categorie, re.IGNORECASE)),
                f"La catégorie {identifiant} doit déclarer le sigle {sigle} dans ses mots-clés.")
-    exiger("Chaque parcours est autonome" in page,
+    exiger("Pour profiter de la progression pédagogique prévue" in page,
            "La page Parcours doit expliquer clairement que chaque itinéraire peut être commencé séparément.")
     exiger(".produit-pied-page::before" in style_principal and "linear-gradient(90deg" in style_principal,
            "Le pied de page principal doit rester visuellement séparé du contenu.")

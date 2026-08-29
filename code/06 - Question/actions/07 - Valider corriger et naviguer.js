@@ -31,7 +31,7 @@ function preparerValidationReponse(question, bouton) {
     return { etaitPassee, tentatives, aideUtilisee };
 }
 function enregistrerResultatReponse(question, texteChoisi, precisions, resultat) {
-    const { reussiteAutonome, reussiteAidee, tentatives, aideUtilisee } = resultat;
+    const { estCorrecte, reussiteAutonome, reussiteAidee, tentatives, aideUtilisee } = resultat;
     etat.reponsesSession.set(question.id, {
         statut: reussiteAutonome ? 'correcte' : (reussiteAidee ? 'aidee' : 'incorrecte'),
         texteReponse: texteChoisi,
@@ -52,6 +52,11 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
     const bilan = obtenirBilanEtape(question.theme, question.etape);
     bilan.questionsTraitees[question.id] = true;
     bilan.resultats[question.id] = bilan.resultats?.[question.id] === true || reussiteAutonome;
+    bilan.validationsSansJoker = bilan.validationsSansJoker || {};
+    // Pour la célébration d'étape, une réponse finalement correcte compte dès lors
+    // qu'aucun joker n'a été utilisé sur cette tentative, même après avoir rejoué.
+    bilan.validationsSansJoker[question.id] = bilan.validationsSansJoker[question.id] === true
+        || (estCorrecte && !aideUtilisee);
     if (aideUtilisee)
         etat.etapeAvecJoker = true;
     synchroniserEtapesReussiesEnAutonomie(PROGRAMMES[question.theme]);

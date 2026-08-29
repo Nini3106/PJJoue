@@ -81,11 +81,20 @@ function nettoyerProgression(progression) {
                 || !estObjetSimple(enregistrement))
                 continue;
             const identifiantsQuestions = new Set(questionsEtape.map(question => String(question.id)));
+            const resultats = filtrerResultats(enregistrement.resultats, identifiantsQuestions);
+            const validationsSansJoker = estObjetSimple(enregistrement.validationsSansJoker)
+                ? filtrerIndicateurs(enregistrement.validationsSansJoker, identifiantsQuestions)
+                : Object.fromEntries(Object.entries(resultats).filter(([_identifiant, resultat]) => resultat === true));
+            const celebrationSansJokerAffichee = typeof enregistrement.celebrationSansJokerAffichee === 'boolean'
+                ? enregistrement.celebrationSansJokerAffichee
+                : enregistrement.termineeSansJoker === true;
             progressionNettoyee.apprenant[theme][numeroEtape] = {
                 meilleurScore: convertirEntierBorne(enregistrement.meilleurScore, 0, 100),
                 nombreTentatives: convertirEntierBorne(enregistrement.nombreTentatives),
                 questionsTraitees: filtrerIndicateurs(enregistrement.questionsTraitees, identifiantsQuestions),
-                resultats: filtrerResultats(enregistrement.resultats, identifiantsQuestions),
+                resultats,
+                validationsSansJoker,
+                celebrationSansJokerAffichee,
                 termineeSansJoker: enregistrement.termineeSansJoker === true,
                 jokersUtilises: enregistrement.termineeSansJoker !== true
             };

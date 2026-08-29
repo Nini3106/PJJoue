@@ -29,12 +29,16 @@ function initialiserProgression(theme) {
             deverrouillee: true,
             questionsTraitees: {},
             resultats: {},
+            validationsSansJoker: {},
+            celebrationSansJokerAffichee: false,
             termineeSansJoker: false,
             jokersUtilises: true,
             ...progressionExistante
         };
         progressionEtape.questionsTraitees = progressionEtape.questionsTraitees || {};
         progressionEtape.resultats = progressionEtape.resultats || {};
+        progressionEtape.validationsSansJoker = progressionEtape.validationsSansJoker || {};
+        progressionEtape.celebrationSansJokerAffichee = progressionEtape.celebrationSansJokerAffichee === true;
         sauvegarde.progression[proprietaire][theme][etapeProgramme.id] = progressionEtape;
     });
 }
@@ -120,7 +124,9 @@ function reinitialiserValidationSansJokerEtape(identifiantTheme, numeroEtape) {
         return;
     questionsEtape.forEach(question => {
         delete bilanEtape.resultats[question.id];
+        delete bilanEtape.validationsSansJoker?.[question.id];
     });
+    bilanEtape.celebrationSansJokerAffichee = false;
     bilanEtape.termineeSansJoker = false;
     bilanEtape.jokersUtilises = true;
     enregistrerSauvegarde();

@@ -423,11 +423,20 @@ function nettoyerProgression(progression) {
                 || !estObjetSimple(enregistrement))
                 continue;
             const identifiantsQuestions = new Set(questionsEtape.map(question => String(question.id)));
+            const resultats = filtrerResultats(enregistrement.resultats, identifiantsQuestions);
+            const validationsSansJoker = estObjetSimple(enregistrement.validationsSansJoker)
+                ? filtrerIndicateurs(enregistrement.validationsSansJoker, identifiantsQuestions)
+                : Object.fromEntries(Object.entries(resultats).filter(([_identifiant, resultat]) => resultat === true));
+            const celebrationSansJokerAffichee = typeof enregistrement.celebrationSansJokerAffichee === 'boolean'
+                ? enregistrement.celebrationSansJokerAffichee
+                : enregistrement.termineeSansJoker === true;
             progressionNettoyee.apprenant[theme][numeroEtape] = {
                 meilleurScore: convertirEntierBorne(enregistrement.meilleurScore, 0, 100),
                 nombreTentatives: convertirEntierBorne(enregistrement.nombreTentatives),
                 questionsTraitees: filtrerIndicateurs(enregistrement.questionsTraitees, identifiantsQuestions),
-                resultats: filtrerResultats(enregistrement.resultats, identifiantsQuestions),
+                resultats,
+                validationsSansJoker,
+                celebrationSansJokerAffichee,
                 termineeSansJoker: enregistrement.termineeSansJoker === true,
                 jokersUtilises: enregistrement.termineeSansJoker !== true
             };
@@ -1314,12 +1323,16 @@ function initialiserProgression(theme) {
             deverrouillee: true,
             questionsTraitees: {},
             resultats: {},
+            validationsSansJoker: {},
+            celebrationSansJokerAffichee: false,
             termineeSansJoker: false,
             jokersUtilises: true,
             ...progressionExistante
         };
         progressionEtape.questionsTraitees = progressionEtape.questionsTraitees || {};
         progressionEtape.resultats = progressionEtape.resultats || {};
+        progressionEtape.validationsSansJoker = progressionEtape.validationsSansJoker || {};
+        progressionEtape.celebrationSansJokerAffichee = progressionEtape.celebrationSansJokerAffichee === true;
         sauvegarde.progression[proprietaire][theme][etapeProgramme.id] = progressionEtape;
     });
 }
@@ -1405,7 +1418,9 @@ function reinitialiserValidationSansJokerEtape(identifiantTheme, numeroEtape) {
         return;
     questionsEtape.forEach(question => {
         delete bilanEtape.resultats[question.id];
+        delete bilanEtape.validationsSansJoker?.[question.id];
     });
+    bilanEtape.celebrationSansJokerAffichee = false;
     bilanEtape.termineeSansJoker = false;
     bilanEtape.jokersUtilises = true;
     enregistrerSauvegarde();
@@ -4179,7 +4194,7 @@ function preparerValidationReponse(question, bouton) {
     return { etaitPassee, tentatives, aideUtilisee };
 }
 function enregistrerResultatReponse(question, texteChoisi, precisions, resultat) {
-    const { reussiteAutonome, reussiteAidee, tentatives, aideUtilisee } = resultat;
+    const { estCorrecte, reussiteAutonome, reussiteAidee, tentatives, aideUtilisee } = resultat;
     etat.reponsesSession.set(question.id, {
         statut: reussiteAutonome ? 'correcte' : (reussiteAidee ? 'aidee' : 'incorrecte'),
         texteReponse: texteChoisi,
@@ -4200,6 +4215,11 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
     const bilan = obtenirBilanEtape(question.theme, question.etape);
     bilan.questionsTraitees[question.id] = true;
     bilan.resultats[question.id] = bilan.resultats?.[question.id] === true || reussiteAutonome;
+    bilan.validationsSansJoker = bilan.validationsSansJoker || {};
+    // Pour la célébration d'étape, une réponse finalement correcte compte dès lors
+    // qu'aucun joker n'a été utilisé sur cette tentative, même après avoir rejoué.
+    bilan.validationsSansJoker[question.id] = bilan.validationsSansJoker[question.id] === true
+        || (estCorrecte && !aideUtilisee);
     if (aideUtilisee)
         etat.etapeAvecJoker = true;
     synchroniserEtapesReussiesEnAutonomie(PROGRAMMES[question.theme]);
@@ -4793,8 +4813,8 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
         };
     }
     return {
-        titre: `Étape ${etapeProgramme} validée en autonomie !`,
-        message: `Une nouvelle destination est inscrite dans ton carnet. Ton titre actuel : « ${titreSymbolique} ». Le chemin continue vers l’étape suivante.`,
+        titre: `Étape ${etapeProgramme} terminée sans joker !`,
+        message: `Toutes les questions de cette étape ont été validées sans joker. Ton titre actuel : « ${titreSymbolique} ». Le chemin continue vers l’étape suivante.`,
         confetti: true
     };
 }
@@ -4901,9 +4921,18 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
             const etaitDejaValideeSansJoker = bilanEtape.termineeSansJoker === true;
             bilanEtape.termineeSansJoker = etaitDejaValideeSansJoker || toutesReussiesEnAutonomie;
             bilanEtape.jokersUtilises = !bilanEtape.termineeSansJoker;
-            const evaluationDeverrouillee = estProgrammeMaitrise(etat.theme);
-            if (toutesReussiesEnAutonomie && !etaitDejaValideeSansJoker)
+            const validationsSansJoker = bilanEtape.validationsSansJoker || {};
+            const toutesValideesSansJoker = questionsEtape.length > 0
+                && questionsEtape.every(question => validationsSansJoker[question.id] === true);
+            const celebrationDejaAffichee = bilanEtape.celebrationSansJokerAffichee === true;
+            if (toutesValideesSansJoker && !celebrationDejaAffichee) {
+                // Mémoriser avant les calculs globaux : ceux-ci réinitialisent les objets
+                // de progression pour garantir leur structure et pourraient sinon perdre
+                // le drapeau porté par l'ancienne référence JavaScript.
+                bilanEtape.celebrationSansJokerAffichee = true;
+                const evaluationDeverrouillee = estProgrammeMaitrise(etat.theme);
                 celebration = obtenirCelebrationEtape(etat.etape, false, evaluationDeverrouillee);
+            }
         }
     }
     if (etat.mode === 'evaluation-finale') {
