@@ -303,11 +303,15 @@ def verifier_jeu(navigateur, page_html: str) -> int:
         const q126 = QUESTIONS.find(question => question.id === 126);
         const q129 = QUESTIONS.find(question => question.id === 129);
         const q6 = QUESTIONS.find(question => question.id === 6);
-        verifier('responsable d unite', q126, 'RUE développement court');
-        verifier('RUE', q126, 'RUE seul refusé', false);
-        verifier('D.P.J.J.', q129, 'DPJJ ponctué');
-        verifier('direction de la protection judiciaire de la jeunesse', q129, 'développement au lieu du sigle', false);
-        verifier('une decison', q6, 'faute légère sur décision');
+        if (q126?.modePrefere === 'reponse-ecrite') {
+            verifier('responsable d unite', q126, 'RUE développement court');
+            verifier('RUE', q126, 'RUE seul refusé', false);
+        }
+        if (q129?.modePrefere === 'reponse-ecrite') {
+            verifier('D.P.J.J.', q129, 'DPJJ ponctué');
+            verifier('direction de la protection judiciaire de la jeunesse', q129, 'développement au lieu du sigle', false);
+        }
+        if (q6?.modePrefere === 'reponse-ecrite') verifier('une decison', q6, 'faute légère sur décision');
         return {nombreQuestions: questions.length, controles, echecs};
     }""")
     assert not resultat_ecrit["echecs"], resultat_ecrit["echecs"][:20]

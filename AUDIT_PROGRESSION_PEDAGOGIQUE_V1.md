@@ -33,3 +33,30 @@ L’ordre ci-dessus est une progression pédagogique, pas une obligation d’int
 - 960 questions au total ;
 - 66 étapes d’apprentissage ;
 - 6 évaluations finales.
+
+## Relecture éditoriale ciblée du parcours 2 — 29 août 2026
+
+Le parcours 2 a fait l’objet d’une nouvelle lecture continue des **110 questions d’apprentissage et 50 questions d’évaluation** dans leur ordre réel d’affichage. Cette passe ne modifie ni les identifiants permanents, ni les étapes, ni les marqueurs Analytics.
+
+Contrôles appliqués :
+
+- notion indispensable introduite ou rendue accessible avant sa restitution ;
+- sigles développés lors de leur première apparition utile ;
+- aucune notion avancée de P3 à P6 introduite prématurément, y compris dans les distracteurs ;
+- formulations françaises naturelles, sans interrogatives numériques télégraphiques ;
+- suppression des quasi-doublons et des référents dépendant du contexte immédiat ;
+- distracteurs plausibles et de longueur suffisamment équilibrée pour ne pas révéler la réponse par leur forme ;
+- plafond éditorial de **220 caractères** respecté pour les 110 questions d’apprentissage ;
+- évaluation finale limitée aux notions enseignées dans le parcours ;
+- navigation libre : aucune référence visible à un autre parcours.
+
+Le contrôle éditorial automatique classe désormais les **160/160 questions du parcours 2 en « RAS automatique — relecture humaine »**.
+
+## Relecture éditoriale globale — 29 août 2026
+
+- Les six parcours ont été relus dans leur ordre pédagogique réel.
+- Les 960 questions passent l’audit éditorial automatique sans anomalie résiduelle.
+- Les formulations numériques télégraphiques ont été naturalisées.
+- Les restitutions écrites de l’évaluation finale ont été remplacées par des modes structurés lorsqu’elles exposaient à une réponse trop opaque.
+- Les prérequis P2 à P6 sont vérifiés sans notion orpheline.
+- Le parcours 2 validé le 29 août 2026 a été conservé strictement inchangé pendant cette passe.

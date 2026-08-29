@@ -79,6 +79,25 @@ La campagne automatisée complète `npm test` est réussie sur la version finale
 
 Les captures produites par les tests ne sont pas livrées. Les scripts Playwright, les lanceurs Windows et la documentation permettant à une personne ou une IA de les régénérer restent inclus dans l’archive.
 
+## Contrôle ciblé du parcours 2 — 29 août 2026
+
+Une relecture éditoriale et pédagogique complète du parcours 2 a été effectuée sur ses **160 questions**. Les identifiants 1001 à 1160, les étapes et les marqueurs Analytics ont été conservés. La passe a corrigé notamment l’ordre d’introduction de certaines notions, les formulations trop mécaniques, les sigles non développés, les distracteurs prématurés ou trop révélateurs et plusieurs répétitions.
+
+État après reconstruction :
+
+- audit éditorial P2 : **160/160 RAS automatique — relecture humaine** ;
+- questions d’apprentissage P2 dépassant 220 caractères : **0** ;
+- prérequis pédagogiques orphelins P2 : **0** ;
+- références inter-parcours visibles : **0** ;
+- structure globale : **6 parcours · 66 étapes · 960 questions · 6 évaluations** ;
+- tests unitaires : **14/14 réussis** ;
+- accessibilité statique : **16 pages contrôlées** ;
+- pages annexes : **19 scénarios PC/mobile réussis** ;
+- recette d’interface autonome : **580 contrôles de réponses réussis** ;
+- syntaxe JavaScript publique vérifiée par `node --check`.
+
+Le test d’ouverture directe `file://` de Playwright ne peut pas être exécuté dans l’environnement de contrôle utilisé ici (`ERR_BLOCKED_BY_ADMINISTRATOR`) ; les contrôles d’interface indépendants de cette ouverture ont été exécutés avec succès.
+
 ## Outils de reprise à conserver
 
 - `INSTALLER_OUTILS_DE_DEVELOPPEMENT.bat` ;
@@ -96,3 +115,12 @@ Le dossier `test-results/` est volontairement absent de la livraison : il est re
 ## Version
 
 **PJJoue V1 — Version 1.0 · Août 2026.**
+
+## Relecture éditoriale globale — 29 août 2026
+
+- Les six parcours ont été relus dans leur ordre pédagogique réel.
+- Les 960 questions passent l’audit éditorial automatique sans anomalie résiduelle.
+- Les formulations numériques télégraphiques ont été naturalisées.
+- Les restitutions écrites de l’évaluation finale ont été remplacées par des modes structurés lorsqu’elles exposaient à une réponse trop opaque.
+- Les prérequis P2 à P6 sont vérifiés sans notion orpheline.
+- Le parcours 2 validé le 29 août 2026 a été conservé strictement inchangé pendant cette passe.

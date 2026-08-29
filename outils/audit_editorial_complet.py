@@ -57,7 +57,9 @@ for q in QUESTIONS:
         add(findings, 2, "REFERENT_VAGUE", "Référent abstrait ou scolaire (« régime étudié », « branche », « catégories visées ») : l’utilisateur ne sait pas précisément de quoi il s’agit.")
     if re.search(r"\b(?:sous réserve|de plein droit|au titre de|en vertu de|quel que soit le reliquat|dessaisissement)\b", stem, re.I):
         add(findings, 1, "JARGON_JURIDIQUE", "Jargon juridique à reformuler ou à définir avant usage.")
-    if q.get("id") == 1002:
+    # Ce contrôle historique ne doit s’activer que si Q1002 mélange encore
+    # réellement la qualification des faits avec la question sur l’âge.
+    if q.get("id") == 1002 and re.search(r"\b(?:qualification|contravention|délit|crime)\b", stem, re.I):
         add(findings, 2, "INFORMATION_PARASITE", "L’introduction sur la qualification (contravention, délit ou crime) ne sert pas à répondre à la question sur l’âge et mélange deux apprentissages.")
     if re.search(r"\b(?:quel repère viens-tu d’identifier|quel objet faut-il rechercher|quels repères faut-il retrouver)\b", stem, re.I):
         add(findings, 2, "FORMULATION_SCOLAIRE_VAGUE", "La question demande de retrouver un « repère » ou un « objet » sans nommer directement l’information recherchée.")

@@ -2,7 +2,7 @@
   "produit": "PJJoue",
   "version": "V1",
   "dateCreation": "août 2026",
-  "dateConsolidation": "2026-08-28",
+  "dateConsolidation": "2026-08-29",
   "composition": {
     "questionsTotales": 960,
     "questionsParcours": 660,
@@ -29,8 +29,8 @@
       "sha256": "0e313192380af267b7696222f6befaf31e5d8cc53fa904720aa2ed55ae568586"
     },
     "AUDIT_PROGRESSION_PEDAGOGIQUE_V1.md": {
-      "tailleOctets": 1879,
-      "sha256": "585f5bee3f449eb878bf39dea47cfdcd05cb112862b9a96926f894d41d20be2a"
+      "tailleOctets": 3773,
+      "sha256": "12535161f12f45629bf202d55cefdf50d2c0b69f63fc5ba6a568a651d3410815"
     },
     "CAPTURER_PJJOUE.bat": {
       "tailleOctets": 1573,
@@ -41,8 +41,8 @@
       "sha256": "744941fedbab8103410ce8d05bcc0d46365b739b461161daed6cdc429738659b"
     },
     "ETAT_VALIDATION_V1.md": {
-      "tailleOctets": 5697,
-      "sha256": "8368ad985c785fbe5a78e890b3c3305629edafd691de05bb0aac5f849971d38e"
+      "tailleOctets": 7709,
+      "sha256": "5153566fb48f2dbbb7ae626ca19961cc3d56a4eecbbfe7e1f6bf1bfc39e6d5b5"
     },
     "INSTALLER_OUTILS_DE_DEVELOPPEMENT.bat": {
       "tailleOctets": 1875,
@@ -633,16 +633,16 @@
       "sha256": "76b773543c87dc1fde7ab91e35256fa4cc683098deb8fa2b4d7fc66c92d9dcd7"
     },
     "donnees/donnees-pjj.js": {
-      "tailleOctets": 1564656,
-      "sha256": "3f586c43bdd85245d4ea856dab91b652c72267bdc0e5dfe915c650dab781fe06"
+      "tailleOctets": 1569136,
+      "sha256": "0a3f83fad7539423e99ec6c19873b2771af33f531158dbdc2ad42fde89d0308f"
     },
     "donnees/programme.json": {
       "tailleOctets": 45471,
       "sha256": "033432c623f7929ede4f914fda3b714e3a1cb4cb112336d1132a746bb626d277"
     },
     "donnees/questions.json": {
-      "tailleOctets": 1820200,
-      "sha256": "c48926d62dacae494e6d21126a92f91853984a44cf3570808c9182f4dec6933a"
+      "tailleOctets": 1824384,
+      "sha256": "d95844d8f3b070b4821958feead3270855653d815cea1af5921da42aa8d21102"
     },
     "donnees/sources.json": {
       "tailleOctets": 31412,
@@ -729,8 +729,8 @@
       "sha256": "f24975d8e0677ba98fd06bb76b455aab182ae8c8aab435df705d8e3d7dbc09dd"
     },
     "outils/audit_editorial_complet.py": {
-      "tailleOctets": 10137,
-      "sha256": "44d09bb9135c7a7f89ea3fa1e6b1a5cf9e72173ab6d7b7d4be47509d6e3df32e"
+      "tailleOctets": 10371,
+      "sha256": "8e3af4689a2243958d50dc4392f079e7e4691d6ebb586c37a1c08d040b6d5949"
     },
     "outils/auditer_accessibilite_statique.py": {
       "tailleOctets": 3224,
@@ -938,7 +938,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 4238,
-      "sha256": "d28f33d68e1afd849c4e1c031564c212bbefdda2cb963b08fb5b84d9cfb3f073"
+      "sha256": "48e7e76225ffa0de4017fb8f2ce43184a5d34136e2aa6e0181b9bd0b67cc3364"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 11305,
@@ -1161,8 +1161,8 @@
       "sha256": "bc4335a9ed5889e4a6dc6dca74caf042babe04687318fadaf7bc8e7a55fdd7fd"
     },
     "tests/verifier_interface.py": {
-      "tailleOctets": 28257,
-      "sha256": "765a738469219d8204e6ba1669cf1854588c7868f3df723911b7d10aa0fe2848"
+      "tailleOctets": 28443,
+      "sha256": "c26218f28c92477107c75a4fc1834be0b4313497ea2a17a12c66fd7f0641a44f"
     },
     "tests/verifier_navigation_libre.py": {
       "tailleOctets": 3060,
@@ -1173,8 +1173,8 @@
       "sha256": "34e520a4ef342358aafe3dae2066a01b0c1e54a9b7d35ca610b772928073b1fd"
     },
     "tests/verifier_pjjoue.py": {
-      "tailleOctets": 26865,
-      "sha256": "9fa558a54d6d9b894bcb7a9e131e4e54b2cac167b46107f3127c3cf91e37902c"
+      "tailleOctets": 27422,
+      "sha256": "3535c03a8c0e62b60b73e809093afe407eaf2a09e3ccad5a53b04cdec8e3ebbf"
     },
     "tests/verifier_regression_visuelle.py": {
       "tailleOctets": 74306,

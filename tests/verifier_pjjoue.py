@@ -215,9 +215,16 @@ def principal() -> int:
     exiger(len(ids) == len(set(ids)), "Les identifiants de questions doivent être uniques.")
     questions_relues = [question for question in questions if question.get("theme") in THEMES_NOUVEAUX]
     exiger(len(questions_relues) == 800, "Les parcours 2 à 6 doivent contenir exactement 800 questions relues.")
+    questions_p2 = [question for question in questions_relues if question.get("theme") == "procedure_ordinaire"]
+    questions_p3_p6 = [question for question in questions_relues if question.get("theme") != "procedure_ordinaire"]
+    exiger(len(questions_p2) == 160, "Le parcours 2 doit contenir exactement 160 questions.")
     exiger(
-        all(question.get("derniereVerification") == "2026-08-28" for question in questions_relues),
-        "Les 800 questions des parcours 2 à 6 doivent porter la date de relecture du 28 août 2026.",
+        all(question.get("derniereVerification") == "2026-08-29" for question in questions_p2),
+        "Les 160 questions du parcours 2 doivent porter la date de relecture éditoriale du 29 août 2026.",
+    )
+    exiger(
+        all(question.get("derniereVerification") == "2026-08-29" for question in questions_p3_p6),
+        "Les 640 questions des parcours 3 à 6 doivent porter la date de relecture éditoriale du 29 août 2026.",
     )
     exiger(
         all(question.get("statutContenu") == STATUT_FINAL_JURIDIQUE for question in questions_relues),
