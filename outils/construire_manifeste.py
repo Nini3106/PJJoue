@@ -20,6 +20,19 @@ DOSSIERS_IGNORES = {
     "test-results",
 }
 FICHIERS_IGNORES = {".DS_Store"}
+EXTENSIONS_TEXTE_MANIFESTE = {
+    ".bat", ".conf", ".css", ".csv", ".html", ".js", ".json", ".md",
+    ".py", ".svg", ".txt", ".webmanifest", ".xml", ".yaml", ".yml",
+}
+NOMS_TEXTE_MANIFESTE = {".gitignore", ".nojekyll", "CNAME"}
+
+
+def lire_octets_stables_pour_manifeste(chemin: Path) -> bytes:
+    """Retourner une représentation stable d'un fichier entre Windows et Linux."""
+    contenu = chemin.read_bytes()
+    if chemin.suffix.lower() in EXTENSIONS_TEXTE_MANIFESTE or chemin.name in NOMS_TEXTE_MANIFESTE:
+        contenu = contenu.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return contenu
 
 
 def est_fichier_a_recenser(chemin: Path) -> bool:
@@ -36,7 +49,7 @@ def est_fichier_a_recenser(chemin: Path) -> bool:
 
 def decrire_fichier(chemin: Path) -> dict[str, int | str]:
     """Retourne la taille et l’empreinte SHA-256 d’un fichier."""
-    contenu = chemin.read_bytes()
+    contenu = lire_octets_stables_pour_manifeste(chemin)
     return {
         "tailleOctets": len(contenu),
         "sha256": sha256(contenu).hexdigest(),

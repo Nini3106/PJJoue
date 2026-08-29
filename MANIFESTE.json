@@ -13,12 +13,12 @@
   },
   "fichiers": {
     ".github/workflows/captures-visuelles.yml": {
-      "tailleOctets": 1005,
-      "sha256": "7a8d1cc39b214c78d992d7911f07d375b921f31ccc5c668f6864257745817683"
+      "tailleOctets": 966,
+      "sha256": "8dcf221cae9ddb120b84c4f2233234128474f4742ad1d6de4b45d62fda363539"
     },
     ".github/workflows/verification.yml": {
-      "tailleOctets": 1034,
-      "sha256": "5c9c34ab14ae2b3ec4b96b27f6c125a0f4f9b6a052c29c307fb55b94732fae33"
+      "tailleOctets": 991,
+      "sha256": "8c31d80c5e30c27de0a815f6856198c63f5628120ca47e6f2f0b79df3c8d8d1d"
     },
     ".gitignore": {
       "tailleOctets": 110,
@@ -53,8 +53,8 @@
       "sha256": "12535161f12f45629bf202d55cefdf50d2c0b69f63fc5ba6a568a651d3410815"
     },
     "CAPTURER_PJJOUE.bat": {
-      "tailleOctets": 1573,
-      "sha256": "d5d9ddc6890bc9059d63375d052fc6dbc34ba9b76332ef27d7a91be8d61e630a"
+      "tailleOctets": 1503,
+      "sha256": "13db7deccfd252fab27fe10f806b475502b9febfcbf4197e6e3a3c13d1d6b05e"
     },
     "CHECKLIST_AVANT_PUSH.md": {
       "tailleOctets": 3644,
@@ -293,16 +293,16 @@
       "sha256": "43d43d43531caaa2d29406bdc65c0256c077d6db376cdc5c49409ddaffd047cb"
     },
     "code/08 - Réviser/Jeu des sigles/contenu.html": {
-      "tailleOctets": 7324,
-      "sha256": "bc9c0d3058545875d27e14d1d78e348e36a25938521734e30b7b944bc681522b"
+      "tailleOctets": 7419,
+      "sha256": "f14819c7da91e154e59699a31552eecae64cb9f4134cf33bfc8b14d96315857b"
     },
     "code/08 - Réviser/Jeu des sigles/LIRE-MOI.md": {
       "tailleOctets": 2366,
       "sha256": "c564da352ee54614846a812788b54fed9db89c1f2f7f6b66d8eac95b3d76ee50"
     },
     "code/08 - Réviser/Jeu des sigles/style-jeu-des-sigles.css": {
-      "tailleOctets": 23261,
-      "sha256": "577e4a25d71d85b9bc22422ee74330213c00c0f05e5008bbf76b3b4794475c5e"
+      "tailleOctets": 24755,
+      "sha256": "344d90e9a52291aea4bc99a8d3377f16f6242f76e29bdfb8c5df9cd1a2466afb"
     },
     "code/08 - Réviser/LIRE-MOI.md": {
       "tailleOctets": 1594,
@@ -557,8 +557,8 @@
       "sha256": "d9ac9ea36cf9c0bfc0e2828f6b12d7df8099780e8d5718c54185435ba36baa9a"
     },
     "CONSTRUIRE_PJJOUE.bat": {
-      "tailleOctets": 250,
-      "sha256": "28a5f0820e2fb3c294516ab8ac26722d2c4c5cb094ee4ebbe995d7556844500e"
+      "tailleOctets": 239,
+      "sha256": "32d8a7e265897f994788b77d7b203d3f381ed47abcd80817e71ffe9a6967c548"
     },
     "decouvrir-la-pjj/index.html": {
       "tailleOctets": 8706,
@@ -709,12 +709,12 @@
       "sha256": "eb8f549047310bf9cd0b8c4300bf72284fecc5d83cf7330e4da716260387db07"
     },
     "index.html": {
-      "tailleOctets": 114178,
-      "sha256": "6a668ac0d264b3e1e8671d620387e2e0d142b1db34a70e80305cb433f010110a"
+      "tailleOctets": 114273,
+      "sha256": "8b1321cce9e464a4b00d2059d29efdc165d5e840ee92abc3a57c9fbfae1cd74c"
     },
     "INSTALLER_OUTILS_DE_DEVELOPPEMENT.bat": {
-      "tailleOctets": 1875,
-      "sha256": "77b86f1a624b11a0b081e5099d680cb10d63040156dedecc0160dac8da6a0260"
+      "tailleOctets": 1806,
+      "sha256": "d5128864d76c05ce573361b75a2441b23e74bc11ec4221d52b482d3b5e4b025f"
     },
     "manifest.webmanifest": {
       "tailleOctets": 663,
@@ -769,12 +769,12 @@
       "sha256": "37b9c4e42490dc46bf108ca8c9a98faeea86cdc9425505ee6495716ce369087f"
     },
     "outils/construire_manifeste.py": {
-      "tailleOctets": 3775,
-      "sha256": "4fc2e1af29a69c263736c85553d14ca485ce60026016d11ce9fe488f6950ca87"
+      "tailleOctets": 4401,
+      "sha256": "3f662655f75ec453b3387af6a9572e360f57aca84ddecce5acf7320b912cf085"
     },
     "outils/construire_site.py": {
-      "tailleOctets": 17602,
-      "sha256": "322402aa876af10cd69d4c2d768e577a8e0111ab3f4f4301acafa79f99c544c3"
+      "tailleOctets": 18075,
+      "sha256": "8894d8bcceaa67b6e4604e19b367edf26d48bcc1fbfd1314f77858a026d56466"
     },
     "outils/controler_css.js": {
       "tailleOctets": 2838,
@@ -817,8 +817,8 @@
       "sha256": "8ee0f51065e8ad882794c2d58005a3f982c5f9a55f19e4fc4dce433bbfd1d15c"
     },
     "PREPARER_PJJOUE_AVANT_PUSH.bat": {
-      "tailleOctets": 2598,
-      "sha256": "264ffcde157d4f9445e51a782e4dc4fcb2b593fd9b753636068489d856af2f4c"
+      "tailleOctets": 2504,
+      "sha256": "50807fc1d0f4b7c1690afdfcb44b4cfb7b8500a073f35d4bdf091595d88db169"
     },
     "quiz-pjj/index.html": {
       "tailleOctets": 8295,
@@ -865,48 +865,48 @@
       "sha256": "4b61aad31b0089548e56ba607b9912a5b734a0169fabeb495d7e0314c85ae960"
     },
     "ressources/icones-parcours/icone-acteurs-justice.svg": {
-      "tailleOctets": 13778,
-      "sha256": "15e378b6b26703b2e2bc6bf4a42ed8fe6c3678f52ada63479554a7aecaf7c404"
+      "tailleOctets": 13767,
+      "sha256": "3bf17f2d64afaa517a3fbe5480b4862ceaa9d029579b02b8d20b971ec13603de"
     },
     "ressources/icones-parcours/icone-activites-educatives.svg": {
-      "tailleOctets": 1612,
-      "sha256": "5d5501fb8f6f870e6bb58fc1e48abdf2ffc00ab8b99a7a7f824c92681f01d55f"
+      "tailleOctets": 1582,
+      "sha256": "6091cd5724abb9cbe709f4a70bac20b759f68061f7bb8a1f0043ae3561437bc0"
     },
     "ressources/icones-parcours/icone-formes-prise-en-charge.svg": {
-      "tailleOctets": 1364,
-      "sha256": "f92c3b771dea7595587bba5b3f55a17959bc82b9573322fbe3d25ebd01b85eb2"
+      "tailleOctets": 1336,
+      "sha256": "0ed25cf63f6de5b2919e7a7f65a627d3be5b4a58617f73c3e51a796ba504bfa3"
     },
     "ressources/icones-parcours/icone-loupe-decouverte.svg": {
-      "tailleOctets": 1423,
-      "sha256": "e63c427d4a500f4c4d0313407c3589039ea231eb38f52d7d17384bf4680176db"
+      "tailleOctets": 1398,
+      "sha256": "a6a57769dba8a1f8feb706cdc94faa2abdc11b86e00186fd8a0d1a54ed676caa"
     },
     "ressources/icones-parcours/icone-mesures-judiciaires.svg": {
-      "tailleOctets": 1559,
-      "sha256": "b9c229bdb92d9e1dbc547b1f6ff64e66e44ad939bd7a88d44e3a592abed24629"
+      "tailleOctets": 1526,
+      "sha256": "690e3fae90f96255559efcc69a6dc7cb0313cb557c8fe3b10a855300d935845a"
     },
     "ressources/icones-parcours/icone-organisation-pjj.svg": {
-      "tailleOctets": 1456,
-      "sha256": "c98679e98cdc286e6ebd2a8153498a3a207ce95de4e73249487401f8436098b4"
+      "tailleOctets": 1425,
+      "sha256": "bc58e19739c976ed749e52a8725761d906ce08eeb9e52debfb6e0b8977e22122"
     },
     "ressources/icones-parcours/icone-partenaires.svg": {
-      "tailleOctets": 13124,
-      "sha256": "15ed3051b98c15bc2bd0f103e654561cde7f93153066739e218bf10b7a45df29"
+      "tailleOctets": 13113,
+      "sha256": "6120c58ecfee58e9ba3ebf45afcee2d3318e3d5045a2383b1b1ca0d81a4da2d7"
     },
     "ressources/icones-parcours/icone-professionnels-pjj.svg": {
-      "tailleOctets": 15188,
-      "sha256": "962becc98706e115ac6bf4dda5f58cae849368783f08c3805d7ddb532c2dba75"
+      "tailleOctets": 15177,
+      "sha256": "dbd72c516f7d005cbe35c94a76dba7f3bba3a97ada4f93adee2035ec18a8d830"
     },
     "ressources/icones-parcours/icone-public-accompagne.svg": {
-      "tailleOctets": 1352,
-      "sha256": "8221bfb767defcc95f26975fe396cd07d9be305f9d5507ba4122f963d33fdf57"
+      "tailleOctets": 1326,
+      "sha256": "77b615d72b103f224dbbc15ac2e5f1357f11840c91ef4f21e0bf5f941279595c"
     },
     "ressources/icones-parcours/icone-structure-ouverte-de-jour.svg": {
-      "tailleOctets": 1438,
-      "sha256": "26e142b3f58bd44667efb83f015d9e0ee6f95ecf9fba204d1028331aa780d629"
+      "tailleOctets": 1406,
+      "sha256": "dbfe6dcef223c063a193f0af25c558afbc8d5449eff38341dd4e243325425aef"
     },
     "ressources/icones-parcours/icone-structures-placement.svg": {
-      "tailleOctets": 1238,
-      "sha256": "e5b93e7037f2f2615ededb2d3d4b0fc7b0371f68ac239683b72973c3a6c70c93"
+      "tailleOctets": 1213,
+      "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
       "tailleOctets": 389985,
@@ -953,8 +953,8 @@
       "sha256": "51a64261c7301ed44340cd3cacc89b8204edcd4adc8beafcf5e0b198d2baa7c4"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 353275,
-      "sha256": "b8596d54139feea7c482e9298787095d6e2bddb1a8531055c72629954375182f"
+      "tailleOctets": 354769,
+      "sha256": "f06360852c7b99d907fad044316119d0a3a473b096bcc4e311e2645f4e474176"
     },
     "ressources/styles/pjjoue-static.css": {
       "tailleOctets": 20106,
@@ -978,7 +978,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 4706,
-      "sha256": "b6767d141ff4eb9d4ee3c86897a55951086df00015f3a6fdfa66430183ff9b38"
+      "sha256": "72fbf32cfc671381a7e3bbe3500f3b213d674cbf63b7a9b8e12a6ac7c63e1251"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 15039,
@@ -1189,8 +1189,8 @@
       "sha256": "7a4e5b647027058c10420e443943721c7725e2da9fbdfa618f2b851287dec186"
     },
     "tests/test_construction_portable.py": {
-      "tailleOctets": 1369,
-      "sha256": "704a00b4739a3ebc2d1cd43b57a23607e08b596542c2440c7bd3f9667373e608"
+      "tailleOctets": 3716,
+      "sha256": "f854f183916ad51aedb6f24d8f64f97c30df1db6f9c720b8507f63afd8a85858"
     },
     "tests/test_controles_prepublication.py": {
       "tailleOctets": 3276,
@@ -1217,8 +1217,8 @@
       "sha256": "82ca8806d6478bf514102fe96cbbcff9b1bdb6101812c5060b47eb97d64c25d9"
     },
     "tests/verifier_jeu_sigles.py": {
-      "tailleOctets": 13701,
-      "sha256": "75a6f1aee63dc3e823fbe667f394076a2b1bf9957014e17af7cbe1b3128f8861"
+      "tailleOctets": 14793,
+      "sha256": "e5c40e3f366a1f6c42015bb9132ec8b65691c887e8497a6d733be488b448503e"
     },
     "tests/verifier_navigation_libre.py": {
       "tailleOctets": 3060,
@@ -1237,8 +1237,8 @@
       "sha256": "6df7bd9b2a3374dc893d8da6a25bb070db2c2939c67473e323f46d557c71ace5"
     },
     "VERIFIER_PJJOUE.bat": {
-      "tailleOctets": 3644,
-      "sha256": "58e989f009b4fa05a9b5c23663375eaffbf61ee764673ff7f5779349a2e5ceed"
+      "tailleOctets": 3516,
+      "sha256": "91b15fbc8ff70d1fa25ca1128a9fbfbbeb76aefb12cca34a9b99e284fff21268"
     }
   }
 }

@@ -21,6 +21,19 @@ RACINE = Path(__file__).resolve().parents[1]
 CHEMIN_PLAN = RACINE / "code" / "plan-construction.json"
 MOTIF_MARQUEUR_HTML = re.compile(r"\{\{[A-Z0-9_]+\}\}")
 MOTIF_RESSOURCE_CACHE = re.compile(r"['\"](\./[^'\"]*)['\"]")
+EXTENSIONS_TEXTE_EMPREINTE = {
+    ".css", ".html", ".js", ".json", ".md", ".svg", ".txt", ".webmanifest", ".xml",
+}
+
+
+def lire_octets_stables_pour_empreinte(chemin: Path) -> bytes:
+    """Retourner des octets stables entre Windows et Linux pour le cache PWA."""
+    contenu = chemin.read_bytes()
+    if chemin.suffix.lower() in EXTENSIONS_TEXTE_EMPREINTE:
+        contenu = contenu.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return contenu
+
+
 MOTIF_REPERE_CSS = re.compile(
     r"/\* === MORCEAU CSS \| sortie=(.*?) \| ordre=(\d+) === \*/\n"
     r"(.*?)\n"
@@ -320,7 +333,7 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
                 f"Ressource précachée introuvable : {chemin_relatif}"
             )
         empreinte_cache.update(chemin_relatif.encode("utf-8"))
-        empreinte_cache.update(chemin.read_bytes())
+        empreinte_cache.update(lire_octets_stables_pour_empreinte(chemin))
     version_cache = empreinte_cache.hexdigest()[:12]
     sorties["service-worker.js"] = sorties["service-worker.js"].replace(
         "__VERSION_CACHE_PJJOUE__", version_cache

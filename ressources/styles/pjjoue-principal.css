@@ -10959,22 +10959,22 @@ body[data-ecran-actif="accueil"] #accueil {
 /* Les quatre accès principaux */
 #sigles .sigles-modes { display:grid; gap:15px; }
 #sigles .sigles-modes-grille { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
-#sigles .sigles-mode-carte { display:grid; grid-template-columns:66px minmax(0,1fr); grid-template-areas:"icone texte" "icone action"; align-items:start; gap:14px 18px; min-height:205px; padding:22px; border:1px solid var(--bordure-carte); border-radius:var(--rayon-tres-grand); background:var(--surface-carte); box-shadow:var(--ombre-carte); }
+#sigles .sigles-mode-carte { --sigles-mode-accent:#9fc2ff; --sigles-mode-fond:rgba(79,140,255,.12); display:grid; grid-template-columns:66px minmax(0,1fr); grid-template-rows:1fr auto; grid-template-areas:"icone texte" "icone action"; align-items:start; gap:14px 18px; min-height:205px; padding:22px; border:1px solid var(--bordure-carte); border-radius:var(--rayon-tres-grand); background:var(--surface-carte); box-shadow:var(--ombre-carte); }
 #sigles .sigles-mode-carte > div:not(.sigles-hasard-actions) { grid-area:texte; }
 #sigles .sigles-mode-carte > button,
-#sigles .sigles-mode-carte > .sigles-hasard-actions { grid-area:action; justify-self:start; }
+#sigles .sigles-mode-carte > .sigles-hasard-actions { grid-area:action; align-self:end; justify-self:start; }
 #sigles .sigles-mode-icone { grid-area:icone; display:grid; place-items:center; width:66px; height:66px; border:1px solid rgba(79,140,255,.48); border-radius:17px; color:#9fc2ff; background:rgba(79,140,255,.11); }
 #sigles .sigles-mode-icone svg { width:40px; height:40px; fill:none; stroke:currentColor; stroke-width:1.55; stroke-linecap:round; stroke-linejoin:round; }
 #sigles .sigles-mode-carte h3 { margin:3px 0 7px; font-size:1.25rem; }
 #sigles .sigles-mode-carte p { margin:0; color:var(--texte-secondaire); line-height:1.5; }
-#sigles .sigles-mode-parcours { border-top:4px solid #9fc2ff; }
-#sigles .sigles-mode-entrainement { border-top:4px solid #ffd36a; }
-#sigles .sigles-mode-revision { border-top:4px solid #c7afff; }
+#sigles .sigles-mode-parcours { --sigles-mode-accent:#9fc2ff; --sigles-mode-fond:rgba(79,140,255,.12); border-top:4px solid #9fc2ff; }
+#sigles .sigles-mode-entrainement { --sigles-mode-accent:#ffd36a; --sigles-mode-fond:rgba(212,154,0,.12); border-top:4px solid #ffd36a; }
+#sigles .sigles-mode-revision { --sigles-mode-accent:#c7afff; --sigles-mode-fond:rgba(139,92,246,.12); border-top:4px solid #c7afff; }
 #sigles .sigles-mode-entrainement .sigles-mode-icone { color:#ffd36a; border-color:rgba(212,154,0,.52); background:rgba(212,154,0,.12); }
 #sigles .sigles-mode-revision .sigles-mode-icone { color:#c7afff; border-color:rgba(139,92,246,.52); background:rgba(139,92,246,.12); }
 
 /* Dé : copie fonctionnelle du Défi du hasard PJJoue, avec le vert du parcours 6. */
-#sigles .sigles-mode-hasard { grid-template-columns:72px minmax(0,1fr); grid-template-areas:"de texte" "de action"; border-top:4px solid var(--sigles-vert-parcours-6-lisible); }
+#sigles .sigles-mode-hasard { --sigles-mode-accent:var(--sigles-vert-parcours-6-lisible); --sigles-mode-fond:rgba(15,118,110,.13); grid-template-columns:72px minmax(0,1fr); grid-template-areas:"de texte" "de action"; border-top:4px solid var(--sigles-vert-parcours-6-lisible); }
 #sigles .sigles-de-objet { grid-area:de; width:68px; height:68px; display:grid; place-items:center; color:var(--sigles-vert-parcours-6-lisible); filter:drop-shadow(0 3px 5px rgba(15,118,110,.25)); transform-origin:center; }
 #sigles .sigles-de-objet svg { width:100%; height:100%; overflow:visible; }
 #sigles .sigles-de-objet .de-contour { fill:none; stroke:currentColor; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
@@ -11007,6 +11007,34 @@ body[data-ecran-actif="accueil"] #accueil {
 #sigles .sigles-hasard-texte { grid-area:texte; }
 #sigles .sigles-hasard-actions { grid-area:action; display:flex; flex-wrap:wrap; gap:9px; }
 #sigles .sigles-hasard-actions .sigles-bouton-secondaire { min-width:0; }
+
+/* Les quatre actions de l’accueil Mission Sigles utilisent la même grammaire :
+   contour coloré, fond bleu discret, aucune sélection jaune pleine et alignement en pied de carte. */
+#sigles .sigles-mode-carte .sigles-bouton-mode {
+  min-height:42px;
+  padding:9px 15px;
+  border:1px solid var(--sigles-mode-accent);
+  border-radius:12px;
+  color:var(--texte);
+  background:rgba(7,49,99,.38);
+  box-shadow:none;
+  font-weight:800;
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+#sigles .sigles-bouton-mode:hover:not(:disabled),
+#sigles .sigles-bouton-mode:focus-visible:not(:disabled) {
+  color:var(--texte);
+  border-color:var(--sigles-mode-accent);
+  background:var(--sigles-mode-fond);
+  box-shadow:inset 0 0 0 1px var(--sigles-mode-accent);
+  transform:none;
+}
+#sigles .sigles-bouton-mode:active:not(:disabled) {
+  color:var(--texte);
+  background:var(--sigles-mode-fond);
+  border-color:var(--sigles-mode-accent);
+  transform:none;
+}
 
 /* Boutons secondaires propres au module : jamais de gris navigateur. */
 #sigles .sigles-bouton-secondaire { min-height:40px; padding:9px 15px; border:1px solid rgba(142,199,251,.55); border-radius:12px; color:var(--texte); background:rgba(7,49,99,.38); font-weight:800; transition:border-color .18s ease,background .18s ease,transform .18s ease; }
@@ -11179,8 +11207,9 @@ body[data-ecran-actif="accueil"] #accueil {
   #sigles .sigles-tableau-bord-principal { align-items:flex-start; }
   #sigles .sigles-embleme { flex-basis:58px; width:58px; height:58px; }
   #sigles .sigles-indicateurs { grid-template-columns:1fr 1fr; }
-  #sigles .sigles-mode-carte { grid-template-columns:1fr; grid-template-areas:"icone" "texte" "action"; }
+  #sigles .sigles-mode-carte { grid-template-columns:1fr; grid-template-rows:auto auto auto; grid-template-areas:"icone" "texte" "action"; }
   #sigles .sigles-mode-hasard { grid-template-columns:1fr; grid-template-areas:"de" "texte" "action"; }
+  #sigles .sigles-mode-carte > .sigles-bouton-mode,
   #sigles .sigles-hasard-actions { width:100%; }
   #sigles .sigles-hasard-actions button { flex:1 1 150px; }
   #sigles .sigles-evaluation-carte { grid-template-columns:1fr; }

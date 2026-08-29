@@ -55,6 +55,18 @@ def verifier() -> None:
         assert page.locator("#siglesEntrainementVue").count() == 0
         assert page.locator("#siglesSession").count() == 0
         assert page.locator("#siglesBilan").count() == 0
+        actions_modes = page.evaluate("""() => ['siglesOuvrirParcours','siglesOuvrirEntrainement','siglesLancerDe','siglesLancerRevision'].map(id => {
+            const bouton = document.getElementById(id);
+            const style = getComputedStyle(bouton);
+            const rect = bouton.getBoundingClientRect();
+            return {id, classe:bouton.className, y:rect.y, hauteur:rect.height, fond:style.backgroundColor, bord:style.borderColor};
+        })""")
+        assert all("sigles-bouton-mode" in action["classe"] for action in actions_modes), actions_modes
+        assert max(action["hauteur"] for action in actions_modes) - min(action["hauteur"] for action in actions_modes) <= 1, actions_modes
+        assert abs(actions_modes[0]["y"] - actions_modes[1]["y"]) <= 1, actions_modes
+        assert abs(actions_modes[2]["y"] - actions_modes[3]["y"]) <= 1, actions_modes
+        assert len({action["fond"] for action in actions_modes}) == 1, actions_modes
+        assert all(action["fond"] not in {"rgb(255, 200, 87)", "rgb(255, 200, 61)"} for action in actions_modes), actions_modes
         page.locator("#siglesOuvrirParcours").click()
         cartes = page.locator("#siglesEtapes .sigles-etape-carte")
         assert cartes.count() == 6
