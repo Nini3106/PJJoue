@@ -196,7 +196,7 @@
 .supports-recherche input { min-height: 46px; padding: 0 14px; border: 1px solid var(--bordure); border-radius: 12px; color: var(--texte); background: var(--surface-carte-profonde); }
 .supports-filtres { display: flex; flex-wrap: wrap; gap: 8px; }
 .supports-filtres button { min-height: 40px; padding: 0 14px; border: 1px solid var(--bordure); border-radius: 999px; color: var(--texte-secondaire); background: var(--surface-carte-profonde); }
-.supports-filtres button.actif { color: var(--texte-sur-jaune); border-color: var(--jaune-interface); background: var(--jaune-interface); }
+.supports-filtres button.actif { color: var(--texte); border-color: var(--jaune-interface); background: rgba(255,200,61,.10); box-shadow:inset 0 0 0 1px var(--jaune-interface); }
 .supports-statut { margin: 0; color: var(--texte-secondaire); font-size: .94rem; }
 .supports-revision-groupes { display: grid; gap: 13px; }
 .supports-juridiction { --support-accent: var(--icone-ciel); overflow: hidden; border: 1px solid var(--bordure-carte); border-left: 5px solid var(--support-accent); border-radius: var(--rayon-grand); background: var(--surface-carte); box-shadow: var(--ombre-douce); }

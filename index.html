@@ -50,14 +50,18 @@
    <nav class="navigation" id="menuPrincipal" aria-label="Navigation principale">
     <button id="boutonAccueil" data-ecran="accueil" type="button">Accueil</button>
     <button id="boutonParcoursPJJ" data-ecran="parcours" type="button">Parcours PJJ</button>
-    <button id="boutonReviser" data-ecran="erreurs" type="button">Réviser</button>
-    <button id="boutonJeuSigles" data-ecran="sigles" type="button">Mission Sigles</button>
-    <button id="boutonSupportsRevision" data-ecran="supports" type="button">Supports</button>
     <button id="boutonEntrainementLibre" data-ecran="entrainement" type="button">Entraînement libre</button>
+    <button id="boutonReviser" data-ecran="erreurs" type="button">Réviser</button>
     <button id="boutonProgression" data-ecran="progression" type="button">Progression</button>
-    <a class="navigation-lien" id="lienGuides" href="guides/">Guides</a>
     <button id="boutonCarnetDeParcours" data-ecran="carnet" type="button">Carnet de parcours</button>
-    <button id="boutonParametres" data-ecran="parametres" type="button">Paramètres</button>
+    <span class="navigation-section-separation" aria-hidden="true"></span>
+    <span class="navigation-section-titre">Supports</span>
+    <button id="boutonSupportsRevision" data-ecran="supports" type="button">Supports de révision</button>
+    <a class="navigation-lien" id="lienGuides" href="guides/">Guides</a>
+    <span class="navigation-section-separation" aria-hidden="true"></span>
+    <span class="navigation-section-titre">Mini jeux</span>
+    <button class="navigation-mini-jeu" id="boutonJeuSigles" data-ecran="sigles" type="button">Mission Sigles</button>
+    <!-- Futurs mini-jeux : ajouter ici, par exemple Mission Mesures. -->
     <button class="bouton-installer-pjjoue" hidden id="boutonInstallerPJJoue" type="button">Installer PJJoue</button>
    </nav>
   </header>
@@ -408,9 +412,15 @@
       </div>
      </div>
      <div class="question-contexte-etape" id="contexteEtapeQuestion" aria-live="polite">
-      <div class="question-etape-identite">
-       <span id="numeroEtapeQuestion">Étape</span>
-       <strong id="titreEtapeQuestion">Parcours PJJ</strong>
+      <div class="question-contexte-identites">
+       <div class="question-parcours-identite" id="identiteParcoursQuestion">
+        <span id="numeroParcoursQuestion">Parcours 01</span>
+        <strong id="titreParcoursQuestion">Découvrir la PJJ</strong>
+       </div>
+       <div class="question-etape-identite">
+        <span id="numeroEtapeQuestion">Étape</span>
+        <strong id="titreEtapeQuestion">Parcours PJJ</strong>
+       </div>
       </div>
       <div class="question-autonomie" id="suiviSansJokerQuestion">
        <span>Maîtrisées sans aide <strong id="compteurSansJokerQuestion">0/10</strong></span>
@@ -552,8 +562,11 @@
    </section>
    
 <section class="ecran" id="erreurs">
-<div class="page-entete">
+<div class="page-entete revision-page-entete">
+<div class="revision-page-entete-ligne">
 <h1>Réviser</h1>
+<button class="discret revision-lien-supports" data-ecran="supports" type="button">Supports de révision</button>
+</div>
 <p>Retravaille les questions qui t’ont posé problème jusqu’à ce que les notions deviennent solides.</p>
 </div>
 <section aria-labelledby="titreErreursRevision" class="revision-erreurs">

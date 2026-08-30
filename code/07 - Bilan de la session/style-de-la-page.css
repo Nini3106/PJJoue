@@ -49,16 +49,16 @@
 
 #bilan .bilan-actions .principal {
     order: -1;
-    color: var(--texte-sur-jaune);
-    border-color: #ffe7a7;
-    background: var(--jaune-interface);
+    color: var(--texte);
+    border-color: #6f94c0;
+    background: var(--surface-carte-profonde);
 }
 
 #bilan .bilan-actions .principal:hover,
 #bilan .bilan-actions .principal:focus-visible {
-    color: var(--texte-sur-jaune);
-    border-color: #fff1c7;
-    background: var(--accent-survol);
+    color: var(--texte);
+    border-color: var(--jaune-interface);
+    background: rgba(255,200,61,.08);
 }
 
 #bilan .bilan-actions .secondaire {

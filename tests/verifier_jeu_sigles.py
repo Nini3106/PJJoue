@@ -36,6 +36,23 @@ def verifier_aucun_bouton_gris(page, selecteur: str) -> None:
     assert not suspects, suspects
 
 
+def verifier_aucun_bouton_jaune_plein(page, selecteur: str) -> None:
+    suspects = page.evaluate(
+        r"""sel => [...document.querySelectorAll(sel)].filter(b => {
+            const s = getComputedStyle(b);
+            const r = b.getBoundingClientRect();
+            if (s.display === 'none' || s.visibility === 'hidden' || r.width <= 0 || r.height <= 0) return false;
+            const m = s.backgroundColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?\)/i);
+            if (!m) return false;
+            const [rouge, vert, bleu] = [Number(m[1]), Number(m[2]), Number(m[3])];
+            const alpha = m[4] == null ? 1 : Number(m[4]);
+            return alpha >= .72 && rouge >= 225 && vert >= 150 && vert <= 225 && bleu <= 120;
+        }).map(b => ({id:b.id, classe:b.className, texte:b.innerText.trim(), fond:getComputedStyle(b).backgroundColor}))""",
+        selecteur,
+    )
+    assert not suspects, suspects
+
+
 def verifier() -> None:
     html = construire_page_jeu()
     with sync_playwright() as automate:
@@ -68,11 +85,18 @@ def verifier() -> None:
         assert len({action["fond"] for action in actions_modes}) == 1, actions_modes
         assert all(action["fond"] not in {"rgb(255, 200, 87)", "rgb(255, 200, 61)"} for action in actions_modes), actions_modes
         page.locator("#siglesOuvrirParcours").click()
+        espace_retour_titre = page.evaluate("""() => {
+            const retour = document.querySelector('#siglesRetourDepuisParcours')?.getBoundingClientRect();
+            const entete = document.querySelector('#siglesParcoursVue .sigles-page-secondaire-entete')?.getBoundingClientRect();
+            return retour && entete ? entete.top - retour.bottom : null;
+        }""")
+        assert espace_retour_titre is not None and abs(espace_retour_titre - 24) <= 1, espace_retour_titre
         cartes = page.locator("#siglesEtapes .sigles-etape-carte")
         assert cartes.count() == 6
         couleurs = page.evaluate("() => [...document.querySelectorAll('#siglesEtapes .sigles-etape-carte')].map(x => getComputedStyle(x).borderTopColor)")
         assert len(set(couleurs)) == 6, couleurs
         verifier_aucun_bouton_gris(page, "#sigles button")
+        verifier_aucun_bouton_jaune_plein(page, "#sigles button")
 
         # 2. La progression des questions enseigne le développement avant le rappel du sigle.
         donnees = page.evaluate("""() => {
@@ -114,6 +138,7 @@ def verifier() -> None:
         assert page.locator("#boutonLancerEntrainementOrdonne").get_attribute("class") == "entrainement-lancer principal"
         assert page.locator("#boutonLancerEntrainementMelange").get_attribute("class") == "entrainement-lancer principal"
         verifier_aucun_bouton_gris(page, "#entrainement button")
+        verifier_aucun_bouton_jaune_plein(page, "#entrainement button")
 
         # Le seul écart visuel demandé : le dé est vert parcours 6.
         couleur_de = page.evaluate("() => getComputedStyle(document.querySelector('#faceDeParcours')).color")
@@ -143,6 +168,7 @@ def verifier() -> None:
         assert not page.locator("#fenetreJokers").is_visible()
         assert page.locator("#boutonQuestionSuivante").is_hidden()
         verifier_aucun_bouton_gris(page, "#question button")
+        verifier_aucun_bouton_jaune_plein(page, "#question button")
 
         # L'étoile ouvre la vraie fenêtre Jokers PJJoue, elle n'est pas affichée en permanence.
         page.locator("#boutonJokers").click()

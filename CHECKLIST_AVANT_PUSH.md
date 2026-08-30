@@ -126,6 +126,6 @@ Seulement lorsque les étapes 1 à 7 sont validées.
 
 - Un lien officiel en **404/410** ou une adresse invalide reste bloquant.
 - Un **403**, un délai dépassé, une erreur DNS/SSL ou un refus anti-robot est signalé en avertissement : ce n'est pas une preuve que le lien est mort.
-- Les références pixel par pixel sont canoniques sous **Linux/Chromium (CI GitHub)**.
-- Sous Windows, la recette exécute les scénarios, assertions de structure, contrôles de débordement et captures, mais n'échoue pas sur les différences de rasterisation des polices système.
-- Ne jamais lancer `--actualiser-references` sous Windows pour écraser les références Linux.
+- La recette visuelle normale est **structurelle et portable** : scénarios, DOM, dimensions, débordements et captures restent bloquants, pas les différences de rasterisation entre navigateurs.
+- Le pixel-perfect est volontairement **opt-in** (`PJJOUE_COMPARAISON_PIXELS_EXACTE=1`) et n’est valable que si l’environnement correspond à `tests/references-visuelles/environnement-reference.json`.
+- Ne jamais lancer `--actualiser-references` sous Windows : les références et leur fichier d’environnement se régénèrent uniquement sous Linux/Chromium.

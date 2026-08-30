@@ -71,6 +71,20 @@ Les scripts utilisent automatiquement Chromium installé par Playwright lorsqu�
 - variable `PLAYWRIGHT_CHROMIUM_EXECUTABLE` pour les recettes visuelles ;
 - variable `PJJOUE_CHROMIUM` acceptée également par les recettes navigateur.
 
+## Références et pixel-perfect
+
+La recette normale reste portable : elle contrôle le DOM, les dimensions critiques, les débordements, le comportement et produit les captures sans confondre une différence de moteur de rendu avec une régression.
+
+Le pixel-perfect est un mode volontaire : définir `PJJOUE_COMPARAISON_PIXELS_EXACTE=1` puis lancer `python tests/verifier_regression_visuelle.py`. Ce mode n’est accepté que si le système et le Chromium majeur correspondent à `tests/references-visuelles/environnement-reference.json`.
+
+Après une modification visuelle validée, actualiser les références **uniquement sous Linux** avec :
+
+```bash
+python tests/verifier_regression_visuelle.py --actualiser-references
+```
+
+Le script met alors à jour les PNG et `environnement-reference.json`. Ne jamais actualiser les références sous Windows.
+
 ## Règle pour toute reprise du site
 
 Après une modification visuelle, **ne pas se contenter de lire le HTML/CSS**. Reconstruire si nécessaire, lancer les tests navigateur puis produire de nouvelles captures afin de contrôler le rendu réel en bureau et mobile. Les anciennes captures ne sont jamais une source de vérité : elles sont des résultats de test jetables.

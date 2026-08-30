@@ -42,15 +42,20 @@ class ControleLiensOfficiels(unittest.TestCase):
 
 
 class ControleVisuelPortable(unittest.TestCase):
-    def test_pixel_exact_canonique_linux(self):
+    def test_pixel_exact_est_opt_in_sur_toutes_les_plateformes(self):
         ancienne = os.environ.pop("PJJOUE_COMPARAISON_PIXELS_EXACTE", None)
         try:
-            self.assertTrue(VISUEL.comparaison_pixel_exacte_active("Linux"))
+            self.assertFalse(VISUEL.comparaison_pixel_exacte_active("Linux"))
             self.assertFalse(VISUEL.comparaison_pixel_exacte_active("Windows"))
         finally:
             if ancienne is not None:
                 os.environ["PJJOUE_COMPARAISON_PIXELS_EXACTE"] = ancienne
 
+    def test_environnement_reference_visuelle_est_documente(self):
+        reference = VISUEL.lire_environnement_reference()
+        self.assertEqual(reference.get("systeme"), "Linux")
+        self.assertIsInstance(reference.get("chromiumMajeur"), int)
+        self.assertGreater(reference.get("chromiumMajeur", 0), 0)
 
     def test_hauteurs_cartes_windows_ne_sont_pas_comparees_aux_pixels_linux(self):
         # Régression observée sous Chromium/Windows : les six cartes mesurent

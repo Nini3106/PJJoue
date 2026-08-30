@@ -79,6 +79,7 @@
       erreurs: ['revision/', '#erreurs'],
       supports: ['supports/', '#supports'],
       entrainement: ['entrainement/', '#entrainement'],
+      sigles: ['mission-sigles/', '#sigles'],
       progression: ['progression/', '#progression'],
       carnet: ['carnet/', '#carnet'],
       parametres: ['parametres/', '#parametres']
@@ -88,20 +89,29 @@
       : new URL(routesApplication[ecran][0], racineApplication).href;
     const lienGuides = `${racineApplication.href}guides/${navigationLocale ? 'index.html' : ''}`;
     const entrees = [
-      ['Accueil', lienApplication('accueil')],
-      ['Apprendre', lienApplication('parcours')],
-      ['Réviser', lienApplication('erreurs')],
-      ['Supports', lienApplication('supports')],
-      ['S’entraîner', lienApplication('entrainement')],
-      ['Progression', lienApplication('progression')],
-      ['Guides', lienGuides],
-      ['Carnet', lienApplication('carnet')],
-      ['Paramètres', lienApplication('parametres')]
+      { libelle: 'Accueil', href: lienApplication('accueil') },
+      { libelle: 'Parcours PJJ', href: lienApplication('parcours') },
+      { libelle: 'Entraînement libre', href: lienApplication('entrainement') },
+      { libelle: 'Réviser', href: lienApplication('erreurs') },
+      { libelle: 'Progression', href: lienApplication('progression') },
+      { libelle: 'Carnet de parcours', href: lienApplication('carnet') },
+      { separation: true },
+      { section: 'Supports' },
+      { libelle: 'Supports de révision', href: lienApplication('supports') },
+      { libelle: 'Guides', href: lienGuides },
+      { separation: true },
+      { section: 'Mini jeux' },
+      { libelle: 'Mission Sigles', href: lienApplication('sigles'), miniJeu: true } // Futurs mini-jeux : ex. Mission Mesures.
     ];
 
-    navigation.innerHTML = entrees.map(([libelle, href]) => {
-      const actif = libelle === 'Guides' ? ' aria-current="page"' : '';
-      return `<a href="${href}"${actif}>${libelle}</a>`;
+    navigation.innerHTML = entrees.map(entree => {
+      if (entree.section)
+        return `<span class="guide-navigation-section-titre">${entree.section}</span>`;
+      if (entree.separation)
+        return '<span class="guide-navigation-section-separation" aria-hidden="true"></span>';
+      const actif = entree.libelle === 'Guides' ? ' aria-current="page"' : '';
+      const classe = entree.miniJeu ? ' class="guide-navigation-mini-jeu"' : '';
+      return `<a href="${entree.href}"${classe}${actif}>${entree.libelle}</a>`;
     }).join('');
 
     const bouton = document.createElement('button');

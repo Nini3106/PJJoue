@@ -77,11 +77,9 @@ npm run test:visuel
 
 Guide détaillé pour une reprise humaine ou par IA : **`code/00 - LIRE EN PREMIER/CAPTURES_VISUELLES_ET_TESTS_NAVIGATEUR.md`**. Les outils de capture font partie du projet ; seul `test-results/` est jetable et régénérable.
 
-Pour comparer deux versions pixel par pixel :
+Le test visuel normal est portable et privilégie les assertions de structure. Pour activer volontairement le pixel-perfect, utiliser le même système et le même Chromium majeur que `tests/references-visuelles/environnement-reference.json`, puis définir `PJJOUE_COMPARAISON_PIXELS_EXACTE=1` avant `python tests/verifier_regression_visuelle.py`.
 
-```bash
-python tests/verifier_regression_visuelle.py --reference-projet CHEMIN_DE_LA_VERSION_REFERENCE
-```
+Après une évolution visuelle validée, `python tests/verifier_regression_visuelle.py --actualiser-references` régénère les références **sous Linux uniquement** et met à jour l’environnement associé.
 
 ## Documentation actuelle
 

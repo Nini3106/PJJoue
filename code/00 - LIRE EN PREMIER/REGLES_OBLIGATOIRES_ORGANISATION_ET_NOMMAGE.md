@@ -519,3 +519,12 @@ Cette règle évite qu’une extraction ZIP par-dessus un ancien dossier laisse 
 Les fichiers générés ne doivent pas dépendre des fins de ligne du système. Le constructeur écrit volontairement les sorties texte en LF. Les empreintes Analytics tolèrent uniquement la différence LF/CRLF ; elles continuent de bloquer toute modification réelle du contenu protégé.
 
 Avant publication, `PREPARER_PJJOUE_AVANT_PUSH.bat` doit reconstruire les données, le site, le service worker, le SEO/sitemap et le manifeste en dernier, puis terminer toute la recette sans erreur. Une empreinte protégée ne doit jamais être modifiée uniquement pour contourner un test.
+
+## 12. Harmonisation visuelle obligatoire
+
+- Ne jamais réintroduire de **bouton jaune plein**. Les actions importantes ont un fond bleu/sombre et un contour jaune au survol/focus.
+- Les boutons d’un mode de jeu prennent le contour de la couleur de leur icône/mode.
+- Le bouton de réinitialisation globale reste rouge : c’est l’unique exception de danger prévue.
+- Conserver **24 px** entre un bouton Retour et le titre qui suit.
+- Le menu est structuré en trois groupes : navigation principale, **Supports**, puis **Mini jeux**. Ajouter les futurs mini-jeux dans ce dernier groupe sans modifier les deux premiers.
+- Toute modification de ces règles doit être contrôlée sur bureau et mobile avant publication.

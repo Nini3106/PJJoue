@@ -67,10 +67,10 @@
 #entrainement .entrainement-carte.entrainement-melange .entrainement-icone { color:var(--icone-bleu-vert); }
 #entrainement .entrainement-carte h3 { margin:0; color:var(--texte); font-size:1.45rem; }
 .entrainement-carte > p { font-size:.96rem; line-height:1.5; }
-#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer { align-self:end; width:100%; min-height:48px; border-color:var(--jaune-interface); color:var(--texte-sur-jaune); background:var(--jaune-interface); }
+#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer { align-self:end; width:100%; min-height:48px; border-color:var(--icone-jaune); color:var(--texte); background:transparent; }
 #entrainement .entrainement-carte.entrainement-melange .entrainement-lancer { align-self:end; width:100%; min-height:48px; border-color:var(--icone-bleu-vert); color:var(--texte); background:transparent; }
 #entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer:hover,
-#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer:focus-visible { border-color:#fff1c7; color:var(--texte-sur-jaune); background:var(--accent-survol); }
+#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer:focus-visible { border-color:var(--icone-jaune); color:var(--texte); background:rgba(255,200,61,.10); box-shadow:inset 0 0 0 1px var(--icone-jaune); }
 #entrainement .entrainement-carte.entrainement-melange .entrainement-lancer:hover,
 #entrainement .entrainement-carte.entrainement-melange .entrainement-lancer:focus-visible { border-color:#7ce8dc; color:var(--texte); background:rgba(57,215,196,.14); }
 .entrainement-hasard { display: grid; grid-template-columns: auto 1fr auto; gap: 22px; align-items: center; margin: 0 0 24px; padding: clamp(22px,3vw,30px); border: 1px solid var(--bordure-carte); border-left: 5px solid var(--jaune-interface); border-radius: var(--rayon-tres-grand); background: linear-gradient(135deg,rgba(255,200,61,.13),var(--surface-carte) 45%,var(--surface-carte-profonde)); box-shadow: var(--ombre-carte); }
@@ -116,3 +116,7 @@
   .entrainement-hasard-actions button { flex:1 1 100%; width:100%; }
 }
 /* === FIN MORCEAU CSS === */
+
+#entrainement .entrainement-hasard-actions .principal { border-color:var(--jaune-interface); color:var(--texte); background:rgba(7,49,99,.38); box-shadow:none; }
+#entrainement .entrainement-hasard-actions .principal:hover,
+#entrainement .entrainement-hasard-actions .principal:focus-visible { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.10); box-shadow:inset 0 0 0 1px var(--jaune-interface); }

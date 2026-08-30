@@ -161,12 +161,11 @@ header.entete {
 }
 .actions button {
     min-height: 40px;
-    border: 1px solid transparent;
+    border: 1px solid #6f94c0;
     border-radius: 999px;
     padding: 8px 14px;
-    color: var(--bleu-nuit-950);
-    background: linear-gradient(135deg,#ffda72,#e9aa2f);
-    border-color: #ffe095;
+    color: #fff;
+    background: var(--surface-carte-profonde);
     font-weight: 800;
     transition: transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
 }
@@ -183,8 +182,8 @@ header.entete {
 }
 .bouton-retour:active,.discret:active {
     color: #fff;
-    background: #b67a00;
-    border-color: var(--accent)
+    background: #124a81;
+    border-color: var(--jaune-interface)
 }
 .navigation {
     display: flex;
@@ -210,17 +209,17 @@ header.entete {
 .navigation button:hover,
 .navigation .navigation-lien:hover {
     transform: none;
-    color: var(--bleu-nuit-950);
-    border-color: var(--bouton-selection);
-    background: var(--bouton-selection);
-    box-shadow: none;
+    color:#fff;
+    border-color:var(--jaune-interface);
+    background:rgba(255,200,61,.08);
+    box-shadow:none;
 }
 .navigation button[aria-current="page"],
 .navigation .navigation-lien[aria-current="page"] {
-    color: var(--bleu-nuit-950);
-    border-color: var(--bouton-selection);
-    background: var(--bouton-selection);
-    box-shadow: none;
+    color:var(--jaune-interface);
+    border-color:var(--jaune-interface);
+    background:rgba(255,200,61,.08);
+    box-shadow:none;
 }
 .conteneur {
     width: min(1180px,calc(100% - 28px));
@@ -749,9 +748,10 @@ p {
 }
 .classement-element button.selectionne,
 .classement-element button[aria-pressed="true"] {
-    color: var(--bleu-nuit-950);
-    border-color: var(--accent);
-    background: var(--accent);
+    color: var(--texte);
+    border-color: #4f8cff;
+    background: rgba(79,140,255,.16);
+    box-shadow: inset 0 0 0 1px #4f8cff;
 }
 .classement-element.verrouille-joker {
     border-color: var(--accent);
@@ -878,10 +878,10 @@ p {
     border-color: var(--bouton-selection)
 }
 .choix-bouton.actif,.choix-bouton[aria-pressed="true"],.choix-bouton.selectionne {
-    color: var(--bleu-nuit-950);
-    border-color: var(--bouton-selection);
-    background: var(--bouton-selection);
-    box-shadow: none;
+    color: var(--texte);
+    border-color: #4f8cff;
+    background: rgba(79,140,255,.16);
+    box-shadow: inset 0 0 0 1px #4f8cff;
 }
 .natif-masque {
     display: none
@@ -1137,27 +1137,32 @@ p {
     }
 }
 .barre-actions-page {
-    display: contents;
+    display: block;
+    margin: 0;
+}
+.barre-actions-page:has(.bouton-retour:not(.masque)) {
+    margin-bottom: 24px;
 }
 
 .discret.bouton-retour {
     width: max-content;
-    margin: 0 0 4px;
+    margin: 0;
     color: #fff;
     border-color: #6f94c0;
     background: var(--surface-carte-profonde);
     box-shadow: none
 }
-.discret.bouton-retour:hover {
+.discret.bouton-retour:hover,
+.discret.bouton-retour:focus-visible {
     color: #fff;
-    border-color: var(--accent);
+    border-color: var(--jaune-interface);
     background: #17558f;
     box-shadow: none
 }
 .discret.bouton-retour:active {
     color: #fff;
-    background: #b67a00;
-    border-color: var(--accent)
+    background: #124a81;
+    border-color: var(--jaune-interface)
 }
 
 
@@ -1212,15 +1217,22 @@ p {
 }
 .principal {
     min-height: 40px;
-    border: 1px solid transparent;
+    border: 1px solid #6f94c0;
     border-radius: 12px;
     padding: 9px 16px;
     font-weight: 800;
     transition: transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
-    color: var(--bleu-nuit-950);
-    background: var(--accent);
-    border-color: #ffe7a7;
+    color: #fff;
+    background: var(--surface-carte-profonde);
     box-shadow: none;
+}
+.principal:hover,
+.principal:focus-visible {
+    color: #fff;
+    border-color: var(--jaune-interface);
+    background: #17558f;
+    box-shadow: none;
+    transform: none;
 }
 .activite-valider:hover {
     color: var(--bleu-nuit-950);
@@ -1230,8 +1242,10 @@ p {
     transform: none;
 }
 .principal:active,.activite-valider:active {
+    color: #fff;
+    border-color: var(--jaune-interface);
     transform: translateY(0);
-    background: #e3a82f;
+    background: #124a81;
 }
 
 .reponse:hover {
@@ -2949,9 +2963,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     -webkit-appearance: none;
 }
 .bouton-commencer-principal {
-    color: var(--bleu-nuit-950);
+    color: #fff;
+    border-color: #6f94c0;
+    background: var(--surface-secondaire);
+}
+.bouton-commencer-principal:hover,
+.bouton-commencer-principal:focus-visible {
+    color: #fff;
     border-color: var(--jaune-interface);
-    background: var(--jaune-interface);
+    background: #17558f;
 }
 
 
@@ -3313,9 +3333,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 #entrainement .choix-bouton:hover,
 #entrainement .choix-bouton:focus-visible {
-    color: var(--texte-sur-jaune);
-    background: var(--jaune-interface);
-    border-color: var(--jaune-interface);
+    color: var(--texte);
+    background: rgba(79,140,255,.12);
+    border-color: #8db9ff;
 }
 #entrainement .entrainement-icone {
     margin-bottom: 12px;
@@ -3409,9 +3429,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     }
 }
 #entrainement .entrainement-nombre-choix .choix-bouton[aria-pressed="true"] {
-    color: #0b3563;
-    background: linear-gradient(180deg,#ffe085,var(--jaune-interface));
-    border-color: #ffe9a8;
+    color:var(--texte);
+    background:rgba(79,140,255,.16);
+    border-color:#4f8cff;
+    box-shadow:inset 0 0 0 1px #4f8cff;
 }
 #question .detaillee-correction {
     margin-top: 12px;
@@ -3682,11 +3703,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     cursor: pointer;
 }
 #entrainement .option-bouton:hover,
-#entrainement .option-bouton:focus-visible,
+#entrainement .option-bouton:focus-visible {
+    color: var(--texte);
+    background: rgba(79,140,255,.12);
+    border-color: #8db9ff;
+}
 .option-bouton.actif {
-    color: var(--texte-sur-jaune);
-    background: var(--jaune-interface);
-    border-color: var(--jaune-interface);
+    color: var(--texte);
+    background: rgba(79,140,255,.16);
+    border-color: #4f8cff;
+    box-shadow: inset 0 0 0 1px #4f8cff;
     font-weight: 900;
 }
 .entrainement-secondes-groupe {
@@ -3706,8 +3732,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 #entrainement .entrainement-lancer:hover,
 #entrainement .entrainement-lancer:focus-visible {
-    color: var(--texte-sur-jaune);
-    background: var(--jaune-interface);
+    color: #fff;
+    background: #17558f;
     border-color: var(--jaune-interface);
 }
 #carnet .carnet-page-entete {
@@ -4021,19 +4047,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     text-align: center;
     box-sizing: border-box;
 }
-#parametres .parametres-actions-boutons .principal {
-    color: #fff;
-    border-color: #6f94c0;
-    background: var(--surface-carte-profonde);
-    box-shadow: none;
-}
-#parametres .parametres-actions-boutons .principal:hover,
-#parametres .parametres-actions-boutons .principal:focus-visible {
-    color: var(--texte-sur-jaune);
-    border-color: var(--bouton-selection);
-    background: var(--bouton-selection);
-    transform: none;
-}
 #parametres .parametres-choix {
     min-height: auto;
     padding: 20px;
@@ -4059,9 +4072,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 #parametres .parametres-choix .choix-bouton:hover,
 #parametres .parametres-choix .choix-bouton:focus-visible {
-    color: var(--texte-sur-jaune);
-    border-color: var(--bouton-selection);
-    background: var(--bouton-selection);
+    color:var(--texte);
+    border-color:var(--jaune-interface);
+    background:rgba(255,200,61,.08);
 }
 @media (max-width:820px) {
     .barre-actions-page {
@@ -5727,16 +5740,17 @@ main.conteneur {
     border-color: var(--accent);
     box-shadow: none;
 }
-/* Sélection : fond jaune + contour jaune. */
+/* Sélection : bleu PJJoue, sans aplat jaune. */
 #parcours .parcours-chronometre-panneau .choix-bouton.actif,
 #parcours .parcours-chronometre-panneau .choix-bouton.selectionne,
 #parcours .parcours-chronometre-panneau .choix-bouton[aria-pressed="true"],
 #parcours .parcours-chronometre-panneau button[data-valeur].actif,
 #parcours .parcours-chronometre-panneau button[data-valeur].selectionne,
 #parcours .parcours-chronometre-panneau button[data-valeur][aria-pressed="true"] {
-    color: var(--texte-sur-jaune);
-    background: linear-gradient(180deg,#ffe286,var(--jaune-interface));
-    border-color: #ffebae;
+    color: var(--texte);
+    background: rgba(79,140,255,.16);
+    border-color: #4f8cff;
+    box-shadow: inset 0 0 0 1px #4f8cff;
     font-weight: 900;
 }
 /* Fenêtre de confirmation de sortie de session. */
@@ -5832,10 +5846,16 @@ main.conteneur {
     border-color: var(--accent);
 }
 #confirmerQuitterSession {
-    color: var(--texte-sur-jaune);
-    background: linear-gradient(180deg,#ffe286,var(--jaune-interface));
-    border-color: #ffebae;
+    color: #fff;
+    background: var(--surface-carte-profonde);
+    border-color: #6f94c0;
     font-weight: 900;
+}
+#confirmerQuitterSession:hover,
+#confirmerQuitterSession:focus-visible {
+    color:#fff;
+    background:#17558f;
+    border-color:var(--jaune-interface);
 }
 @media (max-width:560px) {
     .pjj-fenetre-panneau {
@@ -5964,12 +5984,18 @@ main.conteneur {
     min-height: 46px;
     margin-top: 27px;
     padding: 0 26px;
-    border: 1px solid #ffecad;
+    border: 1px solid #6f94c0;
     border-radius: 16px;
-    background: linear-gradient(180deg,#ffe58e,var(--jaune-interface));
-    color: var(--texte-sur-jaune);
+    background: var(--surface-carte-profonde);
+    color: #fff;
     font-weight: 900;
     cursor: pointer;
+}
+.celebration-continuer:hover,
+.celebration-continuer:focus-visible {
+    border-color:var(--jaune-interface);
+    background:#17558f;
+    color:#fff;
 }
 .celebration-continuer:hover,
 .celebration-continuer:focus-visible {
@@ -6438,9 +6464,14 @@ main.conteneur {
     background: rgba(255,200,87,.10);
 }
 #fenetreMessage.fenetre-danger #confirmerFenetreMessage {
-    color: #4d1b22;
-    border-color: #ffe49b;
-    background: linear-gradient(180deg,#ffe286,var(--jaune-interface));
+    color: #fff;
+    border-color: #6f94c0;
+    background: var(--surface-carte-profonde);
+}
+#fenetreMessage.fenetre-danger #confirmerFenetreMessage:hover,
+#fenetreMessage.fenetre-danger #confirmerFenetreMessage:focus-visible {
+    border-color:var(--jaune-interface);
+    background:#17558f;
 }
 /* Hauteur d'accueil calculée sur la hauteur réelle de la barre supérieure. */
 #accueil.ecran.actif {
@@ -6559,14 +6590,15 @@ main.conteneur {
 #question .joker-menu-bouton:hover,
 #question .joker-menu-bouton:focus-visible,
 #question .joker-menu-bouton.rappel-jokers {
-    color: var(--texte-sur-jaune);
-    background: linear-gradient(180deg,#ffe58e,var(--jaune-interface));
-    box-shadow: 0 0 0 4px rgba(255,200,61,.16),10px 12px 28px rgba(0,20,55,.30);
+    color: #fff;
+    border-color: var(--jaune-interface);
+    background: #17558f;
+    box-shadow: 0 0 0 3px rgba(255,200,61,.10),10px 12px 28px rgba(0,20,55,.30);
 }
 #question .joker-menu-bouton:hover .joker-onglet-icone,
 #question .joker-menu-bouton:focus-visible .joker-onglet-icone,
 #question .joker-menu-bouton.rappel-jokers .joker-onglet-icone {
-    color: var(--texte-sur-jaune);
+    color: var(--jaune-interface);
 }
 #question .joker-menu-bouton:disabled {
     opacity: .46;
@@ -7077,6 +7109,8 @@ body:not([data-ecran-actif="accueil"])::before {
     border: 0;
 }
 .joker-fenetre .joker {
+    --joker-accent:var(--jaune-interface);
+    --joker-accent-rgb:255,200,61;
     min-height: 112px;
     display: flex;
     flex-direction: column;
@@ -7084,7 +7118,7 @@ body:not([data-ecran-actif="accueil"])::before {
     justify-content: center;
     gap: 10px;
     padding: 16px 12px;
-    border: 2px solid var(--accent);
+    border: 2px solid var(--joker-accent);
     border-radius: 17px;
     color: #fff;
     background: var(--surface-carte);
@@ -7099,15 +7133,12 @@ body:not([data-ecran-actif="accueil"])::before {
     place-items: center;
     color: #ffd76b;
 }
-#boutonJoker5050 .joker-icone {
-    color: #39d7c4;
-}
-#boutonJokerIndice .joker-icone {
-    color: var(--jaune-interface);
-}
-#boutonJokerLangueAuChat .joker-icone {
-    color: #a986ff;
-}
+#boutonJoker5050 { --joker-accent:#39d7c4; --joker-accent-rgb:57,215,196; }
+#boutonJokerIndice { --joker-accent:var(--jaune-interface); --joker-accent-rgb:255,200,61; }
+#boutonJokerLangueAuChat { --joker-accent:#a986ff; --joker-accent-rgb:169,134,255; }
+#boutonJoker5050 .joker-icone { color: #39d7c4; }
+#boutonJokerIndice .joker-icone { color: var(--jaune-interface); }
+#boutonJokerLangueAuChat .joker-icone { color: #a986ff; }
 .joker-fenetre .joker-icone svg {
     width: 34px;
     height: 34px;
@@ -7119,13 +7150,15 @@ body:not([data-ecran-actif="accueil"])::before {
 }
 .joker-fenetre .joker:hover:not(:disabled),
 .joker-fenetre .joker:focus-visible:not(:disabled) {
-    color: var(--texte-sur-jaune);
-    background: linear-gradient(180deg,#ffe58e,var(--jaune-interface));
+    color: #fff;
+    border-color:var(--joker-accent);
+    background: rgba(var(--joker-accent-rgb),.12);
+    box-shadow: inset 0 0 0 1px var(--joker-accent);
     transform: translateY(-2px);
 }
 .joker-fenetre .joker:hover:not(:disabled) .joker-icone,
 .joker-fenetre .joker:focus-visible:not(:disabled) .joker-icone {
-    color: var(--texte-sur-jaune);
+    color: var(--joker-accent);
 }
 .joker-fenetre .joker:disabled {
     opacity: .42;
@@ -7515,10 +7548,16 @@ body:not([data-ecran-actif="accueil"])::before {
 }
 .page-information .guide-bouton {
     margin-top: 8px;
-    border-color: var(--jaune-interface);
-    color: var(--bleu-nuit-950);
-    background: var(--jaune-interface);
+    border-color: #6f94c0;
+    color: #fff;
+    background: var(--surface-carte-profonde);
     text-decoration: none;
+}
+.page-information .guide-bouton:hover,
+.page-information .guide-bouton:focus-visible {
+    border-color:var(--jaune-interface);
+    color:#fff;
+    background:#17558f;
 }
 .guide-tableau-conteneur {
     overflow-x: auto;
@@ -7799,10 +7838,10 @@ body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil
     justify-content: center;
     margin-top: 112px;
     padding: 8px 16px;
-    border: 1px solid var(--jaune-interface);
+    border: 1px solid #6f94c0;
     border-radius: 999px;
-    color: var(--bleu-nuit-950);
-    background: var(--jaune-interface);
+    color: #fff;
+    background: var(--surface-carte-profonde);
     font: inherit;
     font-weight: 900;
     cursor: pointer;
@@ -7897,10 +7936,16 @@ body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil
 }
 
 header.entete .navigation .bouton-installer-pjjoue {
-    margin-top: 5px;
-    color: var(--texte-sur-jaune);
-    border-color: var(--bouton-selection);
-    background: var(--bouton-selection);
+    margin-top:5px;
+    color:#fff;
+    border-color:#6f94c0;
+    background:transparent;
+}
+header.entete .navigation .bouton-installer-pjjoue:hover,
+header.entete .navigation .bouton-installer-pjjoue:focus-visible {
+    color:#fff;
+    border-color:var(--jaune-interface);
+    background:rgba(255,200,61,.08);
 }
 
 header.entete .navigation .bouton-installer-pjjoue::before {
@@ -7963,9 +8008,9 @@ header.entete .navigation .bouton-installer-pjjoue::before {
 
 .bouton-retour-haut-guide:hover,
 .bouton-retour-haut-guide:focus-visible {
-    color: var(--texte-sur-jaune);
+    color: #fff;
     border-color: var(--jaune-interface);
-    background: var(--jaune-interface);
+    background: #17558f;
 }
 
 .sommaire-guide {
@@ -8365,15 +8410,16 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     font-weight: 950;
 }
 #fenetreMessage.fenetre-avertissement #confirmerFenetreMessage {
-    color: #17355b;
-    border-color: #ffe7a5;
-    background: linear-gradient(180deg,#ffd86d,#ffc53d);
-    box-shadow: 0 10px 24px rgba(255,176,25,.2);
+    color: #fff;
+    border-color: #6f94c0;
+    background: var(--surface-carte-profonde);
+    box-shadow: none;
 }
 #fenetreMessage.fenetre-avertissement #confirmerFenetreMessage:hover,
 #fenetreMessage.fenetre-avertissement #confirmerFenetreMessage:focus-visible {
-    background: linear-gradient(180deg,#ffe38d,#ffd052);
-    border-color: #fff0bd;
+    color:#fff;
+    background:#17558f;
+    border-color:var(--jaune-interface);
 }
 /* Confirmation Passer : un seul message, sans icône interrogative redondante. */
 #fenetreMessage.fenetre-avertissement #titreFenetreMessage {
@@ -8681,9 +8727,9 @@ header.entete .navigation .bouton-installer-pjjoue::before {
         transition: transform .16s ease,opacity .16s ease;
     }
     header.entete.menu-mobile-ouvert .bouton-menu-mobile {
-        color: var(--texte-sur-jaune);
-        border-color: var(--bouton-selection);
-        background: var(--bouton-selection);
+        color: #fff;
+        border-color: var(--jaune-interface);
+        background: #17558f;
     }
     header.entete.menu-mobile-ouvert .bouton-menu-mobile span:nth-child(1) {
         transform: translateY(6px) rotate(45deg);
@@ -9305,9 +9351,9 @@ header.entete .marque > span {
     }
 
     header.entete.menu-mobile-ouvert .bouton-menu-mobile {
-        color: var(--texte-sur-jaune);
-        border-color: var(--bouton-selection);
-        background: var(--bouton-selection);
+        color: #fff;
+        border-color: var(--jaune-interface);
+        background: #17558f;
     }
 
     header.entete.menu-mobile-ouvert .bouton-menu-mobile span:nth-child(1) {
@@ -9555,9 +9601,9 @@ header.entete .navigation .navigation-lien:focus-visible {
 
 header.entete .navigation button[aria-current="page"],
 header.entete .navigation .navigation-lien[aria-current="page"] {
-    color: var(--texte-sur-jaune);
-    border-color: var(--bouton-selection);
-    background: var(--bouton-selection);
+    color: var(--jaune-interface);
+    border-color: var(--jaune-interface);
+    background: rgba(255,200,61,.08);
 }
 
 @media (min-width:1281px) {
@@ -9591,12 +9637,112 @@ header.entete .navigation .navigation-lien[aria-current="page"] {
     }
 
     header.entete.menu-mobile-ouvert .bouton-menu-mobile {
-        color: var(--texte-sur-jaune);
-        border-color: var(--bouton-selection);
-        background: var(--bouton-selection);
+        color: #fff;
+        border-color: var(--jaune-interface);
+        background: #17558f;
     }
 
 }
+
+/* Harmonisation V1 — retours, mini-jeux et repères de question. */
+header.entete .navigation .navigation-section-titre {
+    display:block;
+    margin:7px 2px 2px;
+    padding:9px 10px 4px;
+    border-top:0;
+    color:var(--jaune-interface);
+    font-size:.72rem;
+    font-weight:900;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+}
+header.entete .navigation .navigation-section-separation {
+    display:block;
+    height:1px;
+    margin:5px 2px;
+    background:rgba(255,255,255,.15);
+}
+header.entete .navigation .navigation-mini-jeu {
+    border-color:rgba(255,200,61,.34);
+}
+header.entete .navigation .navigation-mini-jeu:hover,
+header.entete .navigation .navigation-mini-jeu:focus-visible {
+    border-color:var(--jaune-interface);
+    background:rgba(255,200,61,.08);
+}
+
+/* Une même respiration entre le bouton Retour global et le contenu de page. */
+.barre-actions-page:has(.bouton-retour:not(.masque)) + .ecran.actif > :is(.page-entete,.presentation-page):first-child { padding-top:0; }
+
+/* Réviser : accès direct aux supports sur la ligne de titre. */
+#erreurs .revision-page-entete-ligne {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+}
+#erreurs .revision-page-entete-ligne h1 { margin-bottom:0; }
+#erreurs .revision-lien-supports {
+    flex:0 0 auto;
+    min-height:42px;
+    padding:8px 14px;
+    border:1px solid #6f94c0;
+    border-radius:12px;
+    color:var(--texte);
+    background:var(--surface-carte-profonde);
+    font-weight:800;
+}
+#erreurs .revision-lien-supports:hover,
+#erreurs .revision-lien-supports:focus-visible {
+    border-color:var(--jaune-interface);
+    color:var(--texte);
+    background:rgba(255,200,61,.08);
+}
+#erreurs .revision-page-entete > p { margin-top:12px; }
+
+/* Question : parcours puis étape, tous deux visibles au-dessus de la carte. */
+#question .question-contexte-identites {
+    min-width:0;
+    display:grid;
+    gap:7px;
+}
+#question .question-parcours-identite,
+#question .question-etape-identite {
+    min-width:0;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+}
+#question .question-parcours-identite > span,
+#question .question-etape-identite > span {
+    flex:0 0 auto;
+    padding:3px 8px;
+    border:1px solid color-mix(in srgb,var(--parcours-accent,var(--couleur-etape-active)) 66%,transparent);
+    border-radius:999px;
+    color:#fff;
+    background:color-mix(in srgb,var(--parcours-accent,var(--couleur-etape-active)) 16%,rgba(6,45,91,.72));
+    font-weight:850;
+}
+#question .question-etape-identite > span {
+    border-color:color-mix(in srgb,var(--couleur-etape-active) 66%,transparent);
+    background:color-mix(in srgb,var(--couleur-etape-active) 16%,rgba(6,45,91,.72));
+}
+#question .question-parcours-identite > strong,
+#question .question-etape-identite > strong {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#eef7ff;
+    font-weight:750;
+}
+
+@media (max-width:650px) {
+    #erreurs .revision-page-entete-ligne { align-items:stretch; flex-direction:column; }
+    #erreurs .revision-lien-supports { align-self:flex-start; }
+    #question .question-contexte-etape { align-items:flex-start; flex-direction:column; }
+    #question .question-autonomie { width:100%; justify-content:space-between; }
+}
+
 /* Consentement Analytics : carte compacte alignée sur l'identité visuelle PJJoue. */
 .pjj-consentement,
 .pjj-consentement-preferences {
@@ -10510,7 +10656,7 @@ body[data-ecran-actif="accueil"] #accueil {
 .supports-recherche input { min-height: 46px; padding: 0 14px; border: 1px solid var(--bordure); border-radius: 12px; color: var(--texte); background: var(--surface-carte-profonde); }
 .supports-filtres { display: flex; flex-wrap: wrap; gap: 8px; }
 .supports-filtres button { min-height: 40px; padding: 0 14px; border: 1px solid var(--bordure); border-radius: 999px; color: var(--texte-secondaire); background: var(--surface-carte-profonde); }
-.supports-filtres button.actif { color: var(--texte-sur-jaune); border-color: var(--jaune-interface); background: var(--jaune-interface); }
+.supports-filtres button.actif { color: var(--texte); border-color: var(--jaune-interface); background: rgba(255,200,61,.10); box-shadow:inset 0 0 0 1px var(--jaune-interface); }
 .supports-statut { margin: 0; color: var(--texte-secondaire); font-size: .94rem; }
 .supports-revision-groupes { display: grid; gap: 13px; }
 .supports-juridiction { --support-accent: var(--icone-ciel); overflow: hidden; border: 1px solid var(--bordure-carte); border-left: 5px solid var(--support-accent); border-radius: var(--rayon-grand); background: var(--surface-carte); box-shadow: var(--ombre-douce); }
@@ -10647,10 +10793,10 @@ body[data-ecran-actif="accueil"] #accueil {
 #entrainement .entrainement-carte.entrainement-melange .entrainement-icone { color:var(--icone-bleu-vert); }
 #entrainement .entrainement-carte h3 { margin:0; color:var(--texte); font-size:1.45rem; }
 .entrainement-carte > p { font-size:.96rem; line-height:1.5; }
-#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer { align-self:end; width:100%; min-height:48px; border-color:var(--jaune-interface); color:var(--texte-sur-jaune); background:var(--jaune-interface); }
+#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer { align-self:end; width:100%; min-height:48px; border-color:var(--icone-jaune); color:var(--texte); background:transparent; }
 #entrainement .entrainement-carte.entrainement-melange .entrainement-lancer { align-self:end; width:100%; min-height:48px; border-color:var(--icone-bleu-vert); color:var(--texte); background:transparent; }
 #entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer:hover,
-#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer:focus-visible { border-color:#fff1c7; color:var(--texte-sur-jaune); background:var(--accent-survol); }
+#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer:focus-visible { border-color:var(--icone-jaune); color:var(--texte); background:rgba(255,200,61,.10); box-shadow:inset 0 0 0 1px var(--icone-jaune); }
 #entrainement .entrainement-carte.entrainement-melange .entrainement-lancer:hover,
 #entrainement .entrainement-carte.entrainement-melange .entrainement-lancer:focus-visible { border-color:#7ce8dc; color:var(--texte); background:rgba(57,215,196,.14); }
 .entrainement-hasard { display: grid; grid-template-columns: auto 1fr auto; gap: 22px; align-items: center; margin: 0 0 24px; padding: clamp(22px,3vw,30px); border: 1px solid var(--bordure-carte); border-left: 5px solid var(--jaune-interface); border-radius: var(--rayon-tres-grand); background: linear-gradient(135deg,rgba(255,200,61,.13),var(--surface-carte) 45%,var(--surface-carte-profonde)); box-shadow: var(--ombre-carte); }
@@ -10849,7 +10995,7 @@ body[data-ecran-actif="accueil"] #accueil {
 #supports .masque-recherche-support { display:none; }
 #supports .supports-filtres { display:flex; flex-wrap:wrap; gap:8px; }
 #supports .supports-filtres button { min-width:48px; min-height:42px; padding:0 14px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; }
-#supports .supports-filtres button.actif { border-color:var(--jaune-interface); color:var(--texte-sur-jaune); background:var(--jaune-interface); }
+#supports .supports-filtres button.actif { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.10); box-shadow:inset 0 0 0 1px var(--jaune-interface); }
 #supports .supports-parcours-badges { display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
 #supports .support-parcours-badge { display:inline-flex; align-items:center; min-height:27px; padding:2px 9px; border:1px solid currentColor; border-radius:999px; font-size:.9rem; font-style:normal; font-weight:900; }
 #supports .support-parcours-1 { color:#9fc2ff; } #supports .support-parcours-2 { color:#ffd36a; }
@@ -10894,7 +11040,7 @@ body[data-ecran-actif="accueil"] #accueil {
 #parametres .parametres-choix .choix-groupe .choix-bouton { width:100%; min-width:0; min-height:46px; height:auto; padding:8px 10px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; white-space:normal; }
 #parametres .parametres-choix .choix-groupe .choix-bouton.actif,
 #parametres .parametres-choix .choix-groupe .choix-bouton.selectionne,
-#parametres .parametres-choix .choix-groupe .choix-bouton[aria-pressed="true"] { border-color:var(--jaune-interface); color:var(--texte-sur-jaune); background:var(--jaune-interface); }
+#parametres .parametres-choix .choix-groupe .choix-bouton[aria-pressed="true"] { border-color:#4f8cff; color:var(--texte); background:rgba(79,140,255,.16); box-shadow:inset 0 0 0 1px #4f8cff; }
 #parametres .parametre-volume .curseur { width:100%; height:46px; min-height:46px; margin:0; accent-color:var(--jaune-interface); }
 #parametres .parametre-sauvegarde { grid-column:1/-1; grid-template-columns:minmax(180px,.65fr) minmax(0,1.35fr); min-height:0; align-items:center; }
 #parametres .parametre-sauvegarde p { margin:0; color:var(--texte-secondaire); line-height:1.5; }
@@ -10903,10 +11049,14 @@ body[data-ecran-actif="accueil"] #accueil {
 #parametres .parametres-actions-boutons > button,
 #parametres .progression-importation { display:flex; align-items:center; justify-content:center; min-height:46px; padding:10px 14px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; text-align:center; cursor:pointer; }
 #parametres .fichier-importation-visuellement-cache { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); border:0; white-space:nowrap; }
-#parametres .parametres-actions-boutons .principal { border-color:var(--jaune-interface); color:var(--texte-sur-jaune); background:var(--jaune-interface); }
+#parametres .parametres-actions-boutons .principal { border-color:#6f94c0; color:var(--texte); background:var(--surface-carte-profonde); }
+#parametres .parametres-actions-boutons .principal:hover,
+#parametres .parametres-actions-boutons .principal:focus-visible { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.08); }
 #parametres .parametres-actions-principales { grid-column:1/-1; display:flex; justify-content:flex-start; padding-top:4px; }
 #parametres .parametres-actions-principales button { min-height:50px; padding:11px 28px; border-radius:12px; font-weight:850; }
-#parametres .parametres-actions-principales .principal { border:1px solid var(--jaune-interface); color:var(--texte-sur-jaune); background:var(--jaune-interface); }
+#parametres .parametres-actions-principales .principal { border:1px solid #6f94c0; color:var(--texte); background:var(--surface-carte-profonde); }
+#parametres .parametres-actions-principales .principal:hover,
+#parametres .parametres-actions-principales .principal:focus-visible { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.08); }
 #parametres .parametres-zone-sensible { grid-column:1/-1; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:18px; margin-top:8px; padding:18px 20px; border:1px solid rgba(202,52,83,.72); border-radius:var(--rayon-grand); background:rgba(202,52,83,.09); }
 #parametres .parametres-zone-sensible-texte { display:grid; gap:5px; }
 #parametres .parametres-zone-sensible h2 { margin:0; color:var(--texte); font-size:1rem; }
@@ -10934,7 +11084,7 @@ body[data-ecran-actif="accueil"] #accueil {
 }/* Mission Sigles — mini-PJJoue V1. Les styles reprennent les codes visuels du site. */
 #sigles { --sigles-vert-parcours-6:#0f766e; --sigles-vert-parcours-6-lisible:#70d6ca; }
 #sigles .sigles-vue { width:min(1180px,100%); margin:0 auto; }
-#sigles .sigles-retour { margin:0 0 14px; }
+#sigles .sigles-retour { margin:0 0 24px; }
 #sigles .sigles-accueil-entete,
 #sigles .sigles-page-secondaire-entete { margin-bottom:20px; }
 #sigles .sigles-accueil-entete p,
@@ -11487,16 +11637,16 @@ body[data-ecran-actif="accueil"] #accueil {
 
 #bilan .bilan-actions .principal {
     order: -1;
-    color: var(--texte-sur-jaune);
-    border-color: #ffe7a7;
-    background: var(--jaune-interface);
+    color: var(--texte);
+    border-color: #6f94c0;
+    background: var(--surface-carte-profonde);
 }
 
 #bilan .bilan-actions .principal:hover,
 #bilan .bilan-actions .principal:focus-visible {
-    color: var(--texte-sur-jaune);
-    border-color: #fff1c7;
-    background: var(--accent-survol);
+    color: var(--texte);
+    border-color: var(--jaune-interface);
+    background: rgba(255,200,61,.08);
 }
 
 #bilan .bilan-actions .secondaire {

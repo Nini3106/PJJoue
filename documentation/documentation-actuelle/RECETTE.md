@@ -39,21 +39,23 @@ Cela détecte notamment un fichier public modifié directement au lieu d’être
 
 ## Vérification visuelle réelle
 
-Créer 14 captures Chromium couvrant ordinateur, portable et mobile :
+La recette Chromium couvre les vues clés de l’application en bureau et mobile :
 
 ```bash
 npm run test:visuel
 ```
 
-Les images sont écrites dans `test-results/regression-visuelle/`.
+Les images sont écrites dans `test-results/regression-visuelle-moderne/`. Le contrôle normal reste portable : les assertions DOM, dimensions, débordements, comportement et captures sont bloquants, mais une différence de rasterisation entre versions de Chromium n’est pas traitée comme une régression.
 
-Pendant un nettoyage qui ne doit rien changer visuellement, comparer directement avec la version de référence :
+Pour demander volontairement une comparaison pixel par pixel, utiliser un environnement correspondant exactement à `tests/references-visuelles/environnement-reference.json`, puis définir `PJJOUE_COMPARAISON_PIXELS_EXACTE=1` avant de lancer le test. Le script refuse le mode exact si le système ou le Chromium majeur ne correspondent pas.
+
+Après une modification visuelle validée, les références peuvent être régénérées **uniquement sous Linux** :
 
 ```bash
-python tests/verifier_regression_visuelle.py --reference-projet CHEMIN_DE_LA_VERSION_REFERENCE
+python tests/verifier_regression_visuelle.py --actualiser-references
 ```
 
-Le test compare alors les pixels des mêmes 14 vues dans le même Chromium. Toute différence fait échouer le contrôle et les deux captures concernées sont conservées pour comparaison.
+Cette commande actualise également `environnement-reference.json`. Ne jamais régénérer les références depuis Windows.
 
 ## CSS
 

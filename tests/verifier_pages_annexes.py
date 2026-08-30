@@ -32,6 +32,7 @@ PAGES_BUREAU = [
     "administration.html",
 ]
 PAGES_MOBILE = ["guides/index.html", "decouvrir-la-pjj/index.html", "sources.html", "administration.html"]
+PAGES_GUIDES = set(PAGES_BUREAU[:10])
 SCRIPTS_VISUELS = {"donnees-pjj.js", "sources-pjjoue.js", "administration.js"}
 
 
@@ -85,14 +86,32 @@ def construire_page(adresse: str) -> str:
 
 def verifier_page(page, nom: str) -> None:
     page.wait_for_timeout(260)
-    donnees = page.evaluate("""() => {
+    donnees = page.evaluate(r"""() => {
         const h1 = document.querySelector('h1');
         const style = getComputedStyle(document.body);
+        const retour = document.querySelector('main > .page-information-retour');
+        const enteteApresRetour = retour?.nextElementSibling?.matches('header') ? retour.nextElementSibling : null;
+        const rectangleRetour = retour?.getBoundingClientRect();
+        const rectangleEntete = enteteApresRetour?.getBoundingClientRect();
+        const lireCouleur = valeur => {
+            const m = valeur.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?\)/i);
+            return m ? {r:Number(m[1]),g:Number(m[2]),b:Number(m[3]),a:m[4] == null ? 1 : Number(m[4])} : null;
+        };
+        const boutonsJaunes = [...document.querySelectorAll('button, [role="button"], a[class*="bouton"]')].filter(element => {
+            const s = getComputedStyle(element);
+            const r = element.getBoundingClientRect();
+            if (s.display === 'none' || s.visibility === 'hidden' || r.width <= 0 || r.height <= 0) return false;
+            const c = lireCouleur(s.backgroundColor);
+            return c && c.a >= .72 && c.r >= 225 && c.g >= 150 && c.g <= 225 && c.b <= 120;
+        }).map(element => element.id || element.className || element.textContent.trim().slice(0, 60));
         return {
             largeur: document.documentElement.scrollWidth - document.documentElement.clientWidth,
             h1: Boolean(h1 && h1.getBoundingClientRect().width > 20 && h1.getBoundingClientRect().height > 20),
             fond: style.backgroundColor,
             couleur: style.color,
+            retourVisible: Boolean(rectangleRetour && rectangleRetour.width > 20 && rectangleRetour.height >= 40),
+            espaceRetourEntete: rectangleRetour && rectangleEntete ? rectangleEntete.top - rectangleRetour.bottom : null,
+            boutonsJaunes,
         };
     }""")
     if donnees["largeur"] > 1:
@@ -103,6 +122,15 @@ def verifier_page(page, nom: str) -> None:
         raise AssertionError(f"{nom}: le fond bleu PJJoue validé #16477d a changé ({donnees['fond']})")
     if donnees["couleur"] != "rgb(255, 255, 255)":
         raise AssertionError(f"{nom}: la couleur de texte blanche validée a changé ({donnees['couleur']})")
+    if donnees["boutonsJaunes"]:
+        raise AssertionError(f"{nom}: bouton jaune plein détecté : {donnees['boutonsJaunes']}")
+    if nom in PAGES_GUIDES:
+        if not donnees["retourVisible"]:
+            raise AssertionError(f"{nom}: bouton Retour absent ou non visible")
+        if donnees["espaceRetourEntete"] is None or abs(donnees["espaceRetourEntete"] - 24) > 1:
+            raise AssertionError(
+                f"{nom}: espace Retour → en-tête différent de 24 px ({donnees['espaceRetourEntete']})"
+            )
 
 
 def options_chromium() -> dict:

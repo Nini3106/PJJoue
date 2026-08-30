@@ -66,7 +66,7 @@
 #supports .masque-recherche-support { display:none; }
 #supports .supports-filtres { display:flex; flex-wrap:wrap; gap:8px; }
 #supports .supports-filtres button { min-width:48px; min-height:42px; padding:0 14px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; }
-#supports .supports-filtres button.actif { border-color:var(--jaune-interface); color:var(--texte-sur-jaune); background:var(--jaune-interface); }
+#supports .supports-filtres button.actif { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.10); box-shadow:inset 0 0 0 1px var(--jaune-interface); }
 #supports .supports-parcours-badges { display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
 #supports .support-parcours-badge { display:inline-flex; align-items:center; min-height:27px; padding:2px 9px; border:1px solid currentColor; border-radius:999px; font-size:.9rem; font-style:normal; font-weight:900; }
 #supports .support-parcours-1 { color:#9fc2ff; } #supports .support-parcours-2 { color:#ffd36a; }

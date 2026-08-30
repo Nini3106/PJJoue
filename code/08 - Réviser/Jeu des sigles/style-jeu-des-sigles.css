@@ -2,7 +2,7 @@
 /* Mission Sigles — mini-PJJoue V1. Les styles reprennent les codes visuels du site. */
 #sigles { --sigles-vert-parcours-6:#0f766e; --sigles-vert-parcours-6-lisible:#70d6ca; }
 #sigles .sigles-vue { width:min(1180px,100%); margin:0 auto; }
-#sigles .sigles-retour { margin:0 0 14px; }
+#sigles .sigles-retour { margin:0 0 24px; }
 #sigles .sigles-accueil-entete,
 #sigles .sigles-page-secondaire-entete { margin-bottom:20px; }
 #sigles .sigles-accueil-entete p,

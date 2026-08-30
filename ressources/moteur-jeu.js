@@ -4264,14 +4264,18 @@ function appliquerIdentiteVisuelleEtape(question) {
 }
 function actualiserSuiviEtapeQuestion(question) {
     const conteneur = selectionner('#contexteEtapeQuestion');
+    const identiteParcoursQuestion = selectionner('#identiteParcoursQuestion');
+    const numeroParcours = selectionner('#numeroParcoursQuestion');
+    const titreParcours = selectionner('#titreParcoursQuestion');
     const numero = selectionner('#numeroEtapeQuestion');
     const titre = selectionner('#titreEtapeQuestion');
     const suivi = selectionner('#suiviSansJokerQuestion');
     const compteur = selectionner('#compteurSansJokerQuestion');
     const boutonReinitialiser = selectionner('#boutonReinitialiserValidationsSansJoker');
-    if (!conteneur || !numero || !titre || !suivi || !compteur || !boutonReinitialiser || !question)
+    if (!conteneur || !identiteParcoursQuestion || !numeroParcours || !titreParcours || !numero || !titre || !suivi || !compteur || !boutonReinitialiser || !question)
         return;
     if (question.missionSigles) {
+        identiteParcoursQuestion.classList.add('masque');
         const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
         const identite = obtenirIdentiteEtapeMissionSigles(numeroEtape);
         const finaleMission = obtenirModeMissionSigles() === 'evaluation';
@@ -4284,9 +4288,12 @@ function actualiserSuiviEtapeQuestion(question) {
         }
         return;
     }
+    identiteParcoursQuestion.classList.remove('masque');
     const finale = etat.mode === 'evaluation-finale' || Number(question.etape) === 12;
     const etapeProgramme = obtenirEtapeProgramme(question.theme, question.etape);
     const identite = obtenirIdentiteParcours(question.theme);
+    numeroParcours.textContent = `Parcours ${identite.numero}`;
+    titreParcours.textContent = identite.titre;
     const ecranQuestion = selectionner('#question');
     ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
     ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);

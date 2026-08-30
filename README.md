@@ -198,7 +198,7 @@ La version consolidée du 28 août 2026 a été contrôlée sur ses données, se
 ## Architecture visuelle moderne
 
 L’interface principale est construite à partir des fragments HTML, JavaScript et CSS déclarés dans `code/plan-construction.json`. La base commune se trouve dans `code/01 - Éléments communs/style-general-pjjoue.css`, puis les styles propres aux pages complètent cette base. Le constructeur assemble ces sources dans l’unique feuille publique `ressources/styles/pjjoue-principal.css`. Les pages autonomes partagent `static-pages.css`, et le consentement Analytics possède son composant dédié.
-L’identité repose sur un bleu PJJoue profond et un jaune franc : fond général `#16477d`, en-tête `#0b315d`, texte principal `#f7f8ff`, cartes bleues `#10477f` ou `#0b3d70` et action principale `#ffc83d`. Les six parcours possèdent chacun leur couleur d’accent. Ces choix sont définis directement dans le design system, sans feuille de surcharge ajoutée en fin de cascade.
+L’identité repose sur un bleu PJJoue profond et un jaune franc : fond général `#16477d`, en-tête `#0b315d`, texte principal `#f7f8ff`, cartes bleues `#10477f` ou `#0b3d70` et accent d’interface `#ffc83d`. Les actions importantes restent sur fond bleu/sombre : le jaune sert aux contours, repères, icônes et états de focus, jamais à remplir un bouton. Les six parcours possèdent chacun leur couleur d’accent. Ces choix sont définis directement dans le design system, sans feuille de surcharge ajoutée en fin de cascade.
 Les questions, réponses, modes de jeu et données pédagogiques restent gérés par
 le moteur V1.
 
@@ -218,6 +218,20 @@ Les outils de recette Chromium sont livrés avec le projet afin qu’une personn
 
 Le dossier `test-results/` n’est pas livré : il est recréé automatiquement par les scripts.
 
-Les références visuelles pixel par pixel sont canoniques sous Linux/Chromium, comme la CI GitHub. Sous Windows, le moteur de rendu des polices système (DirectWrite/Segoe UI) peut produire des pixels et des retours à la ligne différents alors que le HTML, le CSS et le JavaScript sont identiques. La recette Windows exécute donc tous les scénarios, assertions DOM, dimensions critiques, contrôles de débordement et captures, tandis que la comparaison bitmap exacte reste bloquante sous Linux/CI. Les références ne doivent pas être régénérées depuis Windows.
+La recette visuelle normale est **portable** : elle exécute tous les scénarios, assertions DOM, dimensions critiques, contrôles de débordement et captures sans rendre un push rouge à cause d’une simple différence de rasterisation entre versions de Chromium ou polices système. Le mode pixel par pixel existe toujours, mais il est **opt-in** avec `PJJOUE_COMPARAISON_PIXELS_EXACTE=1` et n’est accepté que si le système et le Chromium majeur correspondent à `tests/references-visuelles/environnement-reference.json`. Les références ne doivent jamais être régénérées depuis Windows ; `--actualiser-references` est réservé à Linux et met aussi à jour la description de l’environnement de référence. La CI GitHub quotidienne reste donc robuste tout en conservant un contrôle pixel exact reproductible sur l’environnement prévu.
 
 Le contrôle des liens officiels ne bloque que les anomalies confirmées (adresse invalide, HTTP 404 ou 410). Les refus anti-robot, délais réseau, erreurs DNS/SSL ou HTTP temporaires sont signalés pour contrôle humain sans rendre la publication rouge.
+
+## Règles d’harmonisation de l’interface V1
+
+À conserver à chaque évolution de la V1 :
+
+- **aucun bouton jaune plein** : les actions importantes restent sur fond bleu/sombre et prennent un **contour jaune au survol ou au focus** ;
+- les **boutons de jeu** utilisent un contour de la **même couleur que leur icône ou leur mode** ;
+- seule l’action **« Réinitialiser toute la progression »** conserve son traitement rouge de danger ;
+- l’espace entre un bouton **Retour** et le titre qui suit est harmonisé à **24 px** sur les pages de l’application, Mission Sigles et les guides ;
+- le menu principal suit cet ordre : **Accueil, Parcours PJJ, Entraînement libre, Réviser, Progression, Carnet de parcours**, puis la section **Supports** (`Supports de révision`, `Guides`), puis la section **Mini jeux** (`Mission Sigles`, puis les futurs mini-jeux comme `Mission Mesures`) ;
+- sur la page **Réviser**, le bouton **Supports de révision** reste placé à droite du titre sur grand écran ;
+- sur chaque question d’un parcours, afficher le **numéro + nom du parcours** au-dessus du **numéro + nom de l’étape**.
+
+Ces règles font partie de l’identité visuelle de PJJoue V1 et doivent être revérifiées avant chaque push.

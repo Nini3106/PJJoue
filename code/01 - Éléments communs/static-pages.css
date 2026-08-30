@@ -123,7 +123,7 @@ p, li, dd { color: var(--text-soft); }
   color:#fffefa;
   background:#17558f;
 }
-.guide-site-entete.menu-guide-ouvert .guide-bouton-menu-principal { border-color:#ffc83d; color:#082b55; background:#ffc83d; }
+.guide-site-entete.menu-guide-ouvert .guide-bouton-menu-principal { border-color:var(--amber); color:#fffefa; background:#17558f; }
 .guide-bouton-menu-icone { display: grid; gap: 4px; }
 .guide-bouton-menu-icone i { display: block; width: 19px; height: 2px; border-radius: 4px; background: currentColor; transition: transform .16s ease, opacity .16s ease; }
 .guide-site-entete.menu-guide-actif .guide-bouton-menu-principal { display: inline-flex; }
@@ -154,6 +154,12 @@ p, li, dd { color: var(--text-soft); }
 }
 .guide-site-entete.menu-guide-actif .guide-navigation-principale a:hover { color: var(--text); background: var(--surface-raised); }
 .guide-site-entete.menu-guide-actif .guide-navigation-principale a[aria-current="page"] { color: var(--amber); background: var(--accent-doux); }
+.guide-site-entete.menu-guide-actif .guide-navigation-section-titre { display:block; margin:7px 2px 2px; padding:9px 11px 4px; border-top:0; color:var(--amber); font-size:.72rem; font-weight:900; letter-spacing:.11em; text-transform:uppercase; }
+.guide-site-entete.menu-guide-actif .guide-navigation-section-separation { display:block; height:1px; margin:5px 2px; background:rgba(255,255,255,.15); }
+.guide-site-entete.menu-guide-actif .guide-navigation-principale a.guide-navigation-mini-jeu { border:1px solid rgba(255,200,61,.34); }
+.guide-site-entete.menu-guide-actif .guide-navigation-principale a.guide-navigation-mini-jeu:hover,
+.guide-site-entete.menu-guide-actif .guide-navigation-principale a.guide-navigation-mini-jeu:focus-visible { border-color:var(--amber); background:rgba(255,200,61,.08); }
+
 .guide-site-entete.menu-guide-ouvert .guide-bouton-menu-icone i:nth-child(1) { transform: translateY(6px) rotate(45deg); }
 .guide-site-entete.menu-guide-ouvert .guide-bouton-menu-icone i:nth-child(2) { opacity: 0; }
 .guide-site-entete.menu-guide-ouvert .guide-bouton-menu-icone i:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
@@ -167,7 +173,7 @@ p, li, dd { color: var(--text-soft); }
 .page-information, .page-guide { width:min(var(--content),calc(100% - 40px)); margin:42px auto 28px; padding:clamp(24px,4vw,46px); border:1px solid var(--line); border-radius:24px; background:var(--surface); box-shadow:var(--shadow-sm); }
 .page-guide { overflow: hidden; }
 .page-information-retour, .guide-fil-ariane {
-  display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0 8px; margin-bottom: 28px; color: var(--text-soft); font-size: .9rem; font-weight: 720;
+  display:inline-flex; align-items:center; flex-wrap:wrap; gap:0 8px; margin-bottom:24px; color:var(--text-soft); font-size:.9rem; font-weight:720;
 }
 .page-information-retour { min-height: 44px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); text-decoration: none; box-shadow: var(--shadow-xs); }
 .guide-fil-ariane a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text-soft); text-decoration: none; }
@@ -214,10 +220,10 @@ p, li, dd { color: var(--text-soft); }
 
 .guide-bouton, .guide-video-bouton {
   display: inline-flex; align-items: center; justify-content: center; min-height: 46px; margin-top: 6px; padding: 0 18px;
-  border:1px solid var(--amber); border-radius:13px; color:var(--texte-sur-jaune); background:var(--accent);
-  box-shadow:0 8px 20px rgba(8,35,68,.2); cursor:pointer; text-decoration: none; font-weight: 840;
+  border:1px solid #6f94c0; border-radius:13px; color:#fffefa; background:#174f89;
+  box-shadow:none; cursor:pointer; text-decoration:none; font-weight:840;
 }
-.guide-bouton:hover, .guide-video-bouton:hover { color:var(--texte-sur-jaune); background:var(--accent-hover); transform:translateY(-1px); }
+.guide-bouton:hover, .guide-bouton:focus-visible, .guide-video-bouton:hover, .guide-video-bouton:focus-visible { color:#fffefa; border-color:var(--amber); background:rgba(255,200,61,.08); transform:none; }
 
 .page-information button.secondaire {
   min-height: 44px;
