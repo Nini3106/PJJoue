@@ -10,7 +10,7 @@ Cette checklist est obligatoire avant toute publication de PJJoue.
 - Ne pas utiliser `index.html`, `*/index.html`, `ressources/navigation-locale.js` ou `service-worker.js` public comme source de travail.
 - Pour le service worker, modifier `code/01 - Éléments communs/Application installable et hors connexion/service-worker.js`.
 
-## 2. Vérifier les noms de fichiers
+## 2. Vérifier les noms ET l’encodage UTF-8
 
 Exécuter :
 
@@ -34,13 +34,17 @@ Sous Windows :
 CONSTRUIRE_PJJOUE.bat
 ```
 
-Ou :
+Ou, manuellement et **dans cet ordre** :
 
 ```bash
+python outils/construire_donnees.py
 python outils/construire_site.py
+python outils/construire_manifeste.py
 ```
 
-La reconstruction régénère notamment les pages publiques et le service worker.
+La reconstruction régénère les données publiques, les pages, le service worker puis **`MANIFESTE.json` en dernier**.
+
+> Après la génération de `MANIFESTE.json`, toute nouvelle modification d’un fichier impose de relancer `python outils/construire_manifeste.py`.
 
 
 ## 3 bis. Vérifier qu’aucun ancien CSS public ne subsiste
@@ -59,7 +63,13 @@ python outils/construire_site.py --verifier
 
 Résultat attendu : `OK`.
 
-**Si le message « fichiers publics modifiés directement ou non reconstruits » apparaît : ne pas pousser.** Corriger d’abord la source dans `code/`, puis reconstruire.
+Puis vérifier le manifeste :
+
+```bash
+python outils/construire_manifeste.py --verifier
+```
+
+**Si le message « fichiers publics modifiés directement ou non reconstruits » ou « MANIFESTE.json n’est pas à jour » apparaît : ne pas pousser.** Corriger/reconstruire, puis régénérer le manifeste en dernier.
 
 ## 5. Lancer la recette complète
 
@@ -89,16 +99,16 @@ Tous les contrôles doivent être verts.
 
 Seulement lorsque les étapes 1 à 6 sont validées.
 
-> **Règle courte : `code/` → construire → vérifier → tester → pousser.**
+> **Règle courte : UTF-8 → `code/` → construire données/site → régénérer manifeste → vérifier → tester → pousser.**
 
-## 7. Portabilité Windows / Linux
+## 8. Portabilité Windows / Linux
 
 - Les fichiers générés sont écrits avec des fins de ligne LF déterministes, quel que soit le système.
 - Les empreintes Analytics ignorent uniquement la différence technique LF/CRLF ; toute modification réelle du contenu reste bloquée.
 - `PREPARER_PJJOUE_AVANT_PUSH.bat` reconstruit les données, le site, le service worker et `MANIFESTE.json` avant la recette.
 - Ne jamais modifier une empreinte Analytics pour faire passer un test : si elle échoue, comparer d'abord la source protégée et le fichier public.
 
-## 8. Contrôles réseau et visuels portables
+## 9. Contrôles réseau et visuels portables
 
 - Un lien officiel en **404/410** ou une adresse invalide reste bloquant.
 - Un **403**, un délai dépassé, une erreur DNS/SSL ou un refus anti-robot est signalé en avertissement : ce n'est pas une preuve que le lien est mort.

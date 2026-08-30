@@ -20,12 +20,23 @@ Avant chaque push :
 
 ```bash
 python outils/verifier_noms_fichiers.py
+python outils/construire_donnees.py
 python outils/construire_site.py
+python outils/construire_manifeste.py
 python outils/construire_site.py --verifier
+python outils/construire_manifeste.py --verifier
 npm test
 ```
 
-Si un dossier porte un nom corrompu contenant `├`, `Ã`, `Â` ou `�`, arrêter immédiatement : il s’agit probablement d’un problème d’encodage d’archive. Les dossiers français accentués doivent conserver leur orthographe exacte.
+### UTF-8 : règle non négociable
+
+Les chemins français accentués doivent rester **strictement en UTF-8**. Si un dossier contient `├`, `Ã`, `Â`, `ÔÇ`, `ΓÇ` ou `�`, arrêter immédiatement : il s’agit d’un encodage corrompu. `Éléments communs`, `Entraînement libre`, `Réviser` et `Paramètres` doivent conserver exactement ces noms.
+
+`outils/verifier_noms_fichiers.py` contrôle les noms et l’encodage UTF-8 des fichiers texte. Pour créer un ZIP, utiliser `python outils/creer_archive_utf8.py` afin que les noms accentués portent bien l’indicateur UTF-8 dans l’archive.
+
+### Manifeste : toujours en dernier
+
+`MANIFESTE.json` est une photographie d’intégrité du projet. **Après toute modification, reconstruction ou restauration de fichier, il faut le régénérer en dernier** avec `python outils/construire_manifeste.py`. Aucune modification ne doit intervenir entre cette génération et le commit sans une nouvelle génération du manifeste.
 
 ## Où modifier ?
 

@@ -12,6 +12,41 @@ Une personne doit pouvoir regarder un élément à l’écran, retenir son nom o
 
 ---
 
+## RÈGLE ZÉRO — UTF-8 obligatoire et manifeste toujours à jour
+
+Cette règle prime sur toutes les autres règles d’organisation.
+
+### Encodage
+
+- Tous les fichiers texte de PJJoue doivent être enregistrés en **UTF-8**.
+- Tous les noms de fichiers et dossiers doivent conserver leurs caractères français exacts.
+- Les noms mojibake tels que `├ël├®ments communs`, `Entra├«nement libre`, `R├®viser`, `Param├¿tres`, `ÔÇÖ` ou `ΓÇÖ` sont interdits.
+- Une archive ZIP destinée à transmettre PJJoue doit conserver le **drapeau UTF-8** pour chaque chemin non ASCII.
+- Pour créer une archive, utiliser `python outils/creer_archive_utf8.py` plutôt qu’un outil ou une méthode d’archivage non vérifiée.
+- Avant tout commit : `python outils/verifier_noms_fichiers.py` doit répondre OK.
+
+### Manifeste
+
+`MANIFESTE.json` doit correspondre exactement au contenu qui sera commité. Il doit être généré **après** les données et le site :
+
+```bash
+python outils/construire_donnees.py
+python outils/construire_site.py
+python outils/construire_manifeste.py
+```
+
+Puis il doit être vérifié :
+
+```bash
+python outils/construire_manifeste.py --verifier
+```
+
+**Toute modification effectuée après la génération de `MANIFESTE.json` impose de le régénérer.** Il est interdit de pousser un manifeste ancien ou calculé avant les derniers changements.
+
+Sous Windows, `PREPARER_PJJOUE_AVANT_PUSH.bat` est la procédure obligatoire : elle applique cet ordre et effectue une vérification finale.
+
+---
+
 ## 1. Le nom du code doit être fidèle au visuel
 
 Chaque élément visible doit être nommé d’après **ce que l’utilisateur voit ou comprend à l’écran**.

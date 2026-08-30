@@ -50,13 +50,48 @@ Toute correction doit suivre cet ordre, sans exception :
 
 Le `service-worker.js` public doit donc toujours être régénéré à partir de sa source située dans `code/01 - Éléments communs/Application installable et hors connexion/`. Le même principe s’applique aux guides, à l’accueil, aux pages légales et à la navigation locale.
 
-### Archives ZIP et accents français
+### ⚠️ UTF-8 obligatoire pour les fichiers, dossiers et archives ZIP
 
-Les noms de dossiers accentués (`Éléments communs`, `Métiers de la PJJ`, etc.) doivent rester strictement intacts. **Ne jamais publier un dossier dont le nom contient des caractères corrompus** comme `├`, `Ã`, `Â` ou `�`. Un tel dossier est généralement un doublon créé par un mauvais encodage ZIP et n’est pas utilisé par le constructeur.
+PJJoue utilise des noms français accentués (`Éléments communs`, `Entraînement libre`, `Réviser`, `Paramètres`, etc.). **Ils doivent impérativement rester encodés en UTF-8 de bout en bout.**
 
-Le contrôle `python outils/verifier_noms_fichiers.py` est exécuté automatiquement par `npm test` et par la recette Windows. S’il échoue, **ne pas pousser**.
+- Ne jamais créer ou distribuer une archive ZIP qui perd le marquage UTF-8 des noms de fichiers.
+- Ne jamais renommer manuellement un chemin accentué en version dégradée ou « compatible ».
+- **Ne jamais publier** un chemin contenant `├`, `Ã`, `Â`, `ÔÇ`, `ΓÇ`, `�` ou tout autre mojibake.
+- Un dossier comme `code/01 - ├ël├®ments communs` est **interdit** : le seul nom valide est `code/01 - Éléments communs`.
+- Tous les fichiers texte du projet doivent être lisibles en UTF-8.
 
-Pour une publication normale, le réflexe recommandé est : **modifier dans `code/` → construire → vérifier → pousser**.
+Le contrôle `python outils/verifier_noms_fichiers.py` vérifie désormais **les noms ET l’encodage UTF-8 du contenu des fichiers texte**. S’il échoue : **STOP, aucun commit/push**.
+
+Pour fabriquer une archive à transmettre, utiliser exclusivement :
+
+```bash
+python outils/creer_archive_utf8.py
+```
+
+Le script refuse les noms corrompus, vérifie l’UTF-8, crée le ZIP avec les indicateurs UTF-8 corrects puis relit l’archive pour contrôler son intégrité.
+
+### ⚠️ `MANIFESTE.json` doit toujours être régénéré en dernier
+
+`MANIFESTE.json` décrit l’état exact de la livraison. **Toute modification d’un fichier du projet rend le manifeste précédent obsolète.**
+
+L’ordre obligatoire est :
+
+```text
+modifier les sources → construire les données → construire le site → régénérer MANIFESTE.json → vérifier/tester → commit/push
+```
+
+Commandes :
+
+```bash
+python outils/construire_donnees.py
+python outils/construire_site.py
+python outils/construire_manifeste.py
+python outils/construire_manifeste.py --verifier
+```
+
+**Ne jamais modifier un fichier après la génération du manifeste sans régénérer `MANIFESTE.json`.** `PREPARER_PJJOUE_AVANT_PUSH.bat` applique automatiquement cet ordre et refait une vérification finale du manifeste juste avant d’autoriser le push.
+
+Pour une publication normale, le réflexe recommandé est : **modifier dans `code/` → construire → manifeste → vérifier → pousser**.
 
 ## Organisation du code
 

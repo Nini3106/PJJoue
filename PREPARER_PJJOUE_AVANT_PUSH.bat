@@ -6,6 +6,12 @@ echo ============================================================
 echo PJJoue V1 - Preparation obligatoire avant push
 echo ============================================================
 echo.
+echo REGLES BLOQUANTES :
+echo - tous les noms accentues et fichiers texte doivent rester en UTF-8 ;
+echo - aucun chemin corrompu de type ^"├^", ^"Ã^", ^"ÔÇ^", ^"ΓÇ^" ou ^"�^" ;
+echo - MANIFESTE.json est regenere APRES les donnees et le site ;
+echo - toute modification apres le manifeste impose de le regenerer.
+echo.
 
 call :trouver_python
 if errorlevel 1 goto erreur_python
@@ -13,27 +19,40 @@ if errorlevel 1 goto erreur_python
 call :preparer_outils_node
 if errorlevel 1 goto erreur_node
 
-echo 1/3 - Verification des noms de fichiers et dossiers...
+echo 1/4 - Verification UTF-8 des noms et fichiers texte...
 %PYTHON_PJJOUE% outils\verifier_noms_fichiers.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 2/3 - Reconstruction des donnees, fichiers publics, service worker et manifeste...
+echo 2/4 - Reconstruction des donnees et fichiers publics...
 %PYTHON_PJJOUE% outils\construire_donnees.py
 if errorlevel 1 goto erreur
 %PYTHON_PJJOUE% outils\construire_site.py
 if errorlevel 1 goto erreur
+
+echo.
+echo 3/4 - Generation OBLIGATOIRE de MANIFESTE.json en dernier...
 %PYTHON_PJJOUE% outils\construire_manifeste.py
+if errorlevel 1 goto erreur
+%PYTHON_PJJOUE% outils\construire_manifeste.py --verifier
 if errorlevel 1 goto erreur
 
 echo.
-echo 3/3 - Recette complete avant publication...
+echo 4/4 - Recette complete avant publication...
 call VERIFIER_PJJOUE.bat
+if errorlevel 1 goto erreur
+
+echo.
+echo Verification finale : UTF-8 et manifeste toujours inchanges apres la recette...
+%PYTHON_PJJOUE% outils\verifier_noms_fichiers.py
+if errorlevel 1 goto erreur
+%PYTHON_PJJOUE% outils\construire_manifeste.py --verifier
 if errorlevel 1 goto erreur
 
 echo.
 echo ============================================================
 echo PJJoue est pret pour le commit et le push.
+echo UTF-8 valide et MANIFESTE.json confirme a jour.
 echo ============================================================
 pause
 exit /b 0
@@ -81,6 +100,7 @@ echo.
 echo ============================================================
 echo ECHEC - NE PAS POUSSER CETTE VERSION.
 echo Corrige le probleme indique ci-dessus, puis relance ce fichier.
+echo Rappel : UTF-8 obligatoire et MANIFESTE.json genere en dernier.
 echo ============================================================
 pause
 exit /b 1

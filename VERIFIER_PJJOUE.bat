@@ -12,7 +12,7 @@ if errorlevel 1 goto erreur_python
 
 if not exist "node_modules\.bin\eslint.cmd" goto erreur_node
 
-echo 1/12 - Verification des noms de fichiers et dossiers...
+echo 1/12 - Verification UTF-8 des noms et fichiers texte...
 %PYTHON_PJJOUE% outils\verifier_noms_fichiers.py
 if errorlevel 1 goto erreur
 

@@ -29,7 +29,8 @@
     "test:pages-annexes": "python tests/verifier_pages_annexes.py",
     "test:sigles": "python tests/verifier_jeu_sigles.py",
     "controle:noms-fichiers": "python outils/verifier_noms_fichiers.py",
-    "controle:manifeste": "python outils/construire_manifeste.py --verifier"
+    "controle:manifeste": "python outils/construire_manifeste.py --verifier",
+    "archive:utf8": "python outils/creer_archive_utf8.py"
   },
   "keywords": [
     "PJJ",

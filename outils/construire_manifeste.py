@@ -56,8 +56,8 @@ def decrire_fichier(chemin: Path) -> dict[str, int | str]:
     }
 
 
-def construire_manifeste() -> dict[str, object]:
-    """Construit le contenu complet du manifeste à partir des fichiers présents."""
+def construire_manifeste(date_consolidation: str | None = None) -> dict[str, object]:
+    """Construit le manifeste ; la date peut être figée pour une vérification reproductible."""
     questions = json.loads((RACINE_PROJET / "donnees/questions.json").read_text(encoding="utf-8"))
     questions_parcours = [question for question in questions if not question.get("estEvaluationFinale")]
     questions_evaluation = [question for question in questions if question.get("estEvaluationFinale")]
@@ -71,7 +71,7 @@ def construire_manifeste() -> dict[str, object]:
         "produit": "PJJoue",
         "version": "V1",
         "dateCreation": "août 2026",
-        "dateConsolidation": date.today().isoformat(),
+        "dateConsolidation": date_consolidation or date.today().isoformat(),
         "composition": {
             "questionsTotales": len(questions),
             "questionsParcours": len(questions_parcours),
@@ -93,11 +93,19 @@ def principal() -> None:
     )
     options = analyseur.parse_args()
 
-    manifeste = construire_manifeste()
-    contenu = (json.dumps(manifeste, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    date_consolidation = None
     if options.verifier:
         if not FICHIER_MANIFESTE.is_file():
             raise SystemExit("ÉCHEC — MANIFESTE.json est absent. Lance python outils/construire_manifeste.py.")
+        try:
+            manifeste_existant = json.loads(FICHIER_MANIFESTE.read_text(encoding="utf-8"))
+            date_consolidation = manifeste_existant.get("dateConsolidation")
+        except (UnicodeDecodeError, json.JSONDecodeError, AttributeError):
+            raise SystemExit("ÉCHEC — MANIFESTE.json n’est pas un JSON UTF-8 valide. Régénère-le.")
+
+    manifeste = construire_manifeste(date_consolidation=date_consolidation)
+    contenu = (json.dumps(manifeste, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    if options.verifier:
         if FICHIER_MANIFESTE.read_bytes() != contenu:
             raise SystemExit(
                 "ÉCHEC — MANIFESTE.json n’est pas à jour. Lance python outils/construire_manifeste.py puis relance les contrôles."

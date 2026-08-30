@@ -87,3 +87,17 @@ python outils/construire_manifeste.py
 ```
 
 Puis faire un dernier contrôle visuel manuel des écrans principaux, en particulier après toute modification CSS.
+
+## Garde-fous obligatoires : UTF-8 et manifeste
+
+La recette est invalide si les noms de fichiers/dossiers ne sont pas en UTF-8 correct ou si `MANIFESTE.json` ne correspond pas au dernier état du projet.
+
+Avant le verdict final :
+
+```bash
+python outils/verifier_noms_fichiers.py
+python outils/construire_manifeste.py --verifier
+```
+
+Pour produire une archive de livraison, utiliser `python outils/creer_archive_utf8.py`. Le ZIP doit être relu automatiquement et tous les chemins non ASCII doivent porter le drapeau UTF-8.
+

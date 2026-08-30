@@ -73,6 +73,37 @@ class TestConstructionPortable(unittest.TestCase):
             crlf = module.decrire_fichier(fichier)
             self.assertEqual(lf, crlf)
 
+    def test_manifeste_peut_figer_la_date_pour_verification(self):
+        chemin_module = Path(__file__).resolve().parents[1] / "outils" / "construire_manifeste.py"
+        spec = importlib.util.spec_from_file_location("construire_manifeste_date_stable", chemin_module)
+        module = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(module)
+
+        manifeste = module.construire_manifeste(date_consolidation="2026-08-29")
+        self.assertEqual(manifeste["dateConsolidation"], "2026-08-29")
+
+    def test_detection_des_noms_mojibake_et_nfc(self):
+        chemin_module = Path(__file__).resolve().parents[1] / "outils" / "verifier_noms_fichiers.py"
+        spec = importlib.util.spec_from_file_location("verifier_noms_utf8", chemin_module)
+        module = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(module)
+
+        self.assertTrue(module.nom_suspect("Param├¿tres"))
+        self.assertFalse(module.nom_suspect("Paramètres"))
+        self.assertTrue(module.nom_suspect("Parame\u0300tres"))
+
+    def test_zip_python_marque_les_chemins_accentues_en_utf8(self):
+        import zipfile
+        with tempfile.TemporaryDirectory() as dossier:
+            chemin = Path(dossier) / "test.zip"
+            with zipfile.ZipFile(chemin, "w") as archive:
+                archive.writestr("code/01 - Éléments communs/LIRE-MOI.md", "ok")
+            with zipfile.ZipFile(chemin) as archive:
+                info = archive.getinfo("code/01 - Éléments communs/LIRE-MOI.md")
+                self.assertTrue(info.flag_bits & 0x800)
+
 
 if __name__ == "__main__":
     unittest.main()

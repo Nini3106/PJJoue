@@ -635,8 +635,8 @@
     "chapitre": 1,
     "enonce": "Quelles situations peuvent caractériser un mineur en danger ?",
     "libelleMode": "Sélection multiple",
-    "explication": "Des violences répétées ou une santé gravement négligée peuvent caractériser un danger. Un désaccord ponctuel ou une baisse passagère ne suffisent pas, à eux seuls.",
-    "indice": "Cherche les atteintes graves à la sécurité ou à la santé, pas une difficulté ordinaire et isolée.",
+    "explication": "Des violences répétées ou une santé gravement négligée peuvent caractériser un danger. Un échec scolaire important ou une condamnation pénale ne suffisent pas, à eux seuls, à caractériser cette situation.",
+    "indice": "Cherche les atteintes graves à la sécurité ou à la santé, pas seulement une difficulté scolaire ou une situation pénale.",
     "source": "LEGIFRANCE_ASSISTANCE_EDUCATIVE",
     "referencesSources": [
       "ENPJJ_DPJJ",
@@ -668,11 +668,11 @@
         },
         {
           "id": "q13_p2",
-          "texte": "Un désaccord ponctuel sur les devoirs"
+          "texte": "Un échec scolaire important"
         },
         {
           "id": "q13_p3",
-          "texte": "Une baisse passagère des résultats scolaires"
+          "texte": "Une condamnation pénale"
         }
       ],
       "reponses": [
