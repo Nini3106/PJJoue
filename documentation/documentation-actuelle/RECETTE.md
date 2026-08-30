@@ -22,6 +22,7 @@ Avant les tests, PJJoue vérifie maintenant que les fichiers publics corresponde
 
 ```bash
 python outils/construire_site.py --verifier
+python outils/construire_seo.py --verifier
 ```
 
 Cela détecte notamment un fichier public modifié directement au lieu d’être reconstruit.
@@ -101,3 +102,8 @@ python outils/construire_manifeste.py --verifier
 
 Pour produire une archive de livraison, utiliser `python outils/creer_archive_utf8.py`. Le ZIP doit être relu automatiquement et tous les chemins non ASCII doivent porter le drapeau UTF-8.
 
+
+
+## Garde-fou SEO et URL propres
+
+À chaque évolution de la V1, `python outils/construire_seo.py --verifier` doit passer avant publication. Il contrôle les balises SEO des pages indexables, les URL propres de l’application, les relais `noindex,follow` et `sitemap.xml`. Si le SEO/sitemap est reconstruit, `MANIFESTE.json` doit être régénéré ensuite, en dernier.

@@ -79,6 +79,7 @@ def main() -> int:
     executer('outils/verifier_noms_fichiers.py')
     executer('outils/construire_donnees.py', '--verifier')
     executer('outils/construire_site.py', '--verifier')
+    executer('outils/construire_seo.py', '--verifier')
     executer('outils/construire_manifeste.py', '--verifier')
 
     sortie.parent.mkdir(parents=True, exist_ok=True)

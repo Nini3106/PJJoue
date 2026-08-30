@@ -19,6 +19,8 @@ import sys
 
 RACINE = Path(__file__).resolve().parents[1]
 CHEMIN_PLAN = RACINE / "code" / "plan-construction.json"
+CHEMIN_ROUTES = RACINE / "code" / "routes-application.json"
+CHEMIN_PROGRAMME = RACINE / "donnees" / "programme.json"
 MOTIF_MARQUEUR_HTML = re.compile(r"\{\{[A-Z0-9_]+\}\}")
 MOTIF_RESSOURCE_CACHE = re.compile(r"['\"](\./[^'\"]*)['\"]")
 EXTENSIONS_TEXTE_EMPREINTE = {
@@ -282,6 +284,71 @@ def construire_css(plan: dict) -> dict[str, str]:
     return resultat
 
 
+def charger_routes_application() -> dict[str, str]:
+    if not CHEMIN_ROUTES.is_file():
+        raise ErreurConstruction("Le fichier code/routes-application.json est introuvable.")
+    try:
+        routes = json.loads(CHEMIN_ROUTES.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as erreur:
+        raise ErreurConstruction(f"code/routes-application.json n'est pas un JSON valide : {erreur}") from erreur
+    if not isinstance(routes, dict) or routes.get("accueil") != "":
+        raise ErreurConstruction("code/routes-application.json doit contenir accueil avec une route vide.")
+    valeurs = [str(route).strip("/") for route in routes.values() if str(route).strip("/")]
+    verifier_aucun_doublon(valeurs, "Route propre")
+    for ecran, route in routes.items():
+        route = str(route)
+        if route.startswith("/") or route.endswith("/") or "//" in route or "#" in route or "?" in route:
+            raise ErreurConstruction(f"Route propre invalide pour {ecran} : {route!r}")
+    return {str(ecran): str(route) for ecran, route in routes.items()}
+
+
+def construire_relais_route(route: str, profondeur: int) -> str:
+    route_encodee = route.replace("/", "%2F")
+    retour_racine = "../" * profondeur
+    destination = f"{retour_racine}?pjjoue_route={route_encodee}"
+    script_destination = json.dumps(destination, ensure_ascii=False)
+    return (
+        '<!doctype html>\n'
+        '<html lang="fr">\n'
+        '<head>\n'
+        '  <meta charset="utf-8">\n'
+        '  <meta name="viewport" content="width=device-width,initial-scale=1">\n'
+        '  <meta name="robots" content="noindex,follow">\n'
+        '  <link rel="canonical" href="https://pjjoue.fr/">\n'
+        f'  <meta http-equiv="refresh" content="0;url={destination}">\n'
+        '  <title>Ouverture de PJJoue</title>\n'
+        f'  <script>location.replace(new URL({script_destination}, location.href).href);</script>\n'
+        '</head>\n'
+        '<body>\n'
+        '  <h1>Ouverture de PJJoue</h1>\n'
+        f'  <p>Redirection vers la section demandée… <a href="{destination}">Continuer</a></p>\n'
+        '</body>\n'
+        '</html>\n'
+    )
+
+
+def construire_relais_routes() -> dict[str, str]:
+    routes = charger_routes_application()
+    sorties: dict[str, str] = {}
+    for route in routes.values():
+        route = route.strip("/")
+        if not route:
+            continue
+        profondeur = len(route.split("/"))
+        sorties[f"{route}/index.html"] = construire_relais_route(route, profondeur)
+
+    try:
+        programme = json.loads(CHEMIN_PROGRAMME.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as erreur:
+        raise ErreurConstruction(f"donnees/programme.json est illisible : {erreur}") from erreur
+    if not isinstance(programme, dict) or not programme:
+        raise ErreurConstruction("donnees/programme.json doit contenir les parcours.")
+    for identifiant_theme in programme:
+        route = f"parcours/{identifiant_theme}"
+        sorties[f"{route}/index.html"] = construire_relais_route(route, 2)
+    return sorties
+
+
 def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
     sorties: dict[str, str] = {}
 
@@ -291,6 +358,9 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
         sorties[sortie] = contenu
 
     ajouter("index.html", construire_page_principale(plan))
+
+    for sortie, contenu in construire_relais_routes().items():
+        ajouter(sortie, contenu)
 
     for page in plan["pages_autonomes"]:
         ajouter(page["sortie"], lire_texte(page["source"]))

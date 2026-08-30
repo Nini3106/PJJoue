@@ -12,7 +12,7 @@ Une personne doit pouvoir regarder un élément à l’écran, retenir son nom o
 
 ---
 
-## RÈGLE ZÉRO — UTF-8 obligatoire et manifeste toujours à jour
+## RÈGLE ZÉRO — UTF-8, SEO/sitemap et manifeste toujours à jour
 
 Cette règle prime sur toutes les autres règles d’organisation.
 
@@ -27,11 +27,13 @@ Cette règle prime sur toutes les autres règles d’organisation.
 
 ### Manifeste
 
-`MANIFESTE.json` doit correspondre exactement au contenu qui sera commité. Il doit être généré **après** les données et le site :
+`MANIFESTE.json` doit correspondre exactement au contenu qui sera commité. Il doit être généré **après** les données, le site et le SEO/sitemap :
 
 ```bash
 python outils/construire_donnees.py
 python outils/construire_site.py
+python outils/construire_seo.py
+python outils/construire_seo.py --verifier
 python outils/construire_manifeste.py
 ```
 
@@ -42,6 +44,16 @@ python outils/construire_manifeste.py --verifier
 ```
 
 **Toute modification effectuée après la génération de `MANIFESTE.json` impose de le régénérer.** Il est interdit de pousser un manifeste ancien ou calculé avant les derniers changements.
+
+### SEO et URL publiques
+
+À **chaque évolution de la V1**, vérifier les `title`, meta descriptions, canonical, Open Graph, données structurées, URL propres, `robots.txt`, `sitemap.xml` et `lastmod`. Le contrôle obligatoire est :
+
+```bash
+python outils/construire_seo.py --verifier
+```
+
+Les routes propres de l’application (`/parcours/`, `/revision/`, `/supports/`, `/progression/`, etc.) sont des vues internes et non de nouvelles pages SEO : leurs relais doivent rester `noindex,follow`, canoniser vers l’accueil et rester absents du sitemap. En mode `file://`, les fragments `#...` sont conservés uniquement pour la prévisualisation locale.
 
 Sous Windows, `PREPARER_PJJOUE_AVANT_PUSH.bat` est la procédure obligatoire : elle applique cet ordre et effectue une vérification finale.
 
@@ -506,4 +518,4 @@ Cette règle évite qu’une extraction ZIP par-dessus un ancien dossier laisse 
 
 Les fichiers générés ne doivent pas dépendre des fins de ligne du système. Le constructeur écrit volontairement les sorties texte en LF. Les empreintes Analytics tolèrent uniquement la différence LF/CRLF ; elles continuent de bloquer toute modification réelle du contenu protégé.
 
-Avant publication, `PREPARER_PJJOUE_AVANT_PUSH.bat` doit reconstruire les données, le site, le service worker et le manifeste, puis terminer toute la recette sans erreur. Une empreinte protégée ne doit jamais être modifiée uniquement pour contourner un test.
+Avant publication, `PREPARER_PJJOUE_AVANT_PUSH.bat` doit reconstruire les données, le site, le service worker, le SEO/sitemap et le manifeste en dernier, puis terminer toute la recette sans erreur. Une empreinte protégée ne doit jamais être modifiée uniquement pour contourner un test.

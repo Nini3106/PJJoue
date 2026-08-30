@@ -297,6 +297,8 @@ function envoyerUtilisationJoker(type) {
     });
 }
 function estRouteAccueil() {
+    if (typeof lireRoute === 'function')
+        return lireRoute().ecran === 'accueil';
     const fragment = location.hash || '#accueil';
     return fragment === '#accueil' || fragment === '#' || fragment === '';
 }
@@ -925,10 +927,56 @@ let restaurationNavigation = false;
 // Navigation, historique et fenêtres de confirmation
 // -----------------------------------------------------------------------------
 let navigationInterneParFragment = false;
-function routePourEcran(identifiant) {
+function utiliserNavigationParFragment() {
+    return window.location.protocol === 'file:' || !/^https?:$/.test(window.location.protocol);
+}
+function obtenirRacineApplication() {
+    try {
+        return new URL('.', document.baseURI);
+    }
+    catch (erreur) {
+        // Les recettes Chromium avec set_content utilisent about:blank.
+        // Cette racine neutre évite qu'un contexte de test sans URL HTTP interrompe le script.
+        return new URL('https://pjjoue.local/');
+    }
+}
+const URL_RACINE_APPLICATION = obtenirRacineApplication();
+const ROUTES_APPLICATION_PROPRES = Object.freeze({
+    accueil: '',
+    parcours: 'parcours',
+    carnet: 'carnet',
+    entrainement: 'entrainement',
+    erreurs: 'revision',
+    sigles: 'mission-sigles',
+    'sigles-revision': 'mission-sigles/revision',
+    supports: 'supports',
+    progression: 'progression',
+    parametres: 'parametres',
+    question: 'question',
+    bilan: 'resultats'
+});
+const ECRANS_PAR_ROUTE_PROPRE = Object.freeze(
+    Object.fromEntries(
+        Object.entries(ROUTES_APPLICATION_PROPRES)
+            .filter(([, route]) => route)
+            .map(([ecran, route]) => [route, ecran])
+    )
+);
+function routeFragmentPourEcran(identifiant) {
     if (identifiant === 'parcours' && etat.theme)
         return '#parcours/' + encodeURIComponent(etat.theme);
     return '#' + identifiant;
+}
+function routeRelativePourEcran(identifiant) {
+    if (identifiant === 'parcours' && etat.theme)
+        return 'parcours/' + encodeURIComponent(etat.theme);
+    return ROUTES_APPLICATION_PROPRES[identifiant] ?? '';
+}
+function routePourEcran(identifiant) {
+    if (utiliserNavigationParFragment())
+        return routeFragmentPourEcran(identifiant);
+    const routeRelative = routeRelativePourEcran(identifiant);
+    return new URL(routeRelative ? `${routeRelative}/` : './', URL_RACINE_APPLICATION).pathname;
 }
 function creerEtatNavigation(identifiant) {
     return {
@@ -941,8 +989,8 @@ function creerEtatNavigation(identifiant) {
 function mettreAJourAdresseNavigation(identifiant, remplacer = false) {
     const route = routePourEcran(identifiant);
     // Un fichier ouvert directement dans Chrome n’a pas une origine HTTP classique.
-    // On utilise donc uniquement son fragment (#...) et jamais pushState avec une URL file://.
-    if (window.location.protocol === 'file:') {
+    // On conserve donc les fragments uniquement en mode file:// pour les tests locaux.
+    if (utiliserNavigationParFragment()) {
         if (window.location.hash === route)
             return;
         navigationInterneParFragment = true;
@@ -953,6 +1001,8 @@ function mettreAJourAdresseNavigation(identifiant, remplacer = false) {
         window.setTimeout(() => { navigationInterneParFragment = false; }, 0);
         return;
     }
+    if (window.location.pathname === route && !window.location.search && !window.location.hash)
+        return;
     const methode = remplacer ? 'replaceState' : 'pushState';
     history[methode](creerEtatNavigation(identifiant), '', route);
 }
@@ -1300,20 +1350,55 @@ function revenirEnArriere() {
     }
     afficherEcran('accueil', { forcerSortieQuestion: true, remplacerHistorique: true });
 }
-function lireRoute() {
-    const decoderSegment = segment => {
-        try {
-            return decodeURIComponent(segment);
-        }
-        catch (erreur) {
-            return '';
-        }
-    };
-    const parties = location.hash.replace(/^#/, '').split('/').map(decoderSegment);
+function decoderSegmentRoute(segment) {
+    try {
+        return decodeURIComponent(segment);
+    }
+    catch (erreur) {
+        return '';
+    }
+}
+function lireRouteDepuisChemin(chemin) {
+    const parties = String(chemin || '')
+        .replace(/^\/+|\/+$/g, '')
+        .split('/')
+        .filter(Boolean)
+        .map(decoderSegmentRoute);
+    if (!parties.length)
+        return { pjjoue: true, ecran: 'accueil' };
     if (parties[0] === 'parcours')
         return { pjjoue: true, ecran: 'parcours', theme: parties[1] || null };
-    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'sigles', 'sigles-revision', 'supports', 'progression', 'parametres', 'question'];
+    const routeComplete = parties.join('/');
+    return {
+        pjjoue: true,
+        ecran: ECRANS_PAR_ROUTE_PROPRE[routeComplete] || 'accueil'
+    };
+}
+function lireRouteDepuisFragment() {
+    const parties = location.hash.replace(/^#/, '').split('/').map(decoderSegmentRoute);
+    if (parties[0] === 'parcours')
+        return { pjjoue: true, ecran: 'parcours', theme: parties[1] || null };
+    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'sigles', 'sigles-revision', 'supports', 'progression', 'parametres', 'question', 'bilan'];
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
+}
+function lireRoute() {
+    if (utiliserNavigationParFragment())
+        return lireRouteDepuisFragment();
+
+    if (location.hash && /^#(?:accueil|parcours|carnet|entrainement|erreurs|sigles|sigles-revision|supports|progression|parametres|question|bilan)(?:\/|$)/.test(location.hash))
+        return lireRouteDepuisFragment();
+
+    const routeRelayee = new URLSearchParams(location.search).get('pjjoue_route');
+    if (routeRelayee)
+        return lireRouteDepuisChemin(routeRelayee);
+
+    let chemin = location.pathname;
+    const base = URL_RACINE_APPLICATION.pathname.endsWith('/')
+        ? URL_RACINE_APPLICATION.pathname
+        : URL_RACINE_APPLICATION.pathname + '/';
+    if (chemin.startsWith(base))
+        chemin = chemin.slice(base.length);
+    return lireRouteDepuisChemin(chemin);
 }
 function restaurerRoute(route) {
     const etatRoute = route?.pjjoue ? route : lireRoute();
@@ -1337,14 +1422,20 @@ function restaurerRoute(route) {
         else
             ouvrirChoixParcours({ depuisHistorique: true, forcerSortieQuestion: true });
     }
+    else if (etatRoute.ecran === 'bilan') {
+        if (etat.questionsSession?.length)
+            afficherEcran('bilan', { depuisHistorique: true, forcerSortieQuestion: true });
+        else
+            afficherEcran('accueil', { depuisHistorique: true, forcerSortieQuestion: true, remplacerHistorique: true });
+    }
     else
         afficherEcran(etatRoute.ecran || 'accueil', { depuisHistorique: true, forcerSortieQuestion: true });
     restaurationNavigation = false;
-    if (window.location.protocol !== 'file:')
+    if (!utiliserNavigationParFragment())
         history.replaceState(creerEtatNavigation(etat.ecran), '', routePourEcran(etat.ecran));
 }
 window.addEventListener('hashchange', () => {
-    if (window.location.protocol !== 'file:' || restaurationNavigation || navigationInterneParFragment)
+    if (!utiliserNavigationParFragment() || restaurationNavigation || navigationInterneParFragment)
         return;
     const fragmentCourant = window.location.hash || '#accueil';
     if (fragmentCourant === routePourEcran(etat.ecran))
@@ -1356,7 +1447,7 @@ window.addEventListener('popstate', evenement => {
         return;
     // Chrome peut émettre popstate lors d'un simple changement de fragment sur un fichier local.
     // Si l'adresse correspond déjà à l'écran affiché, ce n'est pas une demande de sortie utilisateur.
-    if (window.location.protocol === 'file:' && window.location.hash === routePourEcran(etat.ecran))
+    if (utiliserNavigationParFragment() && window.location.hash === routePourEcran(etat.ecran))
         return;
     if (etat.ecran === 'question' && etat.questionsSession?.length) {
         history.forward();
@@ -6940,6 +7031,14 @@ selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => {
         etat.contexteRevision = null;
     afficherEcran(bouton.dataset.ecran);
 });
+const lienEvitement = selectionner('.passer-lien');
+if (lienEvitement)
+    lienEvitement.addEventListener('click', evenement => {
+        evenement.preventDefault();
+        const cible = selectionner('#contenuPrincipal');
+        cible?.focus({ preventScroll: true });
+        cible?.scrollIntoView({ block: 'start' });
+    });
 const boutonLancerLeDe = selectionner('#boutonLancerLeDe');
 if (boutonLancerLeDe)
     boutonLancerLeDe.onclick = lancerDeParcours;

@@ -17,10 +17,12 @@ echo 1/12 - Verification UTF-8 des noms et fichiers texte...
 if errorlevel 1 goto erreur
 
 echo.
-echo 2/12 - Verification des donnees, de la construction et du manifeste...
+echo 2/12 - Verification des donnees, de la construction, du SEO et du manifeste...
 %PYTHON_PJJOUE% outils\construire_donnees.py --verifier
 if errorlevel 1 goto erreur
 %PYTHON_PJJOUE% outils\construire_site.py --verifier
+if errorlevel 1 goto erreur
+%PYTHON_PJJOUE% outils\construire_seo.py --verifier
 if errorlevel 1 goto erreur
 %PYTHON_PJJOUE% outils\construire_manifeste.py --verifier
 if errorlevel 1 goto erreur

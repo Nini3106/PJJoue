@@ -38,7 +38,9 @@ Après la mise en ligne sur `https://pjjoue.fr/` :
 4. saisir `sitemap.xml`, puis cliquer sur **Envoyer** ;
 5. laisser Google explorer et indexer le site, puis contrôler l’état du sitemap dans Search Console.
 
-Le sitemap contient les pages publiques stables, notamment les guides pédagogiques indexables. Les écrans internes du jeu utilisent une navigation dynamique dans `index.html` et ne doivent pas être déclarés comme des URL séparées. La page `administration.html` porte une directive `noindex,nofollow` et ne figure pas dans le sitemap.
+Le sitemap contient les pages publiques stables, notamment les guides pédagogiques indexables. Les écrans internes du jeu utilisent des URL propres (`/parcours/`, `/revision/`, `/progression/`, etc.) mais restent des vues dynamiques de `index.html` : leurs relais GitHub Pages sont `noindex,follow`, canonisent vers l’accueil et ne doivent pas être déclarés dans le sitemap comme des pages SEO séparées. La page `administration.html` porte une directive `noindex,nofollow` et ne figure pas dans le sitemap.
+
+À chaque évolution de la V1, vérifier si les `title`, meta descriptions, canonical, Open Graph, JSON-LD/`dateModified`, URL propres ou `lastmod` du sitemap doivent évoluer. Le script `outils/construire_seo.py` est le garde-fou de référence.
 
 
 ## Google Tag Manager et consentement
@@ -58,9 +60,10 @@ Avant toute publication ou création d’archive :
 1. vérifier les noms et le contenu UTF-8 avec `python outils/verifier_noms_fichiers.py` ;
 2. reconstruire les données avec `python outils/construire_donnees.py` ;
 3. reconstruire le site/service worker avec `python outils/construire_site.py` ;
-4. **régénérer `MANIFESTE.json` en dernier** avec `python outils/construire_manifeste.py` ;
-5. vérifier le manifeste avec `python outils/construire_manifeste.py --verifier` ;
-6. pour un ZIP, utiliser `python outils/creer_archive_utf8.py`.
+4. reconstruire et vérifier le SEO/sitemap avec `python outils/construire_seo.py` puis `python outils/construire_seo.py --verifier` ;
+5. **régénérer `MANIFESTE.json` en dernier** avec `python outils/construire_manifeste.py` ;
+6. vérifier le manifeste avec `python outils/construire_manifeste.py --verifier` ;
+7. pour un ZIP, utiliser `python outils/creer_archive_utf8.py`.
 
 Aucun chemin `├...`, `Ã...`, `ÔÇ...`, `ΓÇ...` ou `�` n’est acceptable. Une archive PJJoue doit conserver le marquage UTF-8 des noms accentués. Toute modification après la génération du manifeste oblige à le régénérer avant commit/push.
 

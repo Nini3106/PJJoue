@@ -40,6 +40,7 @@ Reconstruire les fichiers publics :
 
 ```bash
 python outils/construire_site.py
+python outils/construire_seo.py
 ```
 
 Sous Windows, on peut aussi lancer `CONSTRUIRE_PJJOUE.bat`.
@@ -50,6 +51,7 @@ Pour vérifier qu’aucun fichier généré n’a été modifié directement :
 
 ```bash
 python outils/construire_site.py --verifier
+python outils/construire_seo.py --verifier
 ```
 
 ## Lancer les contrôles

@@ -304,6 +304,8 @@ function envoyerUtilisationJoker(type) {
     });
 }
 function estRouteAccueil() {
+    if (typeof lireRoute === 'function')
+        return lireRoute().ecran === 'accueil';
     const fragment = location.hash || '#accueil';
     return fragment === '#accueil' || fragment === '#' || fragment === '';
 }

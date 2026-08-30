@@ -193,3 +193,11 @@ Sur téléphone, les boutons du menu sont des pastilles compactes dimensionnées
 - conserver les noms applicatifs en français et les API web dans leur syntaxe officielle ;
 - exécuter les deux contrôles du dossier `tests/` après toute modification ;
 - comparer le rendu de référence sur ordinateur, portable et mobile avant une diffusion.
+
+## URL propres de l’application
+
+En production HTTP(S), les écrans internes utilisent des chemins lisibles (`/parcours/`, `/revision/`, `/supports/`, `/progression/`, `/mission-sigles/`, etc.) au lieu de fragments `#...`. La table de référence est `code/routes-application.json`.
+
+GitHub Pages ne possède pas de routeur serveur : `outils/construire_site.py` génère donc pour chaque route un petit `index.html` relais `noindex,follow`. Il revient vers la racine avec `pjjoue_route`, puis `ressources/moteur-jeu.js` restaure l’écran demandé et remplace immédiatement l’adresse par l’URL propre. Ces relais ne sont pas des pages SEO autonomes et restent absents de `sitemap.xml`. En `file://`, les fragments sont conservés pour la prévisualisation locale.
+
+Le service worker applique la même logique en secours hors connexion afin qu’un rafraîchissement sur une route propre ne casse pas les chemins des ressources.

@@ -93,7 +93,23 @@ async function trouverNavigationEnCache(requete) {
       return reponseIndex;
   }
 
-  const accueil = new URL('index.html', self.registration.scope).href;
+  const racine = new URL(self.registration.scope);
+  const cheminRacine = racine.pathname.endsWith('/') ? racine.pathname : `${racine.pathname}/`;
+  let cheminRoute = adresse.pathname.startsWith(cheminRacine)
+    ? adresse.pathname.slice(cheminRacine.length)
+    : '';
+  cheminRoute = cheminRoute.replace(/\/index\.html$/i, '').replace(/^\/+|\/+$/g, '');
+
+  // Une route interne propre (/parcours/, /progression/, etc.) n'est pas un document
+  // autonome. Hors connexion, on repasse par l'accueil mis en cache avec la route
+  // en paramètre ; l'application restaure ensuite l'écran et remet l'URL propre.
+  if (cheminRoute && !adresse.searchParams.has('pjjoue_route')) {
+    const destination = new URL('./', racine);
+    destination.searchParams.set('pjjoue_route', cheminRoute);
+    return Response.redirect(destination.href, 302);
+  }
+
+  const accueil = new URL('index.html', racine).href;
   return caches.match(accueil);
 }
 

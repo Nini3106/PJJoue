@@ -21,7 +21,7 @@ python outils/verifier_noms_fichiers.py
 Résultat attendu :
 
 ```text
-OK — aucun nom de fichier ou dossier corrompu détecté.
+OK — noms valides et fichiers texte UTF-8 : aucun problème détecté.
 ```
 
 Si un nom contient `├`, `Ã`, `Â`, `�` ou ressemble à un accent français cassé : **STOP — ne pas pousser**.
@@ -39,6 +39,8 @@ Ou, manuellement et **dans cet ordre** :
 ```bash
 python outils/construire_donnees.py
 python outils/construire_site.py
+python outils/construire_seo.py
+python outils/construire_seo.py --verifier
 python outils/construire_manifeste.py
 ```
 
@@ -71,7 +73,19 @@ python outils/construire_manifeste.py --verifier
 
 **Si le message « fichiers publics modifiés directement ou non reconstruits » ou « MANIFESTE.json n’est pas à jour » apparaît : ne pas pousser.** Corriger/reconstruire, puis régénérer le manifeste en dernier.
 
-## 5. Lancer la recette complète
+## 5. Vérifier le SEO, les URL propres et le sitemap
+
+À chaque évolution de la V1, exécuter :
+
+```bash
+python outils/construire_seo.py --verifier
+```
+
+Le contrôle doit confirmer les pages indexables, les `title`/descriptions, canonical, Open Graph, les relais d’URL propres et `sitemap.xml`. Les routes internes (`/parcours/`, `/revision/`, `/progression/`, etc.) doivent rester `noindex,follow` et absentes du sitemap.
+
+Si un contenu public, une URL, une meta ou une date éditoriale change, reconstruire d’abord le SEO avec `python outils/construire_seo.py`, puis **régénérer `MANIFESTE.json` en dernier**.
+
+## 6. Lancer la recette complète
 
 Sous Windows :
 
@@ -87,7 +101,7 @@ npm test
 
 Tous les contrôles doivent être verts.
 
-## 6. Contrôle Git avant commit
+## 7. Contrôle Git avant commit
 
 - Aucun dossier au nom corrompu.
 - Aucun doublon de dossier accentué.
@@ -95,20 +109,20 @@ Tous les contrôles doivent être verts.
 - Aucun fichier supprimé ou ajouté par erreur.
 - La version reste **PJJoue V1**.
 
-## 7. Push
+## 8. Push
 
-Seulement lorsque les étapes 1 à 6 sont validées.
+Seulement lorsque les étapes 1 à 7 sont validées.
 
-> **Règle courte : UTF-8 → `code/` → construire données/site → régénérer manifeste → vérifier → tester → pousser.**
+> **Règle courte : UTF-8 → `code/` → construire données/site → SEO + sitemap → régénérer manifeste en dernier → vérifier → tester → pousser.**
 
-## 8. Portabilité Windows / Linux
+## 9. Portabilité Windows / Linux
 
 - Les fichiers générés sont écrits avec des fins de ligne LF déterministes, quel que soit le système.
 - Les empreintes Analytics ignorent uniquement la différence technique LF/CRLF ; toute modification réelle du contenu reste bloquée.
-- `PREPARER_PJJOUE_AVANT_PUSH.bat` reconstruit les données, le site, le service worker et `MANIFESTE.json` avant la recette.
+- `PREPARER_PJJOUE_AVANT_PUSH.bat` reconstruit les données, le site, le service worker, le SEO/sitemap puis `MANIFESTE.json` en dernier avant la recette.
 - Ne jamais modifier une empreinte Analytics pour faire passer un test : si elle échoue, comparer d'abord la source protégée et le fichier public.
 
-## 9. Contrôles réseau et visuels portables
+## 10. Contrôles réseau et visuels portables
 
 - Un lien officiel en **404/410** ou une adresse invalide reste bloquant.
 - Un **403**, un délai dépassé, une erreur DNS/SSL ou un refus anti-robot est signalé en avertissement : ce n'est pas une preuve que le lien est mort.

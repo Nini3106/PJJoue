@@ -19,6 +19,6 @@ exit /b 1
 
 :fin
 echo.
-echo Archive creee et controlee. Les noms accentues sont marques UTF-8.
+echo Archive creee et controlee. UTF-8, SEO/sitemap et manifeste ont ete verifies.
 pause
 exit /b 0

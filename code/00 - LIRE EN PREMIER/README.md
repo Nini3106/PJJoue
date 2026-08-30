@@ -22,6 +22,8 @@ Avant chaque push :
 python outils/verifier_noms_fichiers.py
 python outils/construire_donnees.py
 python outils/construire_site.py
+python outils/construire_seo.py
+python outils/construire_seo.py --verifier
 python outils/construire_manifeste.py
 python outils/construire_site.py --verifier
 python outils/construire_manifeste.py --verifier
@@ -38,6 +40,8 @@ Les chemins français accentués doivent rester **strictement en UTF-8**. Si un 
 
 `MANIFESTE.json` est une photographie d’intégrité du projet. **Après toute modification, reconstruction ou restauration de fichier, il faut le régénérer en dernier** avec `python outils/construire_manifeste.py`. Aucune modification ne doit intervenir entre cette génération et le commit sans une nouvelle génération du manifeste.
 
+Le SEO fait partie de la construction : **à chaque évolution de la V1**, exécuter `python outils/construire_seo.py` puis `python outils/construire_seo.py --verifier` avant de générer le manifeste. Cela contrôle les balises SEO, les URL propres, les relais `noindex` et `sitemap.xml`.
+
 ## Où modifier ?
 
 Le nom du dossier suit le nom visible dans PJJoue. Si une action concerne la page Question, ouvre `code/06 - Question/`. Si elle concerne plusieurs pages, ouvre `code/01 - Éléments communs/`.
@@ -46,16 +50,21 @@ La page Question est plus riche que les autres : son JavaScript est rangé dans 
 
 ## Après une modification
 
-Construire :
+Construire dans l’ordre :
 
 ```bash
+python outils/construire_donnees.py
 python outils/construire_site.py
+python outils/construire_seo.py
+python outils/construire_manifeste.py
 ```
 
-Vérifier les fichiers générés :
+Vérifier les fichiers générés et le SEO :
 
 ```bash
 python outils/construire_site.py --verifier
+python outils/construire_seo.py --verifier
+python outils/construire_manifeste.py --verifier
 ```
 
 Puis lancer les tests avant publication.

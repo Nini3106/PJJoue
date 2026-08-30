@@ -32,7 +32,7 @@ La page **Réviser** donne accès à **Mission Sigles**, un mini-PJJoue consacr�
 
 La progression pédagogique reprend la logique des parcours principaux : **un sigle n’est jamais demandé seul avant d’avoir été introduit dans une activité précédente avec son développement complet**. Les **72 premières questions sont contextualisées individuellement** : chacune possède un sujet explicite et trois distracteurs rédigés à la main ; les formulations génériques sans sujet sont interdites par les tests. Il n’existe pas d’écran qui donne les réponses avant de jouer. L’entraînement permet de choisir une étape ou tout Mission Sigles, 10 / 20 / 30 / Tous, un ordre par étapes ou mélangé, avec ou sans chrono et avec ou sans jokers. Le Défi du hasard utilise le même dé animé que PJJoue, tire de 1 à 6 questions puis attend le clic de l’utilisateur pour démarrer ; les jokers y sont autorisés.
 
-Le support de révision, le guide public et Mission Sigles utilisent tous la même source `donnees/sigles.json`, afin d’éviter les doublons et les divergences. **Réviser mes erreurs** possède sa propre page `#sigles-revision` : elle reprend le gabarit visuel de Réviser PJJoue mais conserve des données d’erreurs entièrement séparées dans la progression Mission Sigles.
+Le support de révision, le guide public et Mission Sigles utilisent tous la même source `donnees/sigles.json`, afin d’éviter les doublons et les divergences. **Réviser mes erreurs** possède sa propre route `/mission-sigles/revision/` (fragment local `#sigles-revision` en `file://`) : elle reprend le gabarit visuel de Réviser PJJoue mais conserve des données d’erreurs entièrement séparées dans la progression Mission Sigles.
 
 ## ⚠️ Règle absolue avant toute modification ou publication
 
@@ -77,7 +77,7 @@ Le script refuse les noms corrompus, vérifie l’UTF-8, crée le ZIP avec les i
 L’ordre obligatoire est :
 
 ```text
-modifier les sources → construire les données → construire le site → régénérer MANIFESTE.json → vérifier/tester → commit/push
+modifier les sources → construire les données → construire le site → reconstruire/vérifier le SEO et le sitemap → régénérer MANIFESTE.json → vérifier/tester → commit/push
 ```
 
 Commandes :
@@ -85,13 +85,39 @@ Commandes :
 ```bash
 python outils/construire_donnees.py
 python outils/construire_site.py
+python outils/construire_seo.py
+python outils/construire_seo.py --verifier
 python outils/construire_manifeste.py
 python outils/construire_manifeste.py --verifier
 ```
 
 **Ne jamais modifier un fichier après la génération du manifeste sans régénérer `MANIFESTE.json`.** `PREPARER_PJJOUE_AVANT_PUSH.bat` applique automatiquement cet ordre et refait une vérification finale du manifeste juste avant d’autoriser le push.
 
-Pour une publication normale, le réflexe recommandé est : **modifier dans `code/` → construire → manifeste → vérifier → pousser**.
+### ⚠️ SEO, URL propres et sitemap à maintenir à chaque évolution de la V1
+
+Le référencement fait partie de la construction de PJJoue V1. **À chaque nouvelle mise à jour de la V1**, même si la modification semble seulement pédagogique ou visuelle, il faut vérifier si elle nécessite une mise à jour des éléments SEO.
+
+Les points à contrôler sont :
+
+- le `<title>` et la meta description des pages publiques indexables ;
+- l’URL canonical et `og:url` ;
+- les données structurées JSON-LD et leur `dateModified` lorsqu’elles existent ;
+- les URL propres de l’application (`/`, `/parcours/`, `/revision/`, `/progression/`, etc.) ;
+- `sitemap.xml` et ses `lastmod` ;
+- `robots.txt`.
+
+Les écrans internes de l’application utilisent des **URL propres sans `#` en production**. Ils restent des vues de l’application principale : leurs relais GitHub Pages sont `noindex,follow`, canonisent vers `https://pjjoue.fr/` et ne doivent pas être ajoutés au sitemap comme des pages SEO indépendantes. En ouverture locale `file://`, les fragments `#...` restent volontairement utilisés pour permettre les tests sans serveur.
+
+Après une modification, exécuter :
+
+```bash
+python outils/construire_seo.py
+python outils/construire_seo.py --verifier
+```
+
+**Le SEO/sitemap doit être construit avant `MANIFESTE.json`, qui reste toujours généré en dernier.** `PREPARER_PJJOUE_AVANT_PUSH.bat` applique et contrôle automatiquement cette règle.
+
+Pour une publication normale, le réflexe recommandé est : **modifier dans `code/` → construire données/site → SEO + sitemap → manifeste en dernier → vérifier → pousser**.
 
 ## Organisation du code
 
@@ -114,6 +140,7 @@ Les fichiers publics (`index.html`, `ressources/moteur-jeu.js`, les feuilles CSS
 ```bash
 python outils/construire_donnees.py
 python outils/construire_site.py
+python outils/construire_seo.py
 python outils/construire_manifeste.py
 ```
 
@@ -144,7 +171,7 @@ Une ancienne organisation de PJJoue produisait plusieurs feuilles CSS publiques 
 
 Les sorties générées sont écrites avec des fins de ligne LF déterministes afin qu'une reconstruction sous Windows produise les mêmes octets que sur GitHub/Linux. Les contrôles Analytics normalisent uniquement LF/CRLF avant de vérifier les empreintes : un simple changement de fin de ligne ne bloque donc plus la recette, tandis qu'une modification réelle du code Analytics reste détectée.
 
-Avant tout push, utiliser `PREPARER_PJJOUE_AVANT_PUSH.bat`. Ce script reconstruit `donnees/donnees-pjj.js`, les 44 fichiers publics (service worker compris) et `MANIFESTE.json`, puis lance la recette complète.
+Avant tout push, utiliser `PREPARER_PJJOUE_AVANT_PUSH.bat`. Ce script reconstruit `donnees/donnees-pjj.js`, tous les fichiers publics (service worker et relais d’URL propres compris), le SEO/sitemap puis `MANIFESTE.json` en dernier, avant de lancer la recette complète.
 
 ## Vérifications
 

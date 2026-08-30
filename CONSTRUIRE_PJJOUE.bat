@@ -20,14 +20,21 @@ echo Construction du site et du service worker...
 if errorlevel 1 goto erreur
 
 echo.
-echo Generation de MANIFESTE.json EN DERNIER...
+echo Construction et verification du SEO et du sitemap...
+%PYTHON_PJJOUE% outils\construire_seo.py
+if errorlevel 1 goto erreur
+%PYTHON_PJJOUE% outils\construire_seo.py --verifier
+if errorlevel 1 goto erreur
+
+echo.
+echo Generation de MANIFESTE.json EN DERNIER, apres le SEO...
 %PYTHON_PJJOUE% outils\construire_manifeste.py
 if errorlevel 1 goto erreur
 %PYTHON_PJJOUE% outils\construire_manifeste.py --verifier
 if errorlevel 1 goto erreur
 
 echo.
-echo Construction terminee : UTF-8 valide et manifeste a jour.
+echo Construction terminee : UTF-8, SEO/sitemap et manifeste a jour.
 exit /b 0
 
 :trouver_python

@@ -73,18 +73,30 @@
     navigation.id = navigation.id || 'navigationPrincipaleGuides';
 
     const navigationLocale = window.location.protocol === 'file:';
-    const lienApplication = ancre => `${racineApplication.href}${navigationLocale ? 'index.html' : ''}${ancre}`;
+    const routesApplication = {
+      accueil: ['', '#accueil'],
+      parcours: ['parcours/', '#parcours'],
+      erreurs: ['revision/', '#erreurs'],
+      supports: ['supports/', '#supports'],
+      entrainement: ['entrainement/', '#entrainement'],
+      progression: ['progression/', '#progression'],
+      carnet: ['carnet/', '#carnet'],
+      parametres: ['parametres/', '#parametres']
+    };
+    const lienApplication = ecran => navigationLocale
+      ? `${racineApplication.href}index.html${routesApplication[ecran][1]}`
+      : new URL(routesApplication[ecran][0], racineApplication).href;
     const lienGuides = `${racineApplication.href}guides/${navigationLocale ? 'index.html' : ''}`;
     const entrees = [
-      ['Accueil', lienApplication('#accueil')],
-      ['Apprendre', lienApplication('#parcours')],
-      ['Réviser', lienApplication('#erreurs')],
-      ['Supports', lienApplication('#supports')],
-      ['S’entraîner', lienApplication('#entrainement')],
-      ['Progression', lienApplication('#progression')],
+      ['Accueil', lienApplication('accueil')],
+      ['Apprendre', lienApplication('parcours')],
+      ['Réviser', lienApplication('erreurs')],
+      ['Supports', lienApplication('supports')],
+      ['S’entraîner', lienApplication('entrainement')],
+      ['Progression', lienApplication('progression')],
       ['Guides', lienGuides],
-      ['Carnet', lienApplication('#carnet')],
-      ['Paramètres', lienApplication('#parametres')]
+      ['Carnet', lienApplication('carnet')],
+      ['Paramètres', lienApplication('parametres')]
     ];
 
     navigation.innerHTML = entrees.map(([libelle, href]) => {
@@ -235,6 +247,37 @@
 
     const chemin = correspondance[1];
     const suffixe = correspondance[2] || '';
+
+    try {
+      const adresse = new URL(href, document.baseURI);
+      const racine = new URL(racineApplication.href);
+      if (adresse.protocol === 'file:' && adresse.pathname.startsWith(racine.pathname)) {
+        const relatif = decodeURIComponent(adresse.pathname.slice(racine.pathname.length)).replace(/^\/+/, '');
+        const routesVersFragments = {
+          'parcours/': '#parcours',
+          'revision/': '#erreurs',
+          'mission-sigles/': '#sigles',
+          'mission-sigles/revision/': '#sigles-revision',
+          'supports/': '#supports',
+          'entrainement/': '#entrainement',
+          'progression/': '#progression',
+          'carnet/': '#carnet',
+          'parametres/': '#parametres'
+        };
+        let fragment = routesVersFragments[relatif];
+        if (!fragment) {
+          const theme = relatif.match(/^parcours\/([^/]+)\/$/);
+          if (theme)
+            fragment = `#parcours/${encodeURIComponent(theme[1])}`;
+        }
+        if (fragment) {
+          lien.setAttribute('href', `${racineApplication.href}index.html${fragment}`);
+          return;
+        }
+      }
+    } catch (erreur) {
+      // Lien inchangé si l’URL ne peut pas être interprétée.
+    }
 
     if (!chemin.endsWith('/')) {
       return;

@@ -1,0 +1,74 @@
+{
+  "domaine": "https://pjjoue.fr",
+  "titreMax": 60,
+  "descriptionMin": 70,
+  "descriptionMax": 160,
+  "pages": [
+    {
+      "sortie": "index.html",
+      "url": "https://pjjoue.fr/",
+      "lastmod": "2026-08-30"
+    },
+    {
+      "sortie": "guides/index.html",
+      "url": "https://pjjoue.fr/guides/",
+      "lastmod": "2026-08-30"
+    },
+    {
+      "sortie": "preparer-arrivee-pjj/index.html",
+      "url": "https://pjjoue.fr/preparer-arrivee-pjj/"
+    },
+    {
+      "sortie": "concours-educateur-pjj/index.html",
+      "url": "https://pjjoue.fr/concours-educateur-pjj/"
+    },
+    {
+      "sortie": "decouvrir-la-pjj/index.html",
+      "url": "https://pjjoue.fr/decouvrir-la-pjj/"
+    },
+    {
+      "sortie": "organisation-pjj/index.html",
+      "url": "https://pjjoue.fr/organisation-pjj/"
+    },
+    {
+      "sortie": "metiers-pjj/index.html",
+      "url": "https://pjjoue.fr/metiers-pjj/"
+    },
+    {
+      "sortie": "structures-pjj/index.html",
+      "url": "https://pjjoue.fr/structures-pjj/"
+    },
+    {
+      "sortie": "mesures-educatives-pjj/index.html",
+      "url": "https://pjjoue.fr/mesures-educatives-pjj/"
+    },
+    {
+      "sortie": "sigles-pjj/index.html",
+      "url": "https://pjjoue.fr/sigles-pjj/"
+    },
+    {
+      "sortie": "quiz-pjj/index.html",
+      "url": "https://pjjoue.fr/quiz-pjj/"
+    },
+    {
+      "sortie": "mentions-legales.html",
+      "url": "https://pjjoue.fr/mentions-legales.html",
+      "lastmod": "2026-08-30"
+    },
+    {
+      "sortie": "confidentialite.html",
+      "url": "https://pjjoue.fr/confidentialite.html",
+      "lastmod": "2026-08-30"
+    },
+    {
+      "sortie": "accessibilite.html",
+      "url": "https://pjjoue.fr/accessibilite.html",
+      "lastmod": "2026-08-30"
+    },
+    {
+      "sortie": "sources.html",
+      "url": "https://pjjoue.fr/sources.html",
+      "lastmod": "2026-08-30"
+    }
+  ]
+}

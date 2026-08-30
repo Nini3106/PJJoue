@@ -21,6 +21,14 @@ selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => {
         etat.contexteRevision = null;
     afficherEcran(bouton.dataset.ecran);
 });
+const lienEvitement = selectionner('.passer-lien');
+if (lienEvitement)
+    lienEvitement.addEventListener('click', evenement => {
+        evenement.preventDefault();
+        const cible = selectionner('#contenuPrincipal');
+        cible?.focus({ preventScroll: true });
+        cible?.scrollIntoView({ block: 'start' });
+    });
 const boutonLancerLeDe = selectionner('#boutonLancerLeDe');
 if (boutonLancerLeDe)
     boutonLancerLeDe.onclick = lancerDeParcours;

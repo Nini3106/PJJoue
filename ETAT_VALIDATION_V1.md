@@ -63,7 +63,8 @@ La consolidation éditoriale porte sur l’ensemble des 960 questions. Les contr
 
 Périmètre contrôlé :
 
-- construction : **44 fichiers publics exactement à jour** ;
+- construction : **61 fichiers publics exactement à jour** ;
+- SEO / URL propres : **15 pages indexables contrôlées**, sitemap à jour, routes internes propres avec relais `noindex,follow` ;
 - données : **960 questions, 67 sources** ;
 - structure PJJoue : **6 parcours · 66 étapes · 6 évaluations** ;
 - navigation libre : **0 référence inter-parcours visible** ;
