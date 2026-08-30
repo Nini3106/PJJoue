@@ -7,10 +7,10 @@
   <link rel="canonical" href="https://pjjoue.fr/">
   <meta http-equiv="refresh" content="0;url=../../?pjjoue_route=parcours%2Fprocedure_ordinaire">
   <title>Ouverture de PJJoue</title>
-  <script>location.replace(new URL("../../?pjjoue_route=parcours%2Fprocedure_ordinaire", location.href).href);</script>
+  <script>const destination=location.protocol==="file:"?new URL("../../index.html?pjjoue_route=parcours%2Fprocedure_ordinaire",location.href):new URL("../../?pjjoue_route=parcours%2Fprocedure_ordinaire",location.href);location.replace(destination.href);</script>
 </head>
 <body>
   <h1>Ouverture de PJJoue</h1>
-  <p>Redirection vers la section demandée… <a href="../../?pjjoue_route=parcours%2Fprocedure_ordinaire">Continuer</a></p>
+  <p>Redirection vers la section demandée… <a href="../../index.html?pjjoue_route=parcours%2Fprocedure_ordinaire">Continuer</a></p>
 </body>
 </html>

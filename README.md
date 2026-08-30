@@ -32,7 +32,7 @@ La page **Réviser** donne accès à **Mission Sigles**, un mini-PJJoue consacr�
 
 La progression pédagogique reprend la logique des parcours principaux : **un sigle n’est jamais demandé seul avant d’avoir été introduit dans une activité précédente avec son développement complet**. Les **72 premières questions sont contextualisées individuellement** : chacune possède un sujet explicite et trois distracteurs rédigés à la main ; les formulations génériques sans sujet sont interdites par les tests. Il n’existe pas d’écran qui donne les réponses avant de jouer. L’entraînement permet de choisir une étape ou tout Mission Sigles, 10 / 20 / 30 / Tous, un ordre par étapes ou mélangé, avec ou sans chrono et avec ou sans jokers. Le Défi du hasard utilise le même dé animé que PJJoue, tire de 1 à 6 questions puis attend le clic de l’utilisateur pour démarrer ; les jokers y sont autorisés.
 
-Le support de révision, le guide public et Mission Sigles utilisent tous la même source `donnees/sigles.json`, afin d’éviter les doublons et les divergences. **Réviser mes erreurs** possède sa propre route `/mission-sigles/revision/` (fragment local `#sigles-revision` en `file://`) : elle reprend le gabarit visuel de Réviser PJJoue mais conserve des données d’erreurs entièrement séparées dans la progression Mission Sigles.
+Le support de révision, le guide public et Mission Sigles utilisent tous la même source `donnees/sigles.json`, afin d’éviter les doublons et les divergences. **Réviser mes erreurs** possède sa propre route `/mission-sigles/revision/` (en ouverture directe `file://`, la route locale passe par `?pjjoue_route=mission-sigles%2Frevision`, sans fragment `#`) : elle reprend le gabarit visuel de Réviser PJJoue mais conserve des données d’erreurs entièrement séparées dans la progression Mission Sigles.
 
 ## ⚠️ Règle absolue avant toute modification ou publication
 
@@ -106,7 +106,7 @@ Les points à contrôler sont :
 - `sitemap.xml` et ses `lastmod` ;
 - `robots.txt`.
 
-Les écrans internes de l’application utilisent des **URL propres sans `#` en production**. Ils restent des vues de l’application principale : leurs relais GitHub Pages sont `noindex,follow`, canonisent vers `https://pjjoue.fr/` et ne doivent pas être ajoutés au sitemap comme des pages SEO indépendantes. En ouverture locale `file://`, les fragments `#...` restent volontairement utilisés pour permettre les tests sans serveur.
+Les écrans internes de l’application utilisent des **URL propres sans `#` en production**. Ils restent des vues de l’application principale : leurs relais GitHub Pages sont `noindex,follow`, canonisent vers `https://pjjoue.fr/` et ne doivent pas être ajoutés au sitemap comme des pages SEO indépendantes. En ouverture directe `file://`, la prévisualisation sans serveur utilise uniquement le paramètre technique `?pjjoue_route=...` sur `index.html` : **aucun lien interne ne doit générer de fragment `#`**. Les anciens fragments peuvent seulement être lus en compatibilité puis sont immédiatement réécrits sans `#`.
 
 Après une modification, exécuter :
 
@@ -198,7 +198,7 @@ La version consolidée du 28 août 2026 a été contrôlée sur ses données, se
 ## Architecture visuelle moderne
 
 L’interface principale est construite à partir des fragments HTML, JavaScript et CSS déclarés dans `code/plan-construction.json`. La base commune se trouve dans `code/01 - Éléments communs/style-general-pjjoue.css`, puis les styles propres aux pages complètent cette base. Le constructeur assemble ces sources dans l’unique feuille publique `ressources/styles/pjjoue-principal.css`. Les pages autonomes partagent `static-pages.css`, et le consentement Analytics possède son composant dédié.
-L’identité repose sur un bleu PJJoue profond et un jaune franc : fond général `#16477d`, en-tête `#0b315d`, texte principal `#f7f8ff`, cartes bleues `#10477f` ou `#0b3d70` et accent d’interface `#ffc83d`. Les actions importantes restent sur fond bleu/sombre : le jaune sert aux contours, repères, icônes et états de focus, jamais à remplir un bouton. Les six parcours possèdent chacun leur couleur d’accent. Ces choix sont définis directement dans le design system, sans feuille de surcharge ajoutée en fin de cascade.
+L’identité repose sur un bleu PJJoue profond et un jaune franc : fond général `#16477d`, en-tête `#0b315d`, texte principal `#f7f8ff`, cartes bleues `#10477f` ou `#0b3d70` et accent d’interface `#ffc83d`. **Le seul bouton autorisé en jaune plein est « Commencer » / « Reprendre » sur l’accueil.** Tous les autres boutons restent sur fond bleu/sombre, transparent ou dans leur traitement métier (le rouge de danger pour la réinitialisation globale) ; le jaune y sert aux contours, repères, icônes, survols et focus. Les six parcours possèdent chacun leur couleur d’accent. Ces choix sont définis directement dans le design system, sans feuille de surcharge ajoutée en fin de cascade.
 Les questions, réponses, modes de jeu et données pédagogiques restent gérés par
 le moteur V1.
 
@@ -226,12 +226,20 @@ Le contrôle des liens officiels ne bloque que les anomalies confirmées (adress
 
 À conserver à chaque évolution de la V1 :
 
-- **aucun bouton jaune plein** : les actions importantes restent sur fond bleu/sombre et prennent un **contour jaune au survol ou au focus** ;
+- **un seul bouton jaune plein** : exclusivement **« Commencer » / « Reprendre » sur l’accueil** ; tous les autres boutons restent sur fond bleu/sombre ou transparent et utilisent le jaune seulement comme accent, contour, survol ou focus ;
+- **tous les boutons d’action épousent leur contenu** : leur largeur vient du texte (avec le padding nécessaire), sans largeur forcée à `100%`, sans étirement de grille et sans `min-width` décoratif qui créerait un contour inutilement trop large ; `max-width:100%` reste autorisé uniquement pour empêcher un débordement sur petit écran. **Exception volontaire : les 7 choix de périmètre de l’Entraînement libre sont des cartes de sélection homogènes et utilisent tous le même gabarit 230 × 82 px** ;
 - les **boutons de jeu** utilisent un contour de la **même couleur que leur icône ou leur mode** ;
 - seule l’action **« Réinitialiser toute la progression »** conserve son traitement rouge de danger ;
 - l’espace entre un bouton **Retour** et le titre qui suit est harmonisé à **24 px** sur les pages de l’application, Mission Sigles et les guides ;
-- le menu principal suit cet ordre : **Accueil, Parcours PJJ, Entraînement libre, Réviser, Progression, Carnet de parcours**, puis la section **Supports** (`Supports de révision`, `Guides`), puis la section **Mini jeux** (`Mission Sigles`, puis les futurs mini-jeux comme `Mission Mesures`) ;
-- sur la page **Réviser**, le bouton **Supports de révision** reste placé à droite du titre sur grand écran ;
-- sur chaque question d’un parcours, afficher le **numéro + nom du parcours** au-dessus du **numéro + nom de l’étape**.
+- le menu principal suit cet ordre : **Accueil, Parcours PJJ, Entraînement libre, Réviser, Progression, Carnet de parcours**, puis la section **Supports** (`Supports de révision`, `Guides`), puis la section **Mini jeux** (`Mission Sigles`, puis les futurs mini-jeux comme `Mission Mesures`), et enfin **Paramètres** ;
+- sur la page **Réviser**, le titre **Réviser** reste réellement centré dans la page ; le bouton **Supports de révision** reste placé à droite sur grand écran sans décaler le titre ;
+- sur chaque question d’un parcours, afficher sur **une seule ligne** deux repères compacts adjacents **« Parcours X »** et **« Étape X »**, **sans séparateur `:`** ; les noms du parcours et de l’étape ne sont pas répétés dans ce bandeau ;
+- dans **Paramètres**, la taille de texte initiale est **Normale (1)** tant que l’utilisateur n’a pas choisi une autre taille ; une préférence déjà enregistrée reste respectée ;
+- sur mobile, la position des commandes de question (**Précédente / Valider / Passer ou Suivante / Jokers**) est fixe et ne doit pas changer quand l’utilisateur choisit Compacte, Normale ou Grande ;
+- dans **Entraînement libre**, chaque bouton **Commencer** reste directement sous son bloc **Options avancées**, aligné sur son bord gauche.
+- la page **Entraînement libre** conserve une géométrie harmonisée : étapes 1, 2 et 3 dans le même type de grand encadrement, cartes de modes jumelles, déclencheur **Options avancées** compact et **7 choix de parcours strictement identiques en 230 × 82 px** ;
+- tous les menus dépliants utilisent le **même survol que les Guides** : texte adouci au repos, texte blanc sur fond bleu relevé au survol/focus, entrée active en jaune ;
+- les deux repères de question **Parcours X** et **Étape X** conservent séparément la couleur du parcours et celle de l’étape, sans ponctuation entre eux.
+- **Règle d’identité couleur obligatoire** : tout bouton, badge, carte ou encadrement relié à un parcours ou à une étape reprend sa couleur canonique au minimum par son contour/accent, son survol-focus s’il est interactif, ou son repère coloré s’il est informatif. Une couleur ne doit jamais être recopiée localement si une identité canonique existe : les cartes de parcours, les étapes, l’Entraînement, Réviser, les erreurs actives, les cartes de question et les badges `Parcours X` / `Étape X` doivent tous rester synchronisés avec la même source de vérité.
 
 Ces règles font partie de l’identité visuelle de PJJoue V1 et doivent être revérifiées avant chaque push.

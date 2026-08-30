@@ -44,6 +44,21 @@ class TestSeoEtRoutesPropres(unittest.TestCase):
             self.assertIn('rel="canonical" href="https://pjjoue.fr/"', contenu, chemin)
             self.assertIn("pjjoue_route=", contenu, chemin)
 
+    def test_relais_routes_restent_utilisables_en_ouverture_locale(self):
+        relais = CONSTRUCTION.construire_relais_routes()
+        cas = {
+            "parametres/index.html": "index.html?pjjoue_route=parametres",
+            "revision/index.html": "index.html?pjjoue_route=revision",
+            "mission-sigles/index.html": "index.html?pjjoue_route=mission-sigles",
+            "mission-sigles/revision/index.html": "index.html?pjjoue_route=mission-sigles%2Frevision",
+            "resultats/index.html": "index.html?pjjoue_route=resultats",
+            "parcours/commun/index.html": "index.html?pjjoue_route=parcours%2Fcommun",
+        }
+        for chemin, destination_locale in cas.items():
+            contenu = relais[chemin]
+            self.assertIn('location.protocol==="file:"', contenu, chemin)
+            self.assertIn(destination_locale, contenu, chemin)
+
     def test_sitemap_ne_contient_que_les_pages_indexables_configurees(self):
         config = json.loads((RACINE / "code" / "seo-pages.json").read_text(encoding="utf-8"))
         urls = [page["url"] for page in config["pages"]]
@@ -56,11 +71,15 @@ class TestSeoEtRoutesPropres(unittest.TestCase):
 
     def test_navigation_http_et_file_reste_explicitement_separee(self):
         source = (RACINE / "code" / "01 - Éléments communs" / "JavaScript - Navigation et fenêtres.js").read_text(encoding="utf-8")
+        navigation_locale = (RACINE / "code" / "01 - Éléments communs" / "Navigation" / "navigation-locale.js").read_text(encoding="utf-8")
         self.assertIn("window.location.protocol === 'file:'", source)
-        self.assertIn("routeFragmentPourEcran", source)
+        self.assertIn("routeLocalePourEcran", source)
         self.assertIn("ROUTES_APPLICATION_PROPRES", source)
         self.assertIn("history[methode]", source)
         self.assertIn("pjjoue_route", source)
+        self.assertIn("index.html?pjjoue_route=", navigation_locale)
+        self.assertNotRegex(navigation_locale, r"index\.html#[a-z]")
+        self.assertNotRegex(source, r"routeLocalePourEcran[^}]+return\s+['\"]#")
 
     def test_hors_connexion_relaie_une_route_propre_vers_la_racine(self):
         source = (RACINE / "code" / "01 - Éléments communs" / "Application installable et hors connexion" / "service-worker.js").read_text(encoding="utf-8")

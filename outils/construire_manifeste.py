@@ -80,6 +80,31 @@ def construire_manifeste(date_consolidation: str | None = None) -> dict[str, obj
             "questionsEvaluationFinale": len(questions_evaluation),
             "evaluationsFinales": len({question["theme"] for question in questions_evaluation}),
         },
+        "reglesVisuelles": {
+            "identiteCouleurParcoursEtEtapes": {
+                "obligatoire": True,
+                "principe": (
+                    "Tout bouton, badge, carte ou encadrement représentant un parcours ou une étape "
+                    "doit reprendre la couleur canonique de ce parcours ou de cette étape."
+                ),
+                "applicationMinimum": [
+                    "contour ou accent d'encadrement",
+                    "survol ou focus lorsque le composant est interactif",
+                    "repère coloré lorsque le composant est informatif",
+                ],
+                "sourceDeVerite": (
+                    "Utiliser les identités canoniques du parcours et les fonctions canoniques de couleur "
+                    "des étapes ; aucune copie locale divergente de couleur n'est autorisée."
+                ),
+                "exemples": [
+                    "cartes et sélecteurs de parcours",
+                    "cartes et boutons liés aux étapes",
+                    "cartes de question et réponses interactives",
+                    "badges Parcours X et Étape X au-dessus des questions",
+                    "boutons de révision et dossiers d'erreurs par parcours ou étape",
+                ],
+            }
+        },
         "fichiers": fichiers,
     }
 

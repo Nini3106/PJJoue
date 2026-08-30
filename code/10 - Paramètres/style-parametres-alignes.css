@@ -4,10 +4,10 @@
 #parametres .parametre { display:grid; grid-template-columns:minmax(0,1fr); align-content:start; gap:14px; min-height:148px; padding:20px; border:1px solid var(--bordure-carte); border-radius:var(--rayon-grand); background:var(--surface-carte); box-shadow:var(--ombre-douce); }
 #parametres .choix-libelle,
 #parametres .parametre > label { color:var(--texte); font-weight:850; }
-#parametres .parametres-choix .choix-groupe { width:100%; max-width:none; }
-#parametres .parametres-choix .choix-groupe[data-groupe-choix="sonActif"] { grid-template-columns:repeat(2,minmax(0,1fr)); }
-#parametres .parametres-choix .choix-groupe[data-groupe-choix="echelleTexte"] { grid-template-columns:repeat(3,minmax(0,1fr)); }
-#parametres .parametres-choix .choix-groupe .choix-bouton { width:100%; min-width:0; min-height:46px; height:auto; padding:8px 10px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; white-space:normal; }
+#parametres .parametres-choix .choix-groupe { display:flex; flex-wrap:wrap; align-items:center; width:max-content; max-width:100%; }
+#parametres .parametres-choix .choix-groupe[data-groupe-choix="sonActif"] { justify-content:flex-start; }
+#parametres .parametres-choix .choix-groupe[data-groupe-choix="echelleTexte"] { justify-content:flex-start; }
+#parametres .parametres-choix .choix-groupe .choix-bouton { width:max-content; max-width:100%; min-width:0; min-height:46px; height:auto; padding:8px 12px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; white-space:normal; }
 #parametres .parametres-choix .choix-groupe .choix-bouton.actif,
 #parametres .parametres-choix .choix-groupe .choix-bouton.selectionne,
 #parametres .parametres-choix .choix-groupe .choix-bouton[aria-pressed="true"] { border-color:#4f8cff; color:var(--texte); background:rgba(79,140,255,.16); box-shadow:inset 0 0 0 1px #4f8cff; }
@@ -15,7 +15,7 @@
 #parametres .parametre-sauvegarde { grid-column:1/-1; grid-template-columns:minmax(180px,.65fr) minmax(0,1.35fr); min-height:0; align-items:center; }
 #parametres .parametre-sauvegarde p { margin:0; color:var(--texte-secondaire); line-height:1.5; }
 #parametres .parametre-sauvegarde .parametres-actions-boutons { grid-column:2; }
-#parametres .parametres-actions-boutons { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+#parametres .parametres-actions-boutons { display:flex; flex-wrap:wrap; align-items:center; width:100%; max-width:100%; gap:9px; }
 #parametres .parametres-actions-boutons > button,
 #parametres .progression-importation { display:flex; align-items:center; justify-content:center; min-height:46px; padding:10px 14px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; text-align:center; cursor:pointer; }
 #parametres .fichier-importation-visuellement-cache { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); border:0; white-space:nowrap; }
@@ -44,12 +44,12 @@
   #parametres .parametre,
   #parametres .parametre-sauvegarde { grid-template-columns:1fr; gap:12px; }
   #parametres .parametre-sauvegarde .parametres-actions-boutons { grid-column:auto; }
-  #parametres .parametres-actions-boutons { grid-template-columns:1fr; }
-  #parametres .parametres-choix .choix-groupe[data-groupe-choix="echelleTexte"] { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  #parametres .parametres-actions-boutons { justify-content:flex-start; }
+  #parametres .parametres-choix .choix-groupe[data-groupe-choix="echelleTexte"] { justify-content:flex-start; }
   #parametres .parametres-choix .choix-groupe .choix-bouton { min-height:46px; }
   #parametres .parametres-actions-principales { align-items:stretch; }
-  #parametres .parametres-actions-principales button { width:100%; }
+  #parametres .parametres-actions-principales button { width:max-content; max-width:100%; }
   #parametres .parametres-zone-sensible { grid-template-columns:1fr; align-items:stretch; }
-  #parametres .parametres-zone-sensible .danger { width:100%; }
+  #parametres .parametres-zone-sensible .danger { width:max-content; max-width:100%; }
 }
 /* === FIN MORCEAU CSS === */

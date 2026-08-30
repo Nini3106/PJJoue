@@ -25,7 +25,7 @@ L’interface suit une grammaire visuelle unique :
 - en-tête et repères de marque : `#0b315d` ;
 - texte principal sur ces surfaces : blanc cassé `#f7f8ff` ;
 - cadres principaux : bleu profond `#0b3d70` ; contenus intérieurs : bleu `#10477f` ;
-- action principale : jaune `#ffc83d` ;
+- le seul bouton jaune plein est **Commencer / Reprendre** sur l’accueil (`#ffc83d`) ; les autres boutons utilisent le jaune uniquement comme accent, contour, survol ou focus ;
 - six couleurs d’accent distinctes pour les six parcours.
 
 Ces couleurs et les règles communes sont définies dans `style-general-pjjoue.css` et `static-pages.css`. Les fragments propres aux pages, tous déclarés dans `code/plan-construction.json`, sont assemblés dans l’unique feuille publique `pjjoue-principal.css`.
@@ -55,7 +55,7 @@ L’ouverture directe de `index.html` en `file:` est prise en charge :
 - le manifeste PWA n’est injecté qu’en HTTP/HTTPS ;
 - le service worker n’est pas enregistré en `file:` ;
 - Google Tag Manager reste désactivé en `file:` afin qu’aucun contenu web tiers ne tente d’interagir avec une URL locale ;
-- la navigation locale évite les appels d’historique incompatibles avec les URL locales.
+- la navigation locale directe utilise `index.html?pjjoue_route=...` et ne génère aucun fragment `#` dans la barre d’adresse.
 
 ## État des contrôles au 28 août 2026
 
@@ -146,3 +146,15 @@ Fonctionnalités contrôlées :
 Contrôles exécutés après reconstruction : **72/72 sigles uniques**, six étapes de douze, **72 questions d’introduction contextualisées et 216 distracteurs rédigés explicitement**, support et guide synchronisés sans doublon, **20 tests unitaires réussis**, accessibilité statique **16 pages**, structure V1 conforme, iconographie conforme, pages annexes **19 scénarios PC/mobile**, recette Chromium autonome Mission Sigles réussie et syntaxe JavaScript publique vérifiée par `node --check`.
 
 Les recettes qui naviguent directement vers `file://` ou `http://pjjoue.test/` restent bloquées par la politique de l’environnement de contrôle (`ERR_BLOCKED_BY_ADMINISTRATOR`). La recette autonome de Mission Sigles utilise la même page construite injectée dans Chromium et passe intégralement, y compris en largeur mobile 390 px.
+
+## Harmonisation responsive et navigation locale — 30 août 2026
+
+Corrections intégrées à la V1 sans modification des 960 questions :
+
+- repère de question simplifié sur une ligne : **« Parcours X : Étape X »** ;
+- commandes mobiles de question stabilisées : **Précédente / Valider / Passer ou Suivante** sur une ligne et **Jokers** centré dessous, avec géométrie indépendante de la taille de texte choisie ;
+- taille de texte initiale **Normale (1)** pour un nouvel utilisateur, avec conservation d’une préférence explicitement enregistrée ;
+- boutons **Commencer** d’Entraînement libre placés directement sous **Options avancées**, alignés sur le début du bloc ;
+- prévisualisation `file://` sans appel à `pushState`/`replaceState`, afin d’éviter l’avertissement Chromium lié aux origines uniques des fichiers locaux ; aucune navigation interne ne génère de fragment `#`.
+
+Contrôles après reconstruction : **56 tests unitaires réussis**, structure V1 **6 parcours · 66 étapes · 960 questions · 6 évaluations**, navigation libre conforme, accessibilité statique **33 pages**, **67 sources** à jour, CSS sans déclaration répétée, et scénarios Chromium ciblés Question / Entraînement / Paramètres réussis sur bureau et mobile. L’ouverture directe `file://` reste bloquée par la politique de l’environnement de contrôle (`ERR_BLOCKED_BY_ADMINISTRATOR`), mais la branche locale est couverte par des tests statiques et l’interface Chromium injectée.

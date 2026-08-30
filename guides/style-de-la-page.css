@@ -1,8 +1,8 @@
 .page-accueil-guides { --content:1120px; }
 .page-guides { width:min(1120px,calc(100% - 40px)); margin:42px auto 28px; }
-.guides-entete { max-width:820px; margin:0 0 46px; }
-.guides-entete h1 { margin-bottom:16px; }
-.guides-entete > p:last-child { font-size:1.05rem; line-height:1.7; }
+.guides-entete { max-width:920px; margin:0 auto 46px; text-align:center; }
+.guides-entete h1 { margin-bottom:16px; font-size:clamp(1.65rem,2.75vw,2.55rem); line-height:1.12; }
+.guides-entete > p:last-child { max-width:820px; margin-left:auto; margin-right:auto; font-size:1.05rem; line-height:1.7; }
 .guides-collections { display:grid; gap:46px; }
 .guides-collection { display:grid; grid-template-columns:minmax(220px,280px) minmax(0,1fr); gap:32px; padding-top:30px; border-top:1px solid var(--line); }
 .guides-collection > header h2 { margin-bottom:10px; }
@@ -24,5 +24,5 @@
 .guides-appel-jeu .guide-surtitre { margin:0; color:var(--amber); }
 .guides-appel-jeu .guide-bouton { flex:0 0 auto; margin:0; }
 @media (max-width:900px) { .guides-collection { grid-template-columns:1fr; } }
-@media (max-width:620px) { .page-guides { width:calc(100% - 24px); margin:18px auto 24px; } .guides-grille { grid-template-columns:1fr; } .guide-carte-lien { min-height:0; } .guides-appel-jeu { align-items:stretch; flex-direction:column; } .guides-appel-jeu .guide-bouton { width:100%; } }
+@media (max-width:620px) { .page-guides { width:calc(100% - 24px); margin:18px auto 24px; } .guides-grille { grid-template-columns:1fr; } .guide-carte-lien { min-height:0; } .guides-appel-jeu { align-items:stretch; flex-direction:column; } .guides-appel-jeu .guide-bouton { width:max-content; max-width:100%; } }
 @media (max-width:420px) { .guide-carte-lien { grid-template-columns:44px minmax(0,1fr); gap:12px; padding:14px; } .guide-carte-icone { width:44px; height:44px; } .guide-carte-icone svg { width:28px; height:28px; } .guide-carte-lien > b { display:none; } }

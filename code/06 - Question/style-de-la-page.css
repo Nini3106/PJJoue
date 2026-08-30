@@ -83,27 +83,39 @@
         padding: 20px 16px;
     }
 
+    #question .question-contexte-etape {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        margin: 0 4px 12px;
+    }
+
+    #question .question-contexte-identites {
+        max-width: 100%;
+        font-size: clamp(12px,3.6vw,.94rem);
+    }
+
+    #question .question-autonomie {
+        width: 100%;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    /* Trois emplacements fixes sur la première ligne : Précédente, Valider,
+       Passer/Suivante. Jokers reste centré sur la seconde ligne. */
     #question .question-conteneur > .question-commande-ligne {
-        display: block;
+        display: grid;
+        grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+        grid-template-rows: auto auto;
+        align-items: center;
+        column-gap: 8px;
+        row-gap: 10px;
+        width: 100%;
         min-height: 0;
         margin-top: 16px;
     }
 
-    #question .question-conteneur > .question-commande-ligne > .suivant-ligne {
-        display: grid;
-        grid-template-columns: repeat(2,minmax(0,1fr));
-        grid-template-rows: auto;
-        align-items: stretch;
-        justify-content: stretch;
-        gap: 10px;
-        width: 100%;
-        max-width: none;
-        margin: 0;
-        pointer-events: auto;
-    }
-
-    /* Surcharge ciblée de l’ancien groupe flex : ce groupe est l’enfant direct
-       de la barre dont les boutons sont replacés dans la grille mobile. */
+    #question .question-conteneur > .question-commande-ligne > .suivant-ligne,
     #question .question-commande-ligne > .suivant-ligne > .navigation-question-groupe {
         display: contents;
     }
@@ -114,44 +126,47 @@
     #question .suivant-ligne #boutonPasser,
     #question .suivant-ligne #boutonQuestionSuivante {
         position: static;
-        width: 100%;
-        max-width: none;
+        width: max-content;
+        max-width: 100%;
         min-width: 0;
-        min-height: 44px;
+        min-height: 42px;
         height: auto;
         margin: 0;
-        padding: 9px 12px;
+        padding: 8px 10px;
+        flex: 0 0 auto;
+        font-size: clamp(12px,3.35vw,14px);
+        line-height: 1.15;
+        white-space: nowrap;
         transform: none;
-    }
-
-    #question .suivant-ligne > #boutonValider,
-    #question .suivant-ligne #boutonQuestionSuivante {
-        grid-column: 1 / -1;
-        grid-row: 1;
-        justify-self: stretch;
     }
 
     #question .suivant-ligne > #boutonQuestionPrecedente {
         grid-column: 1;
-        grid-row: 2;
+        grid-row: 1;
+        justify-self: start;
     }
 
-    #question .suivant-ligne #boutonPasser {
+    #question .suivant-ligne > #boutonValider {
         grid-column: 2;
-        grid-row: 2;
+        grid-row: 1;
+        justify-self: center;
+    }
+
+    #question .suivant-ligne #boutonPasser,
+    #question .suivant-ligne #boutonQuestionSuivante {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
     }
 
     #question .suivant-ligne #boutonJokers {
-        grid-column: 1 / -1;
-        grid-row: 3;
+        grid-column: 2;
+        grid-row: 2;
         justify-self: center;
-        width: min(100%,220px);
     }
 
-    #question .suivant-ligne:has(#boutonPasser.masque) #boutonQuestionPrecedente {
-        grid-column: 1 / -1;
-        justify-self: center;
-        width: min(100%,260px);
+    #question .suivant-ligne #boutonJokers > span:last-child {
+        font-size: inherit;
     }
 
     /* Les boutons de liaison restent les seuls objets encadrés : les deux

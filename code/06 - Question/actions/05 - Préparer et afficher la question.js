@@ -251,10 +251,10 @@ function appliquerIdentiteVisuelleEtape(question) {
     const etapeProgramme = programme?.etapes?.find(
         etape => Number(etape.id) === Number(question?.etape)
     );
-    document.documentElement.style.setProperty(
-        '--couleur-etape-active',
-        etapeProgramme?.couleur || '#2d7379'
-    );
+    const couleurEtape = question?.theme === 'commun'
+        ? (etapeProgramme?.couleur || '#2d7379')
+        : obtenirCouleurTitreEtape(question?.etape);
+    document.documentElement.style.setProperty('--couleur-etape-active', couleurEtape);
     document.body.dataset.etapeActive = String(question?.etape || 'libre');
 }
 function actualiserSuiviEtapeQuestion(question) {
@@ -270,10 +270,12 @@ function actualiserSuiviEtapeQuestion(question) {
     if (!conteneur || !identiteParcoursQuestion || !numeroParcours || !titreParcours || !numero || !titre || !suivi || !compteur || !boutonReinitialiser || !question)
         return;
     if (question.missionSigles) {
-        identiteParcoursQuestion.classList.add('masque');
+        identiteParcoursQuestion.classList.remove('masque');
         const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
         const identite = obtenirIdentiteEtapeMissionSigles(numeroEtape);
         const finaleMission = obtenirModeMissionSigles() === 'evaluation';
+        numeroParcours.textContent = 'Mission Sigles';
+        titreParcours.textContent = 'Mission Sigles';
         numero.textContent = finaleMission ? 'Évaluation finale' : `Étape ${numeroEtape}`;
         titre.textContent = finaleMission ? 'Expert des sigles' : identite.titre;
         suivi.classList.toggle('masque', finaleMission || obtenirModeMissionSigles() !== 'parcours');

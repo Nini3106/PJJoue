@@ -87,16 +87,16 @@
     }
 
     #bilan .bilan-actions.actions button {
-        width: 100%;
-        max-width: none;
+        width: max-content;
+        max-width: 100%;
         min-width: 0;
         min-height: 44px;
         margin: 0;
     }
 
     #bilan .bilan-actions .principal {
-        grid-column: 1 / -1;
-        grid-row: 1;
+        grid-column: auto;
+        grid-row: auto;
     }
 
     #bilan .bilan-erreurs-panneau {

@@ -258,7 +258,7 @@ def verifier_aucun_bouton_jaune_plein(page: Page) -> None:
         const candidats = [...document.querySelectorAll(
             'button, [role="button"], a[class*="bouton"], a[class*="button"], .entrainement-lancer, .sigles-bouton-mode'
         )];
-        return candidats.filter(estVisible).map(element => {
+        return candidats.filter(estVisible).filter(element => element.id !== 'boutonCommencer').map(element => {
             const style = getComputedStyle(element);
             return {
                 id: element.id || '',
@@ -367,6 +367,9 @@ def verifier_options_entrainement(page: Page) -> None:
                 espace: rectangleOptions && rectangleCommencer
                     ? rectangleCommencer.top - rectangleOptions.bottom
                     : -1,
+                decalageGauche: rectangleOptions && rectangleCommencer
+                    ? rectangleCommencer.left - rectangleOptions.left
+                    : 999,
                 debordement: carte.scrollWidth - carte.clientWidth
             };
         });
@@ -377,6 +380,7 @@ def verifier_options_entrainement(page: Page) -> None:
         or any(not carte["secondesVisibles"] for carte in donnees)
         or any(carte["espace"] < 15 for carte in donnees)
         or abs(donnees[0]["espace"] - donnees[1]["espace"]) > 1
+        or any(abs(carte["decalageGauche"]) > 1 for carte in donnees)
         or any(carte["debordement"] > 1 for carte in donnees)
     ):
         raise AssertionError(
@@ -560,6 +564,63 @@ def verifier_parcours_detail_mobile(page: Page) -> None:
     if donnees["largeurMax"] > donnees["viewport"] + 1:
         raise AssertionError(f"Parcours mobile : une carte dépasse du viewport : {donnees}")
 
+
+
+def verifier_question_mobile_stable(page: Page) -> None:
+    """La commande mobile garde les mêmes zones quelle que soit la taille de texte."""
+    donnees = page.evaluate("""() => {
+        const lire = () => {
+            const barre = document.querySelector('#question .question-commande-ligne');
+            const rectBarre = barre?.getBoundingClientRect();
+            const rect = selecteur => document.querySelector(selecteur)?.getBoundingClientRect();
+            const relatif = rectangle => rectangle && rectBarre ? {
+                gauche: rectangle.left - rectBarre.left,
+                droite: rectangle.right - rectBarre.left,
+                centre: rectangle.left + rectangle.width / 2 - rectBarre.left,
+                haut: rectangle.top - rectBarre.top,
+                largeur: rectangle.width,
+                hauteur: rectangle.height
+            } : null;
+            const identite = document.querySelector('#question .question-contexte-identites');
+            return {
+                largeurBarre: rectBarre?.width || 0,
+                identite: identite?.innerText?.replace(/\\s+/g, ' ').trim() || '',
+                precedent: relatif(rect('#boutonQuestionPrecedente')),
+                valider: relatif(rect('#boutonValider')),
+                passer: relatif(rect('#boutonPasser:not(.masque), #boutonQuestionSuivante:not(.masque)')),
+                jokers: relatif(rect('#boutonJokers:not(.masque)')),
+                debordement: document.documentElement.scrollWidth - document.documentElement.clientWidth
+            };
+        };
+        const ancienne = getComputedStyle(document.documentElement).getPropertyValue('--echelle-texte').trim() || '1';
+        document.documentElement.style.setProperty('--echelle-texte', '1');
+        const normal = lire();
+        document.documentElement.style.setProperty('--echelle-texte', '1.15');
+        const grand = lire();
+        document.documentElement.style.setProperty('--echelle-texte', ancienne);
+        return {normal, grand};
+    }""")
+    for nom, etat in donnees.items():
+        if not re.fullmatch(r"Parcours\s+\d+\s+Étape\s+\d+", etat["identite"]):
+            raise AssertionError(f"Question mobile ({nom}) : repère parcours/étape incorrect : {etat}")
+        if etat["debordement"] > 1:
+            raise AssertionError(f"Question mobile ({nom}) : débordement horizontal : {etat}")
+        if not all(etat.get(cle) for cle in ("precedent", "valider", "passer", "jokers")):
+            raise AssertionError(f"Question mobile ({nom}) : commandes manquantes : {etat}")
+        ligne = [etat["precedent"]["haut"], etat["valider"]["haut"], etat["passer"]["haut"]]
+        if max(ligne) - min(ligne) > 2:
+            raise AssertionError(f"Question mobile ({nom}) : Précédente/Valider/Passer doivent rester sur la même ligne : {etat}")
+        if etat["jokers"]["haut"] <= max(ligne) + 4:
+            raise AssertionError(f"Question mobile ({nom}) : Jokers doit rester centré sur la ligne suivante : {etat}")
+        if abs(etat["valider"]["centre"] - etat["largeurBarre"] / 2) > 2:
+            raise AssertionError(f"Question mobile ({nom}) : Valider n'est pas centré : {etat}")
+        if abs(etat["jokers"]["centre"] - etat["largeurBarre"] / 2) > 2:
+            raise AssertionError(f"Question mobile ({nom}) : Jokers n'est pas centré : {etat}")
+    normal, grand = donnees["normal"], donnees["grand"]
+    if abs(normal["valider"]["centre"] - grand["valider"]["centre"]) > 2:
+        raise AssertionError(f"Question mobile : le centrage de Valider dépend de la taille de texte : {donnees}")
+    if abs(normal["jokers"]["centre"] - grand["jokers"]["centre"]) > 2:
+        raise AssertionError(f"Question mobile : le centrage de Jokers dépend de la taille de texte : {donnees}")
 
 def verifier_palette_reference(page: Page) -> None:
     donnees = page.evaluate("""() => {
@@ -1371,7 +1432,7 @@ def scenarios() -> list[Scenario]:
         Scenario("mobile-progression-peuplee", 390, 844, progression_peuplee, verifier_progression_peuplee_mobile),
         Scenario("mobile-parametres", 390, 844, parametres_mobile, verifier_parametres_mobile_normal),
         Scenario("mobile-parametres-texte-115", 390, 844, parametres_mobile_texte_115, verifier_parametres_mobile_texte_115),
-        Scenario("mobile-question-multiple", 390, 844, question_action("q.activite?.type === 'selection-multiple'")),
+        Scenario("mobile-question-multiple", 390, 844, question_action("q.activite?.type === 'selection-multiple'"), verifier_question_mobile_stable),
         Scenario("mobile-question-association", 390, 844, question_action("q.activite?.type === 'association'"), verifier_association_mobile),
         Scenario("mobile-jokers", 390, 844, joker, verifier_modale),
     ]

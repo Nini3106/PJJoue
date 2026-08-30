@@ -305,8 +305,10 @@ def charger_routes_application() -> dict[str, str]:
 def construire_relais_route(route: str, profondeur: int) -> str:
     route_encodee = route.replace("/", "%2F")
     retour_racine = "../" * profondeur
-    destination = f"{retour_racine}?pjjoue_route={route_encodee}"
-    script_destination = json.dumps(destination, ensure_ascii=False)
+    destination_production = f"{retour_racine}?pjjoue_route={route_encodee}"
+    destination_locale = f"{retour_racine}index.html?pjjoue_route={route_encodee}"
+    script_production = json.dumps(destination_production, ensure_ascii=False)
+    script_local = json.dumps(destination_locale, ensure_ascii=False)
     return (
         '<!doctype html>\n'
         '<html lang="fr">\n'
@@ -315,13 +317,13 @@ def construire_relais_route(route: str, profondeur: int) -> str:
         '  <meta name="viewport" content="width=device-width,initial-scale=1">\n'
         '  <meta name="robots" content="noindex,follow">\n'
         '  <link rel="canonical" href="https://pjjoue.fr/">\n'
-        f'  <meta http-equiv="refresh" content="0;url={destination}">\n'
+        f'  <meta http-equiv="refresh" content="0;url={destination_production}">\n'
         '  <title>Ouverture de PJJoue</title>\n'
-        f'  <script>location.replace(new URL({script_destination}, location.href).href);</script>\n'
+        f'  <script>const destination=location.protocol==="file:"?new URL({script_local},location.href):new URL({script_production},location.href);location.replace(destination.href);</script>\n'
         '</head>\n'
         '<body>\n'
         '  <h1>Ouverture de PJJoue</h1>\n'
-        f'  <p>Redirection vers la section demandée… <a href="{destination}">Continuer</a></p>\n'
+        f'  <p>Redirection vers la section demandée… <a href="{destination_locale}">Continuer</a></p>\n'
         '</body>\n'
         '</html>\n'
     )

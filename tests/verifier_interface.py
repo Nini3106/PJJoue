@@ -30,6 +30,11 @@ def construire_page_jeu() -> str:
     feuille = "\n".join((RACINE / chemin).read_text(encoding="utf-8") for chemin in FEUILLES_INTERFACE)
     donnees = (RACINE / "donnees/donnees-pjj.js").read_text(encoding="utf-8")
     moteur = (RACINE / "ressources/moteur-jeu.js").read_text(encoding="utf-8")
+    moteur = moteur.replace(
+        "restaurerRoute(history.state || lireRoute());",
+        "mettreAJourAdresseNavigation = () => {}; restaurerRoute(history.state || lireRoute());",
+        1,
+    )
     image = base64.b64encode((RACINE / "ressources/panorama-accueil-calme.png").read_bytes()).decode("ascii")
     page = re.sub(r'<meta[^>]+http-equiv="Content-Security-Policy"[^>]*/?>', "", page, flags=re.I)
     page = re.sub(r'<!-- Google Tag Manager -->.*?<!-- End Google Tag Manager -->\s*', "", page, count=1, flags=re.S | re.I)
@@ -113,24 +118,35 @@ def verifier_ouverture_locale(navigateur) -> bool:
     page.reload(wait_until="domcontentloaded")
     page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
 
-    page.goto(f"{(RACINE / 'index.html').resolve().as_uri()}#supports", wait_until="domcontentloaded")
+    index_local = (RACINE / 'index.html').resolve().as_uri()
+    page.goto(f"{index_local}?pjjoue_route=supports", wait_until="domcontentloaded")
     page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
     assert page.locator("body").get_attribute("data-ecran-actif") == "supports", (
-        "La route file:// #supports doit ouvrir les supports depuis le menu des guides."
+        "La route file:// ?pjjoue_route=supports doit ouvrir les supports sans fragment #."
     )
+    assert "#" not in page.url, page.url
 
-    page.goto(f"{(RACINE / 'index.html').resolve().as_uri()}#%E0%A4%A", wait_until="domcontentloaded")
+    page.goto(f"{index_local}?pjjoue_route=%E0%A4%A", wait_until="domcontentloaded")
     page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
     assert page.locator("body").get_attribute("data-ecran-actif") == "accueil", (
-        "Un fragment d'adresse mal encodé doit revenir à l'accueil sans interrompre le site."
+        "Une route locale mal encodée doit revenir à l'accueil sans interrompre le site."
     )
+    assert "#" not in page.url, page.url
+
+    page.goto(f"{index_local}?pjjoue_route=parametres", wait_until="domcontentloaded")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+    assert page.locator("body").get_attribute("data-ecran-actif") == "parametres"
+    page.locator("#boutonRetour").click()
+    page.wait_for_timeout(150)
+    assert page.locator("body").get_attribute("data-ecran-actif") == "accueil"
+    assert page.url.endswith('/index.html') and '#' not in page.url, page.url
 
     for ecran in ("parcours", "supports", "entrainement", "progression", "carnet", "parametres"):
         page.evaluate("ecran => afficherEcran(ecran)", ecran)
     page.evaluate("() => ouvrirParcours('matiere_criminelle_peines')")
     page.wait_for_timeout(150)
 
-    assert page.url.startswith("file:") and "#parcours/matiere_criminelle_peines" in page.url, page.url
+    assert page.url.startswith('file:') and page.url.endswith('/index.html') and '#' not in page.url, page.url
     assert page.locator("#pjjoue-google-tag-manager").count() == 0, (
         "Google Tag Manager ne doit pas être injecté depuis une page file://."
     )

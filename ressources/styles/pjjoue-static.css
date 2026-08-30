@@ -104,8 +104,9 @@ p, li, dd { color: var(--text-soft); }
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width:auto;
-  min-width:102px;
+  width:max-content;
+  max-width:100%;
+  min-width:0;
   height:44px;
   min-height:44px;
   margin-left:auto;
@@ -148,8 +149,8 @@ p, li, dd { color: var(--text-soft); }
   padding: 0 13px;
   border-radius: 11px;
   color: var(--text-soft);
-  font-size: .86rem;
-  font-weight: 740;
+  font-size: 1rem;
+  font-weight: 800;
   text-align: left;
 }
 .guide-site-entete.menu-guide-actif .guide-navigation-principale a:hover { color: var(--text); background: var(--surface-raised); }
@@ -328,11 +329,11 @@ input:focus, select:focus, textarea:focus { border-color: #6F8FEA; box-shadow: 0
 }
 @media (max-width: 620px) {
   .guide-site-entete { min-height:66px; gap:8px; }
-  .guide-site-entete nav a { padding: 8px 9px; font-size: .86rem; }
+  .guide-site-entete nav a { padding: 8px 9px; font-size: .9375rem; }
   .page-information, .page-guide { width: min(100% - 24px, var(--content)); margin: 18px auto 24px; padding: 22px 18px; border-radius: 22px; }
   .page-information-entete, .guide-page-entete { margin-bottom: 28px; }
   .page-information-encadre, .guide-appel-action { padding: 18px; }
-  .guide-appel-action .guide-bouton { width: 100%; }
+  .guide-appel-action .guide-bouton { width:max-content; max-width:100%; }
   .guide-grille-2, .guide-grille-3, .guide-grille-4 { grid-template-columns: 1fr; }
   .page-information-liste > div, .source-fiche dl div { grid-template-columns: 1fr; gap: 3px; }
   .produit-pied-page { width: calc(100% - 24px); }

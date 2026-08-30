@@ -19,4 +19,4 @@ textarea { min-height: 90px; resize: vertical; }
 .fenetre-administration-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
 .fenetre-administration-actions .fenetre-administration-principal { border-color: transparent; color:#fffefa; background:#56656c; }
 @media (max-width: 720px) { .grille-question { grid-template-columns: 1fr; } }
-@media (max-width: 560px) { .fenetre-administration-panneau { padding: 26px 20px 22px; } .fenetre-administration-actions { flex-direction: column-reverse; } .fenetre-administration-actions button { width: 100%; } }
+@media (max-width: 560px) { .fenetre-administration-panneau { padding: 26px 20px 22px; } .fenetre-administration-actions { flex-direction: column-reverse; } .fenetre-administration-actions button { width:max-content; max-width:100%; } }

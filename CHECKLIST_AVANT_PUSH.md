@@ -83,6 +83,12 @@ python outils/construire_seo.py --verifier
 
 Le contrôle doit confirmer les pages indexables, les `title`/descriptions, canonical, Open Graph, les relais d’URL propres et `sitemap.xml`. Les routes internes (`/parcours/`, `/revision/`, `/progression/`, etc.) doivent rester `noindex,follow` et absentes du sitemap.
 
+Contrôles d’interface obligatoires avant push :
+
+- aucun lien interne ne doit réintroduire de fragment `#` dans la barre d’adresse ; en `file://`, utiliser `index.html?pjjoue_route=...` ;
+- le seul bouton jaune plein est **Commencer / Reprendre** sur l’accueil ;
+- les boutons de commande doivent épouser leur libellé avec uniquement le padding nécessaire, sans `width:100%`, `flex-grow` ni étirement décoratif.
+
 Si un contenu public, une URL, une meta ou une date éditoriale change, reconstruire d’abord le SEO avec `python outils/construire_seo.py`, puis **régénérer `MANIFESTE.json` en dernier**.
 
 ## 6. Lancer la recette complète

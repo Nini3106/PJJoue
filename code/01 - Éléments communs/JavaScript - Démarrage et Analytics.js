@@ -306,8 +306,8 @@ function envoyerUtilisationJoker(type) {
 function estRouteAccueil() {
     if (typeof lireRoute === 'function')
         return lireRoute().ecran === 'accueil';
-    const fragment = location.hash || '#accueil';
-    return fragment === '#accueil' || fragment === '#' || fragment === '';
+    const routeLocale = new URLSearchParams(location.search).get('pjjoue_route');
+    return !routeLocale || routeLocale === 'accueil';
 }
 function remettreAccueilEnHaut() {
     const racineDefilement = document.scrollingElement || document.documentElement;

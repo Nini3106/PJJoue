@@ -299,8 +299,8 @@ function envoyerUtilisationJoker(type) {
 function estRouteAccueil() {
     if (typeof lireRoute === 'function')
         return lireRoute().ecran === 'accueil';
-    const fragment = location.hash || '#accueil';
-    return fragment === '#accueil' || fragment === '#' || fragment === '';
+    const routeLocale = new URLSearchParams(location.search).get('pjjoue_route');
+    return !routeLocale || routeLocale === 'accueil';
 }
 function remettreAccueilEnHaut() {
     const racineDefilement = document.scrollingElement || document.documentElement;
@@ -926,8 +926,8 @@ let restaurationNavigation = false;
 // -----------------------------------------------------------------------------
 // Navigation, historique et fenêtres de confirmation
 // -----------------------------------------------------------------------------
-let navigationInterneParFragment = false;
-function utiliserNavigationParFragment() {
+let navigationLocaleEnCours = false;
+function utiliserNavigationLocaleSansServeur() {
     return window.location.protocol === 'file:' || !/^https?:$/.test(window.location.protocol);
 }
 function obtenirRacineApplication() {
@@ -962,10 +962,9 @@ const ECRANS_PAR_ROUTE_PROPRE = Object.freeze(
             .map(([ecran, route]) => [route, ecran])
     )
 );
-function routeFragmentPourEcran(identifiant) {
-    if (identifiant === 'parcours' && etat.theme)
-        return '#parcours/' + encodeURIComponent(etat.theme);
-    return '#' + identifiant;
+function routeLocalePourEcran(identifiant) {
+    const routeRelative = routeRelativePourEcran(identifiant) || 'accueil';
+    return '?pjjoue_route=' + encodeURIComponent(routeRelative);
 }
 function routeRelativePourEcran(identifiant) {
     if (identifiant === 'parcours' && etat.theme)
@@ -973,8 +972,8 @@ function routeRelativePourEcran(identifiant) {
     return ROUTES_APPLICATION_PROPRES[identifiant] ?? '';
 }
 function routePourEcran(identifiant) {
-    if (utiliserNavigationParFragment())
-        return routeFragmentPourEcran(identifiant);
+    if (utiliserNavigationLocaleSansServeur())
+        return routeLocalePourEcran(identifiant);
     const routeRelative = routeRelativePourEcran(identifiant);
     return new URL(routeRelative ? `${routeRelative}/` : './', URL_RACINE_APPLICATION).pathname;
 }
@@ -988,22 +987,23 @@ function creerEtatNavigation(identifiant) {
 }
 function mettreAJourAdresseNavigation(identifiant, remplacer = false) {
     const route = routePourEcran(identifiant);
-    // Un fichier ouvert directement dans Chrome n’a pas une origine HTTP classique.
-    // On conserve donc les fragments uniquement en mode file:// pour les tests locaux.
-    if (utiliserNavigationParFragment()) {
-        if (window.location.hash === route)
+    const methode = remplacer ? 'replaceState' : 'pushState';
+    if (utiliserNavigationLocaleSansServeur()) {
+        // En file://, Chrome attribue une origine de sécurité unique à chaque URL locale.
+        // Modifier l'historique avec pushState/replaceState peut donc produire un avertissement
+        // « Unsafe attempt to load URL ». La navigation interne reste en mémoire et ne génère
+        // aucun fragment #. Lors d'un retour à l'accueil depuis un relais local, on recharge
+        // simplement index.html sans paramètre afin que la barre d'adresse soit cohérente.
+        if (identifiant === 'accueil' && window.location.search) {
+            const accueilLocal = new URL('index.html', URL_RACINE_APPLICATION);
+            window.location[remplacer ? 'replace' : 'assign'](accueilLocal.href);
             return;
-        navigationInterneParFragment = true;
-        if (remplacer)
-            window.location.replace(route);
-        else
-            window.location.hash = route;
-        window.setTimeout(() => { navigationInterneParFragment = false; }, 0);
+        }
+        navigationLocaleEnCours = false;
         return;
     }
     if (window.location.pathname === route && !window.location.search && !window.location.hash)
         return;
-    const methode = remplacer ? 'replaceState' : 'pushState';
     history[methode](creerEtatNavigation(identifiant), '', route);
 }
 function actualiserBoutonRetour() {
@@ -1382,15 +1382,17 @@ function lireRouteDepuisFragment() {
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
 }
 function lireRoute() {
-    if (utiliserNavigationParFragment())
-        return lireRouteDepuisFragment();
+    const routeRelayee = new URLSearchParams(location.search).get('pjjoue_route');
+    if (routeRelayee)
+        return lireRouteDepuisChemin(routeRelayee === 'accueil' ? '' : routeRelayee);
 
+    // Compatibilité silencieuse avec d’anciens favoris locaux : on sait encore les lire,
+    // mais l’adresse est immédiatement réécrite sans # par restaurerRoute().
     if (location.hash && /^#(?:accueil|parcours|carnet|entrainement|erreurs|sigles|sigles-revision|supports|progression|parametres|question|bilan)(?:\/|$)/.test(location.hash))
         return lireRouteDepuisFragment();
 
-    const routeRelayee = new URLSearchParams(location.search).get('pjjoue_route');
-    if (routeRelayee)
-        return lireRouteDepuisChemin(routeRelayee);
+    if (utiliserNavigationLocaleSansServeur())
+        return { pjjoue: true, ecran: 'accueil' };
 
     let chemin = location.pathname;
     const base = URL_RACINE_APPLICATION.pathname.endsWith('/')
@@ -1431,23 +1433,15 @@ function restaurerRoute(route) {
     else
         afficherEcran(etatRoute.ecran || 'accueil', { depuisHistorique: true, forcerSortieQuestion: true });
     restaurationNavigation = false;
-    if (!utiliserNavigationParFragment())
-        history.replaceState(creerEtatNavigation(etat.ecran), '', routePourEcran(etat.ecran));
+    mettreAJourAdresseNavigation(etat.ecran, true);
 }
 window.addEventListener('hashchange', () => {
-    if (!utiliserNavigationParFragment() || restaurationNavigation || navigationInterneParFragment)
+    if (restaurationNavigation || navigationLocaleEnCours || !window.location.hash)
         return;
-    const fragmentCourant = window.location.hash || '#accueil';
-    if (fragmentCourant === routePourEcran(etat.ecran))
-        return;
-    restaurerRoute(lireRoute());
+    restaurerRoute(lireRouteDepuisFragment());
 });
 window.addEventListener('popstate', evenement => {
-    if (navigationInterneParFragment)
-        return;
-    // Chrome peut émettre popstate lors d'un simple changement de fragment sur un fichier local.
-    // Si l'adresse correspond déjà à l'écran affiché, ce n'est pas une demande de sortie utilisateur.
-    if (utiliserNavigationParFragment() && window.location.hash === routePourEcran(etat.ecran))
+    if (navigationLocaleEnCours)
         return;
     if (etat.ecran === 'question' && etat.questionsSession?.length) {
         history.forward();
@@ -4256,10 +4250,10 @@ function appliquerIdentiteVisuelleEtape(question) {
     const etapeProgramme = programme?.etapes?.find(
         etape => Number(etape.id) === Number(question?.etape)
     );
-    document.documentElement.style.setProperty(
-        '--couleur-etape-active',
-        etapeProgramme?.couleur || '#2d7379'
-    );
+    const couleurEtape = question?.theme === 'commun'
+        ? (etapeProgramme?.couleur || '#2d7379')
+        : obtenirCouleurTitreEtape(question?.etape);
+    document.documentElement.style.setProperty('--couleur-etape-active', couleurEtape);
     document.body.dataset.etapeActive = String(question?.etape || 'libre');
 }
 function actualiserSuiviEtapeQuestion(question) {
@@ -4275,10 +4269,12 @@ function actualiserSuiviEtapeQuestion(question) {
     if (!conteneur || !identiteParcoursQuestion || !numeroParcours || !titreParcours || !numero || !titre || !suivi || !compteur || !boutonReinitialiser || !question)
         return;
     if (question.missionSigles) {
-        identiteParcoursQuestion.classList.add('masque');
+        identiteParcoursQuestion.classList.remove('masque');
         const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
         const identite = obtenirIdentiteEtapeMissionSigles(numeroEtape);
         const finaleMission = obtenirModeMissionSigles() === 'evaluation';
+        numeroParcours.textContent = 'Mission Sigles';
+        titreParcours.textContent = 'Mission Sigles';
         numero.textContent = finaleMission ? 'Évaluation finale' : `Étape ${numeroEtape}`;
         titre.textContent = finaleMission ? 'Expert des sigles' : identite.titre;
         suivi.classList.toggle('masque', finaleMission || obtenirModeMissionSigles() !== 'parcours');

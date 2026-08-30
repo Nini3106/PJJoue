@@ -98,6 +98,7 @@ input,select {
     font: inherit
 }
 button {
+    box-sizing: border-box;
     font: inherit;
     cursor: pointer
 }
@@ -1119,12 +1120,17 @@ p {
         align-items: stretch;
         gap: 7px
     }
-    .suivant-ligne>button,.suivant-ligne .navigation-question-groupe {
-        flex: 1;
+    .suivant-ligne>button {
+        flex: 0 0 auto;
+        min-width: 0
+    }
+    .suivant-ligne .navigation-question-groupe {
+        flex: 1 1 auto;
         min-width: 0
     }
     .suivant-ligne .navigation-question-groupe button {
-        width: 100%
+        width: max-content;
+        max-width: 100%
     }
 }
 @media (prefers-reduced-motion:reduce) {
@@ -1236,10 +1242,10 @@ p {
     transform: none;
 }
 .activite-valider:hover {
-    color: var(--bleu-nuit-950);
-    background: var(--accent-survol);
-    border-color: #fff1c7;
-    box-shadow: 0 6px 16px rgba(255,200,87,.16);
+    color: #fff;
+    background: #17558f;
+    border-color: var(--jaune-interface);
+    box-shadow: none;
     transform: none;
 }
 .principal:active,.activite-valider:active {
@@ -1346,13 +1352,15 @@ p {
 }
 @media (max-width:580px) {
     .activite-valider {
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
         min-width: 0;
         min-height: 40px;
         padding: 8px 12px;
     }
     .suivant-ligne button {
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
         min-height: 36px;
         padding: 7px 8px;
         font-size: var(--taille-action-question-mobile);
@@ -1574,7 +1582,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
         flex-direction: column
     }
     .suivant-ligne button,.navigation-question-groupe button {
-        width: 100%
+        width: max-content;
+        max-width: 100%
     }
 }
 /* Lisibilité minimale des informations secondaires et notification non bloquante. */
@@ -2951,28 +2960,30 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .bouton-commencer {
     position: static;
     z-index: auto;
+    width: max-content;
+    max-width: 100%;
     min-height: 48px;
-    border: 1px solid #fff;
+    border: 1px solid #e8ad16;
     padding: 10px 22px;
     margin: 0;
-    color: #fff;
-    background: var(--surface-secondaire);
+    color: var(--texte-sur-jaune);
+    background: var(--jaune-interface);
     border-radius: 999px;
     cursor: pointer;
-    font-weight: 800;
+    font-weight: 900;
     appearance: none;
     -webkit-appearance: none;
 }
 .bouton-commencer-principal {
-    color: #fff;
-    border-color: #6f94c0;
-    background: var(--surface-secondaire);
+    color: var(--texte-sur-jaune);
+    border-color: #e8ad16;
+    background: var(--jaune-interface);
 }
 .bouton-commencer-principal:hover,
 .bouton-commencer-principal:focus-visible {
-    color: #fff;
-    border-color: var(--jaune-interface);
-    background: #17558f;
+    color: var(--texte-sur-jaune);
+    border-color: #fff1c7;
+    background: #ffd45f;
 }
 
 
@@ -3301,104 +3312,24 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 
 
-#entrainement {
-    min-height: calc(100vh - 150px);
-}
-#entrainement .entrainement-nombre {
-    width: min(1080px,100%);
-    margin: 0 auto 28px;
-    text-align: center;
-}
-#entrainement .entrainement-nombre .choix-libelle {
-    margin-bottom: 12px;
-    color: #eaf5ff;
-    font-size: 1rem;
-    font-weight: 900;
-}
-#entrainement .entrainement-nombre-choix {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-}
-#entrainement .entrainement-nombre-choix .choix-bouton {
-    width: max-content;
-    min-width: 0;
-    min-height: 44px;
-    padding-inline: 14px;
-    border-radius: 12px;
-    box-shadow: none;
-    color: #e7f3ff;
-    background: rgba(8,56,108,.50);
-    border: 1px solid rgba(142,199,251,.35);
-}
-#entrainement .choix-bouton:hover,
-#entrainement .choix-bouton:focus-visible {
-    color: var(--texte);
-    background: rgba(79,140,255,.12);
-    border-color: #8db9ff;
-}
-#entrainement .entrainement-icone {
-    margin-bottom: 12px;
-    color: var(--jaune-interface);
-    font-size: 1.55rem;
-    font-weight: 950;
-    min-width: 58px;
-    width: 58px;
-    height: 58px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    border-radius: 0;
-    box-shadow: none;
-    display: grid;
-    place-items: center;
-}
-#entrainement .entrainement-details {
-    margin-top: 12px;
-    color: #aecdE8;
-    font-size: .88rem;
-    font-weight: 750;
-}
-#entrainement .entrainement-lancer {
-    font-weight: 900;
-    box-shadow: none;
-    width: 100%;
-    min-height: 46px;
-    margin-top: auto;
-    border-radius: 13px;
-}
-#entrainement .entrainement-lancer.secondaire {
-    color: #e8f4ff;
-    background: rgba(7,49,99,.45);
-    border: 1px solid rgba(142,199,251,.38);
-}
-@media (max-width:1000px) {
-    #entrainement .entrainement-nombre-choix {
-        grid-template-columns: repeat(5,minmax(54px,1fr));
-    }
-}
-@media (max-width:560px) {
-    #entrainement .entrainement-nombre-choix {
-        grid-template-columns: repeat(5,1fr);
-    }
-}
 
 
 
-#entrainement .entrainement-icone svg,
-#entrainement .entrainement-icone img {
-    width: 52px;
-    height: 52px;
-    overflow: visible;
-    filter: drop-shadow(0 5px 10px rgba(0,20,55,.15));
-}
-#entrainement .entrainement-icone-ordonne {
-    color: var(--icone-jaune);
-}
-#entrainement .entrainement-icone-melange {
-    color: var(--icone-bleu-vert);
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 :is(#erreurs,#sigles-revision) .theme-icone,:is(#erreurs,#sigles-revision) .vide-icone {
     color: var(--icone-orange)
 }
@@ -3409,16 +3340,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: var(--icone-violette)
 }
 @media (max-width:700px) {
-    #entrainement .entrainement-icone {
-        width: 76px;
-        height: 76px;
-        min-width: 76px;
-    }
-    #entrainement .entrainement-icone svg,
-#entrainement .entrainement-icone img {
-        width: 62px;
-        height: 62px;
-    }
+    
+    
     #parcours .chemin-etape-icone {
         width: 56px;
         height: 56px;
@@ -3429,12 +3352,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
         height: 46px;
     }
 }
-#entrainement .entrainement-nombre-choix .choix-bouton[aria-pressed="true"] {
-    color:var(--texte);
-    background:rgba(79,140,255,.16);
-    border-color:#4f8cff;
-    box-shadow:inset 0 0 0 1px #4f8cff;
-}
+
 #question .detaillee-correction {
     margin-top: 12px;
 }
@@ -3556,11 +3474,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 #carnet > .page-entete,
 :is(#erreurs,#sigles-revision) > .page-entete,
+#supports > .page-entete,
 #parametres > .page-entete {
     text-align: center;
 }
 #carnet > .page-entete > p,
 :is(#erreurs,#sigles-revision) > .page-entete > p,
+#supports > .page-entete > p,
 #parametres > .page-entete > p {
     margin-inline: auto;
 }
@@ -3594,8 +3514,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 :is(#erreurs,#sigles-revision) .revision-etape-boutons {
     margin-top: 20px;
-    width: 100%;
-    grid-template-columns: repeat(4,minmax(0,1fr));
+    width: max-content;
+    max-width: 100%;
     gap: 9px;
 }
 :is(#erreurs,#sigles-revision) .revision-etape-bouton {
@@ -3609,7 +3529,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     gap: 8px;
     cursor: pointer;
     min-width: 0;
-    width: 100%;
+    width: max-content;
+    max-width: 100%;
     box-sizing: border-box;
     overflow: hidden;
     padding-left: 12px;
@@ -3628,73 +3549,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     background: var(--jaune-interface);
     flex: 0 0 auto;
 }
-#entrainement .entrainement-entete {
-    text-align: center;
-    margin-bottom: 30px;
-}
-#entrainement .entrainement-entete p {
-    max-width: 760px;
-    margin-left: auto;
-    margin-right: auto;
-}
-#entrainement .entrainement-grille {
-    width: min(1080px,100%);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 22px;
-}
-#entrainement .entrainement-carte {
-    min-height: 360px;
-    height: auto;
-    padding: 26px 27px 24px;
-    border-radius: 20px;
-    box-sizing: border-box;
-    border: 1px solid var(--bordure-carte);
-    background: var(--surface-carte);
-    box-shadow: var(--ombre-carte);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-#entrainement .entrainement-ordonne {
-    border-left: 5px solid var(--jaune-interface)
-}
-#entrainement .entrainement-melange {
-    border-left: 5px solid #39d7c4
-}
-#entrainement .entrainement-carte h2 {
-    margin: 0;
-    color: #fff;
-    font-size: 1.45rem;
-}
-#entrainement .entrainement-carte>p {
-    margin: 8px 0 0;
-    color: #cfe2f4;
-    font-size: .94rem;
-    line-height: 1.4;
-}
-#entrainement .entrainement-options {
-    width: 100%;
-    margin-top: 16px;
-    display: grid;
-    gap: 10px;
-}
-#entrainement .entrainement-option,#entrainement .entrainement-chronometre-secondes {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    align-items: center;
-    gap: 12px;
-}
-#entrainement .entrainement-option>span,#entrainement .entrainement-chronometre-secondes>span {
-    color: #eef7ff;
-    font-weight: 850;
-}
-#entrainement .entrainement-bascule-groupe {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
 .option-bouton {
     min-height: 42px;
     border-radius: 11px;
@@ -3703,12 +3569,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: #eaf5ff;
     cursor: pointer;
 }
-#entrainement .option-bouton:hover,
-#entrainement .option-bouton:focus-visible {
-    color: var(--texte);
-    background: rgba(79,140,255,.12);
-    border-color: #8db9ff;
-}
+
 .option-bouton.actif {
     color: var(--texte);
     background: rgba(79,140,255,.16);
@@ -3717,8 +3578,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     font-weight: 900;
 }
 .entrainement-secondes-groupe {
-    display: grid;
-    grid-template-columns: repeat(6,minmax(0,1fr));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
 }
 .entrainement-secondes-groupe .choix-bouton {
@@ -3726,17 +3588,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding: 6px;
     border-radius: 9px;
 }
-#entrainement .entrainement-lancer {
-    color: #fff;
-    background: var(--surface-carte-profonde);
-    border-color: #6f94c0;
-}
-#entrainement .entrainement-lancer:hover,
-#entrainement .entrainement-lancer:focus-visible {
-    color: #fff;
-    background: #17558f;
-    border-color: var(--jaune-interface);
-}
+
+
 #carnet .carnet-page-entete {
     margin-bottom: 22px;
 }
@@ -3962,19 +3815,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: #5fe0a0;
 }
 
-@media (max-width:980px) {
-    #entrainement .entrainement-grille {
-        grid-template-columns: 1fr;
-        width: min(720px,100%);
-        gap: 18px;
-    }
-    #entrainement .entrainement-carte {
-        min-height: 0;
-        height: auto;
-    }
-}
+
 @media (max-width:950px) {
-    :is(#erreurs,#sigles-revision) .revision-mode-grille,#entrainement .entrainement-grille {
+    :is(#erreurs,#sigles-revision) .revision-mode-grille{
         grid-template-columns: 1fr;
     }
     #carnet .carnet-parcours-details {
@@ -3982,10 +3825,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     }
 }
 @media (max-width:650px) {
-    #entrainement .entrainement-option,#entrainement .entrainement-chronometre-secondes {
-        grid-template-columns: 1fr;
-        gap: 7px;
-    }
+    
     .entrainement-secondes-groupe {
         grid-template-columns: repeat(3,1fr);
     }
@@ -4038,7 +3878,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 #parametres .parametres-actions-boutons button {
     border-radius: 12px;
-    width: 100%;
+    width: max-content;
     max-width: 100%;
     min-width: 0;
     min-height: 40px;
@@ -4061,8 +3901,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     white-space: nowrap;
 }
 #parametres .parametres-choix .choix-groupe {
-    display: grid;
-    grid-template-columns: repeat(3,minmax(0,1fr));
     gap: 8px;
     margin: 0;
 }
@@ -4112,15 +3950,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     }
 }
 #parametres .parametres-actions-boutons {
-    width: 100%;
-    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
     gap: 10px;
     margin: 0;
-}
-@media (max-width:700px) {
-    #parametres .parametres-actions-boutons {
-        grid-template-columns: 1fr;
-    }
 }
 #parametres .parametre-volume.parametre-desactive {
     opacity: .58;
@@ -5356,7 +5187,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     grid-column: 2;
     grid-row: 1;
     justify-self: center;
-    min-width: 190px;
+    min-width: 0;
+    width: max-content;
+    max-width: 100%;
 }
 #question #boutonValider.masque {
     display: none;
@@ -5866,7 +5699,8 @@ main.conteneur {
         flex-direction: column-reverse;
     }
     .pjj-fenetre-actions button {
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
     }
 }
 /* Activité de classement avec distracteurs. */
@@ -6514,7 +6348,8 @@ main.conteneur {
         justify-content: stretch;
     }
     #bilan .bilan-actions button {
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
     }
 }
 @media (max-width:480px) {
@@ -6839,27 +6674,22 @@ body:not([data-ecran-actif="accueil"])::before {
         flex: 0 0 auto;
     }
 
-    #entrainement .entrainement-bascule-groupe,
-    #entrainement .entrainement-secondes-groupe,
-    #entrainement .entrainement-nombre-choix,
     :is(#erreurs,#sigles-revision) .revision-etape-boutons,
-    #progression .progression-actions,
-    #parametres .parametres-actions-boutons,
-    .actions,
-    .pjj-fenetre-actions {
+#progression .progression-actions,
+#parametres .parametres-actions-boutons,
+.actions,
+.pjj-fenetre-actions{
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
         gap: 8px;
     }
-    #entrainement .option-bouton,
-    #entrainement .choix-bouton,
     :is(#erreurs,#sigles-revision) .revision-etape-bouton,
-    #progression .progression-actions > *,
-    #parametres .parametres-actions-boutons > *,
-    .actions > *,
-    .pjj-fenetre-actions > * {
+#progression .progression-actions > *,
+#parametres .parametres-actions-boutons > *,
+.actions > *,
+.pjj-fenetre-actions > *{
         width: auto;
         min-width: 0;
         flex: 0 0 auto;
@@ -6911,26 +6741,11 @@ body:not([data-ecran-actif="accueil"])::before {
 
 /* Ajustement téléphone : boutons compacts et accueil jamais rogné. */
 @media (max-width:580px) {
-    #entrainement .entrainement-carte {
-        padding: 16px 15px;
-    }
-    #entrainement .entrainement-icone {
-        width: 46px;
-        height: 46px;
-        min-width: 46px;
-        margin-bottom: 8px;
-    }
-    #entrainement .entrainement-icone svg {
-        width: 43px;
-        height: 43px;
-    }
-    #entrainement .option-bouton {
-        min-height: 40px;
-    }
-    #entrainement .entrainement-lancer {
-        min-height: 44px;
-        margin-top: 14px;
-    }
+    
+    
+    
+    
+    
     #accueil.ecran.actif,
     #accueil .accueil-presentation {
         height: auto;
@@ -7071,7 +6886,8 @@ body:not([data-ecran-actif="accueil"])::before {
     }
     #question .question-commande-ligne #boutonValider {
         order: 3;
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
     }
     #question .question-commande-ligne .navigation-question-groupe {
         flex-wrap: wrap;
@@ -7083,9 +6899,12 @@ body:not([data-ecran-actif="accueil"])::before {
         opacity: .12;
     }
     #question .question-commande-ligne > .suivant-ligne,
-    #question .question-commande-ligne .navigation-question-groupe,
-    #question .question-commande-ligne button {
+    #question .question-commande-ligne .navigation-question-groupe {
         width: 100%;
+    }
+    #question .question-commande-ligne button {
+        width: max-content;
+        max-width: 100%;
     }
 }
 /* Le bouton Valider prend exactement la zone centrale libérée par les jokers. */
@@ -7243,7 +7062,9 @@ body:not([data-ecran-actif="accueil"])::before {
     #question #boutonValider {
         grid-column: 2;
         grid-row: 1;
-        justify-self: stretch;
+        justify-self: center;
+        width: max-content;
+        max-width: 100%;
     }
     #question .question-commande-ligne .navigation-question-groupe {
         grid-column: 1 / -1;
@@ -8155,19 +7976,17 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     label.secondaire {
         min-height: 44px;
     }
-    #entrainement .entrainement-grille,
-:is(#erreurs,#sigles-revision) .revision-mode-grille,
-#progression .progression-grille {
+    :is(#erreurs,#sigles-revision) .revision-mode-grille,
+#progression .progression-grille{
         grid-template-columns: 1fr;
         gap: 16px;
     }
     
     
     
-    #entrainement .entrainement-carte,
     :is(#erreurs,#sigles-revision) .revision-mode-carte,
-    #progression .progression-carte,
-    #parametres .parametre {
+#progression .progression-carte,
+#parametres .parametre{
         min-width: 0;
         min-height: 0;
         padding: 21px 19px;
@@ -8190,7 +8009,8 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     #progression .progression-actions > *,
     #parametres .parametres-actions-boutons > *,
     .actions > * {
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
     }
     #parcours .chemin-programme-presentation,
 #carnet .carnet-parcours,
@@ -8240,11 +8060,13 @@ header.entete .navigation .bouton-installer-pjjoue::before {
         pointer-events: auto;
     }
     #question #boutonQuestionPrecedente {
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
     }
     #question #boutonValider {
         grid-row: 1;
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
         min-width: 0;
     }
     #question .question-commande-ligne .navigation-question-groupe {
@@ -8259,7 +8081,8 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     #question .question-commande-ligne #boutonPasser,
     #question .question-commande-ligne #boutonQuestionSuivante {
         position: static;
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
         min-width: 0;
         min-height: 44px;
         height: 44px;
@@ -8331,10 +8154,9 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     .conteneur {
         width: calc(100% - 16px);
     }
-    #entrainement .entrainement-carte,
-:is(#erreurs,#sigles-revision) .revision-mode-carte,
+    :is(#erreurs,#sigles-revision) .revision-mode-carte,
 #progression .progression-carte,
-#parametres .parametre {
+#parametres .parametre{
         padding: 18px 16px;
         border-radius: 17px;
     }
@@ -8474,97 +8296,11 @@ header.entete .navigation .bouton-installer-pjjoue::before {
 }
 
 /* Ajustements mobiles ciblés : navigation et entraînement sans collision. */
-@media (max-width:580px) {
-    #entrainement .entrainement-grille {
-        width: 100%;
-        gap: 14px;
-    }
-    #entrainement .entrainement-carte {
-        height: auto;
-        min-height: 0;
-        padding: 18px 16px 17px;
-        border-radius: 17px;
-        align-items: stretch;
-    }
-    #entrainement .entrainement-icone {
-        width: 54px;
-        height: 54px;
-        min-width: 54px;
-        margin-bottom: 10px;
-    }
-    #entrainement .entrainement-icone svg {
-        width: 50px;
-        height: 50px;
-    }
-    #entrainement .entrainement-carte h2 {
-        font-size: 1.35rem;
-    }
-    #entrainement .entrainement-carte > p {
-        margin-top: 8px;
-        font-size: .9rem;
-        line-height: 1.45;
-    }
-    #entrainement .entrainement-details {
-        margin-top: 10px;
-        font-size: .84rem;
-    }
-    #entrainement .entrainement-options {
-        margin-top: 14px;
-        gap: 12px;
-    }
-    #entrainement .entrainement-option,
-    #entrainement .entrainement-chronometre-secondes {
-        display: grid;
-        grid-template-columns: 1fr;
-        align-items: stretch;
-        gap: 7px;
-        width: 100%;
-        min-width: 0;
-    }
-    #entrainement .entrainement-option > span,
-    #entrainement .entrainement-chronometre-secondes > span {
-        font-size: .86rem;
-    }
-    #entrainement .entrainement-bascule-groupe {
-        grid-template-columns: repeat(2,minmax(0,1fr));
-        gap: 8px;
-        width: 100%;
-        min-width: 0;
-    }
-    #entrainement .option-bouton {
-        width: 100%;
-        min-width: 0;
-        min-height: 44px;
-        box-sizing: border-box;
-    }
-    #entrainement .entrainement-secondes-groupe {
-        grid-template-columns: repeat(3,minmax(0,1fr));
-        gap: 7px;
-        width: 100%;
-    }
-    #entrainement .entrainement-lancer {
-        position: static;
-        width: 100%;
-        min-height: 48px;
-        margin: 17px 0 0;
-        flex: none;
-    }
-}
 
-@media (max-width:360px) {
-    #entrainement .entrainement-carte {
-        padding-inline: 14px;
-    }
-}
 
-#entrainement .entrainement-icone svg {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    filter: drop-shadow(0 2px 3px rgba(0,20,55,.1));
-}
+
+
+
 
 /* ==========================================================
    Adaptation aux écrans final : navigation, accueil, bilan et pied de page
@@ -8610,15 +8346,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
         background: #062661;
     }
 
-    #entrainement .entrainement-lancer {
-        align-self: center;
-        width: auto;
-        min-width: 0;
-        max-width: 240px;
-        min-height: 42px;
-        margin: 14px auto 0;
-        padding: 8px 18px;
-    }
+    
 
     #bilan .bilan-resume-entete {
         grid-template-columns: 54px minmax(0,1fr);
@@ -8847,12 +8575,10 @@ header.entete .navigation button[aria-current="page"] {
         padding-inline: 13px;
         font-size: .88rem;
     }
-    #entrainement .option-bouton,
-    #entrainement .choix-bouton,
     :is(#erreurs,#sigles-revision) .revision-etape-bouton,
-    #progression .progression-actions button,
-    #parametres .parametres-actions-boutons button,
-    .pjj-fenetre-actions button {
+#progression .progression-actions button,
+#parametres .parametres-actions-boutons button,
+.pjj-fenetre-actions button{
         min-height: var(--hauteur-bouton-mobile);
         padding: 6px 12px;
         font-size: .86rem;
@@ -8886,8 +8612,7 @@ header.entete .navigation button[aria-current="page"] {
 
 /* Proportions finales des commandes sur mobile. */
 @media (max-width:820px) {
-    #entrainement .entrainement-lancer,
-#carnet #boutonLancerLeDe,
+    #carnet #boutonLancerLeDe,
 #carnet #boutonJouerLeTirage,
 #question .question-commande-ligne button,
 #bilan .bilan-actions button,
@@ -8895,7 +8620,7 @@ header.entete .navigation button[aria-current="page"] {
 #parametres .parametres-actions-boutons button,
 .pjj-fenetre-actions button,
 .celebration-continuer,
-.bouton-retour {
+.bouton-retour{
         width: max-content;
         max-width: calc(100vw - 32px);
         min-width: 0;
@@ -8906,15 +8631,9 @@ header.entete .navigation button[aria-current="page"] {
         padding: 5px 10px;
         line-height: 1.15;
     }
-    #entrainement .entrainement-lancer {
-        max-width: calc(100% - 24px);
-        margin-top: 12px;
-        font-size: .84rem;
-    }
-    #entrainement .option-bouton,
-    #entrainement .choix-bouton,
+    
     #parametres .choix-bouton,
-    :is(#erreurs,#sigles-revision) .revision-etape-bouton {
+:is(#erreurs,#sigles-revision) .revision-etape-bouton{
         width: max-content;
         min-width: 0;
         min-height: 34px;
@@ -8930,9 +8649,7 @@ header.entete .navigation button[aria-current="page"] {
         justify-content: center;
         gap: 8px;
     }
-    #entrainement .entrainement-nombre-choix .choix-bouton,
-    #entrainement .entrainement-secondes-groupe .choix-bouton,
-    #parametres .choix-groupe .choix-bouton {
+    #parametres .choix-groupe .choix-bouton{
         width: max-content;
         min-width: 0;
         height: 34px;
@@ -9255,13 +8972,11 @@ header.entete .marque > span {
     }
 
     button:not(.bouton-menu-mobile),
-    .secondaire,
-    label.secondaire,
-    #entrainement .option-bouton,
-    #entrainement .choix-bouton,
-    #parametres .choix-bouton,
-    :is(#erreurs,#sigles-revision) .revision-etape-bouton,
-    #question .question-commande-ligne button {
+.secondaire,
+label.secondaire,
+#parametres .choix-bouton,
+:is(#erreurs,#sigles-revision) .revision-etape-bouton,
+#question .question-commande-ligne button{
         min-height: 44px;
         height: auto;
     }
@@ -9505,8 +9220,9 @@ header.entete.menu-mobile-ouvert .bouton-menu-mobile .bouton-menu-icone > span:n
     .bouton-menu-mobile {
         flex-direction: row;
         gap: 9px;
-        width: auto;
-        min-width: 102px;
+        width: max-content;
+        max-width: 100%;
+        min-width: 0;
         padding: 0 13px;
     }
 }
@@ -9543,8 +9259,8 @@ header.entete .navigation {
     right: clamp(10px,3vw,38px);
     display: grid;
     grid-template-columns: 1fr;
-    justify-items: stretch;
-    gap: 3px;
+    justify-items: start;
+    gap: 6px;
     width: min(310px,calc(100vw - 20px));
     max-height: calc(100dvh - var(--hauteur-entete,66px) - 18px);
     margin: 0;
@@ -9579,25 +9295,29 @@ header.entete.menu-mobile-ouvert .navigation {
 
 header.entete .navigation button,
 header.entete .navigation .navigation-lien {
-    width: 100%;
-    max-width: none;
+    position: relative;
+    width: max-content;
+    max-width: 100%;
     min-height: 42px;
     padding: 9px 12px;
     border: 1px solid transparent;
     border-radius: 10px;
-    color: #fff;
+    color: #d5e6f7;
     background: transparent;
     box-shadow: none;
+    font-size: 1rem;
+    font-weight: 800;
     text-align: left;
 }
 
+/* Même survol que le menu dépliant des Guides : texte blanc + surface relevée. */
 header.entete .navigation button:hover,
 header.entete .navigation button:focus-visible,
 header.entete .navigation .navigation-lien:hover,
 header.entete .navigation .navigation-lien:focus-visible {
     color: #fff;
-    border-color: rgba(255,255,255,.18);
-    background: rgba(255,255,255,.08);
+    border-color: transparent;
+    background: #1b568f;
 }
 
 header.entete .navigation button[aria-current="page"],
@@ -9625,8 +9345,9 @@ header.entete .navigation .navigation-lien[aria-current="page"] {
         justify-content: center;
         flex-direction: row;
         gap: 9px;
-        width: auto;
-        min-width: 102px;
+        width: max-content;
+        max-width: 100%;
+        min-width: 0;
         height: 44px;
         min-height: 44px;
         margin-left: auto;
@@ -9677,13 +9398,20 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
 
 /* Réviser : accès direct aux supports sur la ligne de titre. */
 #erreurs .revision-page-entete-ligne {
-    display:flex;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
     align-items:center;
-    justify-content:space-between;
     gap:16px;
 }
-#erreurs .revision-page-entete-ligne h1 { margin-bottom:0; }
+#erreurs .revision-page-entete-ligne h1 {
+    grid-column:2;
+    justify-self:center;
+    margin-bottom:0;
+    text-align:center;
+}
 #erreurs .revision-lien-supports {
+    grid-column:3;
+    justify-self:end;
     flex:0 0 auto;
     min-height:42px;
     padding:8px 14px;
@@ -9701,45 +9429,61 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
 }
 #erreurs .revision-page-entete > p { margin-top:12px; }
 
-/* Question : parcours puis étape, tous deux visibles au-dessus de la carte. */
+/* Question : deux repères colorés compacts sur une seule ligne, sans séparateur. */
 #question .question-contexte-identites {
     min-width:0;
-    display:grid;
-    gap:7px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:nowrap;
+    white-space:nowrap;
 }
 #question .question-parcours-identite,
 #question .question-etape-identite {
     min-width:0;
     display:inline-flex;
     align-items:center;
-    gap:8px;
+    gap:0;
+    flex:0 0 auto;
 }
 #question .question-parcours-identite > span,
 #question .question-etape-identite > span {
     flex:0 0 auto;
-    padding:3px 8px;
-    border:1px solid color-mix(in srgb,var(--parcours-accent,var(--couleur-etape-active)) 66%,transparent);
+    display:inline-flex;
+    align-items:center;
+    min-height:30px;
+    padding:4px 10px;
     border-radius:999px;
-    color:#fff;
-    background:color-mix(in srgb,var(--parcours-accent,var(--couleur-etape-active)) 16%,rgba(6,45,91,.72));
     font-weight:850;
+    white-space:nowrap;
+}
+#question .question-parcours-identite > span {
+    border:1px solid rgba(var(--parcours-accent-rgb,79,140,255),.42);
+    color:var(--parcours-accent,#8db9ff);
+    background:rgba(var(--parcours-accent-rgb,79,140,255),.12);
+    box-shadow:inset 0 0 0 1px rgba(var(--parcours-accent-rgb,79,140,255),.12);
 }
 #question .question-etape-identite > span {
-    border-color:color-mix(in srgb,var(--couleur-etape-active) 66%,transparent);
-    background:color-mix(in srgb,var(--couleur-etape-active) 16%,rgba(6,45,91,.72));
+    border:1px solid color-mix(in srgb, var(--couleur-etape-active,#2d7379) 44%, transparent);
+    color:var(--couleur-etape-active,#7de0d5);
+    background:color-mix(in srgb, var(--couleur-etape-active,#2d7379) 14%, transparent);
+    box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--couleur-etape-active,#2d7379) 12%, transparent);
 }
 #question .question-parcours-identite > strong,
 #question .question-etape-identite > strong {
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    color:#eef7ff;
-    font-weight:750;
+    display:none;
 }
 
 @media (max-width:650px) {
-    #erreurs .revision-page-entete-ligne { align-items:stretch; flex-direction:column; }
-    #erreurs .revision-lien-supports { align-self:flex-start; }
+    #erreurs .revision-page-entete-ligne {
+        grid-template-columns:1fr;
+        justify-items:center;
+    }
+    #erreurs .revision-page-entete-ligne h1,
+    #erreurs .revision-lien-supports {
+        grid-column:1;
+        justify-self:center;
+    }
     #question .question-contexte-etape { align-items:flex-start; flex-direction:column; }
     #question .question-autonomie { width:100%; justify-content:space-between; }
 }
@@ -9816,13 +9560,16 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
     text-underline-offset: 3px;
 }
 .pjj-consentement-actions {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
-    min-width: 118px;
+    min-width: 0;
 }
 .pjj-consentement-bouton {
     min-height: 42px;
-    width: 100%;
+    width: max-content;
+    max-width: 100%;
     border-radius: 999px;
     padding: 8px 16px;
     font-weight: 900;
@@ -9838,10 +9585,16 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
     border: 1px solid #9fc5eb;
 }
 .pjj-consentement-accepter {
-    color: #102a4a;
-    background: linear-gradient(135deg, #ffe08a, #f6bb3b);
-    border: 1px solid #ffeaad;
-    box-shadow: 0 7px 18px rgba(246, 187, 59, .2);
+    color: #fff;
+    background: #173e6c;
+    border: 1px solid var(--jaune-interface);
+    box-shadow: none;
+}
+.pjj-consentement-accepter:hover,
+.pjj-consentement-accepter:focus-visible {
+    color: #fff;
+    background: rgba(38,104,170,.72);
+    border-color: var(--jaune-interface);
 }
 .pjj-consentement-fermer {
     position: absolute;
@@ -9955,8 +9708,7 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
 #parcours .carte-parcours-icone,
 #carnet .carnet-parcours-icone,
 #progression .progression-icone,
-#entrainement .entrainement-icone,
-#parcours .chemin-evaluation-carte .icone-evaluation {
+#parcours .chemin-evaluation-carte .icone-evaluation{
     width: var(--icone-principale-cadre);
     height: var(--icone-principale-cadre);
     min-width: var(--icone-principale-cadre);
@@ -9967,9 +9719,8 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
 #parcours .carte-parcours-icone img,
 #carnet .carnet-parcours-icone img,
 #progression .progression-icone img,
-#entrainement .entrainement-icone img,
 #parcours .chemin-evaluation-carte .icone-evaluation img,
-#parcours .programme-objectif-simple .objectif-cible-reference {
+#parcours .programme-objectif-simple .objectif-cible-reference{
     display: block;
     width: var(--icone-principale-image);
     height: var(--icone-principale-image);
@@ -10155,7 +9906,8 @@ img[src$="defi-chrono.svg"] { transform: scale(1.20); }
         grid-template-columns: 1fr;
     }
     #carnet .carnet-defi-hasard-actions button {
-        width: 100%;
+        width: max-content;
+        max-width: 100%;
     }
 }
 

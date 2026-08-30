@@ -62,6 +62,8 @@
     <span class="navigation-section-titre">Mini jeux</span>
     <button class="navigation-mini-jeu" id="boutonJeuSigles" data-ecran="sigles" type="button">Mission Sigles</button>
     <!-- Futurs mini-jeux : ajouter ici, par exemple Mission Mesures. -->
+    <span class="navigation-section-separation" aria-hidden="true"></span>
+    <button id="boutonParametres" data-ecran="parametres" type="button">Paramètres</button>
     <button class="bouton-installer-pjjoue" hidden id="boutonInstallerPJJoue" type="button">Installer PJJoue</button>
    </nav>
   </header>
@@ -418,7 +420,7 @@
         <strong id="titreParcoursQuestion">Découvrir la PJJ</strong>
        </div>
        <div class="question-etape-identite">
-        <span id="numeroEtapeQuestion">Étape</span>
+        <span id="numeroEtapeQuestion">Étape 1</span>
         <strong id="titreEtapeQuestion">Parcours PJJ</strong>
        </div>
       </div>
@@ -1094,7 +1096,7 @@
        <option value="0.9">
         Compacte
        </option>
-       <option value="1">
+       <option value="1" selected>
         Normale
        </option>
        <option value="1.15">
@@ -1102,13 +1104,13 @@
        </option>
       </select>
       <div aria-labelledby="libelleChoixTailleTexte" class="choix-groupe" data-groupe-choix="echelleTexte" role="group">
-       <button id="boutonTailleTexteCompacte" class="choix-bouton" data-valeur="0.9" type="button">
+       <button id="boutonTailleTexteCompacte" class="choix-bouton" data-valeur="0.9" aria-pressed="false" type="button">
         Compacte
        </button>
-       <button id="boutonTailleTexteNormale" class="choix-bouton" data-valeur="1" type="button">
+       <button id="boutonTailleTexteNormale" class="choix-bouton actif selectionne" data-valeur="1" aria-pressed="true" type="button">
         Normale
        </button>
-       <button id="boutonTailleTexteGrande" class="choix-bouton" data-valeur="1.15" type="button">
+       <button id="boutonTailleTexteGrande" class="choix-bouton" data-valeur="1.15" aria-pressed="false" type="button">
         Grande
        </button>
       </div>

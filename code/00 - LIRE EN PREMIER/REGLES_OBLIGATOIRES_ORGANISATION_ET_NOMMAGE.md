@@ -53,7 +53,7 @@ python outils/construire_manifeste.py --verifier
 python outils/construire_seo.py --verifier
 ```
 
-Les routes propres de l’application (`/parcours/`, `/revision/`, `/supports/`, `/progression/`, etc.) sont des vues internes et non de nouvelles pages SEO : leurs relais doivent rester `noindex,follow`, canoniser vers l’accueil et rester absents du sitemap. En mode `file://`, les fragments `#...` sont conservés uniquement pour la prévisualisation locale.
+Les routes propres de l’application (`/parcours/`, `/revision/`, `/supports/`, `/progression/`, etc.) sont des vues internes et non de nouvelles pages SEO : leurs relais doivent rester `noindex,follow`, canoniser vers l’accueil et rester absents du sitemap. En mode `file://`, la prévisualisation locale passe par `index.html?pjjoue_route=...` : **aucun nouveau lien interne ne doit générer de fragment `#`**. Une lecture des anciens fragments peut rester uniquement pour compatibilité, à condition de les réécrire immédiatement sans `#`.
 
 Sous Windows, `PREPARER_PJJOUE_AVANT_PUSH.bat` est la procédure obligatoire : elle applique cet ordre et effectue une vérification finale.
 
@@ -522,9 +522,19 @@ Avant publication, `PREPARER_PJJOUE_AVANT_PUSH.bat` doit reconstruire les donné
 
 ## 12. Harmonisation visuelle obligatoire
 
-- Ne jamais réintroduire de **bouton jaune plein**. Les actions importantes ont un fond bleu/sombre et un contour jaune au survol/focus.
+- Le **seul bouton jaune plein** autorisé est **« Commencer » / « Reprendre » sur l’accueil**. Aucun autre bouton ne reçoit d’aplat jaune ; le jaune reste un accent de contour, survol ou focus.
+- **Tous les boutons d’action doivent épouser leur texte** : largeur pilotée par le contenu et son padding, jamais de largeur forcée à `100%`, jamais d’étirement de grille/flex qui agrandit artificiellement le contour, et pas de `min-width` décoratif. `max-width:100%` sert seulement de garde-fou anti-débordement. **Exception volontaire : les 7 cartes de sélection du périmètre dans Entraînement libre utilisent toutes le même gabarit 230 × 82 px.**
 - Les boutons d’un mode de jeu prennent le contour de la couleur de leur icône/mode.
 - Le bouton de réinitialisation globale reste rouge : c’est l’unique exception de danger prévue.
+- Sur une question de parcours, le repère supérieur doit tenir sur une seule ligne avec deux badges adjacents **« Parcours X »** et **« Étape X »**, **sans séparateur `:`** ; ne pas réafficher les noms du parcours et de l’étape dans ce repère.
+- Dans ce repère, **Parcours X conserve la couleur propre au parcours** et **Étape X conserve la couleur propre à l’étape** ; le passage sur une seule ligne ne doit jamais neutraliser ces identités colorées.
+- **Couleurs parcours/étapes — règle globale obligatoire** : tout composant qui représente explicitement un parcours ou une étape (bouton, badge, carte, dossier, choix, encadrement ou contrôle interactif) doit utiliser la couleur canonique de l’élément représenté. Cette couleur doit apparaître au minimum en contour/accent d’encadrement, en survol/focus pour un contrôle interactif, ou en repère coloré pour un élément informatif. **Interdiction de créer une couleur locale concurrente** : utiliser la même identité/fonction de couleur que la page Parcours afin qu’un même parcours ou une même étape conserve exactement la même couleur partout.
+- La taille de texte par défaut est **Normale (1)** pour un nouvel utilisateur ; une préférence explicitement enregistrée ensuite doit être conservée.
+- Sur mobile, la géométrie de la barre **Précédente / Valider / Passer ou Suivante / Jokers** doit rester stable quelle que soit la taille de texte choisie dans Paramètres.
+- Dans **Entraînement libre**, les boutons **Commencer** sont placés directement sous **Options avancées** et alignés avec le début de ce bloc.
+- Dans **Entraînement libre**, les étapes 1, 2 et 3 utilisent le même grand encadrement et la même géométrie générale ; les **7 choix de périmètre ont exactement le même gabarit 230 × 82 px**, les deux cartes de mode sont jumelles et **Options avancées** reste un déclencheur compact dimensionné à son texte.
+- Sur la page **Réviser**, le titre principal reste réellement centré ; le bouton **Supports de révision** peut rester à droite sur grand écran mais ne doit jamais décaler le titre.
+- Le survol de toutes les entrées du **menu dépliant** reprend celui des Guides : texte secondaire au repos, **texte blanc sur fond bleu relevé `#1b568f` au survol/focus** ; l’entrée active reste jaune.
 - Conserver **24 px** entre un bouton Retour et le titre qui suit.
-- Le menu est structuré en trois groupes : navigation principale, **Supports**, puis **Mini jeux**. Ajouter les futurs mini-jeux dans ce dernier groupe sans modifier les deux premiers.
+- Le menu est structuré en trois groupes : navigation principale, **Supports**, puis **Mini jeux**. Ajouter les futurs mini-jeux dans ce dernier groupe sans modifier les deux premiers. **Paramètres** reste l’entrée utilitaire finale, placée après la section Mini jeux.
 - Toute modification de ces règles doit être contrôlée sur bureau et mobile avant publication.

@@ -74,18 +74,18 @@
 
     const navigationLocale = window.location.protocol === 'file:';
     const routesApplication = {
-      accueil: ['', '#accueil'],
-      parcours: ['parcours/', '#parcours'],
-      erreurs: ['revision/', '#erreurs'],
-      supports: ['supports/', '#supports'],
-      entrainement: ['entrainement/', '#entrainement'],
-      sigles: ['mission-sigles/', '#sigles'],
-      progression: ['progression/', '#progression'],
-      carnet: ['carnet/', '#carnet'],
-      parametres: ['parametres/', '#parametres']
+      accueil: ['', 'accueil'],
+      parcours: ['parcours/', 'parcours'],
+      erreurs: ['revision/', 'revision'],
+      supports: ['supports/', 'supports'],
+      entrainement: ['entrainement/', 'entrainement'],
+      sigles: ['mission-sigles/', 'mission-sigles'],
+      progression: ['progression/', 'progression'],
+      carnet: ['carnet/', 'carnet'],
+      parametres: ['parametres/', 'parametres']
     };
     const lienApplication = ecran => navigationLocale
-      ? `${racineApplication.href}index.html${routesApplication[ecran][1]}`
+      ? `${racineApplication.href}index.html?pjjoue_route=${encodeURIComponent(routesApplication[ecran][1])}`
       : new URL(routesApplication[ecran][0], racineApplication).href;
     const lienGuides = `${racineApplication.href}guides/${navigationLocale ? 'index.html' : ''}`;
     const entrees = [
@@ -101,7 +101,9 @@
       { libelle: 'Guides', href: lienGuides },
       { separation: true },
       { section: 'Mini jeux' },
-      { libelle: 'Mission Sigles', href: lienApplication('sigles'), miniJeu: true } // Futurs mini-jeux : ex. Mission Mesures.
+      { libelle: 'Mission Sigles', href: lienApplication('sigles'), miniJeu: true }, // Futurs mini-jeux : ex. Mission Mesures.
+      { separation: true },
+      { libelle: 'Paramètres', href: lienApplication('parametres') }
     ];
 
     navigation.innerHTML = entrees.map(entree => {
@@ -263,25 +265,25 @@
       const racine = new URL(racineApplication.href);
       if (adresse.protocol === 'file:' && adresse.pathname.startsWith(racine.pathname)) {
         const relatif = decodeURIComponent(adresse.pathname.slice(racine.pathname.length)).replace(/^\/+/, '');
-        const routesVersFragments = {
-          'parcours/': '#parcours',
-          'revision/': '#erreurs',
-          'mission-sigles/': '#sigles',
-          'mission-sigles/revision/': '#sigles-revision',
-          'supports/': '#supports',
-          'entrainement/': '#entrainement',
-          'progression/': '#progression',
-          'carnet/': '#carnet',
-          'parametres/': '#parametres'
+        const routesVersParametres = {
+          'parcours/': 'parcours',
+          'revision/': 'revision',
+          'mission-sigles/': 'mission-sigles',
+          'mission-sigles/revision/': 'mission-sigles/revision',
+          'supports/': 'supports',
+          'entrainement/': 'entrainement',
+          'progression/': 'progression',
+          'carnet/': 'carnet',
+          'parametres/': 'parametres'
         };
-        let fragment = routesVersFragments[relatif];
-        if (!fragment) {
+        let routeLocale = routesVersParametres[relatif];
+        if (!routeLocale) {
           const theme = relatif.match(/^parcours\/([^/]+)\/$/);
           if (theme)
-            fragment = `#parcours/${encodeURIComponent(theme[1])}`;
+            routeLocale = `parcours/${theme[1]}`;
         }
-        if (fragment) {
-          lien.setAttribute('href', `${racineApplication.href}index.html${fragment}`);
+        if (routeLocale) {
+          lien.setAttribute('href', `${racineApplication.href}index.html?pjjoue_route=${encodeURIComponent(routeLocale)}`);
           return;
         }
       }

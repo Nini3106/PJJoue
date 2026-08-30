@@ -43,7 +43,7 @@
        <option value="0.9">
         Compacte
        </option>
-       <option value="1">
+       <option value="1" selected>
         Normale
        </option>
        <option value="1.15">
@@ -51,13 +51,13 @@
        </option>
       </select>
       <div aria-labelledby="libelleChoixTailleTexte" class="choix-groupe" data-groupe-choix="echelleTexte" role="group">
-       <button id="boutonTailleTexteCompacte" class="choix-bouton" data-valeur="0.9" type="button">
+       <button id="boutonTailleTexteCompacte" class="choix-bouton" data-valeur="0.9" aria-pressed="false" type="button">
         Compacte
        </button>
-       <button id="boutonTailleTexteNormale" class="choix-bouton" data-valeur="1" type="button">
+       <button id="boutonTailleTexteNormale" class="choix-bouton actif selectionne" data-valeur="1" aria-pressed="true" type="button">
         Normale
        </button>
-       <button id="boutonTailleTexteGrande" class="choix-bouton" data-valeur="1.15" type="button">
+       <button id="boutonTailleTexteGrande" class="choix-bouton" data-valeur="1.15" aria-pressed="false" type="button">
         Grande
        </button>
       </div>

@@ -131,7 +131,7 @@
 .parcours-detail-progression-ligne strong { color:var(--parcours-accent-lisible,var(--parcours-accent)); }
 .parcours-detail-barre { height: 8px; margin-bottom: 15px; overflow: hidden; border-radius: 99px; background: var(--surface-secondaire); }
 .parcours-detail-barre i { display: block; height: 100%; background: var(--parcours-accent); }
-.parcours-action-principale { width: 100%; }
+.parcours-action-principale { width:max-content; max-width:100%; }
 
 .parcours-carte-zone {
   padding: 24px;
