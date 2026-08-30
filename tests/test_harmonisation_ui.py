@@ -139,7 +139,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         self.assertIn("numeroParcours.textContent", js)
         self.assertIn("titreParcours.textContent", js)
         general = (CODE / "01 - Éléments communs/style-general-pjjoue.css").read_text(encoding="utf-8")
-        self.assertIn("color:var(--parcours-accent,#8db9ff);", general)
+        self.assertIn("color:var(--parcours-accent-lisible,var(--parcours-accent,#8db9ff));", general)
         self.assertIn("color:var(--couleur-etape-active,#7de0d5);", general)
 
     def test_seul_commencer_reprendre_est_jaune_plein(self) -> None:
@@ -227,6 +227,8 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         question_js = (CODE / "06 - Question/actions/05 - Préparer et afficher la question.js").read_text(encoding="utf-8")
         self.assertIn("question?.theme === 'commun'", question_js)
         self.assertIn("obtenirCouleurTitreEtape(question?.etape)", question_js)
+        self.assertIn("--parcours-accent-lisible", question_js)
+        self.assertIn("background:var(--surface-carte-profonde);", entrainement)
 
     def test_navigation_locale_ne_manipule_pas_history_en_file(self) -> None:
         navigation = (CODE / "01 - Éléments communs/JavaScript - Navigation et fenêtres.js").read_text(encoding="utf-8")
@@ -286,16 +288,17 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         self.assertIn("style=\"--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}\"", revision_js)
         self.assertIn("background: var(--couleur-etape-active);", question_css)
         self.assertIn("border-color: var(--couleur-etape-active,var(--jaune-interface));", question_css)
-        self.assertIn("color:var(--parcours-accent,#8db9ff);", question_css)
+        self.assertIn("color:var(--parcours-accent-lisible,var(--parcours-accent,#8db9ff));", question_css)
         self.assertIn("color:var(--couleur-etape-active,#7de0d5);", question_css)
         self.assertIn("obtenirCouleurTitreEtape(question?.etape)", question_js)
+        self.assertIn("--parcours-accent-lisible", question_js)
+        self.assertIn("background:var(--surface-carte-profonde);", entrainement_css)
 
     def test_reinitialisation_globale_reste_rouge(self) -> None:
         html = (CODE / "10 - Paramètres/contenu.html").read_text(encoding="utf-8")
         css = (CODE / "10 - Paramètres/style-parametres-alignes.css").read_text(encoding="utf-8")
         self.assertIn('class="danger" id="boutonReinitialiserTouteLaProgression"', html)
         self.assertRegex(css, re.compile(r"\.parametres-zone-sensible \.danger \{[^}]*background:#ca3453;", re.S))
-
 
 if __name__ == "__main__":
     unittest.main()

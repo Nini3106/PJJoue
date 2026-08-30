@@ -415,7 +415,7 @@
 #entrainement .entrainement-hasard-actions .principal {
     border-color:var(--jaune-interface);
     color:var(--texte);
-    background:rgba(7,49,99,.38);
+    background:var(--surface-carte-profonde);
     box-shadow:none;
 }
 #entrainement .entrainement-hasard-actions .principal:hover,

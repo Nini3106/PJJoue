@@ -9457,10 +9457,10 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
     white-space:nowrap;
 }
 #question .question-parcours-identite > span {
-    border:1px solid rgba(var(--parcours-accent-rgb,79,140,255),.42);
-    color:var(--parcours-accent,#8db9ff);
-    background:rgba(var(--parcours-accent-rgb,79,140,255),.12);
-    box-shadow:inset 0 0 0 1px rgba(var(--parcours-accent-rgb,79,140,255),.12);
+    border:1px solid var(--parcours-accent-lisible,var(--parcours-accent,#8db9ff));
+    color:var(--parcours-accent-lisible,var(--parcours-accent,#8db9ff));
+    background:rgba(var(--parcours-accent-rgb,79,140,255),.18);
+    box-shadow:inset 0 0 0 1px rgba(var(--parcours-accent-rgb,79,140,255),.16);
 }
 #question .question-etape-identite > span {
     border:1px solid color-mix(in srgb, var(--couleur-etape-active,#2d7379) 44%, transparent);
@@ -10893,7 +10893,7 @@ body[data-ecran-actif="accueil"] #accueil {
 #entrainement .entrainement-hasard-actions .principal {
     border-color:var(--jaune-interface);
     color:var(--texte);
-    background:rgba(7,49,99,.38);
+    background:var(--surface-carte-profonde);
     box-shadow:none;
 }
 #entrainement .entrainement-hasard-actions .principal:hover,

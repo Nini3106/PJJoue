@@ -4076,6 +4076,7 @@ function afficherReperesQuestion(question) {
         const identite = obtenirIdentiteEtapeMissionSigles(numeroEtape);
         const ecranQuestion = selectionner('#question');
         ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
+        ecranQuestion?.style.setProperty('--parcours-accent-lisible', identite.couleurTexte || identite.couleur);
         ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
         const valeurProgression = Math.round((etat.indexQuestion + 1) / etat.questionsSession.length * 100);
         selectionner('#compteurQuestion').textContent = `${etat.indexQuestion + 1} / ${etat.questionsSession.length}`;
@@ -4089,6 +4090,7 @@ function afficherReperesQuestion(question) {
     const identite = obtenirIdentiteParcours(question.theme);
     const ecranQuestion = selectionner('#question');
     ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
+    ecranQuestion?.style.setProperty('--parcours-accent-lisible', identite.couleurTexte || identite.couleur);
     ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
     const valeurProgression = Math.round(
         (etat.indexQuestion + 1) / etat.questionsSession.length * 100
@@ -4292,6 +4294,7 @@ function actualiserSuiviEtapeQuestion(question) {
     titreParcours.textContent = identite.titre;
     const ecranQuestion = selectionner('#question');
     ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
+    ecranQuestion?.style.setProperty('--parcours-accent-lisible', identite.couleurTexte || identite.couleur);
     ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
     numero.textContent = finale ? 'Étape 12' : `Étape ${question.etape}`;
     titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours PJJ');
