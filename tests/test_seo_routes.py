@@ -51,6 +51,8 @@ class TestSeoEtRoutesPropres(unittest.TestCase):
             "revision/index.html": "index.html?pjjoue_route=revision",
             "mission-sigles/index.html": "index.html?pjjoue_route=mission-sigles",
             "mission-sigles/revision/index.html": "index.html?pjjoue_route=mission-sigles%2Frevision",
+            "mission-mesures/index.html": "index.html?pjjoue_route=mission-mesures",
+            "mission-mesures/revision/index.html": "index.html?pjjoue_route=mission-mesures%2Frevision",
             "resultats/index.html": "index.html?pjjoue_route=resultats",
             "parcours/commun/index.html": "index.html?pjjoue_route=parcours%2Fcommun",
         }

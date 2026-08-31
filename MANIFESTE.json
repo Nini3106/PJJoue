@@ -2,7 +2,7 @@
   "produit": "PJJoue",
   "version": "V1",
   "dateCreation": "août 2026",
-  "dateConsolidation": "2026-08-30",
+  "dateConsolidation": "2026-08-31",
   "composition": {
     "questionsTotales": 960,
     "questionsParcours": 660,
@@ -28,6 +28,12 @@
         "badges Parcours X et Étape X au-dessus des questions",
         "boutons de révision et dossiers d'erreurs par parcours ou étape"
       ]
+    },
+    "etoileFilanteMaitriseSansJoker": {
+      "obligatoire": true,
+      "principe": "Une étape maîtrisée sans joker reçoit une étoile filante avec une traînée visible ; la carte du parcours affiche le même symbole avec le nombre de jalons maîtrisés.",
+      "comptage": "Le compteur additionne les étapes maîtrisées sans joker et l'évaluation finale réussie ; il va de 1 à 12 et affiche 12 lorsque les 11 étapes et l'évaluation sont maîtrisées.",
+      "interdiction": "Une étoile seule sans traînée ne doit pas remplacer ce symbole."
     }
   },
   "fichiers": {
@@ -124,8 +130,8 @@
       "sha256": "6ff04b6dba4e96d664c5408222a4f822eba5dc74aca61d977433f6ec4f97420c"
     },
     "code/00 - LIRE EN PREMIER/INDEX_VISUEL_VERS_CODE.md": {
-      "tailleOctets": 12543,
-      "sha256": "a989cccc630d7a4ad3411956dff7b9f805773b6b395a7f56a95806233b7bd354"
+      "tailleOctets": 11850,
+      "sha256": "0d48eaa916aca9241856f3311909cc507627430f2942f00711c2662a535e8b44"
     },
     "code/00 - LIRE EN PREMIER/LEXIQUE_VISUEL_VERS_CODE.md": {
       "tailleOctets": 1252,
@@ -136,8 +142,8 @@
       "sha256": "7e60977d2bded0fa2cd392b60615269413311d4e6feb3508d622b1b76963dea5"
     },
     "code/00 - LIRE EN PREMIER/REGLES_OBLIGATOIRES_ORGANISATION_ET_NOMMAGE.md": {
-      "tailleOctets": 18953,
-      "sha256": "17cc36f6537241c045d467b4d9348fe633a5248a9bc469d889929f821c2fe0e7"
+      "tailleOctets": 19819,
+      "sha256": "f612f9f9dd5cdf098bc0da13d8ae04bfc55b605e14348196b1ef558338eeb6fc"
     },
     "code/01 - Éléments communs/Analytics/LIRE-MOI.md": {
       "tailleOctets": 482,
@@ -164,20 +170,20 @@
       "sha256": "4e0cc9d3983d5b1912fa25bc6593094fbb06bee71f1d12933a31de26672b564e"
     },
     "code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js": {
-      "tailleOctets": 23749,
-      "sha256": "6fcd0382b896550bb54b3f92aa8219ee164a2d8b11da2712e37a5eff6b9b66d1"
+      "tailleOctets": 23908,
+      "sha256": "4afab59ae41303f70705f050b3b59bd975a8e74b25654d5a0d0ad623d0d1617b"
     },
     "code/01 - Éléments communs/JavaScript - Navigation et fenêtres.js": {
-      "tailleOctets": 23854,
-      "sha256": "61a2f2dc366bc28ce2ff40b93ecf26076ce68d8c39ef553b287f10c69e2d193e"
+      "tailleOctets": 24299,
+      "sha256": "9b342ae5b52faec134b54bc1383eda851fb308e5d353c491e641b2af4133a37f"
     },
     "code/01 - Éléments communs/JavaScript - Préparer les questions et sessions.js": {
-      "tailleOctets": 14334,
-      "sha256": "ba163a2892887a2d18952e552197518ad181daea594388f61d712250248509a3"
+      "tailleOctets": 14456,
+      "sha256": "b7b507c6b15303c0c4c2280458e1db6809f4abdf4f6163c1640248860c7158b7"
     },
     "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js": {
-      "tailleOctets": 25937,
-      "sha256": "4ca98fb0a6e821b09d1d1ac0cd5793f5d1987a34a435e8c5f3b260eb4fa2740a"
+      "tailleOctets": 29373,
+      "sha256": "be30b23c8ed747ad0c0d85b962b34613dccd6f392f42cd2d7b7896cc86fc896c"
     },
     "code/01 - Éléments communs/JavaScript - Sons et célébrations.js": {
       "tailleOctets": 6633,
@@ -192,28 +198,28 @@
       "sha256": "978bc0cbd20b0c413587ba62530f4864784faa1672cb71a974b5bab20d1dc4a6"
     },
     "code/01 - Éléments communs/Navigation/navigation-locale.js": {
-      "tailleOctets": 12238,
-      "sha256": "4625b8de6063b0818c77ab46614c48c4ccf5f62d311ae69693ecc9cae4204a41"
+      "tailleOctets": 12454,
+      "sha256": "66b709dccec5ae6fb53fd4df1d5e5ec3be47e9b8b948b52bab1c927c6b01423e"
     },
     "code/01 - Éléments communs/consentement.css": {
       "tailleOctets": 3710,
       "sha256": "d4f78b4143792d7ad36d3af09ed210b2f35f10487840b559f936129063d51948"
     },
     "code/01 - Éléments communs/gabarit-page-principale.html": {
-      "tailleOctets": 11922,
-      "sha256": "6fc0de6538d36c1a455febc8074916bb25a67530629032f841c0088b8b1653cd"
+      "tailleOctets": 11986,
+      "sha256": "6b05e4733c379e5fc82f4982236c08820ac9995c6489ac8107f699182d78e502"
     },
     "code/01 - Éléments communs/static-pages.css": {
       "tailleOctets": 20968,
       "sha256": "6e0c5ab43780ebd278b7394f14523cfd73d084d5b4260061148d51a5b9af125d"
     },
     "code/01 - Éléments communs/style-des-six-parcours.css": {
-      "tailleOctets": 17533,
-      "sha256": "dc2018190807b4b712efef2a0ed0bca1b1f4a44974020344cd0c02995c24a682"
+      "tailleOctets": 19129,
+      "sha256": "a5f1d8aaeee8d3a1b3274f47034af8ce3cdba3337b707466866635545e091a92"
     },
     "code/01 - Éléments communs/style-general-pjjoue.css": {
-      "tailleOctets": 262516,
-      "sha256": "332a8da867fc690539bba9e32e2620747dbe1ad2cd8ff5d5db0e57faca623b92"
+      "tailleOctets": 263524,
+      "sha256": "b5a2b2287ce9b0f1a635e59086dd2f6cfb83fe0b570628c266d0662d60269c2b"
     },
     "code/02 - Accueil/LIRE-MOI.md": {
       "tailleOctets": 556,
@@ -232,8 +238,8 @@
       "sha256": "a4b7ad1e992ee8f8895172e7bea863e1815eca08062897056c9617e9a06c0229"
     },
     "code/03 - Parcours PJJ/actions-de-la-page.js": {
-      "tailleOctets": 18754,
-      "sha256": "3e0561af42b73bf3899899eb48acc06f82c3aa478a71608bc00575feeed06948"
+      "tailleOctets": 20802,
+      "sha256": "0bacab642c58d11f4a056fe09ad12d4442b13692e7719861189b45532b524ab8"
     },
     "code/03 - Parcours PJJ/contenu.html": {
       "tailleOctets": 5747,
@@ -260,16 +266,16 @@
       "sha256": "431a51c1667670d51447ace5d8d97c38f6c5dd07fbd4b57b0dc0a93cfeddd88c"
     },
     "code/05 - Entraînement libre/actions-de-la-page.js": {
-      "tailleOctets": 10589,
-      "sha256": "b57ec9fe29647bdedce5efdafc2bfc1eb5cbb6009714574eb92e127adb35e8ad"
+      "tailleOctets": 11185,
+      "sha256": "5908b62e0b0ff6065aa7df9c182694a0c53e6d2e80663ce48c342ce05bae0036"
     },
     "code/05 - Entraînement libre/contenu.html": {
-      "tailleOctets": 13212,
-      "sha256": "1d318be0e03b3cdddf4bff106ab35ea1c68732fcfa97c8e456782158a2f001e6"
+      "tailleOctets": 13238,
+      "sha256": "1dc585888a5a5be26c8f38a011f11250ea7b2f7211bd8b61f096ca49c400690f"
     },
     "code/05 - Entraînement libre/style-configurateur-entrainement.css": {
-      "tailleOctets": 16308,
-      "sha256": "173ac8f3921989322127e7159d99536ec5c1aef5a8f86b4940ec785dc5b3dbdf"
+      "tailleOctets": 17789,
+      "sha256": "29c4a011e67a69871fd106c2a68bc91fe24c2448b999e58c4f20e7adbb3c1a7f"
     },
     "code/06 - Question/LIRE-MOI.md": {
       "tailleOctets": 903,
@@ -292,16 +298,16 @@
       "sha256": "a9a8e000b8ad16fc876d7ece6548ff2543e2d90f77a53f3192bb7d3b1371f3e8"
     },
     "code/06 - Question/actions/05 - Préparer et afficher la question.js": {
-      "tailleOctets": 16555,
-      "sha256": "414d9c54e6eb2a7b98e29e29460ae3ae515360ea69d009b0cd536d04dcc47e89"
+      "tailleOctets": 19954,
+      "sha256": "b6ab018ebb0893b36d609e60fb4092a00e0f90a13e4002f4f2cac51ff7dc4c3a"
     },
     "code/06 - Question/actions/06 - Chronomètre de la question.js": {
       "tailleOctets": 4517,
       "sha256": "7af43b7887001d62e17827b06668397456c1f1dc4165994a36c884f61d50bc8b"
     },
     "code/06 - Question/actions/07 - Valider corriger et naviguer.js": {
-      "tailleOctets": 16003,
-      "sha256": "3c7bc162b8a425264327e323092134566676460186e6060b0857502c6e03a4e8"
+      "tailleOctets": 16299,
+      "sha256": "b9addf0cdd5619dfe84ca0f1f8518ec33ae0d5868e7dc7baa4619c633281baa9"
     },
     "code/06 - Question/actions/08 - Jokers de la question.js": {
       "tailleOctets": 12955,
@@ -312,16 +318,16 @@
       "sha256": "3bfd2df8758196154cbd3854a23d2852a48dc6279d96eed8883aa45140d50140"
     },
     "code/06 - Question/style-de-la-page.css": {
-      "tailleOctets": 5103,
-      "sha256": "74500109e85c971d8c5e119f8cdf5098dfe1bf1b24475587c25b32aa546833c6"
+      "tailleOctets": 10250,
+      "sha256": "371e801401bf5ad71a63d156ce49e6a6a1a97e9ff0c30856433466a3bfcf7f0f"
     },
     "code/07 - Bilan de la session/LIRE-MOI.md": {
       "tailleOctets": 580,
       "sha256": "230495253dff79a7a29158036d6616cd8f50450fba20ebb30152992e90bc17ad"
     },
     "code/07 - Bilan de la session/actions-de-la-page.js": {
-      "tailleOctets": 23837,
-      "sha256": "401fd1e1e1327d0d9650d8eaa996bfd90bd6e0d6ead715cf4dbb530f1885ceb6"
+      "tailleOctets": 23944,
+      "sha256": "7e30255e84d39a156495db4b588485689322e0c54af58f5e56931ea2681f19d8"
     },
     "code/07 - Bilan de la session/contenu.html": {
       "tailleOctets": 2909,
@@ -331,37 +337,53 @@
       "tailleOctets": 2392,
       "sha256": "66e33eced4f5cfd473c8b94afe4ba8e0ff944fb3fc708e88d00a1757511f1fef"
     },
+    "code/08 - Réviser/Jeu des mesures/LIRE-MOI.md": {
+      "tailleOctets": 766,
+      "sha256": "cdb85a3329032ba9748b180d6d9efde443a3c5e08da6c6afcf25ec1479db405a"
+    },
+    "code/08 - Réviser/Jeu des mesures/actions-de-la-page.js": {
+      "tailleOctets": 34108,
+      "sha256": "d185d103211e8adbf1fbd4c72e13416065de9f83a8bffa4a83bea1bcd1b79596"
+    },
+    "code/08 - Réviser/Jeu des mesures/contenu.html": {
+      "tailleOctets": 7610,
+      "sha256": "0ac0559acacce07c86742adc3243eafdea324bafbfdb23eabba6540776d21772"
+    },
+    "code/08 - Réviser/Jeu des mesures/style-jeu-des-mesures.css": {
+      "tailleOctets": 25146,
+      "sha256": "1ada6af7622f695f4db2c6468acfffd141c46727c0e9a9b920e10adb5f825858"
+    },
     "code/08 - Réviser/Jeu des sigles/LIRE-MOI.md": {
       "tailleOctets": 2366,
       "sha256": "c564da352ee54614846a812788b54fed9db89c1f2f7f6b66d8eac95b3d76ee50"
     },
     "code/08 - Réviser/Jeu des sigles/actions-de-la-page.js": {
-      "tailleOctets": 71361,
-      "sha256": "43d43d43531caaa2d29406bdc65c0256c077d6db376cdc5c49409ddaffd047cb"
+      "tailleOctets": 71976,
+      "sha256": "a9ed0e47061ce7c267116ba0bbe10b83825d473c8cd12b3d40397defd003e349"
     },
     "code/08 - Réviser/Jeu des sigles/contenu.html": {
       "tailleOctets": 7419,
       "sha256": "f14819c7da91e154e59699a31552eecae64cb9f4134cf33bfc8b14d96315857b"
     },
     "code/08 - Réviser/Jeu des sigles/style-jeu-des-sigles.css": {
-      "tailleOctets": 25071,
-      "sha256": "feb082a3c4bbf0da608089d9792b3c7ed0451735c700b512e56680d9acc91089"
+      "tailleOctets": 24829,
+      "sha256": "1c7b4770d84111c2f45b0884c7258a7293c33915bc4568c74529818bcfda0e8f"
     },
     "code/08 - Réviser/LIRE-MOI.md": {
       "tailleOctets": 1594,
       "sha256": "62caa15e48d3d7103696a96aca3022481ead7362297798567e09157ab814009e"
     },
     "code/08 - Réviser/actions-de-la-page.js": {
-      "tailleOctets": 15426,
-      "sha256": "f8e251e0f2e70fa5e551fccf385b6e083bf57a46babb62f8ede331bc4cdb39dd"
+      "tailleOctets": 17288,
+      "sha256": "0991f9b0fc80e62a81710874b30587d692216fcbdc8060f6e3fab268b5c34727"
     },
     "code/08 - Réviser/contenu.html": {
-      "tailleOctets": 51025,
-      "sha256": "e2dcbe428257be45b906b09d4a30530bde78fd7d2a5fc747c1862b85324dcc5e"
+      "tailleOctets": 51625,
+      "sha256": "dd678be3c01568edecc5d101d1160c504c0594ec93c163dbe0c907e9998692b7"
     },
     "code/08 - Réviser/style-reviser-et-supports.css": {
-      "tailleOctets": 11695,
-      "sha256": "7f34a82d9b9731de263c4c0bf0b3866885dc12fcaa4b5a7830c22053b843768b"
+      "tailleOctets": 11956,
+      "sha256": "526b7205038caa49121e4ae7b29502dc5a4c2740a686a4f8106b00df908e9477"
     },
     "code/09 - Progression/LIRE-MOI.md": {
       "tailleOctets": 564,
@@ -592,12 +614,12 @@
       "sha256": "1c7059807d0a0e18fff45584e4aa11193e908b405e433b517cd0132f0c13bcb7"
     },
     "code/plan-construction.json": {
-      "tailleOctets": 11802,
-      "sha256": "5611571baa062953cbb33e5eb8ff00f3002ec34ec797ad0a4a5754d2d34623bd"
+      "tailleOctets": 12149,
+      "sha256": "21ed38ed881e414d8997ee3f26d904f709a95e8f0426c7800420fa60c41664c6"
     },
     "code/routes-application.json": {
-      "tailleOctets": 343,
-      "sha256": "a2c245faae33093717b41fa9ca382bfe3ff32115a4a70911e9989d2ab775bbb8"
+      "tailleOctets": 425,
+      "sha256": "4970cf175ad7e7fabcd137795ac69c25040194e631dffc390518e756a1282fda"
     },
     "code/seo-pages.json": {
       "tailleOctets": 1874,
@@ -638,6 +660,10 @@
     "documentation/documentation-actuelle/ARCHITECTURE_CODE_PAR_PAGE.md": {
       "tailleOctets": 3788,
       "sha256": "c9eec46dc010969ceb20973f60e0c1df29f4aaa11825ae50a2b497e1de4f512f"
+    },
+    "documentation/documentation-actuelle/AUDIT_JURIDIQUE_MISSION_MESURES_2026-08-30.md": {
+      "tailleOctets": 11929,
+      "sha256": "bb68c9d2f347e1dfd3fbad3cdc3391841bcaf99e0186657f559281b47bfe2aa5"
     },
     "documentation/documentation-actuelle/BANQUE_QUESTIONS.md": {
       "tailleOctets": 3717,
@@ -704,8 +730,12 @@
       "sha256": "76b773543c87dc1fde7ab91e35256fa4cc683098deb8fa2b4d7fc66c92d9dcd7"
     },
     "donnees/donnees-pjj.js": {
-      "tailleOctets": 1602669,
-      "sha256": "acdabb88358949e6dfd47b86214be68e4215da7a3650299e0a811e84a4657622"
+      "tailleOctets": 1873772,
+      "sha256": "0bd980a3279be766c6c2bbc47de5da3ac77bb12e7930a4c75bc59c2de4959d3b"
+    },
+    "donnees/mesures.json": {
+      "tailleOctets": 309012,
+      "sha256": "1d5466e412554b4c16f33a7c36fd55edada44154aa78a2cbc4ec0ee5c1d7df1a"
     },
     "donnees/programme.json": {
       "tailleOctets": 45471,
@@ -720,8 +750,8 @@
       "sha256": "b9ef938005cd82a33130d8a12b622936683763bd2252f6cecc8ddde1f49a387a"
     },
     "donnees/sources.json": {
-      "tailleOctets": 31412,
-      "sha256": "e1320ca739cfb7fc0d730867f230c8ade4249707bca741eeaad52e8b4b9d0594"
+      "tailleOctets": 36262,
+      "sha256": "87d4119f241f6682422574b6a636b905bdd0cdcf95e48a19e90d04c454016668"
     },
     "entrainement/index.html": {
       "tailleOctets": 744,
@@ -764,8 +794,8 @@
       "sha256": "eb8f549047310bf9cd0b8c4300bf72284fecc5d83cf7330e4da716260387db07"
     },
     "index.html": {
-      "tailleOctets": 115286,
-      "sha256": "75af88853208ee03c0e9be548c57903b0db98c6e4ceb9f8743b0f2aa6a5c5d88"
+      "tailleOctets": 123570,
+      "sha256": "2ec4f806de25fc5abffb4d42fd1d6dd688b465b93ae736f9103279f707ea5461"
     },
     "manifest.webmanifest": {
       "tailleOctets": 663,
@@ -790,6 +820,14 @@
     "metiers-pjj/style-de-la-page.css": {
       "tailleOctets": 205,
       "sha256": "c0f89869dcedde7309df4c4caaaf4541e063d730425b2f5f9cbdda16b3e124db"
+    },
+    "mission-mesures/index.html": {
+      "tailleOctets": 756,
+      "sha256": "3b1a9537d74ce8c9b1d9852a0d79d07e7c68c215b3f1972fc6bb6508fc46fe83"
+    },
+    "mission-mesures/revision/index.html": {
+      "tailleOctets": 812,
+      "sha256": "fae29edd1fa1e9ea4b1027f9b58f78ff8ef21977f3e930066cda52ab4477e60b"
     },
     "mission-sigles/index.html": {
       "tailleOctets": 752,
@@ -824,12 +862,12 @@
       "sha256": "2cc61ab7afeaca4daba7b76a0c632d298270ab9bbcba3286ef5d7a81f009b8df"
     },
     "outils/construire_donnees.py": {
-      "tailleOctets": 4712,
-      "sha256": "37b9c4e42490dc46bf108ca8c9a98faeea86cdc9425505ee6495716ce369087f"
+      "tailleOctets": 9497,
+      "sha256": "d53f5d08b5882924764c3c356a34a57a1957934d3f8827b688a6eda4239d3457"
     },
     "outils/construire_manifeste.py": {
-      "tailleOctets": 6239,
-      "sha256": "40c60c47e00e2cc864107d99131e8eb73e77563253639032b8278f9af4e3f436"
+      "tailleOctets": 6988,
+      "sha256": "d8272b8455a7923cb72d392a70bf4940c85b7c95cc9e74b3acae77a872abf9bb"
     },
     "outils/construire_seo.py": {
       "tailleOctets": 11832,
@@ -1008,12 +1046,12 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 394892,
-      "sha256": "bcd2e0a00028ab9327d91e6160654a5856ac9135efc79c52f3d3e79e5a9f35c7"
+      "tailleOctets": 441833,
+      "sha256": "0db96b6ec7a2623c2141474a79157fc9894105bc796b9f27ab63d6ff84b91069"
     },
     "ressources/navigation-locale.js": {
-      "tailleOctets": 12238,
-      "sha256": "4625b8de6063b0818c77ab46614c48c4ccf5f62d311ae69693ecc9cae4204a41"
+      "tailleOctets": 12454,
+      "sha256": "66b709dccec5ae6fb53fd4df1d5e5ec3be47e9b8b948b52bab1c927c6b01423e"
     },
     "ressources/panorama-accueil-calme.png": {
       "tailleOctets": 1811539,
@@ -1056,8 +1094,8 @@
       "sha256": "51a64261c7301ed44340cd3cacc89b8204edcd4adc8beafcf5e0b198d2baa7c4"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 356024,
-      "sha256": "cdbb16f2630a179cc5f8e7613609cbcd3dd2bb2c1951d232052167cc5dadb166"
+      "tailleOctets": 390321,
+      "sha256": "806eff730621b0b160587ceb821d1f6543cc830b8dfa8d23895fab8e3c103289"
     },
     "ressources/styles/pjjoue-static.css": {
       "tailleOctets": 20968,
@@ -1085,7 +1123,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5532,
-      "sha256": "724c89e193f7133e350844af7f1012867f7472171cadb2913f18203fcb4cd1d6"
+      "sha256": "6f0428d487b3fb70d12e6208aade024dc0b5e539e265c6cfdf3a68f0d5c42f01"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14890,
@@ -1303,6 +1341,10 @@
       "tailleOctets": 162070,
       "sha256": "121a978c932513fa04377f9e7ea57a8e16c17a0620eea495ec083e1ebd3261a8"
     },
+    "tests/test_audit_juridique_mesures.py": {
+      "tailleOctets": 7315,
+      "sha256": "064f9f13a95c982822bf697280b15bf62ccbd750af25fe437f9c49e9b85bc624"
+    },
     "tests/test_construction_portable.py": {
       "tailleOctets": 5372,
       "sha256": "eca4cb862dd90cb5866987fade4facb17715056505d4f2b3a6511d75e8d9615b"
@@ -1311,13 +1353,25 @@
       "tailleOctets": 3618,
       "sha256": "1a101c6a2d0ce7bc4e68bf245535590a0e46b9763e84781f5ec2e598fa330ca4"
     },
+    "tests/test_couleurs_questions_et_correction.py": {
+      "tailleOctets": 3011,
+      "sha256": "326521553bdae6bf2494756a2af902838246df907bf9bb43a35c3505af3baf1d"
+    },
     "tests/test_harmonisation_ui.py": {
-      "tailleOctets": 20313,
-      "sha256": "16a022982bae3555f55f61861a3d384f7920b77ca512257077856342305533eb"
+      "tailleOctets": 24728,
+      "sha256": "cf52296b6a5e885f7c3a1dee6f417b6a72a829cc9a15ed5f21ebe40f0b121260"
+    },
+    "tests/test_mesures_jeu.py": {
+      "tailleOctets": 7772,
+      "sha256": "ae360ea496084b612909ab468b5d8124efab2175d9040331d5ea9da398169715"
+    },
+    "tests/test_progression_etoile_filante_et_supports.py": {
+      "tailleOctets": 3533,
+      "sha256": "3fe8658f773da3ef20be9ed8ce9b64af7feb5c6458cc8f641230a9fa9de28c93"
     },
     "tests/test_seo_routes.py": {
-      "tailleOctets": 5094,
-      "sha256": "e492a1b57a66722f608d0546ec04a9cecb7d0ffe8cf8782ba3c9ceb9be050cb5"
+      "tailleOctets": 5284,
+      "sha256": "78f396e9afd3ff195e12a3b464d9b0695e81cfdce6a5712fdf250f64042d8244"
     },
     "tests/test_sigles_jeu.py": {
       "tailleOctets": 6195,
@@ -1340,8 +1394,8 @@
       "sha256": "1dd55da8cbbc570a0c5e1d001736c95d38d59b57ed60257d8d28c79a0f05806f"
     },
     "tests/verifier_jeu_sigles.py": {
-      "tailleOctets": 16417,
-      "sha256": "6e7c1f7217eb3246c9fe775458b0c16aa12646a52ec0a4bbbc0ae405d57b4f57"
+      "tailleOctets": 16421,
+      "sha256": "b8b24ed84eb38893b3705e4a2b1d5de89c506de5a7b55bb2021e8316b3cbc6c8"
     },
     "tests/verifier_navigation_libre.py": {
       "tailleOctets": 3060,
@@ -1352,12 +1406,12 @@
       "sha256": "09d23c21aaa5622576c0ac1e246204fdf26a018e404ece8d4f4a5818e6c506c3"
     },
     "tests/verifier_pjjoue.py": {
-      "tailleOctets": 27733,
-      "sha256": "10b97b506a986b6d1236efd83c1c8115a3c579946a928a1f597a1be3dcd16691"
+      "tailleOctets": 27914,
+      "sha256": "00beb160b0a9c8879812f3a1d68d2de38c794912da090bf355b40b3d1fe9bac4"
     },
     "tests/verifier_regression_visuelle.py": {
-      "tailleOctets": 87686,
-      "sha256": "af575683c76b1738ce89996d7b33533660507dcc438e9daffb01c770e29a4eea"
+      "tailleOctets": 87709,
+      "sha256": "50ada6331a8feed3cd9cbb77f83f7419b42c040228bd9c48b5888bd7801aa31c"
     }
   }
 }

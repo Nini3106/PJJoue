@@ -61,7 +61,7 @@
     <span class="navigation-section-separation" aria-hidden="true"></span>
     <span class="navigation-section-titre">Mini jeux</span>
     <button class="navigation-mini-jeu" id="boutonJeuSigles" data-ecran="sigles" type="button">Mission Sigles</button>
-    <!-- Futurs mini-jeux : ajouter ici, par exemple Mission Mesures. -->
+    <button class="navigation-mini-jeu" id="boutonJeuMesures" data-ecran="mesures" type="button">Mission Mesures</button>
     <span class="navigation-section-separation" aria-hidden="true"></span>
     <button id="boutonParametres" data-ecran="parametres" type="button">Paramètres</button>
     <button class="bouton-installer-pjjoue" hidden id="boutonInstallerPJJoue" type="button">Installer PJJoue</button>
@@ -342,12 +342,12 @@
           <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement" data-selection-visuelle="au-clic">
             <button id="boutonEntrainement10Questions" class="choix-bouton" data-valeur="10" type="button">10</button>
             <button id="boutonEntrainement20Questions" class="choix-bouton" data-valeur="20" type="button">20</button>
-            <button id="boutonEntrainement50Questions" class="choix-bouton" data-valeur="50" type="button">50</button>
-            <button id="boutonEntrainement100Questions" class="choix-bouton" data-valeur="100" type="button">100</button>
+            <button id="boutonEntrainement30Questions" class="choix-bouton" data-valeur="30" type="button">30</button>
+            <button id="boutonEntrainementTousQuestions" class="choix-bouton" data-choix-nombre="tous" data-valeur="660" type="button">Tous</button>
           </div>
           <div class="entrainement-personnalise">
             <div class="entrainement-personnalise-entete"><span>Personnaliser</span><strong id="valeurNombreQuestions">10 questions</strong></div>
-            <input id="curseurNombreQuestions" type="range" min="10" max="660" step="10" value="10" aria-label="Nombre personnalisé de questions — clique ou fais glisser sur la barre">
+            <input id="curseurNombreQuestions" type="range" min="10" max="660" step="1" value="10" aria-label="Nombre personnalisé de questions — clique ou fais glisser sur la barre">
             <div class="entrainement-personnalise-bornes"><span>10</span><span id="borneMaxQuestions">660 max</span></div>
           </div>
         </div>
@@ -602,13 +602,13 @@
 <button aria-label="Filtrer par le parcours 6" aria-pressed="false" data-filtre-supports="6" title="Parcours 6" type="button">P6</button>
 </div>
 <button class="discret supports-tout-refermer" disabled id="boutonRefermerSupports" type="button">Tout refermer</button>
-<p id="statutRechercheSupports" class="supports-statut" aria-live="polite">8 catégories · 19 ressources</p>
+<p id="statutRechercheSupports" class="supports-statut" aria-live="polite">8 catégories · 20 ressources</p>
 </div>
 <div class="supports-revision-groupes">
 <details class="supports-juridiction" id="supports-reperes-pjj" data-mots-cles="PJJ protection judiciaire de la jeunesse DPJJ administration centrale direction interrégionale direction territoriale service unité éducative organisation hiérarchie mesures éducatives sigles vocabulaire">
 <summary>
 <span class="support-juridiction-abreviation">PJJ</span>
-<span class="support-juridiction-titre"><strong>Organisation et repères de la PJJ</strong><small>4 ressources de révision</small></span>
+<span class="support-juridiction-titre"><strong>Organisation et repères de la PJJ</strong><small>5 ressources de révision</small></span>
 <span class="support-juridiction-action">Ouvrir</span><span aria-hidden="true" class="support-juridiction-chevron">⌄</span>
 </summary>
 <div class="supports-juridiction-contenu">
@@ -616,6 +616,7 @@
 <a class="support-revision support-ressource-guide" id="support-mesures-educatives" href="mesures-educatives-pjj/"><span class="support-revision-type">Mesures</span><span class="support-revision-titre"><strong>Mesures éducatives</strong><small>Repères utiles pour distinguer les mesures et leur logique.</small></span><span aria-hidden="true">→</span></a>
 <a class="support-revision support-ressource-guide" id="support-sigles-essentiels" href="sigles-pjj/"><span class="support-revision-type">Vocabulaire</span><span class="support-revision-titre"><strong>Sigles essentiels</strong><small>Retrouver rapidement les abréviations fréquentes.</small></span><span aria-hidden="true">→</span></a>
 <button class="support-revision support-ressource-guide support-jeu-sigles" id="support-jeu-sigles" data-ecran="sigles" type="button"><span class="support-revision-type">Mini‑jeu</span><span class="support-revision-titre"><strong>Mission Sigles</strong><small>Parcours, entraînement, dé du hasard, révision et évaluation sur les 72 sigles.</small></span><span aria-hidden="true">→</span></button>
+<button class="support-revision support-ressource-guide support-jeu-mesures" id="support-jeu-mesures" data-ecran="mesures" data-mots-cles="mesure mesures mesures éducatives mesure éducative MEJ MEJP MEE modules interdictions obligations sûreté CJ ARSE détention provisoire DP sanctions peines" type="button"><span class="support-revision-type">Mini‑jeu</span><span class="support-revision-titre"><strong>Mission Mesures</strong><small>Parcours, entraînement, dé du hasard, révision et évaluation sur les mesures et leurs modules.</small></span><span aria-hidden="true">→</span></button>
 </div></details>
 <details class="supports-juridiction" id="supports-je" data-mots-cles="JE juge des enfants chambre du conseil culpabilité mise à l’épreuve éducative MEE sanction mesure éducative MEJ justice des mineurs">
 <summary>
@@ -1003,6 +1004,90 @@
 </div>
 <div id="contenuErreursSigles"></div>
 </section>
+</section>
+<section class="ecran" id="mesures">
+  <div class="mesures-vue" id="mesuresAccueil">
+    <header class="presentation-page mesures-accueil-entete">
+      <span class="surtitre">Mini‑PJJoue</span>
+      <h1>Mission Mesures</h1>
+      <p>Apprends les mesures applicables aux mineurs dans l’ordre où elles peuvent apparaître dans la procédure : avant le jugement, pendant la mise à l’épreuve éducative, à la sanction puis pendant l’exécution.</p>
+    </header>
+
+    <section class="mesures-tableau-bord" aria-labelledby="mesuresTitreProgression">
+      <div class="mesures-tableau-bord-principal">
+        <span class="mesures-embleme" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6z"/><path d="M8 10h8M8 14h5"/></svg></span>
+        <div>
+          <span class="surtitre">Ta progression</span>
+          <h2 id="mesuresTitreProgression">Mesures et modules</h2>
+          <p id="mesuresResumeProgression">0 repère maîtrisé · 0 étape maîtrisée</p>
+        </div>
+      </div>
+      <div class="mesures-jauge" role="progressbar" aria-label="Progression dans Mission Mesures" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="mesuresProgressionGlobale"><span id="mesuresJaugeValeur" style="width:0%"></span></div>
+      <div class="mesures-indicateurs">
+        <div><strong id="mesuresNombreDecouverts">0</strong><span>Introduits</span></div>
+        <div><strong id="mesuresNombreMaitrises">0</strong><span>Maîtrisés</span></div>
+        <div><strong id="mesuresNombreErreurs">0</strong><span>À revoir</span></div>
+        <div><strong id="mesuresMeilleurScore">0%</strong><span>Évaluation</span></div>
+      </div>
+    </section>
+
+    <section class="mesures-modes" aria-labelledby="mesuresTitreModes">
+      <div class="revision-section-entete"><div><span class="surtitre">Choisis ton mode</span><h2 id="mesuresTitreModes">Comment veux-tu jouer ?</h2></div></div>
+      <div class="mesures-modes-grille">
+        <article class="mesures-mode-carte mesures-mode-parcours">
+          <span class="mesures-mode-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18h4V7h4v7h4V4h4v14"/><path d="M3 20h18"/></svg></span>
+          <div><span class="surtitre">Progression guidée</span><h3>Parcours Mesures</h3><p>Avance dans l’ordre du temps juridique, sans notion testée avant d’avoir été introduite.</p></div>
+          <button class="principal mesures-bouton-mode" id="mesuresOuvrirParcours" type="button">Choisir une étape →</button>
+        </article>
+
+        <article class="mesures-mode-carte mesures-mode-entrainement">
+          <span class="mesures-mode-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 6-6M16 6h2v2"/></svg></span>
+          <div><span class="surtitre">Session sur mesure</span><h3>Entraînement Mesures</h3><p>Choisis une étape, le nombre de questions, l’ordre, le chrono et les jokers.</p></div>
+          <button class="mesures-bouton-secondaire mesures-bouton-mode" id="mesuresOuvrirEntrainement" type="button">Configurer l’entraînement</button>
+        </article>
+
+        <article class="mesures-mode-carte mesures-mode-hasard">
+          <span aria-hidden="true" class="de-objet mesures-de-objet" data-face="1" id="mesuresFaceDe">
+            <svg viewBox="0 0 72 72"><path class="de-contour" d="M10 22 25 10h33v35L43 57H10V22Zm0 0h33l15-12M43 22v35"></path><g class="de-points-avant"><circle cx="18" cy="30" r="2.7"></circle><circle cx="26.5" cy="30" r="2.7"></circle><circle cx="35" cy="30" r="2.7"></circle><circle cx="18" cy="39.5" r="2.7"></circle><circle cx="26.5" cy="39.5" r="2.7"></circle><circle cx="35" cy="39.5" r="2.7"></circle><circle cx="18" cy="49" r="2.7"></circle><circle cx="26.5" cy="49" r="2.7"></circle><circle cx="35" cy="49" r="2.7"></circle></g><g class="de-points-dessus"><circle cx="27" cy="16" r="2"></circle><circle cx="43" cy="16" r="2"></circle></g><g class="de-points-cote"><circle cx="50" cy="25" r="2"></circle><circle cx="50" cy="34" r="2"></circle><circle cx="50" cy="43" r="2"></circle></g></svg>
+          </span>
+          <div class="mesures-hasard-texte"><span class="surtitre">Mode surprise</span><h3>Défi du hasard</h3><p id="mesuresDeResultat">Lance le dé pour tirer de 1 à 6 questions dans Mission Mesures.</p></div>
+          <div class="mesures-hasard-actions"><button class="principal mesures-bouton-mode" id="mesuresLancerDe" type="button">Lancer le dé</button><button class="principal mesures-bouton-mode masque" id="mesuresJouerTirage" type="button">Lancer le défi</button></div>
+        </article>
+
+        <article class="mesures-mode-carte mesures-mode-revision">
+          <span class="mesures-mode-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 8a8 8 0 1 1-1 7"/><path d="M5 4v4H1"/><path d="m9 12 2 2 4-5"/></svg></span>
+          <div><span class="surtitre">Consolidation</span><h3>Réviser mes erreurs</h3><p id="mesuresTexteRevision">Aucun repère à revoir pour le moment.</p></div>
+          <button class="mesures-bouton-secondaire mesures-bouton-mode" id="mesuresLancerRevision" type="button">Réviser mes erreurs</button>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <div class="mesures-vue masque" id="mesuresParcoursVue">
+    <button class="discret mesures-retour" id="mesuresRetourDepuisParcours" type="button">← Retour à Mission Mesures</button>
+    <header class="presentation-page mesures-page-secondaire-entete">
+      <span class="surtitre">Parcours Mesures</span>
+      <h1>Suis le temps juridique.</h1>
+      <p>Chaque étape introduit uniquement les notions nécessaires au stade de la procédure étudié. Les sigles de mesures sont d’abord développés dans une question complète avant d’être utilisés seuls.</p>
+    </header>
+    <section class="mesures-parcours-zone" aria-labelledby="mesuresTitreEtapes">
+      <div class="mesures-parcours-zone-entete"><div><h2 id="mesuresTitreEtapes">Les étapes</h2><p>De l’avant-jugement à l’exécution : mesures possibles, limites, autorités compétentes et modules.</p></div></div>
+      <div class="mesures-etapes-grille" id="mesuresEtapes"></div>
+      <article class="mesures-evaluation-carte" id="mesuresEvaluationCarte">
+        <span class="mesures-evaluation-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4h8v5c0 3-1.8 5-4 5S8 12 8 9z"/><path d="M8 6H4v2c0 2 1.5 3 4 3M16 6h4v2c0 2-1.5 3-4 3M12 14v4M8 21h8M9 18h6"/></svg></span>
+        <div><span class="surtitre">Évaluation finale</span><h3>Maîtriser les mesures</h3><p>30 activités · aucun joker · aucune question passée · réussite à partir de 90 %.</p><small id="mesuresEvaluationStatut">Disponible après la maîtrise autonome de toutes les étapes.</small></div>
+        <button class="principal" id="mesuresLancerEvaluation" type="button">Commencer l’évaluation</button>
+      </article>
+    </section>
+  </div>
+</section>
+
+<section class="ecran" id="mesures-revision">
+  <div class="page-entete"><h1>Réviser mes erreurs · Mission Mesures</h1><p>Retravaille les mesures, modules et règles de compétence qui t’ont posé problème.</p></div>
+  <section aria-labelledby="titreErreursRevisionMesures" class="revision-erreurs">
+    <div class="revision-section-entete"><div><span class="surtitre">Tes erreurs</span><h2 id="titreErreursRevisionMesures">Repères à retravailler</h2></div><p>Une erreur disparaît dès que tu la réussis en révision.</p></div>
+    <div id="contenuErreursMesures"></div>
+  </section>
 </section>
 <section class="ecran" id="progression">
   <header class="page-entete progression-entete">

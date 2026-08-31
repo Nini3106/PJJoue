@@ -264,20 +264,22 @@
     "statutSource": "Source officielle vérifiée"
   },
   "LEGIFRANCE_CJPM_MJIE": {
-    "titre": "Légifrance — Mesure judiciaire d’investigation éducative",
-    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039088099/",
-    "repere": "Objet et contenu de la mesure judiciaire d’investigation éducative",
-    "dateVerification": "2026-08-07",
+    "titre": "Légifrance — CJPM, mesure judiciaire d’investigation éducative (art. L322-7)",
+    "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000039088115",
+    "repere": "Nature de la MJIE, autorités compétentes et possibilité à tous les stades de la procédure pénale.",
+    "dateVerification": "2026-08-30",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
-    "statutSource": "Source officielle vérifiée"
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
   },
   "LEGIFRANCE_CJPM_MEJ": {
-    "titre": "Légifrance — Mesure éducative judiciaire et ses modules",
-    "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000051786157",
-    "repere": "Mesure éducative judiciaire et modules insertion, réparation, santé et placement",
-    "dateVerification": "2026-08-07",
+    "titre": "Légifrance — CJPM, mesure éducative judiciaire (art. L111-1 à L112-15)",
+    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039087915/",
+    "repere": "MEJ comme sanction éducative, contenu, modules, interdictions, obligations, durée et juridictions compétentes.",
+    "dateVerification": "2026-08-30",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
-    "statutSource": "Source officielle vérifiée"
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
   },
   "LEGIFRANCE_CJPM_MISE_EPREUVE": {
     "titre": "Légifrance — Mise à l’épreuve éducative",
@@ -315,17 +317,19 @@
     "titre": "Légifrance — Article L. 322-3 du code de la justice pénale des mineurs",
     "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000051786048",
     "repere": "Le RRSE est une évaluation synthétique de la personnalité et de la situation du mineur",
-    "dateVerification": "2026-08-07",
+    "dateVerification": "2026-08-30",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
-    "statutSource": "Source officielle vérifiée"
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
   },
   "LEGIFRANCE_CJPM_MEJP": {
-    "titre": "Légifrance — Article L. 323-1 du code de la justice pénale des mineurs",
+    "titre": "Légifrance — CJPM, mesure éducative judiciaire provisoire (art. L323-1 à L323-3)",
     "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000051786086",
-    "repere": "La mesure éducative judiciaire peut être prononcée à titre provisoire avant le prononcé de la sanction",
-    "dateVerification": "2026-08-07",
+    "repere": "MEJP avant sanction, contenu autorisé, présentation périodique, placement ASE et autorités compétentes.",
+    "dateVerification": "2026-08-30",
     "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
-    "statutSource": "Source officielle vérifiée"
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
   },
   "LEGIFRANCE_CJPM_AGE_21": {
     "titre": "Légifrance — Services et établissements de la protection judiciaire de la jeunesse",
@@ -448,36 +452,40 @@
     "statutSource": "Source officielle vérifiée"
   },
   "LEGIFRANCE_CJPM_INSTRUCTION": {
-    "titre": "Légifrance — Information judiciaire des mineurs",
-    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039088285/",
-    "repere": "Articles L431-1 à L435-2 : information judiciaire, mesures et règlement de l’instruction",
-    "dateVerification": "2026-08-25",
-    "traitementEditorial": "Sélection et reformulation pédagogique pour PJJoue",
-    "statutSource": "Source officielle vérifiée"
+    "titre": "Légifrance — CJPM, MJIE et MEJP pendant l’information judiciaire (art. L432-1 et L432-2)",
+    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039088295/",
+    "repere": "MJIE obligatoire en principe à l’ouverture de l’information ; MEJP par JI/JLD selon saisine, durée d’un an renouvelable.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
   },
   "LEGIFRANCE_CJPM_CJ": {
-    "titre": "Légifrance — Contrôle judiciaire des mineurs",
-    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039088135/",
-    "repere": "Articles L331-1 à L331-7, version issue notamment de la loi du 23 juin 2025",
-    "dateVerification": "2026-08-25",
-    "traitementEditorial": "Sélection et reformulation pédagogique pour PJJoue",
-    "statutSource": "Source officielle vérifiée"
+    "titre": "Légifrance — CJPM, contrôle judiciaire des mineurs (art. L331-1 à L331-7)",
+    "url": "https://www.legifrance.gouv.fr/codes/id/LEGISCTA000039088135",
+    "repere": "Âges, seuils, conditions et autorités du contrôle judiciaire.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
   },
   "LEGIFRANCE_CJPM_ARSE": {
-    "titre": "Légifrance — Assignation à résidence avec surveillance électronique des mineurs",
-    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039088157/",
-    "repere": "Articles L333-1 à L333-2 : âge, seuils, avis éducatif et domicile des représentants légaux",
-    "dateVerification": "2026-08-25",
-    "traitementEditorial": "Sélection et reformulation pédagogique pour PJJoue",
-    "statutSource": "Source officielle vérifiée"
+    "titre": "Légifrance — CJPM, assignation à résidence avec surveillance électronique (art. L333-1 à L333-2)",
+    "url": "https://www.legifrance.gouv.fr/codes/id/LEGISCTA000039088157/",
+    "repere": "Âges, seuils, exceptions, avis PJJ et consentement du domicile pour l’ARSE.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
   },
   "LEGIFRANCE_CJPM_DP": {
-    "titre": "Légifrance — Détention provisoire des mineurs",
+    "titre": "Légifrance — CJPM, détention provisoire des mineurs (art. L334-1 à L334-6)",
     "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039088163/",
-    "repere": "Articles L334-1 à L334-6 : conditions de la détention provisoire des mineurs",
-    "dateVerification": "2026-08-25",
-    "traitementEditorial": "Sélection et reformulation pédagogique pour PJJoue",
-    "statutSource": "Source officielle vérifiée"
+    "repere": "Conditions strictes de la détention provisoire, âge minimal, autorités et subsidiarité par rapport au CJ/ARSE.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
   },
   "LEGIFRANCE_CJPM_TIG": {
     "titre": "Légifrance — Travail d’intérêt général applicable aux mineurs",
@@ -534,5 +542,59 @@
     "dateVerification": "2026-08-26",
     "traitementEditorial": "Sélection et reformulation pédagogique pour PJJoue",
     "statutSource": "Source officielle vérifiée"
+  },
+  "LEGIFRANCE_CJPM_MODULES": {
+    "titre": "Légifrance — CJPM, modules de la mesure éducative judiciaire (art. L112-5 à L112-15)",
+    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039087927/",
+    "repere": "Contenu des modules insertion, réparation, santé et placement.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
+  },
+  "LEGIFRANCE_CJPM_MEE": {
+    "titre": "Légifrance — CJPM, procédure de mise à l’épreuve éducative (art. L521-7 à L521-25)",
+    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039088409/",
+    "repere": "Mesures possibles après culpabilité pendant la MEE, contrôle du JE, modification et fin au jugement sur la sanction.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
+  },
+  "LEGIFRANCE_CJPM_EXECUTION_MESURES": {
+    "titre": "Légifrance — CJPM, application et exécution des mesures éducatives (art. L611-1 à L611-6)",
+    "url": "https://www.legifrance.gouv.fr/codes/id/LEGISCTA000039088493",
+    "repere": "Contrôle de la MEJ par le juge des enfants et modification ou mainlevée après sanction.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
+  },
+  "LEGIFRANCE_CJPM_DEFERREMENT": {
+    "titre": "Légifrance — CJPM, mesures avant comparution au déferrement (art. L423-9)",
+    "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000051786051",
+    "repere": "Au déferrement : MEJP quel que soit l’âge ; CJ dès 13 ans selon L331-1 ; ARSE dans cette branche à partir de 16 ans selon L333-1 ; JLD pour DP avant audience unique dans les cas prévus.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
+  },
+  "LEGIFRANCE_CJPM_REGLEMENT_INSTRUCTION": {
+    "titre": "Légifrance — CJPM, règlement de l’information judiciaire (art. L434-5 à L434-11)",
+    "url": "https://www.legifrance.gouv.fr/codes/id/LEGISCTA000039088319",
+    "repere": "Maintien de la MEJP au règlement, règles de DP après renvoi ou mise en accusation mises à jour au 25 juillet 2026, et compétences après saisine du TPE/CAM.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
+  },
+  "LEGIFRANCE_CJPM_MEE_REVOCATION": {
+    "titre": "Légifrance — CJPM, période de MEE : révocation des mesures de sûreté et DP (art. L521-21 à L521-23)",
+    "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000039086952/LEGISCTA000039088425/",
+    "repere": "Débat contradictoire, DP après révocation, maximum de deux révocations dans une même MEE et demande de mise en liberté.",
+    "dateVerification": "2026-08-30",
+    "traitementEditorial": "Sélection et reformulation pédagogique par Dev'Ines",
+    "statutSource": "Source officielle vérifiée",
+    "auditMissionMesures": "Vérifié le 30/08/2026 contre la version en vigueur du CJPM."
   }
 }

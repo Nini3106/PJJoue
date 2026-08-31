@@ -80,6 +80,7 @@
       supports: ['supports/', 'supports'],
       entrainement: ['entrainement/', 'entrainement'],
       sigles: ['mission-sigles/', 'mission-sigles'],
+      mesures: ['mission-mesures/', 'mission-mesures'],
       progression: ['progression/', 'progression'],
       carnet: ['carnet/', 'carnet'],
       parametres: ['parametres/', 'parametres']
@@ -101,7 +102,8 @@
       { libelle: 'Guides', href: lienGuides },
       { separation: true },
       { section: 'Mini jeux' },
-      { libelle: 'Mission Sigles', href: lienApplication('sigles'), miniJeu: true }, // Futurs mini-jeux : ex. Mission Mesures.
+      { libelle: 'Mission Sigles', href: lienApplication('sigles'), miniJeu: true },
+      { libelle: 'Mission Mesures', href: lienApplication('mesures'), miniJeu: true },
       { separation: true },
       { libelle: 'Paramètres', href: lienApplication('parametres') }
     ];
@@ -270,6 +272,8 @@
           'revision/': 'revision',
           'mission-sigles/': 'mission-sigles',
           'mission-sigles/revision/': 'mission-sigles/revision',
+          'mission-mesures/': 'mission-mesures',
+          'mission-mesures/revision/': 'mission-mesures/revision',
           'supports/': 'supports',
           'entrainement/': 'entrainement',
           'progression/': 'progression',

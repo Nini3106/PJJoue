@@ -72,9 +72,11 @@
 #supports .support-parcours-1 { color:#9fc2ff; } #supports .support-parcours-2 { color:#ffd36a; }
 #supports .support-parcours-3 { color:#70d7ea; } #supports .support-parcours-4 { color:#c7afff; }
 #supports .support-parcours-5 { color:#ff91a8; } #supports .support-parcours-6 { color:#70d6ca; }
-#supports .support-ressource-guide { display:grid; grid-template-columns:120px minmax(0,1fr) auto; gap:16px; align-items:center; min-height:86px; padding:16px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); color:var(--texte); background:var(--surface-carte); text-decoration:none; }
+#supports .support-ressource-guide { display:grid; grid-template-columns:120px minmax(0,1fr) auto; gap:16px; align-items:center; justify-items:stretch; min-height:86px; padding:16px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); color:var(--texte); background:var(--surface-carte); text-align:left; text-decoration:none; }
 #supports .support-ressource-guide:hover { border-color:var(--support-accent,var(--jaune-interface)); transform:translateY(-1px); }
-#supports .support-ressource-guide .support-revision-titre { display:grid; gap:4px; }
+#supports .support-ressource-guide .support-revision-type { justify-self:start; text-align:left; }
+#supports .support-ressource-guide .support-revision-titre { display:grid; justify-items:start; gap:4px; min-width:0; text-align:left; }
+#supports .support-ressource-guide > :last-child { justify-self:end; }
 
 @media (max-width:820px) {
   :is(#erreurs,#sigles-revision) .revision-toutes-erreurs { grid-template-columns:68px 1fr; }

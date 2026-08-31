@@ -31,6 +31,8 @@ const ROUTES_APPLICATION_PROPRES = Object.freeze({
     erreurs: 'revision',
     sigles: 'mission-sigles',
     'sigles-revision': 'mission-sigles/revision',
+    mesures: 'mission-mesures',
+    'mesures-revision': 'mission-mesures/revision',
     supports: 'supports',
     progression: 'progression',
     parametres: 'parametres',
@@ -178,6 +180,8 @@ const TITRES_ECRANS = {
     erreurs: 'Mes erreurs à retravailler',
     sigles: 'Mission Sigles',
     'sigles-revision': 'Réviser mes erreurs · Mission Sigles',
+    mesures: 'Mission Mesures',
+    'mesures-revision': 'Réviser mes erreurs · Mission Mesures',
     supports: 'Supports de révision',
     progression: 'Progression',
     parametres: 'Paramètres',
@@ -245,10 +249,14 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
         afficherErreurs();
     if (identifiant === 'sigles-revision')
         afficherRevisionMissionSigles();
+    if (identifiant === 'mesures-revision')
+        afficherRevisionMesures();
     if (identifiant === 'progression')
         afficherProgression();
     if (identifiant === 'sigles')
         actualiserAccueilSigles();
+    if (identifiant === 'mesures')
+        actualiserAccueilMesures();
     if (identifiant === 'carnet') {
         THEMES.forEach(theme => initialiserProgression(theme.id));
         actualiserCarnetParcours();
@@ -410,7 +418,9 @@ function revenirEnArriere() {
         return;
     }
     if (etat.ecran === 'question') {
-        const secours = etat.mode === 'parcours' || etat.mode === 'evaluation-finale' ? 'parcours' : (etat.mode === 'revision' ? 'erreurs' : (etat.mode === 'sigles-revision' ? 'sigles-revision' : 'entrainement'));
+        const secours = estSessionMissionMesures?.() ? 'mesures'
+            : (estSessionMissionSigles?.() ? 'sigles'
+            : (etat.mode === 'parcours' || etat.mode === 'evaluation-finale' ? 'parcours' : (etat.mode === 'revision' ? 'erreurs' : 'entrainement')));
         if (secours === 'parcours') {
             ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
             return;
@@ -460,7 +470,7 @@ function lireRouteDepuisFragment() {
     const parties = location.hash.replace(/^#/, '').split('/').map(decoderSegmentRoute);
     if (parties[0] === 'parcours')
         return { pjjoue: true, ecran: 'parcours', theme: parties[1] || null };
-    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'sigles', 'sigles-revision', 'supports', 'progression', 'parametres', 'question', 'bilan'];
+    const ecransAutorises = ['accueil', 'parcours', 'carnet', 'entrainement', 'erreurs', 'sigles', 'sigles-revision', 'mesures', 'mesures-revision', 'supports', 'progression', 'parametres', 'question', 'bilan'];
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
 }
 function lireRoute() {
@@ -470,7 +480,7 @@ function lireRoute() {
 
     // Compatibilité silencieuse avec d’anciens favoris locaux : on sait encore les lire,
     // mais l’adresse est immédiatement réécrite sans # par restaurerRoute().
-    if (location.hash && /^#(?:accueil|parcours|carnet|entrainement|erreurs|sigles|sigles-revision|supports|progression|parametres|question|bilan)(?:\/|$)/.test(location.hash))
+    if (location.hash && /^#(?:accueil|parcours|carnet|entrainement|erreurs|sigles|sigles-revision|mesures|mesures-revision|supports|progression|parametres|question|bilan)(?:\/|$)/.test(location.hash))
         return lireRouteDepuisFragment();
 
     if (utiliserNavigationLocaleSansServeur())

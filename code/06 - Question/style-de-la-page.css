@@ -179,4 +179,129 @@
         box-shadow: none;
     }
 }
+
+/* === Cohérence des couleurs de l'étape dans tous les modes de réponse ===
+   La ligne supérieure de la carte est la source visuelle : toute sélection
+   utilisateur et tout fil de liaison reprennent exactement la même couleur
+   canonique d'étape. Les états propres aux jokers et aux corrections gardent
+   leurs couleurs fonctionnelles (aide, réussite, erreur). */
+#question {
+    --fond-selection-etape: color-mix(
+        in srgb,
+        var(--couleur-etape-active) 22%,
+        rgba(20,79,137,.72)
+    );
+}
+
+/* Le badge Étape reprend la couleur de la carte ; le badge Parcours conserve
+   l'identité canonique du parcours ou l'identité stable des mini-jeux. */
+#question .question-etape-identite > span {
+    border-color: var(--couleur-etape-active);
+    color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
+    background: color-mix(in srgb,var(--couleur-etape-active) 16%,rgba(6,45,91,.72));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--couleur-etape-active) 18%,transparent);
+}
+
+/* Choix unique. */
+#question #zoneReponses .reponse.selectionne,
+#question #zoneReponses .reponse[aria-checked="true"] {
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
+}
+#question #zoneReponses .reponse.selectionne .lettre,
+#question #zoneReponses .reponse[aria-checked="true"] .lettre {
+    border-color: var(--couleur-etape-active);
+    background: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
+    color: var(--bleu-nuit-950);
+}
+
+/* Sélection multiple. */
+#question .multiple-choix.selectionne,
+#question .multiple-choix[aria-pressed="true"] {
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
+}
+#question .multiple-choix.selectionne .multiple-coche,
+#question .multiple-choix[aria-pressed="true"] .multiple-coche {
+    border-color: var(--couleur-etape-active);
+    color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
+    background: color-mix(in srgb,var(--couleur-etape-active) 20%,var(--surface-carte-profonde));
+}
+
+/* Retirer des choix : « éliminé » est ici un choix de l'utilisateur avant
+   validation, donc il suit l'étape et non la couleur rouge d'une erreur. */
+#question .elimination-choix.elimine {
+    opacity: .86;
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
+}
+#question .elimination-choix:not(.verrouille-joker)::after {
+    color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
+}
+
+/* Relier : sélection, paire créée et fil utilisent une seule et même couleur. */
+#question .association-colonne button.actif,
+#question .association-colonne button.associe,
+#question .association-colonne button[aria-pressed="true"] {
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
+}
+#question .association-lignes .fil-association {
+    stroke: var(--couleur-etape-active);
+}
+
+/* Classer. */
+#question .classement-element button.selectionne,
+#question .classement-element button[aria-pressed="true"] {
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 3px 0 0 var(--couleur-etape-active);
+}
+
+/* Ordre et choisir puis ordonner : il n'y a pas de case « sélectionnée »
+   permanente dans l'ordre simple ; les commandes et les éléments retenus
+   reprennent néanmoins le repère de l'étape. */
+#question .ordre-commandes button:hover:not(:disabled),
+#question .ordre-commandes button:focus-visible,
+#question .choisir-ordre-proposition:hover,
+#question .choisir-ordre-proposition:focus-visible {
+    border-color: var(--couleur-etape-active);
+}
+#question .ordre-choix-selectionne > li:not(.ordre-verrouille) {
+    border-left: 4px solid var(--couleur-etape-active);
+    background: color-mix(in srgb,var(--couleur-etape-active) 10%,rgba(20,79,137,.72));
+}
+
+/* Réponse écrite : le focus constitue l'état de sélection du champ. */
+#question .ecrite-zone input:focus,
+#question .ecrite-zone textarea:focus,
+#question .ecrite-zone select:focus {
+    border-color: var(--couleur-etape-active);
+    box-shadow: 0 0 0 2px color-mix(in srgb,var(--couleur-etape-active) 28%,transparent);
+}
+
+/* Correction du mode « Retirer des choix » : cette ligne ne contient que
+   deux éléments. Elle ne doit donc pas hériter de la grille à trois colonnes
+   réservée aux corrections avec flèche. */
+#question .detaillee-correction-ligne.ligne-eliminee {
+    grid-template-columns: 24px minmax(0,1fr);
+    align-items: start;
+    gap: 10px;
+}
+#question .detaillee-correction-ligne.ligne-eliminee .marque-erreur {
+    display: block;
+    width: 24px;
+    text-align: center;
+}
+#question .detaillee-correction-ligne.ligne-eliminee > span:last-child {
+    min-width: 0;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+/* === FIN cohérence couleurs de l'étape === */
+
 /* === FIN MORCEAU CSS === */

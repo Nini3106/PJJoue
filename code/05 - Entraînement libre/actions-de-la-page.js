@@ -5,6 +5,19 @@
  * Les mots imposés par le navigateur (document, window, localStorage, history...)
  * gardent leur nom technique, car le navigateur ne comprendrait pas leur traduction.
  */
+function garantirOptionNombreQuestions(selectNombre, valeur) {
+    if (!selectNombre)
+        return;
+    const valeurTexte = String(valeur);
+    if ([...selectNombre.options].some(option => option.value === valeurTexte))
+        return;
+    selectNombre.querySelector('option[data-option-personnalisee="true"]')?.remove();
+    const option = document.createElement('option');
+    option.value = valeurTexte;
+    option.textContent = valeurTexte;
+    option.dataset.optionPersonnalisee = 'true';
+    selectNombre.appendChild(option);
+}
 function synchroniserCurseurNombreQuestions(nombreMax = null) {
     const selectNombre = selectionner('#nombreQuestionsEntrainement');
     const curseur = selectionner('#curseurNombreQuestions');
@@ -12,9 +25,12 @@ function synchroniserCurseurNombreQuestions(nombreMax = null) {
     const borne = selectionner('#borneMaxQuestions');
     if (!selectNombre || !curseur)
         return;
+    const minimum = Number(curseur.min) || 1;
     const max = Number(nombreMax) || Number(curseur.max) || 660;
     curseur.max = String(max);
-    const valeur = Math.min(max, Math.max(10, Number(selectNombre.value) || 10));
+    const valeur = Math.min(max, Math.max(minimum, Number(selectNombre.value) || minimum));
+    garantirOptionNombreQuestions(selectNombre, valeur);
+    selectNombre.value = String(valeur);
     curseur.value = String(valeur);
     if (sortie)
         sortie.textContent = `${valeur} question${valeur === 1 ? '' : 's'}`;
@@ -30,8 +46,11 @@ function initialiserCurseurNombreQuestions() {
     curseur.dataset.initialise = 'true';
     if (groupe)
         groupe.dataset.selectionEffectuee = 'true';
-    curseur.oninput = () => {
-        const valeur = Number(curseur.value) || 10;
+    const appliquerValeurCurseur = () => {
+        const minimum = Number(curseur.min) || 1;
+        const maximum = Number(curseur.max) || 660;
+        const valeur = Math.min(maximum, Math.max(minimum, Number(curseur.value) || minimum));
+        garantirOptionNombreQuestions(selectNombre, valeur);
         selectNombre.value = String(valeur);
         groupe?.setAttribute('data-selection-effectuee', 'true');
         groupe?.querySelectorAll('.choix-bouton').forEach(bouton => {
@@ -40,26 +59,13 @@ function initialiserCurseurNombreQuestions() {
             bouton.classList.toggle('selectionne', actif);
             bouton.setAttribute('aria-pressed', String(actif));
         });
-        synchroniserCurseurNombreQuestions();
+        synchroniserCurseurNombreQuestions(maximum);
     };
-    const positionnerCurseurAuPointeur = evenement => {
-        if (evenement.button !== undefined && evenement.button !== 0)
-            return;
-        const limites = curseur.getBoundingClientRect();
-        if (!limites.width)
-            return;
-        const minimum = Number(curseur.min) || 10;
-        const maximum = Number(curseur.max) || 660;
-        const pas = Number(curseur.step) || 10;
-        const proportion = Math.min(1, Math.max(0, (evenement.clientX - limites.left) / limites.width));
-        const valeurBrute = minimum + proportion * (maximum - minimum);
-        const valeur = Math.min(maximum, Math.max(minimum, minimum + Math.round((valeurBrute - minimum) / pas) * pas));
-        if (Number(curseur.value) !== valeur) {
-            curseur.value = String(valeur);
-            curseur.oninput();
-        }
-    };
-    curseur.addEventListener('pointerdown', positionnerCurseurAuPointeur);
+    /* Le navigateur gère lui-même le clic et le glisser du range. Ne pas recalculer
+       la position sur pointerdown : cela entrait en concurrence avec le comportement
+       natif et pouvait faire revenir le bouton rond à une autre valeur. */
+    curseur.addEventListener('input', appliquerValeurCurseur);
+    curseur.addEventListener('change', appliquerValeurCurseur);
     synchroniserCurseurNombreQuestions();
 }
 function appliquerCouleursParcoursEntrainement() {
@@ -72,6 +78,17 @@ function appliquerCouleursParcoursEntrainement() {
             if (!Number.isFinite(numero) || numero < 1 || numero > 6)
                 return;
             const identite = obtenirIdentiteEtapeMissionSigles(numero);
+            bouton.style.setProperty('--parcours-accent', identite.couleur);
+            bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
+            bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
+        });
+        return;
+    }
+    if (etat.contexteEntrainement === 'mesures') {
+        groupe.querySelectorAll('.choix-bouton[data-valeur]').forEach(bouton => {
+            const numero = Number(bouton.dataset.valeur);
+            if (!Number.isFinite(numero) || !ETAPES_MISSION_MESURES[numero]) return;
+            const identite = obtenirIdentiteEtapeMissionMesures(numero);
             bouton.style.setProperty('--parcours-accent', identite.couleur);
             bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
             bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
@@ -95,67 +112,58 @@ function actualiserLimiteQuestionsEntrainement() {
     const groupeNombre = document.querySelector('[data-groupe-choix="nombreQuestionsEntrainement"]');
     if (!selectPerimetre || !selectNombre || !groupeNombre)
         return;
+
+    let nombreMax = 0;
+    let minimumCurseur = 10;
+    let pasCurseur = 1;
+    let texteDisponibilite = '';
+
     if (etat.contexteEntrainement === 'sigles') {
         const perimetre = selectPerimetre.value || 'tous';
-        const reserve = obtenirPoolEntrainementMissionSigles(perimetre);
-        const nombreMax = reserve.length;
+        nombreMax = obtenirPoolEntrainementMissionSigles(perimetre).length;
+        minimumCurseur = Math.min(10, nombreMax);
+        pasCurseur = 1;
         const libellePerimetre = perimetre === 'tous' ? 'Mission Sigles complète' : `l’étape ${Number(perimetre)}`;
-        const boutons = [...groupeNombre.querySelectorAll('.choix-bouton')];
-        boutons.forEach((bouton, index) => {
-            if (index === 3) {
-                bouton.dataset.valeur = String(nombreMax);
-                bouton.textContent = 'Tous';
-            }
-            const valeur = Number(bouton.dataset.valeur);
-            const disponible = valeur <= nombreMax;
-            bouton.hidden = !disponible;
-            bouton.disabled = !disponible;
-        });
-        let nombreSelectionne = Math.min(nombreMax, Math.max(1, Number(selectNombre.value) || 10));
-        if (nombreSelectionne > nombreMax || ![...selectNombre.options].some(option => Number(option.value) === nombreSelectionne))
-            nombreSelectionne = Math.min(10, nombreMax);
-        selectNombre.value = String(nombreSelectionne);
-        groupeNombre.querySelectorAll('.choix-bouton:not([hidden])').forEach(bouton => {
-            const actif = Number(bouton.dataset.valeur) === nombreSelectionne;
-            bouton.classList.toggle('actif', actif);
-            bouton.classList.toggle('selectionne', actif);
-            bouton.setAttribute('aria-pressed', String(actif));
-        });
-        const curseur = selectionner('#curseurNombreQuestions');
-        if (curseur) {
-            curseur.min = String(Math.min(10, nombreMax));
-            curseur.max = String(nombreMax);
-            curseur.step = '1';
-            curseur.value = String(nombreSelectionne);
-        }
-        const resume = selectionner('#limiteQuestionsEntrainement');
-        if (resume)
-            resume.textContent = `${nombreMax} sigles disponibles dans ${libellePerimetre}.`;
-        synchroniserCurseurNombreQuestions(nombreMax);
-        return;
+        texteDisponibilite = `${nombreMax} sigles disponibles dans ${libellePerimetre}.`;
+    } else if (etat.contexteEntrainement === 'mesures') {
+        const perimetre = selectPerimetre.value || 'tous';
+        nombreMax = obtenirPoolEntrainementMissionMesures(perimetre).length;
+        minimumCurseur = Math.min(10, nombreMax);
+        pasCurseur = 1;
+        const libellePerimetre = perimetre === 'tous' ? 'Mission Mesures complète' : `l’étape ${Number(perimetre)}`;
+        texteDisponibilite = `${nombreMax} repères disponibles dans ${libellePerimetre}.`;
+    } else {
+        const perimetre = selectPerimetre.value || 'tous';
+        nombreMax = obtenirQuestionsEntrainement(perimetre).length;
+        const libellePerimetre = perimetre === 'tous'
+            ? 'le parcours complet'
+            : `le parcours ${obtenirOrdreTheme(perimetre) + 1}`;
+        texteDisponibilite = `${nombreMax} questions d’apprentissage disponibles dans ${libellePerimetre}.`;
     }
-    const perimetre = selectPerimetre.value || 'tous';
-    const reserve = obtenirQuestionsEntrainement(perimetre);
-    const nombreMax = reserve.length;
-    const libellePerimetre = perimetre === 'tous'
-        ? 'le parcours complet'
-        : `le parcours ${obtenirOrdreTheme(perimetre) + 1}`;
-    Array.from(selectNombre.options).forEach(option => {
-        const disponible = Number(option.value) <= nombreMax;
-        option.disabled = !disponible;
-        option.hidden = !disponible;
-    });
-    groupeNombre.querySelectorAll('.choix-bouton').forEach(bouton => {
+
+    if (!nombreMax)
+        return;
+
+    garantirOptionNombreQuestions(selectNombre, nombreMax);
+    const boutonTous = groupeNombre.querySelector('[data-choix-nombre="tous"]');
+    if (boutonTous) {
+        boutonTous.dataset.valeur = String(nombreMax);
+        boutonTous.textContent = 'Tous';
+        boutonTous.hidden = false;
+        boutonTous.disabled = false;
+    }
+    groupeNombre.querySelectorAll('.choix-bouton:not([data-choix-nombre="tous"])').forEach(bouton => {
         const disponible = Number(bouton.dataset.valeur) <= nombreMax;
         bouton.hidden = !disponible;
         bouton.disabled = !disponible;
     });
-    let nombreSelectionne = Number(selectNombre.value) || 10;
-    if (nombreSelectionne > nombreMax) {
-        nombreSelectionne = nombreMax;
-        selectNombre.value = String(nombreMax);
-        groupeNombre.dataset.selectionEffectuee = 'true';
-    }
+
+    let nombreSelectionne = Number(selectNombre.value) || Math.min(10, nombreMax);
+    if (nombreSelectionne > nombreMax || nombreSelectionne < 1)
+        nombreSelectionne = Math.min(10, nombreMax);
+    garantirOptionNombreQuestions(selectNombre, nombreSelectionne);
+    selectNombre.value = String(nombreSelectionne);
+
     groupeNombre.querySelectorAll('.choix-bouton:not([hidden])').forEach(bouton => {
         const actif = groupeNombre.dataset.selectionEffectuee === 'true'
             && Number(bouton.dataset.valeur) === nombreSelectionne;
@@ -163,9 +171,17 @@ function actualiserLimiteQuestionsEntrainement() {
         bouton.classList.toggle('selectionne', actif);
         bouton.setAttribute('aria-pressed', String(actif));
     });
+
+    const curseur = selectionner('#curseurNombreQuestions');
+    if (curseur) {
+        curseur.min = String(minimumCurseur);
+        curseur.max = String(nombreMax);
+        curseur.step = String(pasCurseur);
+        curseur.value = String(nombreSelectionne);
+    }
     const resume = selectionner('#limiteQuestionsEntrainement');
     if (resume)
-        resume.textContent = `${nombreMax} questions d’apprentissage disponibles dans ${libellePerimetre}.`;
+        resume.textContent = texteDisponibilite;
     synchroniserCurseurNombreQuestions(nombreMax);
 }
 function initialiserGroupesChoix() {

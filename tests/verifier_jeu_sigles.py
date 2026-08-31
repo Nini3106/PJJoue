@@ -133,8 +133,8 @@ def verifier() -> None:
         assert page.locator("#entrainement [data-groupe-choix='perimetreEntrainement'] .choix-bouton").count() == 7
         assert page.locator("#boutonEntrainement10Questions").inner_text().strip() == "10"
         assert page.locator("#boutonEntrainement20Questions").inner_text().strip() == "20"
-        assert page.locator("#boutonEntrainement50Questions").inner_text().strip() == "30"
-        assert page.locator("#boutonEntrainement100Questions").inner_text().strip() == "Tous"
+        assert page.locator("#boutonEntrainement30Questions").inner_text().strip() == "30"
+        assert page.locator("#boutonEntrainementTousQuestions").inner_text().strip() == "Tous"
         assert page.locator("#boutonLancerEntrainementOrdonne").get_attribute("class") == "entrainement-lancer principal"
         assert page.locator("#boutonLancerEntrainementMelange").get_attribute("class") == "entrainement-lancer principal"
         verifier_aucun_bouton_gris(page, "#entrainement button")
@@ -183,9 +183,9 @@ def verifier() -> None:
         page.evaluate("() => { etat.missionSiglesConfiguration=null; afficherEcran('sigles'); }")
         page.locator("#siglesOuvrirEntrainement").click()
         page.locator("[data-groupe-choix='perimetreEntrainement'] [data-valeur='2']").click()
-        assert page.locator("#boutonEntrainement100Questions").is_visible()
-        assert page.locator("#boutonEntrainement100Questions").inner_text().strip() == "Tous"
-        page.locator("#boutonEntrainement100Questions").click()
+        assert page.locator("#boutonEntrainementTousQuestions").is_visible()
+        assert page.locator("#boutonEntrainementTousQuestions").inner_text().strip() == "Tous"
+        page.locator("#boutonEntrainementTousQuestions").click()
         page.locator("[data-carte-entrainement='melange'] details summary").click()
         page.locator("#boutonEntrainementMelangeSansJokers").click()
         page.locator("#boutonEntrainementMelangeAvecChronometre").click()

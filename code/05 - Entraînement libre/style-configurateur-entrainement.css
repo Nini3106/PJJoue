@@ -3,7 +3,13 @@
 
 /* Structure générale */
 #entrainement {
+    --entrainement-hasard-accent:var(--jaune-interface);
+    --entrainement-hasard-accent-rgb:255,200,61;
     min-height:calc(100vh - 150px);
+}
+#entrainement:is([data-contexte-entrainement="sigles"],[data-contexte-entrainement="mesures"]) {
+    --entrainement-hasard-accent:#70d6ca;
+    --entrainement-hasard-accent-rgb:112,214,202;
 }
 #entrainement .entrainement-entete {
     margin-bottom:30px;
@@ -86,19 +92,18 @@
 
 /* Étape 1 — les sept choix ont exactement le même gabarit. */
 #entrainement .entrainement-perimetre-choix {
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
     align-items:stretch;
     gap:12px;
+    width:100%;
 }
 #entrainement .entrainement-perimetre-choix .choix-bouton {
     display:grid;
     align-content:center;
     gap:4px;
-    width:230px;
-    min-width:230px;
-    max-width:230px;
+    min-width:0;
+    max-width:100%;
     height:82px;
     min-height:82px;
     padding:12px 14px;
@@ -114,6 +119,19 @@
     color:var(--texte-secondaire);
     font-size:.94rem;
     font-weight:650;
+}
+/* Les Missions réutilisent ces cartes avec des titres plus longs que les six parcours PJJoue.
+   Leur hauteur doit donc suivre le contenu sans modifier le gabarit de l’entraînement PJJoue classique. */
+#entrainement:is([data-contexte-entrainement="sigles"],[data-contexte-entrainement="mesures"]) .entrainement-perimetre-choix .choix-bouton {
+    height:auto;
+    min-height:96px;
+}
+#entrainement:is([data-contexte-entrainement="sigles"],[data-contexte-entrainement="mesures"]) .entrainement-perimetre-choix .choix-bouton b,
+#entrainement:is([data-contexte-entrainement="sigles"],[data-contexte-entrainement="mesures"]) .entrainement-perimetre-choix .choix-bouton span {
+    min-width:0;
+    max-width:100%;
+    white-space:normal;
+    overflow-wrap:anywhere;
 }
 #entrainement .entrainement-perimetre-choix .choix-bouton:not([data-valeur="tous"]) b {
     color:var(--parcours-accent-lisible,var(--parcours-accent));
@@ -389,7 +407,7 @@
     margin-bottom:24px;
     padding:clamp(22px,3vw,30px);
     border:1px solid var(--bordure-carte);
-    border-left:5px solid var(--jaune-interface);
+    border-left:5px solid var(--entrainement-hasard-accent);
     border-radius:var(--rayon-tres-grand);
     background:linear-gradient(135deg,rgba(255,200,61,.13),var(--surface-carte) 45%,var(--surface-carte-profonde));
     box-shadow:var(--ombre-carte);
@@ -413,17 +431,19 @@
     font-weight:900;
 }
 #entrainement .entrainement-hasard-actions .principal {
-    border-color:var(--jaune-interface);
+    border-color:var(--entrainement-hasard-accent);
     color:var(--texte);
     background:var(--surface-carte-profonde);
     box-shadow:none;
 }
 #entrainement .entrainement-hasard-actions .principal:hover,
-#entrainement .entrainement-hasard-actions .principal:focus-visible {
-    border-color:var(--jaune-interface);
+#entrainement .entrainement-hasard-actions .principal:focus-visible,
+#entrainement .entrainement-hasard-actions .principal:active {
+    border-color:var(--entrainement-hasard-accent);
     color:var(--texte);
-    background:rgba(255,200,61,.10);
-    box-shadow:inset 0 0 0 1px var(--jaune-interface);
+    background:rgba(var(--entrainement-hasard-accent-rgb),.10);
+    box-shadow:inset 0 0 0 1px var(--entrainement-hasard-accent);
+    transform:none;
 }
 #entrainement .de-objet {
     display:grid;
@@ -432,10 +452,10 @@
     height:84px;
     padding:6px;
     border-radius:20px;
-    color:var(--jaune-interface);
-    background:rgba(255,200,61,.08);
+    color:var(--entrainement-hasard-accent);
+    background:rgba(var(--entrainement-hasard-accent-rgb),.08);
     transform-origin:center;
-    filter:drop-shadow(0 3px 5px rgba(255,200,61,.22));
+    filter:drop-shadow(0 3px 5px rgba(var(--entrainement-hasard-accent-rgb),.22));
 }
 #entrainement .de-objet svg {
     width:100%;
@@ -485,6 +505,9 @@
 }
 
 @media (max-width:980px) {
+    #entrainement .entrainement-perimetre-choix {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
     #entrainement .entrainement-grille {
         grid-template-columns:1fr;
     }
@@ -510,6 +533,9 @@
 }
 
 @media (max-width:580px) {
+    #entrainement .entrainement-perimetre-choix {
+        grid-template-columns:1fr;
+    }
     #entrainement .entrainement-etape-config,
     #entrainement .entrainement-etape-config.entrainement-etape-modes {
         grid-template-columns:1fr;

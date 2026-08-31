@@ -374,7 +374,7 @@ function afficherBilanSigles(pc){ const total=etatJeuSigles.questions.length; if
 
 function lancerEtapeSigles(numero){ const sigles=obtenirSiglesEtape(numero); preparerSessionMissionSiglesNative({mode:'parcours',etape:numero,sigles,questions:creerQuestionsEtapeSigles(numero),jokersActifs:true,titre:`Étape ${numero} · ${ETAPES_MISSION_SIGLES[numero].titre}`}); }
 function lancerEntrainementSigles(){ const perimetre=valeurGroupeSigles('#siglesChoixPerimetre','perimetre','tous'); const pool=perimetre==='tous'?[...SIGLES]:obtenirSiglesEtape(Number(perimetre)); const nombreBrut=valeurGroupeSigles('#siglesChoixNombre','nombre','10'); const nombre=nombreBrut==='tous'?pool.length:Math.min(pool.length,Number(nombreBrut)||10); const organisation=valeurGroupeSigles('#siglesChoixOrganisation','organisation','etapes'); let cibles=choisirSansDoublon(pool,nombre); if(organisation==='etapes')cibles=cibles.sort((a,b)=>Number(a.etape)-Number(b.etape)||Number(a.id)-Number(b.id)); const chrono=valeurGroupeSigles('#siglesChoixChrono','chrono','non')==='oui'; const secondes=Number(valeurGroupeSigles('#siglesChoixSecondes','secondes','30'))||30; const jokers=valeurGroupeSigles('#siglesChoixJokers','jokers','oui')==='oui'; const questions=creerQuestionsEntrainementSigles(cibles,organisation==='melange'); preparerSessionSigles({mode:'entrainement',sigles:cibles,questions,jokersActifs:jokers,titre:`Entraînement Sigles · ${nombre} sigle${nombre===1?'':'s'}`,chronoActif:chrono,secondesQuestion:secondes}); }
-function lancerDeSigles(){ const face=selectionnerSigles('#siglesFaceDe'),resultat=selectionnerSigles('#siglesDeResultat'),lancer=selectionnerSigles('#siglesLancerDe'),jouer=selectionnerSigles('#siglesJouerTirage'); if(!face||!resultat||!lancer||!jouer)return; const valeur=1+Math.floor(Math.random()*6); lancer.disabled=true;jouer.classList.add('masque');face.classList.remove('de-en-lancer');void face.offsetWidth;face.classList.add('de-en-lancer');window.setTimeout(()=>{ etatJeuSigles.nombreTire=valeur;etatJeuSigles.tirageHasard=choisirSansDoublon(SIGLES,valeur);face.dataset.face=String(valeur);face.classList.remove('de-en-lancer');resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les 72 sigles.`;jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`;lancer.textContent='Relancer le dé';lancer.classList.remove('principal');lancer.classList.add('sigles-bouton-secondaire');jouer.classList.remove('masque');lancer.disabled=false;jouer.focus({preventScroll:true}); },420); }
+function lancerDeSigles(){ const face=selectionnerSigles('#siglesFaceDe'),resultat=selectionnerSigles('#siglesDeResultat'),lancer=selectionnerSigles('#siglesLancerDe'),jouer=selectionnerSigles('#siglesJouerTirage'); if(!face||!resultat||!lancer||!jouer)return; const valeur=1+Math.floor(Math.random()*6); lancer.disabled=true;jouer.classList.add('masque');face.classList.remove('de-en-lancer');void face.offsetWidth;face.classList.add('de-en-lancer');window.setTimeout(()=>{ etatJeuSigles.nombreTire=valeur;etatJeuSigles.tirageHasard=choisirSansDoublon(SIGLES,valeur);face.dataset.face=String(valeur);face.classList.remove('de-en-lancer');resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les 72 sigles.`;jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`;lancer.textContent='Relancer le dé';lancer.classList.add('principal');lancer.classList.remove('sigles-bouton-secondaire');jouer.classList.remove('masque');lancer.disabled=false;jouer.focus({preventScroll:true}); },420); }
 function jouerTirageDeSigles(){ const cibles=[...etatJeuSigles.tirageHasard]; if(!cibles.length)return; preparerSessionMissionSiglesNative({mode:'hasard',sigles:cibles,questions:creerQuestionsHasardSigles(cibles),jokersActifs:true,titre:`Défi du hasard · ${cibles.length} question${cibles.length===1?'':'s'}`,chronoActif:false}); }
 function lancerRevisionSigles(){
     afficherEcran('sigles-revision');
@@ -667,7 +667,7 @@ function actualiserBoutonTousMissionSigles() {
     if (selectionner('#entrainement')?.dataset.contexteEntrainement !== 'sigles') return;
     const perimetre = selectionner('#perimetreEntrainement')?.value || 'tous';
     const maximum = obtenirPoolEntrainementMissionSigles(perimetre).length;
-    const boutonTous = selectionner('#boutonEntrainement100Questions');
+    const boutonTous = selectionner('#boutonEntrainementTousQuestions');
     const selectNombre = selectionner('#nombreQuestionsEntrainement');
     if (boutonTous) {
         boutonTous.dataset.valeur = String(maximum);
@@ -702,7 +702,7 @@ function configurerEntrainementMissionSiglesNatif() {
         boutons.forEach((bouton, index) => {
             if (index === 0) {
                 bouton.dataset.valeur = 'tous';
-                bouton.innerHTML = '<b>Toute Mission Sigles</b><span>Les 6 étapes</span>';
+                bouton.innerHTML = '<b>Tout Mission Sigles</b><span>Les 6 étapes</span>';
                 bouton.classList.add('entrainement-perimetre-global');
                 bouton.style.removeProperty('--parcours-accent');
                 bouton.style.removeProperty('--parcours-accent-rgb');
@@ -755,7 +755,7 @@ function configurerEntrainementMissionSiglesNatif() {
 }
 function restaurerEntrainementPJJoueNatif() {
     const ecran = selectionner('#entrainement');
-    if (!ecran || ecran.dataset.contexteEntrainement !== 'sigles') return;
+    if (!ecran || !['sigles','mesures'].includes(ecran.dataset.contexteEntrainement)) return;
     ecran.dataset.contexteEntrainement = 'pjjoue';
     etat.contexteEntrainement = null;
     const entete = ecran.querySelector('.entrainement-entete');
@@ -777,17 +777,23 @@ function restaurerEntrainementPJJoueNatif() {
     ];
     if (selectPerimetre && groupePerimetre) {
         selectPerimetre.innerHTML = donnees.map(([v,b])=>`<option value="${v}">${b.replace(/^\d+ · /,'')}</option>`).join('');
-        [...groupePerimetre.querySelectorAll('.choix-bouton')].forEach((bouton,index)=>{ const [v,b,sp]=donnees[index]; bouton.dataset.valeur=v; bouton.innerHTML=`<b>${b}</b><span>${sp}</span>`; });
+        groupePerimetre.innerHTML = donnees.map(([v,b,sp],index)=>`<button class="choix-bouton${index===0?' actif entrainement-perimetre-global':''}" data-valeur="${v}" type="button"><b>${b}</b><span>${sp}</span></button>`).join('');
         selectPerimetre.value = 'tous';
+        groupePerimetre.dataset.selectionEffectuee = 'true';
     }
     const selectNombre = selectionner('#nombreQuestionsEntrainement');
     const groupeNombre = document.querySelector('[data-groupe-choix="nombreQuestionsEntrainement"]');
     if (selectNombre && groupeNombre) {
-        selectNombre.innerHTML = Array.from({length:65},(_,i)=>(i+1)*10).filter(n=>n<=540||n===660).concat([660]).filter((v,i,a)=>a.indexOf(v)===i).map(n=>`<option value="${n}">${n}</option>`).join('');
-        const valeurs=['10','20','50','100'];
-        [...groupeNombre.querySelectorAll('.choix-bouton')].forEach((bouton,index)=>{bouton.dataset.valeur=valeurs[index];bouton.textContent=valeurs[index];bouton.hidden=false;});
+        selectNombre.innerHTML = Array.from({length:54},(_,i)=>(i+1)*10).concat([660]).map(n=>`<option value="${n}">${n}</option>`).join('');
+        const valeurs=['10','20','30','660'];
+        [...groupeNombre.querySelectorAll('.choix-bouton')].forEach((bouton,index)=>{bouton.dataset.valeur=valeurs[index];bouton.textContent=index===3?'Tous':valeurs[index];bouton.hidden=false;bouton.disabled=false;});
         selectNombre.value='10';
     }
+    const carteOrdonnee = ecran.querySelector('[data-carte-entrainement="ordonne"]');
+    const carteMelangee = ecran.querySelector('[data-carte-entrainement="melange"]');
+    carteOrdonnee?.querySelector(':scope > p') && (carteOrdonnee.querySelector(':scope > p').textContent = 'Suis la progression pédagogique du parcours choisi.');
+    carteMelangee?.querySelector(':scope > p') && (carteMelangee.querySelector(':scope > p').textContent = 'Brasse les questions du périmètre choisi.');
+    initialiserGroupesChoix();
     selectionner('#boutonLancerLeDe').onclick = lancerDeParcours;
     selectionner('#boutonJouerLeTirage').onclick = jouerTirageDeParcours;
     appliquerCouleursParcoursEntrainement();

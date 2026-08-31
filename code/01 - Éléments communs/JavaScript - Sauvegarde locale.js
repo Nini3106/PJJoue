@@ -29,6 +29,22 @@ function creerProgressionSiglesInitiale() {
         statistiques: { questionsJouees: 0 }
     };
 }
+function creerProgressionMesuresInitiale() {
+    const numeros = (MESURES_MISSION?.etapes || []).map(etape => Number(etape.numero)).filter(Number.isFinite);
+    return {
+        decouverts: {},
+        etapes: Object.fromEntries(numeros.map(numero => [String(numero), {
+            autonomes: {},
+            validationsSansJoker: {},
+            celebrationAffichee: false,
+            nombreTentatives: 0,
+            meilleurScore: 0
+        }])),
+        erreurs: {},
+        evaluation: { meilleurScore: 0, nombreTentatives: 0, reussie: false },
+        statistiques: { questionsJouees: 0 }
+    };
+}
 function creerSauvegardeInitiale() {
     return {
         version: 'V1',
@@ -43,7 +59,8 @@ function creerSauvegardeInitiale() {
         etapesDecouvertes: {},
         questionsJouees: {},
         evaluationsFinales: creerEvaluationsFinalesInitiales(),
-        siglesJeu: creerProgressionSiglesInitiale()
+        siglesJeu: creerProgressionSiglesInitiale(),
+        mesuresJeu: creerProgressionMesuresInitiale()
     };
 }
 function estObjetSimple(valeur) {
@@ -222,6 +239,55 @@ function nettoyerProgressionSigles(sauvegardeBrute) {
         statistiques: { questionsJouees: convertirEntierBorne(statistiques.questionsJouees) }
     };
 }
+function nettoyerProgressionMesures(sauvegardeBrute) {
+    const initiale = creerProgressionMesuresInitiale();
+    const brute = estObjetSimple(sauvegardeBrute?.mesuresJeu) ? sauvegardeBrute.mesuresJeu : {};
+    const reperes = MESURES_MISSION?.reperes || [];
+    const identifiants = new Set(reperes.map(element => String(element.cle || '')));
+    const filtrerActifs = valeur => estObjetSimple(valeur)
+        ? Object.fromEntries(Object.entries(valeur).filter(([cle, actif]) => identifiants.has(String(cle)) && actif === true))
+        : {};
+    const erreurs = {};
+    if (estObjetSimple(brute.erreurs)) {
+        for (const [cle, valeur] of Object.entries(brute.erreurs)) {
+            if (!identifiants.has(String(cle)) || !estObjetSimple(valeur)) continue;
+            erreurs[String(cle)] = {
+                active: valeur.active === true,
+                nombreErreurs: convertirEntierBorne(valeur.nombreErreurs),
+                reussitesRevision: convertirEntierBorne(valeur.reussitesRevision, 0, 2)
+            };
+        }
+    }
+    const etapes = {};
+    for (const numero of (MESURES_MISSION?.etapes || []).map(etape => Number(etape.numero))) {
+        const cleEtape = String(numero);
+        const source = estObjetSimple(brute.etapes?.[cleEtape]) ? brute.etapes[cleEtape] : {};
+        const autorises = new Set(reperes.filter(element => Number(element.etape) === numero).map(element => String(element.cle)));
+        const filtrerEtape = valeur => estObjetSimple(valeur)
+            ? Object.fromEntries(Object.entries(valeur).filter(([cle, actif]) => autorises.has(String(cle)) && actif === true))
+            : {};
+        etapes[cleEtape] = {
+            autonomes: filtrerEtape(source.autonomes),
+            validationsSansJoker: filtrerEtape(source.validationsSansJoker),
+            celebrationAffichee: source.celebrationAffichee === true,
+            nombreTentatives: convertirEntierBorne(source.nombreTentatives),
+            meilleurScore: convertirEntierBorne(source.meilleurScore, 0, 100)
+        };
+    }
+    const evaluation = estObjetSimple(brute.evaluation) ? brute.evaluation : {};
+    const statistiques = estObjetSimple(brute.statistiques) ? brute.statistiques : {};
+    return {
+        decouverts: filtrerActifs(brute.decouverts),
+        etapes: Object.keys(etapes).length ? etapes : initiale.etapes,
+        erreurs,
+        evaluation: {
+            meilleurScore: convertirEntierBorne(evaluation.meilleurScore, 0, 100),
+            nombreTentatives: convertirEntierBorne(evaluation.nombreTentatives),
+            reussie: evaluation.reussie === true
+        },
+        statistiques: { questionsJouees: convertirEntierBorne(statistiques.questionsJouees) }
+    };
+}
 function nettoyerSauvegarde(sauvegardeBrute) {
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
@@ -255,7 +321,8 @@ function nettoyerSauvegarde(sauvegardeBrute) {
         etapesDecouvertes: normaliserEtapesDecouvertes(sauvegardeBrute),
         questionsJouees: filtrerIndicateurs(sauvegardeBrute.questionsJouees, identifiantsQuestions),
         evaluationsFinales: nettoyerEvaluationsFinales(sauvegardeBrute),
-        siglesJeu: nettoyerProgressionSigles(sauvegardeBrute)
+        siglesJeu: nettoyerProgressionSigles(sauvegardeBrute),
+        mesuresJeu: nettoyerProgressionMesures(sauvegardeBrute)
     };
 }
 function chargerSauvegarde() {

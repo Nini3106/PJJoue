@@ -52,6 +52,11 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
         enregistrerSessionEnCours();
         return;
     }
+    if (question?.missionMesures) {
+        enregistrerResultatMissionMesuresNatif(question, resultat);
+        enregistrerSessionEnCours();
+        return;
+    }
     if (etat.mode !== 'parcours') {
         enregistrerSessionEnCours();
         return;
@@ -308,6 +313,9 @@ function passerQuestion() {
     if (question?.missionSigles) {
         enregistrerPassageMissionSiglesNatif(question);
     }
+    else if (question?.missionMesures) {
+        enregistrerPassageMissionMesuresNatif(question);
+    }
     else {
         marquerEtapeDecouverte(question);
         marquerQuestionJouee(question);
@@ -319,7 +327,7 @@ function passerQuestion() {
     etat.erreursSession.add(question.id);
     etat.serie = 0;
     actualiserIndicateurSerie();
-    if (!question?.missionSigles) {
+    if (!question?.missionSigles && !question?.missionMesures) {
         sauvegarde.erreurs[question.id] = sauvegarde.erreurs[question.id] || { reussites: 0, maitrisee: false, nombreErreurs: 0, theme: question.theme };
         if (!precedente) {
             sauvegarde.erreurs[question.id].nombreErreurs = (sauvegarde.erreurs[question.id].nombreErreurs || 0) + 1;

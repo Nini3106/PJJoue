@@ -24,7 +24,7 @@
  */
 if ('scrollRestoration' in history)
     history.scrollRestoration = 'manual';
-const { THEMES, PROGRAMMES, SOURCES, QUESTIONS, SIGLES = [] } = window.DONNEES_PJJ;
+const { THEMES, PROGRAMMES, SOURCES, QUESTIONS, SIGLES = [], MESURES_MISSION = { etapes:[], reperes:[], evaluation:[] } } = window.DONNEES_PJJ;
 const TRACES_PICTOGRAMMES = Object.freeze({
     decouvertePjj: '<path d="M4 5.5h6.2c1.1 0 1.8.3 1.8 1.3v12.7c0-1-.7-1.5-1.8-1.5H4z"/><path d="M20 5.5h-6.2c-1.1 0-1.8.3-1.8 1.3v12.7c0-1 .7-1.5 1.8-1.5H20z"/><path d="M7 9h2.5M14.5 9H17M7 12h2.5M14.5 12H17"/>',
     procedureOrdinaire: '<path d="M5 3.5h9l4 4V20.5H5z"/><path d="M14 3.5v4h4M8 11h5M8 15h3"/><circle cx="16.5" cy="15.5" r="3.5"/><path d="m15 15.5 1 1 2-2"/>',
@@ -159,6 +159,8 @@ const LIBELLES_PAGES_ANALYTICS = Object.freeze({
     erreurs: 'Mes erreurs à retravailler',
     sigles: 'Mission Sigles',
     'sigles-revision': 'Réviser mes erreurs · Mission Sigles',
+    mesures: 'Mission Mesures',
+    'mesures-revision': 'Réviser mes erreurs · Mission Mesures',
     supports: 'Supports de révision',
     progression: 'Progression',
     parametres: 'Paramètres',

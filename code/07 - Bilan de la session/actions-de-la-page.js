@@ -413,6 +413,10 @@ function terminerSession() {
         terminerSessionMissionSiglesNative();
         return;
     }
+    if (estSessionMissionMesures()) {
+        terminerSessionMissionMesuresNative();
+        return;
+    }
     clearInterval(etat.identifiantMinuteur);
     const total = etat.questionsSession.length;
     const nombreQuestionsPassees = etat.questionsPassees?.size || 0;

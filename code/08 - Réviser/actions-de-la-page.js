@@ -158,26 +158,50 @@ const PARCOURS_PAR_CATEGORIE_SUPPORT = Object.freeze({
     'supports-jap': ['6'],
     'supports-transversaux': ['2', '3', '4', '5', '6']
 });
-function obtenirIndexRechercheCategorie(categorie) {
+function obtenirIndexIdentiteCategorieSupport(categorie) {
     const titreCategorie = categorie.querySelector(':scope > summary')?.textContent || '';
-    const motsCles = categorie.dataset.motsCles || '';
     const parcours = (categorie.dataset.parcoursSupports || '')
         .split(' ')
         .filter(Boolean)
         .map(numero => `P${numero} parcours ${numero}`)
         .join(' ');
-    return normaliserRechercheSupports(`${titreCategorie} ${motsCles} ${parcours}`);
+    return normaliserRechercheSupports(`${titreCategorie} ${parcours}`);
 }
-function obtenirIndexRechercheSupport(categorie, ressource) {
-    return normaliserRechercheSupports(`${obtenirIndexRechercheCategorie(categorie)} ${ressource.textContent}`);
+function obtenirIndexRechercheCategorie(categorie) {
+    return normaliserRechercheSupports(`${obtenirIndexIdentiteCategorieSupport(categorie)} ${categorie.dataset.motsCles || ''}`);
+}
+function obtenirIndexIdentiteSupport(ressource) {
+    const entete = ressource.matches('details')
+        ? ressource.querySelector(':scope > summary')?.textContent || ''
+        : ressource.textContent || '';
+    return normaliserRechercheSupports(`${entete} ${ressource.dataset.motsCles || ''}`);
+}
+function obtenirIndexRechercheSupport(ressource) {
+    return normaliserRechercheSupports(`${ressource.textContent} ${ressource.dataset.motsCles || ''}`);
+}
+function obtenirVariantesTermeRechercheSupport(terme) {
+    if (terme.length <= 3)
+        return [terme];
+    const variantes = new Set([terme]);
+    if (terme.endsWith('s') && terme.length > 4)
+        variantes.add(terme.slice(0, -1));
+    else
+        variantes.add(`${terme}s`);
+    return [...variantes];
 }
 function correspondARechercheSupport(indexRecherche, termesRecherches) {
     if (!termesRecherches.length)
         return true;
     const motsIndex = new Set(indexRecherche.split(' ').filter(Boolean));
-    return termesRecherches.every(terme => terme.length <= 3
-        ? motsIndex.has(terme)
-        : indexRecherche.includes(terme));
+    return termesRecherches.every(terme => obtenirVariantesTermeRechercheSupport(terme).some(variante =>
+        variante.length <= 3 ? motsIndex.has(variante) : indexRecherche.includes(variante)
+    ));
+}
+function calculerPrioriteRechercheSupport(ressource, termesRecherches, ordreInitial) {
+    if (!termesRecherches.length)
+        return ordreInitial;
+    const correspondIdentite = correspondARechercheSupport(obtenirIndexIdentiteSupport(ressource), termesRecherches);
+    return (correspondIdentite ? 0 : 1000) + ordreInitial;
 }
 function synchroniserFiltreSupports(zone, filtre) {
     const filtreActif = filtre || 'tous';
@@ -226,31 +250,41 @@ function appliquerRechercheSupports() {
     let categoriesVisibles = 0;
     let ressourcesVisibles = 0;
     const categories = [...zone.querySelectorAll('.supports-juridiction')];
-    const correspondancesDirectes = new Map(categories.map(categorie => [
+    const correspondancesIdentite = new Map(categories.map(categorie => [
+        categorie,
+        correspondARechercheSupport(obtenirIndexIdentiteCategorieSupport(categorie), termesRecherches)
+    ]));
+    const correspondancesCategorie = new Map(categories.map(categorie => [
         categorie,
         correspondARechercheSupport(obtenirIndexRechercheCategorie(categorie), termesRecherches)
     ]));
     const rechercheCourte = termesRecherches.length === 1 && termesRecherches[0].length <= 3;
-    const limiterAuxCategoriesDirectes = rechercheCourte
-        && [...correspondancesDirectes.values()].some(Boolean);
+    const limiterAuxCategoriesIdentifiees = rechercheCourte
+        && [...correspondancesIdentite.values()].some(Boolean);
     categories.forEach((categorie, ordreInitial) => {
         const correspondAuFiltre = filtre === 'tous'
             || (categorie.dataset.parcoursSupports || '').split(' ').includes(filtre);
-        const correspondDirectement = correspondancesDirectes.get(categorie);
+        const correspondIdentite = correspondancesIdentite.get(categorie);
+        const correspondCategorie = correspondancesCategorie.get(categorie);
         let ressourcesCorrespondantes = 0;
-        categorie.querySelectorAll(':scope > .supports-juridiction-contenu > .support-revision').forEach(ressource => {
-            const indexRecherche = obtenirIndexRechercheSupport(categorie, ressource);
+        let meilleurePrioriteRessource = 2000;
+        categorie.querySelectorAll(':scope > .supports-juridiction-contenu > .support-revision').forEach((ressource, ordreRessource) => {
+            const correspondContenu = correspondARechercheSupport(obtenirIndexRechercheSupport(ressource), termesRecherches);
             const correspond = !termesRecherches.length
-                || correspondDirectement
-                || (!limiterAuxCategoriesDirectes && correspondARechercheSupport(indexRecherche, termesRecherches));
+                || (rechercheCourte && correspondIdentite)
+                || (!limiterAuxCategoriesIdentifiees && correspondContenu);
+            const prioriteRessource = calculerPrioriteRechercheSupport(ressource, termesRecherches, ordreRessource);
             ressource.classList.toggle('masque-recherche-support', !correspond);
-            if (correspond)
+            ressource.style.order = termesRecherches.length && correspond ? String(prioriteRessource) : '';
+            if (correspond) {
                 ressourcesCorrespondantes += 1;
+                meilleurePrioriteRessource = Math.min(meilleurePrioriteRessource, prioriteRessource);
+            }
         });
         const categorieVisible = correspondAuFiltre && ressourcesCorrespondantes > 0;
         categorie.classList.toggle('masque-recherche-support', !categorieVisible);
         categorie.style.order = termesRecherches.length
-            ? String((correspondDirectement ? 0 : categories.length) + ordreInitial)
+            ? String(((correspondIdentite || correspondCategorie) ? 0 : 10000) + meilleurePrioriteRessource + ordreInitial)
             : '';
         if (categorieVisible) {
             categoriesVisibles += 1;

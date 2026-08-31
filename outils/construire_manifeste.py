@@ -103,6 +103,18 @@ def construire_manifeste(date_consolidation: str | None = None) -> dict[str, obj
                     "badges Parcours X et Étape X au-dessus des questions",
                     "boutons de révision et dossiers d'erreurs par parcours ou étape",
                 ],
+            },
+            "etoileFilanteMaitriseSansJoker": {
+                "obligatoire": True,
+                "principe": (
+                    "Une étape maîtrisée sans joker reçoit une étoile filante avec une traînée visible ; "
+                    "la carte du parcours affiche le même symbole avec le nombre de jalons maîtrisés."
+                ),
+                "comptage": (
+                    "Le compteur additionne les étapes maîtrisées sans joker et l'évaluation finale réussie ; "
+                    "il va de 1 à 12 et affiche 12 lorsque les 11 étapes et l'évaluation sont maîtrisées."
+                ),
+                "interdiction": "Une étoile seule sans traînée ne doit pas remplacer ce symbole.",
             }
         },
         "fichiers": fichiers,

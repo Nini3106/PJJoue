@@ -66,6 +66,74 @@
   outline-offset: 4px;
 }
 
+/* Maîtrise autonome : étoile filante commune aux étapes et au résumé du parcours. */
+#parcours .etoile-filante-progression {
+  position:absolute;
+  z-index:5;
+  top:12px;
+  right:12px;
+  display:block;
+  width:58px;
+  height:36px;
+  color:var(--jaune-interface);
+  pointer-events:none;
+  filter:drop-shadow(0 3px 7px rgba(0,19,52,.34));
+}
+#parcours .etoile-filante-progression svg {
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+#parcours .etoile-filante-trainee {
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.5;
+  stroke-linecap:round;
+  opacity:.72;
+}
+#parcours .etoile-filante-trainee-basse { opacity:.46; }
+#parcours .etoile-filante-astre {
+  fill:var(--surface-carte);
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linejoin:round;
+}
+#parcours .etoile-filante-progression-compteur {
+  top:6px;
+  right:8px;
+  width:88px;
+  height:54px;
+}
+#parcours .etoile-filante-progression-compteur .etoile-filante-astre {
+  transform-box:view-box;
+  transform-origin:65.8% 39%;
+  transform:scale(1.18);
+}
+#parcours .etoile-filante-nombre {
+  position:absolute;
+  left:65.8%;
+  top:50%;
+  min-width:26px;
+  transform:translate(-50%,-50%);
+  color:var(--texte);
+  font-size:.78rem;
+  font-weight:950;
+  font-variant-numeric:tabular-nums;
+  line-height:1;
+  text-align:center;
+  white-space:nowrap;
+}
+#parcours .selecteur-parcours-bouton:has(.etoile-filante-progression) .selecteur-parcours-statut {
+  padding-right:82px;
+}
+#parcours .chemin-etape-carte.validee-sans-joker {
+  padding-top:28px;
+}
+#parcours .chemin-evaluation-carte.complete {
+  padding-top:30px;
+}
+
 .selecteur-parcours-icone {
   grid-area: icone;
   display: grid;

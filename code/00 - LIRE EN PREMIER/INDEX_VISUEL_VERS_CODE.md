@@ -51,14 +51,7 @@ La colonne **Repère** contient le nom exact à rechercher. Les boutons statique
 | Entraînement libre | 10 | `#boutonEntrainement10Questions` | `code/05 - Entraînement libre/` |
 | Entraînement libre | 20 | `#boutonEntrainement20Questions` | `code/05 - Entraînement libre/` |
 | Entraînement libre | 30 | `#boutonEntrainement30Questions` | `code/05 - Entraînement libre/` |
-| Entraînement libre | 40 | `#boutonEntrainement40Questions` | `code/05 - Entraînement libre/` |
-| Entraînement libre | 50 | `#boutonEntrainement50Questions` | `code/05 - Entraînement libre/` |
-| Entraînement libre | 60 | `#boutonEntrainement60Questions` | `code/05 - Entraînement libre/` |
-| Entraînement libre | 70 | `#boutonEntrainement70Questions` | `code/05 - Entraînement libre/` |
-| Entraînement libre | 80 | `#boutonEntrainement80Questions` | `code/05 - Entraînement libre/` |
-| Entraînement libre | 90 | `#boutonEntrainement90Questions` | `code/05 - Entraînement libre/` |
-| Entraînement libre | 100 | `#boutonEntrainement100Questions` | `code/05 - Entraînement libre/` |
-| Entraînement libre | 110 | `#boutonEntrainement110Questions` | `code/05 - Entraînement libre/` |
+| Entraînement libre | Tous | `#boutonEntrainementTousQuestions` | `code/05 - Entraînement libre/` |
 | Entraînement libre | Avec | `#boutonEntrainementOrdonneAvecJokers` | `code/05 - Entraînement libre/` |
 | Entraînement libre | Sans | `#boutonEntrainementOrdonneSansJokers` | `code/05 - Entraînement libre/` |
 | Entraînement libre | Sans | `#boutonEntrainementOrdonneSansChronometre` | `code/05 - Entraînement libre/` |

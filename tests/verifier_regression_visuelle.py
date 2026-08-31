@@ -705,7 +705,7 @@ def verifier_revision_supports(page: Page) -> None:
         )
     })""")
     ordre_attendu = {
-        "supports-reperes-pjj": ["support-organisation-pjj", "support-mesures-educatives", "support-sigles-essentiels", "support-jeu-sigles"],
+        "supports-reperes-pjj": ["support-organisation-pjj", "support-mesures-educatives", "support-sigles-essentiels", "support-jeu-sigles", "support-jeu-mesures"],
         "supports-je": ["support-pratique-je", "support-synthese-je"],
         "supports-tpe": ["support-pratique-tpe", "support-synthese-tpe"],
         "supports-ji": ["support-pratique-ji", "support-synthese-ji"],

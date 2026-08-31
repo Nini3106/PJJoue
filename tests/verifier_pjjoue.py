@@ -328,7 +328,7 @@ def principal() -> int:
             f"Q{identifiant} doit référencer directement la règle officielle du TIG.",
         )
     sources_utilisees = {q.get("source") for q in questions if q.get("source")} | {ref for q in questions for ref in q.get("referencesSources", [])}
-    exiger(len(sources) == 67, "Le catalogue étendu doit contenir 67 sources officielles.")
+    exiger(len(sources) == 73, "Le catalogue étendu doit contenir 73 sources officielles avec Mission Mesures.")
     exiger("LEGIFRANCE_CJPM" in sources and "LEGIFRANCE_CJPM_APPLICATION" in sources, "Les sources judiciaires canoniques manquent.")
     exiger(all(str(q.get("indice", "")).strip() for q in apprentissage), "Chaque question d’apprentissage doit avoir un indice.")
     cles_enonce = [(q.get("theme"), q.get("etape"), q["enonce"].strip()) for q in questions]
@@ -352,8 +352,8 @@ def principal() -> int:
         position_hasard >= 0 and position_configurateur >= 0 and position_hasard < position_configurateur,
         "Le Défi du hasard doit rester valorisé avant le configurateur manuel.",
     )
-    exiger("boutonLancer.classList.add('secondaire')" in moteur,
-           "Après un tirage, Relancer le dé doit devenir secondaire et laisser Jouer comme action principale.")
+    exiger("boutonLancer.classList.add('principal')" in moteur and "boutonLancer.classList.remove('secondaire')" in moteur,
+           "Après un tirage, Relancer le dé doit conserver le même style principal que Jouer le tirage.")
     exiger("selecteurParcours" in page, "Le sélecteur des six parcours manque.")
     exiger("960" in page and "66" in page and "6" in page, "Les statistiques de la livraison sont absentes.")
     categories_supports = re.findall(r'<details\b[^>]*class="[^"]*\bsupports-juridiction\b[^"]*"[^>]*>', page)
@@ -364,8 +364,12 @@ def principal() -> int:
            "La recherche doit indexer automatiquement les mots-clés et le contenu de chaque support.")
     exiger("termesRecherches.every" in moteur,
            "La recherche des supports doit reconnaître chaque terme saisi, sans dépendre d’une expression exacte.")
-    exiger("motsIndex.has(terme)" in moteur and "limiterAuxCategoriesDirectes" in moteur,
-           "Les sigles courts doivent cibler exactement leur juridiction, sans faux positifs par sous-chaîne.")
+    exiger(
+        "terme.length <= 3" in moteur
+        and ("motsIndex.has(terme)" in moteur or "motsIndex.has(variante)" in moteur)
+        and "limiterAuxCategoriesIdentifiees" in moteur,
+        "Les sigles courts doivent cibler exactement leur juridiction, sans faux positifs par sous-chaîne.",
+    )
     exiger('role="group"' in page and 'aria-pressed="true"' in page,
            "Les filtres des supports doivent exposer leur groupe et leur état actif.")
     exiger("synchroniserOuvertureSupports" in moteur and "boutonRefermer.disabled" in moteur,

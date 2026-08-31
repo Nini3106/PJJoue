@@ -41,7 +41,7 @@ function preparerQuestionCourante() {
 
     clearInterval(etat.identifiantMinuteur);
     etat.questionCourante = etat.questionsSession[etat.indexQuestion];
-    if (!etat.questionCourante?.missionSigles) {
+    if (!etat.questionCourante?.missionSigles && !etat.questionCourante?.missionMesures) {
         marquerEtapeDecouverte(etat.questionCourante);
         marquerQuestionJouee(etat.questionCourante);
     }
@@ -71,14 +71,34 @@ function preparerQuestionCourante() {
     return { question, reponse, dejaPassee };
 }
 
+const IDENTITE_PARCOURS_MINI_JEUX = Object.freeze({
+    couleur: '#4f8cff',
+    couleurTexte: '#9fc2ff',
+    couleurRgb: '79,140,255'
+});
+
+function obtenirIdentiteParcoursQuestion(question) {
+    if (question?.missionSigles || question?.missionMesures) {
+        return IDENTITE_PARCOURS_MINI_JEUX;
+    }
+    return obtenirIdentiteParcours(question?.theme);
+}
+
+function appliquerIdentiteParcoursQuestion(question) {
+    const identite = obtenirIdentiteParcoursQuestion(question);
+    const ecranQuestion = selectionner('#question');
+    ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
+    ecranQuestion?.style.setProperty(
+        '--parcours-accent-lisible',
+        identite.couleurTexte || identite.couleur
+    );
+    ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb || '79,140,255');
+}
+
 function afficherReperesQuestion(question) {
     if (question?.missionSigles) {
         const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
         const identite = obtenirIdentiteEtapeMissionSigles(numeroEtape);
-        const ecranQuestion = selectionner('#question');
-        ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
-        ecranQuestion?.style.setProperty('--parcours-accent-lisible', identite.couleurTexte || identite.couleur);
-        ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
         const valeurProgression = Math.round((etat.indexQuestion + 1) / etat.questionsSession.length * 100);
         selectionner('#compteurQuestion').textContent = `${etat.indexQuestion + 1} / ${etat.questionsSession.length}`;
         selectionner('#progressionQuestion').style.width = `${valeurProgression}%`;
@@ -87,12 +107,19 @@ function afficherReperesQuestion(question) {
         selectionner('#reperesQuestion').innerHTML = `<span class="repere repere-theme"><span class="icone-theme" aria-hidden="true">Aa</span><b>Mission Sigles · Étape ${identite.numero}</b></span>`;
         return;
     }
+    if (question?.missionMesures) {
+        const numeroEtape = Number(question.missionMesuresMeta?.numeroEtape || question.etape || 1);
+        const identite = obtenirIdentiteEtapeMissionMesures(numeroEtape);
+        const valeurProgression = Math.round((etat.indexQuestion + 1) / etat.questionsSession.length * 100);
+        selectionner('#compteurQuestion').textContent = `${etat.indexQuestion + 1} / ${etat.questionsSession.length}`;
+        selectionner('#progressionQuestion').style.width = `${valeurProgression}%`;
+        selectionner('#progressionQuestion').parentElement?.setAttribute('aria-valuenow', String(valeurProgression));
+        selectionner('#enonceQuestion').textContent = nettoyerEnonce(question);
+        selectionner('#reperesQuestion').innerHTML = `<span class="repere repere-theme"><b>Mission Mesures · Étape ${String(numeroEtape).padStart(2,'0')}</b></span>`;
+        return;
+    }
     const theme = THEMES.find(themeCandidat => themeCandidat.id === question.theme);
     const identite = obtenirIdentiteParcours(question.theme);
-    const ecranQuestion = selectionner('#question');
-    ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
-    ecranQuestion?.style.setProperty('--parcours-accent-lisible', identite.couleurTexte || identite.couleur);
-    ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
     const valeurProgression = Math.round(
         (etat.indexQuestion + 1) / etat.questionsSession.length * 100
     );
@@ -243,21 +270,38 @@ function configurerChronometreEtFocusQuestion(jokersActifs, modeEvaluationFinale
 }
 
 function appliquerIdentiteVisuelleEtape(question) {
+    let couleurEtape = '#2d7379';
+    let couleurEtapeLisible = couleurEtape;
+    let identifiantEtape = String(question?.etape || 'libre');
+
     if (question?.missionSigles) {
-        const identite = obtenirIdentiteEtapeMissionSigles(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
-        document.documentElement.style.setProperty('--couleur-etape-active', identite.couleur);
-        document.body.dataset.etapeActive = `sigles-${question.missionSiglesMeta?.numeroEtape || question.etape || 1}`;
-        return;
+        const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
+        const identite = obtenirIdentiteEtapeMissionSigles(numeroEtape);
+        couleurEtape = identite.couleur;
+        couleurEtapeLisible = identite.couleurTexte || identite.couleur;
+        identifiantEtape = `sigles-${numeroEtape}`;
     }
-    const programme = PROGRAMMES[question?.theme];
-    const etapeProgramme = programme?.etapes?.find(
-        etape => Number(etape.id) === Number(question?.etape)
-    );
-    const couleurEtape = question?.theme === 'commun'
-        ? (etapeProgramme?.couleur || '#2d7379')
-        : obtenirCouleurTitreEtape(question?.etape);
+    else if (question?.missionMesures) {
+        const numeroEtape = Number(question.missionMesuresMeta?.numeroEtape || question.etape || 1);
+        const identite = obtenirIdentiteEtapeMissionMesures(numeroEtape);
+        couleurEtape = identite.couleur;
+        couleurEtapeLisible = identite.couleurTexte || identite.couleur;
+        identifiantEtape = `mesures-${numeroEtape}`;
+    }
+    else {
+        const programme = PROGRAMMES[question?.theme];
+        const etapeProgramme = programme?.etapes?.find(
+            etape => Number(etape.id) === Number(question?.etape)
+        );
+        couleurEtape = etapeProgramme?.couleur || obtenirCouleurTitreEtape(question?.etape);
+        couleurEtapeLisible = couleurEtape;
+    }
+
     document.documentElement.style.setProperty('--couleur-etape-active', couleurEtape);
-    document.body.dataset.etapeActive = String(question?.etape || 'libre');
+    document.documentElement.style.setProperty('--couleur-etape-active-lisible', couleurEtapeLisible);
+    document.documentElement.style.setProperty('--couleur-fil-association', couleurEtape);
+    document.body.dataset.etapeActive = identifiantEtape;
+    appliquerIdentiteParcoursQuestion(question);
 }
 function actualiserSuiviEtapeQuestion(question) {
     const conteneur = selectionner('#contexteEtapeQuestion');
@@ -287,16 +331,29 @@ function actualiserSuiviEtapeQuestion(question) {
         }
         return;
     }
+    if (question.missionMesures) {
+        identiteParcoursQuestion.classList.remove('masque');
+        const numeroEtape = Number(question.missionMesuresMeta?.numeroEtape || question.etape || 1);
+        const identite = obtenirIdentiteEtapeMissionMesures(numeroEtape);
+        const finaleMission = obtenirModeMissionMesures() === 'evaluation';
+        numeroParcours.textContent = 'Mission Mesures';
+        titreParcours.textContent = 'Mission Mesures';
+        numero.textContent = finaleMission ? 'Évaluation finale' : `Étape ${String(numeroEtape).padStart(2,'0')}`;
+        titre.textContent = finaleMission ? 'Maîtriser les mesures' : identite.titre;
+        suivi.classList.toggle('masque', finaleMission || obtenirModeMissionMesures() !== 'parcours');
+        if (!finaleMission && obtenirModeMissionMesures() === 'parcours') {
+            const total = obtenirReperesMesuresEtape(numeroEtape).length;
+            compteur.textContent = `${compterMaitrisesEtapeMesures(numeroEtape)}/${total}`;
+            boutonReinitialiser.disabled = compterMaitrisesEtapeMesures(numeroEtape) === 0;
+        }
+        return;
+    }
     identiteParcoursQuestion.classList.remove('masque');
     const finale = etat.mode === 'evaluation-finale' || Number(question.etape) === 12;
     const etapeProgramme = obtenirEtapeProgramme(question.theme, question.etape);
     const identite = obtenirIdentiteParcours(question.theme);
     numeroParcours.textContent = `Parcours ${identite.numero}`;
     titreParcours.textContent = identite.titre;
-    const ecranQuestion = selectionner('#question');
-    ecranQuestion?.style.setProperty('--parcours-accent', identite.couleur);
-    ecranQuestion?.style.setProperty('--parcours-accent-lisible', identite.couleurTexte || identite.couleur);
-    ecranQuestion?.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
     numero.textContent = finale ? 'Étape 12' : `Étape ${question.etape}`;
     titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours PJJ');
     suivi.classList.toggle('masque', finale || etat.mode !== 'parcours');
@@ -322,6 +379,18 @@ function demanderReinitialisationSansJoker() {
             message:`Les ${nombreAutonomes} validations autonomes de cette étape Mission Sigles seront effacées.`,
             libelleConfirmer:'Réinitialiser', libelleAnnuler:'Annuler', afficherAnnuler:true, variante:'avertissement',
             apresConfirmation:()=>reinitialiserMaitriseEtapeMissionSigles(numeroEtape)
+        });
+        return;
+    }
+    if (question?.missionMesures) {
+        const numeroEtape = Number(question.missionMesuresMeta?.numeroEtape || question.etape || 1);
+        const nombreAutonomes = compterMaitrisesEtapeMesures(numeroEtape);
+        if (!nombreAutonomes) return;
+        ouvrirFenetreMessage({
+            titre:'Réinitialiser la maîtrise sans aide ?',
+            message:`Les ${nombreAutonomes} validations autonomes de cette étape Mission Mesures seront effacées.`,
+            libelleConfirmer:'Réinitialiser', libelleAnnuler:'Annuler', afficherAnnuler:true, variante:'avertissement',
+            apresConfirmation:()=>reinitialiserMaitriseEtapeMissionMesures(numeroEtape)
         });
         return;
     }

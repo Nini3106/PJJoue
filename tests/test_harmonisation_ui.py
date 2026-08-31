@@ -68,6 +68,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
                 "Guides",
                 "Mini jeux",
                 "Mission Sigles",
+                "Mission Mesures",
                 "Paramètres",
             ],
         )
@@ -77,7 +78,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         bloc_menu = js[js.index('const entrees = ['):js.index('];', js.index('const entrees = ['))]
         attendu = [
             "Accueil", "Parcours PJJ", "Entraînement libre", "Réviser", "Progression",
-            "Carnet de parcours", "Supports", "Supports de révision", "Guides", "Mini jeux", "Mission Sigles", "Paramètres",
+            "Carnet de parcours", "Supports", "Supports de révision", "Guides", "Mini jeux", "Mission Sigles", "Mission Mesures", "Paramètres",
         ]
         positions = []
         for libelle in attendu:
@@ -116,20 +117,56 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         self.assertRegex(statique, re.compile(r"\.page-information-retour, \.guide-fil-ariane\s*\{[^}]*margin-bottom:\s*24px;", re.S))
         self.assertIn("#sigles .sigles-retour { margin:0 0 24px; }", sigles)
 
-    def test_titres_mission_sigles_et_guides_sont_harmonises(self) -> None:
+    def test_titres_missions_et_guides_sont_harmonises(self) -> None:
         sigles = (CODE / "08 - Réviser/Jeu des sigles/style-jeu-des-sigles.css").read_text(encoding="utf-8")
+        mesures = (CODE / "08 - Réviser/Jeu des mesures/style-jeu-des-mesures.css").read_text(encoding="utf-8")
         guides = (CODE / "11 - Guides pour découvrir la PJJ/Accueil des guides/style-de-la-page.css").read_text(encoding="utf-8")
         statique = (CODE / "01 - Éléments communs/static-pages.css").read_text(encoding="utf-8")
-        self.assertRegex(sigles, re.compile(r"#sigles \.sigles-accueil-entete\s*\{[^}]*text-align:center;", re.S))
+        self.assertRegex(sigles, re.compile(r"#sigles \.sigles-accueil-entete,\s*#sigles \.sigles-page-secondaire-entete\s*\{[^}]*text-align:center;", re.S))
+        self.assertRegex(mesures, re.compile(r"#mesures \.mesures-accueil-entete,\s*#mesures \.mesures-page-secondaire-entete\s*\{[^}]*text-align:center;", re.S))
         self.assertRegex(guides, re.compile(r"\.guides-entete\s*\{[^}]*text-align:center;", re.S))
         self.assertRegex(guides, re.compile(r"\.guides-entete h1\s*\{[^}]*font-size:clamp\(1\.65rem,2\.75vw,2\.55rem\);", re.S))
         self.assertRegex(statique, re.compile(r"\.guide-site-entete\.menu-guide-actif \.guide-navigation-principale a\s*\{[^}]*font-size:\s*1rem;[^}]*font-weight:\s*800;", re.S))
+
+    def test_entrainements_missions_acceptent_les_intitules_longs_et_hasard_garde_la_couleur_du_de(self) -> None:
+        entrainement = (CODE / "05 - Entraînement libre/style-configurateur-entrainement.css").read_text(encoding="utf-8")
+        sigles = (CODE / "08 - Réviser/Jeu des sigles/style-jeu-des-sigles.css").read_text(encoding="utf-8")
+        mesures = (CODE / "08 - Réviser/Jeu des mesures/style-jeu-des-mesures.css").read_text(encoding="utf-8")
+        self.assertIn('#entrainement:is([data-contexte-entrainement="sigles"],[data-contexte-entrainement="mesures"]) .entrainement-perimetre-choix .choix-bouton', entrainement)
+        self.assertRegex(entrainement, re.compile(r'data-contexte-entrainement="mesures"[^}]*height:auto;[^}]*min-height:96px;', re.S))
+        self.assertIn('#sigles .sigles-mode-hasard .sigles-bouton-mode:disabled { border-color:var(--sigles-vert-parcours-6-lisible); }', sigles)
+        self.assertIn('#mesures .mesures-mode-hasard .mesures-bouton-mode:disabled { border-color:var(--mesures-vert-parcours-6-lisible); }', mesures)
+        self.assertIn('--entrainement-hasard-accent:#70d6ca;', entrainement)
+        self.assertIn('border-color:var(--entrainement-hasard-accent);', entrainement)
+        self.assertIn('#entrainement .entrainement-hasard-actions .principal:active {', entrainement)
 
     def test_reviser_offre_acces_direct_aux_supports(self) -> None:
         html = (CODE / "08 - Réviser/contenu.html").read_text(encoding="utf-8")
         self.assertIn('class="discret revision-lien-supports"', html)
         self.assertIn('data-ecran="supports"', html)
         self.assertIn("Supports de révision", html)
+
+    def test_supports_proposent_les_deux_missions_et_recherche_le_contenu_reel(self) -> None:
+        html = (CODE / "08 - Réviser/contenu.html").read_text(encoding="utf-8")
+        css = (CODE / "08 - Réviser/style-reviser-et-supports.css").read_text(encoding="utf-8")
+        js = (CODE / "08 - Réviser/actions-de-la-page.js").read_text(encoding="utf-8")
+        self.assertIn('id="support-jeu-sigles"', html)
+        self.assertIn('id="support-jeu-mesures"', html)
+        self.assertIn('data-ecran="mesures"', html)
+        self.assertIn('data-mots-cles="mesure mesures', html)
+        self.assertRegex(css, re.compile(r"#supports \.support-ressource-guide \{[^}]*text-align:left;", re.S))
+        self.assertIn('function obtenirIndexIdentiteCategorieSupport(categorie)', js)
+        self.assertIn('function obtenirIndexRechercheSupport(ressource)', js)
+        self.assertNotIn('obtenirIndexRechercheSupport(categorie, ressource)', js)
+
+    def test_libelles_missions_et_phrase_pedagogique_sont_valides(self) -> None:
+        sigles_js = (CODE / "08 - Réviser/Jeu des sigles/actions-de-la-page.js").read_text(encoding="utf-8")
+        mesures_js = (CODE / "08 - Réviser/Jeu des mesures/actions-de-la-page.js").read_text(encoding="utf-8")
+        mesures_html = (CODE / "08 - Réviser/Jeu des mesures/contenu.html").read_text(encoding="utf-8")
+        self.assertIn('<b>Tout Mission Sigles</b>', sigles_js)
+        self.assertIn('<b>Tout Mission Mesure</b>', mesures_js)
+        self.assertNotIn('<b>Tout Mission Mesures</b>', mesures_js)
+        self.assertIn('Chaque étape introduit uniquement les notions nécessaires au stade de la procédure étudié. Les sigles de mesures sont d’abord développés dans une question complète avant d’être utilisés seuls.', mesures_html)
 
     def test_question_affiche_parcours_puis_etape(self) -> None:
         html = (CODE / "06 - Question/contenu.html").read_text(encoding="utf-8")
@@ -225,10 +262,14 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         self.assertIn('parametres: { son: true, volume: .65, echelleTexte: 1 }', sauvegarde)
         self.assertRegex(entrainement, re.compile(r"#entrainement \.entrainement-options-avancees \+ \.entrainement-lancer,\s*#entrainement \.entrainement-lancer \{[^}]*align-self:start;[^}]*width:max-content;", re.S))
         question_js = (CODE / "06 - Question/actions/05 - Préparer et afficher la question.js").read_text(encoding="utf-8")
-        self.assertIn("question?.theme === 'commun'", question_js)
-        self.assertIn("obtenirCouleurTitreEtape(question?.etape)", question_js)
+        self.assertIn("couleurEtape = etapeProgramme?.couleur || obtenirCouleurTitreEtape(question?.etape);", question_js)
+        self.assertIn("--couleur-etape-active-lisible", question_js)
         self.assertIn("--parcours-accent-lisible", question_js)
         self.assertIn("background:var(--surface-carte-profonde);", entrainement)
+        entrainement_js = (CODE / "05 - Entraînement libre/actions-de-la-page.js").read_text(encoding="utf-8")
+        entrainement_html = (CODE / "05 - Entraînement libre/contenu.html").read_text(encoding="utf-8")
+        self.assertIn("let pasCurseur = 1;", entrainement_js)
+        self.assertIn('id="curseurNombreQuestions" type="range" min="10" max="660" step="1"', entrainement_html)
 
     def test_navigation_locale_ne_manipule_pas_history_en_file(self) -> None:
         navigation = (CODE / "01 - Éléments communs/JavaScript - Navigation et fenêtres.js").read_text(encoding="utf-8")
@@ -242,14 +283,16 @@ class HarmonisationInterfaceTests(unittest.TestCase):
     def test_entrainement_est_structurellement_harmonise(self) -> None:
         css = (CODE / "05 - Entraînement libre/style-configurateur-entrainement.css").read_text(encoding="utf-8")
         css_genere = (RACINE / "ressources/styles/pjjoue-principal.css").read_text(encoding="utf-8")
-        self.assertRegex(css_genere, re.compile(r"#entrainement \.entrainement-perimetre-choix \.choix-bouton \{[^}]*width:230px;[^}]*height:82px;", re.S), "Le gabarit harmonisé des parcours doit être compilé dans le site public.")
+        self.assertRegex(css_genere, re.compile(r"#entrainement \.entrainement-perimetre-choix \{[^}]*display:grid;[^}]*grid-template-columns:repeat\(4,minmax\(0,1fr\)\);", re.S), "La grille harmonisée des parcours doit être compilée dans le site public.")
         self.assertIn("#entrainement .entrainement-etape-config.entrainement-etape-modes {", css)
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-etape-config,\s*#entrainement \.entrainement-etape-config\.entrainement-etape-modes \{[^}]*border:1px solid var\(--bordure-carte\);[^}]*background:var\(--surface-carte\);", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-nombre-config \{[^}]*grid-template-columns:1fr;", re.S))
         self.assertRegex(css_genere, re.compile(r"#entrainement \.entrainement-grille \{[^}]*grid-template-columns:\s*repeat\(2,minmax\(0,1fr\)\);", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-options-avancees summary \{[^}]*width:max-content;[^}]*border:1px solid var\(--bordure\);", re.S))
-        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \.choix-bouton \{[^}]*width:230px;[^}]*height:82px;", re.S))
-        self.assertIn("justify-content:center;", css)
+        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \{[^}]*display:grid;[^}]*grid-template-columns:repeat\(4,minmax\(0,1fr\)\);", re.S))
+        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \.choix-bouton \{[^}]*height:82px;[^}]*min-height:82px;", re.S))
+        self.assertNotRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \.choix-bouton \{[^}]*\n\s*width:100%;", re.S))
+        self.assertNotIn("justify-content:center;", css[css.index("#entrainement .entrainement-perimetre-choix {"):css.index("#entrainement .entrainement-perimetre-choix .choix-bouton {")])
 
     def test_titre_revision_est_reellement_centre(self) -> None:
         general = (CODE / "01 - Éléments communs/style-general-pjjoue.css").read_text(encoding="utf-8")

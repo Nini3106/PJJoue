@@ -168,6 +168,10 @@ function lancerEntrainementLibre() {
         lancerEntrainementMissionSiglesNatif();
         return;
     }
+    if (etat.contexteEntrainement === 'mesures') {
+        lancerEntrainementMissionMesuresNatif();
+        return;
+    }
     etat.mode = 'libre';
     etat.origineSessionAnalytics = 'entrainement_libre';
     const perimetre = selectionner('#perimetreEntrainement')?.value || etat.perimetreEntrainement || 'tous';
@@ -218,8 +222,8 @@ function lancerDeParcours() {
         resultat.textContent = `${nombreTire} question${nombreTire === 1 ? '' : 's'} aléatoire${nombreTire === 1 ? '' : 's'} tirée${nombreTire === 1 ? '' : 's'} dans les six parcours.`;
         boutonJouer.textContent = `Jouer ${nombreTire} question${nombreTire === 1 ? '' : 's'}`;
         boutonLancer.textContent = 'Relancer le dé';
-        boutonLancer.classList.remove('principal');
-        boutonLancer.classList.add('secondaire');
+        boutonLancer.classList.add('principal');
+        boutonLancer.classList.remove('secondaire');
         boutonJouer.classList.remove('masque');
         boutonLancer.disabled = false;
         boutonJouer.focus({ preventScroll: true });

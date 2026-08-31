@@ -4,11 +4,9 @@
 #sigles .sigles-vue { width:min(1180px,100%); margin:0 auto; }
 #sigles .sigles-retour { margin:0 0 24px; }
 #sigles .sigles-accueil-entete,
-#sigles .sigles-page-secondaire-entete { margin-bottom:20px; }
-#sigles .sigles-accueil-entete { max-width:920px; margin-left:auto; margin-right:auto; text-align:center; }
-#sigles .sigles-accueil-entete p { margin-left:auto; margin-right:auto; }
+#sigles .sigles-page-secondaire-entete { max-width:920px; margin:0 auto 20px; text-align:center; }
 #sigles .sigles-accueil-entete p,
-#sigles .sigles-page-secondaire-entete p { max-width:850px; }
+#sigles .sigles-page-secondaire-entete p { max-width:850px; margin-left:auto; margin-right:auto; }
 
 /* Tableau de bord */
 #sigles .sigles-tableau-bord { display:grid; gap:16px; margin-bottom:24px; padding:22px; border:1px solid var(--bordure-carte); border-radius:var(--rayon-tres-grand); background:var(--surface-carte); box-shadow:var(--ombre-carte); }
@@ -77,6 +75,8 @@
 #sigles .sigles-hasard-texte { grid-area:texte; }
 #sigles .sigles-hasard-actions { grid-area:action; display:flex; flex-wrap:wrap; gap:9px; }
 #sigles .sigles-hasard-actions .sigles-bouton-secondaire { min-width:0; }
+#sigles .sigles-mode-hasard .sigles-bouton-mode,
+#sigles .sigles-mode-hasard .sigles-bouton-mode:disabled { border-color:var(--sigles-vert-parcours-6-lisible); }
 
 /* Les quatre actions de l’accueil Mission Sigles utilisent la même grammaire :
    contour coloré, fond bleu discret, aucune sélection jaune pleine et alignement en pied de carte. */
@@ -292,11 +292,5 @@
   #sigles .sigles-etape-carte { animation:none; transition:none; }
 }
 
-/* Mission Sigles réutilise l'écran Entraînement natif de PJJoue.
-   Seul le dé garde le repère vert du parcours 6 demandé pour ce module. */
-#entrainement[data-contexte-entrainement="sigles"] #faceDeParcours {
-  color: #70d6ca;
-  filter: drop-shadow(0 3px 5px rgba(15, 118, 110, .25));
-}
 
 /* === FIN MORCEAU CSS === */

@@ -74,6 +74,23 @@ const IDENTITES_PARCOURS = Object.freeze({
 function obtenirIdentiteParcours(identifiantTheme) {
     return IDENTITES_PARCOURS[identifiantTheme] || IDENTITES_PARCOURS.commun;
 }
+/**
+ * Construit le repère de maîtrise autonome. Les deux traits derrière l'étoile
+ * font partie du symbole : il s'agit volontairement d'une étoile filante,
+ * jamais d'une étoile seule. Le nombre est réservé au résumé d'un parcours.
+ */
+function creerEtoileFilanteProgression(nombreJalons = null) {
+    const nombre = Number(nombreJalons);
+    const afficherNombre = Number.isFinite(nombre) && nombre > 0;
+    return `<span class="etoile-filante-progression${afficherNombre ? ' etoile-filante-progression-compteur' : ''}" aria-hidden="true">
+        <svg viewBox="0 0 76 46" focusable="false">
+            <path class="etoile-filante-trainee etoile-filante-trainee-haute" d="M4 28 C16 27 25 21 34 12"></path>
+            <path class="etoile-filante-trainee etoile-filante-trainee-basse" d="M8 40 C21 37 31 30 39 21"></path>
+            <path class="etoile-filante-astre" d="M50 4 L54.4 13.4 L64.7 14.6 L57.1 21.7 L59.2 31.7 L50 26.5 L40.8 31.7 L42.9 21.7 L35.3 14.6 L45.6 13.4 Z"></path>
+        </svg>
+        ${afficherNombre ? `<b class="etoile-filante-nombre">${Math.round(nombre)}</b>` : ''}
+    </span>`;
+}
 function calculerProgressionParcours(identifiantTheme) {
     const programme = PROGRAMMES[identifiantTheme];
     if (!programme)
@@ -81,7 +98,17 @@ function calculerProgressionParcours(identifiantTheme) {
     synchroniserEtapesReussiesEnAutonomie(programme);
     const maitrisees = programme.etapes.filter(etapeProgramme => estEtapeMaitrisee(identifiantTheme, etapeProgramme.id)).length;
     const total = programme.etapes.length;
-    return { maitrisees, total, pourcentage: total ? Math.round(maitrisees / total * 100) : 0 };
+    const evaluationReussie = estEvaluationFinaleReussie(identifiantTheme);
+    const jalonsMaitrises = maitrisees + (evaluationReussie ? 1 : 0);
+    const totalJalons = total + 1;
+    return {
+        maitrisees,
+        total,
+        pourcentage: total ? Math.round(maitrisees / total * 100) : 0,
+        evaluationReussie,
+        jalonsMaitrises,
+        totalJalons
+    };
 }
 function actualiserSelecteurParcours() {
     const zone = selectionner('#selecteurParcours');
@@ -92,7 +119,11 @@ function actualiserSelecteurParcours() {
         const identite = obtenirIdentiteParcours(theme.id);
         const progression = calculerProgressionParcours(theme.id);
         const bouton = document.createElement('button');
-        const statut = progression.pourcentage === 100 ? 'Terminé' : progression.pourcentage > 0 ? 'En cours' : 'À découvrir';
+        const statut = progression.evaluationReussie
+            ? 'Terminé'
+            : progression.pourcentage === 100
+                ? 'Évaluation à passer'
+                : progression.pourcentage > 0 ? 'En cours' : 'À découvrir';
         bouton.type = 'button';
         const estDernierParcours = theme.id === THEMES[THEMES.length - 1].id;
         bouton.className = `selecteur-parcours-bouton${theme.id === 'commun' ? ' parcours-recommande' : ''}${estDernierParcours ? ' parcours-cloture' : ''}`;
@@ -100,8 +131,9 @@ function actualiserSelecteurParcours() {
         bouton.style.setProperty('--parcours-accent', identite.couleur);
         bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
         bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
-        bouton.setAttribute('aria-label', `${identite.titre}. ${progression.maitrisees} étapes maîtrisées sur ${progression.total}.`);
+        bouton.setAttribute('aria-label', `${identite.titre}. ${progression.maitrisees} étapes maîtrisées sans joker sur ${progression.total}.${progression.evaluationReussie ? ' Évaluation finale réussie.' : ''}`);
         bouton.innerHTML = `
+            ${progression.jalonsMaitrises > 0 ? creerEtoileFilanteProgression(progression.jalonsMaitrises) : ''}
             <span class="selecteur-parcours-numero">Parcours ${identite.numero}</span>
             <span class="selecteur-parcours-icone">${creerIconeTheme(theme.id, '')}</span>
             <span class="selecteur-parcours-statut">${statut}</span>
@@ -297,8 +329,9 @@ function afficherEtapes() {
             etapeValideeEnAutonomie ? 'validee-sans-joker' : '',
             estDestinationActuelle ? 'destination-actuelle' : ''
         ].filter(Boolean).join(' ');
-        carte.setAttribute('aria-label', `Étape ${etapeProgramme.id} — ${etapeProgramme.titre} — ${nombreTraitees} questions réalisées sur ${total}`);
+        carte.setAttribute('aria-label', `Étape ${etapeProgramme.id} — ${etapeProgramme.titre} — ${nombreTraitees} questions réalisées sur ${total}${etapeValideeEnAutonomie ? ' — maîtrisée sans joker' : ''}`);
         carte.innerHTML = `
+          ${etapeValideeEnAutonomie ? creerEtoileFilanteProgression() : ''}
           <span class="chemin-etape-icone" aria-hidden="true">${obtenirBaliseIconeEtape(etapeProgramme.id, etat.theme)}</span>
           <span class="chemin-etape-texte">
             <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
@@ -335,6 +368,9 @@ function afficherEtapes() {
     evaluation.setAttribute('aria-disabled', String(!evaluationDeverrouillee));
     evaluation.classList.toggle('deverrouillee', evaluationDeverrouillee);
     evaluation.classList.toggle('complete', evaluationReussie);
+    evaluation.querySelector(':scope > .etoile-filante-progression')?.remove();
+    if (evaluationReussie)
+        evaluation.insertAdjacentHTML('afterbegin', creerEtoileFilanteProgression());
     const iconeEvaluation = evaluation.querySelector('.icone-evaluation');
     if (iconeEvaluation) iconeEvaluation.innerHTML = creerPictogrammeAuTrait('trophee', 'pictogramme-evaluation');
     evaluation.querySelector('.evaluation-etape-numero').textContent = 'ÉTAPE 12';

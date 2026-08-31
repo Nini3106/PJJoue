@@ -6,6 +6,8 @@
   "erreurs": "revision",
   "sigles": "mission-sigles",
   "sigles-revision": "mission-sigles/revision",
+  "mesures": "mission-mesures",
+  "mesures-revision": "mission-mesures/revision",
   "supports": "supports",
   "progression": "progression",
   "parametres": "parametres",
