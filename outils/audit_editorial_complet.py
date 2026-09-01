@@ -11,6 +11,17 @@ QUESTIONS = json.loads((ROOT / "donnees/questions.json").read_text(encoding="utf
 OUT = ROOT / "audit-resultats"
 OUT.mkdir(exist_ok=True)
 
+
+MODES_CANONIQUES_ETAPE = {
+    "choix-unique",
+    "selection-multiple",
+    "association",
+    "eliminer",
+    "reponse-ecrite",
+    "remettre-ordre",
+    "classer",
+}
+
 PARCOURS = {
     "commun": (1, "Découvrir la PJJ", "p1_"),
     "procedure_ordinaire": (2, "Du parquet à la sanction", "p2_"),
@@ -51,8 +62,14 @@ for q in QUESTIONS:
     legal_text = stem + " " + answer
     if re.search(r"\b\d+°(?:\s*(?:à|au)\s*\d+°)?|\b\d+\s*bis\b", legal_text, re.I):
         add(findings, 3, "RENVOI_LEGAL_NON_EXPLIQUE", "Notation de texte comme « 5° » ou « 7 bis » non expliquée : incompréhensible pour un utilisateur non juriste.")
-    if re.search(r"\b[LRD]\s*\.?\s*\d{3}(?:[-‑]\d+)+\b", stem):
-        add(findings, 2, "ARTICLE_DANS_QUESTION", "Numéro d’article utilisé dans la question sans reformulation suffisante ; la règle doit être nommée en langage clair.")
+    article_brut_re = r"\b(?:article\s+)?[LRD]\s*\.?\s*\d+(?:[-‑]\d+)*\b|\barticle\s+\d+(?:[-‑]\d+)*\b"
+    if re.search(article_brut_re, stem, re.I):
+        add(findings, 2, "ARTICLE_DANS_QUESTION", "Référence juridique brute dans l’énoncé (article L./R./D. ou numéro d’article) ; la question doit formuler la règle en français naturel et réserver la référence à la correction ou à la source.")
+    nombre_interrogatif_re = r"^(Quels?|Quelles?)\s+(?:\d+|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze)\b"
+    if re.search(nombre_interrogatif_re, stem.strip(), re.I):
+        add(findings, 3, "QUESTION_NOMBRE_SANS_SONT", "Formulation télégraphique interdite : écrire « Quels/Quelles sont les + nombre + … ? ».")
+    if len(stem) > 220:
+        add(findings, 2, "ENONCE_LONG", f"Énoncé de {len(stem)} caractères : le plafond éditorial de 220 caractères est dépassé ; raccourcir ou scinder la question.")
     if re.search(r"\b(?:régime|branche|cadre|interdiction|exception|catégories?) (?:étudié|étudiée|visé|visée|2026)\b", stem, re.I):
         add(findings, 2, "REFERENT_VAGUE", "Référent abstrait ou scolaire (« régime étudié », « branche », « catégories visées ») : l’utilisateur ne sait pas précisément de quoi il s’agit.")
     if re.search(r"\b(?:sous réserve|de plein droit|au titre de|en vertu de|quel que soit le reliquat|dessaisissement)\b", stem, re.I):
@@ -63,7 +80,11 @@ for q in QUESTIONS:
         add(findings, 2, "INFORMATION_PARASITE", "L’introduction sur la qualification (contravention, délit ou crime) ne sert pas à répondre à la question sur l’âge et mélange deux apprentissages.")
     if re.search(r"\b(?:quel repère viens-tu d’identifier|quel objet faut-il rechercher|quels repères faut-il retrouver)\b", stem, re.I):
         add(findings, 2, "FORMULATION_SCOLAIRE_VAGUE", "La question demande de retrouver un « repère » ou un « objet » sans nommer directement l’information recherchée.")
-    if re.search(r"\b(?:elle|il|celui-ci|celle-ci|cette mesure|ce régime|cette branche|ces demandes)\b", stem, re.I) and stem.count(".") == 0 and len(stem) < 95:
+    # Un pronom n'est fragile que lorsqu'il ouvre l'énoncé sans antécédent explicite.
+    # Des formulations naturelles comme « pourquoi la santé peut-elle… » ou
+    # « que faut-il… » ne doivent pas être signalées : leur référent est présent
+    # dans la question elle-même.
+    if re.search(r"^(?:Elle|Il|Celui-ci|Celle-ci|Cette mesure|Ce régime|Cette branche|Ces demandes)\b", stem.strip(), re.I):
         add(findings, 1, "REFERENT_FRAGILE", "Le référent dépend fortement du contexte immédiat et peut devenir ambigu en navigation libre.")
 
     if mode == "reponse-ecrite":
@@ -144,11 +165,38 @@ with scope_path.open("w", encoding="utf-8-sig", newline="") as f:
     writer.writeheader()
     writer.writerows(scope_rows)
 
+# Contrôle obligatoire de la couverture des sept modes par étape.
+# Depuis l’harmonisation du 31 août 2026, toute étape d’apprentissage doit
+# contenir chacun des sept modes canoniques au moins une fois.
+modes_par_etape = defaultdict(set)
+for q in QUESTIONS:
+    if not q.get("estEvaluationFinale"):
+        modes_par_etape[(q["theme"], q["etape"])].add(q.get("modePrefere", ""))
+
+couverture_modes = []
+for (theme, etape), presents in sorted(modes_par_etape.items()):
+    manquants = sorted(MODES_CANONIQUES_ETAPE - presents)
+    couverture_modes.append({
+        "theme": theme,
+        "etape": etape,
+        "modesPresents": sorted(presents),
+        "modesManquants": manquants,
+        "conformeNouvelleCharte": not manquants,
+    })
+(OUT / "couverture_modes_par_etape.json").write_text(
+    json.dumps(couverture_modes, ensure_ascii=False, indent=2), encoding="utf-8"
+)
+
 summary = {
     "total": len(rows),
     "decisions": Counter(r["Décision"] for r in rows),
     "codes": Counter(c for r in rows for c in r["Codes"].split(" | ") if c),
     "parcours": {p: Counter(r["Décision"] for r in rows if r["Parcours"] == p) for p in range(1, 7)},
+    "nouvelleRegleModesParEtape": {
+        "etapesTotales": len(couverture_modes),
+        "etapesConformes": sum(1 for ligne in couverture_modes if ligne["conformeNouvelleCharte"]),
+        "etapesACompleter": sum(1 for ligne in couverture_modes if not ligne["conformeNouvelleCharte"]),
+    },
 }
 (OUT / "synthese_audit.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
 print(csv_path)

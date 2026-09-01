@@ -484,7 +484,7 @@ def verifier_parcours_crimes_bureau(page: Page) -> None:
         donnees["theme"] != "matiere_criminelle_peines"
         or donnees["nombreCartes"] != 11
         or donnees["nombreSvg"] != 11
-        or not any("Emprisonnement" in titre for titre in donnees["titres"])
+        or not any("emprisonnement" in titre.casefold() for titre in donnees["titres"])
     ):
         raise AssertionError(f"Parcours crimes : contenu de contrôle introuvable : {donnees}")
     verifier_grille_cartes_parcours_bureau(page)

@@ -187,6 +187,14 @@ def valider_activite(question: dict[str, Any], erreurs: list[str]) -> None:
             )
         if not reponses.issubset(propositions):
             erreurs.append(f"{contexte}.reponses référence une proposition inconnue.")
+        propositions_brutes = activite.get("propositions") if isinstance(activite.get("propositions"), list) else []
+        if len(propositions_brutes) < 4 or len(propositions_brutes) - len(reponses_liste) < 2:
+            erreurs.append(
+                f"{contexte} doit proposer au moins deux distracteurs en plus des réponses exactes."
+            )
+        longueurs = [len(str(element.get("texte", "")).strip()) for element in propositions_brutes if isinstance(element, dict)]
+        if longueurs and max(longueurs) > 40 and max(longueurs) / max(1, min(longueurs)) > 3:
+            erreurs.append(f"{contexte} contient des propositions visuellement trop déséquilibrées : {longueurs}.")
     elif type_activite == "association":
         gauche = valider_elements(activite, "colonneGauche", contexte, erreurs)
         droite = valider_elements(activite, "colonneDroite", contexte, erreurs)
@@ -200,6 +208,8 @@ def valider_activite(question: dict[str, Any], erreurs: list[str]) -> None:
                 erreurs.append(f"{contexte}.associations référence un élément de droite inconnu.")
             if len(set(associations.values())) != len(associations.values()):
                 erreurs.append(f"{contexte}.associations doit être bijective.")
+            if set(associations.values()) != droite:
+                erreurs.append(f"{contexte}.associations doit utiliser chaque élément de droite exactement une fois.")
     elif type_activite in {"remettre-ordre", "choisir-ordre"}:
         elements = valider_elements(activite, "elements", contexte, erreurs)
         ordre_liste = valider_liste_textes(
@@ -226,6 +236,13 @@ def valider_activite(question: dict[str, Any], erreurs: list[str]) -> None:
                 erreurs.append(f"{contexte}.classements doit référencer chaque élément une fois.")
             if not set(classements.values()).issubset(categories):
                 erreurs.append(f"{contexte}.classements référence une catégorie inconnue.")
+            if set(classements.values()) != categories:
+                erreurs.append(f"{contexte}.classements doit utiliser chaque catégorie au moins une fois.")
+
+
+def compter_mots_reponse(valeur: object) -> int:
+    """Compte les mots significatifs d’une réponse courte, apostrophes et traits d’union inclus."""
+    return len(re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ0-9]+(?:['’\-][A-Za-zÀ-ÖØ-öø-ÿ0-9]+)*", str(valeur)))
 
 
 def normaliser_choix(valeur: object) -> str:
@@ -292,6 +309,16 @@ def valider_schema_mode(question: dict[str, Any], erreurs: list[str]) -> None:
             erreurs.append(f"{contexte}.propositionsAConserver doit être une liste non vide.")
         elif isinstance(affichees, list) and not set(conservees).issubset(set(affichees)):
             erreurs.append(f"{contexte}.propositionsAConserver contient un choix non affiché.")
+        if isinstance(mauvaises, list) and isinstance(affichees, list) and isinstance(conservees, list):
+            if set(affichees) != set(conservees) | set(mauvaises) or set(conservees) & set(mauvaises):
+                erreurs.append(
+                    f"{contexte}.propositionsAEliminer doit correspondre exactement aux choix conservés et aux distracteurs."
+                )
+            if question.get("nombreEliminationsAttendues") != len(mauvaises):
+                erreurs.append(f"{contexte}.nombreEliminationsAttendues doit correspondre au nombre de distracteurs.")
+            longueurs = [len(str(texte).strip()) for texte in affichees]
+            if longueurs and max(longueurs) > 40 and max(longueurs) / max(1, min(longueurs)) > 3:
+                erreurs.append(f"{contexte} contient des propositions visuellement trop déséquilibrées : {longueurs}.")
 
 
 def valider_donnees(
@@ -361,6 +388,7 @@ def valider_donnees(
         return erreurs
 
     identifiants: list[int] = []
+    modes_par_etape: dict[tuple[str, int], set[str]] = {}
     for indice, question in enumerate(questions):
         contexte = f"Question à l’index {indice}"
         if not isinstance(question, dict):
@@ -379,6 +407,13 @@ def valider_donnees(
             "statutContenu", "versionContenu", "derniereVerification", "bonneReponse",
         ):
             valider_texte(question.get(champ), f"{contexte}.{champ}", erreurs)
+        enonce = str(question.get("enonce", ""))
+        if len(enonce) > 220:
+            erreurs.append(f"{contexte}.enonce dépasse le plafond éditorial de 220 caractères ({len(enonce)}).")
+        if re.search(r"^(Quels?|Quelles?)\s+(?:\d+|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze)\b", enonce.strip(), re.I):
+            erreurs.append(f"{contexte}.enonce doit utiliser « Quels/Quelles sont les + nombre ».")
+        if re.search(r"\b(?:article\s+)?[LRD]\s*\.?\s*\d+(?:[-‑]\d+)*\b|\barticle\s+\d+(?:[-‑]\d+)*\b", enonce, re.I):
+            erreurs.append(f"{contexte}.enonce contient une référence juridique brute interdite.")
         if question.get("theme") not in themes_programme:
             erreurs.append(f"{contexte}.theme référence un parcours inconnu : {question.get('theme')!r}.")
         valider_texte(question.get("indice"), f"{contexte}.indice", erreurs, vide_autorise=True)
@@ -396,6 +431,54 @@ def valider_donnees(
             erreurs.append(f"{contexte} référence une source inconnue.")
         valider_activite(question, erreurs)
         valider_schema_mode(question, erreurs)
+        if question.get("modePrefere") == "reponse-ecrite":
+            nb_mots = compter_mots_reponse(question.get("bonneReponse", ""))
+            if nb_mots > 3:
+                erreurs.append(
+                    f"{contexte}.bonneReponse comporte {nb_mots} mots en réponse écrite ; le maximum PJJoue est 3."
+                )
+        if not question.get("estEvaluationFinale") and isinstance(question.get("theme"), str) and est_entier(question.get("etape")):
+            cle_etape = (question["theme"], question["etape"])
+            modes_par_etape.setdefault(cle_etape, set()).add(str(question.get("modePrefere", "")))
+
+    if len(modes_par_etape) != 66:
+        erreurs.append(f"La banque d’apprentissage doit contenir exactement 66 étapes ; {len(modes_par_etape)} détectées.")
+    for (theme, etape), modes in sorted(modes_par_etape.items()):
+        manquants = MODES_QUESTION - modes
+        if manquants:
+            erreurs.append(
+                f"{theme}.étape {etape} ne couvre pas les sept modes canoniques ; "
+                f"modes manquants : {sorted(manquants)}."
+            )
+
+    # Les prérequis pédagogiques doivent toujours avoir été introduits plus tôt
+    # dans l’ordre réellement joué du même parcours.
+    questions_apprentissage = [
+        q for q in questions
+        if isinstance(q, dict) and not q.get("estEvaluationFinale") and isinstance(q.get("theme"), str)
+    ]
+    par_theme: dict[str, list[dict[str, Any]]] = {}
+    for question in questions_apprentissage:
+        par_theme.setdefault(question["theme"], []).append(question)
+    for theme, questions_theme in par_theme.items():
+        questions_theme.sort(
+            key=lambda q: (
+                int(q.get("etape", 999)),
+                int(q.get("ordreEtape", q.get("id", 999999))),
+                int(q.get("id", 999999)),
+            )
+        )
+        concepts_vus: set[str] = set()
+        for question in questions_theme:
+            manquants = [
+                concept for concept in (question.get("prerequisPedagogiques") or [])
+                if concept not in concepts_vus
+            ]
+            if manquants:
+                erreurs.append(
+                    f"Q{question.get('id', '?')} utilise des prérequis non introduits avant elle dans {theme} : {manquants}."
+                )
+            concepts_vus.update(question.get("introduitConcepts") or [])
 
     doublons = sorted({identifiant for identifiant in identifiants if identifiants.count(identifiant) > 1})
     if doublons:

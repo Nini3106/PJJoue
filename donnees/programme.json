@@ -4,7 +4,7 @@
     "categorie": "socle",
     "sequence": "Culture commune PJJ",
     "titre": "PJJoue — Parcours PJJ",
-    "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 réponses écrites.",
+    "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
     "etapes": [
       {
         "id": 1,
@@ -207,12 +207,12 @@
     "id": "procedure_ordinaire",
     "categorie": "parcours",
     "sequence": "Procédure ordinaire",
-    "titre": "Suivre la procédure ordinaire : du parquet à la sanction",
+    "titre": "Procédure ordinaire : de l’enquête à la sanction",
     "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
     "etapes": [
       {
         "id": 1,
-        "titre": "Les repères qui commandent le dossier",
+        "titre": "Avant le jugement : les repères qui commandent le dossier",
         "couleur": "#39d7c4",
         "souvenirs": [
           "Le CJPM est le code de référence.",
@@ -229,7 +229,7 @@
       },
       {
         "id": 2,
-        "titre": "Après l’enquête : le parquet oriente",
+        "titre": "Avant le jugement : après l’enquête, le parquet oriente",
         "couleur": "#ffc83d",
         "souvenirs": [
           "Ces orientations ne produisent pas la même suite procédurale.",
@@ -246,7 +246,7 @@
       },
       {
         "id": 3,
-        "titre": "Saisir le JE ou le TPE dans la procédure ordinaire",
+        "titre": "Jugement de culpabilité : JE, TPE et action civile",
         "couleur": "#a986ff",
         "souvenirs": [
           "La convocation permet ici d’identifier qui va juger.",
@@ -263,7 +263,7 @@
       },
       {
         "id": 4,
-        "titre": "De la culpabilité à l’ouverture de la MEE",
+        "titre": "Après la culpabilité : ouvrir la mise à l’épreuve éducative",
         "couleur": "#62c5ff",
         "souvenirs": [
           "La MEE est une période procédurale située entre culpabilité et sanction.",
@@ -297,7 +297,7 @@
       },
       {
         "id": 6,
-        "titre": "L’audience de sanction après la MEE",
+        "titre": "Au stade de la sanction : l’audience après la MEE",
         "couleur": "#5fe0a0",
         "souvenirs": [
           "Cette audience intervient après la période de MEE.",
@@ -314,7 +314,7 @@
       },
       {
         "id": 7,
-        "titre": "Comprendre l’audience unique",
+        "titre": "Audience unique : culpabilité et sanction le même jour",
         "couleur": "#ffcf66",
         "souvenirs": [
           "L’audience unique réunit les décisions sans passer par la période de MEE entre deux audiences.",
@@ -331,7 +331,7 @@
       },
       {
         "id": 8,
-        "titre": "Comparer MEE et audience unique",
+        "titre": "Après une audience unique : basculer vers une MEE",
         "couleur": "#eb78ac",
         "souvenirs": [
           "La procédure retrouve la séparation culpabilité/MEE/sanction.",
@@ -348,7 +348,7 @@
       },
       {
         "id": 9,
-        "titre": "Appliquer la procédure ordinaire à des dossiers",
+        "titre": "Appliquer les voies de jugement à des dossiers",
         "couleur": "#74d4ff",
         "souvenirs": [
           "Le renvoi de la sanction après culpabilité correspond à la procédure de MEE.",
@@ -365,7 +365,7 @@
       },
       {
         "id": 10,
-        "titre": "Choisir la bonne voie de jugement",
+        "titre": "Choisir la bonne voie avant ou au jugement",
         "couleur": "#a7df75",
         "souvenirs": [
           "Huit mois se situe dans la fenêtre ordinaire de six à neuf mois.",
@@ -382,7 +382,7 @@
       },
       {
         "id": 11,
-        "titre": "Reconstruire un parcours ordinaire complet",
+        "titre": "Reconstruire la procédure ordinaire de l’enquête à la sanction",
         "couleur": "#ff8b73",
         "souvenirs": [
           "Le parquet ne prononce ni culpabilité ni sanction.",
@@ -403,12 +403,12 @@
     "id": "information_judiciaire",
     "categorie": "parcours",
     "sequence": "Instruction et sûreté",
-    "titre": "Comprendre l’information judiciaire, le JI, le JLD et les décisions provisoires",
+    "titre": "Avant le jugement : information judiciaire, JI et JLD",
     "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
     "etapes": [
       {
         "id": 1,
-        "titre": "Pourquoi une information judiciaire ?",
+        "titre": "Avant le jugement : pourquoi une information judiciaire ?",
         "couleur": "#39d7c4",
         "souvenirs": [
           "L’information judiciaire appartient à la procédure préalable au jugement.",
@@ -425,7 +425,7 @@
       },
       {
         "id": 2,
-        "titre": "Le JI enquête, il ne juge pas",
+        "titre": "Pendant l’information : le JI instruit, il ne juge pas",
         "couleur": "#ffc83d",
         "souvenirs": [
           "Les expertises font partie des investigations possibles.",
@@ -442,7 +442,7 @@
       },
       {
         "id": 3,
-        "titre": "La MJIE pendant l’information",
+        "titre": "Pendant l’information : la MJIE",
         "couleur": "#a986ff",
         "souvenirs": [
           "Le CJPM définit la MJIE comme une évaluation approfondie et interdisciplinaire.",
@@ -459,7 +459,7 @@
       },
       {
         "id": 4,
-        "titre": "La MEJP pendant l’information",
+        "titre": "Pendant l’information : la MEJP",
         "couleur": "#62c5ff",
         "souvenirs": [
           "L432-2 attribue expressément ce pouvoir au JI au cours de l’information.",
@@ -476,7 +476,7 @@
       },
       {
         "id": 5,
-        "titre": "Le contrôle judiciaire pendant l’information",
+        "titre": "Pendant l’information : le contrôle judiciaire",
         "couleur": "#ff9e5e",
         "souvenirs": [
           "L331-1 réserve le CJ aux mineurs d’au moins treize ans.",
@@ -493,7 +493,7 @@
       },
       {
         "id": 6,
-        "titre": "L’ARSE pendant l’information",
+        "titre": "Pendant l’information : l’ARSE",
         "couleur": "#5fe0a0",
         "souvenirs": [
           "L333-1 fixe ce seuil pour le régime général.",
@@ -510,7 +510,7 @@
       },
       {
         "id": 7,
-        "titre": "Quand la détention provisoire est envisagée",
+        "titre": "Pendant l’information : quand la détention provisoire est possible",
         "couleur": "#ffcf66",
         "souvenirs": [
           "L334-1 pose une interdiction absolue avant 13 ans.",
@@ -527,7 +527,7 @@
       },
       {
         "id": 8,
-        "titre": "Le JI saisit, le JLD statue et contrôle la durée",
+        "titre": "Détention provisoire : le JI saisit, le JLD statue",
         "couleur": "#eb78ac",
         "souvenirs": [
           "Cette séparation est centrale dans l’instruction.",
@@ -544,7 +544,7 @@
       },
       {
         "id": 9,
-        "titre": "Durées criminelles, puis JLD au défèrement",
+        "titre": "Détention provisoire : durées et JLD au défèrement",
         "couleur": "#74d4ff",
         "souvenirs": [
           "L433-5 fixe un maximum ordinaire de deux ans.",
@@ -561,7 +561,7 @@
       },
       {
         "id": 10,
-        "titre": "La fin de l’information judiciaire",
+        "titre": "Avant le jugement : régler et terminer l’information judiciaire",
         "couleur": "#a7df75",
         "souvenirs": [
           "Le non-lieu est l’une des ordonnances de règlement prévues par L434-1.",
@@ -578,7 +578,7 @@
       },
       {
         "id": 11,
-        "titre": "Reconstruire un dossier d’instruction",
+        "titre": "Synthèse : reconstruire un dossier d’information judiciaire",
         "couleur": "#ff8b73",
         "souvenirs": [
           "Le JI conduit l’information et la règle par une ordonnance adaptée aux charges et à la qualification retenue.",
@@ -599,12 +599,12 @@
     "id": "jugement_educatif_ordinaire",
     "categorie": "parcours",
     "sequence": "JE, TPE et mesures éducatives",
-    "titre": "Juger devant le JE et le TPE : mesures éducatives et sanctions ordinaires",
+    "titre": "Du jugement à la sanction : construire la réponse éducative",
     "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
     "etapes": [
       {
         "id": 1,
-        "titre": "Le juge des enfants en chambre du conseil",
+        "titre": "Au jugement : le juge des enfants en chambre du conseil",
         "couleur": "#39d7c4",
         "souvenirs": [
           "En chambre du conseil, le juge des enfants statue seul ; cette formation se distingue du TPE collégial.",
@@ -621,7 +621,7 @@
       },
       {
         "id": 2,
-        "titre": "La MEJ : nature, finalités et contenu",
+        "titre": "À la sanction : nature, finalités et contenu de la MEJ",
         "couleur": "#ffc83d",
         "souvenirs": [
           "Leur contenu peut se recouper, mais leur place procédurale n’est pas la même.",
@@ -638,7 +638,7 @@
       },
       {
         "id": 3,
-        "titre": "MEJ et MEJP : distinguer les deux moments",
+        "titre": "Avant ou à la sanction : distinguer MEJP et MEJ",
         "couleur": "#a986ff",
         "souvenirs": [
           "Avant le prononcé de la sanction, la mesure éducative prend la forme provisoire : la MEJP.",
@@ -757,7 +757,7 @@
       },
       {
         "id": 10,
-        "titre": "Le tribunal pour enfants en matière ordinaire",
+        "titre": "À la sanction : le tribunal pour enfants en matière ordinaire",
         "couleur": "#a7df75",
         "souvenirs": [
           "La collégialité du TPE réunit un juge des enfants président et deux assesseurs.",
@@ -774,7 +774,7 @@
       },
       {
         "id": 11,
-        "titre": "Le tribunal de police et les frontières de compétence",
+        "titre": "Frontières de compétence : tribunal de police, JE et TPE",
         "couleur": "#ff8b73",
         "souvenirs": [
           "L’article L121-3 fixe ces trois possibilités pour le tribunal de police.",
@@ -795,12 +795,12 @@
     "id": "matiere_criminelle_peines",
     "categorie": "parcours",
     "sequence": "Matière criminelle et peines",
-    "titre": "Juger la matière criminelle et comprendre les sanctions et peines",
+    "titre": "Matière criminelle : de l’information judiciaire au jugement et aux peines",
     "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
     "etapes": [
       {
         "id": 1,
-        "titre": "Qualification criminelle et âge au moment des faits",
+        "titre": "Avant le jugement criminel : qualification, âge et information judiciaire",
         "couleur": "#39d7c4",
         "souvenirs": [
           "La compétence criminelle dépend d’abord de l’âge du mineur au moment où le crime a été commis.",
@@ -817,7 +817,7 @@
       },
       {
         "id": 2,
-        "titre": "Le TPE jugeant un crime commis avant seize ans",
+        "titre": "Après l’information : le TPE juge le crime commis avant seize ans",
         "couleur": "#ffc83d",
         "souvenirs": [
           "Même lorsqu’il juge un crime commis avant seize ans, son appellation juridique reste « tribunal pour enfants ».",
@@ -834,7 +834,7 @@
       },
       {
         "id": 3,
-        "titre": "La cour d’assises des mineurs : saisine et procès",
+        "titre": "Après l’information : la CAM juge le crime commis à partir de seize ans",
         "couleur": "#a986ff",
         "souvenirs": [
           "La CAM connaît en principe des crimes commis par les mineurs âgés d’au moins seize ans au moment des faits.",
@@ -851,7 +851,7 @@
       },
       {
         "id": 4,
-        "titre": "Avertissement judiciaire, confiscation et peine de stage",
+        "titre": "À la sanction : avertissement, confiscation et peine de stage",
         "couleur": "#62c5ff",
         "souvenirs": [
           "Le CJPM classe l’avertissement judiciaire parmi les mesures éducatives encourues à titre de sanction ; il ne s’agit pas d’une peine.",
@@ -868,7 +868,7 @@
       },
       {
         "id": 5,
-        "titre": "TIG et sanction-réparation",
+        "titre": "À la sanction : TIG et sanction-réparation",
         "couleur": "#ff9e5e",
         "souvenirs": [
           "Le TIG du mineur combine deux repères d’âge distincts : treize ans au minimum lors des faits et seize ans au minimum lorsque la peine est prononcée.",
@@ -885,7 +885,7 @@
       },
       {
         "id": 6,
-        "titre": "Amende, peines complémentaires et peines inapplicables",
+        "titre": "À la sanction : amende et peines complémentaires",
         "couleur": "#5fe0a0",
         "souvenirs": [
           "Dans ce régime d’atténuation, l’amende ne peut pas dépasser la moitié de l’amende encourue.",
@@ -902,7 +902,7 @@
       },
       {
         "id": 7,
-        "titre": "Emprisonnement, réclusion et atténuation",
+        "titre": "À la sanction : emprisonnement, réclusion et atténuation",
         "couleur": "#ffcf66",
         "souvenirs": [
           "Le TPE et la CAM peuvent prononcer une peine privative de liberté dans les conditions du CJPM ; le JE statuant seul ne dispose pas de ce pouvoir de sanction.",
@@ -919,7 +919,7 @@
       },
       {
         "id": 8,
-        "titre": "DDSE : reconnaître la peine sans la confondre avec l'ARSE",
+        "titre": "Avant ou après le jugement : distinguer ARSE et DDSE-peine",
         "couleur": "#eb78ac",
         "souvenirs": [
           "L'ARSE intervient avant le jugement ou la sanction dans les cadres prévus ; la DDSE, lorsqu'elle est prononcée par la juridiction de jugement, relève de la peine.",
@@ -936,7 +936,7 @@
       },
       {
         "id": 9,
-        "titre": "Sursis probatoire et suivi socio-judiciaire",
+        "titre": "Après condamnation : sursis probatoire et suivi socio-judiciaire",
         "couleur": "#74d4ff",
         "souvenirs": [
           "L122-2 vise la condamnation du mineur à une peine d'emprisonnement assortie d'un sursis probatoire.",
@@ -953,7 +953,7 @@
       },
       {
         "id": 10,
-        "titre": "Comparer les juridictions et les peines",
+        "titre": "Comparer juridictions et peines",
         "couleur": "#a7df75",
         "souvenirs": [
           "L121-8 rend cette peine applicable aux mineurs de plus de seize ans lorsque les conditions de l'article L1633-3 du code des transports sont réunies.",
@@ -970,7 +970,7 @@
       },
       {
         "id": 11,
-        "titre": "Synthèse : retrouver la juridiction et la réponse possible",
+        "titre": "Synthèse : juridiction compétente et réponse possible",
         "couleur": "#ff8b73",
         "souvenirs": [
           "L'âge au moment des faits est le premier filtre : avant treize ans, une peine est exclue même si une réponse éducative reste possible.",
@@ -991,12 +991,12 @@
     "id": "application_execution_peines",
     "categorie": "parcours",
     "sequence": "Application des peines",
-    "titre": "Appliquer, exécuter et aménager les mesures et les peines",
+    "titre": "Après la sanction : appliquer, exécuter et aménager les peines",
     "sousTitre": "11 étapes de 10 questions, puis une évaluation finale de 50 questions.",
     "etapes": [
       {
         "id": 1,
-        "titre": "Après condamnation : situer l’application et l’exécution",
+        "titre": "Après la sanction : entrer dans l’application et l’exécution",
         "couleur": "#39d7c4",
         "souvenirs": [
           "L’application et l’exécution viennent après le prononcé de la peine : elles organisent sa mise en œuvre sans recommencer le jugement initial.",
@@ -1013,7 +1013,7 @@
       },
       {
         "id": 2,
-        "titre": "JE faisant fonction de JAP et passage au JAP",
+        "titre": "Après la sanction : JE faisant fonction de JAP et passage au JAP",
         "couleur": "#ffc83d",
         "souvenirs": [
           "Pour les condamnations prononcées contre un mineur, L611-2 confie en principe au JE les fonctions normalement exercées par le JAP.",
@@ -1030,7 +1030,7 @@
       },
       {
         "id": 3,
-        "titre": "Suivre une peine déjà prononcée",
+        "titre": "Exécuter et suivre une peine déjà prononcée",
         "couleur": "#a986ff",
         "souvenirs": [
           "L’article 712-6 s’applique notamment aux décisions concernant le sursis probatoire, le TIG et le suivi socio-judiciaire.",
@@ -1047,7 +1047,7 @@
       },
       {
         "id": 4,
-        "titre": "Juge seul, formation collégiale et garanties",
+        "titre": "Application des peines : juge seul, formation collégiale et garanties",
         "couleur": "#62c5ff",
         "souvenirs": [
           "L611-3 prévoit que le TPE exerce, à l’égard des mineurs condamnés, les attributions dévolues au TAP.",
@@ -1132,7 +1132,7 @@
       },
       {
         "id": 9,
-        "titre": "Majorité, maintien, dessaisissement et articulation entre JE",
+        "titre": "Majorité : maintien, transfert et articulation entre juges des enfants",
         "couleur": "#74d4ff",
         "souvenirs": [
           "Le JE reste en principe compétent jusqu’à vingt-et-un ans lorsque la condamnation a été prononcée contre un mineur, sauf dessaisissement.",
@@ -1149,7 +1149,7 @@
       },
       {
         "id": 10,
-        "titre": "Articulations complexes de compétence",
+        "titre": "Compétences complexes en application des peines",
         "couleur": "#a7df75",
         "souvenirs": [
           "Le JE remplit les fonctions du JAP ; lorsque le droit commun appelle le TAP, le CJPM confie ses attributions au TPE.",
@@ -1166,7 +1166,7 @@
       },
       {
         "id": 11,
-        "titre": "Synthèse : le parcours complet jusqu’à l’exécution",
+        "titre": "Synthèse : de la sanction à l’exécution",
         "couleur": "#ff8b73",
         "souvenirs": [
           "L’application commence par une condamnation existante, puis impose d’identifier l’autorité compétente avant toute décision de suivi ou d’adaptation.",

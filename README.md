@@ -7,13 +7,13 @@ PJJoue est un site web pédagogique consacré à la Protection judiciaire de la 
 ## Parcours
 
 1. **PJJoue — Parcours PJJ** — découvrir la PJJ ;
-2. **Suivre la procédure ordinaire : du parquet à la sanction** ;
-3. **Comprendre l’information judiciaire, le JI, le JLD et les décisions provisoires** ;
-4. **Juger devant le JE et le TPE : mesures éducatives et sanctions ordinaires** ;
-5. **Juger la matière criminelle et comprendre les sanctions et peines** ;
-6. **Appliquer, exécuter et aménager les mesures et les peines**.
+2. **Procédure ordinaire : de l’enquête à la sanction** ;
+3. **Avant le jugement : information judiciaire, JI et JLD** ;
+4. **Du jugement à la sanction : construire la réponse éducative** ;
+5. **Matière criminelle : de l’information judiciaire au jugement et aux peines** ;
+6. **Après la sanction : appliquer, exécuter et aménager les peines**.
 
-Chaque parcours comporte **11 étapes de 10 questions d’apprentissage**, puis **une évaluation finale de 50 questions**. Dans les six parcours, le mode de réponse est choisi selon l’action réellement demandée ; les évaluations alternent elles aussi plusieurs modes naturels. La V1 contient donc :
+Chaque parcours comporte **11 étapes de 10 questions d’apprentissage**, puis **une évaluation finale de 50 questions**. Chaque étape d’apprentissage contient au moins une question dans chacun des **7 modes canoniques** ; cette couverture n’est jamais obtenue en forçant un mode qui dénaturerait la notion. Les évaluations alternent elles aussi plusieurs modes naturels. La V1 contient donc :
 
 - **660 questions d’apprentissage** ;
 - **300 questions d’évaluation** ;
@@ -22,6 +22,8 @@ Chaque parcours comporte **11 étapes de 10 questions d’apprentissage**, puis 
 - **6 évaluations finales**.
 
 La progression entre les parcours reste pédagogique et implicite : aucun texte visible n’oblige le joueur à avoir suivi un autre parcours auparavant.
+
+La progression juridique de référence suit le **stade réel de la procédure** : **avant le jugement → jugement de culpabilité → MEE éventuelle entre culpabilité et sanction → sanction → application et exécution après la sanction**. L’information judiciaire appartient à l’avant-jugement ; l’audience unique réunit culpabilité et sanction le même jour, sauf bascule vers une procédure en deux temps. Les titres de parcours et d’étapes utilisent ces repères lorsqu’ils améliorent l’orientation sans créer de chronologie artificielle.
 
 PJJoue reste transversal : aucun contenu spécifique à un poste d’assistante administrative ni aucune procédure locale de service n’est intégré aux parcours judiciaires.
 
@@ -243,3 +245,7 @@ Le contrôle des liens officiels ne bloque que les anomalies confirmées (adress
 - **Règle d’identité couleur obligatoire** : tout bouton, badge, carte ou encadrement relié à un parcours ou à une étape reprend sa couleur canonique au minimum par son contour/accent, son survol-focus s’il est interactif, ou son repère coloré s’il est informatif. Une couleur ne doit jamais être recopiée localement si une identité canonique existe : les cartes de parcours, les étapes, l’Entraînement, Réviser, les erreurs actives, les cartes de question et les badges `Parcours X` / `Étape X` doivent tous rester synchronisés avec la même source de vérité.
 
 Ces règles font partie de l’identité visuelle de PJJoue V1 et doivent être revérifiées avant chaque push.
+
+## Relecture humaine finale
+
+- `documentation/documentation-actuelle/RAPPORT_RELECTURE_HUMAINE_FINALE_2026-08-31.md` — dernière passe humaine sur les 960 questions avant gel de la V1.

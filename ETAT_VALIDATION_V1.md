@@ -9,7 +9,7 @@
 - 66 étapes d’apprentissage ;
 - 960 questions ;
 - 6 évaluations finales ;
-- 67 sources ;
+- 73 sources ;
 - formulations, réponses, aides, corrections et modes de jeu revus selon la charte de la banque ;
 - ordre des thèmes et identité permanente des questions conservés.
 
@@ -65,7 +65,7 @@ Périmètre contrôlé :
 
 - construction : **61 fichiers publics exactement à jour** ;
 - SEO / URL propres : **15 pages indexables contrôlées**, sitemap à jour, routes internes propres avec relais `noindex,follow` ;
-- données : **960 questions, 67 sources** ;
+- données : **960 questions, 73 sources** ;
 - structure PJJoue : **6 parcours · 66 étapes · 6 évaluations** ;
 - navigation libre : **0 référence inter-parcours visible** ;
 - iconographie : **66 étapes + 6 thèmes + modes d’entraînement** conformes ;
@@ -158,3 +158,55 @@ Corrections intégrées à la V1 sans modification des 960 questions :
 - prévisualisation `file://` sans appel à `pushState`/`replaceState`, afin d’éviter l’avertissement Chromium lié aux origines uniques des fichiers locaux ; aucune navigation interne ne génère de fragment `#`.
 
 Contrôles après reconstruction : **56 tests unitaires réussis**, structure V1 **6 parcours · 66 étapes · 960 questions · 6 évaluations**, navigation libre conforme, accessibilité statique **33 pages**, **67 sources** à jour, CSS sans déclaration répétée, et scénarios Chromium ciblés Question / Entraînement / Paramètres réussis sur bureau et mobile. L’ouverture directe `file://` reste bloquée par la politique de l’environnement de contrôle (`ERR_BLOCKED_BY_ADMINISTRATOR`), mais la branche locale est couverte par des tests statiques et l’interface Chromium injectée.
+
+## Harmonisation des modes et progression juridique — 31 août 2026
+
+La charte impose que **chaque étape d’apprentissage comporte au moins une question dans chacun des sept modes canoniques** : choix unique, sélection multiple, association, éliminer, réponse écrite, remettre dans l’ordre et classer.
+
+État après harmonisation :
+
+- **66 étapes sur 66 conformes** aux sept modes ;
+- **199 changements de mode**, sans ajout ni suppression de question, soit le minimum correspondant aux modes réellement manquants avant harmonisation ;
+- **960/960 questions RAS automatique — relecture humaine** après la passe éditoriale ;
+- **0 énoncé au-delà de 220 caractères** ;
+- distracteurs des questions retouchées relus pour leur plausibilité, leur équilibre et leur cohérence avec le thème et le stade ;
+- associations vérifiées comme relations univoques, sans conversion artificielle d’un classement en association ;
+- titres de parcours et d’étapes juridiques ajustés lorsque nécessaire selon la chaîne : **avant jugement → culpabilité → MEE éventuelle → sanction → après sanction / exécution** ;
+- information judiciaire maintenue explicitement dans l’avant-jugement ; audience unique identifiée comme branche réunissant culpabilité et sanction.
+
+Cette règle est maintenant **bloquante dans la validation des données et les tests unitaires** : une étape à laquelle manque un mode ne peut plus être considérée comme conforme.
+
+## Gel après relecture humaine finale — 31 août 2026
+
+La banque a subi une dernière relecture humaine avant gel de la V1. Le parcours 1 a été conservé au maximum ; les parcours 2 à 6 et les questions transformées lors de l’harmonisation des modes ont été contrôlés plus sévèrement.
+
+État final :
+
+- **960 questions**, toutes vérifiées au 31 août 2026 ;
+- **66/66 étapes avec les sept modes canoniques** ;
+- **199 changements de mode**, sans ajout ni suppression de question ;
+- **960/960 RAS automatique — relecture humaine** ;
+- **0 énoncé au-delà de 220 caractères** ;
+- identifiants permanents conservés ;
+- **111/111 tests Python/pytest réussis** ;
+- recette d’interface Chromium : **552 contrôles de réponses réussis** ;
+- pages annexes : **19 scénarios réussis** ;
+- recette visuelle : **44/44 scénarios validés en lots ciblés** ;
+- Mission Sigles : recette dédiée réussie ;
+- syntaxe JavaScript publique vérifiée avec `node --check`.
+
+Le lancement monolithique de la recette visuelle dépasse le délai maximal de l’environnement mais les 44 scénarios ont été exécutés et validés séparément. ESLint n’a pas pu être relancé ici à cause d’une installation npm locale incomplète et d’un téléchargement réseau qui n’aboutit pas dans le délai ; aucun échec JavaScript fonctionnel ou syntaxique n’a été relevé par les autres contrôles.
+
+
+## Ultime vérification sémantique — 31 août 2026
+
+Une dernière passe ciblée a été menée à partir de `PJJoue_V1_FINAL_RELECTURE_HUMAINE_COMPLETE.zip`, utilisée comme source de vérité. Elle n’a pas réécrit les questions déjà validées et a corrigé uniquement les incohérences résiduelles réellement constatées dans l’évaluation finale du parcours 1 : adéquation entre l’énoncé et la réponse, développement de sigles, nombre de réponses annoncé, formulation des associations et cohérence d’un choix unique sur les modules de la MEJ.
+
+Après cette passe :
+
+- **960/960 questions : RAS automatique — relecture humaine** ;
+- **66/66 étapes avec les 7 modes canoniques** ;
+- **199 changements de mode exactement**, inchangés par rapport à la base antérieure à l’harmonisation ;
+- identifiants permanents conservés ;
+- champs de compatibilité des choix uniques et du mode Éliminer resynchronisés avec les réponses visibles ;
+- **111/111 tests Python/pytest réussis**.

@@ -89,12 +89,27 @@ def construire_manifeste(date_consolidation: str | None = None) -> dict[str, obj
                 ),
                 "applicationMinimum": [
                     "contour ou accent d'encadrement",
+                    "carte ou repère visuel de l'étape",
+                    "badge Étape au-dessus d'une question",
+                    "accent, bordure ou ligne de la carte de question",
+                    "sélection en choix unique et sélection multiple",
+                    "état interactif d'élimination, classement et remise en ordre",
+                    "boutons ou cartes associés du mode Relier",
+                    "fils de liaison du mode Relier",
+                    "focus de réponse écrite lorsqu'il représente l'interaction avec l'étape",
+                    "boutons, dossiers de révision ou repères représentant explicitement l'étape",
                     "survol ou focus lorsque le composant est interactif",
-                    "repère coloré lorsque le composant est informatif",
+                    "survol ou focus lorsque le composant représente l'étape",
                 ],
                 "sourceDeVerite": (
                     "Utiliser les identités canoniques du parcours et les fonctions canoniques de couleur "
-                    "des étapes ; aucune copie locale divergente de couleur n'est autorisée."
+                    "des étapes ; aucune copie locale divergente de couleur n'est autorisée. Une variante "
+                    "lisible accessible peut être utilisée si elle dérive de la même identité."
+                ),
+                "distinctionSemantique": (
+                    "Un composant représentant le parcours ou la Mission conserve l'identité du parcours ou de la Mission ; "
+                    "un composant représentant l'étape ou l'interaction avec sa question reprend la couleur de l'étape. "
+                    "Les couleurs fonctionnelles de succès, erreur, avertissement, désactivation ou navigation gardent leur sens propre."
                 ),
                 "exemples": [
                     "cartes et sélecteurs de parcours",

@@ -2,7 +2,7 @@
   "produit": "PJJoue",
   "version": "V1",
   "dateCreation": "août 2026",
-  "dateConsolidation": "2026-08-31",
+  "dateConsolidation": "2026-09-01",
   "composition": {
     "questionsTotales": 960,
     "questionsParcours": 660,
@@ -17,10 +17,20 @@
       "principe": "Tout bouton, badge, carte ou encadrement représentant un parcours ou une étape doit reprendre la couleur canonique de ce parcours ou de cette étape.",
       "applicationMinimum": [
         "contour ou accent d'encadrement",
+        "carte ou repère visuel de l'étape",
+        "badge Étape au-dessus d'une question",
+        "accent, bordure ou ligne de la carte de question",
+        "sélection en choix unique et sélection multiple",
+        "état interactif d'élimination, classement et remise en ordre",
+        "boutons ou cartes associés du mode Relier",
+        "fils de liaison du mode Relier",
+        "focus de réponse écrite lorsqu'il représente l'interaction avec l'étape",
+        "boutons, dossiers de révision ou repères représentant explicitement l'étape",
         "survol ou focus lorsque le composant est interactif",
-        "repère coloré lorsque le composant est informatif"
+        "survol ou focus lorsque le composant représente l'étape"
       ],
-      "sourceDeVerite": "Utiliser les identités canoniques du parcours et les fonctions canoniques de couleur des étapes ; aucune copie locale divergente de couleur n'est autorisée.",
+      "sourceDeVerite": "Utiliser les identités canoniques du parcours et les fonctions canoniques de couleur des étapes ; aucune copie locale divergente de couleur n'est autorisée. Une variante lisible accessible peut être utilisée si elle dérive de la même identité.",
+      "distinctionSemantique": "Un composant représentant le parcours ou la Mission conserve l'identité du parcours ou de la Mission ; un composant représentant l'étape ou l'interaction avec sa question reprend la couleur de l'étape. Les couleurs fonctionnelles de succès, erreur, avertissement, désactivation ou navigation gardent leur sens propre.",
       "exemples": [
         "cartes et sélecteurs de parcours",
         "cartes et boutons liés aux étapes",
@@ -62,16 +72,16 @@
       "sha256": "0e313192380af267b7696222f6befaf31e5d8cc53fa904720aa2ed55ae568586"
     },
     "AUDIT_PROGRESSION_PEDAGOGIQUE_V1.md": {
-      "tailleOctets": 3773,
-      "sha256": "12535161f12f45629bf202d55cefdf50d2c0b69f63fc5ba6a568a651d3410815"
+      "tailleOctets": 8169,
+      "sha256": "19c38540f1d091451de94d18d618d209cae91231736227ac54ba35583c2a0ca3"
     },
     "CAPTURER_PJJOUE.bat": {
       "tailleOctets": 1503,
       "sha256": "13db7deccfd252fab27fe10f806b475502b9febfcbf4197e6e3a3c13d1d6b05e"
     },
     "CHECKLIST_AVANT_PUSH.md": {
-      "tailleOctets": 5522,
-      "sha256": "97da9b4901cb335bee49ee7102403be408ff0184382ba8912867faa2dfa6ba16"
+      "tailleOctets": 6976,
+      "sha256": "e7f3724dd366b64be1e81d68089cde0f7244a19d47eea217f4bfdf3951e5aa89"
     },
     "CNAME": {
       "tailleOctets": 10,
@@ -86,8 +96,8 @@
       "sha256": "9b1c492d463e1e7212f47d85a5a547335f69a8ff9fdfaa3a887312115d55d2f7"
     },
     "ETAT_VALIDATION_V1.md": {
-      "tailleOctets": 11957,
-      "sha256": "d95fa5a45fc15b6e248be05011f2f798ae9c20c077902ba1dadc3d69934274fd"
+      "tailleOctets": 15873,
+      "sha256": "9fc9857995ecab63259cafe61f0b1529fa0b4f446d9d63b8a183ebc608c9c1d7"
     },
     "INSTALLER_OUTILS_DE_DEVELOPPEMENT.bat": {
       "tailleOctets": 1806,
@@ -98,8 +108,8 @@
       "sha256": "a9caafe03cd7d5002dba0a41175a7b9e21d0a7a7cc3b32d77e6a8c2073daa717"
     },
     "README.md": {
-      "tailleOctets": 20032,
-      "sha256": "48bda1da5ffcf11a65b96667f9951bd75815154dd1b2066492464aee98104d0b"
+      "tailleOctets": 20859,
+      "sha256": "3256bc2f9f4e299ddee6077a2dfbb21e447019ed034c4c021baddd9609a53e74"
     },
     "VERIFIER_PJJOUE.bat": {
       "tailleOctets": 3604,
@@ -238,8 +248,8 @@
       "sha256": "a4b7ad1e992ee8f8895172e7bea863e1815eca08062897056c9617e9a06c0229"
     },
     "code/03 - Parcours PJJ/actions-de-la-page.js": {
-      "tailleOctets": 20802,
-      "sha256": "0bacab642c58d11f4a056fe09ad12d4442b13692e7719861189b45532b524ab8"
+      "tailleOctets": 20951,
+      "sha256": "8c8206603bdb80ff5c24e1e4ec7fcf363353c061d1fc26ca987050e7dc075fe8"
     },
     "code/03 - Parcours PJJ/contenu.html": {
       "tailleOctets": 5747,
@@ -666,12 +676,12 @@
       "sha256": "bb68c9d2f347e1dfd3fbad3cdc3391841bcaf99e0186657f559281b47bfe2aa5"
     },
     "documentation/documentation-actuelle/BANQUE_QUESTIONS.md": {
-      "tailleOctets": 3717,
-      "sha256": "a641b835a200c418b0486b653257fe53aa9de0b0d554c6576d765314ad9243b6"
+      "tailleOctets": 4592,
+      "sha256": "cb9351fab188773bea59fb659353744464f6f0872acf071cd39075a721fad32b"
     },
     "documentation/documentation-actuelle/CHARTE_BANQUE_QUESTIONS.md": {
-      "tailleOctets": 7168,
-      "sha256": "aeafc00acaf0dc8bdf817c00219d2d0d0eebd03235d28836885844444aa5fa1e"
+      "tailleOctets": 24696,
+      "sha256": "0af105dfe960fe55b75050a9c9716e581376fe5eab47d62ca3326aae84c866db"
     },
     "documentation/documentation-actuelle/CONFIGURATION_GTM_ANALYTICS.md": {
       "tailleOctets": 10957,
@@ -697,9 +707,17 @@
       "tailleOctets": 594,
       "sha256": "1249163138cd1e05cec73a022bc388eee10cf21fed4ef1a1976a70245f872f56"
     },
+    "documentation/documentation-actuelle/RAPPORT_HARMONISATION_MODES_PROGRESSION_2026-08-31.md": {
+      "tailleOctets": 8428,
+      "sha256": "8be84464320a37bdc3c26cb189cac79db88c776b2eb3ed593f9abfad7cb5cd2a"
+    },
     "documentation/documentation-actuelle/RAPPORT_HARMONISATION_QUESTIONS_P1_P6_2026-08-28.md": {
       "tailleOctets": 5811,
       "sha256": "0162a4e63a546455d0e8865828b228507908ca2bca1a06a4fa9eac7c5f83e1c6"
+    },
+    "documentation/documentation-actuelle/RAPPORT_RELECTURE_HUMAINE_FINALE_2026-08-31.md": {
+      "tailleOctets": 6070,
+      "sha256": "ced019315d5060a114e844e5173171a1df1e819973088f4cbcdcf29d3e5d5e7f"
     },
     "documentation/documentation-actuelle/RECETTE.md": {
       "tailleOctets": 4181,
@@ -730,20 +748,20 @@
       "sha256": "76b773543c87dc1fde7ab91e35256fa4cc683098deb8fa2b4d7fc66c92d9dcd7"
     },
     "donnees/donnees-pjj.js": {
-      "tailleOctets": 1873772,
-      "sha256": "0bd980a3279be766c6c2bbc47de5da3ac77bb12e7930a4c75bc59c2de4959d3b"
+      "tailleOctets": 1934134,
+      "sha256": "8d512e1b19bd0d3b49a6bc4078fe0a8964daffe79b98ae64e2a779a1278270da"
     },
     "donnees/mesures.json": {
       "tailleOctets": 309012,
       "sha256": "1d5466e412554b4c16f33a7c36fd55edada44154aa78a2cbc4ec0ee5c1d7df1a"
     },
     "donnees/programme.json": {
-      "tailleOctets": 45471,
-      "sha256": "033432c623f7929ede4f914fda3b714e3a1cb4cb112336d1132a746bb626d277"
+      "tailleOctets": 45967,
+      "sha256": "96adf79ee5037befdd43ae6a1d73ebf97caf9288575d88496a174e944c6b23a2"
     },
     "donnees/questions.json": {
-      "tailleOctets": 1819550,
-      "sha256": "d1f5c9a065559a7bc0800cf6f68c1d5a8777a2123ee068a341a2842e1de8a6b9"
+      "tailleOctets": 1903620,
+      "sha256": "a63df376fc04b393d1a8728b7707fde799b3429abf8921458c28634285ad0dc0"
     },
     "donnees/sigles.json": {
       "tailleOctets": 44539,
@@ -854,8 +872,8 @@
       "sha256": "f24975d8e0677ba98fd06bb76b455aab182ae8c8aab435df705d8e3d7dbc09dd"
     },
     "outils/audit_editorial_complet.py": {
-      "tailleOctets": 10371,
-      "sha256": "8e3af4689a2243958d50dc4392f079e7e4691d6ebb586c37a1c08d040b6d5949"
+      "tailleOctets": 12695,
+      "sha256": "c24e731d99986be2e8b9255a7af442e55796796bb97ce32ae0ae1d320241592d"
     },
     "outils/auditer_accessibilite_statique.py": {
       "tailleOctets": 3224,
@@ -866,8 +884,8 @@
       "sha256": "d53f5d08b5882924764c3c356a34a57a1957934d3f8827b688a6eda4239d3457"
     },
     "outils/construire_manifeste.py": {
-      "tailleOctets": 6988,
-      "sha256": "d8272b8455a7923cb72d392a70bf4940c85b7c95cc9e74b3acae77a872abf9bb"
+      "tailleOctets": 8237,
+      "sha256": "81e3bb004ad8c2f7de9f22371b258645b4ea8c9d0327a6dbba7015680b949eac"
     },
     "outils/construire_seo.py": {
       "tailleOctets": 11832,
@@ -890,8 +908,8 @@
       "sha256": "d5b5f92173a33fc6d30237e52edf0620797654d6e0c43ac5e0ecaed8530c01be"
     },
     "outils/validation_donnees.py": {
-      "tailleOctets": 19487,
-      "sha256": "ea1db84da8caf0d8fcb1de3ed17bff46e3b54e14d60bcf034d7a435c8918b5f0"
+      "tailleOctets": 24790,
+      "sha256": "37dbc463c55cb81d8c35271bd17b63164c48e2d93c553036d941ecfc10c1b697"
     },
     "outils/verifier_fraicheur_sources.py": {
       "tailleOctets": 1926,
@@ -1046,8 +1064,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 441833,
-      "sha256": "0db96b6ec7a2623c2141474a79157fc9894105bc796b9f27ab63d6ff84b91069"
+      "tailleOctets": 441982,
+      "sha256": "37717908a825ee1c7e8a02aff239ce24db3b798b4d8165ac9f3daf794c992bd6"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1123,7 +1141,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5532,
-      "sha256": "6f0428d487b3fb70d12e6208aade024dc0b5e539e265c6cfdf3a68f0d5c42f01"
+      "sha256": "1a81fe8c2982df8f0d66a0ddfdf517ac689e4451b94496c0635c647fbbe0e5e4"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14890,
@@ -1345,6 +1363,10 @@
       "tailleOctets": 7315,
       "sha256": "064f9f13a95c982822bf697280b15bf62ccbd750af25fe437f9c49e9b85bc624"
     },
+    "tests/test_charte_questions.py": {
+      "tailleOctets": 14495,
+      "sha256": "71ad6ae9406a6af4b8b367161c65f619d4307780bb18decdcf4f64598c462b03"
+    },
     "tests/test_construction_portable.py": {
       "tailleOctets": 5372,
       "sha256": "eca4cb862dd90cb5866987fade4facb17715056505d4f2b3a6511d75e8d9615b"
@@ -1378,8 +1400,8 @@
       "sha256": "2297d3490f66cd993936393feb2778700ad4eaa78607e4d47a7611945a759e23"
     },
     "tests/test_validation_donnees.py": {
-      "tailleOctets": 5576,
-      "sha256": "6c03f14e2740b093986025775daafa02c8540111ccae3ddba4219422b0f5087d"
+      "tailleOctets": 6809,
+      "sha256": "1d98f99963d1946ae356e1f92531ff79e2f7639cb3cf31f63073e2f395c50e5f"
     },
     "tests/verifier_couleurs_icones.py": {
       "tailleOctets": 3945,
@@ -1406,12 +1428,12 @@
       "sha256": "09d23c21aaa5622576c0ac1e246204fdf26a018e404ece8d4f4a5818e6c506c3"
     },
     "tests/verifier_pjjoue.py": {
-      "tailleOctets": 27914,
-      "sha256": "00beb160b0a9c8879812f3a1d68d2de38c794912da090bf355b40b3d1fe9bac4"
+      "tailleOctets": 27920,
+      "sha256": "8437f51aa165b95e4f354ab98a82ec62d41f3f3900a9313d8c48615ab82e24ce"
     },
     "tests/verifier_regression_visuelle.py": {
-      "tailleOctets": 87709,
-      "sha256": "50ada6331a8feed3cd9cbb77f83f7419b42c040228bd9c48b5888bd7801aa31c"
+      "tailleOctets": 87720,
+      "sha256": "c59481dc1ae8dd29a0af26127cd64d029fcef205a87efc0c5c3365409a8e3a37"
     }
   }
 }

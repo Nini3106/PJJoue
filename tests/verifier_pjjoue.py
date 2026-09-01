@@ -219,12 +219,12 @@ def principal() -> int:
     questions_p3_p6 = [question for question in questions_relues if question.get("theme") != "procedure_ordinaire"]
     exiger(len(questions_p2) == 160, "Le parcours 2 doit contenir exactement 160 questions.")
     exiger(
-        all(question.get("derniereVerification") == "2026-08-29" for question in questions_p2),
-        "Les 160 questions du parcours 2 doivent porter la date de relecture éditoriale du 29 août 2026.",
+        all(str(question.get("derniereVerification", "")) >= "2026-08-29" for question in questions_p2),
+        "Les 160 questions du parcours 2 doivent avoir été vérifiées le 29 août 2026 ou après.",
     )
     exiger(
-        all(question.get("derniereVerification") == "2026-08-29" for question in questions_p3_p6),
-        "Les 640 questions des parcours 3 à 6 doivent porter la date de relecture éditoriale du 29 août 2026.",
+        all(str(question.get("derniereVerification", "")) >= "2026-08-29" for question in questions_p3_p6),
+        "Les 640 questions des parcours 3 à 6 doivent avoir été vérifiées le 29 août 2026 ou après.",
     )
     exiger(
         all(question.get("statutContenu") == STATUT_FINAL_JURIDIQUE for question in questions_relues),

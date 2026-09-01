@@ -91,6 +91,19 @@ Contrôles d’interface obligatoires avant push :
 
 Si un contenu public, une URL, une meta ou une date éditoriale change, reconstruire d’abord le SEO avec `python outils/construire_seo.py`, puis **régénérer `MANIFESTE.json` en dernier**.
 
+## 5 bis. Vérifier la charte des questions et des couleurs
+
+Avant tout push qui modifie la banque ou un mode de jeu :
+
+- vérifier qu’aucune question n’utilise une formulation télégraphique du type **« Quels trois… ? » / « Quelles deux… ? »** ; écrire **« Quels/Quelles sont les + nombre + … ? »** ;
+- vérifier que l’énoncé est naturel, autonome, centré sur une notion principale et ne dépasse pas **220 caractères** ;
+- ne pas placer de référence juridique brute (`L1`, `L. 11-1`, `R. …`, `article …`, `5°`, etc.) dans l’énoncé lorsqu’elle peut être formulée en langage clair et déplacée vers la correction ou la source ;
+- vérifier que les questions juridiques et les titres d’étapes respectent le stade réel : **avant jugement → culpabilité → MEE éventuelle → sanction → après sanction / exécution**, avec l’information judiciaire dans l’avant-jugement et l’audience unique comme branche particulière ;
+- contrôler que chaque étape d’apprentissage couvre au moins une fois chacun des sept modes canoniques, sans activité artificielle ;
+- vérifier que les sélections, fils d’association, accents de question et repères d’étape reprennent la couleur canonique de l’étape, tandis que succès, erreur, navigation et identité Mission conservent leur sémantique propre.
+
+La référence détaillée est `documentation/documentation-actuelle/CHARTE_BANQUE_QUESTIONS.md`.
+
 ## 6. Lancer la recette complète
 
 Sous Windows :
