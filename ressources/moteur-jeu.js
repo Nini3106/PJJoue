@@ -7001,6 +7001,7 @@ function initialiserJeuSigles(){ const racine=selectionnerSigles('#sigles');if(!
     actualiserAccueilSigles(); actualiserChoixChronoSigles();
 }
 initialiserJeuSigles();
+const SEUIL_EVALUATION_MESURES = 90;
 const NOMBRE_QUESTIONS_EVALUATION_MESURES = 30;
 const REPERES_MISSION_MESURES = Object.freeze([...(MESURES_MISSION?.reperes || [])]);
 const ETAPES_MISSION_MESURES = Object.freeze(Object.fromEntries(
