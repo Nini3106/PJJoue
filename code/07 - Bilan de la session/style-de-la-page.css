@@ -1,0 +1,106 @@
+/* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=42 === */
+/* Finitions du bilan : un résumé, puis des sections sœurs non imbriquées. */
+#bilan.ecran.actif {
+    display: grid;
+    gap: 24px;
+}
+
+#bilan .bilan-resume-carte {
+    overflow: visible;
+}
+
+#bilan .carte-voyage-finale,
+#bilan .bilan-erreurs-panneau,
+#bilan .bilan-actions {
+    margin: 0;
+}
+
+#bilan #listeErreursBilan {
+    max-height: none;
+    overflow: visible;
+    overscroll-behavior: auto;
+    padding-right: 0;
+    scrollbar-gutter: auto;
+}
+
+/* Comme sur la question, le titre est focalisé pour annoncer le changement
+   d’écran, mais ce titre non interactif ne ressemble pas à un bouton. */
+#bilan #titreBilan[tabindex="-1"]:focus,
+#bilan #titreBilan[tabindex="-1"]:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+#bilan .bilan-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding-top: 0;
+    border-top: 0;
+}
+
+#bilan .bilan-actions button {
+    min-height: 44px;
+    height: auto;
+    margin: 0;
+    padding: 9px 18px;
+}
+
+#bilan .bilan-actions .principal {
+    order: -1;
+    color: var(--texte);
+    border-color: #6f94c0;
+    background: var(--surface-carte-profonde);
+}
+
+#bilan .bilan-actions .principal:hover,
+#bilan .bilan-actions .principal:focus-visible {
+    color: var(--texte);
+    border-color: var(--jaune-interface);
+    background: rgba(255,200,61,.08);
+}
+
+#bilan .bilan-actions .secondaire {
+    color: var(--texte);
+    border-color: rgba(142,199,251,.52);
+    background: rgba(8,56,108,.66);
+}
+
+#bilan .bilan-actions .secondaire:hover,
+#bilan .bilan-actions .secondaire:focus-visible {
+    color: #fff;
+    border-color: var(--accent);
+    background: #174f89;
+}
+
+@media (max-width:760px) {
+    #bilan .bilan-resume-carte .bilan-statistiques {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+        gap: 10px;
+    }
+
+    #bilan .bilan-actions {
+        display: grid;
+        grid-template-columns: repeat(2,minmax(0,1fr));
+        gap: 10px;
+    }
+
+    #bilan .bilan-actions.actions button {
+        width: max-content;
+        max-width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        margin: 0;
+    }
+
+    #bilan .bilan-actions .principal {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    #bilan .bilan-erreurs-panneau {
+        padding: 18px 16px;
+    }
+}
+/* === FIN MORCEAU CSS === */

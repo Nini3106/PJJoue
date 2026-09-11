@@ -1,0 +1,91 @@
+/* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=0004 === */
+/* Tableau visible de la page Progression. */
+.progression-studio { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px; align-items:stretch; }
+.progression-vue-ensemble,
+.progression-explorateur { display:grid; grid-template-rows:auto 1fr; align-content:start; align-self:stretch; gap:16px; min-width:0; height:100%; padding:22px; border:1px solid var(--bordure); border-radius:var(--rayon-tres-grand); background:var(--surface-carte); box-shadow:var(--ombre-carte); }
+.progression-vue-ensemble-entete,
+.progression-explorateur-entete { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; min-height:148px; margin:0; padding:0; }
+.progression-vue-ensemble-entete > div,
+.progression-explorateur-entete > div { display:grid; align-content:start; }
+.progression-vue-ensemble-entete h2,
+.progression-explorateur-entete h2 { min-height:2.45em; margin-bottom:5px; }
+.progression-vue-ensemble-entete p,
+.progression-explorateur-entete p { max-width:460px; margin:0; color:var(--texte-secondaire); line-height:1.45; }
+.progression-explorateur-entete .secondaire { flex:0 0 auto; min-height:46px; padding:0 16px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; }
+.progression-explorateur-entete .secondaire:hover { border-color:var(--jaune-interface); color:var(--jaune-interface); }
+.progression-colonne-contenu { display:grid; grid-template-rows:auto 1fr; align-content:start; gap:14px; min-height:0; height:100%; }
+.progression-tableau-bord { display:grid; min-height:208px; margin:0; }
+.progression-global { display:grid; grid-template-columns:104px minmax(0,1fr); gap:18px; min-height:0; height:100%; padding:18px; border:1px solid var(--bordure); border-radius:var(--rayon-grand); background:var(--surface-carte-profonde); }
+.progression-score { display: grid; place-content: center; text-align: center; }
+.progression-score strong { color: var(--jaune-interface); font-size: 2rem; }
+.progression-score span { color: var(--texte-secondaire); font-size: .94rem; }
+.progression-global-corps { min-width: 0; }
+.progression-global-entete { display: flex; justify-content: space-between; gap: 12px; }
+.progression-global-entete > div { display: grid; gap: 3px; }
+.progression-global-entete > div > span { color: var(--texte-secondaire); font-size: .94rem; }
+.progression-global-statut { align-self:start; width:fit-content; padding:4px 8px; border-radius:999px; color:var(--texte-secondaire); background:var(--surface-secondaire); font-size:.86rem; font-weight:800; white-space:nowrap; }
+.progression-rail { position: relative; height: 9px; margin: 30px 0 14px; border-radius: 99px; background: var(--surface-secondaire); }
+.progression-rail-remplissage { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: var(--jaune-interface); }
+.progression-jalons { position: absolute; inset: -17px 0 auto; display: flex; justify-content: space-between; }
+.progression-jalon { display:grid; justify-items:center; gap:4px; color:var(--texte-secondaire); font-size:.86rem; }
+.progression-jalon i { font-style:normal; font-weight:800; }
+.progression-jalon b { position:relative; display:grid; place-items:center; width:13px; height:13px; border:2px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:50%; background:var(--surface-carte-profonde); }
+.progression-jalon.est-entame { color:var(--parcours-accent-lisible,var(--parcours-accent)); }
+.progression-jalon.est-entame b { background:rgba(var(--parcours-accent-rgb),.38); box-shadow:0 0 0 3px rgba(var(--parcours-accent-rgb),.12); }
+.progression-jalon.est-complet { color:var(--parcours-accent-lisible,var(--parcours-accent)); }
+.progression-jalon.est-complet b { background:var(--parcours-accent); box-shadow:0 0 0 3px rgba(var(--parcours-accent-rgb),.18); }
+.progression-jalon.est-complet b::after { content:'✓'; color:var(--bleu-nuit-950); font-size:.58rem; font-weight:950; line-height:1; }
+.progression-vue-ensemble-metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:12px; height:100%; }
+#progression .progression-vue-ensemble-metrics .progression-statistique { display:grid; grid-template-rows:minmax(2.55em,auto) auto; align-content:center; gap:7px; min-height:88px; height:100%; padding:14px 16px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); background:var(--surface-carte-profonde); }
+#progression .progression-vue-ensemble-metrics .progression-statistique > span { margin:0; color:var(--texte-secondaire); font-size:.94rem; line-height:1.35; }
+#progression .progression-vue-ensemble-metrics .progression-statistique > strong { margin:0; color:var(--texte); font-size:1.55rem; line-height:1; }
+.progression-pastilles { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:10px; min-height:208px; margin:0; }
+.progression-pastille { display:grid; grid-template-columns:auto minmax(0,1fr); gap:11px; align-items:center; min-height:58px; padding:12px 14px; border:1px solid var(--bordure); border-left:4px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:11px; color:var(--texte-secondaire); background:var(--surface-carte-profonde); text-align:left; }
+.progression-pastille span { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:.94rem; font-weight:900; }
+.progression-pastille strong { color: var(--texte); font-size: .94rem; line-height:1.3; }
+.progression-pastille.est-active { border-color:var(--parcours-accent-lisible,var(--parcours-accent)); background:rgba(var(--parcours-accent-rgb),.12); }
+.progression-pastille:focus-visible { outline:3px solid var(--parcours-accent-lisible,var(--parcours-accent)); outline-offset:3px; }
+.progression-detail-parcours:focus-visible { outline:3px solid var(--jaune-interface); outline-offset:4px; border-radius:var(--rayon-grand); }
+.progression-detail-parcours,
+.progression-parcours-mis-en-avant { height:100%; }
+.progression-parcours-mis-en-avant { display:grid; align-content:start; gap:14px; min-height:0; padding:18px; border:1px solid var(--bordure); border-top:5px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:var(--rayon-grand); background:var(--surface-carte-profonde); }
+.progression-parcours-mis-en-avant-identite { display: flex; gap: 13px; align-items: center; }
+.progression-parcours-mis-en-avant-identite > div { min-width:0; }
+.progression-parcours-mis-en-avant-icone { display:grid; place-items:center; flex:0 0 58px; width:58px; height:58px; color:var(--parcours-accent-lisible,var(--parcours-accent)); }
+.progression-parcours-mis-en-avant-chapitre { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:.94rem; font-weight:850; }
+.progression-parcours-mis-en-avant-identite h3 { margin: 4px 0 0; }
+.progression-etats { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.progression-parcours-statut,
+.progression-etat { width: fit-content; padding: 6px 10px; border-radius: 999px; color: var(--texte-secondaire); background: var(--surface-secondaire); font-size: .94rem; font-weight: 800; }
+.progression-parcours-statut.est-entame { color:var(--parcours-accent-lisible,var(--parcours-accent)); background:rgba(var(--parcours-accent-rgb),.15); }
+.progression-parcours-statut.est-complet,
+.progression-etat-reussie { color:#8ff0ba; background:var(--reussite-douce); }
+.progression-etat-ouverte { color:var(--parcours-accent-lisible,var(--parcours-accent)); background:rgba(var(--parcours-accent-rgb),.15); }
+.progression-etat-verrouillee { color:var(--texte-secondaire); }
+.progression-parcours-mis-en-avant-avancee { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+.progression-parcours-mis-en-avant-avancee > div { display: grid; gap: 3px; padding: 11px; border: 1px solid var(--bordure); border-radius: 11px; }
+.progression-parcours-mis-en-avant-avancee strong { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:1.35rem; }
+.progression-parcours-mis-en-avant-avancee span { color: var(--texte-secondaire); font-size: .94rem; }
+.progression-parcours-mis-en-avant > .barre { height:8px; margin:0; }
+
+@media (max-width:980px) {
+  .progression-studio { grid-template-columns:1fr; }
+  .progression-vue-ensemble, .progression-explorateur { height:auto; }
+  .progression-vue-ensemble-entete, .progression-explorateur-entete { min-height:0; }
+  .progression-vue-ensemble-entete h2, .progression-explorateur-entete h2 { min-height:0; }
+}
+@media (max-width:560px) {
+  .progression-vue-ensemble, .progression-explorateur { height:auto; padding:18px; }
+  .progression-vue-ensemble-entete, .progression-explorateur-entete { display:grid; }
+  .progression-vue-ensemble-entete, .progression-explorateur-entete { min-height:0; }
+  .progression-explorateur-entete .secondaire { justify-self:start; }
+  .progression-global { grid-template-columns: 1fr; }
+  .progression-score { grid-template-columns:auto auto; align-items:baseline; justify-content:start; gap:8px; text-align:left; }
+  .progression-pastilles { grid-template-columns:1fr; }
+  .progression-global-entete { display:grid; }
+}
+@media (max-width:359px) {
+  .progression-vue-ensemble-metrics,
+  .progression-parcours-mis-en-avant-avancee { grid-template-columns:1fr; }
+}
+/* === FIN MORCEAU CSS === */

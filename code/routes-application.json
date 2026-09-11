@@ -1,0 +1,16 @@
+{
+  "accueil": "",
+  "parcours": "parcours",
+  "carnet": "carnet",
+  "entrainement": "entrainement",
+  "erreurs": "revision",
+  "sigles": "mission-sigles",
+  "sigles-revision": "mission-sigles/revision",
+  "mesures": "mission-mesures",
+  "mesures-revision": "mission-mesures/revision",
+  "supports": "supports",
+  "progression": "progression",
+  "parametres": "parametres",
+  "question": "question",
+  "bilan": "resultats"
+}

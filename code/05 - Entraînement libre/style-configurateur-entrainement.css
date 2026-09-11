@@ -1,0 +1,596 @@
+/* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=0003 === */
+/* Configurateur de la page Entraînement libre — géométrie unique et responsive. */
+
+/* Structure générale */
+#entrainement {
+    --entrainement-hasard-accent:var(--jaune-interface);
+    --entrainement-hasard-accent-rgb:255,200,61;
+    min-height:calc(100vh - 150px);
+}
+#entrainement:is([data-contexte-entrainement="sigles"],[data-contexte-entrainement="mesures"]) {
+    --entrainement-hasard-accent:#70d6ca;
+    --entrainement-hasard-accent-rgb:112,214,202;
+}
+#entrainement .entrainement-entete {
+    margin-bottom:30px;
+    text-align:center;
+}
+#entrainement .entrainement-entete p {
+    max-width:760px;
+    margin-left:auto;
+    margin-right:auto;
+}
+#entrainement .entrainement-hasard,
+#entrainement .entrainement-configurateur {
+    width:min(1100px,100%);
+    margin-left:auto;
+    margin-right:auto;
+}
+#entrainement .entrainement-configurateur {
+    display:grid;
+    gap:18px;
+}
+#entrainement .entrainement-etape-config,
+#entrainement .entrainement-etape-config.entrainement-etape-modes {
+    display:grid;
+    grid-template-columns:48px minmax(0,1fr);
+    align-items:start;
+    gap:16px;
+    width:100%;
+    padding:22px;
+    border:1px solid var(--bordure-carte);
+    border-radius:var(--rayon-tres-grand);
+    background:var(--surface-carte);
+    box-shadow:var(--ombre-carte);
+}
+#entrainement .entrainement-etape-config > div {
+    min-width:0;
+    display:grid;
+    gap:13px;
+}
+#entrainement .entrainement-etape-numero {
+    display:grid;
+    place-items:center;
+    width:42px;
+    height:42px;
+    border:1px solid var(--bordure);
+    border-radius:50%;
+    color:var(--texte-sur-jaune);
+    background:var(--jaune-interface);
+    font-weight:900;
+}
+#entrainement .entrainement-etape-config h2 {
+    margin:4px 0 0;
+}
+#entrainement .entrainement-limite {
+    margin:-4px 0 0;
+}
+
+/* États communs des choix */
+#entrainement .choix-bouton.actif,
+#entrainement .choix-bouton.selectionne,
+#entrainement .choix-bouton[aria-pressed="true"],
+#entrainement .option-bouton.actif,
+#entrainement .option-bouton.selectionne,
+#entrainement .option-bouton[aria-pressed="true"] {
+    color:var(--texte);
+    border-color:#4f8cff;
+    background:rgba(79,140,255,.16);
+    box-shadow:inset 0 0 0 1px #4f8cff;
+    font-weight:900;
+}
+#entrainement .entrainement-nombre-choix .choix-bouton:hover,
+#entrainement .entrainement-nombre-choix .choix-bouton:focus-visible,
+#entrainement .entrainement-secondes-groupe .choix-bouton:hover,
+#entrainement .entrainement-secondes-groupe .choix-bouton:focus-visible,
+#entrainement .option-bouton:hover,
+#entrainement .option-bouton:focus-visible {
+    color:var(--texte);
+    border-color:#8db9ff;
+    background:rgba(79,140,255,.12);
+}
+
+/* Étape 1 — les sept choix ont exactement le même gabarit. */
+#entrainement .entrainement-perimetre-choix {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    align-items:stretch;
+    gap:12px;
+    width:100%;
+}
+#entrainement .entrainement-perimetre-choix .choix-bouton {
+    display:grid;
+    align-content:center;
+    gap:4px;
+    min-width:0;
+    max-width:100%;
+    height:82px;
+    min-height:82px;
+    padding:12px 14px;
+    border-left:5px solid var(--parcours-accent,var(--bordure));
+    border-radius:13px;
+    text-align:left;
+}
+#entrainement .entrainement-perimetre-choix .choix-bouton b,
+#entrainement .entrainement-perimetre-choix .choix-bouton span {
+    display:block;
+}
+#entrainement .entrainement-perimetre-choix .choix-bouton span {
+    color:var(--texte-secondaire);
+    font-size:.94rem;
+    font-weight:650;
+}
+/* Les Missions réutilisent ces cartes avec des titres plus longs que les six parcours PJJoue.
+   Leur hauteur doit donc suivre le contenu sans modifier le gabarit de l’entraînement PJJoue classique. */
+#entrainement:is([data-contexte-entrainement="sigles"],[data-contexte-entrainement="mesures"]) .entrainement-perimetre-choix .choix-bouton {
+    height:auto;
+    min-height:96px;
+}
+#entrainement:is([data-contexte-entrainement="sigles"],[data-contexte-entrainement="mesures"]) .entrainement-perimetre-choix .choix-bouton b,
+#entrainement:is([data-contexte-entrainement="sigles"],[data-contexte-entrainement="mesures"]) .entrainement-perimetre-choix .choix-bouton span {
+    min-width:0;
+    max-width:100%;
+    white-space:normal;
+    overflow-wrap:anywhere;
+}
+#entrainement .entrainement-perimetre-choix .choix-bouton:not([data-valeur="tous"]) b {
+    color:var(--parcours-accent-lisible,var(--parcours-accent));
+}
+#entrainement .entrainement-perimetre-choix .choix-bouton:hover,
+#entrainement .entrainement-perimetre-choix .choix-bouton:focus-visible {
+    color:var(--texte);
+    border-color:var(--parcours-accent,#4f8cff);
+    background:rgba(var(--parcours-accent-rgb,79,140,255),.12);
+    box-shadow:inset 0 0 0 1px var(--parcours-accent,#4f8cff);
+}
+#entrainement .entrainement-perimetre-choix .choix-bouton:not([data-valeur="tous"]).actif,
+#entrainement .entrainement-perimetre-choix .choix-bouton:not([data-valeur="tous"]).selectionne {
+    color:var(--texte);
+    border-color:var(--parcours-accent);
+    background:rgba(var(--parcours-accent-rgb),.18);
+    box-shadow:inset 0 0 0 1px var(--parcours-accent);
+}
+#entrainement .entrainement-perimetre-choix .choix-bouton[data-valeur="tous"]:hover,
+#entrainement .entrainement-perimetre-choix .choix-bouton[data-valeur="tous"]:focus-visible,
+#entrainement .entrainement-perimetre-choix .choix-bouton[data-valeur="tous"].actif,
+#entrainement .entrainement-perimetre-choix .choix-bouton[data-valeur="tous"].selectionne {
+    border-color:#8ec7fb;
+    border-left-color:#8ec7fb;
+    color:var(--texte);
+    background:rgba(79,140,255,.14);
+    box-shadow:inset 0 0 0 1px #4f8cff;
+}
+#entrainement .entrainement-perimetre-choix .choix-bouton[data-valeur="tous"]:is(:hover,:focus-visible,.actif,.selectionne) b,
+#entrainement .entrainement-perimetre-choix .choix-bouton[data-valeur="tous"]:is(:hover,:focus-visible,.actif,.selectionne) span {
+    color:var(--texte);
+}
+
+/* Étape 2 — quantité puis personnalisation, sur une seule colonne. */
+#entrainement .entrainement-nombre-config {
+    display:grid;
+    grid-template-columns:1fr;
+    align-items:start;
+    gap:12px;
+    width:100%;
+}
+#entrainement .entrainement-nombre-choix {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:flex-start;
+    gap:8px;
+    margin:0;
+}
+#entrainement .entrainement-nombre-config > .entrainement-nombre-choix .choix-bouton {
+    width:max-content;
+    max-width:100%;
+    min-width:0;
+    min-height:44px;
+    height:auto;
+}
+#entrainement .entrainement-personnalise {
+    display:grid;
+    gap:8px;
+    width:100%;
+    min-height:0;
+    padding:14px 16px;
+    border:1px solid var(--bordure);
+    border-radius:14px;
+    background:var(--surface-carte-profonde);
+}
+#entrainement .entrainement-personnalise-entete,
+#entrainement .entrainement-personnalise-bornes {
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+}
+#entrainement .entrainement-personnalise-entete strong {
+    color:#8db9ff;
+}
+#entrainement .entrainement-personnalise-bornes {
+    color:var(--texte-secondaire);
+    font-size:.94rem;
+}
+#entrainement .entrainement-personnalise-reperes {
+    position:relative;
+    width:100%;
+    height:28px;
+    margin-top:-7px;
+    pointer-events:none;
+}
+#entrainement .entrainement-repere {
+    position:absolute;
+    left:var(--position-repere);
+    top:0;
+    display:grid;
+    justify-items:center;
+    gap:3px;
+    transform:translateX(-50%);
+    color:var(--texte-secondaire);
+    font-size:.78rem;
+    line-height:1;
+    white-space:nowrap;
+}
+#entrainement .entrainement-repere.debut {
+    transform:none;
+}
+#entrainement .entrainement-repere.fin {
+    transform:translateX(-100%);
+}
+#entrainement .entrainement-repere i {
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#6f9bd5;
+    box-shadow:0 0 0 2px var(--surface-carte-profonde);
+}
+#entrainement .entrainement-repere b {
+    font:inherit;
+    color:inherit;
+}
+#entrainement .entrainement-personnalise input {
+    width:100%;
+    min-height:44px;
+    accent-color:#4f8cff;
+    cursor:pointer;
+    touch-action:none;
+}
+
+/* Étape 3 — deux cartes jumelles. */
+#entrainement .entrainement-grille {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    align-items:stretch;
+    gap:16px;
+    width:100%;
+    margin:0;
+}
+#entrainement .entrainement-carte {
+    display:grid;
+    grid-template-rows:auto auto auto 1fr auto;
+    align-content:start;
+    align-items:start;
+    gap:10px;
+    height:100%;
+    min-height:0;
+    padding:20px;
+    border:1px solid var(--bordure-carte);
+    border-radius:18px;
+    background:var(--surface-carte);
+    box-shadow:var(--ombre-carte);
+}
+#entrainement .entrainement-carte .entrainement-icone {
+    width:58px;
+    height:58px;
+    min-width:58px;
+    margin:0 0 2px;
+}
+#entrainement .entrainement-carte .entrainement-icone svg {
+    width:54px;
+    height:54px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+#entrainement .entrainement-carte.entrainement-ordonne .entrainement-icone {
+    color:var(--icone-jaune);
+}
+#entrainement .entrainement-carte.entrainement-melange .entrainement-icone {
+    color:var(--icone-bleu-vert);
+}
+#entrainement .entrainement-carte h3 {
+    margin:0;
+    color:var(--texte);
+    font-size:1.34rem;
+}
+#entrainement .entrainement-carte > p {
+    min-height:44px;
+    margin:0;
+    color:var(--texte-secondaire);
+    font-size:.96rem;
+    line-height:1.5;
+}
+
+/* Options avancées — déclencheur compact, contenu visible uniquement à l’ouverture. */
+#entrainement .entrainement-options-avancees {
+    align-self:end;
+    margin:4px 0 0;
+    padding:0;
+    border:0;
+    background:transparent;
+}
+#entrainement .entrainement-options-avancees summary {
+    display:inline-flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:9px;
+    width:max-content;
+    max-width:100%;
+    min-height:42px;
+    padding:8px 12px;
+    border:1px solid var(--bordure);
+    border-radius:11px;
+    color:var(--texte);
+    background:rgba(7,49,99,.38);
+    list-style:none;
+    cursor:pointer;
+    font-weight:850;
+    box-shadow:none;
+}
+#entrainement .entrainement-options-avancees summary::-webkit-details-marker {
+    display:none;
+}
+#entrainement .entrainement-options-avancees summary::after {
+    content:'▾';
+    color:#9fc5e8;
+    font-size:.9rem;
+    line-height:1;
+    transition:transform .16s ease,color .16s ease;
+}
+#entrainement .entrainement-options-avancees summary:hover,
+#entrainement .entrainement-options-avancees summary:focus-visible {
+    border-color:#8ec7fb;
+    color:#fff;
+    background:#1b568f;
+}
+#entrainement .entrainement-options-avancees[open] summary {
+    border-color:#8ec7fb;
+    background:rgba(27,86,143,.72);
+}
+#entrainement .entrainement-options-avancees[open] summary::after {
+    transform:rotate(180deg);
+    color:#fff;
+}
+#entrainement .entrainement-options-avancees .entrainement-options {
+    display:grid;
+    gap:10px;
+    width:100%;
+    margin:10px 0 0;
+    padding:12px;
+    border:1px solid rgba(145,198,245,.28);
+    border-radius:13px;
+    background:rgba(7,49,99,.28);
+}
+#entrainement .entrainement-option,
+#entrainement .entrainement-chronometre-secondes {
+    display:grid;
+    grid-template-columns:90px minmax(0,1fr);
+    align-items:center;
+    gap:10px;
+}
+#entrainement .entrainement-option > span,
+#entrainement .entrainement-chronometre-secondes > span {
+    color:var(--texte);
+    font-weight:850;
+}
+#entrainement .entrainement-bascule-groupe,
+#entrainement .entrainement-secondes-groupe {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    width:max-content;
+    max-width:100%;
+}
+#entrainement .option-bouton {
+    min-height:42px;
+    border:1px solid rgba(145,198,245,.32);
+    border-radius:11px;
+    color:#eaf5ff;
+    background:var(--surface-carte-profonde);
+}
+#entrainement .entrainement-options-avancees + .entrainement-lancer,
+#entrainement .entrainement-lancer {
+    justify-self:start;
+    align-self:start;
+    width:max-content;
+    max-width:100%;
+    margin:16px 0 0;
+}
+#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer {
+    min-height:48px;
+    border-color:var(--icone-jaune);
+    color:var(--texte);
+    background:transparent;
+}
+#entrainement .entrainement-carte.entrainement-melange .entrainement-lancer {
+    min-height:48px;
+    border-color:var(--icone-bleu-vert);
+    color:var(--texte);
+    background:transparent;
+}
+#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer:hover,
+#entrainement .entrainement-carte.entrainement-ordonne .entrainement-lancer:focus-visible {
+    border-color:var(--icone-jaune);
+    color:var(--texte);
+    background:rgba(255,200,61,.10);
+    box-shadow:inset 0 0 0 1px var(--icone-jaune);
+}
+#entrainement .entrainement-carte.entrainement-melange .entrainement-lancer:hover,
+#entrainement .entrainement-carte.entrainement-melange .entrainement-lancer:focus-visible {
+    border-color:#7ce8dc;
+    color:var(--texte);
+    background:rgba(57,215,196,.14);
+}
+
+/* Défi du hasard */
+#entrainement .entrainement-hasard {
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:22px;
+    margin-bottom:24px;
+    padding:clamp(22px,3vw,30px);
+    border:1px solid var(--bordure-carte);
+    border-left:5px solid var(--entrainement-hasard-accent);
+    border-radius:var(--rayon-tres-grand);
+    background:linear-gradient(135deg,rgba(255,200,61,.13),var(--surface-carte) 45%,var(--surface-carte-profonde));
+    box-shadow:var(--ombre-carte);
+}
+#entrainement .entrainement-hasard-texte h2 {
+    font-size:clamp(1.45rem,2.5vw,1.85rem);
+}
+#entrainement .entrainement-hasard-texte h2,
+#entrainement .entrainement-hasard-texte p {
+    margin-bottom:5px;
+}
+#entrainement .entrainement-hasard-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+}
+#entrainement .entrainement-hasard-actions button {
+    min-height:48px;
+    padding:9px 20px;
+    border-radius:12px;
+    font-weight:900;
+}
+#entrainement .entrainement-hasard-actions .principal {
+    border-color:var(--entrainement-hasard-accent);
+    color:var(--texte);
+    background:var(--surface-carte-profonde);
+    box-shadow:none;
+}
+#entrainement .entrainement-hasard-actions .principal:hover,
+#entrainement .entrainement-hasard-actions .principal:focus-visible,
+#entrainement .entrainement-hasard-actions .principal:active {
+    border-color:var(--entrainement-hasard-accent);
+    color:var(--texte);
+    background:rgba(var(--entrainement-hasard-accent-rgb),.10);
+    box-shadow:inset 0 0 0 1px var(--entrainement-hasard-accent);
+    transform:none;
+}
+#entrainement .de-objet {
+    display:grid;
+    place-items:center;
+    width:84px;
+    height:84px;
+    padding:6px;
+    border-radius:20px;
+    color:var(--entrainement-hasard-accent);
+    background:rgba(var(--entrainement-hasard-accent-rgb),.08);
+    transform-origin:center;
+    filter:drop-shadow(0 3px 5px rgba(var(--entrainement-hasard-accent-rgb),.22));
+}
+#entrainement .de-objet svg {
+    width:100%;
+    height:100%;
+    overflow:visible;
+}
+#entrainement .de-contour {
+    fill:none;
+    stroke:currentColor;
+    stroke-width:2.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+#entrainement .de-points-avant circle {
+    display:none;
+    fill:currentColor;
+}
+#entrainement .de-points-dessus circle,
+#entrainement .de-points-cote circle {
+    fill:currentColor;
+}
+#entrainement .de-objet[data-face="1"] .de-points-avant circle:nth-child(5),
+#entrainement .de-objet[data-face="2"] .de-points-avant circle:nth-child(1),
+#entrainement .de-objet[data-face="2"] .de-points-avant circle:nth-child(9),
+#entrainement .de-objet[data-face="3"] .de-points-avant circle:nth-child(1),
+#entrainement .de-objet[data-face="3"] .de-points-avant circle:nth-child(5),
+#entrainement .de-objet[data-face="3"] .de-points-avant circle:nth-child(9),
+#entrainement .de-objet[data-face="4"] .de-points-avant circle:nth-child(1),
+#entrainement .de-objet[data-face="4"] .de-points-avant circle:nth-child(3),
+#entrainement .de-objet[data-face="4"] .de-points-avant circle:nth-child(7),
+#entrainement .de-objet[data-face="4"] .de-points-avant circle:nth-child(9),
+#entrainement .de-objet[data-face="5"] .de-points-avant circle:nth-child(1),
+#entrainement .de-objet[data-face="5"] .de-points-avant circle:nth-child(3),
+#entrainement .de-objet[data-face="5"] .de-points-avant circle:nth-child(5),
+#entrainement .de-objet[data-face="5"] .de-points-avant circle:nth-child(7),
+#entrainement .de-objet[data-face="5"] .de-points-avant circle:nth-child(9),
+#entrainement .de-objet[data-face="6"] .de-points-avant circle:nth-child(1),
+#entrainement .de-objet[data-face="6"] .de-points-avant circle:nth-child(3),
+#entrainement .de-objet[data-face="6"] .de-points-avant circle:nth-child(4),
+#entrainement .de-objet[data-face="6"] .de-points-avant circle:nth-child(6),
+#entrainement .de-objet[data-face="6"] .de-points-avant circle:nth-child(7),
+#entrainement .de-objet[data-face="6"] .de-points-avant circle:nth-child(9) {
+    display:block;
+}
+#entrainement .de-objet.de-en-lancer {
+    animation:lancerDe .42s ease-out;
+}
+
+@media (max-width:980px) {
+    #entrainement .entrainement-perimetre-choix {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    #entrainement .entrainement-grille {
+        grid-template-columns:1fr;
+    }
+    #entrainement .entrainement-carte > p {
+        min-height:0;
+    }
+}
+
+@media (max-width:820px) {
+    #entrainement .entrainement-hasard {
+        grid-template-columns:1fr;
+    }
+    #entrainement .de-objet {
+        width:76px;
+        height:76px;
+    }
+    #entrainement .choix-bouton,
+    #entrainement .option-bouton,
+    #entrainement .entrainement-lancer {
+        min-height:44px;
+        height:auto;
+    }
+}
+
+@media (max-width:580px) {
+    #entrainement .entrainement-perimetre-choix {
+        grid-template-columns:1fr;
+    }
+    #entrainement .entrainement-etape-config,
+    #entrainement .entrainement-etape-config.entrainement-etape-modes {
+        grid-template-columns:1fr;
+        gap:12px;
+        padding:17px;
+    }
+    #entrainement .entrainement-etape-numero {
+        width:38px;
+        height:38px;
+    }
+    #entrainement .entrainement-carte {
+        padding:17px 15px;
+    }
+    #entrainement .entrainement-option,
+    #entrainement .entrainement-chronometre-secondes {
+        grid-template-columns:1fr;
+        align-items:stretch;
+        gap:7px;
+    }
+}
+/* === FIN MORCEAU CSS === */

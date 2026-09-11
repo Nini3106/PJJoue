@@ -1,0 +1,126 @@
+/* PAGE : Organisation de la PJJ */
+.page-organisation-pjj .organisation-schema {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 760px;
+    margin: 22px auto 0;
+}
+
+.page-organisation-pjj .organisation-noeud {
+    width: min(100%,560px);
+    padding: 18px 22px;
+    box-sizing: border-box;
+    border: 2px solid var(--bordure);
+    border-radius: 18px;
+    background: var(--surface-carte);
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(8,35,68,.1);
+}
+
+.page-organisation-pjj .organisation-noeud strong,
+.page-organisation-pjj .organisation-noeud span {
+    display: block;
+}
+
+.page-organisation-pjj .organisation-noeud strong {
+    color: var(--texte);
+    font-size: 1.08rem;
+    line-height: 1.35;
+}
+
+.page-organisation-pjj .organisation-noeud span {
+    margin-top: 5px;
+    color: var(--texte-secondaire);
+    line-height: 1.45;
+}
+
+.page-organisation-pjj .organisation-noeud-terrain {
+    border-color: var(--accent);
+    background: var(--accent-doux);
+}
+
+.page-organisation-pjj .organisation-fleche {
+    position: relative;
+    display: block;
+    width: 2px;
+    height: 34px;
+    background: var(--accent);
+}
+
+.page-organisation-pjj .organisation-fleche::after {
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    content: "";
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.page-organisation-pjj .organisation-branches {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 24px;
+    width: 100%;
+}
+
+.page-organisation-pjj .organisation-branches::before {
+    position: absolute;
+    top: -18px;
+    left: 25%;
+    width: 50%;
+    height: 18px;
+    border-top: 2px solid var(--accent);
+    border-right: 2px solid var(--accent);
+    border-left: 2px solid var(--accent);
+    content: "";
+}
+
+.page-organisation-pjj .organisation-fleche-separation {
+    height: 34px;
+}
+
+.page-organisation-pjj .organisation-fleche-reunion {
+    height: 34px;
+}
+
+.page-organisation-pjj .organisation-schema figcaption {
+    margin-top: 14px;
+    color: var(--texte-secondaire);
+    font-size: .9rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+@media (max-width:580px) {
+    .page-organisation-pjj .organisation-noeud {
+        padding: 15px 14px;
+        border-radius: 15px;
+    }
+
+    .page-organisation-pjj .organisation-branches {
+        grid-template-columns: 1fr;
+        gap: 34px;
+    }
+
+    .page-organisation-pjj .organisation-branches::before {
+        top: -18px;
+        left: 50%;
+        width: 0;
+        height: calc(100% + 18px);
+        border-top: 0;
+        border-right: 0;
+        border-left: 2px solid var(--accent);
+        transform: translateX(-50%);
+        z-index: 0;
+    }
+
+    .page-organisation-pjj .organisation-branches .organisation-noeud {
+        position: relative;
+        z-index: 1;
+    }
+}

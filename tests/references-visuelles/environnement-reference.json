@@ -1,0 +1,7 @@
+{
+  "systeme": "Linux",
+  "chromium": "144.0.7559.96",
+  "chromiumMajeur": 144,
+  "playwright": "1.57.0",
+  "note": "Références visuelles PJJoue V1 ; le pixel-perfect exige le même système et le même Chromium majeur."
+}

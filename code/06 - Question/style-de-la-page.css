@@ -1,0 +1,307 @@
+/* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=41 === */
+/* Finitions de la page Question : hauteur naturelle et commandes stables. */
+#question #enonceQuestion {
+    text-wrap: pretty;
+}
+
+/* Le focus reste annoncé aux technologies d’assistance sans dessiner un cadre
+   de bouton autour d’un titre non interactif. */
+#question #enonceQuestion[tabindex="-1"]:focus,
+#question #enonceQuestion[tabindex="-1"]:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+#question #zoneCorrection[tabindex="-1"]:focus,
+#question #zoneCorrection[tabindex="-1"]:focus-visible {
+    outline: 1px solid rgba(255,200,61,.5);
+    outline-offset: 2px;
+}
+
+#question .question-commande-ligne .suivant-ligne #boutonJokers > span:last-child {
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+#question .question-carte {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+    justify-content: flex-start;
+}
+
+#question .question-carte #zoneReponses {
+    flex: 0 0 auto;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+    scrollbar-gutter: auto;
+}
+
+/* Une correction ou un indice remplace le jeu dans le flux. La page porte le
+   défilement, ce qui évite un deuxième ascenseur dans une carte trop courte. */
+#question .question-carte:has(> #zoneCorrection:not(.masque)),
+#question .question-carte:has(> #zoneIndice:not(.masque)) {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    padding: 0;
+    overflow: visible;
+    justify-content: flex-start;
+}
+
+#question .question-carte:has(> #zoneCorrection:not(.masque)) > .reperes,
+#question .question-carte:has(> #zoneCorrection:not(.masque)) > #zoneReponses,
+#question .question-carte:has(> #zoneIndice:not(.masque)) > .reperes,
+#question .question-carte:has(> #zoneIndice:not(.masque)) > #zoneReponses {
+    display: none;
+}
+
+#question .question-carte > #zoneCorrection:not(.masque),
+#question .question-carte > #zoneIndice:not(.masque) {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin: 0;
+    overflow: visible;
+    overscroll-behavior: auto;
+    scrollbar-gutter: auto;
+}
+
+#question .question-commande-ligne button {
+    min-height: 44px;
+    height: auto;
+}
+
+@media (max-width:820px) {
+    #question .question-etape > .question-carte {
+        min-height: 0;
+        padding: 20px 16px;
+    }
+
+    #question .question-contexte-etape {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        margin: 0 4px 12px;
+    }
+
+    #question .question-contexte-identites {
+        max-width: 100%;
+        font-size: clamp(12px,3.6vw,.94rem);
+    }
+
+    #question .question-autonomie {
+        width: 100%;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    /* Trois emplacements fixes sur la première ligne : Précédente, Valider,
+       Passer/Suivante. Jokers reste centré sur la seconde ligne. */
+    #question .question-conteneur > .question-commande-ligne {
+        display: grid;
+        grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+        grid-template-rows: auto auto;
+        align-items: center;
+        column-gap: 8px;
+        row-gap: 10px;
+        width: 100%;
+        min-height: 0;
+        margin-top: 16px;
+    }
+
+    #question .question-conteneur > .question-commande-ligne > .suivant-ligne,
+    #question .question-commande-ligne > .suivant-ligne > .navigation-question-groupe {
+        display: contents;
+    }
+
+    #question .suivant-ligne > #boutonQuestionPrecedente,
+    #question .suivant-ligne > #boutonValider,
+    #question .suivant-ligne #boutonJokers,
+    #question .suivant-ligne #boutonPasser,
+    #question .suivant-ligne #boutonQuestionSuivante {
+        position: static;
+        width: max-content;
+        max-width: 100%;
+        min-width: 0;
+        min-height: 42px;
+        height: auto;
+        margin: 0;
+        padding: 8px 10px;
+        flex: 0 0 auto;
+        font-size: clamp(12px,3.35vw,14px);
+        line-height: 1.15;
+        white-space: nowrap;
+        transform: none;
+    }
+
+    #question .suivant-ligne > #boutonQuestionPrecedente {
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: start;
+    }
+
+    #question .suivant-ligne > #boutonValider {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: center;
+    }
+
+    #question .suivant-ligne #boutonPasser,
+    #question .suivant-ligne #boutonQuestionSuivante {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+    }
+
+    #question .suivant-ligne #boutonJokers {
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: center;
+    }
+
+    #question .suivant-ligne #boutonJokers > span:last-child {
+        font-size: inherit;
+    }
+
+    /* Les boutons de liaison restent les seuls objets encadrés : les deux
+       colonnes n’ajoutent plus une boîte intermédiaire. */
+    #question .association-colonne {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+}
+
+/* === Cohérence des couleurs de l'étape dans tous les modes de réponse ===
+   La ligne supérieure de la carte est la source visuelle : toute sélection
+   utilisateur et tout fil de liaison reprennent exactement la même couleur
+   canonique d'étape. Les états propres aux jokers et aux corrections gardent
+   leurs couleurs fonctionnelles (aide, réussite, erreur). */
+#question {
+    --fond-selection-etape: color-mix(
+        in srgb,
+        var(--couleur-etape-active) 22%,
+        rgba(20,79,137,.72)
+    );
+}
+
+/* Le badge Étape reprend la couleur de la carte ; le badge Parcours conserve
+   l'identité canonique du parcours ou l'identité stable des mini-jeux. */
+#question .question-etape-identite > span {
+    border-color: var(--couleur-etape-active);
+    color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
+    background: color-mix(in srgb,var(--couleur-etape-active) 16%,rgba(6,45,91,.72));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--couleur-etape-active) 18%,transparent);
+}
+
+/* Choix unique. */
+#question #zoneReponses .reponse.selectionne,
+#question #zoneReponses .reponse[aria-checked="true"] {
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
+}
+#question #zoneReponses .reponse.selectionne .lettre,
+#question #zoneReponses .reponse[aria-checked="true"] .lettre {
+    border-color: var(--couleur-etape-active);
+    background: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
+    color: var(--bleu-nuit-950);
+}
+
+/* Sélection multiple. */
+#question .multiple-choix.selectionne,
+#question .multiple-choix[aria-pressed="true"] {
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
+}
+#question .multiple-choix.selectionne .multiple-coche,
+#question .multiple-choix[aria-pressed="true"] .multiple-coche {
+    border-color: var(--couleur-etape-active);
+    color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
+    background: color-mix(in srgb,var(--couleur-etape-active) 20%,var(--surface-carte-profonde));
+}
+
+/* Retirer des choix : « éliminé » est ici un choix de l'utilisateur avant
+   validation, donc il suit l'étape et non la couleur rouge d'une erreur. */
+#question .elimination-choix.elimine {
+    opacity: .86;
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
+}
+#question .elimination-choix:not(.verrouille-joker)::after {
+    color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
+}
+
+/* Relier : sélection, paire créée et fil utilisent une seule et même couleur. */
+#question .association-colonne button.actif,
+#question .association-colonne button.associe,
+#question .association-colonne button[aria-pressed="true"] {
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
+}
+#question .association-lignes .fil-association {
+    stroke: var(--couleur-etape-active);
+}
+
+/* Classer. */
+#question .classement-element button.selectionne,
+#question .classement-element button[aria-pressed="true"] {
+    border-color: var(--couleur-etape-active);
+    background: var(--fond-selection-etape);
+    box-shadow: inset 3px 0 0 var(--couleur-etape-active);
+}
+
+/* Ordre et choisir puis ordonner : il n'y a pas de case « sélectionnée »
+   permanente dans l'ordre simple ; les commandes et les éléments retenus
+   reprennent néanmoins le repère de l'étape. */
+#question .ordre-commandes button:hover:not(:disabled),
+#question .ordre-commandes button:focus-visible,
+#question .choisir-ordre-proposition:hover,
+#question .choisir-ordre-proposition:focus-visible {
+    border-color: var(--couleur-etape-active);
+}
+#question .ordre-choix-selectionne > li:not(.ordre-verrouille) {
+    border-left: 4px solid var(--couleur-etape-active);
+    background: color-mix(in srgb,var(--couleur-etape-active) 10%,rgba(20,79,137,.72));
+}
+
+/* Réponse écrite : le focus constitue l'état de sélection du champ. */
+#question .ecrite-zone input:focus,
+#question .ecrite-zone textarea:focus,
+#question .ecrite-zone select:focus {
+    border-color: var(--couleur-etape-active);
+    box-shadow: 0 0 0 2px color-mix(in srgb,var(--couleur-etape-active) 28%,transparent);
+}
+
+/* Correction du mode « Retirer des choix » : cette ligne ne contient que
+   deux éléments. Elle ne doit donc pas hériter de la grille à trois colonnes
+   réservée aux corrections avec flèche. */
+#question .detaillee-correction-ligne.ligne-eliminee {
+    grid-template-columns: 24px minmax(0,1fr);
+    align-items: start;
+    gap: 10px;
+}
+#question .detaillee-correction-ligne.ligne-eliminee .marque-erreur {
+    display: block;
+    width: 24px;
+    text-align: center;
+}
+#question .detaillee-correction-ligne.ligne-eliminee > span:last-child {
+    min-width: 0;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+/* === FIN cohérence couleurs de l'étape === */
+
+/* === FIN MORCEAU CSS === */

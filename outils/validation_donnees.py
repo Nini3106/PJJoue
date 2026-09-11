@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 from typing import Any
+import re
+import unicodedata
 
 
 MODES_QUESTION = {
@@ -21,6 +23,34 @@ TYPES_ACTIVITE = {
     "classer",
     "remettre-ordre",
     "selection-multiple",
+}
+LIBELLES_MODES = {
+    "association": "Relier / Association",
+    "choix-unique": "Choix unique",
+    "classer": "Classer",
+    "eliminer": "Retirer des choix",
+    "remettre-ordre": "Remettre dans l’ordre",
+    "reponse-ecrite": "Réponse écrite",
+    "selection-multiple": "Sélection multiple",
+}
+CHAMPS_REPONSE_ECRITE = {
+    "reponsesAcceptees",
+    "typeReponseAttendue",
+    "sigleAttendu",
+    "sigleSeulRefuse",
+    "nombreSiglesRequis",
+    "siglesDistinctsAttendus",
+    "conceptsEvaluation",
+    "nombreConceptsRequis",
+    "conceptsInterdits",
+    "expressionsInterditesExactes",
+    "conceptsOrdonnes",
+}
+CHAMPS_ELIMINATION = {
+    "propositionsAConserver",
+    "propositionsAEliminer",
+    "nombreEliminationsAttendues",
+    "consigneElimination",
 }
 
 
@@ -59,6 +89,19 @@ def valider_liste_textes(
     return [element for element in valeur if isinstance(element, str) and element.strip()]
 
 
+def refuser_chaine_eclatee(
+    valeur: object,
+    emplacement: str,
+    erreurs: list[str],
+) -> None:
+    """Détecte une phrase transformée par erreur en liste de caractères."""
+    if not isinstance(valeur, list) or len(valeur) < 12:
+        return
+    textes = [element for element in valeur if isinstance(element, str)]
+    if len(textes) == len(valeur) and sum(len(element) <= 1 for element in textes) >= len(textes) * 0.8:
+        erreurs.append(f"{emplacement} ressemble à une phrase éclatée caractère par caractère.")
+
+
 def valider_elements(
     activite: dict[str, Any],
     cle: str,
@@ -72,6 +115,7 @@ def valider_elements(
         erreurs.append(f"{emplacement} doit être une liste non vide.")
         return set()
     identifiants: list[str] = []
+    textes_visibles: list[str] = []
     for indice, element in enumerate(elements):
         if not isinstance(element, dict):
             erreurs.append(f"{emplacement}[{indice}] doit être un objet.")
@@ -82,9 +126,18 @@ def valider_elements(
         valider_texte(texte, f"{emplacement}[{indice}].texte", erreurs)
         if isinstance(identifiant, str) and identifiant.strip():
             identifiants.append(identifiant)
+        if isinstance(texte, str) and texte.strip():
+            textes_visibles.append(normaliser_choix(texte))
     doublons = sorted({identifiant for identifiant in identifiants if identifiants.count(identifiant) > 1})
     if doublons:
         erreurs.append(f"{emplacement} contient des identifiants dupliqués : {doublons}.")
+    doublons_visibles = sorted(
+        {texte for texte in textes_visibles if textes_visibles.count(texte) > 1}
+    )
+    if doublons_visibles:
+        erreurs.append(
+            f"{emplacement} contient des libellés visibles dupliqués : {doublons_visibles}."
+        )
     return set(identifiants)
 
 
@@ -115,14 +168,33 @@ def valider_activite(question: dict[str, Any], erreurs: list[str]) -> None:
 
     if type_activite == "selection-multiple":
         propositions = valider_elements(activite, "propositions", contexte, erreurs)
-        reponses = set(valider_liste_textes(
+        reponses_liste = valider_liste_textes(
             activite.get("reponses"),
             f"{contexte}.reponses",
             erreurs,
             vide_autorise=False,
-        ))
+        )
+        reponses = set(reponses_liste)
+        if len(reponses_liste) < 2:
+            erreurs.append(
+                f"{contexte}.reponses doit contenir au moins deux choix : "
+                "une seule bonne réponse relève du choix unique."
+            )
+        consigne = str(activite.get("consigne", ""))
+        if re.search(rf"\b{len(reponses_liste)}\b", consigne) is None:
+            erreurs.append(
+                f"{contexte}.consigne doit annoncer les {len(reponses_liste)} réponses attendues."
+            )
         if not reponses.issubset(propositions):
             erreurs.append(f"{contexte}.reponses référence une proposition inconnue.")
+        propositions_brutes = activite.get("propositions") if isinstance(activite.get("propositions"), list) else []
+        if len(propositions_brutes) < 4 or len(propositions_brutes) - len(reponses_liste) < 2:
+            erreurs.append(
+                f"{contexte} doit proposer au moins deux distracteurs en plus des réponses exactes."
+            )
+        longueurs = [len(str(element.get("texte", "")).strip()) for element in propositions_brutes if isinstance(element, dict)]
+        if longueurs and max(longueurs) > 40 and max(longueurs) / max(1, min(longueurs)) > 3:
+            erreurs.append(f"{contexte} contient des propositions visuellement trop déséquilibrées : {longueurs}.")
     elif type_activite == "association":
         gauche = valider_elements(activite, "colonneGauche", contexte, erreurs)
         droite = valider_elements(activite, "colonneDroite", contexte, erreurs)
@@ -136,6 +208,8 @@ def valider_activite(question: dict[str, Any], erreurs: list[str]) -> None:
                 erreurs.append(f"{contexte}.associations référence un élément de droite inconnu.")
             if len(set(associations.values())) != len(associations.values()):
                 erreurs.append(f"{contexte}.associations doit être bijective.")
+            if set(associations.values()) != droite:
+                erreurs.append(f"{contexte}.associations doit utiliser chaque élément de droite exactement une fois.")
     elif type_activite in {"remettre-ordre", "choisir-ordre"}:
         elements = valider_elements(activite, "elements", contexte, erreurs)
         ordre_liste = valider_liste_textes(
@@ -162,6 +236,89 @@ def valider_activite(question: dict[str, Any], erreurs: list[str]) -> None:
                 erreurs.append(f"{contexte}.classements doit référencer chaque élément une fois.")
             if not set(classements.values()).issubset(categories):
                 erreurs.append(f"{contexte}.classements référence une catégorie inconnue.")
+            if set(classements.values()) != categories:
+                erreurs.append(f"{contexte}.classements doit utiliser chaque catégorie au moins une fois.")
+
+
+def compter_mots_reponse(valeur: object) -> int:
+    """Compte les mots significatifs d’une réponse courte, apostrophes et traits d’union inclus."""
+    return len(re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ0-9]+(?:['’\-][A-Za-zÀ-ÖØ-öø-ÿ0-9]+)*", str(valeur)))
+
+
+def normaliser_choix(valeur: object) -> str:
+    """Normalise un choix pour repérer les doublons invisibles à la lecture."""
+    texte = unicodedata.normalize("NFKD", str(valeur).casefold())
+    texte = "".join(caractere for caractere in texte if not unicodedata.combining(caractere))
+    return re.sub(r"[^a-z0-9]+", " ", texte).strip()
+
+
+def valider_schema_mode(question: dict[str, Any], erreurs: list[str]) -> None:
+    """Refuse les champs contradictoires laissés par un changement de mode."""
+    identifiant = question.get("id", "?")
+    contexte = f"Q{identifiant}"
+    mode = question.get("modePrefere")
+    if mode not in MODES_QUESTION:
+        return
+    if question.get("libelleMode") != LIBELLES_MODES[mode]:
+        erreurs.append(f"{contexte}.libelleMode ne correspond pas au mode {mode!r}.")
+
+    if mode != "reponse-ecrite":
+        champs_residuels = sorted(champ for champ in CHAMPS_REPONSE_ECRITE if champ in question)
+        if champs_residuels:
+            erreurs.append(f"{contexte} conserve des champs de réponse écrite incompatibles : {champs_residuels}.")
+    if mode != "eliminer":
+        champs_residuels = sorted(champ for champ in CHAMPS_ELIMINATION if champ in question)
+        if champs_residuels:
+            erreurs.append(f"{contexte} conserve des champs d’élimination incompatibles : {champs_residuels}.")
+
+    mauvaises = question.get("mauvaisesReponses")
+    if mode == "choix-unique":
+        if question.get("activite") is not None:
+            erreurs.append(f"{contexte}.activite doit être absent en choix unique.")
+        if not isinstance(mauvaises, list) or len(mauvaises) != 3:
+            erreurs.append(f"{contexte}.mauvaisesReponses doit contenir exactement trois distracteurs.")
+        else:
+            choix = [question.get("bonneReponse"), *mauvaises]
+            choix_normalises = [normaliser_choix(choix_visible) for choix_visible in choix]
+            if len(set(choix_normalises)) != 4:
+                erreurs.append(f"{contexte} contient des choix identiques après normalisation.")
+    elif mode == "reponse-ecrite":
+        if question.get("activite") is not None:
+            erreurs.append(f"{contexte}.activite doit être absent en réponse écrite.")
+        if mauvaises != []:
+            erreurs.append(f"{contexte}.mauvaisesReponses doit être vide en réponse écrite.")
+        valider_liste_textes(
+            question.get("reponsesAcceptees"),
+            f"{contexte}.reponsesAcceptees",
+            erreurs,
+            vide_autorise=False,
+        )
+    elif mode in {"selection-multiple", "association", "classer", "remettre-ordre"}:
+        if mauvaises != []:
+            erreurs.append(f"{contexte}.mauvaisesReponses doit être vide pour une activité structurée.")
+        if not isinstance(question.get("activite"), dict):
+            erreurs.append(f"{contexte}.activite est obligatoire pour le mode {mode!r}.")
+    elif mode == "eliminer":
+        if question.get("activite") is not None:
+            erreurs.append(f"{contexte}.activite doit être absent en mode élimination.")
+        affichees = question.get("propositionsAEliminer")
+        conservees = question.get("propositionsAConserver")
+        if not isinstance(affichees, list) or not affichees:
+            erreurs.append(f"{contexte}.propositionsAEliminer doit contenir les choix affichés.")
+        if not isinstance(conservees, list) or not conservees:
+            erreurs.append(f"{contexte}.propositionsAConserver doit être une liste non vide.")
+        elif isinstance(affichees, list) and not set(conservees).issubset(set(affichees)):
+            erreurs.append(f"{contexte}.propositionsAConserver contient un choix non affiché.")
+        if isinstance(mauvaises, list) and isinstance(affichees, list) and isinstance(conservees, list):
+            if set(affichees) != set(conservees) | set(mauvaises) or set(conservees) & set(mauvaises):
+                erreurs.append(
+                    f"{contexte}.propositionsAEliminer doit correspondre exactement aux choix conservés et aux distracteurs."
+                )
+            if question.get("nombreEliminationsAttendues") != len(mauvaises):
+                erreurs.append(f"{contexte}.nombreEliminationsAttendues doit correspondre au nombre de distracteurs.")
+            longueurs = [len(str(texte).strip()) for texte in affichees]
+            if longueurs and max(longueurs) > 40 and max(longueurs) / max(1, min(longueurs)) > 3:
+                erreurs.append(f"{contexte} contient des propositions visuellement trop déséquilibrées : {longueurs}.")
 
 
 def valider_donnees(
@@ -180,40 +337,58 @@ def valider_donnees(
             if not isinstance(source, dict):
                 erreurs.append(f"Source {identifiant} : la fiche doit être un objet.")
                 continue
-            for champ in ("titre", "url", "repere", "dateVerification", "statutRelecture", "roleRelecteur"):
+            for champ in ("titre", "url", "repere", "dateVerification", "statutSource", "traitementEditorial"):
                 valider_texte(source.get(champ), f"Source {identifiant}.{champ}", erreurs)
 
-    if not isinstance(programme, dict):
-        erreurs.append("programme.json doit contenir un objet.")
+    themes_programme: set[str] = set()
+    if not isinstance(programme, dict) or not programme:
+        erreurs.append("programme.json doit contenir au moins un parcours.")
     else:
-        etapes = programme.get("commun", {}).get("etapes") if isinstance(programme.get("commun"), dict) else None
-        if not isinstance(etapes, list) or len(etapes) != 10:
-            erreurs.append("programme.commun.etapes doit contenir dix étapes.")
-        else:
+        themes_programme = set(programme)
+        for identifiant_programme, fiche_programme in programme.items():
+            contexte_programme = f"programme.{identifiant_programme}"
+            if not isinstance(fiche_programme, dict):
+                erreurs.append(f"{contexte_programme} doit être un objet.")
+                continue
+            if fiche_programme.get("id") != identifiant_programme:
+                erreurs.append(f"{contexte_programme}.id doit être {identifiant_programme!r}.")
+            for champ in ("titre", "sousTitre", "categorie", "sequence"):
+                valider_texte(fiche_programme.get(champ), f"{contexte_programme}.{champ}", erreurs)
+            etapes = fiche_programme.get("etapes")
+            if not isinstance(etapes, list) or len(etapes) != 11:
+                erreurs.append(f"{contexte_programme}.etapes doit contenir onze étapes.")
+                continue
             identifiants_etapes = [etape.get("id") for etape in etapes if isinstance(etape, dict)]
-            if identifiants_etapes != list(range(1, 11)):
-                erreurs.append("Les étapes du programme doivent être numérotées de 1 à 10 dans l’ordre.")
+            if identifiants_etapes != list(range(1, 12)):
+                erreurs.append(f"Les étapes de {contexte_programme} doivent être numérotées de 1 à 11 dans l’ordre.")
             for indice, etape in enumerate(etapes, start=1):
                 if not isinstance(etape, dict):
-                    erreurs.append(f"Étape {indice} : la fiche doit être un objet.")
+                    erreurs.append(f"{contexte_programme}.étape {indice} : la fiche doit être un objet.")
                     continue
-                valider_texte(etape.get("titre"), f"Étape {indice}.titre", erreurs)
-                valider_texte(etape.get("couleur"), f"Étape {indice}.couleur", erreurs)
-                valider_liste_textes(
+                valider_texte(etape.get("titre"), f"{contexte_programme}.étape {indice}.titre", erreurs)
+                valider_texte(etape.get("couleur"), f"{contexte_programme}.étape {indice}.couleur", erreurs)
+                souvenirs = valider_liste_textes(
                     etape.get("souvenirs"),
-                    f"Étape {indice}.souvenirs",
+                    f"{contexte_programme}.étape {indice}.souvenirs",
                     erreurs,
                     vide_autorise=False,
                 )
-                references = valider_liste_textes(etape.get("sources"), f"Étape {indice}.sources", erreurs)
+                if len(souvenirs) != 3:
+                    erreurs.append(f"{contexte_programme}.étape {indice}.souvenirs doit contenir exactement trois repères.")
+                references = valider_liste_textes(
+                    etape.get("sources"),
+                    f"{contexte_programme}.étape {indice}.sources",
+                    erreurs,
+                )
                 if not set(references).issubset(sources_connues):
-                    erreurs.append(f"Étape {indice}.sources référence une source inconnue.")
+                    erreurs.append(f"{contexte_programme}.étape {indice}.sources référence une source inconnue.")
 
     if not isinstance(questions, list) or not questions:
         erreurs.append("questions.json doit contenir une liste non vide.")
         return erreurs
 
     identifiants: list[int] = []
+    modes_par_etape: dict[tuple[str, int], set[str]] = {}
     for indice, question in enumerate(questions):
         contexte = f"Question à l’index {indice}"
         if not isinstance(question, dict):
@@ -232,18 +407,78 @@ def valider_donnees(
             "statutContenu", "versionContenu", "derniereVerification", "bonneReponse",
         ):
             valider_texte(question.get(champ), f"{contexte}.{champ}", erreurs)
+        enonce = str(question.get("enonce", ""))
+        if len(enonce) > 220:
+            erreurs.append(f"{contexte}.enonce dépasse le plafond éditorial de 220 caractères ({len(enonce)}).")
+        if re.search(r"^(Quels?|Quelles?)\s+(?:\d+|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze)\b", enonce.strip(), re.I):
+            erreurs.append(f"{contexte}.enonce doit utiliser « Quels/Quelles sont les + nombre ».")
+        if re.search(r"\b(?:article\s+)?[LRD]\s*\.?\s*\d+(?:[-‑]\d+)*\b|\barticle\s+\d+(?:[-‑]\d+)*\b", enonce, re.I):
+            erreurs.append(f"{contexte}.enonce contient une référence juridique brute interdite.")
+        if question.get("theme") not in themes_programme:
+            erreurs.append(f"{contexte}.theme référence un parcours inconnu : {question.get('theme')!r}.")
         valider_texte(question.get("indice"), f"{contexte}.indice", erreurs, vide_autorise=True)
-        if not est_entier(question.get("etape")) or not 1 <= question["etape"] <= 11:
-            erreurs.append(f"{contexte}.etape doit être un entier de 1 à 11.")
+        if not est_entier(question.get("etape")) or not 1 <= question["etape"] <= 12:
+            erreurs.append(f"{contexte}.etape doit être un entier de 1 à 12.")
         if not est_entier(question.get("chapitre")) or question["chapitre"] < 1:
             erreurs.append(f"{contexte}.chapitre doit être un entier positif.")
         if not isinstance(question.get("procedureLocale"), bool):
             erreurs.append(f"{contexte}.procedureLocale doit être un booléen.")
         valider_liste_textes(question.get("mauvaisesReponses"), f"{contexte}.mauvaisesReponses", erreurs)
+        for champ in ("faitsCorrects", "faitsIncorrects"):
+            refuser_chaine_eclatee(question.get(champ), f"{contexte}.{champ}", erreurs)
         references = valider_liste_textes(question.get("referencesSources"), f"{contexte}.referencesSources", erreurs)
         if question.get("source") not in sources_connues or not set(references).issubset(sources_connues):
             erreurs.append(f"{contexte} référence une source inconnue.")
         valider_activite(question, erreurs)
+        valider_schema_mode(question, erreurs)
+        if question.get("modePrefere") == "reponse-ecrite":
+            nb_mots = compter_mots_reponse(question.get("bonneReponse", ""))
+            if nb_mots > 3:
+                erreurs.append(
+                    f"{contexte}.bonneReponse comporte {nb_mots} mots en réponse écrite ; le maximum PJJoue est 3."
+                )
+        if not question.get("estEvaluationFinale") and isinstance(question.get("theme"), str) and est_entier(question.get("etape")):
+            cle_etape = (question["theme"], question["etape"])
+            modes_par_etape.setdefault(cle_etape, set()).add(str(question.get("modePrefere", "")))
+
+    if len(modes_par_etape) != 66:
+        erreurs.append(f"La banque d’apprentissage doit contenir exactement 66 étapes ; {len(modes_par_etape)} détectées.")
+    for (theme, etape), modes in sorted(modes_par_etape.items()):
+        manquants = MODES_QUESTION - modes
+        if manquants:
+            erreurs.append(
+                f"{theme}.étape {etape} ne couvre pas les sept modes canoniques ; "
+                f"modes manquants : {sorted(manquants)}."
+            )
+
+    # Les prérequis pédagogiques doivent toujours avoir été introduits plus tôt
+    # dans l’ordre réellement joué du même parcours.
+    questions_apprentissage = [
+        q for q in questions
+        if isinstance(q, dict) and not q.get("estEvaluationFinale") and isinstance(q.get("theme"), str)
+    ]
+    par_theme: dict[str, list[dict[str, Any]]] = {}
+    for question in questions_apprentissage:
+        par_theme.setdefault(question["theme"], []).append(question)
+    for theme, questions_theme in par_theme.items():
+        questions_theme.sort(
+            key=lambda q: (
+                int(q.get("etape", 999)),
+                int(q.get("ordreEtape", q.get("id", 999999))),
+                int(q.get("id", 999999)),
+            )
+        )
+        concepts_vus: set[str] = set()
+        for question in questions_theme:
+            manquants = [
+                concept for concept in (question.get("prerequisPedagogiques") or [])
+                if concept not in concepts_vus
+            ]
+            if manquants:
+                erreurs.append(
+                    f"Q{question.get('id', '?')} utilise des prérequis non introduits avant elle dans {theme} : {manquants}."
+                )
+            concepts_vus.update(question.get("introduitConcepts") or [])
 
     doublons = sorted({identifiant for identifiant in identifiants if identifiants.count(identifiant) > 1})
     if doublons:

@@ -1,0 +1,921 @@
+{
+  "fichiers": {
+    "01-Frise-JE.pdf": "P2 étapes 2, 5, 6, 8, 11 ; P3 MEJP/MEJ/CJ/ARSE/DP ; P4 JE-JAP ; P5 exécution MEJ/MEJP.",
+    "01_Mesures-Modules-Peine-Temps-De-Proc#U00e9dure-JE.png": "Repères JE repris : chambre du conseil, MEE, sanctions limitées, JE-JAP. L’encadré spécifique AA est exclu.",
+    "02_Mesures-Modules-Peine-Temps-De-Proc#U00e9dure-TPE.png": "Repères TPE repris : culpabilité, MEE 6–9 mois, audience unique, bascule vers MEE et remise en liberté du mineur détenu, sanctions et TPE-TAP. Encadré AA exclu.",
+    "03_Mesures-Modules-Peine-Temps-De-Proc#U00e9dure-JI.png": "Repères JI repris : ouverture et conduite de l’information, mise en examen, MJIE/MEJP/CJ/ARSE, saisine du JLD pour DP, non-lieu/renvoi/mise en accusation. Encadré AA exclu.",
+    "04_Mesures-Modules-Peine-Temps-De-Proc#U00e9dure-JLD.png": "Repères JLD repris : liberté/sûreté, réquisitions du parquet mais décision du JLD, placement/maintien/prolongation/mainlevée/rejet de DP, limites de rôle. Encadré AA exclu.",
+    "05_Mesures-Modules-Peine-Temps-De-Proc#U00e9dure-CAM.png": "Repères CAM repris : crimes dès 16 ans aux faits, information préalable, mise en accusation, culpabilité/action civile/sanction, réponses éducatives et peines. L’affirmation d’une période éducative type MEE est écartée faute de base dans le CJPM actuel ; encadré AA exclu.",
+    "06_Mesures-Modules-Peine-Temps-De-Proc#U00e9dure-JAP.png": "Repères JAP repris : après condamnation, exécution, suivis, aménagements, JE-JAP/JAP et limites. Encadré AA exclu.",
+    "02-Frise-TPE.pdf": "P2 étapes 5, 7, 9 ; P4 étapes TPE et TPE-TAP ; P3 mesures possibles au jugement.",
+    "03-Frise-JI.pdf": "P2 étapes 3 et 4 ; P3 MJIE/MEJP/CJ/ARSE/DP.",
+    "04-Frise-JLD.pdf": "P2 étapes 2 et 10 ; P3 ARSE/DP et compétences de sûreté.",
+    "05-Frise-CAM.pdf": "P2 étape 10 ; P4 étape CAM ; distinctions avec instruction et MEE.",
+    "06-Frise-JAP.pdf": "P2 étape 11 ; P4 étapes 10-11 ; P5 application des peines.",
+    "CJPM_Tableau_maitre_mesures_modules_peines.pdf": "Couverture transversale P2-P5 : acteurs/stades, MJIE, MEJP, MEJ, modules, CJ, ARSE, DP, sanctions, peines, application.",
+    "Tableau-Maitre-JAP.pdf": "P2 étape 11 ; P4 étapes 9-11 ; P5 étape 11.",
+    "JAP-r#U00e9cap.png": "Repères JAP/TAP repris, mais la mention « jours-amende » a été corrigée : le CJPM rend cette peine inapplicable aux mineurs."
+  },
+  "progression": [
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 1,
+      "titre": "Lire une procédure sans se tromper",
+      "notions_introduites": [
+        "Âge au moment pertinent → nature des faits → stade procédural → acteur compétent → nature de la décision → conditions particulières.",
+        "Parce que plusieurs règles du CJPM changent selon l’âge au moment juridiquement pertinent, souvent l’âge aux faits.",
+        "Contravention, délit et crime.",
+        "Enquête ou défèrement, instruction éventuelle, culpabilité, MEE éventuelle ou audience unique, sanction, puis exécution.",
+        "Parce que parquet, JE, TPE, JI, JLD, tribunal de police, CAM et juridictions d’application n’ont pas les mêmes pouvoirs.",
+        "Investigation, mesure éducative provisoire, mesure de sûreté, sanction éducative et peine.",
+        "Ses conditions particulières d’âge, de seuil, de stade, de compétence et de contenu.",
+        "Ne pas la déduire comme certaine : la logique juridique sert à comprendre et contrôler, pas à inventer une décision absente.",
+        "Dire qu’il est impossible de déterminer le point avec les éléments disponibles, plutôt que deviner."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_JUGEMENT"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 2,
+      "titre": "Le parquet et le défèrement",
+      "notions_introduites": [
+        "Il oriente la procédure : classement, alternatives ou poursuites, et choisit le mode de saisine dans le cadre légal.",
+        "Prendre des réquisitions et demander à la juridiction ou au juge compétent de statuer.",
+        "Non. Il poursuit et requiert, mais ne rend pas le jugement sur la culpabilité ou la sanction.",
+        "Oui, il peut la requérir, mais la décision appartient au juge ou à la juridiction compétente.",
+        "MJIE, MEJP et, si les conditions sont réunies, contrôle judiciaire ou ARSE.",
+        "Le juge des enfants statue sur ces réquisitions dans la branche prévue.",
+        "Le juge des libertés et de la détention.",
+        "Il ne juge pas l’affaire au fond et ne déclare pas le mineur coupable.",
+        "Le jugement doit intervenir dans le calendrier resserré prévu par le CJPM."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 3,
+      "titre": "L’information judiciaire et le juge d’instruction",
+      "notions_introduites": [
+        "Avant le jugement au fond.",
+        "Le juge d’instruction.",
+        "Il peut mettre le mineur en examen lorsque les conditions légales sont réunies.",
+        "Des investigations et expertises utiles à l’instruction.",
+        "Le JI ordonne en principe une MJIE, sauf notamment si le dossier unique de personnalité contient déjà un rapport de MJIE de moins d’un an.",
+        "Il peut notamment ordonner une MEJP, un contrôle judiciaire ou une ARSE et agir sur leur maintien ou leur évolution dans le cadre légal.",
+        "Il saisit le JLD, qui statue sur la détention provisoire.",
+        "Il ne prononce pas lui-même la sanction finale et ne juge pas définitivement la culpabilité.",
+        "L’âge du mineur au moment des faits et la qualification finale retenue."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_INSTRUCTION",
+        "LEGIFRANCE_CJPM_MJIE",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 4,
+      "titre": "La fin de l’instruction et l’orientation",
+      "notions_introduites": [
+        "Une ordonnance de non-lieu.",
+        "Le tribunal de police.",
+        "Le renvoi devant le juge des enfants.",
+        "Le tribunal pour enfants.",
+        "Le tribunal pour enfants.",
+        "Tribunal pour enfants ; « TPEC » ou « TPE criminel » ne sont pas des appellations officielles.",
+        "La cour d’assises des mineurs, après mise en accusation.",
+        "L’âge au moment des faits.",
+        "Parce que l’orientation diffère selon qu’il s’agit finalement d’une contravention, d’un délit ou d’un crime."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_INSTRUCTION"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 5,
+      "titre": "Culpabilité et action civile",
+      "notions_introduites": [
+        "Sur la culpabilité du mineur et, le cas échéant, sur l’action civile.",
+        "À demander réparation du préjudice causé par l’infraction.",
+        "Non. La qualité de victime et la constitution de partie civile ne se confondent pas automatiquement.",
+        "Non. Les dommages-intérêts réparent un préjudice ; l’amende est une peine versée à l’État.",
+        "Ouvrir une mise à l’épreuve éducative avant l’audience de sanction.",
+        "Expertise, MJIE, MEJP, contrôle judiciaire ou ARSE selon les conditions applicables.",
+        "La date de l’audience de sanction.",
+        "Si la sanction sera examinée devant le JE ou le TPE, dans le cadre prévu.",
+        "Non. La culpabilité est jugée, mais la sanction reste à décider lors de l’audience de sanction."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_JUGEMENT",
+        "LEGIFRANCE_CJPM_MISE_EPREUVE"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 6,
+      "titre": "La mise à l’épreuve éducative",
+      "notions_introduites": [
+        "C’est la période comprise entre la déclaration de culpabilité et la décision sur la sanction dans la procédure en deux temps.",
+        "Le juge des enfants.",
+        "MJIE, expertise, MEJP, contrôle judiciaire ou ARSE.",
+        "Les prescrire, les modifier ou les lever dans les conditions prévues par le CJPM.",
+        "Jusqu’au prononcé de la sanction, sauf fin antérieure décidée.",
+        "Non. Chaque aggravation ou décision de détention suppose son propre cadre légal et une décision compétente.",
+        "Un débat contradictoire devant l’autorité compétente.",
+        "Non. Il existe des possibilités encadrées et des limites prévues par le CJPM.",
+        "Non. Le contrôle de la MEE par le JE ne lui permet pas de reprendre librement une sanction expressément renvoyée au TPE."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MISE_EPREUVE",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 7,
+      "titre": "L’audience unique",
+      "notions_introduites": [
+        "La décision sur la culpabilité, l’action civile le cas échéant et la sanction le même jour.",
+        "Le tribunal pour enfants.",
+        "Oui, lorsque la juridiction estime qu’une période d’observation éducative est nécessaire dans les cas prévus.",
+        "La remise en liberté dans le cas prévu par l’article L521-27.",
+        "L’audience unique vise à juger culpabilité et sanction ensemble ; la MEE sépare ces deux décisions par une période éducative.",
+        "Avertissement, MEJ et peines légalement applicables au mineur.",
+        "La décision de saisine, de renvoi ou de convocation et le cadre procédural indiqué.",
+        "Non : la sanction est normalement jugée le même jour que la culpabilité.",
+        "Lors d’une audience de sanction ultérieure après la période de MEE."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_JUGEMENT"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 8,
+      "titre": "Le juge des enfants au jugement et après",
+      "notions_introduites": [
+        "En chambre du conseil.",
+        "L’avertissement judiciaire.",
+        "La mesure éducative judiciaire, avec les modules, interdictions ou obligations légalement possibles.",
+        "Confiscation, peine de stage et travail d’intérêt général sous ses conditions d’âge.",
+        "Au moins seize ans au moment du prononcé et au moins treize ans au moment des faits.",
+        "Le JE ne peut pas prononcer une peine d’emprisonnement.",
+        "Non. Le JE dispose d’une palette de peines plus limitée.",
+        "Le juge des enfants.",
+        "Les fonctions de juge de l’application des peines jusqu’aux règles de majorité et de dessaisissement prévues."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_TIG",
+        "LEGIFRANCE_CJPM_APPLICATION"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 9,
+      "titre": "Le tribunal pour enfants",
+      "notions_introduites": [
+        "Une juridiction de jugement collégiale spécialisée pour les mineurs.",
+        "Statuer sur culpabilité et action civile, ouvrir une MEE et fixer l’audience de sanction.",
+        "Culpabilité, action civile le cas échéant et sanction.",
+        "Avertissement, MEJ et les peines légalement applicables dans son champ de compétence.",
+        "Oui, lorsque les conditions légales sont réunies.",
+        "Elle est plus large et peut notamment inclure amende, TIG, stage, confiscation, DDSE, sursis probatoire, SSJ, sanction-réparation et emprisonnement selon les textes.",
+        "Oui ; l’appellation officielle reste tribunal pour enfants.",
+        "Les fonctions du tribunal de l’application des peines.",
+        "Entre six et neuf mois, sauf cas légal particulier."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_JUGEMENT",
+        "LEGIFRANCE_CJPM_INSTRUCTION",
+        "LEGIFRANCE_CJPM_APPLICATION",
+        "LEGIFRANCE_CJPM_MISE_EPREUVE"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 10,
+      "titre": "JLD, tribunal de police et cour d’assises des mineurs",
+      "notions_introduites": [
+        "Statuer sur la liberté et la sûreté : selon le cadre, il peut décider placement, maintien, prolongation, mainlevée ou rejet concernant la détention provisoire.",
+        "Non : il ne statue pas sur la culpabilité ou la sanction finale.",
+        "MEJP, contrôle judiciaire ou ARSE dans les cadres où le CJPM lui attribue ce pouvoir.",
+        "Non : L322-7 vise le JE, le JI et les juridictions de jugement pour mineurs.",
+        "Les contraventions relevant de sa compétence.",
+        "Avertissement selon le CJPM, dispense de peine, amende atténuée et certaines peines complémentaires applicables.",
+        "À partir de seize ans au moment des faits.",
+        "La culpabilité, l’action civile le cas échéant et la sanction.",
+        "Non. Elle est saisie après l’information judiciaire et la mise en accusation."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_DP",
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_MJIE",
+        "LEGIFRANCE_CJPM_INSTRUCTION"
+      ]
+    },
+    {
+      "theme": "procedure_ordinaire",
+      "etape": 11,
+      "titre": "Après la sanction : JE-JAP, JAP et TPE-TAP",
+      "notions_introduites": [
+        "Le juge des enfants.",
+        "Le juge des enfants, dans les limites prévues par le CJPM et en principe jusqu’à vingt-et-un ans.",
+        "Oui. Le JE peut se dessaisir au profit du JAP à partir de dix-huit ans dans les cas prévus, notamment selon la personnalité et la durée de la peine.",
+        "Le JAP, sauf décision spéciale maintenant la compétence du JE dans le cadre prévu.",
+        "Le tribunal pour enfants.",
+        "JE-JAP ou JAP correspond au juge seul ; TPE exerçant les fonctions du TAP correspond à la compétence collégiale.",
+        "Non. Elle intervient après condamnation pour l’exécution, l’adaptation ou les incidents de la peine.",
+        "Placement extérieur, semi-liberté, DDSE, fractionnement ou suspension et libération conditionnelle selon les textes.",
+        "Des incidents d’exécution, adaptations, retraits ou révocations et autres décisions d’exécution prévues par les textes."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_APPLICATION"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 1,
+      "titre": "Classer correctement chaque décision",
+      "notions_introduites": [
+        "Une mesure d’investigation éducative approfondie ; ce n’est ni une sanction ni une mesure de sûreté.",
+        "Une mesure éducative judiciaire provisoire prononcée avant la sanction.",
+        "Une sanction éducative fondée sur un accompagnement individualisé.",
+        "Une mesure de sûreté laissant le mineur libre sous obligations ou interdictions.",
+        "Une mesure de sûreté avec assignation à résidence et surveillance électronique.",
+        "Une mesure de sûreté provisoire privative de liberté, et non une peine.",
+        "Elle appartient à la réponse pénale prononcée après déclaration de culpabilité dans les conditions prévues.",
+        "Non. C’est un contenu pouvant compléter une MEJ ou, dans les limites légales, une MEJP.",
+        "Non. C’est une période procédurale entre culpabilité et sanction."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MJIE",
+        "LEGIFRANCE_CJPM_MEJP",
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_CJ",
+        "LEGIFRANCE_CJPM_ARSE",
+        "LEGIFRANCE_CJPM_DP",
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_MISE_EPREUVE"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 2,
+      "titre": "La MJIE au mot près",
+      "notions_introduites": [
+        "Une évaluation approfondie et interdisciplinaire de la personnalité et de la situation du mineur.",
+        "Oui, le cas échéant, lorsqu’elle est nécessaire à l’évaluation.",
+        "Le JE, le JI et les juridictions de jugement pour mineurs, à tous les stades de la procédure pénale.",
+        "Les services et établissements de la PJJ ou du secteur associatif habilité.",
+        "Le JI l’ordonne en principe.",
+        "La présence dans le dossier unique de personnalité d’un rapport de MJIE datant de moins d’un an.",
+        "Non, elle sert à éclairer la décision par l’évaluation de la situation.",
+        "La MJIE n’est pas une mesure de sûreté.",
+        "Non. Les modules sont insertion, réparation, santé et placement."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MJIE",
+        "LEGIFRANCE_CJPM_MEJ"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 3,
+      "titre": "La MEJP : provisoire mais précise",
+      "notions_introduites": [
+        "Avant le prononcé de la sanction, à différents stades de la procédure selon le cadre légal.",
+        "Les quatre modules : insertion, réparation, santé et placement.",
+        "Celles numérotées 5 à 7 bis de l’article L112-2.",
+        "Non. La MEJP ne reprend pas ces deux obligations.",
+        "Une obligation de présentation périodique auprès des services ou autorités désignés, pour une durée maximale de six mois.",
+        "Un placement auprès de l’aide sociale à l’enfance jusqu’à la majorité dans le cadre prévu.",
+        "Oui, elle peut être modifiée ou levée à tout moment dans le cadre légal.",
+        "Elle est exécutoire par provision et susceptible d’appel.",
+        "Oui dans le cadre prévu, mais elle ne peut se poursuivre au-delà de vingt-et-un ans."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJP"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 4,
+      "titre": "La MEJ : sanction éducative individualisée",
+      "notions_introduites": [
+        "Sur un accompagnement individualisé fondé sur l’évaluation de la situation personnelle, familiale, sanitaire et sociale du mineur.",
+        "Comme sanction, à l’audience de sanction ou lors d’une audience unique lorsque la sanction est décidée.",
+        "Insertion, réparation, santé et placement.",
+        "Les interdictions et obligations numérotées 5 à 9 de l’article L112-2.",
+        "Oui, ils peuvent être prononcés alternativement ou cumulativement dans les limites légales.",
+        "Aux mineurs de plus de dix ans.",
+        "Cinq ans.",
+        "Vingt-et-un ans.",
+        "Parce que la MEJP partage le socle éducatif mais son contenu est juridiquement plus restreint, notamment sans les obligations 8 et 9."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_MEJP"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 5,
+      "titre": "Les interdictions et obligations de la MEJ",
+      "notions_introduites": [
+        "Une interdiction de paraître, pendant au maximum un an, dans certains lieux de commission désignés, hors résidence habituelle.",
+        "Une interdiction de contact avec la victime, les coauteurs ou les complices pendant au maximum un an.",
+        "Une interdiction d’aller et venir sur la voie publique sans représentant légal pendant les horaires fixés, pour une durée maximale de six mois, avec les exceptions prévues.",
+        "L’interdiction d’utiliser certains comptes d’accès à une plateforme en ligne utilisés pour commettre l’infraction, pour une durée maximale de six mois dans le champ légal.",
+        "L’obligation de remettre l’objet détenu ou appartenant au mineur qui a servi à l’infraction ou qui en est le produit.",
+        "L’obligation de suivre un stage de formation civique d’une durée maximale d’un mois.",
+        "Un volet relatif au harcèlement scolaire dans le cadre prévu.",
+        "Les interdictions 5, 6, 7 et 7 bis, mais pas les obligations 8 et 9.",
+        "Ils concernent les mineurs de plus de dix ans."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_MEJP"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 6,
+      "titre": "Le module insertion",
+      "notions_introduites": [
+        "Orienter le mineur vers une prise en charge adaptée visant son insertion sociale, scolaire ou professionnelle.",
+        "Le module insertion peut être principalement scolaire.",
+        "Le module insertion peut viser l’insertion sociale.",
+        "Le module insertion peut viser l’insertion professionnelle.",
+        "Un accueil de jour.",
+        "Un placement dans un internat scolaire.",
+        "Une institution ou un établissement public ou privé d’enseignement ou de formation professionnelle habilité.",
+        "Oui, le CJPM prévoit un régime propre de durée.",
+        "Le consentement de l’intéressé est requis dans le cadre prévu par les textes."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 7,
+      "titre": "Le module réparation",
+      "notions_introduites": [
+        "Une activité d’aide ou de réparation envers la victime ou dans l’intérêt de la collectivité, ou une médiation.",
+        "Oui, avec son accord lorsque celui-ci est requis.",
+        "La réparation peut être réalisée dans l’intérêt de la collectivité.",
+        "Le module réparation peut prendre la forme d’une médiation.",
+        "Pour une réparation directement à son égard ou une médiation dans les cas prévus.",
+        "Un an.",
+        "Les observations du mineur et, dans la mesure du possible, de ses représentants légaux.",
+        "Un rapport écrit rendant compte de son déroulement.",
+        "Non : ce sont trois mécanismes juridiquement distincts."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_MEJ_EXEC"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 8,
+      "titre": "Le module santé",
+      "notions_introduites": [
+        "Une prise en charge sanitaire adaptée aux besoins du mineur.",
+        "Le module santé peut orienter le mineur vers des soins adaptés.",
+        "Oui, dans le cadre prévu.",
+        "Les services de psychiatrie sont exclus de cette modalité prévue par le module.",
+        "Un établissement médico-social peut être prévu dans le cadre du module santé.",
+        "Sur un besoin de santé identifié et une prise en charge adaptée à la situation.",
+        "Oui, selon la modalité concernée.",
+        "Une orientation de la CDAPH dans les cas prévus.",
+        "Non. Le module organise une prise en charge ; l’expertise répond à une autre fonction d’évaluation."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_MEJ_EXEC"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 9,
+      "titre": "Le module placement",
+      "notions_introduites": [
+        "Accueillir le mineur hors de son milieu de vie habituel dans l’une des modalités légalement prévues.",
+        "Un membre de la famille dans le cadre prévu.",
+        "Un placement auprès d’une personne digne de confiance est possible dans le cadre légal.",
+        "Oui, lorsqu’il relève des catégories autorisées.",
+        "Oui, dans le cadre légal et sous réserve des exclusions prévues.",
+        "Le lieu et la durée du placement.",
+        "Les modalités de relations avec la famille, notamment selon les droits prévus.",
+        "L’audition, l’urgence, le renouvellement, la durée et les effets de la majorité selon les cas.",
+        "Non. Le placement est éducatif ; la DP est une mesure de sûreté privative de liberté."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_MEJ_EXEC",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 10,
+      "titre": "Le contrôle judiciaire",
+      "notions_introduites": [
+        "Une mesure de sûreté dans laquelle le mineur reste libre mais soumis à des obligations et interdictions.",
+        "Treize ans.",
+        "Elle est motivée et notifiée au mineur avec les avertissements prévus par la loi.",
+        "Oui, s’il encourt une peine criminelle.",
+        "Un délit puni d’au moins sept ans d’emprisonnement.",
+        "Lorsqu’existe l’antécédent procédural prévu par le texte et un rapport datant de moins d’un an.",
+        "Notamment terrorisme, violences volontaires, agression sexuelle ou délit aggravé par des violences dans le cadre de l’article L331-1.",
+        "En matière criminelle et, en correctionnel, lorsque les conditions du code de procédure pénale relatives à l’emprisonnement encouru sont réunies.",
+        "JE, TPE, JI ou JLD dans leur champ de compétence."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_CJ"
+      ]
+    },
+    {
+      "theme": "information_judiciaire",
+      "etape": 11,
+      "titre": "ARSE et détention provisoire",
+      "notions_introduites": [
+        "À partir de seize ans si le mineur encourt une peine d’emprisonnement d’au moins trois ans.",
+        "Une peine encourue d’au moins cinq ans pour une infraction à caractère terroriste.",
+        "Une infraction commise en bande organisée punie d’au moins dix ans d’emprisonnement.",
+        "JE, TPE, JI ou JLD lorsqu’ils sont compétents.",
+        "Un avis de la PJJ, ou du SPIP si l’intéressé est majeur au jour de la décision dans le cadre prévu.",
+        "Leur accord écrit préalable doit être recueilli.",
+        "Moins de treize ans.",
+        "Elle doit être indispensable, constituer l’unique moyen d’atteindre les objectifs légaux et CJ/ARSE doivent être insuffisants.",
+        "Une MEJP doit être prononcée."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_ARSE",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 1,
+      "titre": "Les règles générales de sanction",
+      "notions_introduites": [
+        "Après déclaration de culpabilité, au stade où la sanction est jugée.",
+        "Oui, le CJPM privilégie la réponse éducative tout en permettant des peines lorsque les circonstances et la personnalité l’exigent.",
+        "Aucune peine ne peut être prononcée pour des faits commis avant treize ans.",
+        "Une sanction éducative prévue par le CJPM.",
+        "Oui, c’est une sanction éducative individualisée.",
+        "Non. Le cumul avec la MEJ est encadré, notamment lorsque celle-ci ne comporte que le module réparation dans le cas prévu.",
+        "JE, TPE, CAM et, dans son champ contraventionnel, tribunal de police selon les règles applicables.",
+        "La DP est une mesure de sûreté provisoire avant jugement définitif de la peine ; l’emprisonnement est une peine.",
+        "Son âge, les circonstances, sa personnalité et sa situation dans le cadre des règles du CJPM."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 2,
+      "titre": "Ce que peut prononcer le juge des enfants",
+      "notions_introduites": [
+        "Le JE peut prononcer un avertissement judiciaire.",
+        "Le JE peut prononcer une MEJ comme sanction.",
+        "Oui, dans le cadre légal, sur réquisitions du procureur et sous les conditions prévues.",
+        "Oui, dans les conditions prévues et sur réquisitions du procureur.",
+        "Oui, si ses conditions d’âge sont réunies et dans le cadre légal.",
+        "Au moins seize ans au moment du prononcé et au moins treize ans au moment des faits.",
+        "Non, sa compétence de sanction est plus limitée.",
+        "Une peine d’emprisonnement.",
+        "Des réquisitions du procureur dans les cas prévus."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_TIG"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 3,
+      "titre": "Ce que peut prononcer le tribunal pour enfants",
+      "notions_introduites": [
+        "Le TPE peut prononcer un avertissement judiciaire.",
+        "Le TPE peut prononcer une MEJ.",
+        "Oui, dans les limites applicables aux mineurs.",
+        "Le TPE peut prononcer TIG, stage et confiscation lorsque leurs conditions sont remplies.",
+        "Oui, lorsque les textes le permettent.",
+        "Oui, dans les conditions applicables.",
+        "Le TPE peut prononcer un SSJ ou une sanction-réparation lorsque les textes le permettent.",
+        "Oui, sous les règles d’âge, d’atténuation et de motivation applicables.",
+        "Le TPE ne peut pas prononcer de peine pour des faits commis avant treize ans."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_MEJ"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 4,
+      "titre": "La cour d’assises des mineurs",
+      "notions_introduites": [
+        "Les crimes commis à partir de seize ans aux faits après information judiciaire et mise en accusation.",
+        "La CAM statue sur la culpabilité.",
+        "Oui, le cas échéant.",
+        "Oui, dans le cadre du CJPM.",
+        "Oui, lorsque leurs conditions sont réunies.",
+        "Oui, notamment réclusion ou détention criminelle selon la qualification et les règles du CJPM.",
+        "L’atténuation de responsabilité s’applique en principe, sous les exceptions légales pour certains mineurs de plus de seize ans.",
+        "La CAM ne conduit pas l’information judiciaire.",
+        "Non. Ces dispositions concernent le jugement devant le JE/TPE ; la procédure de la CAM relève de règles distinctes."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_INSTRUCTION",
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_JUGEMENT"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 5,
+      "titre": "Le tribunal de police",
+      "notions_introduites": [
+        "Les contraventions relevant de sa compétence.",
+        "Oui, selon les règles applicables.",
+        "Treize ans, sous les règles applicables.",
+        "Oui, dans le cadre prévu.",
+        "Oui, avec les règles d’atténuation applicables aux mineurs.",
+        "Oui, celles légalement applicables dans son champ contraventionnel.",
+        "Le tribunal de police ne dispose pas de la palette de sanctions du TPE.",
+        "Le tribunal de police ne peut pas prononcer une réclusion criminelle.",
+        "Celles des quatre premières classes dans la règle d’orientation étudiée."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_INSTRUCTION"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 6,
+      "titre": "Confiscation, stage et TIG",
+      "notions_introduites": [
+        "Une peine.",
+        "L’objet ayant servi à commettre l’infraction, dans le cadre légal.",
+        "La peine de stage est une peine.",
+        "Il doit être adapté à l’âge et respecter les conditions prévues par le code pénal et le CJPM.",
+        "Au moins seize ans.",
+        "Au moins treize ans.",
+        "Adapté au mineur.",
+        "Un caractère formateur ou de nature à favoriser l’insertion sociale du jeune condamné.",
+        "JE, TPE ou CAM, selon les conditions propres à chacune."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_TIG"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 7,
+      "titre": "Amende et peines inapplicables aux mineurs",
+      "notions_introduites": [
+        "L’atténuation conduit en principe à un maximum réduit par rapport à l’amende encourue par un majeur, avec le plafond spécifique prévu.",
+        "Non, aucune peine n’est prononcée pour des faits commis avant treize ans.",
+        "Non, elle est expressément inapplicable.",
+        "Non, le CJPM les rend expressément inapplicables aux mineurs.",
+        "Non, elles font partie des peines inapplicables aux mineurs.",
+        "Non, dans la liste des peines expressément écartées par le CJPM.",
+        "Non, elles figurent parmi les peines inapplicables.",
+        "L’affichage ou la diffusion de la condamnation est inapplicable au mineur.",
+        "Vérifier qu’elle n’appartient pas aux peines rendues inapplicables par le CJPM et contrôler les conditions d’âge."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 8,
+      "titre": "Emprisonnement, réclusion et atténuation",
+      "notions_introduites": [
+        "Le juge des enfants statuant en chambre du conseil.",
+        "Le tribunal pour enfants.",
+        "La cour d’assises des mineurs.",
+        "En principe, la peine ne peut dépasser la moitié du maximum encouru par un majeur.",
+        "Vingt ans.",
+        "Oui, exceptionnellement, dans les conditions légales et avec la motivation requise.",
+        "Le raisonnement sur la compétence criminelle et les règles de minorité part de l’âge aux faits.",
+        "Non : sûreté provisoire pour la première, peine pour la seconde.",
+        "Non : âge, atténuation, compétence et motivation doivent être vérifiés."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 9,
+      "titre": "DDSE, sursis probatoire, SSJ et sanction-réparation",
+      "notions_introduites": [
+        "La DDSE est liée à une peine ou à son aménagement ; l’ARSE est une mesure de sûreté provisoire avant ou pendant le jugement.",
+        "TPE ou CAM lorsque les textes le permettent, puis le juge compétent peut intervenir dans l’exécution ou l’aménagement.",
+        "Une modalité de peine assortie d’obligations et d’un suivi de probation.",
+        "Le respect des obligations imposées et l’évolution de l’exécution.",
+        "Une peine ou mesure de suivi pouvant être prononcée lorsqu’elle est légalement encourue pour l’infraction concernée.",
+        "Non, seulement lorsque le code pénal le prévoit pour l’infraction concernée.",
+        "Une peine distincte du module réparation de la MEJ.",
+        "Module réparation de la MEJ, sanction-réparation pénale et action civile de la victime.",
+        "Le TPE et la CAM dans leur champ de compétence."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_ARSE",
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_APPLICATION",
+        "LEGIFRANCE_CJPM_MEJ"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 10,
+      "titre": "JE-JAP et JAP après condamnation",
+      "notions_introduites": [
+        "Après qu’une peine a été prononcée.",
+        "Le juge de l’application des peines ne rejuge pas la culpabilité.",
+        "Le juge des enfants dans les limites prévues par le CJPM.",
+        "Jusqu’à vingt-et-un ans, sous les règles de compétence et de dessaisissement.",
+        "À partir de dix-huit ans.",
+        "La personnalité de l’intéressé et la durée de la peine dans le cadre légal.",
+        "Le JAP, sauf décision spéciale de maintien du JE.",
+        "Sursis probatoire, TIG, SSJ, obligations, incidents et adaptations selon la compétence.",
+        "Les incidents, adaptations et décisions d’exécution ou d’aménagement que les textes lui attribuent."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_APPLICATION"
+      ]
+    },
+    {
+      "theme": "jugement_educatif_ordinaire",
+      "etape": 11,
+      "titre": "TPE-TAP et aménagements de peine",
+      "notions_introduites": [
+        "Le tribunal pour enfants.",
+        "Le JAP est un juge seul ; le TAP est une formation collégiale pour les décisions que le droit commun lui attribue.",
+        "Oui, dans les conditions prévues.",
+        "La semi-liberté est un aménagement de peine.",
+        "Oui, selon le cadre pénal applicable.",
+        "Oui, lorsque les conditions légales sont réunies.",
+        "La libération conditionnelle relève de l’application des peines.",
+        "Oui, selon les règles de compétence applicables.",
+        "La peine en cours, l’âge actuel, un éventuel dessaisissement et si le texte attribue la décision au juge seul ou à la formation collégiale."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_APPLICATION"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 1,
+      "titre": "Le principe : la justice décide, la PJJ met en œuvre",
+      "notions_introduites": [
+        "Une décision ou un mandat de l’autorité judiciaire dans le cadre de ses compétences.",
+        "Non. Elle met en œuvre ou contribue à l’exécution des décisions confiées ; elle ne se substitue pas à la juridiction.",
+        "La nature exacte de la mesure ou de la peine, son contenu, sa durée, ses obligations et l’autorité qui l’a prononcée.",
+        "La juridiction désigne le service compétent dans la décision ou selon les règles d’exécution.",
+        "Par un accompagnement individualisé construit à partir de la situation, des besoins, des obligations et des objectifs de la mesure.",
+        "Articuler les interventions utiles autour du jeune tout en gardant la cohérence avec la décision judiciaire et les rôles de chacun.",
+        "Oui. Les observations et évaluations permettent d’ajuster les propositions dans le cadre judiciaire.",
+        "Pour rendre compte de l’exécution, de l’évolution du mineur et fournir les éléments utiles aux décisions qui relèvent du magistrat.",
+        "La PJJ observe, accompagne, met en œuvre et formule des éléments ou propositions ; l’autorité judiciaire décide ce qui relève de sa compétence."
+      ],
+      "sources": [
+        "JUSTICE_DPJJ",
+        "LEGIFRANCE_CJPM",
+        "LEGIFRANCE_CJPM_MEJ_EXEC",
+        "LEGIFRANCE_CJPM_MEJ"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 2,
+      "titre": "Mettre en œuvre une MJIE",
+      "notions_introduites": [
+        "Elle réalise l’évaluation approfondie et interdisciplinaire de la personnalité et de la situation du mineur dans le cadre de la mission confiée.",
+        "Les dimensions personnelles, familiales, sociales, éducatives et, si nécessaire, médicales pertinentes pour comprendre la situation.",
+        "Parce qu’elle croise plusieurs regards professionnels pour construire une compréhension approfondie de la situation.",
+        "Recueillir, vérifier et croiser les informations utiles avant de les analyser.",
+        "À donner du sens aux éléments recueillis et à comprendre les besoins, ressources, difficultés et dynamiques de la situation.",
+        "Oui, pour éclairer l’autorité judiciaire, sans se substituer à sa décision.",
+        "Restituer de manière structurée l’évaluation et les éléments utiles à la décision judiciaire.",
+        "Oui, lorsqu’une autorité habilitée l’ordonne.",
+        "Non. La MJIE est une investigation destinée à éclairer la décision."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MJIE"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 3,
+      "titre": "Mettre en œuvre une MEJP",
+      "notions_introduites": [
+        "Un service éducatif de milieu ouvert de la PJJ, conformément aux règles réglementaires.",
+        "Les modules, interdictions et éventuelles obligations spécifiques effectivement prononcés, ainsi que la durée et les échéances.",
+        "Aider le mineur et ses représentants légaux à comprendre le cadre, ses objectifs et les comportements attendus, puis suivre son respect.",
+        "La cohérence et la coordination de leur mise en œuvre autour du projet éducatif du mineur.",
+        "Un rapport sur l’exécution de la mesure et l’évolution du mineur au moins quinze jours avant l’échéance, selon les dispositions réglementaires.",
+        "Un rapport actualisé utile à l’audience.",
+        "Elle rend compte et peut formuler une proposition à l’autorité judiciaire, qui décide.",
+        "Parce qu’elle intervient avant la sanction et peut être modifiée ou levée ; son contenu et sa durée doivent rester ceux décidés juridiquement.",
+        "La mesure provisoire prend fin, sauf articulation expressément prévue par le cadre légal et la nouvelle décision."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJP_EXEC",
+        "LEGIFRANCE_CJPM_MEJP",
+        "LEGIFRANCE_CJPM_MISE_EPREUVE"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 4,
+      "titre": "Mettre en œuvre une MEJ",
+      "notions_introduites": [
+        "Un service éducatif de milieu ouvert de la PJJ.",
+        "Un accompagnement éducatif individualisé construit à partir de l’évaluation de la situation du mineur.",
+        "Le service chargé de la MEJ coordonne la mesure pour maintenir une prise en charge cohérente.",
+        "Tous les six mois, et au moins quinze jours avant l’échéance de la mesure.",
+        "Un rapport sur la situation et l’exécution de la mesure.",
+        "Il accompagne le mineur et ses représentants légaux dans leur compréhension et leur respect.",
+        "Oui, les modalités éducatives peuvent être adaptées aux besoins et à l’évolution, dans les limites de la décision judiciaire.",
+        "Le service peut adresser au JE un rapport proposant une mainlevée ; le juge décide.",
+        "Maintenir la continuité et la cohérence du parcours éducatif malgré la pluralité des modules ou intervenants."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ_EXEC",
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_PARTAGE_CONTINUITE"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 5,
+      "titre": "Mettre en œuvre le module insertion",
+      "notions_introduites": [
+        "Repérer les besoins, acquis, obstacles et ressources du jeune sur les plans scolaire, social et professionnel.",
+        "Une solution adaptée aux besoins et au projet du jeune dans le cadre de la décision.",
+        "Comme l’une des voies d’insertion lorsque le besoin est scolaire ou de remobilisation.",
+        "Comme une voie possible d’acquisition de compétences et d’insertion professionnelle.",
+        "Un service ou établissement de la PJJ ou une structure habilitée désignée par la décision.",
+        "Coordonner avec les acteurs utiles, suivre l’engagement et réévaluer les obstacles et progrès.",
+        "Remobilisation, autonomie, compétences sociales, scolarité, formation et insertion sociale ou professionnelle.",
+        "Le consentement de l’intéressé lorsque le texte le prévoit.",
+        "Les démarches réalisées, l’engagement, les difficultés, les progrès et les besoins d’ajustement utiles à l’évaluation de la mesure."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_MEJ_EXEC",
+        "LEGIFRANCE_CJPM_PARTAGE_CONTINUITE"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 6,
+      "titre": "Mettre en œuvre le module réparation",
+      "notions_introduites": [
+        "Travailler la compréhension des conséquences de l’acte, la responsabilisation et une démarche concrète de réparation adaptée.",
+        "L’accord de la victime dans les cas où le texte le requiert.",
+        "Par une activité d’aide ou de réparation dans l’intérêt de la collectivité.",
+        "Le service PJJ désigné ou une structure du secteur associatif habilité autorisée pour cette mission.",
+        "L’articulation, la coordination et les échanges d’informations utiles dans le cadre prévu.",
+        "Elle en informe le service PJJ chargé de la MEJ afin que l’autorité judiciaire puisse être utilement éclairée.",
+        "Au moins quinze jours avant l’échéance de l’activité ou de la médiation dans le cadre réglementaire.",
+        "Un an maximum pour le module réparation.",
+        "Non. Le module éducatif de réparation est distinct de l’indemnisation civile décidée par la juridiction."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_MEJ_EXEC",
+        "LEGIFRANCE_CJPM_JUGEMENT"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 7,
+      "titre": "Mettre en œuvre le module santé",
+      "notions_introduites": [
+        "Un besoin de santé identifié chez le mineur.",
+        "Elle accompagne le jeune dans l’accès et l’adhésion à la prise en charge décidée, en articulation avec les professionnels de santé et dans le respect de leurs compétences.",
+        "Les informations et rapports sont transmis dans le respect du secret médical et des règles de confidentialité.",
+        "Un rapport sur le déroulement du placement au JE, avec copie au service PJJ chargé de la MEJ, dans le respect du secret médical.",
+        "Coordonner le parcours éducatif autour de la mesure sans se substituer au diagnostic ni au soin médical.",
+        "Parce que l’accompagnement vise à rendre compréhensible le cadre, soutenir l’accès au soin et favoriser une implication adaptée.",
+        "Non, il s’inscrit dans un accompagnement global et peut s’articuler avec d’autres besoins éducatifs.",
+        "Les services de psychiatrie sont exclus de cette modalité du module santé.",
+        "Une orientation de la CDAPH dans les cas prévus."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ_EXEC",
+        "LEGIFRANCE_CJPM_MEJ"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 8,
+      "titre": "Mettre en œuvre le module placement",
+      "notions_introduites": [
+        "Dans des établissements de placement de la PJJ ou du secteur associatif habilité, selon la décision et le cadre légal.",
+        "Le service PJJ chargé de la MEJ, en lien avec l’établissement de placement désigné.",
+        "Informer sans délai le JE et le service PJJ chargé de la MEJ.",
+        "Un rapport intermédiaire sur le déroulement du placement dans le cadre prévu.",
+        "Au moins quinze jours avant l’échéance du placement.",
+        "Le service PJJ chargé de la MEJ.",
+        "La mise en œuvre du placement respecte les modalités de relations familiales fixées par la décision.",
+        "Pour assurer la continuité éducative et anticiper les conditions de retour, d’orientation ou de poursuite du parcours.",
+        "Non : le placement relève d’une mesure éducative, même lorsqu’il comporte un cadre contenant ; la DP relève de la sûreté et de l’incarcération."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_MEJ_EXEC",
+        "LEGIFRANCE_CJPM_MEJ",
+        "LEGIFRANCE_CJPM_PARTAGE_CONTINUITE",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 9,
+      "titre": "La PJJ avec le contrôle judiciaire et l’ARSE",
+      "notions_introduites": [
+        "L’autorité judiciaire compétente ; la PJJ n’en décide pas elle-même le prononcé.",
+        "L’aider à comprendre précisément les obligations et interdictions, leurs objectifs et les conséquences d’un non-respect.",
+        "Le respect du cadre, l’évolution de la situation, les difficultés concrètes et les besoins éducatifs utiles à l’autorité judiciaire.",
+        "Donner un avis éducatif sur la situation et les conditions de faisabilité dans le cadre prévu.",
+        "Une proposition éducative et les éléments utiles à la mise en œuvre et à la faisabilité de la mesure.",
+        "La faisabilité concrète de la mesure et les conditions du lieu dans le cadre de l’évaluation.",
+        "Oui, dans les conditions prévues et avec une décision de placement compatible ; le CEF est exclu du dispositif spécifique mentionné par les textes réglementaires.",
+        "Elle transmet les éléments utiles selon le cadre applicable ; la décision de modifier, révoquer ou aggraver appartient à l’autorité judiciaire.",
+        "Non. Elle rend compte de la situation ; chaque mesure suppose une nouvelle appréciation et une décision judiciaire fondée sur ses conditions propres."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_CJ",
+        "LEGIFRANCE_CJPM_ARSE",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 10,
+      "titre": "La PJJ auprès des mineurs détenus",
+      "notions_introduites": [
+        "Oui, les services PJJ assurent une intervention éducative continue en détention.",
+        "L’administration pénitentiaire.",
+        "Individualiser la période de détention du mineur.",
+        "Une prise en charge éducative individualisée du mineur détenu.",
+        "Pour éviter la rupture du parcours et préparer les étapes de détention, de sortie et de réinsertion.",
+        "Non. La détention provisoire est une mesure de sûreté et peut précéder le jugement de la sanction.",
+        "Une MEJP doit être prononcée.",
+        "Les conditions éducatives, familiales, scolaires, sanitaires et d’insertion permettant une continuité de prise en charge.",
+        "Non. Les deux administrations travaillent conjointement avec des responsabilités distinctes."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_DETENTION_PJJ",
+        "LEGIFRANCE_CJPM_DP"
+      ]
+    },
+    {
+      "theme": "matiere_criminelle_peines",
+      "etape": 11,
+      "titre": "TIG, sursis probatoire et application des peines avec la PJJ",
+      "notions_introduites": [
+        "Un service éducatif de milieu ouvert de la PJJ désigné.",
+        "Il propose au JE un poste adapté à la personnalité et à la situation du mineur.",
+        "Son caractère adapté, formateur ou favorable à l’insertion sociale du jeune condamné.",
+        "La bonne exécution de la peine et le respect des obligations imposées au condamné.",
+        "Le service mandaté adresse un rapport au procureur de la République et au juge des enfants.",
+        "Assurer l’accompagnement éducatif du condamné, lui apporter aide et soutien et veiller au respect des obligations confiées.",
+        "Un rapport relatif au projet d’exécution de la peine dans un délai de trois mois.",
+        "Des rapports d’évaluation selon les échéances fixées par la juridiction et à l’issue du suivi.",
+        "Un accompagnement éducatif global, mobilisant les ressources PJJ et du SAH et recherchant la continuité de l’action éducative déjà engagée."
+      ],
+      "sources": [
+        "LEGIFRANCE_CJPM_TIG",
+        "LEGIFRANCE_CJPM_APPLICATION"
+      ]
+    }
+  ],
+  "empreinteP1": "f27f4417c35aea95ee1b21e24278d1f78ec9f5ac59b16eda203de88c452b3fc3"
+}

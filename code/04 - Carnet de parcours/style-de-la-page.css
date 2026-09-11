@@ -1,0 +1,48 @@
+/* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=40 === */
+/* Finitions du Carnet : cartes à hauteur de contenu et en-tête lisible. */
+#carnet .carnet-journal .carnet-parcours-details {
+    align-items: start;
+}
+
+#carnet .carnet-journal .carnet-souvenirs,
+#carnet .carnet-journal .carnet-defis {
+    align-self: start;
+}
+
+#carnet .carnet-souvenirs:has(.carnet-vide) #souvenirsParcours {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+    scrollbar-gutter: auto;
+}
+
+#carnet .carnet-souvenirs:has(.carnet-vide) .carnet-vide {
+    max-width: 62ch;
+    margin: 0;
+    padding: 11px 13px;
+    border-radius: var(--rayon-moyen);
+    color: var(--texte-secondaire);
+    background: rgba(8,56,108,.32);
+}
+
+@media (max-width:620px) {
+    #carnet .carnet-journal-entete {
+        display: grid;
+        grid-template-columns: minmax(0,1fr);
+        justify-items: start;
+        gap: 12px;
+    }
+
+    #carnet .carnet-journal-entete > div {
+        min-width: 0;
+    }
+
+    #carnet .carnet-journal .carnet-parcours-titre {
+        grid-column: 1;
+        grid-row: auto;
+        justify-self: start;
+        max-width: 100%;
+        white-space: normal;
+    }
+}
+/* === FIN MORCEAU CSS === */

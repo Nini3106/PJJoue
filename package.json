@@ -2,19 +2,37 @@
   "name": "pjjoue-v1",
   "version": "1.0.0",
   "private": true,
-  "description": "Contrôles techniques et recette de PJJoue V1",
+  "description": "PJJoue V1 — 6 parcours intégrés, 960 questions, 66 étapes et 6 évaluations finales",
   "scripts": {
-    "test": "npm run controle:javascript && npm run controle:css && npm run test:unitaire && python tests/verifier_v1.py && python tests/verifier_interface.py",
+    "dev": "node outils/serveur-previsualisation.js",
+    "test": "npm run controle:javascript && npm run controle:css && npm run test:unitaire && npm run controle:accessibilite && npm run controle:sources && python tests/verifier_pjjoue.py && npm run controle:navigation-libre && npm run controle:couleurs-icones && npm run controle:identite-v1 && npm run test:visuel && npm run test:pages-annexes && npm run test:interface && npm run test:sigles",
     "controle:javascript": "eslint ressources/*.js",
     "controle:css": "npm run controle:css:doublons && npm run controle:css:structure",
     "controle:css:doublons": "node outils/controler_css.js doublons",
     "controle:css:structure": "node outils/controler_css.js structure",
     "test:unitaire": "python -m unittest discover -s tests -p test_*.py",
-    "test:structure": "python tests/verifier_v1.py",
+    "test:structure": "python tests/verifier_pjjoue.py",
     "test:interface": "python tests/verifier_interface.py",
+    "controle:accessibilite": "python outils/auditer_accessibilite_statique.py",
+    "controle:sources": "python outils/verifier_fraicheur_sources.py",
+    "controle:liens": "python outils/verifier_liens_officiels.py",
     "test:visuel": "python tests/verifier_regression_visuelle.py",
     "build:donnees": "python outils/construire_donnees.py",
-    "build:manifeste": "python outils/construire_manifeste.py"
+    "build:seo": "python outils/construire_seo.py",
+    "build:manifeste": "python outils/construire_manifeste.py",
+    "build:site": "python outils/construire_site.py",
+    "pretest": "npm run controle:noms-fichiers && npm run controle:donnees && npm run controle:construction && npm run controle:seo && npm run controle:manifeste",
+    "controle:donnees": "python outils/construire_donnees.py --verifier",
+    "controle:construction": "python outils/construire_site.py --verifier",
+    "controle:seo": "python outils/construire_seo.py --verifier",
+    "controle:navigation-libre": "python tests/verifier_navigation_libre.py",
+    "controle:couleurs-icones": "python tests/verifier_couleurs_icones.py",
+    "controle:identite-v1": "python tests/verifier_identite_v1.py",
+    "test:pages-annexes": "python tests/verifier_pages_annexes.py",
+    "test:sigles": "python tests/verifier_jeu_sigles.py",
+    "controle:noms-fichiers": "python outils/verifier_noms_fichiers.py",
+    "controle:manifeste": "python outils/construire_manifeste.py --verifier",
+    "archive:utf8": "python outils/creer_archive_utf8.py"
   },
   "keywords": [
     "PJJ",
@@ -29,17 +47,18 @@
     "typescript": "^5.9.2"
   },
   "engines": {
-    "node": ">=24.18 <25"
+    "node": "^20.19.0 || ^22.13.0 || >=24",
+    "npm": ">=10 <12"
   },
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": ">=24.18 <25",
+      "version": "^20.19.0 || ^22.13.0 || >=24",
       "onFail": "error"
     },
     "packageManager": {
       "name": "npm",
-      "version": ">=11.16 <12",
+      "version": ">=10 <12",
       "onFail": "error"
     }
   }

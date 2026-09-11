@@ -1,0 +1,212 @@
+# État de validation — PJJoue V1 moderne
+
+**Création : août 2026.**  
+**Consolidation éditoriale : 28 août 2026.**
+
+## Contenu pédagogique harmonisé
+
+- 6 parcours ;
+- 66 étapes d’apprentissage ;
+- 960 questions ;
+- 6 évaluations finales ;
+- 73 sources ;
+- formulations, réponses, aides, corrections et modes de jeu revus selon la charte de la banque ;
+- ordre des thèmes et identité permanente des questions conservés.
+
+Les six parcours peuvent être commencés indépendamment. Chaque question reste compréhensible seule, y compris en entraînement libre, et la progression se ressent par la nature des activités sans être annoncée artificiellement à l’utilisateur.
+
+Le parcours 1 suit sa propre progression, indépendamment des fiches de révision et du tableau maître. Dans les parcours 2 à 6, les questions s’appuient sur ces supports et ne conservent un détail supplémentaire que lorsqu’il possède une utilité d’apprentissage concrète, qu’il est introduit de manière accessible et qu’il est réutilisé à un endroit cohérent du parcours.
+
+## Architecture et identité visuelle
+
+L’interface suit une grammaire visuelle unique :
+
+- fond général et surfaces principales : bleus profonds ;
+- en-tête et repères de marque : `#0b315d` ;
+- texte principal sur ces surfaces : blanc cassé `#f7f8ff` ;
+- cadres principaux : bleu profond `#0b3d70` ; contenus intérieurs : bleu `#10477f` ;
+- le seul bouton jaune plein est **Commencer / Reprendre** sur l’accueil (`#ffc83d`) ; les autres boutons utilisent le jaune uniquement comme accent, contour, survol ou focus ;
+- six couleurs d’accent distinctes pour les six parcours.
+
+Ces couleurs et les règles communes sont définies dans `style-general-pjjoue.css` et `static-pages.css`. Les fragments propres aux pages, tous déclarés dans `code/plan-construction.json`, sont assemblés dans l’unique feuille publique `pjjoue-principal.css`.
+
+L’iconographie des 6 parcours a été redessinée en SVG au trait arrondi, avec un pictogramme propre à la logique de chaque itinéraire. Les 66 étapes, les évaluations et les modes d’entraînement utilisent le même langage graphique.
+
+## Navigation et pages
+
+- toutes les entrées principales sont réunies dans un menu unique ouvrable et repliable ;
+- l’ancien libellé **Plus** a été supprimé ;
+- **Carnet de voyage** est devenu **Carnet de parcours** dans le visuel et dans les sources ;
+- **S’entraîner librement** est masqué sur l’accueil d’un nouvel utilisateur et apparaît après enregistrement d’une progression ;
+- les Guides disposent de leur page dédiée ;
+- l’appel final de la page Guides est limité à **Passer à la pratique** / **Voir les parcours** ;
+- les badges **À découvrir** des 6 cartes de parcours sont contrôlés automatiquement pour conserver les mêmes dimensions.
+
+## Supports de révision
+
+La page **Réviser** comporte une section **Supports de révision** organisée par juridiction. Les fiches pratique et synthétique se suivent pour JE, TPE, JI, JLD, CAM et JAP ; les compléments JAP et le tableau transversal CJPM restent rangés dans leurs groupes respectifs. Les encadrements spécifiques à l’AA et le terme « imprimable » ont été retirés conformément à la consigne de contenu. Une erreur est désormais retirée de la révision dès sa prochaine réussite autonome.
+
+## Compatibilité locale
+
+Pour une utilisation locale dans les conditions normales d’un site web, lancer `npm run dev` depuis le dossier du projet puis ouvrir **http://localhost:4173/**.
+
+L’ouverture directe de `index.html` en `file:` est prise en charge :
+
+- le manifeste PWA n’est injecté qu’en HTTP/HTTPS ;
+- le service worker n’est pas enregistré en `file:` ;
+- Google Tag Manager reste désactivé en `file:` afin qu’aucun contenu web tiers ne tente d’interagir avec une URL locale ;
+- la navigation locale directe utilise `index.html?pjjoue_route=...` et ne génère aucun fragment `#` dans la barre d’adresse.
+
+## État des contrôles au 28 août 2026
+
+La consolidation éditoriale porte sur l’ensemble des 960 questions. Les contrôles automatiques ciblés de structure, de cohérence éditoriale et de conformité PJJoue disponibles pendant l’harmonisation ont été exécutés sur la banque reconstruite.
+
+Périmètre contrôlé :
+
+- construction : **61 fichiers publics exactement à jour** ;
+- SEO / URL propres : **15 pages indexables contrôlées**, sitemap à jour, routes internes propres avec relais `noindex,follow` ;
+- données : **960 questions, 73 sources** ;
+- structure PJJoue : **6 parcours · 66 étapes · 6 évaluations** ;
+- navigation libre : **0 référence inter-parcours visible** ;
+- iconographie : **66 étapes + 6 thèmes + modes d’entraînement** conformes ;
+- identité V1 : conforme ;
+- tests unitaires : **14 réussis** ;
+- accessibilité statique : **16 pages contrôlées** ;
+- recette visuelle : **44 scénarios réussis** ;
+- pages annexes : **19 scénarios réussis** ;
+- interface : **6 parcours, 66 étapes, 6 évaluations et 612 contrôles de réponses réussis**.
+
+La campagne automatisée complète `npm test` est réussie sur la version finale reconstruite le 28 août 2026.
+
+Les captures produites par les tests ne sont pas livrées. Les scripts Playwright, les lanceurs Windows et la documentation permettant à une personne ou une IA de les régénérer restent inclus dans l’archive.
+
+## Contrôle ciblé du parcours 2 — 29 août 2026
+
+Une relecture éditoriale et pédagogique complète du parcours 2 a été effectuée sur ses **160 questions**. Les identifiants 1001 à 1160, les étapes et les marqueurs Analytics ont été conservés. La passe a corrigé notamment l’ordre d’introduction de certaines notions, les formulations trop mécaniques, les sigles non développés, les distracteurs prématurés ou trop révélateurs et plusieurs répétitions.
+
+État après reconstruction :
+
+- audit éditorial P2 : **160/160 RAS automatique — relecture humaine** ;
+- questions d’apprentissage P2 dépassant 220 caractères : **0** ;
+- prérequis pédagogiques orphelins P2 : **0** ;
+- références inter-parcours visibles : **0** ;
+- structure globale : **6 parcours · 66 étapes · 960 questions · 6 évaluations** ;
+- tests unitaires : **14/14 réussis** ;
+- accessibilité statique : **16 pages contrôlées** ;
+- pages annexes : **19 scénarios PC/mobile réussis** ;
+- recette d’interface autonome : **580 contrôles de réponses réussis** ;
+- syntaxe JavaScript publique vérifiée par `node --check`.
+
+Le test d’ouverture directe `file://` de Playwright ne peut pas être exécuté dans l’environnement de contrôle utilisé ici (`ERR_BLOCKED_BY_ADMINISTRATOR`) ; les contrôles d’interface indépendants de cette ouverture ont été exécutés avec succès.
+
+## Outils de reprise à conserver
+
+- `INSTALLER_OUTILS_DE_DEVELOPPEMENT.bat` ;
+- `CAPTURER_PJJOUE.bat` ;
+- `VERIFIER_PJJOUE.bat` ;
+- `requirements-dev.txt` ;
+- `package.json` et `package-lock.json` ;
+- `tests/verifier_regression_visuelle.py` ;
+- `tests/verifier_pages_annexes.py` ;
+- `tests/verifier_interface.py` ;
+- `code/00 - LIRE EN PREMIER/CAPTURES_VISUELLES_ET_TESTS_NAVIGATEUR.md`.
+
+Le dossier `test-results/` est volontairement absent de la livraison : il est recréé automatiquement.
+
+## Version
+
+**PJJoue V1 — Version 1.0 · Août 2026.**
+
+## Relecture éditoriale globale — 29 août 2026
+
+- Les six parcours ont été relus dans leur ordre pédagogique réel.
+- Les 960 questions passent l’audit éditorial automatique sans anomalie résiduelle.
+- Les formulations numériques télégraphiques ont été naturalisées.
+- Les restitutions écrites de l’évaluation finale ont été remplacées par des modes structurés lorsqu’elles exposaient à une réponse trop opaque.
+- Les prérequis P2 à P6 sont vérifiés sans notion orpheline.
+- Le parcours 2 validé le 29 août 2026 a été conservé strictement inchangé pendant cette passe.
+
+## Mission Sigles — 29 août 2026
+
+Mission Sigles est intégré à la V1 à partir d’une source centrale unique de **72 sigles**. Le support de révision, le guide public et le mini-jeu sont reconstruits depuis `donnees/sigles.json`, ce qui garantit l’absence de doublons entre ces trois usages.
+
+Fonctionnalités contrôlées :
+
+- **6 étapes de 12 sigles**, repérées par les six couleurs des parcours PJJoue ;
+- chaîne pédagogique stricte : introduction du développement complet dans une activité → rappel du sigle dans une activité ultérieure ;
+- aucun écran préalable ne donne les réponses avant de jouer ;
+- entraînement libre **10 / 20 / 30 / Tous**, sur une étape ou tout le module, par étapes ou mélangé, avec ou sans chrono (15 / 20 / 25 / 30 s) et avec ou sans jokers ;
+- **Défi du hasard** utilisant le même dé animé que PJJoue, en vert du parcours 6, avec tirage de 1 à 6 questions puis lancement manuel ; jokers autorisés ;
+- **Réviser mes erreurs** sur une page Mission Sigles indépendante (`#sigles-revision`), visuellement et fonctionnellement alignée sur Réviser PJJoue, mais alimentée uniquement par les erreurs Sigles ;
+- progression et sauvegarde intégrées à la sauvegarde V1 ;
+- célébration d’étape par **confettis + son** après validation finale sans joker, même après une nouvelle tentative ;
+- évaluation finale de **30 activités**, sans joker ni passage, réussie à partir de **90 %**, avec célébration et fanfare ;
+- célébration spéciale du 100 % avec le message « 72 sigles. Même pas peur. ».
+
+Contrôles exécutés après reconstruction : **72/72 sigles uniques**, six étapes de douze, **72 questions d’introduction contextualisées et 216 distracteurs rédigés explicitement**, support et guide synchronisés sans doublon, **20 tests unitaires réussis**, accessibilité statique **16 pages**, structure V1 conforme, iconographie conforme, pages annexes **19 scénarios PC/mobile**, recette Chromium autonome Mission Sigles réussie et syntaxe JavaScript publique vérifiée par `node --check`.
+
+Les recettes qui naviguent directement vers `file://` ou `http://pjjoue.test/` restent bloquées par la politique de l’environnement de contrôle (`ERR_BLOCKED_BY_ADMINISTRATOR`). La recette autonome de Mission Sigles utilise la même page construite injectée dans Chromium et passe intégralement, y compris en largeur mobile 390 px.
+
+## Harmonisation responsive et navigation locale — 30 août 2026
+
+Corrections intégrées à la V1 sans modification des 960 questions :
+
+- repère de question simplifié sur une ligne : **« Parcours X : Étape X »** ;
+- commandes mobiles de question stabilisées : **Précédente / Valider / Passer ou Suivante** sur une ligne et **Jokers** centré dessous, avec géométrie indépendante de la taille de texte choisie ;
+- taille de texte initiale **Normale (1)** pour un nouvel utilisateur, avec conservation d’une préférence explicitement enregistrée ;
+- boutons **Commencer** d’Entraînement libre placés directement sous **Options avancées**, alignés sur le début du bloc ;
+- prévisualisation `file://` sans appel à `pushState`/`replaceState`, afin d’éviter l’avertissement Chromium lié aux origines uniques des fichiers locaux ; aucune navigation interne ne génère de fragment `#`.
+
+Contrôles après reconstruction : **56 tests unitaires réussis**, structure V1 **6 parcours · 66 étapes · 960 questions · 6 évaluations**, navigation libre conforme, accessibilité statique **33 pages**, **67 sources** à jour, CSS sans déclaration répétée, et scénarios Chromium ciblés Question / Entraînement / Paramètres réussis sur bureau et mobile. L’ouverture directe `file://` reste bloquée par la politique de l’environnement de contrôle (`ERR_BLOCKED_BY_ADMINISTRATOR`), mais la branche locale est couverte par des tests statiques et l’interface Chromium injectée.
+
+## Harmonisation des modes et progression juridique — 31 août 2026
+
+La charte impose que **chaque étape d’apprentissage comporte au moins une question dans chacun des sept modes canoniques** : choix unique, sélection multiple, association, éliminer, réponse écrite, remettre dans l’ordre et classer.
+
+État après harmonisation :
+
+- **66 étapes sur 66 conformes** aux sept modes ;
+- **199 changements de mode**, sans ajout ni suppression de question, soit le minimum correspondant aux modes réellement manquants avant harmonisation ;
+- **960/960 questions RAS automatique — relecture humaine** après la passe éditoriale ;
+- **0 énoncé au-delà de 220 caractères** ;
+- distracteurs des questions retouchées relus pour leur plausibilité, leur équilibre et leur cohérence avec le thème et le stade ;
+- associations vérifiées comme relations univoques, sans conversion artificielle d’un classement en association ;
+- titres de parcours et d’étapes juridiques ajustés lorsque nécessaire selon la chaîne : **avant jugement → culpabilité → MEE éventuelle → sanction → après sanction / exécution** ;
+- information judiciaire maintenue explicitement dans l’avant-jugement ; audience unique identifiée comme branche réunissant culpabilité et sanction.
+
+Cette règle est maintenant **bloquante dans la validation des données et les tests unitaires** : une étape à laquelle manque un mode ne peut plus être considérée comme conforme.
+
+## Gel après relecture humaine finale — 31 août 2026
+
+La banque a subi une dernière relecture humaine avant gel de la V1. Le parcours 1 a été conservé au maximum ; les parcours 2 à 6 et les questions transformées lors de l’harmonisation des modes ont été contrôlés plus sévèrement.
+
+État final :
+
+- **960 questions**, toutes vérifiées au 31 août 2026 ;
+- **66/66 étapes avec les sept modes canoniques** ;
+- **199 changements de mode**, sans ajout ni suppression de question ;
+- **960/960 RAS automatique — relecture humaine** ;
+- **0 énoncé au-delà de 220 caractères** ;
+- identifiants permanents conservés ;
+- **111/111 tests Python/pytest réussis** ;
+- recette d’interface Chromium : **552 contrôles de réponses réussis** ;
+- pages annexes : **19 scénarios réussis** ;
+- recette visuelle : **44/44 scénarios validés en lots ciblés** ;
+- Mission Sigles : recette dédiée réussie ;
+- syntaxe JavaScript publique vérifiée avec `node --check`.
+
+Le lancement monolithique de la recette visuelle dépasse le délai maximal de l’environnement mais les 44 scénarios ont été exécutés et validés séparément. ESLint n’a pas pu être relancé ici à cause d’une installation npm locale incomplète et d’un téléchargement réseau qui n’aboutit pas dans le délai ; aucun échec JavaScript fonctionnel ou syntaxique n’a été relevé par les autres contrôles.
+
+
+## Ultime vérification sémantique — 31 août 2026
+
+Une dernière passe ciblée a été menée à partir de `PJJoue_V1_FINAL_RELECTURE_HUMAINE_COMPLETE.zip`, utilisée comme source de vérité. Elle n’a pas réécrit les questions déjà validées et a corrigé uniquement les incohérences résiduelles réellement constatées dans l’évaluation finale du parcours 1 : adéquation entre l’énoncé et la réponse, développement de sigles, nombre de réponses annoncé, formulation des associations et cohérence d’un choix unique sur les modules de la MEJ.
+
+Après cette passe :
+
+- **960/960 questions : RAS automatique — relecture humaine** ;
+- **66/66 étapes avec les 7 modes canoniques** ;
+- **199 changements de mode exactement**, inchangés par rapport à la base antérieure à l’harmonisation ;
+- identifiants permanents conservés ;
+- champs de compatibilité des choix uniques et du mode Éliminer resynchronisés avec les réponses visibles ;
+- **111/111 tests Python/pytest réussis**.

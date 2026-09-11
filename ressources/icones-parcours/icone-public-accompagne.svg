@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" shape-rendering="geometricPrecision">
+
+  <defs>
+    <linearGradient id="etape02Gradient" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900">
+      <stop offset="0%" stop-color="#BCA1FF"/>
+      <stop offset="52%" stop-color="#A986FF"/>
+      <stop offset="100%" stop-color="#765EB2"/>
+    </linearGradient>
+  </defs>
+
+  <g id="linework" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+    <circle cx="512" cy="310" r="88"/>
+    <path d="M338 675 C350 545 420 470 512 470 C604 470 674 545 686 675"/>
+    <circle cx="272" cy="430" r="66"/>
+    <path d="M155 704 C166 615 207 558 272 558 C319 558 357 588 378 636"/>
+    <circle cx="752" cy="430" r="66"/>
+    <path d="M646 636 C667 588 705 558 752 558 C817 558 858 615 869 704"/>
+    <path d="M225 775 C303 835 403 858 512 858 C621 858 721 835 799 775"/>
+
+  </g>
+  <use xlink:href="#linework" fill="none" stroke="#765EB2" stroke-width="36.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <use xlink:href="#linework" fill="none" stroke="url(#etape02Gradient)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+
+</svg>

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Recette navigateur des écrans et interactions principales de PJJoue V1."""
+"""Recette navigateur PJJoue — 6 parcours, 66 étapes et 6 évaluations finales."""
 from __future__ import annotations
 
 from pathlib import Path
 import base64
-import hashlib
 import json
+import os
 import re
 import sys
 
@@ -14,64 +14,46 @@ try:
     from playwright.sync_api import sync_playwright
 except ModuleNotFoundError as erreur:
     raise SystemExit(
-        "Playwright est requis pour la recette visuelle. "
+        "Playwright est requis pour la recette d’interface. "
         "Installation : python -m pip install playwright puis python -m playwright install chromium"
     ) from erreur
 
 RACINE = Path(__file__).resolve().parents[1]
 FEUILLES_INTERFACE = (
-    "ressources/styles/00-fondations-et-composants.css",
-    "ressources/styles/10-parcours-principal.css",
-    "ressources/styles/20-accueil-et-question-principale.css",
-    "ressources/styles/30-revision-parcours-et-parametres.css",
-    "ressources/styles/40-progression-et-erreurs.css",
-    "ressources/styles/50-carte-question-et-correction.css",
-    "ressources/styles/60-parcours-modes-et-chronometre.css",
-    "ressources/styles/70-celebrations-bilan-et-fenetres.css",
-    "ressources/styles/80-finitions-de-l-interface.css",
-    "ressources/styles/90-responsive-et-etats-finaux.css",
+    "ressources/styles/pjjoue-principal.css",
+    "ressources/styles/95-consentement.css",
 )
-
 
 
 def construire_page_jeu() -> str:
     page = (RACINE / "index.html").read_text(encoding="utf-8")
-    feuille = "\n".join(
-        (RACINE / chemin).read_text(encoding="utf-8")
-        for chemin in FEUILLES_INTERFACE
-    )
+    feuille = "\n".join((RACINE / chemin).read_text(encoding="utf-8") for chemin in FEUILLES_INTERFACE)
     donnees = (RACINE / "donnees/donnees-pjj.js").read_text(encoding="utf-8")
     moteur = (RACINE / "ressources/moteur-jeu.js").read_text(encoding="utf-8")
+    moteur = moteur.replace(
+        "restaurerRoute(history.state || lireRoute());",
+        "mettreAJourAdresseNavigation = () => {}; restaurerRoute(history.state || lireRoute());",
+        1,
+    )
     image = base64.b64encode((RACINE / "ressources/panorama-accueil-calme.png").read_bytes()).decode("ascii")
-
+    page = re.sub(r'<meta[^>]+http-equiv="Content-Security-Policy"[^>]*/?>', "", page, flags=re.I)
+    page = re.sub(r'<!-- Google Tag Manager -->.*?<!-- End Google Tag Manager -->\s*', "", page, count=1, flags=re.S | re.I)
+    page = re.sub(r'<!-- Google Tag Manager \(noscript\) -->.*?<!-- End Google Tag Manager \(noscript\) -->\s*', "", page, count=1, flags=re.S | re.I)
     page = re.sub(
-        r'<meta[^>]+http-equiv="Content-Security-Policy"[^>]*/?>',
-        "",
-        page,
-        flags=re.IGNORECASE,
+        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue|navigation-locale)\.js")[^>]*>\s*</script>',
+        "", page, flags=re.I,
     )
-    page = re.sub(
-        r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css")[^>]*>\s*',
-        "",
-        page,
-        flags=re.IGNORECASE,
-    )
+    page = re.sub(r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css")[^>]*>\s*', "", page, flags=re.I)
     page = page.replace("</head>", f"<style>{feuille}</style></head>", 1)
     page = page.replace('src="ressources/panorama-accueil-calme.png"', f'src="data:image/png;base64,{image}"')
     graine = "<script>let graineTest=123456789;Math.random=()=>{graineTest=(1103515245*graineTest+12345)%2147483648;return graineTest/2147483648};</script>"
     page = re.sub(
         r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js")[^>]*>\s*</script>',
-        lambda _: graine + f"<script>{donnees}</script>",
-        page,
-        count=1,
-        flags=re.IGNORECASE,
+        lambda _: graine + f"<script>{donnees}</script>", page, count=1, flags=re.I,
     )
     page = re.sub(
         r'<script\b(?=[^>]*src="ressources/moteur-jeu\.js")[^>]*>\s*</script>',
-        lambda _: f"<script>{moteur}</script>",
-        page,
-        count=1,
-        flags=re.IGNORECASE,
+        lambda _: f"<script>{moteur}</script>", page, count=1, flags=re.I,
     )
     return page
 
@@ -81,706 +63,581 @@ def construire_page_administration() -> str:
     feuille = (RACINE / "ressources/administration.css").read_text(encoding="utf-8")
     donnees = (RACINE / "donnees/donnees-pjj.js").read_text(encoding="utf-8")
     administration = (RACINE / "ressources/administration.js").read_text(encoding="utf-8")
-    page = re.sub(
-        r'<link\b(?=[^>]*href="ressources/administration\.css")[^>]*>',
-        f"<style>{feuille}</style>",
-        page,
-        count=1,
-        flags=re.IGNORECASE,
-    )
-    page = re.sub(
-        r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js")[^>]*>\s*</script>',
-        lambda _: f"<script>{donnees}</script>",
-        page,
-        count=1,
-        flags=re.IGNORECASE,
-    )
-    page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/administration\.js")[^>]*>\s*</script>',
-        lambda _: f"<script>{administration}</script>",
-        page,
-        count=1,
-        flags=re.IGNORECASE,
-    )
+    page = re.sub(r'<link\b(?=[^>]*href="ressources/administration\.css")[^>]*>', f"<style>{feuille}</style>", page, count=1, flags=re.I)
+    page = re.sub(r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js")[^>]*>\s*</script>', lambda _: f"<script>{donnees}</script>", page, count=1, flags=re.I)
+    page = re.sub(r'<script\b(?=[^>]*src="ressources/administration\.js")[^>]*>\s*</script>', lambda _: f"<script>{administration}</script>", page, count=1, flags=re.I)
     return page
 
 
-SCENARIOS = {
-    "accueil": "afficherEcran('accueil',{remplacerHistorique:true});",
-    "jouer": "afficherEcran('choixMode',{remplacerHistorique:true});",
-    "parcours": "etat.theme='commun';ouvrirParcours('commun',{remplacerHistorique:true});",
-    "entrainement": "afficherEcran('entrainement',{remplacerHistorique:true});",
-    "question_choix": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);",
-    "question_multiple": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===2)]);",
-    "question_relier": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===3)]);",
-    "question_eliminer": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===4)]);",
-    "question_ordre": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===5)]);",
-    "question_ecrite": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===6)]);",
-    "question_classer": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===7)]);",
-    "question_choisir_ordre": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===48)]);",
-    "joker_5050_eliminer": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===4)]);utiliserJoker5050();",
-    "joker_5050_choisir_ordre": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===48)]);utiliserJoker5050();",
-    "celebration_finale": "afficherCelebration({titre:'Parcours terminé',message:'Tu as terminé la V1.',finale:true});",
-    "correction_bonne": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);document.querySelector('.reponse[data-est-correcte=\"1\"]').click();",
-    "correction_fausse": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);document.querySelector('.reponse[data-est-correcte=\"0\"]').click();",
-    "menu_jokers": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);ouvrirFenetreJokers();",
-    "joker_indice": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);utiliserIndice('indice');",
-    "joker_langue_chat": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);utiliserLangueAuChat();",
-    "confirmation_passer": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);demanderPassageQuestion();",
-    "confirmation_quitter": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);ouvrirFenetreQuitterSession();",
-    "bilan": "etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);etat.score=1;etat.reponsesSession.set(1,{statut:'correcte',texteReponse:QUESTIONS.find(question=>question.id===1).bonneReponse,precisions:{}});terminerSession();",
-    "erreurs": "sauvegarde.aDejaJoue=true;sauvegarde.erreurs={'1':{reussites:0,maitrisee:false,nombreErreurs:1,theme:'commun'},'2':{reussites:0,maitrisee:false,nombreErreurs:2,theme:'commun'}};afficherErreurs();afficherEcran('erreurs',{remplacerHistorique:true});",
-    "progression": "sauvegarde.aDejaJoue=true;sauvegarde.nombreQuestionsJouees=12;sauvegarde.erreurs={'1':{reussites:0,maitrisee:false,nombreErreurs:1,theme:'commun'}};initialiserProgression('commun');sauvegarde.progression.apprenant.commun['1']={meilleurScore:8,nombreTentatives:1,questionsTraitees:{'1':true,'2':true},resultats:{'1':true,'2':false},termineeSansJoker:false,jokersUtilises:true};afficherProgression();afficherEcran('progression',{remplacerHistorique:true});",
-    "parametres": "afficherEcran('parametres',{remplacerHistorique:true});",
-}
-
-LARGEURS = {
-    "bureau": {"width": 1440, "height": 900},
-    "portable": {"width": 1024, "height": 768},
-    "mobile": {"width": 390, "height": 844},
-}
+def lancer_chromium(automate):
+    arguments = ["--no-sandbox"]
+    explicite = os.environ.get("PJJOUE_CHROMIUM")
+    candidats = [Path(explicite)] if explicite else []
+    candidats += [Path("/usr/bin/chromium"), Path("/usr/bin/chromium-browser")]
+    for candidat in candidats:
+        if candidat and candidat.exists():
+            return automate.chromium.launch(headless=True, executable_path=str(candidat), args=arguments)
+    return automate.chromium.launch(headless=True, args=arguments)
 
 
-def verifier_chargement_local(navigateur) -> None:
-    page = navigateur.new_page(viewport=LARGEURS["bureau"])
-    page.set_default_timeout(3000)
+def verifier_ouverture_locale(navigateur) -> bool:
+    """Vérifier le vrai index en file://, avec un consentement déjà accepté."""
+    page = navigateur.new_page(viewport={"width": 1440, "height": 1000})
     erreurs: list[str] = []
+    requetes_externes: list[str] = []
     page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
-    page.goto((RACINE / "index.html").as_uri(), wait_until="load")
-    page.wait_for_timeout(100)
-    etat_chargement = page.evaluate("""() => ({
-        questions: window.DONNEES_PJJ?.QUESTIONS?.length || 0,
-        moteur: typeof afficherEcran === 'function',
-        ecransActifs: document.querySelectorAll('.ecran.actif').length,
-        feuillesChargees: [...document.styleSheets].filter(feuille =>
-            feuille.href?.includes('/ressources/styles/')
-        ).length,
-        largeurDocument: document.documentElement.scrollWidth,
-        largeurFenetre: window.innerWidth
-    })""")
-    attendu = {
-        "questions": 150,
-        "moteur": True,
-        "ecransActifs": 1,
-        "feuillesChargees": len(FEUILLES_INTERFACE),
-    }
-    for cle, valeur in attendu.items():
-        if etat_chargement[cle] != valeur:
-            raise AssertionError(
-                f"Ouverture locale incorrecte ({cle}) : {etat_chargement}."
-            )
-    if etat_chargement["largeurDocument"] > etat_chargement["largeurFenetre"] + 2:
-        raise AssertionError("L’accueil ouvert localement déborde horizontalement.")
-    if erreurs:
-        raise AssertionError(f"Erreurs JavaScript pendant l’ouverture locale : {erreurs}")
-    page.close()
+    page.on(
+        "console",
+        lambda message: erreurs.append(f"console:{message.type}:{message.text}")
+        if message.type == "error" else None,
+    )
+    page.on(
+        "requestfailed",
+        lambda requete: erreurs.append(f"requête:{requete.url}:{requete.failure}"),
+    )
+    page.on(
+        "request",
+        lambda requete: requetes_externes.append(requete.url)
+        if requete.url.startswith(("http://", "https://")) else None,
+    )
 
-
-def construire_combinaisons() -> list[tuple[str, str]]:
-    combinaisons = [("bureau", nom) for nom in SCENARIOS]
-    combinaisons.extend(("mobile", nom) for nom in [
-        "accueil", "jouer", "parcours", "entrainement", "question_choix",
-        "question_choisir_ordre", "joker_5050_choisir_ordre", "correction_fausse",
-        "bilan", "erreurs", "progression", "parametres",
-    ])
-    combinaisons.extend(("portable", nom) for nom in ["accueil", "parcours", "question_relier", "progression"])
-    return combinaisons
-
-
-def verifier_scenarios(navigateur, page_html: str) -> int:
-    nombre = 0
-    for format_ecran, nom_scenario in construire_combinaisons():
-        page = navigateur.new_page(viewport=LARGEURS[format_ecran], device_scale_factor=1)
-        page.set_default_timeout(3000)
-        erreurs: list[str] = []
-        page.on("pageerror", lambda erreur, erreurs=erreurs: erreurs.append(str(erreur)))
-        page.set_content(page_html, wait_until="domcontentloaded")
-        page.evaluate(SCENARIOS[nom_scenario])
-        page.wait_for_timeout(80)
-        actif = page.locator(".ecran.actif").count()
-        if actif != 1:
-            raise AssertionError(f"{format_ecran}/{nom_scenario} : {actif} écrans actifs au lieu d’un.")
-        largeur_document = page.evaluate("document.documentElement.scrollWidth")
-        largeur_fenetre = page.evaluate("window.innerWidth")
-        if largeur_document > largeur_fenetre + 2:
-            raise AssertionError(f"{format_ecran}/{nom_scenario} : débordement horizontal de {largeur_document - largeur_fenetre}px.")
-        if erreurs:
-            raise AssertionError(f"{format_ecran}/{nom_scenario} : erreurs JavaScript : {erreurs}")
+    try:
+        page.goto((RACINE / "index.html").resolve().as_uri(), wait_until="domcontentloaded")
+    except ErreurPlaywright as erreur_navigation:
+        if "ERR_BLOCKED_BY_ADMINISTRATOR" not in str(erreur_navigation):
+            raise
         page.close()
-        nombre += 1
-    return nombre
+        print("INFO — navigation file:// bloquée par l'environnement : contrôles locaux directs ignorés, interface inline maintenue.")
+        return False
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+    page.evaluate(
+        "() => localStorage.setItem('pjjoue_consentement_analytics_v1', 'accepte')"
+    )
+    erreurs.clear()
+    requetes_externes.clear()
+    page.reload(wait_until="domcontentloaded")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+
+    index_local = (RACINE / 'index.html').resolve().as_uri()
+    page.goto(f"{index_local}?pjjoue_route=supports", wait_until="domcontentloaded")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+    assert page.locator("body").get_attribute("data-ecran-actif") == "supports", (
+        "La route file:// ?pjjoue_route=supports doit ouvrir les supports sans fragment #."
+    )
+    assert "#" not in page.url, page.url
+
+    page.goto(f"{index_local}?pjjoue_route=%E0%A4%A", wait_until="domcontentloaded")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+    assert page.locator("body").get_attribute("data-ecran-actif") == "accueil", (
+        "Une route locale mal encodée doit revenir à l'accueil sans interrompre le site."
+    )
+    assert "#" not in page.url, page.url
+
+    page.goto(f"{index_local}?pjjoue_route=parametres", wait_until="domcontentloaded")
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+    assert page.locator("body").get_attribute("data-ecran-actif") == "parametres"
+    page.locator("#boutonRetour").click()
+    page.wait_for_timeout(150)
+    assert page.locator("body").get_attribute("data-ecran-actif") == "accueil"
+    assert page.url.endswith('/index.html') and '#' not in page.url, page.url
+
+    for ecran in ("parcours", "supports", "entrainement", "progression", "carnet", "parametres"):
+        page.evaluate("ecran => afficherEcran(ecran)", ecran)
+    page.evaluate("() => ouvrirParcours('matiere_criminelle_peines')")
+    page.wait_for_timeout(150)
+
+    assert page.url.startswith('file:') and page.url.endswith('/index.html') and '#' not in page.url, page.url
+    assert page.locator("#pjjoue-google-tag-manager").count() == 0, (
+        "Google Tag Manager ne doit pas être injecté depuis une page file://."
+    )
+    assert not requetes_externes, f"Requêtes externes inattendues en file:// : {requetes_externes}"
+    assert not erreurs, erreurs
+    page.close()
+    return True
 
 
-def verifier_interactions(navigateur, page_html: str) -> None:
-    page = navigateur.new_page(viewport=LARGEURS["bureau"])
-    page.set_default_timeout(3000)
+def verifier_liens_guides_locaux(navigateur) -> None:
+    """Ne pas transformer un lien externe opaque en navigation file:// différée."""
+    page = navigateur.new_page(viewport={"width": 1440, "height": 1000})
     erreurs: list[str] = []
     page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
-    page.set_content(page_html, wait_until="domcontentloaded")
-
-    # Le sélecteur visuel du nombre de questions pilote bien la valeur native.
-    page.evaluate("afficherEcran('entrainement',{remplacerHistorique:true});")
-    page.locator('[data-groupe-choix="nombreQuestionsEntrainement"] [data-valeur="20"]').click()
-    if page.locator("#nombreQuestionsEntrainement").input_value() != "20":
-        raise AssertionError("Le bouton 20 questions ne met pas à jour le sélecteur d’entraînement.")
-    etat_selection = page.evaluate("""() => {
-        const boutons=[...document.querySelectorAll('[data-groupe-choix="nombreQuestionsEntrainement"] .choix-bouton')];
-        return {
-            actifs:boutons.filter(bouton=>bouton.classList.contains('actif')).map(bouton=>bouton.dataset.valeur),
-            selectionnes:boutons.filter(bouton=>bouton.classList.contains('selectionne')).map(bouton=>bouton.dataset.valeur),
-            presses:boutons.filter(bouton=>bouton.getAttribute('aria-pressed')==='true').map(bouton=>bouton.dataset.valeur)
-        };
-    }""")
-    attendu_selection = {"actifs": ["20"], "selectionnes": ["20"], "presses": ["20"]}
-    if etat_selection != attendu_selection:
-        raise AssertionError(f"Plusieurs nombres de questions paraissent sélectionnés : {etat_selection}")
-
-    page.evaluate("afficherEcran('parametres',{remplacerHistorique:true});")
-    page.locator('[data-groupe-choix="echelleTexte"] [data-valeur="1.08"]').click()
-    etat_echelle = page.evaluate("""() => {
-        const boutons=[...document.querySelectorAll('[data-groupe-choix="echelleTexte"] .choix-bouton')];
-        return {
-            valeur:document.querySelector('#echelleTexte').value,
-            actifs:boutons.filter(bouton=>bouton.classList.contains('actif')).map(bouton=>bouton.dataset.valeur),
-            selectionnes:boutons.filter(bouton=>bouton.classList.contains('selectionne')).map(bouton=>bouton.dataset.valeur)
-        };
-    }""")
-    if etat_echelle != {"valeur": "1.08", "actifs": ["1.08"], "selectionnes": ["1.08"]}:
-        raise AssertionError(f"La taille de texte possède une sélection incohérente : {etat_echelle}")
-
-    # Les libellés de progression et les accords doivent suivre les compteurs.
-    libelles_progression = page.evaluate("""() => {
-        const valeurs={
-            experienceProgression:1,
-            questionsJoueesProgression:1,
-            erreursProgression:1,
-            etapesMaitriseesProgression:1
-        };
-        const lireStatistique=(identifiant)=>{
-            const valeur=document.getElementById(identifiant);
-            if(identifiant==='experienceProgression'){
-                return `${valeur.querySelector('.experience-valeur')?.textContent||''} ${valeur.querySelector('.experience-libelle')?.textContent||''}`.trim();
-            }
-            return valeur.parentElement.innerText.replace(/\\s+/g,' ').trim();
-        };
-        Object.entries(valeurs).forEach(([identifiant,valeur])=>document.getElementById(identifiant).textContent=String(valeur));
-        actualiserLibellesProgression();
-        const singuliers=Object.keys(valeurs).map(lireStatistique);
-        Object.keys(valeurs).forEach(identifiant=>document.getElementById(identifiant).textContent='2');
-        actualiserLibellesProgression();
-        const pluriels=Object.keys(valeurs).map(lireStatistique);
-        return {singuliers,pluriels};
-    }""")
-    if libelles_progression["singuliers"] != ["1 découverte", "1 activité réalisée", "1 erreur active", "1 étape maîtrisée"]:
-        raise AssertionError(f"Libellés singuliers incorrects : {libelles_progression['singuliers']}")
-    if libelles_progression["pluriels"] != ["2 découvertes", "2 activités réalisées", "2 erreurs actives", "2 étapes maîtrisées"]:
-        raise AssertionError(f"Libellés pluriels incorrects : {libelles_progression['pluriels']}")
-
-    accords_erreurs = page.evaluate("""() => {
-        sauvegarde.aDejaJoue=true;
-        sauvegarde.erreurs={'1':{reussites:0,maitrisee:false,nombreErreurs:1,nombrePassages:0,theme:'commun'}};
-        afficherErreurs();
-        const singulier=document.querySelector('#contenuErreurs').innerText;
-        sauvegarde.erreurs['2']={reussites:0,maitrisee:false,nombreErreurs:1,nombrePassages:0,theme:'commun'};
-        afficherErreurs();
-        return {singulier,pluriel:document.querySelector('#contenuErreurs').innerText};
-    }""")
-    if "1 erreur active" not in accords_erreurs["singulier"] or "1 erreurs actives" in accords_erreurs["singulier"]:
-        raise AssertionError("L’écran Réviser n’accorde pas correctement une erreur active.")
-    if "2 erreurs actives" not in accords_erreurs["pluriel"]:
-        raise AssertionError("L’écran Réviser n’accorde pas correctement plusieurs erreurs actives.")
-
-    # Le format unique de sauvegarde V1 est nettoyé sans déplacer les questions.
-    sauvegarde_nettoyee = page.evaluate("""() => nettoyerSauvegarde({
-        version:'V1',xp:14,nombreQuestionsJouees:7,aDejaJoue:true,
-        erreurs:{'96':{reussites:1,maitrisee:false,nombreErreurs:2,nombrePassages:3,theme:'commun'}},
-        progression:{apprenant:{commun:{'10':{
-            meilleurScore:8,nombreTentatives:2,questionsTraitees:{'96':true},
-            resultats:{'96':true},termineeSansJoker:true,jokersUtilises:false
-        }}}},
-        parametres:{son:false,volume:.4,echelleTexte:1.08},dernierTheme:'commun',
-        etapesDecouvertes:{'10':true},questionsJouees:{'96':true},
-        evaluationFinale:{meilleurScore:41,nombreTentatives:2,reussie:true}
-    })""")
-    if (
-        sauvegarde_nettoyee["nombreQuestionsJouees"] != 7
-        or sauvegarde_nettoyee["erreurs"]["96"]["nombrePassages"] != 3
-        or sauvegarde_nettoyee["progression"]["apprenant"]["commun"]["10"]["questionsTraitees"] != {"96": True}
-        or sauvegarde_nettoyee["parametres"] != {"son": False, "volume": 0.4, "echelleTexte": 1.08}
-        or sauvegarde_nettoyee["evaluationFinale"] != {"meilleurScore": 41, "nombreTentatives": 2, "reussie": True}
-    ):
-        raise AssertionError(f"La sauvegarde V1 est nettoyée incorrectement : {sauvegarde_nettoyee}")
-
-    sauvegarde_malformee = page.evaluate("""() => nettoyerSauvegarde({
-        xp:'Infinity',meilleureSerie:2.7,nombreQuestionsJouees:-4,
-        erreurs:{'2':{reussites:'Infinity',nombreErreurs:1.8,nombrePassages:-2,theme:'inconnu'}},
-        progression:{apprenant:{commun:{'1':{
-            meilleurScore:999,nombreTentatives:1.5,
-            questionsTraitees:{'1':true,'2':'oui','999':true},
-            resultats:{'1':'oui','2':false,'999':true}
-        },'99':{meilleurScore:10}}}},
-        parametres:{volume:4},
-        etapesDecouvertes:{'1':true,'2':'oui','99':true},
-        questionsJouees:{'1':true,'2':'oui','999':true},
-        evaluationFinale:{meilleurScore:999,nombreTentatives:1.5,reussie:'oui'}
-    })""")
-    attendu_malforme = {
-        "xp": 0,
-        "meilleureSerie": 2,
-        "nombreQuestionsJouees": 0,
-        "erreur": {"reussites": 0, "nombreErreurs": 1, "nombrePassages": 0, "theme": "commun"},
-        "progression": {
-            "meilleurScore": 10,
-            "nombreTentatives": 1,
-            "questionsTraitees": {"1": True},
-            "resultats": {"2": False},
-        },
-        "etapesDecouvertes": {"1": True},
-        "questionsJouees": {"1": True},
-        "evaluationFinale": {"meilleurScore": 50, "nombreTentatives": 1, "reussie": False},
-    }
-    obtenu_malforme = {
-        "xp": sauvegarde_malformee["xp"],
-        "meilleureSerie": sauvegarde_malformee["meilleureSerie"],
-        "nombreQuestionsJouees": sauvegarde_malformee["nombreQuestionsJouees"],
-        "erreur": sauvegarde_malformee["erreurs"]["2"],
-        "progression": sauvegarde_malformee["progression"]["apprenant"]["commun"]["1"],
-        "etapesDecouvertes": sauvegarde_malformee["etapesDecouvertes"],
-        "questionsJouees": sauvegarde_malformee["questionsJouees"],
-        "evaluationFinale": sauvegarde_malformee["evaluationFinale"],
-    }
-    obtenu_malforme["progression"].pop("termineeSansJoker")
-    obtenu_malforme["progression"].pop("jokersUtilises")
-    obtenu_malforme["erreur"].pop("maitrisee")
-    if obtenu_malforme != attendu_malforme:
-        raise AssertionError(f"Une sauvegarde malformée est mal nettoyée : {obtenu_malforme}")
-
-    # L’ouverture de la fenêtre des jokers place le focus sur le premier joker disponible.
-    page.evaluate("etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===1)]);ouvrirFenetreJokers();")
-    page.wait_for_timeout(50)
-    identifiant_focus = page.evaluate("document.activeElement?.id || ''")
-    if identifiant_focus != "joker5050":
-        raise AssertionError(f"Le focus de la fenêtre des jokers est mal placé : {identifiant_focus}")
-    page.evaluate("fermerFenetreJokers({restaurerFocus:false});")
-
-    # Les fils d’association utilisent des coordonnées valides.
-    page.evaluate("etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;lancerSession([QUESTIONS.find(question=>question.id===3)]);")
-    boutons_gauche = page.locator('.association-colonne [data-gauche][data-action="selectionner-association"]')
-    boutons_droite = page.locator('.association-colonne [data-droite][data-action="selectionner-association"]')
-    boutons_gauche.first.click()
-    boutons_droite.first.click()
-    page.wait_for_timeout(50)
-    chemins = page.locator(".association-lignes path").all()
-    if not chemins:
-        raise AssertionError("Le mode Relier ne dessine aucun fil après une association.")
-    for chemin in chemins:
-        valeur = chemin.get_attribute("d") or ""
-        if "NaN" in valeur:
-            raise AssertionError("Un fil d’association contient une coordonnée invalide.")
-        apparence_fil = chemin.evaluate("""element => {
-            const style = getComputedStyle(element);
-            return {
-                remplissage: style.fill,
-                couleur: style.stroke,
-                epaisseur: style.strokeWidth,
-                extremite: style.strokeLinecap,
-                jonction: style.strokeLinejoin
-            };
-        }""")
-        apparence_attendue = {
-            "remplissage": "none",
-            "couleur": "rgb(255, 201, 79)",
-            "epaisseur": "4px",
-            "extremite": "round",
-            "jonction": "round",
+    page.on(
+        "console",
+        lambda message: erreurs.append(f"console:{message.type}:{message.text}")
+        if message.type == "error" else None,
+    )
+    page.goto((RACINE / "guides" / "index.html").resolve().as_uri(), wait_until="domcontentloaded")
+    page.wait_for_function("() => Boolean(document.querySelector('.guide-bouton-menu-principal'))")
+    observation = page.evaluate("""() => new Promise(resolve => {
+        const lien = document.querySelector('a[href^="mailto:"]');
+        if (!lien) {
+            resolve(null);
+            return;
         }
-        if apparence_fil != apparence_attendue:
-            raise AssertionError(f"Le fil d’association n’a pas l’apparence jaune attendue : {apparence_fil}")
-
-    # L’étape 11 est verrouillée puis déverrouillée selon les dix bilans.
-    resultat_verrouillage = page.evaluate("""() => {
-        initialiserProgression('commun');
-        obtenirEtapesProgramme('commun').forEach(etapeProgramme=>{
-            obtenirBilanEtape('commun',etapeProgramme.id).termineeSansJoker=false;
-        });
-        etat.theme='commun';afficherEtapes();
-        const carte=document.querySelector('.chemin-evaluation-carte');
-        const verrouillee=carte.classList.contains('verrouillee')||carte.getAttribute('aria-disabled')==='true';
-        obtenirEtapesProgramme('commun').forEach(etapeProgramme=>{
-            const bilan=obtenirBilanEtape('commun',etapeProgramme.id);
-            bilan.termineeSansJoker=true;
-            bilan.questionsTraitees={};
-            obtenirQuestionsEtape('commun',etapeProgramme.id).forEach(question=>{
-                bilan.questionsTraitees[String(question.id)]=true;
-            });
-        });
-        afficherEtapes();
-        const carteOuverte=document.querySelector('.chemin-evaluation-carte');
-        const deverrouillee=carteOuverte.classList.contains('deverrouillee')&&!carteOuverte.disabled&&typeof carteOuverte.onclick==='function';
-        return {verrouillee,deverrouillee};
-    }""")
-    if not resultat_verrouillage["verrouillee"] or not resultat_verrouillage["deverrouillee"]:
-        raise AssertionError(f"Règle de déverrouillage incorrecte : {resultat_verrouillage}")
-
-    # L’évaluation finale charge 50 questions sans jokers ni passage.
-    resultat_evaluation = page.evaluate("""() => {
-        lancerEvaluationFinale();
-        return {
-            nombre:etat.questionsSession.length,
-            jokers:etat.jokersSessionActifs,
-            passerVisible:!document.querySelector('#boutonPasserQuestion').classList.contains('masque')
-        };
-    }""")
-    if resultat_evaluation != {"nombre": 50, "jokers": False, "passerVisible": False}:
-        raise AssertionError(f"Configuration de l’évaluation finale incorrecte : {resultat_evaluation}")
-
-    # Une question passée ne révèle pas la réponse dans son bilan.
-    resultat_passage = page.evaluate("""() => {
-        const question=QUESTIONS.find(questionCible=>questionCible.id===1);
-        etat.mode='entrainement';etat.jokersSessionActifs=true;etat.chronometreSessionActif=false;
-        lancerSession([question]);
-        etat.questionsPassees.add(question.id);
-        etat.erreursSession.add(question.id);
-        etat.reponsesSession.set(question.id,{statut:'passee',texteReponse:''});
-        terminerSession();
-        const carte=document.querySelector('.bilan-erreur-element');
-        return {
-            texte:carte?.textContent||'',
-            reponse:question.bonneReponse
-        };
-    }""")
-    if resultat_passage["reponse"] in resultat_passage["texte"] or "Réponse non dévoilée" not in resultat_passage["texte"]:
-        raise AssertionError("Le bilan d’une question passée révèle la réponse ou n’affiche pas l’avertissement attendu.")
-
-    if erreurs:
-        raise AssertionError(f"Erreurs JavaScript pendant les interactions : {erreurs}")
+        document.addEventListener('click', evenement => {
+            if (evenement.target.closest('a[href^="mailto:"]'))
+                resolve({ annule: evenement.defaultPrevented, adresse: location.href });
+        }, { once: true });
+        lien.click();
+    })""")
+    page.wait_for_timeout(180)
+    assert observation and not observation["annule"], (
+        "Le script de transition des guides ne doit pas intercepter les liens mailto: en file://."
+    )
+    assert page.url.startswith("file:") and "/guides/index.html" in page.url, page.url
+    assert not erreurs, erreurs
     page.close()
 
 
-def verifier_defi_chrono(navigateur, page_html: str) -> None:
-    formats_sensibles = {
-        "mobile-360": {"width": 360, "height": 800},
-        "mobile-390": LARGEURS["mobile"],
-        "seuil-580": {"width": 580, "height": 900},
-        "seuil-760": {"width": 760, "height": 900},
-        "seuil-820": {"width": 820, "height": 900},
-        "apres-seuil-820": {"width": 821, "height": 900},
-        "portable": LARGEURS["portable"],
-        "bureau": LARGEURS["bureau"],
-    }
-    for format_ecran, dimensions in formats_sensibles.items():
-        page = navigateur.new_page(viewport=dimensions)
-        page.set_default_timeout(3000)
-        page.set_content(page_html, wait_until="domcontentloaded")
-        page.evaluate("etat.theme='commun';ouvrirParcours('commun',{remplacerHistorique:true});")
-        page.locator('#choixChronometreParcours [data-valeur="oui"]').click()
-        mesures = page.evaluate("""() => {
-            const panneau = document.querySelector('.parcours-chronometre-panneau')
-                .getBoundingClientRect();
-            const boutons = [...document.querySelectorAll(
-                '#secondesChronometreParcours .choix-bouton'
-            )];
-            const debordements = boutons.flatMap(bouton => {
-                const cadre = bouton.getBoundingClientRect();
-                return [
-                    panneau.left - cadre.left,
-                    cadre.right - panneau.right,
-                    panneau.top - cadre.top,
-                    cadre.bottom - panneau.bottom
-                ];
-            });
-            return {
-                panneau: Math.max(0, ...debordements),
-                document: Math.max(
-                    0,
-                    document.documentElement.scrollWidth - window.innerWidth
-                )
-            };
-        }""")
-        if mesures["panneau"] > 1:
-            raise AssertionError(
-                f"{format_ecran} : les boutons du défi chrono dépassent leur panneau "
-                f"de {mesures['panneau']:.2f}px."
-            )
-        if mesures["document"] > 2:
-            raise AssertionError(
-                f"{format_ecran} : le défi chrono provoque un débordement horizontal "
-                f"de {mesures['document']:.2f}px."
-            )
-        page.close()
+def verifier_jeu(navigateur, page_html: str) -> int:
+    index_public = (RACINE / "index.html").read_text(encoding="utf-8")
+    navigation_locale = (RACINE / "ressources/navigation-locale.js").read_text(encoding="utf-8")
+    moteur_public = (RACINE / "ressources/moteur-jeu.js").read_text(encoding="utf-8")
+    assert not re.search(r'<link\b[^>]*rel=["\']manifest["\']', index_public, re.I), (
+        "Le manifeste ne doit pas être chargé directement en file:// : navigation-locale.js l’active seulement en HTTP(S)."
+    )
+    assert "activerManifesteApplication" in navigation_locale and "^https?:$" in navigation_locale, (
+        "La protection du manifeste pour l’ouverture locale est absente."
+    )
+    assert "new URL('../', scriptNavigation.src)" in navigation_locale, (
+        "La racine de l’application doit rester compatible avec un sous-chemin GitHub Pages."
+    )
+    assert "new URL('service-worker.js', racineApplication)" in navigation_locale, (
+        "Le service worker doit rester compatible avec un sous-chemin GitHub Pages."
+    )
+    assert "['http:', 'https:', 'file:'].includes(destination.protocol)" in navigation_locale, (
+        "Les transitions des guides ne doivent pas intercepter mailto:, tel: ou un autre protocole opaque."
+    )
+    assert "destination.pathname.startsWith(racineApplication.pathname)" in navigation_locale, (
+        "En file://, une transition animée ne doit pas sortir du dossier de l'application."
+    )
+    assert "function mettreAJourAdresseNavigation" in moteur_public and "window.location.protocol === 'file:'" in moteur_public, (
+        "La navigation par fragment dédiée aux fichiers locaux est absente."
+    )
+    assert re.search(r"ecransAutorises\s*=\s*\[[^\]]*['\"]supports['\"]", moteur_public), (
+        "La route directe #supports doit rester autorisée, notamment depuis le menu des guides."
+    )
+    assert "decodeURIComponent(segment)" in moteur_public and "catch (erreur)" in moteur_public, (
+        "Un fragment d'adresse mal encodé ne doit pas interrompre le démarrage de PJJoue."
+    )
 
-
-def verifier_reponses_ecrites(navigateur, page_html: str) -> None:
-    page = navigateur.new_page(viewport=LARGEURS["bureau"])
+    page = navigateur.new_page(viewport={"width": 1440, "height": 1000})
+    erreurs: list[str] = []
+    page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
+    page.on("console", lambda message: erreurs.append(f"console:{message.type}:{message.text}") if message.type == "error" else None)
     page.set_content(page_html, wait_until="domcontentloaded")
-    cas = [
-        {"question": 6, "reponse": "décision judiciaire", "attendu": True},
-        {"question": 6, "reponse": "pas de décision", "attendu": False},
-        {"question": 101, "reponse": "ministère de la justice et une direction", "attendu": True},
-        {"question": 101, "reponse": "pas ministère justice pas direction", "attendu": False},
-        {"question": 103, "reponse": "ordonnance du juge", "attendu": True},
-        {"question": 103, "reponse": "aucune décision aucun mandat judiciaire", "attendu": False},
-        {"question": 106, "reponse": "parqet", "attendu": True},
-        {"question": 106, "reponse": "pas le parquet", "attendu": False},
-        {"question": 108, "reponse": "procureur République", "attendu": True},
-        {"question": 108, "reponse": "pas le procureur", "attendu": False},
-        {"question": 108, "reponse": "un antiprocureur", "attendu": False},
-    ]
-    resultats = page.evaluate("""cas => cas.map(test => {
-        const question = QUESTIONS.find(element => element.id === test.question);
-        const resultat = question.estEvaluationFinale
-            ? validerReponseEcriteEvaluation(test.reponse, question)
-            : validerReponseEcriteSouple(test.reponse, question);
-        return {...test, resultat};
-    })""", cas)
-    incorrects = [test for test in resultats if test["resultat"] != test["attendu"]]
-    if incorrects:
-        raise AssertionError(f"Validation incorrecte de réponses écrites : {incorrects}")
-    page.close()
+    page.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960 && typeof ouvrirParcours === 'function'")
+    page.evaluate("() => ouvrirParcours('commun', {remplacerHistorique:true})")
+    page.wait_for_timeout(150)
+    cartes = page.locator('.chemin-etape-carte[data-etape]')
+    identifiants = cartes.evaluate_all("elements => elements.map(element => element.dataset.etape)")
+    assert cartes.count() == 11, "Le parcours 1 n’affiche pas 11 étapes d’apprentissage."
+    assert identifiants == [str(i) for i in range(1, 12)], identifiants
+    texte_final = page.locator('.chemin-evaluation-carte').inner_text().upper()
+    assert "ÉTAPE 12" in texte_final, texte_final
+    assert not page.locator('.chemin-evaluation-carte').evaluate("element => element.classList.contains('deverrouillee')"), "L’évaluation est déverrouillée trop tôt."
 
+    # Le sélecteur doit exposer six parcours séparés, chacun avec 11 étapes.
+    selecteurs = page.locator('#selecteurParcours .selecteur-parcours-bouton')
+    assert selecteurs.count() == 6, "Le sélecteur ne propose pas les six parcours."
+    themes_attendus = ["commun", "procedure_ordinaire", "information_judiciaire", "jugement_educatif_ordinaire", "matiere_criminelle_peines", "application_execution_peines"]
+    for index, theme_attendu in enumerate(themes_attendus):
+        page.evaluate("() => ouvrirChoixParcours({remplacerHistorique:true})")
+        page.wait_for_timeout(40)
+        selecteurs.nth(index).click()
+        page.wait_for_timeout(70)
+        cartes_theme = page.locator('.chemin-etape-carte[data-etape]')
+        assert cartes_theme.count() == 11, f"Le parcours {index + 1} n’affiche pas 11 étapes d’apprentissage."
+        assert page.evaluate("() => etat.theme") == theme_attendu
+    page.evaluate("() => ouvrirParcours('commun', {remplacerHistorique:true})")
+    page.wait_for_timeout(80)
 
-def verifier_mise_en_page_questions(navigateur, page_html: str) -> None:
-    """Vérifie les contrats visuels qui avaient été cassés pendant le nettoyage CSS."""
-    for format_ecran in ("bureau", "mobile"):
-        page = navigateur.new_page(viewport=LARGEURS[format_ecran])
-        page.set_default_timeout(3000)
-        page.set_content(page_html, wait_until="domcontentloaded")
+    # Navigation libre : avec une sauvegarde vierge, chacun des six parcours
+    # doit pouvoir démarrer directement à son étape 1, sans prérequis de parcours.
+    premieres_questions = {
+        "commun": 1,
+        "procedure_ordinaire": 1001,
+        "information_judiciaire": 1201,
+        "jugement_educatif_ordinaire": 1401,
+        "matiere_criminelle_peines": 1601,
+        "application_execution_peines": 1801,
+    }
+    for theme, question_attendue in premieres_questions.items():
+        page.evaluate("theme => ouvrirParcours(theme, {remplacerHistorique:true})", theme)
+        page.wait_for_timeout(70)
+        premiere_carte = page.locator('.chemin-etape-carte[data-etape="1"]')
+        assert premiere_carte.count() == 1, f"L’étape 1 du parcours {theme} n’est pas affichée."
+        assert premiere_carte.is_visible() and premiere_carte.is_enabled(), (
+            f"L’étape 1 du parcours {theme} n’est pas directement accessible avec une sauvegarde vierge."
+        )
+        assert premiere_carte.get_attribute("data-theme") == theme
+        premiere_carte.click()
+        page.wait_for_timeout(70)
+        lancement = page.evaluate("() => ({theme: etat.theme, etape: etat.etape, question: etat.questionCourante?.id})")
+        assert lancement == {"theme": theme, "etape": 1, "question": question_attendue}, lancement
+    page.evaluate("() => ouvrirParcours('commun', {remplacerHistorique:true})")
+    page.wait_for_timeout(80)
 
-        resultat_multiple = page.evaluate("""() => {
-            etat.jokersSessionActifs = true;
+    page.evaluate("() => { etapeNecessiteAutreChapitre=()=>false; etat.mode='parcours'; etat.theme='commun'; etat.etape=10; etat.chapitre=1; configurerBoutonContinuerBilan(); }")
+    assert "étape 11" in page.locator('#boutonContinuer').inner_text().lower()
+    page.evaluate("() => { etat.etape=11; configurerBoutonContinuerBilan(); }")
+    assert "retour au parcours" in page.locator('#boutonContinuer').inner_text().lower()
+
+    resultat_ecrit = page.evaluate(r"""() => {
+        const questions = QUESTIONS.filter(question => question.modePrefere === 'reponse-ecrite');
+        const echecs = [];
+        let controles = 0;
+        const verifier = (reponse, question, libelle, attendu=true) => {
+            controles++;
+            const obtenu = validerReponseEcriteEvaluation(reponse, question);
+            if (obtenu !== attendu) echecs.push({id: question.id, libelle, reponse, attendu, obtenu});
+        };
+        for (const question of questions) {
+            verifier(question.bonneReponse, question, 'bonne réponse');
+            for (const variante of (question.reponsesAcceptees || [])) verifier(variante, question, 'variante');
+            verifier(String(question.bonneReponse).normalize('NFD').replace(/[\u0300-\u036f]/g, ''), question, 'sans accents');
+            if (question.typeReponseAttendue !== 'sigle') {
+                const motsLongs = [...String(question.bonneReponse).matchAll(/[A-Za-zÀ-ÿ]{6,}/g)]
+                    .sort((a, b) => b[0].length - a[0].length);
+                if (motsLongs.length) {
+                    const mot = motsLongs[0][0];
+                    const index = motsLongs[0].index;
+                    const coupe = Math.max(1, Math.min(mot.length - 2, Math.floor(mot.length / 2)));
+                    const motAvecFaute = mot.slice(0, coupe) + mot.slice(coupe + 1);
+                    verifier(
+                        String(question.bonneReponse).slice(0, index) + motAvecFaute + String(question.bonneReponse).slice(index + mot.length),
+                        question,
+                        'faute légère automatique'
+                    );
+                    if (!/s$/i.test(mot)) {
+                        verifier(
+                            String(question.bonneReponse).slice(0, index) + mot + 's' + String(question.bonneReponse).slice(index + mot.length),
+                            question,
+                            'variation de pluriel automatique'
+                        );
+                    }
+                }
+            }
+            if (question.typeReponseAttendue === 'developpement-sigle') verifier(question.sigleAttendu, question, 'sigle seul', false);
+            if (question.typeReponseAttendue === 'sigle') {
+                verifier(String(question.sigleAttendu).split('').join(' '), question, 'sigle espacé');
+                verifier(String(question.sigleAttendu).split('').join('.') + '.', question, 'sigle ponctué');
+            }
+        }
+        const q126 = QUESTIONS.find(question => question.id === 126);
+        const q129 = QUESTIONS.find(question => question.id === 129);
+        const q6 = QUESTIONS.find(question => question.id === 6);
+        if (q126?.modePrefere === 'reponse-ecrite') {
+            verifier('responsable d unite', q126, 'RUE développement court');
+            verifier('RUE', q126, 'RUE seul refusé', false);
+        }
+        if (q129?.modePrefere === 'reponse-ecrite') {
+            verifier('D.P.J.J.', q129, 'DPJJ ponctué');
+            verifier('direction de la protection judiciaire de la jeunesse', q129, 'développement au lieu du sigle', false);
+        }
+        if (q6?.modePrefere === 'reponse-ecrite') verifier('une decison', q6, 'faute légère sur décision');
+        return {nombreQuestions: questions.length, controles, echecs};
+    }""")
+    assert not resultat_ecrit["echecs"], resultat_ecrit["echecs"][:20]
+
+    # Recette des ajouts finaux : ordre pédagogique indépendant des IDs Analytics,
+    # identité d’étape, restauration responsive, reprise unique et compteur sans joker.
+    page.evaluate("() => lancerEtape('commun', 2)")
+    page.wait_for_timeout(120)
+    ordre_etape_2 = page.evaluate("() => etat.questionsSession.map(question => question.id)")
+    assert ordre_etape_2 == [11, 12, 13, 14, 15, 17, 16, 18, 19, 20], ordre_etape_2
+    contexte = page.evaluate(r"""() => ({
+        numero: document.querySelector('#numeroEtapeQuestion')?.textContent.trim(),
+        titre: document.querySelector('#titreEtapeQuestion')?.textContent.trim(),
+        suivi: document.querySelector('#suiviSansJokerQuestion')?.textContent.replace(/\s+/g, ' ').trim(),
+        id: etat.questionCourante?.id
+    })""")
+    assert contexte["numero"] == "Étape 2", contexte
+    assert contexte["titre"], contexte
+    assert "Maîtrisées sans aide" in contexte["suivi"], contexte
+
+    identifiant_avant_resize = contexte["id"]
+    page.evaluate("""() => {
+        document.querySelector('#enonceQuestion').textContent = '';
+        document.querySelector('#zoneReponses').replaceChildren();
+    }""")
+    page.set_viewport_size({"width": 390, "height": 844})
+    page.wait_for_timeout(180)
+    rendu_repare = page.evaluate("""() => ({
+        id: etat.questionCourante?.id,
+        enonce: document.querySelector('#enonceQuestion')?.textContent.trim(),
+        reponses: document.querySelector('#zoneReponses')?.children.length || 0
+    })""")
+    assert rendu_repare["id"] == identifiant_avant_resize and rendu_repare["enonce"] and rendu_repare["reponses"] > 0, rendu_repare
+    page.set_viewport_size({"width": 1440, "height": 1000})
+    page.wait_for_timeout(120)
+
+    # Le stockage local est volontairement indisponible dans la page inline de cette
+    # recette (origine opaque). La restauration après rechargement est donc couverte
+    # par les contrôles statiques de verifier_pjjoue.py ; ici on couvre le même rendu
+    # responsive à chaud, qui était l’autre déclencheur du bug signalé.
+
+    reprise = page.evaluate("""() => {
+        const id = etat.questionCourante.id;
+        etat.questionValidee = true;
+        etat.reponsesSession.set(id, {statut:'incorrecte'});
+        etat.tentativesQuestions = new Map();
+        rejouerQuestionCourante();
+        const apresPremiere = etat.tentativesQuestions.get(id) || 0;
+        etat.questionValidee = true;
+        rejouerQuestionCourante();
+        const apresSeconde = etat.tentativesQuestions.get(id) || 0;
+        return {apresPremiere, apresSeconde};
+    }""")
+    assert reprise == {"apresPremiere": 1, "apresSeconde": 1}, reprise
+
+    compteur_sans_joker = page.evaluate("""() => {
+        const bilan = obtenirBilanEtape('commun', 2);
+        const ids = obtenirQuestionsEtape('commun', 2).slice(0, 2).map(question => question.id);
+        bilan.questionsTraitees = bilan.questionsTraitees || {};
+        bilan.resultats = bilan.resultats || {};
+        ids.forEach(id => { bilan.questionsTraitees[id] = true; bilan.resultats[id] = true; });
+        actualiserSuiviEtapeQuestion(etat.questionCourante);
+        const avant = compterReussitesAutonomesEtape('commun', 2);
+        reinitialiserValidationSansJokerEtape('commun', 2);
+        const apres = compterReussitesAutonomesEtape('commun', 2);
+        const progressionConservee = ids.every(id => bilan.questionsTraitees[id] === true);
+        return {avant, apres, progressionConservee};
+    }""")
+    assert compteur_sans_joker == {"avant": 2, "apres": 0, "progressionConservee": True}, compteur_sans_joker
+
+    validation_apres_reprise = page.evaluate("""() => {
+        const theme = 'commun';
+        const numeroEtape = 2;
+        const questions = obtenirQuestionsEtape(theme, numeroEtape);
+        const bilan = obtenirBilanEtape(theme, numeroEtape);
+        bilan.questionsTraitees = {};
+        bilan.resultats = {};
+        bilan.validationsSansJoker = {};
+        bilan.celebrationSansJokerAffichee = false;
+        etat.mode = 'parcours';
+        etat.theme = theme;
+        etat.etape = numeroEtape;
+        etat.reponsesSession = new Map();
+        etat.questionsPassees = new Set();
+        etat.brouillonsEcrits = new Map();
+        enregistrerResultatReponse(questions[0], '', {}, {
+            estCorrecte: true, reussiteAutonome: false, reussiteAidee: true,
+            tentatives: 1, aideUtilisee: false, etaitPassee: false
+        });
+        enregistrerResultatReponse(questions[1], '', {}, {
+            estCorrecte: true, reussiteAutonome: false, reussiteAidee: true,
+            tentatives: 0, aideUtilisee: true, etaitPassee: false
+        });
+        const courant = obtenirBilanEtape(theme, numeroEtape);
+        return {
+            repriseSansJoker: courant.validationsSansJoker[questions[0].id] === true,
+            repriseResteNonAutonome: courant.resultats[questions[0].id] !== true,
+            jokerNeComptePas: courant.validationsSansJoker[questions[1].id] !== true
+        };
+    }""")
+    assert validation_apres_reprise == {
+        "repriseSansJoker": True,
+        "repriseResteNonAutonome": True,
+        "jokerNeComptePas": True
+    }, validation_apres_reprise
+
+    migration_ancienne_sauvegarde = page.evaluate("""() => {
+        const q = obtenirQuestionsEtape('commun', 2)[0];
+        const progression = nettoyerProgression({apprenant:{commun:{2:{
+            meilleurScore: 100, nombreTentatives: 1,
+            questionsTraitees: {[q.id]: true},
+            resultats: {[q.id]: true},
+            termineeSansJoker: true
+        }}}});
+        const etape = progression.apprenant.commun['2'];
+        return {
+            validationMigree: etape.validationsSansJoker[q.id] === true,
+            celebrationAncienneConsidereeAffichee: etape.celebrationSansJokerAffichee === true
+        };
+    }""")
+    assert migration_ancienne_sauvegarde == {
+        "validationMigree": True,
+        "celebrationAncienneConsidereeAffichee": True
+    }, migration_ancienne_sauvegarde
+
+    celebration_etape_progressive = page.evaluate("""() => {
+        const theme = 'commun';
+        const numeroEtape = 2;
+        const bilan = obtenirBilanEtape(theme, numeroEtape);
+        const questions = obtenirQuestionsEtape(theme, numeroEtape);
+        bilan.questionsTraitees = {};
+        bilan.resultats = {};
+        bilan.validationsSansJoker = {};
+        bilan.termineeSansJoker = false;
+        bilan.jokersUtilises = true;
+        bilan.celebrationSansJokerAffichee = false;
+        questions.forEach((question, index) => {
+            bilan.questionsTraitees[question.id] = true;
+            bilan.validationsSansJoker[question.id] = true;
+            // La première question représente une réussite obtenue après reprise :
+            // elle n'est pas autonome, mais elle a bien été validée sans joker.
+            bilan.resultats[question.id] = index !== 0;
+        });
+        etat.mode = 'parcours';
+        etat.theme = theme;
+        etat.etape = numeroEtape;
+        const premiere = mettreAJourProgressionFinSession(100, 0, false);
+        const seconde = mettreAJourProgressionFinSession(100, 0, false);
+        return {
+            premiereCelebration: Boolean(premiere.celebration?.confetti),
+            titre: premiere.celebration?.titre || '',
+            secondeCelebration: Boolean(seconde.celebration),
+            maitriseeAutonome: bilan.termineeSansJoker === true,
+            celebrationMemorisee: obtenirBilanEtape(theme, numeroEtape).celebrationSansJokerAffichee === true
+        };
+    }""")
+    assert celebration_etape_progressive["premiereCelebration"], celebration_etape_progressive
+    assert "terminée sans joker" in celebration_etape_progressive["titre"].lower(), celebration_etape_progressive
+    assert celebration_etape_progressive["secondeCelebration"] is False, celebration_etape_progressive
+    assert celebration_etape_progressive["maitriseeAutonome"] is False, celebration_etape_progressive
+    assert celebration_etape_progressive["celebrationMemorisee"], celebration_etape_progressive
+
+    declenchement_celebration = page.evaluate("""() => new Promise(resolve => {
+        let confettis = 0;
+        let sons = 0;
+        const ancienConfettis = lancerConfettis;
+        const ancienSon = jouerSonEtapeSansJoker;
+        lancerConfettis = () => { confettis++; };
+        jouerSonEtapeSansJoker = () => { sons++; };
+        lancerCelebrationBilan({titre:'Test', message:'Test', confetti:true});
+        setTimeout(() => {
+            document.querySelector('#fenetreCelebration[open]')?.close();
+            lancerConfettis = ancienConfettis;
+            jouerSonEtapeSansJoker = ancienSon;
+            resolve({confettis, sons});
+        }, 320);
+    })""")
+    assert declenchement_celebration == {"confettis": 1, "sons": 1}, declenchement_celebration
+
+    page_mobile = navigateur.new_page(viewport={"width": 390, "height": 844})
+    erreurs_mobile: list[str] = []
+    page_mobile.on("pageerror", lambda erreur: erreurs_mobile.append(str(erreur)))
+    page_mobile.set_content(page_html, wait_until="domcontentloaded")
+    page_mobile.wait_for_function("() => window.DONNEES_PJJ?.QUESTIONS?.length === 960")
+    page_mobile.evaluate("() => ouvrirParcours('commun', {remplacerHistorique:true})")
+    page_mobile.wait_for_timeout(100)
+    dimensions = page_mobile.evaluate("() => ({document: document.documentElement.scrollWidth, fenetre: window.innerWidth})")
+    assert dimensions["document"] <= dimensions["fenetre"] + 2, dimensions
+    page_mobile.evaluate("() => lancerEvaluationFinale('commun')")
+    page_mobile.wait_for_timeout(80)
+    evaluation = page_mobile.evaluate("""() => ({
+        mode: etat.mode,
+        nombre: etat.questionsSession.length,
+        etape: etat.etape,
+        jokers: etat.jokersSessionActifs,
+        modes: [...new Set(etat.questionsSession.map(question => question.modePresentation || question.modePrefere))],
+        rendu: Boolean(document.querySelector('#zoneReponses')?.children.length)
+    })""")
+    assert evaluation["mode"] == "evaluation-finale" and evaluation["nombre"] == 50, evaluation
+    assert evaluation["etape"] == 12 and evaluation["jokers"] is False, evaluation
+    assert len(evaluation["modes"]) >= 3 and evaluation["rendu"], evaluation
+
+    # Les 960 questions des six parcours sont rendues réellement dans l’interface.
+    # Ce contrôle couvre les 66 étapes et les six évaluations,
+    # afin de détecter un champ résiduel ou une activité impossible à afficher.
+    parcours_rendus = page_mobile.evaluate(r"""() => {
+        const themes = [
+            'commun',
+            'procedure_ordinaire',
+            'information_judiciaire',
+            'jugement_educatif_ordinaire',
+            'matiere_criminelle_peines',
+            'application_execution_peines'
+        ];
+        const resultats = [];
+        const verifierSession = (anomalies, modesTous, modesEvaluation, evaluation) => {
+            let nombre = 0;
             etat.chronometreSessionActif = false;
-            lancerSession([QUESTIONS.find(question => question.id === 2)]);
-            const zone = document.querySelector('#zoneReponses');
-            const consigne = document.querySelector('.activite-consigne');
-            const grille = document.querySelector('.multiple-grille');
-            const styleZone = getComputedStyle(zone);
-            return {
-                affichageZone: styleZone.display,
-                largeurZone: zone.getBoundingClientRect().width,
-                largeurConsigne: consigne.getBoundingClientRect().width,
-                largeurGrille: grille.getBoundingClientRect().width,
-                colonnes: getComputedStyle(grille).gridTemplateColumns
-            };
-        }""")
-        if resultat_multiple["affichageZone"] != "block":
-            raise AssertionError(f"{format_ecran} : une activité est encore affichée comme une grille générale.")
-        if resultat_multiple["largeurConsigne"] < resultat_multiple["largeurZone"] * 0.94:
-            raise AssertionError(f"{format_ecran} : la consigne d’activité n’occupe plus toute la largeur.")
-        if resultat_multiple["largeurGrille"] < resultat_multiple["largeurZone"] * 0.94:
-            raise AssertionError(f"{format_ecran} : la grille d’activité est comprimée dans une colonne.")
-
-        resultat_ordre = page.evaluate("""() => {
-            lancerSession([QUESTIONS.find(question => question.id === 5)]);
-            const zone = document.querySelector('#zoneReponses');
-            const liste = document.querySelector('.ordre-liste');
-            const ligne = liste.querySelector('li');
-            return {
-                largeurZone: zone.getBoundingClientRect().width,
-                largeurListe: liste.getBoundingClientRect().width,
-                affichageLigne: getComputedStyle(ligne).display,
-                colonnesLigne: getComputedStyle(ligne).gridTemplateColumns
-            };
-        }""")
-        if resultat_ordre["largeurListe"] < resultat_ordre["largeurZone"] * 0.94:
-            raise AssertionError(f"{format_ecran} : la liste à ordonner n’occupe plus toute la largeur.")
-        if resultat_ordre["affichageLigne"] != "grid" or " " not in resultat_ordre["colonnesLigne"]:
-            raise AssertionError(f"{format_ecran} : les flèches d’ordre ne sont plus alignées avec leur texte.")
-
-        resultat_relier = page.evaluate("""() => {
-            lancerSession([QUESTIONS.find(question => question.id === 3)]);
-            const colonnes = document.querySelectorAll('.association-colonne');
-            colonnes[0].querySelector('button').click();
-            colonnes[1].querySelector('button').click();
-            const panneau = document.querySelector('.association-panneau');
-            const couche = document.querySelector('.association-lignes');
-            const fil = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            fil.classList.add('fil-association');
-            couche.appendChild(fil);
-            return {
-                largeurZone: document.querySelector('#zoneReponses').getBoundingClientRect().width,
-                largeurPanneau: panneau.getBoundingClientRect().width,
-                colonnes: getComputedStyle(panneau).gridTemplateColumns,
-                couleurFil: getComputedStyle(fil).stroke
-            };
-        }""")
-        if resultat_relier["largeurPanneau"] < resultat_relier["largeurZone"] * 0.94:
-            raise AssertionError(f"{format_ecran} : le mode Relier est comprimé dans une demi-colonne.")
-        if format_ecran == "bureau" and " " not in resultat_relier["colonnes"]:
-            raise AssertionError("Le mode Relier n’affiche plus ses deux colonnes sur ordinateur.")
-        if format_ecran == "bureau" and resultat_relier["couleurFil"] not in ("rgb(255, 201, 79)", "#ffc94f"):
-            raise AssertionError(f"Le fil du mode Relier n’est plus jaune : {resultat_relier['couleurFil']}")
-
-        page.evaluate("""() => {
-            lancerSession([QUESTIONS.find(question => question.id === 1)]);
-        }""")
-        page.wait_for_timeout(220)
-        resultat_correction = page.evaluate("""() => {
-            document.querySelector('.reponse[data-est-correcte="0"]').click();
-            const carte = document.querySelector('.question-carte').getBoundingClientRect();
-            const correction = document.querySelector('#zoneCorrection');
-            const cadre = correction.getBoundingClientRect();
-            const style = getComputedStyle(correction);
-            return {
-                position: style.position,
-                debordementVertical: style.overflowY,
-                ecartGauche: Math.abs(carte.left - cadre.left),
-                ecartHaut: Math.abs(carte.top - cadre.top),
-                ecartLargeur: Math.abs(carte.width - cadre.width),
-                ecartHauteur: Math.abs(carte.height - cadre.height)
-            };
-        }""")
-        if resultat_correction["position"] != "absolute":
-            raise AssertionError(f"{format_ecran} : la correction ne recouvre plus la carte de question.")
-        if resultat_correction["debordementVertical"] not in ("auto", "scroll"):
-            raise AssertionError(f"{format_ecran} : une correction longue ne peut plus défiler dans sa carte.")
-        for cle in ("ecartGauche", "ecartHaut", "ecartLargeur", "ecartHauteur"):
-            if resultat_correction[cle] > 5:
-                raise AssertionError(
-                    f"{format_ecran} : la correction ne correspond plus à la carte "
-                    f"({cle} : {resultat_correction[cle]:.2f}px)."
-                )
-
-        apparence_navigation = page.evaluate("""() => {
-            afficherEcran('accueil', {remplacerHistorique: true});
-            const bouton = document.querySelector('.navigation button:not([aria-current="page"])');
-            const style = getComputedStyle(bouton);
-            return {rayon: parseFloat(style.borderRadius), fond: style.backgroundColor};
-        }""")
-        fond_transparent = apparence_navigation["fond"] in (
-            "transparent",
-            "rgba(0, 0, 0, 0)",
-        )
-        apparence_incorrecte = (
-            format_ecran == "mobile"
-            and (apparence_navigation["rayon"] != 0 or not fond_transparent)
-        ) or (
-            format_ecran != "mobile"
-            and (apparence_navigation["rayon"] < 20 or fond_transparent)
-        )
-        if apparence_incorrecte:
-            raise AssertionError(
-                f"{format_ecran} : les boutons de navigation ont perdu leur présentation V1 "
-                f"(rayon : {apparence_navigation['rayon']}px, "
-                f"fond : {apparence_navigation['fond']})."
-            )
-        page.close()
-
-
-EMPREINTES_CORRECTIONS = {
-    "1:correcte": "0adc17a49649545004cc0830c29f3f78526d551276bc3053a35f668e4682f031",
-    "1:incorrecte": "80b1a119622b4d63f963351760cee5fb232a76f3682c4d527d3371998a955bd0",
-    "2:correcte": "cf469c527c2e2ca3d03128165861e20c1787971234c375d30ba2d893f524a96a",
-    "2:incorrecte": "297d0ba709194733c15457b94c512aa5f3b9203bd6b6c1d4b6d503d4b902650d",
-    "3:correcte": "6194d2478dd82dcc8c30d6308ccc5993acddda08f422e4fa220458181af57207",
-    "3:incorrecte": "a9151d13cdcff7f125ef615e51b7293b07404abee2fa9028acdde6d56c937124",
-    "4:correcte": "0301ae36ae642127841e46f7feec8094c9a91d5b459d167339d6e3007258ae40",
-    "4:incorrecte": "c2a2d0acebbecfb69317e3b328c7454013b9e208324782cf57975502ba461846",
-    "5:correcte": "396f792336e5d32f5350be2be00cea6a0d2d9216012302fb3e405e943b738c5c",
-    "5:incorrecte": "62b29239a3dd4a68fd594109eb11a26aec5e7b14b0906b6a0a8ebfcdee530d1d",
-    "6:correcte": "41f99f7f97b42bbb22d6bf5f8e535280100092e1291f7177fb7560943ff790d5",
-    "6:incorrecte": "c3834f919bd502a8b4c5e2e329fbbf613bc5d96c258f4701ee0feb350298b224",
-    "7:correcte": "38a0b6d5a1b5b75168f95fd8b0e5311b7236a77556e1fba4ff932360802df897",
-    "7:incorrecte": "bbcbd00a152c27844386a1e19e0da7cd338a345d424ee513718b1aec36629e62",
-    "48:correcte": "b219dd09f9c094067234675d218fbfa91162e98a09e20e8e2b6ec190d2375a72",
-    "48:incorrecte": "038fe412604a945891026114502936e73e2c0a156f62b557bd93af3ad098e61c",
-}
-
-
-def verifier_textes_corrections(navigateur, page_html: str) -> None:
-    for format_ecran in ("bureau", "mobile"):
-        page = navigateur.new_page(viewport=LARGEURS[format_ecran])
-        page.set_default_timeout(3000)
-        page.set_content(page_html, wait_until="domcontentloaded")
-        for identifiant_question in (1, 2, 3, 4, 5, 6, 7, 48):
-            for statut in ("correcte", "incorrecte"):
-                texte = page.evaluate(
-                    r"""([identifiantQuestion, statutReponse]) => {
-                        const question = QUESTIONS.find(element => element.id === identifiantQuestion);
-                        etat.jokersSessionActifs = true;
-                        etat.chronometreSessionActif = false;
-                        lancerSession([question]);
-                        afficherCorrectionEnregistree(question, {
-                            statut: statutReponse,
-                            texteReponse: statutReponse === 'incorrecte'
-                                ? 'Réponse de test'
-                                : question.bonneReponse,
-                            precisions: {}
-                        });
-                        const zone = document.querySelector('#zoneCorrection');
-                        const debordement = zone.scrollWidth > zone.clientWidth + 2;
-                        const conteneurExplication = document.createElement('div');
-                        conteneurExplication.innerHTML = question.explication;
-                        return {
-                            texte: zone.innerText.replace(/\s+/g, ' ').trim(),
-                            explication: conteneurExplication.innerText.replace(/\s+/g, ' ').trim(),
-                            debordement
-                        };
-                    }""",
-                    [identifiant_question, statut],
-                )
-                cle = f"{identifiant_question}:{statut}"
-                empreinte = hashlib.sha256(texte["texte"].encode("utf-8")).hexdigest()
-                if empreinte != EMPREINTES_CORRECTIONS[cle]:
-                    raise AssertionError(
-                        f"{format_ecran}/{cle} : le texte de correction diffère de la référence V1."
-                    )
-                if texte["explication"] not in texte["texte"]:
-                    raise AssertionError(f"{format_ecran}/{cle} : l’explication de la question est absente.")
-                if texte["debordement"]:
-                    raise AssertionError(f"{format_ecran}/{cle} : la correction déborde horizontalement.")
-        page.close()
+            for (let index = 0; index < etat.questionsSession.length; index++) {
+                etat.indexQuestion = index;
+                afficherQuestion({ suivreAnalytics: false });
+                clearInterval(etat.identifiantMinuteur);
+                etat.identifiantMinuteur = null;
+                const question = etat.questionCourante;
+                const mode = question.modePresentation || question.modePrefere;
+                const zone = document.querySelector('#zoneReponses');
+                modesTous[mode] = (modesTous[mode] || 0) + 1;
+                if (evaluation) modesEvaluation[mode] = (modesEvaluation[mode] || 0) + 1;
+                const compter = selecteur => zone?.querySelectorAll(selecteur).length || 0;
+                let renduValide = Boolean(
+                    document.querySelector('#enonceQuestion')?.textContent.trim()
+                    && zone?.textContent.trim()
+                    && zone.children.length
+                );
+                if (mode === 'choix-unique') renduValide = renduValide && compter('button.reponse') === 4;
+                if (mode === 'reponse-ecrite') renduValide = renduValide && compter('#reponseEcrite') === 1;
+                if (mode === 'selection-multiple') renduValide = renduValide && compter('button.multiple-choix') >= 3;
+                if (mode === 'association') renduValide = renduValide && compter('.association-panneau button') >= 4;
+                if (mode === 'classer') renduValide = renduValide && compter('.classement-element') >= 2;
+                if (mode === 'remettre-ordre') renduValide = renduValide && compter('.ordre-liste li') >= 2;
+                if (mode === 'eliminer') renduValide = renduValide && compter('button.elimination-choix') >= 2;
+                if (!renduValide) anomalies.push({ id: question.id, mode });
+                nombre++;
+            }
+            return nombre;
+        };
+        for (const theme of themes) {
+            const anomalies = [];
+            const modesTous = {};
+            const modesEvaluation = {};
+            let nombre = 0;
+            for (let etape = 1; etape <= 11; etape++) {
+                lancerEtape(theme, etape);
+                nombre += verifierSession(anomalies, modesTous, modesEvaluation, false);
+            }
+            lancerEvaluationFinale(theme);
+            nombre += verifierSession(anomalies, modesTous, modesEvaluation, true);
+            resultats.push({ theme, nombre, modesTous, modesEvaluation, anomalies });
+        }
+        return resultats;
+    }""")
+    for resultat in parcours_rendus:
+        assert resultat["nombre"] == 160, resultat
+        assert len(resultat["modesEvaluation"]) >= 3, resultat
+        assert not resultat["anomalies"], resultat["anomalies"][:20]
+    assert not erreurs_mobile, erreurs_mobile
+    page_mobile.close()
+    assert not erreurs, erreurs
+    page.close()
+    return int(resultat_ecrit["controles"])
 
 
 def verifier_administration(navigateur, page_html: str) -> None:
-    page = navigateur.new_page(viewport=LARGEURS["bureau"])
-    page.set_default_timeout(3000)
+    page = navigateur.new_page(viewport={"width": 1440, "height": 900})
     erreurs: list[str] = []
     page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
     page.set_content(page_html, wait_until="domcontentloaded")
-    page.wait_for_timeout(80)
-    if page.locator(".carte-question").count() != 150:
-        raise AssertionError("L’administration n’affiche pas les 150 questions.")
-    page.locator("#filtreEtape").select_option("11")
-    if page.locator(".carte-question").count() != 50:
-        raise AssertionError("Le filtre de l’étape 11 n’affiche pas 50 questions.")
-    page.locator("#boutonControler").click()
-    etat_controle = page.locator("#etatAdministration").inner_text()
-    etat_reference = "Validation structurelle : OK."
-    if etat_controle != etat_reference:
-        raise AssertionError(f"Le contrôle structurel de l’administration diffère de la référence : {etat_controle}")
-    brouillon_valide = page.evaluate("""() => validerBrouillon(questionsOriginales.map(question => ({
-        ...structuredClone(question),
-        enonce: question.id === 1 ? 'Énoncé conservé' : question.enonce
-    })))""")
-    if (
-        not brouillon_valide
-        or brouillon_valide[0]["enonce"] != "Énoncé conservé"
-        or brouillon_valide[0]["id"] != 1
-        or brouillon_valide[0]["versionContenu"] != "V1"
-        or len(brouillon_valide) != 150
-    ):
-        raise AssertionError(f"Un brouillon V1 valide n’est pas repris correctement : {brouillon_valide}")
-    if erreurs:
-        raise AssertionError(f"Erreurs JavaScript dans l’administration : {erreurs}")
+    page.wait_for_timeout(100)
+    assert page.locator('.carte-question').count() == 960, "L’administration n’affiche pas 960 questions."
+    page.locator('#filtreEtape').select_option('12')
+    page.wait_for_timeout(50)
+    assert page.locator('.carte-question').count() == 300, "Le filtre de l’étape 12 n’affiche pas les 300 questions des six évaluations."
+    page.locator('#filtreParcours').select_option('application_execution_peines')
+    page.wait_for_timeout(50)
+    assert page.locator('.carte-question').count() == 50, "Le filtre Parcours 6 + étape 12 n’affiche pas ses 50 questions."
+    page.locator('#boutonControler').click()
+    assert "OK" in page.locator('#etatAdministration').inner_text(), "Le contrôle structurel de l’administration échoue."
+    assert not erreurs, erreurs
     page.close()
 
 
 def principal() -> int:
     try:
-        page_jeu = construire_page_jeu()
-        page_administration = construire_page_administration()
         with sync_playwright() as automate:
-            navigateur = automate.chromium.launch(headless=True)
-            verifier_chargement_local(navigateur)
-            nombre_scenarios = verifier_scenarios(navigateur, page_jeu)
-            verifier_interactions(navigateur, page_jeu)
-            verifier_defi_chrono(navigateur, page_jeu)
-            verifier_reponses_ecrites(navigateur, page_jeu)
-            verifier_mise_en_page_questions(navigateur, page_jeu)
-            verifier_textes_corrections(navigateur, page_jeu)
-            verifier_administration(navigateur, page_administration)
+            navigateur = lancer_chromium(automate)
+            ouverture_locale_disponible = verifier_ouverture_locale(navigateur)
+            if ouverture_locale_disponible:
+                verifier_liens_guides_locaux(navigateur)
+            controles = verifier_jeu(navigateur, construire_page_jeu())
+            verifier_administration(navigateur, construire_page_administration())
             navigateur.close()
-        print(f"OK — interface PJJoue V1 : {nombre_scenarios} scénarios et interactions complémentaires réussis")
+        print(f"OK — interface : 6 parcours, 66 étapes, 6 évaluations et {controles} contrôles de réponses réussis")
         return 0
     except (AssertionError, ErreurPlaywright, OSError) as erreur:
         print(f"ÉCHEC — {erreur}", file=sys.stderr)

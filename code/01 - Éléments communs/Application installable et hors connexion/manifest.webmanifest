@@ -1,0 +1,26 @@
+{
+  "name": "PJJoue — Découvrir la PJJ et le CJPM",
+  "short_name": "PJJoue",
+  "description": "Site pédagogique indépendant et non officiel pour découvrir la Protection judiciaire de la jeunesse et approfondir le Code de la justice pénale des mineurs (CJPM).",
+  "lang": "fr-FR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#efeae2",
+  "theme_color": "#5d96c8",
+  "categories": ["education"],
+  "icons": [
+    {
+      "src": "icone-pjjoue-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icone-pjjoue-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

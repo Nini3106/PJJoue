@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="violetTrophee" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="880" y2="900"><stop offset="0" stop-color="#C6B0FF"/><stop offset=".52" stop-color="#A986FF"/><stop offset="1" stop-color="#765EB2"/></linearGradient></defs>
+  <g id="traitsTrophee" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M350 260H674V390c0 155-66 260-162 300-96-40-162-145-162-300Z"/><path d="M350 315h-80c-50 0-65 35-58 90 10 95 66 160 171 170M674 315h80c50 0 65 35 58 90-10 95-66 160-171 170M300 365h50M724 365h-50M300 365c2 87 40 150 102 170M724 365c-2 87-40 150-102 170M468 678c0 52-13 87-38 112h164c-25-25-38-60-38-112"/><rect x="398" y="790" width="228" height="62" rx="18"/><rect x="360" y="852" width="304" height="74" rx="20"/><path d="M330 926h364"/></g>
+  <use href="#traitsTrophee" stroke="#765EB2" stroke-width="36.25"/><use href="#traitsTrophee" stroke="url(#violetTrophee)" stroke-width="30"/>
+</svg>
