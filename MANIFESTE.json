@@ -605,7 +605,7 @@
     },
     "code/plan-construction.json": {
       "tailleOctets": 11415,
-      "sha256": "ab69da2d47c1ae81bcf157d02000a428373018ceeec02302dccb38befc9c6ebb"
+      "sha256": "701da63c403fc311392b50d7a815fc32f9e058de549359f4d849cd9a48a7a5e9"
     },
     "code/routes-application.json": {
       "tailleOctets": 425,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 446288,
-      "sha256": "29e91308c6b13a06faeaa46f135af132b5581b83091d7bcb3529faa375867632"
+      "tailleOctets": 446325,
+      "sha256": "3053bcb0553c9f3f42d118e99291458d27639d80d1ad9a6e366a0e7d07984aa9"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "3901ae8558a4ba16102f43c19fe4ccb36cb26beaf8e9770c03f9fcd7ac6ec2f3"
+      "sha256": "78b0a2b39c16138a67fef4dec22e4db429e8380482c3bad58b47a041f7851c98"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
@@ -1342,6 +1342,10 @@
     "tests/test_couleurs_questions_et_correction.py": {
       "tailleOctets": 3011,
       "sha256": "326521553bdae6bf2494756a2af902838246df907bf9bb43a35c3505af3baf1d"
+    },
+    "tests/test_evaluation_mesures.py": {
+      "tailleOctets": 5603,
+      "sha256": "d93e504d5b92d5b2d193f12665f93ab5f615813d06303ddc89e496f505615423"
     },
     "tests/test_harmonisation_ui.py": {
       "tailleOctets": 24728,
