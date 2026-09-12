@@ -48,8 +48,8 @@
   },
   "fichiers": {
     ".github/workflows/captures-visuelles.yml": {
-      "tailleOctets": 966,
-      "sha256": "8dcf221cae9ddb120b84c4f2233234128474f4742ad1d6de4b45d62fda363539"
+      "tailleOctets": 1222,
+      "sha256": "117225f713fbce72f3030f2f60c6f8a1b00241acddfb00f89717c74ed2b3df1c"
     },
     ".github/workflows/verification.yml": {
       "tailleOctets": 991,
@@ -1394,6 +1394,10 @@
     "tests/verifier_pjjoue.py": {
       "tailleOctets": 27920,
       "sha256": "8437f51aa165b95e4f354ab98a82ec62d41f3f3900a9313d8c48615ab82e24ce"
+    },
+    "tests/verifier_publication_accueil.py": {
+      "tailleOctets": 7456,
+      "sha256": "b581892d82add9d146b57395919f8e5d98744a58c68898fdf857e3061a31d355"
     },
     "tests/verifier_regression_visuelle.py": {
       "tailleOctets": 87720,

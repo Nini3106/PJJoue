@@ -2,6 +2,8 @@ name: Captures visuelles de PJJoue
 
 on:
   workflow_dispatch:
+  push:
+    branches: [verification/accueil-mobile-captures]
 
 permissions:
   contents: read
@@ -13,6 +15,8 @@ jobs:
     steps:
       - name: Récupérer le site
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
 
       - name: Préparer Python
         uses: actions/setup-python@v5
@@ -28,7 +32,9 @@ jobs:
 
       - name: Contrôler les captures visuelles
         continue-on-error: true
-        run: python tests/verifier_regression_visuelle.py
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/pjjoue-temoin" 80a194491e489e08536cb3d06fe74187faf47a01
+          python tests/verifier_publication_accueil.py --temoin "$RUNNER_TEMP/pjjoue-temoin"
 
       - name: Conserver les captures
         if: always()
