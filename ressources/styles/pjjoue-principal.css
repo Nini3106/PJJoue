@@ -10182,7 +10182,7 @@ body[data-ecran-actif="accueil"] #accueil {
 
     #accueil .accueil-contenu {
         width: 100%;
-        min-height: 610px;
+        min-height: max(610px, calc(100dvh - var(--hauteur-entete,66px)));
         padding: 26px 18px 0;
     }
 
@@ -10197,7 +10197,7 @@ body[data-ecran-actif="accueil"] #accueil {
 
 @media (max-width:360px) {
     #accueil .accueil-contenu {
-        min-height: 590px;
+        min-height: max(590px, calc(100dvh - var(--hauteur-entete,66px)));
         padding-inline: 15px;
     }
 }
