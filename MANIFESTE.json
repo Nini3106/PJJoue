@@ -2,7 +2,7 @@
   "produit": "PJJoue",
   "version": "V1",
   "dateCreation": "août 2026",
-  "dateConsolidation": "2026-09-11",
+  "dateConsolidation": "2026-09-12",
   "composition": {
     "questionsTotales": 960,
     "questionsParcours": 660,
@@ -228,8 +228,8 @@
       "sha256": "a5f1d8aaeee8d3a1b3274f47034af8ce3cdba3337b707466866635545e091a92"
     },
     "code/01 - Éléments communs/style-general-pjjoue.css": {
-      "tailleOctets": 263652,
-      "sha256": "7db4f45354446254999f8142445c7e67f4bf98d303171aae5657e92a6877d30c"
+      "tailleOctets": 263748,
+      "sha256": "bfd1ba8baad00706bbae985ea54babdf79d6849ba50c865a20328d4dfb66e344"
     },
     "code/02 - Accueil/LIRE-MOI.md": {
       "tailleOctets": 556,
@@ -1076,8 +1076,8 @@
       "sha256": "51a64261c7301ed44340cd3cacc89b8204edcd4adc8beafcf5e0b198d2baa7c4"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 391292,
-      "sha256": "b63c1f813e02beed8f53b30a905fa1214a743a047b97750f7d155663845b5e5f"
+      "tailleOctets": 391388,
+      "sha256": "d11d872098a097040482aaaab7b63ab7ecb311da0c802b110496c1f6a2fc6ee7"
     },
     "ressources/styles/pjjoue-static.css": {
       "tailleOctets": 20968,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "3901ae8558a4ba16102f43c19fe4ccb36cb26beaf8e9770c03f9fcd7ac6ec2f3"
+      "sha256": "c2f65599358dd2386f67e3cc30d37beb0b7171e4fff92c98aaf011d2165bff63"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
