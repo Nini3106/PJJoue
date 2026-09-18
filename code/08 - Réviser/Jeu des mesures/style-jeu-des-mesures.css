@@ -122,8 +122,21 @@
 #mesures .mesures-parcours-zone-entete h2 { margin:0 0 4px; }
 #mesures .mesures-parcours-zone-entete p { margin:0; color:var(--texte-secondaire); }
 #mesures .mesures-etapes-grille { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-#mesures .mesures-etape-carte { --mesures-etape-accent:#4f8cff; --mesures-etape-accent-lisible:#9fc2ff; --mesures-etape-rgb:79,140,255; display:grid; grid-template-rows:auto auto 1fr auto auto; gap:11px; min-height:280px; padding:22px; border:1px solid var(--bordure-carte); border-top:5px solid var(--mesures-etape-accent-lisible); border-radius:var(--rayon-tres-grand); color:var(--texte); background:var(--surface-carte); box-shadow:var(--ombre-carte); text-align:left; }
+#mesures .mesures-etape-carte { --mesures-etape-accent:#4f8cff; --mesures-etape-accent-lisible:#9fc2ff; --mesures-etape-rgb:79,140,255; position:relative; display:grid; grid-template-rows:1fr auto; gap:0; min-height:280px; overflow:hidden; border:1px solid var(--bordure-carte); border-top:5px solid var(--mesures-etape-accent-lisible); border-radius:var(--rayon-tres-grand); color:var(--texte); background:var(--surface-carte); box-shadow:var(--ombre-carte); text-align:left; transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease; }
 #mesures .mesures-etape-carte:hover { border-color:var(--mesures-etape-accent-lisible); transform:translateY(-2px); }
+#mesures .mesures-etape-ouvrir { display:grid; grid-template-rows:auto auto 1fr auto; gap:11px; width:100%; min-height:275px; padding:22px; border:0; border-radius:0; color:inherit; background:transparent; box-shadow:none; text-align:left; font:inherit; cursor:pointer; }
+#mesures .mesures-etape-ouvrir:hover,
+#mesures .mesures-etape-ouvrir:focus-visible { color:inherit; background:rgba(var(--mesures-etape-rgb),.07); box-shadow:none; transform:none; }
+#mesures .mesures-etape-revision { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:44px; margin:0; padding:10px 16px; border:0; border-top:1px solid rgba(var(--mesures-etape-rgb),.35); border-radius:0; color:var(--mesures-etape-accent-lisible); background:rgba(var(--mesures-etape-rgb),.10); box-shadow:none; text-align:left; font:inherit; font-size:.88rem; font-weight:850; cursor:pointer; }
+#mesures .mesures-etape-revision:hover:not(:disabled),
+#mesures .mesures-etape-revision:focus-visible:not(:disabled) { color:var(--texte); background:rgba(var(--mesures-etape-rgb),.19); box-shadow:inset 0 0 0 1px var(--mesures-etape-accent-lisible); }
+#mesures .mesures-etape-revision:disabled { color:var(--texte-secondaire); background:var(--surface-carte-profonde); border-top-color:var(--bordure); opacity:.72; cursor:not-allowed; }
+#mesures .mesures-etape-revision strong { color:inherit; font-size:1rem; }
+#mesures .mesures-etape-carte .etoile-filante-progression { position:absolute; z-index:2; top:10px; right:10px; display:block; width:68px; height:42px; color:var(--mesures-etape-accent-lisible); pointer-events:none; filter:drop-shadow(0 3px 7px rgba(0,19,52,.34)); }
+#mesures .mesures-etape-carte .etoile-filante-progression svg { display:block; width:100%; height:100%; overflow:visible; }
+#mesures .mesures-etape-carte .etoile-filante-trainee { fill:none; stroke:currentColor; stroke-width:2.5; stroke-linecap:round; opacity:.72; }
+#mesures .mesures-etape-carte .etoile-filante-trainee-basse { opacity:.46; }
+#mesures .mesures-etape-carte .etoile-filante-astre { fill:var(--surface-carte); stroke:currentColor; stroke-width:2.4; stroke-linejoin:round; }
 #mesures .mesures-etape-carte-entete { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 #mesures .mesures-etape-icone { display:grid; place-items:center; width:64px; height:64px; border:1px solid rgba(var(--mesures-etape-rgb),.55); border-radius:17px; color:var(--mesures-etape-accent-lisible); background:rgba(var(--mesures-etape-rgb),.12); }
 #mesures .mesures-etape-icone svg { width:40px; height:40px; fill:none; stroke:currentColor; stroke-width:1.55; stroke-linecap:round; stroke-linejoin:round; }

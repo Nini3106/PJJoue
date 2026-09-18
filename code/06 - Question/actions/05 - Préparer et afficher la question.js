@@ -303,6 +303,57 @@ function appliquerIdentiteVisuelleEtape(question) {
     document.body.dataset.etapeActive = identifiantEtape;
     appliquerIdentiteParcoursQuestion(question);
 }
+function obtenirErreursActivesEtapeQuestion(question) {
+    if (!question)
+        return [];
+    const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
+    if (question.missionSigles)
+        return obtenirErreursSiglesActives().filter(cible => Number(cible.etape) === numeroEtape);
+    if (question.missionMesures)
+        return obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === numeroEtape);
+    return Object.entries(sauvegarde.erreurs || {})
+        .filter(([_identifiant, suivi]) => suivi?.maitrisee !== true)
+        .map(([identifiant]) => QUESTIONS.find(element => String(element.id) === String(identifiant)))
+        .filter(element => element && !element.estEvaluationFinale
+            && element.theme === question.theme && Number(element.etape) === numeroEtape);
+}
+function rejouerErreursEtapeCourante() {
+    const question = etat.questionCourante;
+    if (!question)
+        return;
+    const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
+    if (question.missionSigles) {
+        lancerRevisionEtapeSiglesDepuisQuestion(numeroEtape);
+        return;
+    }
+    if (question.missionMesures) {
+        lancerRevisionEtapeMesuresDepuisQuestion(numeroEtape);
+        return;
+    }
+    lancerRevisionEtape(question.theme, numeroEtape);
+}
+function actualiserBoutonRevisionEtapeQuestion(question) {
+    const bouton = selectionner('#boutonRejouerErreursEtape');
+    if (!bouton)
+        return;
+    const mode = question?.missionSigles
+        ? obtenirModeMissionSigles()
+        : question?.missionMesures
+            ? obtenirModeMissionMesures()
+            : etat.mode;
+    const erreurs = obtenirErreursActivesEtapeQuestion(question);
+    const visible = Boolean(question)
+        && !question.estEvaluationFinale
+        && mode !== 'evaluation'
+        && mode !== 'evaluation-finale'
+        && mode !== 'revision'
+        && erreurs.length > 0;
+    bouton.classList.toggle('masque', !visible);
+    bouton.disabled = !visible;
+    bouton.setAttribute('aria-label', visible
+        ? `Rejouer uniquement mes erreurs de l’étape ${Number(question.etape || 1)}`
+        : 'Rejouer uniquement mes erreurs');
+}
 function actualiserSuiviEtapeQuestion(question) {
     const conteneur = selectionner('#contexteEtapeQuestion');
     const identiteParcoursQuestion = selectionner('#identiteParcoursQuestion');
@@ -324,11 +375,13 @@ function actualiserSuiviEtapeQuestion(question) {
         titreParcours.textContent = 'Mission Sigles';
         numero.textContent = finaleMission ? 'Évaluation finale' : `Étape ${numeroEtape}`;
         titre.textContent = finaleMission ? 'Expert des sigles' : identite.titre;
-        suivi.classList.toggle('masque', finaleMission || obtenirModeMissionSigles() !== 'parcours');
-        if (!finaleMission && obtenirModeMissionSigles() === 'parcours') {
+        const modeMission = obtenirModeMissionSigles();
+        suivi.classList.toggle('masque', finaleMission || !['parcours', 'revision'].includes(modeMission));
+        if (!finaleMission && ['parcours', 'revision'].includes(modeMission)) {
             compteur.textContent = `${compterMaitrisesEtapeSigles(numeroEtape)}/${NOMBRE_SIGLES_PAR_ETAPE}`;
             boutonReinitialiser.disabled = compterMaitrisesEtapeSigles(numeroEtape) === 0;
         }
+        actualiserBoutonRevisionEtapeQuestion(question);
         return;
     }
     if (question.missionMesures) {
@@ -340,12 +393,14 @@ function actualiserSuiviEtapeQuestion(question) {
         titreParcours.textContent = 'Mission Mesures';
         numero.textContent = finaleMission ? 'Évaluation finale' : `Étape ${String(numeroEtape).padStart(2,'0')}`;
         titre.textContent = finaleMission ? 'Maîtriser les mesures' : identite.titre;
-        suivi.classList.toggle('masque', finaleMission || obtenirModeMissionMesures() !== 'parcours');
-        if (!finaleMission && obtenirModeMissionMesures() === 'parcours') {
+        const modeMission = obtenirModeMissionMesures();
+        suivi.classList.toggle('masque', finaleMission || !['parcours', 'revision'].includes(modeMission));
+        if (!finaleMission && ['parcours', 'revision'].includes(modeMission)) {
             const total = obtenirReperesMesuresEtape(numeroEtape).length;
             compteur.textContent = `${compterMaitrisesEtapeMesures(numeroEtape)}/${total}`;
             boutonReinitialiser.disabled = compterMaitrisesEtapeMesures(numeroEtape) === 0;
         }
+        actualiserBoutonRevisionEtapeQuestion(question);
         return;
     }
     identiteParcoursQuestion.classList.remove('masque');
@@ -356,9 +411,11 @@ function actualiserSuiviEtapeQuestion(question) {
     titreParcours.textContent = identite.titre;
     numero.textContent = finale ? 'Étape 12' : `Étape ${question.etape}`;
     titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours PJJ');
-    suivi.classList.toggle('masque', finale || etat.mode !== 'parcours');
-    if (finale || etat.mode !== 'parcours')
+    suivi.classList.toggle('masque', finale || !['parcours', 'revision'].includes(etat.mode));
+    if (finale || !['parcours', 'revision'].includes(etat.mode)) {
+        actualiserBoutonRevisionEtapeQuestion(question);
         return;
+    }
     const questionsEtape = obtenirQuestionsEtape(question.theme, question.etape);
     const nombreAutonomes = compterReussitesAutonomesEtape(question.theme, question.etape);
     compteur.textContent = `${nombreAutonomes}/${questionsEtape.length}`;
@@ -367,6 +424,7 @@ function actualiserSuiviEtapeQuestion(question) {
         'aria-label',
         `Réinitialiser les ${nombreAutonomes} questions maîtrisées sans aide de l’étape ${question.etape}`
     );
+    actualiserBoutonRevisionEtapeQuestion(question);
 }
 function demanderReinitialisationSansJoker() {
     const question = etat.questionCourante;
