@@ -266,7 +266,7 @@ function lancerRevision(identifiantTheme = 'toutes') {
     etat.origineSessionAnalytics = 'revision_des_erreurs';
     etat.theme = identifiantTheme === 'toutes' ? null : identifiantTheme;
     etat.perimetreRevision = identifiantTheme;
-    etat.jokersSessionActifs = true;
+    etat.jokersSessionActifs = false;
     etat.chronometreSessionActif = false;
     lancerSession(melanger(reserve));
 }
@@ -297,7 +297,7 @@ function lancerRevisionEtape(identifiantTheme, etape = null) {
     etat.origineSessionAnalytics = 'revision_des_erreurs';
     etat.theme = identifiantTheme;
     etat.perimetreRevision = `${identifiantTheme}:etape:${etapeCible}`;
-    etat.jokersSessionActifs = true;
+    etat.jokersSessionActifs = false;
     etat.chronometreSessionActif = false;
     lancerSession(melanger(reserve));
 }

@@ -173,10 +173,14 @@ document.addEventListener('click', evenement => {
         lancerToutesErreursSiglesDepuisRevision();
     else if (action === 'reviser-etape-sigles')
         lancerRevisionEtapeSiglesDepuisRevision(cible.dataset.etape);
+    else if (action === 'reviser-etape-mesures')
+        lancerRevisionEtapeMesuresDepuisRevision(cible.dataset.etape);
     else if (action === 'ouvrir-parcours-depuis-erreurs')
         ouvrirChoixParcours();
     else if (action === 'ouvrir-mission-sigles-depuis-erreurs')
         afficherEcran('sigles');
+    else if (action === 'rejouer-erreurs-etape')
+        rejouerErreursEtapeCourante();
 });
 mesurerHauteurEntete();
 selectionner('#boutonMenuMobile')?.addEventListener('click', evenement => {

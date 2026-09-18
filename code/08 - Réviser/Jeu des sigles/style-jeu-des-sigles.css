@@ -122,8 +122,21 @@
 #sigles .sigles-parcours-zone-entete h2 { margin:0 0 4px; }
 #sigles .sigles-parcours-zone-entete p { margin:0; color:var(--texte-secondaire); }
 #sigles .sigles-etapes-grille { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-#sigles .sigles-etape-carte { --sigles-etape-accent:#4f8cff; --sigles-etape-accent-lisible:#9fc2ff; --sigles-etape-rgb:79,140,255; display:grid; grid-template-rows:auto auto 1fr auto auto; gap:11px; min-height:280px; padding:22px; border:1px solid var(--bordure-carte); border-top:5px solid var(--sigles-etape-accent-lisible); border-radius:var(--rayon-tres-grand); color:var(--texte); background:var(--surface-carte); box-shadow:var(--ombre-carte); text-align:left; }
+#sigles .sigles-etape-carte { --sigles-etape-accent:#4f8cff; --sigles-etape-accent-lisible:#9fc2ff; --sigles-etape-rgb:79,140,255; position:relative; display:grid; grid-template-rows:1fr auto; gap:0; min-height:280px; overflow:hidden; border:1px solid var(--bordure-carte); border-top:5px solid var(--sigles-etape-accent-lisible); border-radius:var(--rayon-tres-grand); color:var(--texte); background:var(--surface-carte); box-shadow:var(--ombre-carte); text-align:left; transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease; }
 #sigles .sigles-etape-carte:hover { border-color:var(--sigles-etape-accent-lisible); transform:translateY(-2px); }
+#sigles .sigles-etape-ouvrir { display:grid; grid-template-rows:auto auto 1fr auto; gap:11px; width:100%; min-height:275px; padding:22px; border:0; border-radius:0; color:inherit; background:transparent; box-shadow:none; text-align:left; font:inherit; cursor:pointer; }
+#sigles .sigles-etape-ouvrir:hover,
+#sigles .sigles-etape-ouvrir:focus-visible { color:inherit; background:rgba(var(--sigles-etape-rgb),.07); box-shadow:none; transform:none; }
+#sigles .sigles-etape-revision { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:44px; margin:0; padding:10px 16px; border:0; border-top:1px solid rgba(var(--sigles-etape-rgb),.35); border-radius:0; color:var(--sigles-etape-accent-lisible); background:rgba(var(--sigles-etape-rgb),.10); box-shadow:none; text-align:left; font:inherit; font-size:.88rem; font-weight:850; cursor:pointer; }
+#sigles .sigles-etape-revision:hover:not(:disabled),
+#sigles .sigles-etape-revision:focus-visible:not(:disabled) { color:var(--texte); background:rgba(var(--sigles-etape-rgb),.19); box-shadow:inset 0 0 0 1px var(--sigles-etape-accent-lisible); }
+#sigles .sigles-etape-revision:disabled { color:var(--texte-secondaire); background:var(--surface-carte-profonde); border-top-color:var(--bordure); opacity:.72; cursor:not-allowed; }
+#sigles .sigles-etape-revision strong { color:inherit; font-size:1rem; }
+#sigles .sigles-etape-carte .etoile-filante-progression { position:absolute; z-index:2; top:10px; right:10px; display:block; width:68px; height:42px; color:var(--sigles-etape-accent-lisible); pointer-events:none; filter:drop-shadow(0 3px 7px rgba(0,19,52,.34)); }
+#sigles .sigles-etape-carte .etoile-filante-progression svg { display:block; width:100%; height:100%; overflow:visible; }
+#sigles .sigles-etape-carte .etoile-filante-trainee { fill:none; stroke:currentColor; stroke-width:2.5; stroke-linecap:round; opacity:.72; }
+#sigles .sigles-etape-carte .etoile-filante-trainee-basse { opacity:.46; }
+#sigles .sigles-etape-carte .etoile-filante-astre { fill:var(--surface-carte); stroke:currentColor; stroke-width:2.4; stroke-linejoin:round; }
 #sigles .sigles-etape-carte-entete { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 #sigles .sigles-etape-icone { display:grid; place-items:center; width:64px; height:64px; border:1px solid rgba(var(--sigles-etape-rgb),.55); border-radius:17px; color:var(--sigles-etape-accent-lisible); background:rgba(var(--sigles-etape-rgb),.12); }
 #sigles .sigles-etape-icone svg { width:40px; height:40px; fill:none; stroke:currentColor; stroke-width:1.55; stroke-linecap:round; stroke-linejoin:round; }
