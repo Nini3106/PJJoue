@@ -200,7 +200,6 @@
 .parcours-detail-barre { height: 8px; margin-bottom: 15px; overflow: hidden; border-radius: 99px; background: var(--surface-secondaire); }
 .parcours-detail-barre i { display: block; height: 100%; background: var(--parcours-accent); }
 .parcours-action-principale { width:max-content; max-width:100%; }
-.parcours-reprendre-debut { justify-self:start; width:max-content; max-width:100%; }
 
 .parcours-carte-zone {
   padding: 24px;
@@ -240,6 +239,31 @@
 #parcours #cartesEtapesFinales::after { right:-14px; width:14px; }
 #parcours .chemin-etape-texte { max-width:100%; }
 #parcours .chemin-etape-titre { min-width:0; max-width:100%; overflow-wrap:anywhere; hyphens:auto; }
+#parcours .chemin-etape-numero-ligne { display:flex; align-items:center; flex-wrap:wrap; gap:8px; min-width:0; }
+#parcours .chemin-etape-numero-ligne .chemin-etape-numero { margin-bottom:0; }
+#parcours .chemin-etape-reprendre-debut {
+  flex:0 1 auto;
+  min-height:36px;
+  max-width:100%;
+  padding:7px 11px;
+  border:1px solid var(--couleur-etape,var(--parcours-accent-lisible,var(--parcours-accent)));
+  border-radius:10px;
+  color:var(--couleur-etape,var(--parcours-accent-lisible,var(--parcours-accent)));
+  background:color-mix(in srgb, var(--couleur-etape,var(--parcours-accent)) 12%, transparent);
+  box-shadow:none;
+  font-size:.78rem;
+  font-weight:850;
+  line-height:1.15;
+  text-align:center;
+  white-space:normal;
+}
+#parcours .chemin-etape-reprendre-debut:hover,
+#parcours .chemin-etape-reprendre-debut:focus-visible {
+  color:var(--texte);
+  border-color:var(--couleur-etape,var(--parcours-accent-lisible,var(--parcours-accent)));
+  background:color-mix(in srgb, var(--couleur-etape,var(--parcours-accent)) 24%, transparent);
+  box-shadow:inset 0 0 0 1px var(--couleur-etape,var(--parcours-accent-lisible,var(--parcours-accent)));
+}
 .chemin-ligne-inverse { direction: rtl; }
 .chemin-ligne-inverse > * { direction: ltr; }
 #parcours .chemin-etape-carte,
@@ -306,8 +330,7 @@
 }
 
 @media (max-width: 720px) {
-  #parcours .parcours-action-principale,
-  #parcours .parcours-reprendre-debut { width:100%; }
+  #parcours .parcours-action-principale { width:100%; }
 }
 
 @media (min-width: 721px) and (max-width: 1120px) {
