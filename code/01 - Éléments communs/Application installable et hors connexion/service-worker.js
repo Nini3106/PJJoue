@@ -10,7 +10,7 @@ const RESSOURCES_ESSENTIELLES = [
   './ressources/navigation-locale.js?v=20260828-menu2',
   './ressources/consentement-analytics.js',
   './ressources/videos-guides.js',
-  './ressources/styles/pjjoue-principal.css?v=20260828-coherence11',
+  './ressources/styles/pjjoue-principal.css?v=20260828-coherence12',
   './ressources/styles/pjjoue-static.css?v=20260828-menu2',
   './ressources/styles/95-consentement.css',
   './ressources/styles/95-consentement.css?v=20260827-final1',
