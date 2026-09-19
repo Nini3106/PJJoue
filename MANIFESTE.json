@@ -224,8 +224,8 @@
       "sha256": "6e0c5ab43780ebd278b7394f14523cfd73d084d5b4260061148d51a5b9af125d"
     },
     "code/01 - Éléments communs/style-des-six-parcours.css": {
-      "tailleOctets": 20385,
-      "sha256": "1ce58401b58bf7e3aee12abcbbf6d1d6302907d30a63202f3ce12956259f08b2"
+      "tailleOctets": 20421,
+      "sha256": "9fcc4ffeede5547498f22d2f7d5ca9a90fe7b7171cb89d45c99e0351d87aa3ee"
     },
     "code/01 - Éléments communs/style-general-pjjoue.css": {
       "tailleOctets": 263748,
@@ -1076,8 +1076,8 @@
       "sha256": "51a64261c7301ed44340cd3cacc89b8204edcd4adc8beafcf5e0b198d2baa7c4"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 398499,
-      "sha256": "7e2815ca7129e5aae4d4fb072e98e674f546b2bd9e401d1d2deaa9cf3255eeba"
+      "tailleOctets": 398535,
+      "sha256": "e2613a712ac8308efcb16a5b933e881ccaa9a81bdf69368ff91d0bd94da83cd6"
     },
     "ressources/styles/pjjoue-static.css": {
       "tailleOctets": 20968,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "ab5d620925337773a5f6a0a5cef8e4bc46bba10731d75b32969b6e12b0e5a079"
+      "sha256": "a578bc41291ef1c1dddd16ae090520709325468a4540ca9204cfafae768bfe57"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
