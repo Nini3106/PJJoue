@@ -2199,6 +2199,12 @@ function actualiserEnteteParcours(programme) {
         barre.querySelector('i')?.style.setProperty('width', `${progression.pourcentage}%`);
     }
     const boutonAction = selectionner('#boutonActionParcours');
+    const boutonReprendreDepuisDebut = selectionner('#boutonReprendreDepuisDebutParcours');
+    if (boutonReprendreDepuisDebut) {
+        boutonReprendreDepuisDebut.classList.add('masque');
+        boutonReprendreDepuisDebut.disabled = true;
+        boutonReprendreDepuisDebut.onclick = null;
+    }
     if (!boutonAction)
         return;
     boutonAction.disabled = false;
@@ -2206,6 +2212,12 @@ function actualiserEnteteParcours(programme) {
         const dejaCommencee = compterQuestionsTraiteesEtape(programme.id, prochaineEtape.id) > 0;
         boutonAction.textContent = `${dejaCommencee ? 'Reprendre' : 'Commencer'} l’étape ${prochaineEtape.id} →`;
         boutonAction.onclick = () => lancerEtape(programme.id, prochaineEtape.id);
+        if (boutonReprendreDepuisDebut && dejaCommencee) {
+            boutonReprendreDepuisDebut.classList.remove('masque');
+            boutonReprendreDepuisDebut.disabled = false;
+            boutonReprendreDepuisDebut.setAttribute('aria-label', `Reprendre l’étape ${prochaineEtape.id} depuis la première question`);
+            boutonReprendreDepuisDebut.onclick = () => lancerEtapeDepuisDebut(programme.id, prochaineEtape.id);
+        }
     }
     else if (!estEvaluationFinaleReussie(programme.id)) {
         boutonAction.textContent = 'Passer l’évaluation finale →';
@@ -2810,9 +2822,14 @@ function obtenirQuestionsSessionEtape(identifiantTheme, etape, chapitre) {
         return questionsEtape.filter(question => (Number(question.chapitre) || 1) === Number(chapitre));
     return questionsEtape;
 }
-function lancerEtape(identifiantTheme, etape, chapitre = null) {
+function obtenirQuestionsRestantesEtape(reserve, identifiantTheme, etape) {
+    const questionsTraitees = obtenirBilanEtape(identifiantTheme, etape)?.questionsTraitees || {};
+    return reserve.filter(question => !questionsTraitees[question.id]);
+}
+function lancerEtape(identifiantTheme, etape, chapitre = null, options = {}) {
     // Une étape demandée explicitement remplace toute ancienne session mémorisée.
     // Cela évite qu'une session précédente intercepte l'ouverture de la nouvelle étape.
+    const depuisDebut = options?.depuisDebut === true;
     clearInterval(etat.identifiantMinuteur);
     etat.identifiantMinuteur = null;
     etat.questionsSession = [];
@@ -2822,7 +2839,9 @@ function lancerEtape(identifiantTheme, etape, chapitre = null) {
     etat.theme = identifiantTheme;
     etat.etape = Number(etape);
     etat.etapeAvecJoker = false;
-    etat.chapitre = Number(chapitre) || determinerProchainChapitre(identifiantTheme, etape);
+    etat.chapitre = depuisDebut
+        ? 1
+        : Number(chapitre) || determinerProchainChapitre(identifiantTheme, etape);
     etat.mode = 'parcours';
     etat.origineSessionAnalytics = 'parcours_pjj';
     etat.organisationSession = 'melange';
@@ -2834,7 +2853,16 @@ function lancerEtape(identifiantTheme, etape, chapitre = null) {
         : (Number(etat.dureeChronometreParcours) || 15)));
     etat.dureeChronometreParcours = etat.dureeChronometreSession;
     const reserve = obtenirQuestionsSessionEtape(identifiantTheme, etape, etat.chapitre);
-    lancerSession(ordonnerQuestionsParcours(reserve));
+    const questionsRestantes = depuisDebut
+        ? reserve
+        : obtenirQuestionsRestantesEtape(reserve, identifiantTheme, etape);
+    // Une étape déjà parcourue peut encore nécessiter une validation sans joker.
+    // Dans ce cas, on conserve le comportement existant et on rejoue la réserve
+    // du chapitre le moins maîtrisé au lieu de lancer une session vide.
+    lancerSession(ordonnerQuestionsParcours(questionsRestantes.length ? questionsRestantes : reserve));
+}
+function lancerEtapeDepuisDebut(identifiantTheme, etape) {
+    lancerEtape(identifiantTheme, etape, 1, { depuisDebut: true });
 }
 function obtenirQuestionsEvaluationFinale(identifiantTheme = etat.theme || 'commun') {
     return QUESTIONS
