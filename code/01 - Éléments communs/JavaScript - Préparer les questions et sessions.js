@@ -102,8 +102,15 @@ function obtenirQuestionsSessionEtape(identifiantTheme, etape, chapitre) {
     return questionsEtape;
 }
 function obtenirQuestionsRestantesEtape(reserve, identifiantTheme, etape) {
-    const questionsTraitees = obtenirBilanEtape(identifiantTheme, etape)?.questionsTraitees || {};
-    return reserve.filter(question => !questionsTraitees[question.id]);
+    const bilan = obtenirBilanEtape(identifiantTheme, etape);
+    const questionsTraitees = bilan?.questionsTraitees || {};
+    const questionsNonTraitees = reserve.filter(question => !questionsTraitees[question.id]);
+    if (questionsNonTraitees.length)
+        return questionsNonTraitees;
+    // Toutes les questions peuvent avoir été vues alors qu'une ou plusieurs
+    // réponses n'ont pas encore été réussies sans aide. Reprendre ces questions
+    // évite de relancer toute l'étape lorsqu'elle affiche par exemple 9/10.
+    return reserve.filter(question => bilan?.resultats?.[question.id] !== true);
 }
 function lancerEtape(identifiantTheme, etape, chapitre = null, options = {}) {
     // Une étape demandée explicitement remplace toute ancienne session mémorisée.
