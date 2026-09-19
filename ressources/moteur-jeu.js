@@ -4571,17 +4571,21 @@ function actualiserBoutonRevisionEtapeQuestion(question) {
             ? obtenirModeMissionMesures()
             : etat.mode;
     const erreurs = obtenirErreursActivesEtapeQuestion(question);
+    // Le bouton fait partie de l'interface de chaque étape : il reste donc
+    // visible même avant la première erreur, mais il est désactivé tant
+    // qu'aucune erreur active n'est disponible à rejouer.
     const visible = Boolean(question)
         && !question.estEvaluationFinale
-        && mode !== 'evaluation'
-        && mode !== 'evaluation-finale'
-        && mode !== 'revision'
-        && erreurs.length > 0;
+        && mode === 'parcours';
+    const disponible = visible && erreurs.length > 0;
     bouton.classList.toggle('masque', !visible);
-    bouton.disabled = !visible;
-    bouton.setAttribute('aria-label', visible
+    bouton.disabled = !disponible;
+    bouton.setAttribute('aria-label', disponible
         ? `Rejouer uniquement mes erreurs de l’étape ${Number(question.etape || 1)}`
         : 'Rejouer uniquement mes erreurs');
+    bouton.title = disponible
+        ? `Rejouer les ${erreurs.length} erreur${erreurs.length > 1 ? 's' : ''} active${erreurs.length > 1 ? 's' : ''} de cette étape`
+        : 'Aucune erreur active à rejouer dans cette étape';
 }
 function actualiserSuiviEtapeQuestion(question) {
     const conteneur = selectionner('#contexteEtapeQuestion');

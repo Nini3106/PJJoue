@@ -2,7 +2,7 @@
   "produit": "PJJoue",
   "version": "V1",
   "dateCreation": "août 2026",
-  "dateConsolidation": "2026-09-18",
+  "dateConsolidation": "2026-09-19",
   "composition": {
     "questionsTotales": 960,
     "questionsParcours": 660,
@@ -308,8 +308,8 @@
       "sha256": "a9a8e000b8ad16fc876d7ece6548ff2543e2d90f77a53f3192bb7d3b1371f3e8"
     },
     "code/06 - Question/actions/05 - Préparer et afficher la question.js": {
-      "tailleOctets": 22675,
-      "sha256": "fbdf999b59fcb3a545d0effdd9799aa3604600e3828f8df6bb43edbf35d96b3e"
+      "tailleOctets": 23075,
+      "sha256": "abe19939cd6865d481a8f1f81bbfed31c128c548d1a98ced836e4e998a2cc125"
     },
     "code/06 - Question/actions/06 - Chronomètre de la question.js": {
       "tailleOctets": 4517,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 452233,
-      "sha256": "eef66001ea18b258c932e39c0fd3bda6865728e58534a83cef7919313bb982a3"
+      "tailleOctets": 452633,
+      "sha256": "3c475318a7512466e11501e417a5c6c07b6748e6ea3c81287b710b938a10b397"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "cdf4dc6ab0dc35b4fa150ab00c105d3775f70c63b3df9da2b13f68965974d9d5"
+      "sha256": "9a595066b34675a24da6107f8539d05ea77ce7c6d0a6feded8f7ff510b0a1fa6"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
