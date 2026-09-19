@@ -10458,13 +10458,13 @@ body[data-ecran-actif="accueil"] #accueil {
 #parcours #cartesEtapesFinales::after { right:-14px; width:14px; }
 #parcours .chemin-etape-texte { max-width:100%; }
 #parcours .chemin-etape-titre { min-width:0; max-width:100%; overflow-wrap:anywhere; hyphens:auto; }
-#parcours .chemin-etape-numero-ligne { display:flex; align-items:center; flex-wrap:wrap; gap:8px; min-width:0; }
+#parcours .chemin-etape-numero-ligne { display:flex; align-items:center; flex-wrap:nowrap; gap:8px; width:max-content; max-width:none; min-width:0; }
 #parcours .chemin-etape-numero-ligne .chemin-etape-numero { margin-bottom:0; }
 #parcours .chemin-etape-reprendre-debut {
   flex:0 1 auto;
   min-height:36px;
   max-width:100%;
-  padding:7px 11px;
+  padding:7px 8px;
   border:1px solid var(--couleur-etape,var(--parcours-accent-lisible,var(--parcours-accent)));
   border-radius:10px;
   color:var(--couleur-etape,var(--parcours-accent-lisible,var(--parcours-accent)));
@@ -10474,7 +10474,7 @@ body[data-ecran-actif="accueil"] #accueil {
   font-weight:850;
   line-height:1.15;
   text-align:center;
-  white-space:normal;
+  white-space:nowrap;
 }
 #parcours .chemin-etape-reprendre-debut:hover,
 #parcours .chemin-etape-reprendre-debut:focus-visible {
