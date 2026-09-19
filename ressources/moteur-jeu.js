@@ -2212,7 +2212,7 @@ function actualiserEnteteParcours(programme) {
         const dejaCommencee = compterQuestionsTraiteesEtape(programme.id, prochaineEtape.id) > 0;
         boutonAction.textContent = `${dejaCommencee ? 'Reprendre' : 'Commencer'} l’étape ${prochaineEtape.id} →`;
         boutonAction.onclick = () => lancerEtape(programme.id, prochaineEtape.id);
-        if (boutonReprendreDepuisDebut && dejaCommencee) {
+        if (boutonReprendreDepuisDebut) {
             boutonReprendreDepuisDebut.classList.remove('masque');
             boutonReprendreDepuisDebut.disabled = false;
             boutonReprendreDepuisDebut.setAttribute('aria-label', `Reprendre l’étape ${prochaineEtape.id} depuis la première question`);

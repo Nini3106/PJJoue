@@ -248,8 +248,8 @@
       "sha256": "a4b7ad1e992ee8f8895172e7bea863e1815eca08062897056c9617e9a06c0229"
     },
     "code/03 - Parcours PJJ/actions-de-la-page.js": {
-      "tailleOctets": 21696,
-      "sha256": "72ced484dc8c9b1453a4bc48a6700fc9ba41261682e473ccc6733aabdeb7c3e7"
+      "tailleOctets": 21679,
+      "sha256": "47098d449f02332f6d1cbc15db54ce3023b50c9a04f37086aec63a32c2334359"
     },
     "code/03 - Parcours PJJ/contenu.html": {
       "tailleOctets": 5904,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 454288,
-      "sha256": "139942714423ffba7f0bc4c9ac62805911bc82af8c3393d07965deee629f4333"
+      "tailleOctets": 454271,
+      "sha256": "69bad94d1a9b65e50a93621b02ae37fac7afd1b54a652a6b6a066141bb9df2e7"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "342633cad2617895b753ddf9212bf330a6252d318098b1a54de0806c46db58a6"
+      "sha256": "ffcd6c0014f44a0d575b9a73fff383ed90c0c9bb7c191a50dc7cfc71cb77916b"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
