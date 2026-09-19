@@ -173,7 +173,7 @@
     },
     "code/01 - Éléments communs/Application installable et hors connexion/service-worker.js": {
       "tailleOctets": 5364,
-      "sha256": "a973964e3d2f0aa1065b93b5217714867bc19a2ec53cc12142c62826505e49e3"
+      "sha256": "1b35714896b1fa7a3594774dbd9b4f33e5dd8e9bb3642e4b4417c321cbe19130"
     },
     "code/01 - Éléments communs/JavaScript - Brancher les boutons.js": {
       "tailleOctets": 16279,
@@ -217,7 +217,7 @@
     },
     "code/01 - Éléments communs/gabarit-page-principale.html": {
       "tailleOctets": 11957,
-      "sha256": "279e322522b87d930adfeab27560cfa1bdd2ef42c6e41db73388e9933c63065f"
+      "sha256": "1dbe4213a997ac8de0256e128ce625241345c19a728c4e08fe36f9790415ece7"
     },
     "code/01 - Éléments communs/static-pages.css": {
       "tailleOctets": 20968,
@@ -785,7 +785,7 @@
     },
     "index.html": {
       "tailleOctets": 125416,
-      "sha256": "09eec9c5e63ac03904f708e2e6c83b4188403be5044f3564230c7581bf36324b"
+      "sha256": "6b45bda2e83cdfeb7d170b5dd90588c0dddb330e824a1e9a212838158f93810b"
     },
     "manifest.webmanifest": {
       "tailleOctets": 724,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "a578bc41291ef1c1dddd16ae090520709325468a4540ca9204cfafae768bfe57"
+      "sha256": "3498cec487550eb84a25f5c1f1073524310e0ea1c4a770241defe055441a4007"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
