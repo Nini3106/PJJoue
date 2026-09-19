@@ -184,6 +184,12 @@ function actualiserEnteteParcours(programme) {
         barre.querySelector('i')?.style.setProperty('width', `${progression.pourcentage}%`);
     }
     const boutonAction = selectionner('#boutonActionParcours');
+    const boutonReprendreDepuisDebut = selectionner('#boutonReprendreDepuisDebutParcours');
+    if (boutonReprendreDepuisDebut) {
+        boutonReprendreDepuisDebut.classList.add('masque');
+        boutonReprendreDepuisDebut.disabled = true;
+        boutonReprendreDepuisDebut.onclick = null;
+    }
     if (!boutonAction)
         return;
     boutonAction.disabled = false;
@@ -191,6 +197,12 @@ function actualiserEnteteParcours(programme) {
         const dejaCommencee = compterQuestionsTraiteesEtape(programme.id, prochaineEtape.id) > 0;
         boutonAction.textContent = `${dejaCommencee ? 'Reprendre' : 'Commencer'} l’étape ${prochaineEtape.id} →`;
         boutonAction.onclick = () => lancerEtape(programme.id, prochaineEtape.id);
+        if (boutonReprendreDepuisDebut && dejaCommencee) {
+            boutonReprendreDepuisDebut.classList.remove('masque');
+            boutonReprendreDepuisDebut.disabled = false;
+            boutonReprendreDepuisDebut.setAttribute('aria-label', `Reprendre l’étape ${prochaineEtape.id} depuis la première question`);
+            boutonReprendreDepuisDebut.onclick = () => lancerEtapeDepuisDebut(programme.id, prochaineEtape.id);
+        }
     }
     else if (!estEvaluationFinaleReussie(programme.id)) {
         boutonAction.textContent = 'Passer l’évaluation finale →';

@@ -194,12 +194,13 @@
 .parcours-detail-repere { display:grid; grid-template-columns:28px minmax(0,1fr); align-items:start; gap:9px; max-width:760px; margin-top:12px; color:var(--texte-secondaire); font-size:.9rem; font-weight:650; line-height:1.45; }
 .parcours-detail-repere-icone { display:grid; place-items:center; width:28px; height:28px; color:var(--parcours-accent-lisible,var(--parcours-accent)); }
 .parcours-detail-repere-icone svg { width:26px; height:26px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
-.parcours-detail-actions { align-self: center; min-width:0; padding:14px 16px; border: 1px solid var(--bordure); border-radius: var(--rayon-grand); background: var(--surface-carte-profonde); }
+.parcours-detail-actions { display:grid; align-self: center; gap:10px; min-width:0; padding:14px 16px; border: 1px solid var(--bordure); border-radius: var(--rayon-grand); background: var(--surface-carte-profonde); }
 .parcours-detail-progression-ligne { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--texte-secondaire); font-size: .94rem; }
 .parcours-detail-progression-ligne strong { color:var(--parcours-accent-lisible,var(--parcours-accent)); }
 .parcours-detail-barre { height: 8px; margin-bottom: 15px; overflow: hidden; border-radius: 99px; background: var(--surface-secondaire); }
 .parcours-detail-barre i { display: block; height: 100%; background: var(--parcours-accent); }
 .parcours-action-principale { width:max-content; max-width:100%; }
+.parcours-reprendre-debut { justify-self:start; width:max-content; max-width:100%; }
 
 .parcours-carte-zone {
   padding: 24px;
@@ -302,6 +303,11 @@
   .parcours-detail-actions { width:100%; box-sizing:border-box; }
   #parcours .parcours-chronometre-panneau { grid-template-columns:1fr; }
   #parcours .chemin-ligne { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  #parcours .parcours-action-principale,
+  #parcours .parcours-reprendre-debut { width:100%; }
 }
 
 @media (min-width: 721px) and (max-width: 1120px) {
