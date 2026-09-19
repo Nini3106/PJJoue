@@ -160,11 +160,6 @@ function actualiserEnteteParcours(programme) {
     const identite = obtenirIdentiteParcours(programme.id);
     const progression = calculerProgressionParcours(programme.id);
     const prochaineEtape = obtenirEtapeAReprendre(programme);
-    const etapeCibleReprise = prochaineEtape
-        || [...programme.etapes].reverse().find(etapeProgramme =>
-            compterQuestionsTraiteesEtape(programme.id, etapeProgramme.id) > 0)
-        || programme.etapes[0]
-        || null;
     const detail = selectionner('#vueDetailParcours');
     if (detail) {
         detail.style.setProperty('--parcours-accent', identite.couleur);
@@ -189,21 +184,9 @@ function actualiserEnteteParcours(programme) {
         barre.querySelector('i')?.style.setProperty('width', `${progression.pourcentage}%`);
     }
     const boutonAction = selectionner('#boutonActionParcours');
-    const boutonReprendreDepuisDebut = selectionner('#boutonReprendreDepuisDebutParcours');
-    if (boutonReprendreDepuisDebut) {
-        boutonReprendreDepuisDebut.classList.add('masque');
-        boutonReprendreDepuisDebut.disabled = true;
-        boutonReprendreDepuisDebut.onclick = null;
-    }
     if (!boutonAction)
         return;
     boutonAction.disabled = false;
-    if (etapeCibleReprise && boutonReprendreDepuisDebut) {
-        boutonReprendreDepuisDebut.classList.remove('masque');
-        boutonReprendreDepuisDebut.disabled = false;
-        boutonReprendreDepuisDebut.setAttribute('aria-label', `Reprendre l’étape ${etapeCibleReprise.id} depuis la première question`);
-        boutonReprendreDepuisDebut.onclick = () => lancerEtapeDepuisDebut(programme.id, etapeCibleReprise.id);
-    }
     if (prochaineEtape) {
         const dejaCommencee = compterQuestionsTraiteesEtape(programme.id, prochaineEtape.id) > 0;
         boutonAction.textContent = `${dejaCommencee ? 'Reprendre' : 'Commencer'} l’étape ${prochaineEtape.id} →`;
@@ -331,8 +314,9 @@ function afficherEtapes() {
             && (pourcentageTermine < 100 || !etapeValideeEnAutonomie);
         if (estDestinationActuelle)
             destinationActuelleSignalee = true;
-        const carte = document.createElement('button');
-        carte.type = 'button';
+        const carte = document.createElement('article');
+        carte.setAttribute('role', 'button');
+        carte.setAttribute('tabindex', '0');
         carte.dataset.etape = String(etapeProgramme.id);
         carte.dataset.theme = etat.theme;
         if (etat.theme !== 'commun') {
@@ -351,7 +335,10 @@ function afficherEtapes() {
           ${etapeValideeEnAutonomie ? creerEtoileFilanteProgression() : ''}
           <span class="chemin-etape-icone" aria-hidden="true">${obtenirBaliseIconeEtape(etapeProgramme.id, etat.theme)}</span>
           <span class="chemin-etape-texte">
-            <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
+            <span class="chemin-etape-numero-ligne">
+              <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
+              <button class="chemin-etape-reprendre-debut" type="button" aria-label="Reprendre l’étape ${etapeProgramme.id} depuis la première question">Reprendre depuis le début</button>
+            </span>
             <span class="chemin-etape-titre">${etapeProgramme.titre}</span>
           </span>
           ${estDestinationActuelle ? '<span class="chemin-position-actuelle">À travailler</span>' : ''}
@@ -359,7 +346,22 @@ function afficherEtapes() {
           <span class="chemin-nombre">${etapeValideeEnAutonomie
             ? '<b>Maîtrisée sans aide</b>'
             : `<b>${nombreTraitees}/${total}</b> questions · environ 8 min`}</span>`;
-        carte.onclick = () => lancerEtape(etat.theme, etapeProgramme.id);
+        const boutonReprendre = carte.querySelector('.chemin-etape-reprendre-debut');
+        boutonReprendre?.addEventListener('click', evenement => {
+            evenement.stopPropagation();
+            lancerEtapeDepuisDebut(etat.theme, etapeProgramme.id);
+        });
+        carte.addEventListener('click', evenement => {
+            if (evenement.target.closest('button'))
+                return;
+            lancerEtape(etat.theme, etapeProgramme.id);
+        });
+        carte.addEventListener('keydown', evenement => {
+            if ((evenement.key === 'Enter' || evenement.key === ' ') && !evenement.target.closest('button')) {
+                evenement.preventDefault();
+                lancerEtape(etat.theme, etapeProgramme.id);
+            }
+        });
         return carte;
     }
     for (const etapeProgramme of programme.etapes) {
