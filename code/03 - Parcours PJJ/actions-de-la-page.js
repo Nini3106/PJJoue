@@ -160,6 +160,11 @@ function actualiserEnteteParcours(programme) {
     const identite = obtenirIdentiteParcours(programme.id);
     const progression = calculerProgressionParcours(programme.id);
     const prochaineEtape = obtenirEtapeAReprendre(programme);
+    const etapeCibleReprise = prochaineEtape
+        || [...programme.etapes].reverse().find(etapeProgramme =>
+            compterQuestionsTraiteesEtape(programme.id, etapeProgramme.id) > 0)
+        || programme.etapes[0]
+        || null;
     const detail = selectionner('#vueDetailParcours');
     if (detail) {
         detail.style.setProperty('--parcours-accent', identite.couleur);
@@ -193,16 +198,16 @@ function actualiserEnteteParcours(programme) {
     if (!boutonAction)
         return;
     boutonAction.disabled = false;
+    if (etapeCibleReprise && boutonReprendreDepuisDebut) {
+        boutonReprendreDepuisDebut.classList.remove('masque');
+        boutonReprendreDepuisDebut.disabled = false;
+        boutonReprendreDepuisDebut.setAttribute('aria-label', `Reprendre l’étape ${etapeCibleReprise.id} depuis la première question`);
+        boutonReprendreDepuisDebut.onclick = () => lancerEtapeDepuisDebut(programme.id, etapeCibleReprise.id);
+    }
     if (prochaineEtape) {
         const dejaCommencee = compterQuestionsTraiteesEtape(programme.id, prochaineEtape.id) > 0;
         boutonAction.textContent = `${dejaCommencee ? 'Reprendre' : 'Commencer'} l’étape ${prochaineEtape.id} →`;
         boutonAction.onclick = () => lancerEtape(programme.id, prochaineEtape.id);
-        if (boutonReprendreDepuisDebut) {
-            boutonReprendreDepuisDebut.classList.remove('masque');
-            boutonReprendreDepuisDebut.disabled = false;
-            boutonReprendreDepuisDebut.setAttribute('aria-label', `Reprendre l’étape ${prochaineEtape.id} depuis la première question`);
-            boutonReprendreDepuisDebut.onclick = () => lancerEtapeDepuisDebut(programme.id, prochaineEtape.id);
-        }
     }
     else if (!estEvaluationFinaleReussie(programme.id)) {
         boutonAction.textContent = 'Passer l’évaluation finale →';
