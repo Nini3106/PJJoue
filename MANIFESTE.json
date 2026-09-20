@@ -184,8 +184,8 @@
       "sha256": "5d3900d18859e3c0e38196148501b426dce82d903e297c48271437182214ac82"
     },
     "code/01 - Éléments communs/JavaScript - Navigation et fenêtres.js": {
-      "tailleOctets": 24299,
-      "sha256": "9b342ae5b52faec134b54bc1383eda851fb308e5d353c491e641b2af4133a37f"
+      "tailleOctets": 24329,
+      "sha256": "debe5e0843e359bbfe42bfcc91087c73e1a12b3a4272d8c08f5fb3fb97efc995"
     },
     "code/01 - Éléments communs/JavaScript - Préparer les questions et sessions.js": {
       "tailleOctets": 16050,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 476992,
-      "sha256": "c766392ac677478988ba25f1738af98f8d08c62a7a087123cca976b85479b240"
+      "tailleOctets": 477022,
+      "sha256": "7a4f2c3a36d66d432b02dc9eaf4b3f28b34594d717213315fa548f034bba70e9"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "50f99cb3f40f0b3defd4caf333f44d0c4d3ae276dc7733df1d0e422b12a58c55"
+      "sha256": "4a80b8544a5825114770275e1ec6d8bd19bac01aaf23b54a822a49f4e104070e"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
@@ -1396,8 +1396,8 @@
       "sha256": "8437f51aa165b95e4f354ab98a82ec62d41f3f3900a9313d8c48615ab82e24ce"
     },
     "tests/verifier_regression_visuelle.py": {
-      "tailleOctets": 88053,
-      "sha256": "54f8b108e890180f61a799737fa7602542f23b0db27945a2df27ece0bba0d639"
+      "tailleOctets": 88587,
+      "sha256": "aeff47451e95fce60e05914d46176d61d5dba8fcd6278f93bf931ae6c4fb7222"
     }
   }
 }
