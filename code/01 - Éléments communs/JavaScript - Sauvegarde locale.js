@@ -613,14 +613,15 @@ function actualiserBoutonJokers() {
         'aria-label',
         disponibles > 0 ? `Ouvrir les jokers — ${libelleDisponibilite}` : 'Aucun joker disponible'
     );
-    if (etat.questionValidee) {
-        declencheur.title = 'Les jokers ne sont plus disponibles après validation.';
-    }
-    else {
-        declencheur.title = disponibles > 0
+    const aide = etat.questionValidee
+        ? 'Les jokers ne sont plus disponibles après validation.'
+        : disponibles > 0
             ? libelleDisponibilite
             : 'Tous les jokers ont été utilisés pour cette activité.';
-    }
+    if (typeof definirAideSurvolBouton === 'function')
+        definirAideSurvolBouton(declencheur, aide);
+    else
+        declencheur.title = aide;
     if (statut) {
         statut.textContent = disponibles > 0
             ? `${libelleNombreJokers} encore disponible${disponibles > 1 ? 's' : ''}`

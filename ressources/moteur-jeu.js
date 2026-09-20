@@ -964,14 +964,15 @@ function actualiserBoutonJokers() {
         'aria-label',
         disponibles > 0 ? `Ouvrir les jokers — ${libelleDisponibilite}` : 'Aucun joker disponible'
     );
-    if (etat.questionValidee) {
-        declencheur.title = 'Les jokers ne sont plus disponibles après validation.';
-    }
-    else {
-        declencheur.title = disponibles > 0
+    const aide = etat.questionValidee
+        ? 'Les jokers ne sont plus disponibles après validation.'
+        : disponibles > 0
             ? libelleDisponibilite
             : 'Tous les jokers ont été utilisés pour cette activité.';
-    }
+    if (typeof definirAideSurvolBouton === 'function')
+        definirAideSurvolBouton(declencheur, aide);
+    else
+        declencheur.title = aide;
     if (statut) {
         statut.textContent = disponibles > 0
             ? `${libelleNombreJokers} encore disponible${disponibles > 1 ? 's' : ''}`
@@ -4725,9 +4726,9 @@ function actualiserBoutonRevisionEtapeQuestion(question) {
     bouton.setAttribute('aria-label', disponible
         ? `Rejouer uniquement mes erreurs de l’étape ${Number(question.etape || 1)}`
         : 'Rejouer uniquement mes erreurs');
-    bouton.title = disponible
+    definirAideSurvolBouton(bouton, disponible
         ? `Rejouer les ${erreurs.length} questions à reprendre : erreurs actives et questions déjà introduites non maîtrisées sans joker. Les maîtrises sans joker sont conservées.`
-        : 'Aucune erreur active ou question non maîtrisée sans joker à rejouer dans cette étape';
+        : 'Aucune erreur active ou question non maîtrisée sans joker à rejouer dans cette étape');
 }
 function actualiserSuiviEtapeQuestion(question) {
     const conteneur = selectionner('#contexteEtapeQuestion');
@@ -8398,7 +8399,7 @@ document.addEventListener('keydown', evenement => {
 /*
  * Aides courtes affichées au survol des actions qui demandent un peu de contexte.
  * Les boutons dont le libellé suffit à comprendre l'action ne reçoivent volontairement
- * pas de titre : l'interface reste légère et les aides restent utiles.
+ * pas d'infobulle : l'interface reste légère et les aides restent utiles.
  */
 const TITRES_BOUTONS_SURVOL = Object.freeze({
     boutonInstallerPJJoue: 'Installer PJJoue comme application sur cet appareil.',
@@ -8505,26 +8506,140 @@ function obtenirTitreSurvolBouton(bouton) {
     return '';
 }
 
-function appliquerTitreSurvolBouton(bouton) {
-    if (!(bouton instanceof HTMLButtonElement) || bouton.title)
+let compteurInfobullePJJoue = 0;
+let infobullePJJoueActive = null;
+
+function positionnerInfobullePJJoue() {
+    const active = infobullePJJoueActive;
+    if (!active?.element?.isConnected || !active.declencheur?.isConnected)
         return;
-    const titre = obtenirTitreSurvolBouton(bouton);
-    if (titre)
-        bouton.title = titre;
+    const declencheur = active.declencheur;
+    const element = active.element;
+    const marge = 10;
+    const rect = declencheur.getBoundingClientRect();
+    const largeur = element.offsetWidth;
+    const hauteur = element.offsetHeight;
+    const espaceHaut = rect.top - marge;
+    const afficherDessous = espaceHaut < hauteur + marge;
+    const haut = afficherDessous
+        ? Math.min(window.innerHeight - hauteur - marge, rect.bottom + marge)
+        : rect.top - hauteur - marge;
+    const gauche = Math.min(
+        Math.max(marge, rect.left + rect.width / 2 - largeur / 2),
+        Math.max(marge, window.innerWidth - largeur - marge)
+    );
+    const fleche = Math.min(
+        Math.max(16, rect.left + rect.width / 2 - gauche),
+        Math.max(16, largeur - 16)
+    );
+    element.dataset.position = afficherDessous ? 'dessous' : 'dessus';
+    element.style.left = `${gauche}px`;
+    element.style.top = `${Math.max(marge, haut)}px`;
+    element.style.setProperty('--position-fleche', `${fleche}px`);
 }
 
-function appliquerTitresSurvol(racine = document) {
+function masquerInfobullePJJoue() {
+    const active = infobullePJJoueActive;
+    if (!active)
+        return;
+    const { declencheur, element, ariaDescribedBy } = active;
+    if (declencheur?.isConnected) {
+        if (ariaDescribedBy)
+            declencheur.setAttribute('aria-describedby', ariaDescribedBy);
+        else
+            declencheur.removeAttribute('aria-describedby');
+    }
+    element?.remove();
+    infobullePJJoueActive = null;
+}
+
+function afficherInfobullePJJoue(declencheur) {
+    const texte = declencheur?.dataset.infobulle;
+    if (!(declencheur instanceof HTMLButtonElement) || !texte)
+        return;
+    if (infobullePJJoueActive?.declencheur === declencheur) {
+        infobullePJJoueActive.element.textContent = texte;
+        positionnerInfobullePJJoue();
+        return;
+    }
+    masquerInfobullePJJoue();
+    const element = document.createElement('span');
+    element.className = 'infobulle-pjjoue';
+    element.id = `infobullePJJoue-${++compteurInfobullePJJoue}`;
+    element.setAttribute('role', 'tooltip');
+    element.textContent = texte;
+    const ariaDescribedBy = declencheur.getAttribute('aria-describedby') || '';
+    declencheur.setAttribute('aria-describedby', element.id);
+    document.body.appendChild(element);
+    infobullePJJoueActive = { declencheur, element, ariaDescribedBy };
+    positionnerInfobullePJJoue();
+    requestAnimationFrame(() => element.classList.add('est-visible'));
+}
+
+function definirAideSurvolBouton(bouton, texte) {
+    if (!(bouton instanceof HTMLButtonElement))
+        return;
+    if (texte) {
+        bouton.dataset.infobulle = texte;
+        // Les infobulles natives sont remplacées par l'aide intégrée à PJJoue.
+        bouton.removeAttribute('title');
+        if (infobullePJJoueActive?.declencheur === bouton)
+            afficherInfobullePJJoue(bouton);
+    }
+    else {
+        delete bouton.dataset.infobulle;
+        if (infobullePJJoueActive?.declencheur === bouton)
+            masquerInfobullePJJoue();
+    }
+}
+
+function appliquerAideSurvolBouton(bouton) {
+    if (!(bouton instanceof HTMLButtonElement))
+        return;
+    const texte = obtenirTitreSurvolBouton(bouton);
+    if (texte)
+        definirAideSurvolBouton(bouton, texte);
+}
+
+function appliquerAidesSurvol(racine = document) {
     if (racine instanceof HTMLButtonElement)
-        appliquerTitreSurvolBouton(racine);
-    racine.querySelectorAll?.('button').forEach(appliquerTitreSurvolBouton);
+        appliquerAideSurvolBouton(racine);
+    racine.querySelectorAll?.('button').forEach(appliquerAideSurvolBouton);
 }
 
 function activerAidesAuSurvol() {
-    appliquerTitresSurvol();
+    appliquerAidesSurvol();
+    document.addEventListener('pointerover', evenement => {
+        const bouton = evenement.target.closest?.('button[data-infobulle]');
+        if (bouton && !bouton.contains(evenement.relatedTarget))
+            afficherInfobullePJJoue(bouton);
+    });
+    document.addEventListener('pointerout', evenement => {
+        const bouton = evenement.target.closest?.('button[data-infobulle]');
+        if (bouton && !bouton.contains(evenement.relatedTarget)
+            && document.activeElement !== bouton)
+            masquerInfobullePJJoue();
+    });
+    document.addEventListener('focusin', evenement => {
+        const bouton = evenement.target.closest?.('button[data-infobulle]');
+        if (bouton)
+            afficherInfobullePJJoue(bouton);
+    });
+    document.addEventListener('focusout', evenement => {
+        const bouton = evenement.target.closest?.('button[data-infobulle]');
+        if (bouton && !bouton.matches(':hover'))
+            masquerInfobullePJJoue();
+    });
+    document.addEventListener('keydown', evenement => {
+        if (evenement.key === 'Escape')
+            masquerInfobullePJJoue();
+    });
+    window.addEventListener('resize', positionnerInfobullePJJoue, { passive: true });
+    window.addEventListener('scroll', positionnerInfobullePJJoue, { passive: true, capture: true });
     const observateur = new MutationObserver(mutations => {
         mutations.forEach(mutation => mutation.addedNodes.forEach(noeud => {
             if (noeud.nodeType === Node.ELEMENT_NODE)
-                appliquerTitresSurvol(noeud);
+                appliquerAidesSurvol(noeud);
         }));
     });
     observateur.observe(document.body, { childList: true, subtree: true });
