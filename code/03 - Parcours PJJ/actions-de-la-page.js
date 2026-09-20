@@ -335,10 +335,7 @@ function afficherEtapes() {
           ${etapeValideeEnAutonomie ? creerEtoileFilanteProgression() : ''}
           <span class="chemin-etape-icone" aria-hidden="true">${obtenirBaliseIconeEtape(etapeProgramme.id, etat.theme)}</span>
           <span class="chemin-etape-texte">
-            <span class="chemin-etape-numero-ligne">
-              <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
-              <button class="chemin-etape-reprendre-debut" type="button" aria-label="Reprendre l’étape ${etapeProgramme.id} depuis la première question">Reprendre depuis le début</button>
-            </span>
+            <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
             <span class="chemin-etape-titre">${etapeProgramme.titre}</span>
           </span>
           ${estDestinationActuelle ? '<span class="chemin-position-actuelle">À travailler</span>' : ''}
@@ -346,11 +343,6 @@ function afficherEtapes() {
           <span class="chemin-nombre">${etapeValideeEnAutonomie
             ? '<b>Maîtrisée sans aide</b>'
             : `<b>${nombreTraitees}/${total}</b> questions · environ 8 min`}</span>`;
-        const boutonReprendre = carte.querySelector('.chemin-etape-reprendre-debut');
-        boutonReprendre?.addEventListener('click', evenement => {
-            evenement.stopPropagation();
-            lancerEtapeDepuisDebut(etat.theme, etapeProgramme.id);
-        });
         carte.addEventListener('click', evenement => {
             if (evenement.target.closest('button'))
                 return;

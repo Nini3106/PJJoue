@@ -311,11 +311,15 @@ function obtenirErreursActivesEtapeQuestion(question) {
         return obtenirErreursSiglesActives().filter(cible => Number(cible.etape) === numeroEtape);
     if (question.missionMesures)
         return obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === numeroEtape);
-    return Object.entries(sauvegarde.erreurs || {})
+    const erreursEnregistrees = Object.entries(sauvegarde.erreurs || {})
         .filter(([_identifiant, suivi]) => suivi?.maitrisee !== true)
         .map(([identifiant]) => QUESTIONS.find(element => String(element.id) === String(identifiant)))
         .filter(element => element && !element.estEvaluationFinale
             && element.theme === question.theme && Number(element.etape) === numeroEtape);
+    const erreursDeProgression = obtenirQuestionsNonMaitriseesEtape(question.theme, numeroEtape);
+    return [...new Map([...erreursEnregistrees, ...erreursDeProgression]
+        .filter(Boolean)
+        .map(element => [element.id, element])).values()];
 }
 function rejouerErreursEtapeCourante() {
     const question = etat.questionCourante;
@@ -331,6 +335,39 @@ function rejouerErreursEtapeCourante() {
         return;
     }
     lancerRevisionEtape(question.theme, numeroEtape);
+}
+function reprendreEtapeDepuisDebutQuestion() {
+    const question = etat.questionCourante;
+    if (!question)
+        return;
+    const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
+    if (question.missionSigles) {
+        lancerEtapeSigles(numeroEtape);
+        return;
+    }
+    if (question.missionMesures) {
+        lancerEtapeMesures(numeroEtape);
+        return;
+    }
+    lancerEtapeDepuisDebut(question.theme, numeroEtape);
+}
+function actualiserBoutonReprendreEtapeDepuisDebut(question) {
+    const bouton = selectionner('#boutonReprendreEtapeDepuisDebut');
+    if (!bouton)
+        return;
+    const modeParcours = question?.missionSigles
+        ? obtenirModeMissionSigles() === 'parcours'
+        : question?.missionMesures
+            ? obtenirModeMissionMesures() === 'parcours'
+            : etat.mode === 'parcours';
+    const visible = Boolean(question)
+        && !question.estEvaluationFinale
+        && modeParcours;
+    bouton.classList.toggle('masque', !visible);
+    bouton.disabled = !visible;
+    bouton.setAttribute('aria-label', visible
+        ? `Reprendre l’étape ${Number(question.etape || 1)} depuis la première question`
+        : 'Reprendre cette étape depuis la première question');
 }
 function actualiserBoutonRevisionEtapeQuestion(question) {
     const bouton = selectionner('#boutonRejouerErreursEtape');
@@ -370,6 +407,7 @@ function actualiserSuiviEtapeQuestion(question) {
     const boutonReinitialiser = selectionner('#boutonReinitialiserValidationsSansJoker');
     if (!conteneur || !identiteParcoursQuestion || !numeroParcours || !titreParcours || !numero || !titre || !suivi || !compteur || !boutonReinitialiser || !question)
         return;
+    actualiserBoutonReprendreEtapeDepuisDebut(question);
     if (question.missionSigles) {
         identiteParcoursQuestion.classList.remove('masque');
         const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);

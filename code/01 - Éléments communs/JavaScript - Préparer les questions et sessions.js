@@ -305,9 +305,14 @@ function lancerRevisionEtape(identifiantTheme, etape = null) {
         afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir rejouer tes erreurs.');
         return;
     }
-    const identifiants = actif.map(([id]) => Number(id));
+    const identifiants = new Set(actif.map(([id]) => Number(id)));
+    // Une question peut être traitée avec aide (ou passée) sans disposer
+    // d'une entrée d'erreur dans une ancienne sauvegarde. Elle reste pourtant
+    // à consolider dès lors qu'elle n'est pas validée sans aide.
+    obtenirQuestionsNonMaitriseesEtape(identifiantTheme, etapeCible)
+        .forEach(question => identifiants.add(Number(question.id)));
     const reserve = QUESTIONS.filter(question =>
-        identifiants.includes(question.id)
+        identifiants.has(question.id)
         && question.theme === identifiantTheme
         && Number(question.etape) === etapeCible
         && !question.estEvaluationFinale
