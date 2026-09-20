@@ -189,7 +189,10 @@ const TITRES_ECRANS = {
     bilan: 'Résultats'
 };
 function actualiserTitrePage(ecran) {
-    document.title = `${TITRES_ECRANS[ecran] || 'Quiz CJPM'} — Quiz CJPM`;
+    // L’accueil conserve un titre descriptif après le rendu JavaScript et le retour au menu.
+    document.title = ecran === 'accueil'
+        ? 'Quiz CJPM — Justice pénale des mineurs'
+        : `${TITRES_ECRANS[ecran] || 'Quiz CJPM'} — Quiz CJPM`;
 }
 function afficherEcran(identifiant, optionsAffichage = {}) {
     masquerInfobullePJJoue();

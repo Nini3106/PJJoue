@@ -169,7 +169,7 @@ def verifier_raccourcis_guides(navigateur) -> None:
         "sigles-cjpm": ("sigles", "cjpm", None),
         "sigles-pjj": ("sigles", "pjj", None),
         "mesures-educatives-pjj": ("mesures", None, None),
-        "quiz-pjj": ("parcours", "commun", None),
+        "quiz-pjj": ("parcours", "procedure_ordinaire", None),
     }
     def servir(route):
         adresse = urlparse(route.request.url)
