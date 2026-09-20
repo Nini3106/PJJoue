@@ -1137,7 +1137,7 @@
     },
     "tests/empreintes_analytics.json": {
       "tailleOctets": 603,
-      "sha256": "90d3deeb8bbc24617faf6a7392f88ec1f5c292b26560053ae3fb5afb839e8f85"
+      "sha256": "4e63c07d88fe5c0f6185a32acbd59b13555fbd30b2592d7ff5ea60fad0a2a2a9"
     },
     "tests/empreintes_parcours_reference_v1.json": {
       "tailleOctets": 1396,

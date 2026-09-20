@@ -1,7 +1,7 @@
 {
   "code/01 - Éléments communs/Analytics/consentement-analytics.js": "e70e90f458fef8a8ed9f8f12e758b9274c17c07344d082dde1263c9dcfacd6eb",
-  "code/01 - Éléments communs/Analytics/suivi-analytics-pjjoue.js": "105adf651499d611214f59d20eccf90f870e1b6de4303ca26c3a4f19c97395bf",
-  "ressources/analytics-pjjoue.js": "105adf651499d611214f59d20eccf90f870e1b6de4303ca26c3a4f19c97395bf",
-  "ressources/analytics-pages-pjjoue.js": "c56df5103f6f5e0256e33f924aa8f0498deac8c2f71d86b94fa1979c2ad9b348",
+  "code/01 - Éléments communs/Analytics/suivi-analytics-pjjoue.js": "d25ce4667f8741ddda723e7ff7c14620fcd37c838e65684f81326dd1ee2a7efa",
+  "ressources/analytics-pjjoue.js": "d25ce4667f8741ddda723e7ff7c14620fcd37c838e65684f81326dd1ee2a7efa",
+  "ressources/analytics-pages-pjjoue.js": "e70d0462603803b6f419970e0310315c4c9e18fa8ee7639b773f0766622ff69d",
   "ressources/consentement-analytics.js": "e70e90f458fef8a8ed9f8f12e758b9274c17c07344d082dde1263c9dcfacd6eb"
 }
