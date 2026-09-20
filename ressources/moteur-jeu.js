@@ -472,8 +472,11 @@ function creerEvaluationsFinalesInitiales() {
 }
 function creerProgressionSiglesInitiale() {
     return {
+        organisation: 2,
+        domaine: 'cjpm',
+        evaluations: {cjpm:creerEtatEvaluationFinale(),pjj:creerEtatEvaluationFinale()},
         decouverts: {},
-        etapes: Object.fromEntries([1, 2, 3, 4, 5, 6].map(numero => [String(numero), {
+        etapes: Object.fromEntries([...new Set(SIGLES.map(x=>Number(x.etape)))].map(numero => [String(numero), {
             autonomes: {},
             validationsSansJoker: {},
             celebrationAffichee: false,
@@ -646,7 +649,6 @@ function normaliserEtapesDecouvertes(sauvegardeBrute) {
     return resultat;
 }
 function nettoyerProgressionSigles(sauvegardeBrute) {
-    const initiale = creerProgressionSiglesInitiale();
     const brute = estObjetSimple(sauvegardeBrute?.siglesJeu) ? sauvegardeBrute.siglesJeu : {};
     const identifiants = new Set((SIGLES || []).map(element => String(element.sigle || '').toUpperCase()));
     const filtrerSiglesActifs = valeur => estObjetSimple(valeur)
@@ -665,8 +667,13 @@ function nettoyerProgressionSigles(sauvegardeBrute) {
             };
         }
     }
+    const migration=brute.organisation !== 2;
+    const anciennesEtapes=estObjetSimple(brute.etapes)?Object.values(brute.etapes):[];
+    // Reclasser les acquis par sigle, jamais par l'ancien numéro d'étape.
+    const acquisHistoriques=Object.assign({},...anciennesEtapes.map(e=>filtrerSiglesActifs(e?.autonomes)));
+    const sansJokerHistoriques=Object.assign({},...anciennesEtapes.map(e=>filtrerSiglesActifs(e?.validationsSansJoker)));
     const etapes = {};
-    for (let numero = 1; numero <= 6; numero += 1) {
+    for (const numero of new Set(SIGLES.map(x=>Number(x.etape)))) {
         const cle = String(numero);
         const source = estObjetSimple(brute.etapes?.[cle]) ? brute.etapes[cle] : {};
         const autorises = new Set((SIGLES || []).filter(element => Number(element.etape) === numero).map(element => String(element.sigle).toUpperCase()));
@@ -674,16 +681,25 @@ function nettoyerProgressionSigles(sauvegardeBrute) {
             ? Object.fromEntries(Object.entries(valeur).filter(([sigle, actif]) => autorises.has(String(sigle).toUpperCase()) && actif === true))
             : {};
         etapes[cle] = {
-            autonomes: filtrerEtape(source.autonomes),
-            validationsSansJoker: filtrerEtape(source.validationsSansJoker),
-            celebrationAffichee: source.celebrationAffichee === true,
-            nombreTentatives: convertirEntierBorne(source.nombreTentatives),
-            meilleurScore: convertirEntierBorne(source.meilleurScore, 0, 100)
+            autonomes: filtrerEtape(migration?acquisHistoriques:source.autonomes),
+            validationsSansJoker: filtrerEtape(migration?sansJokerHistoriques:source.validationsSansJoker),
+            celebrationAffichee: migration ? [...autorises].every(c=>sansJokerHistoriques[c]) : source.celebrationAffichee === true,
+            nombreTentatives: migration ? 0 : convertirEntierBorne(source.nombreTentatives),
+            meilleurScore: migration ? 0 : convertirEntierBorne(source.meilleurScore, 0, 100)
         };
     }
     const evaluation = estObjetSimple(brute.evaluation) ? brute.evaluation : {};
     const statistiques = estObjetSimple(brute.statistiques) ? brute.statistiques : {};
+    const nettoyerEvaluation = source => ({
+        meilleurScore:convertirEntierBorne(source?.meilleurScore,0,100),
+        nombreTentatives:convertirEntierBorne(source?.nombreTentatives),
+        reussie:source?.reussie===true
+    });
     return {
+        organisation:2,
+        domaine:['cjpm','pjj','tous'].includes(brute.domaine)?brute.domaine:'cjpm',
+        evaluations:{cjpm:nettoyerEvaluation(brute.evaluations?.cjpm),pjj:nettoyerEvaluation(brute.evaluations?.pjj)},
+        historiqueEtapes:migration ? brute.etapes || {} : brute.historiqueEtapes || {},
         decouverts: filtrerSiglesActifs(brute.decouverts),
         etapes,
         erreurs,
@@ -2812,7 +2828,7 @@ function actualiserLimiteQuestionsEntrainement() {
     if (etat.contexteEntrainement === 'sigles') {
         const perimetre = selectPerimetre.value || 'tous';
         nombreMax = obtenirPoolEntrainementMissionSigles(perimetre).length;
-        const libellePerimetre = perimetre === 'tous' ? 'Mission Sigles complète' : `l’étape ${Number(perimetre)}`;
+        const libellePerimetre = ['cjpm','pjj','tous'].includes(perimetre) ? `le domaine ${libelleDomaineSigles(perimetre)}` : libelleEtapeSigles(Number(perimetre));
         texteDisponibilite = `${nombreMax} sigles disponibles dans ${libellePerimetre}.`;
     } else if (etat.contexteEntrainement === 'mesures') {
         const perimetre = selectPerimetre.value || 'tous';
@@ -4913,12 +4929,12 @@ function actualiserSuiviEtapeQuestion(question) {
         const finaleMission = obtenirModeMissionSigles() === 'evaluation';
         numeroParcours.textContent = 'Mission Sigles';
         titreParcours.textContent = 'Mission Sigles';
-        numero.textContent = finaleMission ? 'Évaluation finale' : `Étape ${numeroEtape}`;
+        numero.textContent = finaleMission ? `Évaluation ${libelleDomaineSigles(etat.missionSiglesConfiguration?.domaine)}` : libelleEtapeSigles(numeroEtape);
         titre.textContent = finaleMission ? 'Expert des sigles' : identite.titre;
         const modeMission = obtenirModeMissionSigles();
         suivi.classList.toggle('masque', finaleMission || !['parcours', 'revision'].includes(modeMission));
         if (!finaleMission && ['parcours', 'revision'].includes(modeMission)) {
-            compteur.textContent = `${compterMaitrisesEtapeSigles(numeroEtape)}/${NOMBRE_SIGLES_PAR_ETAPE}`;
+            compteur.textContent = `${compterMaitrisesEtapeSigles(numeroEtape)}/${obtenirSiglesEtape(numeroEtape).length}`;
             boutonReinitialiser.disabled = compterMaitrisesEtapeSigles(numeroEtape) === 0;
         }
         actualiserBoutonRevisionEtapeQuestion(question);
@@ -6567,14 +6583,41 @@ function initialiserRechercheSupports() {
     synchroniserOuvertureSupports(zone);
 }
 const ETAPES_MISSION_SIGLES = Object.freeze({
-    1: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', couleur:'#4f8cff', couleurTexte:'#9fc2ff', couleurRgb:'79,140,255', icone:'organisation' },
-    2: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', couleur:'#d49a00', couleurTexte:'#ffd36a', couleurRgb:'212,154,0', icone:'services' },
-    3: { numero:'03', titre:'Placement, hébergement et détention', sousTitre:'Structures et dispositifs de placement', couleur:'#0891b2', couleurTexte:'#70d7ea', couleurRgb:'8,145,178', icone:'placement' },
-    4: { numero:'04', titre:'Justice, juridictions et procédure', sousTitre:'Acteurs judiciaires et repères de procédure', couleur:'#8b5cf6', couleurTexte:'#c7afff', couleurRgb:'139,92,246', icone:'justice' },
-    5: { numero:'05', titre:'Mesures, sûreté et sanctions', sousTitre:'Mesures éducatives, sûreté et peines', couleur:'#e11d48', couleurTexte:'#ff91a8', couleurRgb:'225,29,72', icone:'mesures' },
-    6: { numero:'06', titre:'Partenaires, publics et repères professionnels', sousTitre:'Partenaires et vocabulaire transversal', couleur:'#0f766e', couleurTexte:'#70d6ca', couleurRgb:'15,118,110', icone:'partenaires' }
+    1: { numero:'01', titre:'Enquête et premiers repères', sousTitre:'Parcours 1 · De l’enquête à la sanction', domaine:'cjpm', couleur:'#d49a00', couleurTexte:'#ffd36a', couleurRgb:'212,154,0', icone:'justice' },
+    2: { numero:'02', titre:'Instruction et mesures de sûreté', sousTitre:'Parcours 2 · Information judiciaire', domaine:'cjpm', couleur:'#0891b2', couleurTexte:'#70d7ea', couleurRgb:'8,145,178', icone:'justice' },
+    3: { numero:'03', titre:'Jugement et réponse éducative', sousTitre:'Parcours 3 · Du jugement à la sanction', domaine:'cjpm', couleur:'#8b5cf6', couleurTexte:'#c7afff', couleurRgb:'139,92,246', icone:'mesures' },
+    4: { numero:'04', titre:'Matière criminelle et garanties', sousTitre:'Parcours 4 · Crimes, peines et droits', domaine:'cjpm', couleur:'#e11d48', couleurTexte:'#ff91a8', couleurRgb:'225,29,72', icone:'justice' },
+    5: { numero:'05', titre:'Application et exécution des peines', sousTitre:'Parcours 5 · Après la sanction', domaine:'cjpm', couleur:'#0f766e', couleurTexte:'#70d6ca', couleurRgb:'15,118,110', icone:'mesures' },
+    6: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', domaine:'pjj', couleur:'#4f8cff', couleurTexte:'#9fc2ff', couleurRgb:'79,140,255', icone:'organisation' },
+    7: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', domaine:'pjj', couleur:'#4f8cff', couleurTexte:'#9fc2ff', couleurRgb:'79,140,255', icone:'services' },
+    8: { numero:'03', titre:'Placement et détention', sousTitre:'Structures et dispositifs de placement', domaine:'pjj', couleur:'#4f8cff', couleurTexte:'#9fc2ff', couleurRgb:'79,140,255', icone:'placement' },
+    9: { numero:'04', titre:'Partenaires et repères professionnels', sousTitre:'Protection de l’enfance et accompagnement', domaine:'pjj', couleur:'#4f8cff', couleurTexte:'#9fc2ff', couleurRgb:'79,140,255', icone:'partenaires' }
 });
-const NOMBRE_SIGLES_PAR_ETAPE = 12;
+function obtenirDomaineSigles() { return obtenirSauvegardeJeuSigles().domaine || 'cjpm'; }
+function libelleDomaineSigles(domaine=obtenirDomaineSigles()) { return {cjpm:'CJPM',pjj:'PJJ',tous:'CJPM et PJJ'}[domaine] || 'CJPM'; }
+function obtenirPoolDomaineSigles(domaine=obtenirDomaineSigles()) { return SIGLES.filter(x => domaine === 'tous' || x.domaine === domaine); }
+function numerosEtapesSigles(domaine=obtenirDomaineSigles()) { return Object.keys(ETAPES_MISSION_SIGLES).map(Number).filter(n => domaine === 'tous' || ETAPES_MISSION_SIGLES[n].domaine === domaine); }
+function obtenirEvaluationSigles(domaine=obtenirDomaineSigles()) {
+    const jeu=obtenirSauvegardeJeuSigles();
+    if(domaine==='tous') return jeu.evaluation;
+    jeu.evaluations ||= {};
+    jeu.evaluations[domaine] ||= {meilleurScore:0,nombreTentatives:0,reussie:false};
+    return jeu.evaluations[domaine];
+}
+function choisirDomaineSigles(domaine) {
+    if(!['cjpm','pjj','tous'].includes(domaine)) return;
+    obtenirSauvegardeJeuSigles().domaine=domaine;
+    etatJeuSigles.tirageHasard=[];
+    selectionnerSigles('#siglesJouerTirage')?.classList.add('masque');
+    enregistrerSauvegarde(); actualiserAccueilSigles();
+    construireRevisionMissionSiglesIndependante();
+}
+function actualiserChoixDomaineSigles() {
+    selectionnerTousSigles('[data-choix-domaine-sigles]').forEach(zone => {
+        zone.innerHTML=['cjpm','pjj','tous'].map(d => `<button type="button" class="choix-bouton${d===obtenirDomaineSigles()?' actif':''}" data-domaine-sigles="${d}" aria-pressed="${d===obtenirDomaineSigles()}"><b>${d==='tous'?'Tous':`Sigles ${libelleDomaineSigles(d)}`}</b><span>${obtenirPoolDomaineSigles(d).length} sigles · ${d==='cjpm'?'les 5 parcours':d==='pjj'?'option PJJ':'les deux domaines'}</span></button>`).join('');
+        zone.querySelectorAll('button').forEach(b => b.addEventListener('click',()=>choisirDomaineSigles(b.dataset.domaineSigles)));
+    });
+}
 const SEUIL_EVALUATION_SIGLES = 90;
 const NOMBRE_QUESTIONS_EVALUATION_SIGLES = 30;
 
@@ -6622,11 +6665,11 @@ function compterValidationsSansJokerEtapeSigles(numero) {
     const etape = obtenirEtatEtapeSigles(numero);
     return obtenirSiglesEtape(numero).filter(element => etape.validationsSansJoker[normaliserSigleJeu(element.sigle)] === true).length;
 }
-function etapeSiglesMaitrisee(numero) { return compterMaitrisesEtapeSigles(numero) === NOMBRE_SIGLES_PAR_ETAPE; }
-function evaluationSiglesDebloquee() { return [1,2,3,4,5,6].every(etapeSiglesMaitrisee); }
-function obtenirErreursSiglesActives() {
+function etapeSiglesMaitrisee(numero) { return compterMaitrisesEtapeSigles(numero) === obtenirSiglesEtape(numero).length; }
+function evaluationSiglesDebloquee() { return numerosEtapesSigles().every(etapeSiglesMaitrisee); }
+function obtenirErreursSiglesActives(domaine=obtenirDomaineSigles()) {
     const erreurs = obtenirSauvegardeJeuSigles().erreurs || {};
-    return Object.entries(erreurs).filter(([,e]) => e?.active === true).map(([sigle]) => obtenirSigleJeu(sigle)).filter(Boolean);
+    return Object.entries(erreurs).filter(([,e]) => e?.active === true).map(([sigle]) => obtenirSigleJeu(sigle)).filter(c => c && (domaine==='tous' || c.domaine===domaine));
 }
 function obtenirSiglesNonMaitrisesEtape(numero) {
     const etape = obtenirEtatEtapeSigles(numero);
@@ -6636,7 +6679,7 @@ function obtenirSiglesNonMaitrisesEtape(numero) {
     );
 }
 function obtenirCiblesARejouerEtapeSigles(numero) {
-    const cibles = [...obtenirErreursSiglesActives().filter(cible => Number(cible.etape) === Number(numero)), ...obtenirSiglesNonMaitrisesEtape(numero)];
+    const cibles = [...obtenirErreursSiglesActives('tous').filter(cible => Number(cible.etape) === Number(numero)), ...obtenirSiglesNonMaitrisesEtape(numero)];
     return [...new Map(cibles.map(cible => [normaliserSigleJeu(cible.sigle), cible])).values()];
 }
 function enregistrerErreurSigles(cibles) {
@@ -6680,16 +6723,22 @@ function afficherVueSigles(nom) {
 
 function actualiserAccueilSigles() {
     const jeu = obtenirSauvegardeJeuSigles();
-    const introduits = Object.values(jeu.decouverts || {}).filter(Boolean).length;
-    const maitrises = [1,2,3,4,5,6].reduce((total,n) => total + compterMaitrisesEtapeSigles(n), 0);
-    const etapes = [1,2,3,4,5,6].filter(etapeSiglesMaitrisee).length;
+    const pool=obtenirPoolDomaineSigles();
+    const introduits = pool.filter(x=>jeu.decouverts[x.sigle]).length;
+    actualiserChoixDomaineSigles();
+    selectionnerSigles('#siglesTitreProgression').textContent=`${libelleDomaineSigles()} · ${pool.length} sigles`;
+    selectionnerSigles('#siglesTitreEtapes').textContent=`${libelleDomaineSigles()} · ${numerosEtapesSigles().length} étapes`;
+    selectionnerSigles('#siglesDescriptionParcours').textContent=`${numerosEtapesSigles().length} étapes progressives pour apprendre les ${pool.length} sigles ${libelleDomaineSigles()}.`;
+    if(!etatJeuSigles.tirageHasard.length) selectionnerSigles('#siglesDeResultat').textContent=`Lance le dé pour tirer de 1 à 6 questions parmi les ${pool.length} sigles ${libelleDomaineSigles()}.`;
+    const maitrises = numerosEtapesSigles().reduce((total,n) => total + compterMaitrisesEtapeSigles(n), 0);
+    const etapes = numerosEtapesSigles().filter(etapeSiglesMaitrisee).length;
     const erreurs = obtenirErreursSiglesActives().length;
-    const pourcentage = Math.round(maitrises / SIGLES.length * 100);
+    const pourcentage = Math.round(maitrises / pool.length * 100);
     if (selectionnerSigles('#siglesResumeProgression')) selectionnerSigles('#siglesResumeProgression').textContent = `${maitrises} sigle${maitrises===1?'':'s'} maîtrisé${maitrises===1?'':'s'} · ${etapes} étape${etapes===1?'':'s'} maîtrisée${etapes===1?'':'s'}`;
     if (selectionnerSigles('#siglesNombreDecouverts')) selectionnerSigles('#siglesNombreDecouverts').textContent = introduits;
     if (selectionnerSigles('#siglesNombreMaitrises')) selectionnerSigles('#siglesNombreMaitrises').textContent = maitrises;
     if (selectionnerSigles('#siglesNombreErreurs')) selectionnerSigles('#siglesNombreErreurs').textContent = erreurs;
-    if (selectionnerSigles('#siglesMeilleurScore')) selectionnerSigles('#siglesMeilleurScore').textContent = `${jeu.evaluation.meilleurScore || 0}%`;
+    if (selectionnerSigles('#siglesMeilleurScore')) selectionnerSigles('#siglesMeilleurScore').textContent = `${obtenirEvaluationSigles().meilleurScore || 0}%`;
     if (selectionnerSigles('#siglesJaugeValeur')) selectionnerSigles('#siglesJaugeValeur').style.width = `${pourcentage}%`;
     if (selectionnerSigles('#siglesProgressionGlobale')) selectionnerSigles('#siglesProgressionGlobale').setAttribute('aria-valuenow', String(pourcentage));
     if (selectionnerSigles('#siglesTexteRevision')) selectionnerSigles('#siglesTexteRevision').textContent = erreurs ? `${erreurs} sigle${erreurs===1?'':'s'} à consolider dans tes erreurs.` : 'Aucun sigle à revoir pour le moment.';
@@ -6697,32 +6746,32 @@ function actualiserAccueilSigles() {
 }
 function construireCartesEtapesSigles() {
     const zone = selectionnerSigles('#siglesEtapes'); if (!zone) return;
-    zone.innerHTML = [1,2,3,4,5,6].map(numero => {
-        const identite = ETAPES_MISSION_SIGLES[numero]; const maitrises = compterMaitrisesEtapeSigles(numero); const sansJoker = compterValidationsSansJokerEtapeSigles(numero); const pc = Math.round(maitrises/12*100);
+    zone.innerHTML = numerosEtapesSigles().map(numero => {
+        const identite = ETAPES_MISSION_SIGLES[numero]; const maitrises = compterMaitrisesEtapeSigles(numero); const sansJoker = compterValidationsSansJokerEtapeSigles(numero); const nombre = obtenirSiglesEtape(numero).length; const pc = Math.round(maitrises/nombre*100);
         const erreurs = obtenirCiblesARejouerEtapeSigles(numero).length;
-        const etoile = sansJoker === NOMBRE_SIGLES_PAR_ETAPE ? creerEtoileFilanteProgression() : '';
+        const etoile = sansJoker === obtenirSiglesEtape(numero).length ? creerEtoileFilanteProgression() : '';
         const revision = `<button class="sigles-etape-revision" data-action="reviser-etape-sigles" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Rejouer uniquement mes erreurs' : 'Aucune erreur à rejouer'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
-        return `<article class="sigles-etape-carte" data-sigles-etape="${numero}" style="--sigles-etape-accent:${identite.couleur};--sigles-etape-accent-lisible:${identite.couleurTexte};--sigles-etape-rgb:${identite.couleurRgb}"><button class="sigles-etape-ouvrir" data-sigles-etape="${numero}" type="button"><span class="sigles-etape-carte-entete"><span class="sigles-etape-icone" aria-hidden="true">${iconeEtapeSigles(identite.icone)}</span><span class="sigles-etape-numero">ÉTAPE ${identite.numero}</span>${etoile}</span><h3>${identite.titre}</h3><p>${identite.sousTitre}<br>12 sigles · 24 activités de parcours.</p><span class="sigles-etape-progression"><i style="width:${pc}%"></i></span><span class="sigles-etape-pied"><span>${maitrises}/12 bonnes réponses · ${sansJoker}/12 sans joker</span><span>${maitrises===12?'Maîtrisée ✓':'Ouvrir →'}</span></button>${revision}</article>`;
+        return `<article class="sigles-etape-carte" data-sigles-etape="${numero}" style="--sigles-etape-accent:${identite.couleur};--sigles-etape-accent-lisible:${identite.couleurTexte};--sigles-etape-rgb:${identite.couleurRgb}"><button class="sigles-etape-ouvrir" data-sigles-etape="${numero}" type="button"><span class="sigles-etape-carte-entete"><span class="sigles-etape-icone" aria-hidden="true">${iconeEtapeSigles(identite.icone)}</span><span class="sigles-etape-numero">${libelleDomaineSigles(identite.domaine)} · ÉTAPE ${identite.numero}</span>${etoile}</span><h3>${identite.titre}</h3><p>${identite.sousTitre}<br>${nombre} sigles · ${nombre*2} activités de parcours.</p><span class="sigles-etape-progression"><i style="width:${pc}%"></i></span><span class="sigles-etape-pied"><span>${maitrises}/${nombre} bonnes réponses · ${sansJoker}/${nombre} sans joker</span><span>${maitrises===nombre?'Maîtrisée ✓':'Ouvrir →'}</span></button>${revision}</article>`;
     }).join('');
     zone.querySelectorAll('.sigles-etape-ouvrir').forEach(b => b.addEventListener('click', () => lancerEtapeSigles(Number(b.dataset.siglesEtape))));
 }
 function actualiserCarteEvaluationSigles() {
     const bouton = selectionnerSigles('#siglesLancerEvaluation'); const carte = selectionnerSigles('#siglesEvaluationCarte'); const statut = selectionnerSigles('#siglesEvaluationStatut'); const ok = evaluationSiglesDebloquee();
-    if (bouton) { bouton.disabled = !ok; bouton.textContent = ok ? 'Commencer l’évaluation' : 'Maîtrise d’abord les 6 étapes'; }
+    if (bouton) { bouton.disabled = !ok; bouton.textContent = ok ? 'Commencer l’évaluation' : `Maîtrise les ${numerosEtapesSigles().length} étapes ${libelleDomaineSigles()}`; }
     carte?.classList.toggle('verrouillee', !ok);
-    if (statut) statut.textContent = ok ? 'Évaluation débloquée.' : 'Disponible après la maîtrise autonome des 6 étapes.';
+    if (statut) statut.textContent = ok ? 'Évaluation débloquée.' : `Disponible après la maîtrise des ${numerosEtapesSigles().length} étapes ${libelleDomaineSigles()}.`;
 }
 function construireChoixPerimetreSigles() {
     const zone = selectionnerSigles('#siglesChoixPerimetre'); if (!zone) return;
     const actuel = zone.querySelector('[aria-pressed="true"]')?.dataset.perimetre || 'tous';
-    zone.innerHTML = `<button class="choix-bouton entrainement-perimetre-global" data-perimetre="tous" type="button" style="--parcours-accent:#4f8cff;--parcours-accent-lisible:#9fc2ff;--parcours-accent-rgb:79,140,255"><b>Tous les sigles</b><span>Les 6 étapes</span></button>` + [1,2,3,4,5,6].map(n => { const e=ETAPES_MISSION_SIGLES[n]; return `<button class="choix-bouton" data-perimetre="${n}" type="button" style="--parcours-accent:${e.couleur};--parcours-accent-lisible:${e.couleurTexte};--parcours-accent-rgb:${e.couleurRgb}"><b>${e.numero} · ${e.titre}</b><span>12 sigles</span></button>`; }).join('');
+    zone.innerHTML = `<button class="choix-bouton entrainement-perimetre-global" data-perimetre="tous" type="button" style="--parcours-accent:#4f8cff;--parcours-accent-lisible:#9fc2ff;--parcours-accent-rgb:79,140,255"><b>Tous les sigles</b><span>Les ${numerosEtapesSigles().length} étapes</span></button>` + numerosEtapesSigles().map(n => { const e=ETAPES_MISSION_SIGLES[n]; return `<button class="choix-bouton" data-perimetre="${n}" type="button" style="--parcours-accent:${e.couleur};--parcours-accent-lisible:${e.couleurTexte};--parcours-accent-rgb:${e.couleurRgb}"><b>${e.numero} · ${e.titre}</b><span>${obtenirSiglesEtape(n).length} sigles</span></button>`; }).join('');
     zone.querySelectorAll('button').forEach(b => { const actif = b.dataset.perimetre === actuel; b.classList.toggle('actif', actif); b.setAttribute('aria-pressed', actif?'true':'false'); b.addEventListener('click', () => { activerBoutonGroupeSigles(zone,b); actualiserDisponibiliteNombreSigles(); }); });
     actualiserDisponibiliteNombreSigles();
 }
 function activerBoutonGroupeSigles(zone, bouton) { zone?.querySelectorAll('button').forEach(b => { const actif=b===bouton; b.classList.toggle('actif',actif); b.setAttribute('aria-pressed',actif?'true':'false'); }); }
 function valeurGroupeSigles(selecteur, attribut, defaut) { const actif = selectionnerSigles(`${selecteur} button[aria-pressed="true"]`); return actif?.dataset?.[attribut] ?? defaut; }
 function actualiserDisponibiliteNombreSigles() {
-    const perimetre = valeurGroupeSigles('#siglesChoixPerimetre','perimetre','tous'); const max = perimetre === 'tous' ? SIGLES.length : obtenirSiglesEtape(Number(perimetre)).length; const info=selectionnerSigles('#siglesNombreDisponible'); if(info) info.textContent=`${max} sigles disponibles dans ce périmètre.`;
+    const perimetre = valeurGroupeSigles('#siglesChoixPerimetre','perimetre','tous'); const max = obtenirPoolEntrainementMissionSigles(perimetre).length; const info=selectionnerSigles('#siglesNombreDisponible'); if(info) info.textContent=`${max} sigles disponibles dans ce périmètre.`;
     const zone=selectionnerSigles('#siglesChoixNombre'); if(!zone)return; let actif=zone.querySelector('[aria-pressed="true"]');
     zone.querySelectorAll('button').forEach(b=>{ const n=b.dataset.nombre==='tous'?max:Number(b.dataset.nombre); b.disabled=n>max; });
     if (actif?.disabled) { actif = [...zone.querySelectorAll('button:not(:disabled)')].pop(); if(actif) activerBoutonGroupeSigles(zone,actif); }
@@ -6820,16 +6869,19 @@ function creerQuestionIntroductionSigles(cible) {
     };
 }
 function poolSiglesConnus(extras=[]) {
-    const connus = SIGLES.filter(x=>sigleEstIntroduit(x.sigle));
+    const domaines = new Set(extras.map(x=>x.domaine));
+    const connus = SIGLES.filter(x=>sigleEstIntroduit(x.sigle) && (domaines.size ? domaines.has(x.domaine) : obtenirPoolDomaineSigles().includes(x)));
     const map = new Map([...connus,...extras].map(x=>[normaliserSigleJeu(x.sigle),x])); return [...map.values()];
 }
 function creerQuestionRappelDirectSigles(cible, pool=SIGLES) {
+    pool=pool.filter(x=>x.domaine===cible.domaine);
+    if(pool.length<4) pool=obtenirPoolDomaineSigles(cible.domaine);
     const autres = choisirSansDoublon(pool.filter(x=>normaliserSigleJeu(x.sigle)!==normaliserSigleJeu(cible.sigle)),3);
     const options = melangerSigles([cible,...autres]).map((x,i)=>({id:`dev-${i}`,texte:significationMissionSigles(x),correcte:normaliserSigleJeu(x.sigle)===normaliserSigleJeu(cible.sigle)}));
     return { type:'choix', cibles:[cible], cible, compteMaitrise:true, consigne:`Que signifie ${cible.sigle} ?`, options, explication:`${cible.sigle} signifie « ${significationMissionSigles(cible)} ». ${cible.repere || ''}`.trim(), indice:cible.repere || `Cherche le développement exact de ${cible.sigle}.` };
 }
 function creerQuestionRappelInverseSigles(cible, poolConnus) {
-    const eligibles = poolConnus.filter(x=>normaliserSigleJeu(x.sigle)!==normaliserSigleJeu(cible.sigle) && sigleEstIntroduit(x.sigle));
+    const eligibles = poolConnus.filter(x=>x.domaine===cible.domaine && normaliserSigleJeu(x.sigle)!==normaliserSigleJeu(cible.sigle) && sigleEstIntroduit(x.sigle));
     if (eligibles.length < 3) return creerQuestionRappelDirectSigles(cible, poolConnus.length>=4?poolConnus:SIGLES);
     const autres=choisirSansDoublon(eligibles,3); const options=melangerSigles([cible,...autres]).map((x,i)=>({id:`sig-${i}`,texte:x.sigle,correcte:normaliserSigleJeu(x.sigle)===normaliserSigleJeu(cible.sigle)}));
     return { type:'choix', cibles:[cible], cible, compteMaitrise:true, consigne:`Quel sigle correspond à « ${significationMissionSigles(cible)} » ?`, options, explication:`Le sigle attendu est ${cible.sigle}. ${cible.repere || ''}`.trim(), indice:cible.repere || 'Repère le sigle correspondant au développement déjà travaillé.' };
@@ -6862,8 +6914,8 @@ function creerQuestionsHasardSigles(cibles) {
 }
 function creerQuestionsRevisionSigles(cibles) { const connus=poolSiglesConnus(cibles); return cibles.map((cible,index)=>index%2?creerQuestionRappelInverseSigles(cible,connus):creerQuestionRappelDirectSigles(cible,cibles)); }
 function creerQuestionsEvaluationSigles() {
-    const cibles=choisirSansDoublon(SIGLES,30); const connus=SIGLES;
-    return cibles.map((cible,index)=> index>0 && index%6===5 ? creerQuestionAssociationSigles(choisirSansDoublon(SIGLES,4)) : (index%2?creerQuestionRappelInverseSigles(cible,connus):creerQuestionRappelDirectSigles(cible,SIGLES))).slice(0,30);
+    const connus=obtenirPoolDomaineSigles(); const cibles=choisirSansDoublon(connus,NOMBRE_QUESTIONS_EVALUATION_SIGLES);
+    return cibles.map((cible,index)=> index>0 && index%6===5 ? creerQuestionAssociationSigles(choisirSansDoublon(connus,4)) : (index%2?creerQuestionRappelInverseSigles(cible,connus):creerQuestionRappelDirectSigles(cible,connus))).slice(0,NOMBRE_QUESTIONS_EVALUATION_SIGLES);
 }
 
 function questionSiglesAReprendre(question) {
@@ -6937,7 +6989,7 @@ function finaliserQuestionSigles(correcte,cibles,{parJoker=false,passage=false,t
 function afficherFeedbackSigles(type,texte){ const z=selectionnerSigles('#siglesFeedback'); if(!z)return; z.dataset.type=type; z.textContent=texte; z.classList.remove('masque'); }
 function passerQuestionSigles(){ if(etatJeuSigles.mode==='evaluation'||etatJeuSigles.questionValidee)return; const q=etatJeuSigles.questions[etatJeuSigles.indexQuestion]; finaliserQuestionSigles(false,q.cibles,{passage:true}); }
 function questionSuivanteSigles(){ etatJeuSigles.indexQuestion += 1; afficherQuestionSigles(); }
-function verifierCelebrationEtapeSigles(cibles){ const numeros=[...new Set(cibles.map(c=>Number(c.etape)))]; numeros.forEach(n=>{ const e=obtenirEtatEtapeSigles(n); if(compterValidationsSansJokerEtapeSigles(n)===12 && !e.celebrationAffichee){ e.celebrationAffichee=true; etatJeuSigles.celebrationEtapeADiffuser=n; } }); }
+function verifierCelebrationEtapeSigles(cibles){ const numeros=[...new Set(cibles.map(c=>Number(c.etape)))]; numeros.forEach(n=>{ const e=obtenirEtatEtapeSigles(n); if(compterValidationsSansJokerEtapeSigles(n)===obtenirSiglesEtape(n).length && !e.celebrationAffichee){ e.celebrationAffichee=true; etatJeuSigles.celebrationEtapeADiffuser=n; } }); }
 
 function utiliserJokerSigles(type) {
     if(!etatJeuSigles.jokersActifs||etatJeuSigles.questionValidee)return; const q=etatJeuSigles.questions[etatJeuSigles.indexQuestion]; etatJeuSigles.aideUtilisee=true; const bouton=selectionnerSigles(`[data-joker-sigles="${type}"]`); if(bouton)bouton.disabled=true;
@@ -6952,13 +7004,13 @@ function arreterChronoSigles(){ if(etatJeuSigles.chronoIntervalle){ clearInterva
 
 function terminerSessionSigles(){ arreterChronoSigles(); const total=etatJeuSigles.questions.length, pc=total?Math.round(etatJeuSigles.score/total*100):0; const jeu=obtenirSauvegardeJeuSigles();
     if(etatJeuSigles.mode==='parcours'&&etatJeuSigles.etape){ const e=obtenirEtatEtapeSigles(etatJeuSigles.etape); e.nombreTentatives+=1;e.meilleurScore=Math.max(e.meilleurScore||0,pc); }
-    if(etatJeuSigles.mode==='evaluation'){ jeu.evaluation.nombreTentatives+=1;jeu.evaluation.meilleurScore=Math.max(jeu.evaluation.meilleurScore||0,pc);etatJeuSigles.evaluationReussie=pc>=SEUIL_EVALUATION_SIGLES&&etatJeuSigles.questionsPassees===0;etatJeuSigles.evaluationParfaite=pc===100&&etatJeuSigles.questionsPassees===0;if(etatJeuSigles.evaluationReussie)jeu.evaluation.reussie=true; }
+    if(etatJeuSigles.mode==='evaluation'){ obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).nombreTentatives+=1;obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).meilleurScore=Math.max(obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).meilleurScore||0,pc);etatJeuSigles.evaluationReussie=pc>=SEUIL_EVALUATION_SIGLES&&etatJeuSigles.questionsPassees===0;etatJeuSigles.evaluationParfaite=pc===100&&etatJeuSigles.questionsPassees===0;if(etatJeuSigles.evaluationReussie)obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).reussie=true; }
     enregistrerSauvegarde(); afficherVueSigles('bilan'); afficherBilanSigles(pc); actualiserAccueilSigles(); }
 function afficherBilanSigles(pc){ const total=etatJeuSigles.questions.length; if(selectionnerSigles('#siglesBilanScore'))selectionnerSigles('#siglesBilanScore').textContent=`${etatJeuSigles.score} / ${total} · ${pc}%`; if(selectionnerSigles('#siglesBilanDetails'))selectionnerSigles('#siglesBilanDetails').textContent=`${etatJeuSigles.reponsesAutonomes} réussites autonomes · ${etatJeuSigles.reponsesAidees} avec aide · ${etatJeuSigles.questionsPassees} passées`;
     let surtitre='Mission Sigles', titre='Session terminée', texte='Les sigles difficiles restent disponibles dans « Réviser mes erreurs ».', icone='✓';
-    if(etatJeuSigles.mode==='parcours'){ const m=etapeSiglesMaitrisee(etatJeuSigles.etape); titre=m?`Étape ${etatJeuSigles.etape} maîtrisée`:`Étape ${etatJeuSigles.etape} terminée`; texte=m?'Les 12 sigles de cette étape sont maîtrisés en autonomie.':'Tu peux rejouer l’étape ou retrouver tes erreurs dans la révision.'; }
-    if(etatJeuSigles.celebrationEtapeADiffuser){ icone='★'; titre=`Étape ${etatJeuSigles.celebrationEtapeADiffuser} validée sans joker !`; texte='Tous les sigles de cette étape ont finalement été réussis sans joker. Bravo !'; lancerConfettis(1.35); jouerSonEtapeSansJoker(); }
-    if(etatJeuSigles.mode==='evaluation'){ surtitre='Évaluation finale'; if(etatJeuSigles.evaluationReussie){ titre=etatJeuSigles.evaluationParfaite?'72 sigles. Même pas peur.':'Évaluation réussie !';texte=etatJeuSigles.evaluationParfaite?'30 / 30. Mission accomplie.':'Tu dépasses le seuil de 90 %. Bravo !';icone='🏆';lancerConfettis(etatJeuSigles.evaluationParfaite?3:2);jouerSonEvaluationFinale(); } else { titre='Évaluation à consolider';texte='Il faut 90 % pour réussir. Les sigles manqués rejoignent tes erreurs.';icone='↻'; } }
+    if(etatJeuSigles.mode==='parcours'){ const m=etapeSiglesMaitrisee(etatJeuSigles.etape); titre=m?`${libelleEtapeSigles(etatJeuSigles.etape)} maîtrisée`:`${libelleEtapeSigles(etatJeuSigles.etape)} terminée`; texte=m?'Tous les sigles de cette étape sont maîtrisés en autonomie.':'Tu peux rejouer l’étape ou retrouver tes erreurs dans la révision.'; }
+    if(etatJeuSigles.celebrationEtapeADiffuser){ icone='★'; titre=`${libelleEtapeSigles(etatJeuSigles.celebrationEtapeADiffuser)} validée sans joker !`; texte='Tous les sigles de cette étape ont finalement été réussis sans joker. Bravo !'; lancerConfettis(1.35); jouerSonEtapeSansJoker(); }
+    if(etatJeuSigles.mode==='evaluation'){ surtitre='Évaluation finale'; if(etatJeuSigles.evaluationReussie){ titre=etatJeuSigles.evaluationParfaite?'Mission accomplie. Même pas peur.':'Évaluation réussie !';texte=etatJeuSigles.evaluationParfaite?'30 / 30. Mission accomplie.':'Tu dépasses le seuil de 90 %. Bravo !';icone='🏆';lancerConfettis(etatJeuSigles.evaluationParfaite?3:2);jouerSonEvaluationFinale(); } else { titre='Évaluation à consolider';texte='Il faut 90 % pour réussir. Les sigles manqués rejoignent tes erreurs.';icone='↻'; } }
     if(etatJeuSigles.mode==='hasard'){ titre='Défi du hasard terminé';texte=pc===100?'Tirage parfait ! Le dé était avec toi.':'Le dé a parlé. Tu peux relancer un nouveau tirage quand tu veux.'; }
     if(etatJeuSigles.mode==='revision'){ titre='Révision terminée';texte=obtenirErreursSiglesActives().length?'Il reste quelques sigles à consolider.':'Bravo : aucun sigle actif à revoir.'; }
     if(etatJeuSigles.mode==='entrainement'&&pc===100&&total>=10){ titre='Entraînement parfait !';texte='Aucune erreur sur cette session.';lancerConfettis(1);jouerSonEtapeSansJoker(); }
@@ -6974,10 +7026,10 @@ function lancerEtapeSigles(numero, { depuisDebut = false } = {}){
     // Si tout est déjà maîtrisé, conserver une session complète permet encore
     // d'accéder au bouton « Reprendre depuis le début » depuis l'écran des
     // questions, sans modifier la progression enregistrée.
-    preparerSessionMissionSiglesNative({mode:'parcours',etape:numero,sigles,questions:questions.length ? questions : questionsCompletes,jokersActifs:true,titre:`Étape ${numero} · ${ETAPES_MISSION_SIGLES[numero].titre}`});
+    preparerSessionMissionSiglesNative({mode:'parcours',etape:numero,sigles,questions:questions.length ? questions : questionsCompletes,jokersActifs:true,titre:`${libelleEtapeSigles(numero)} · ${ETAPES_MISSION_SIGLES[numero].titre}`});
 }
 function lancerEntrainementSigles(){ const perimetre=valeurGroupeSigles('#siglesChoixPerimetre','perimetre','tous'); const pool=perimetre==='tous'?[...SIGLES]:obtenirSiglesEtape(Number(perimetre)); const nombreBrut=valeurGroupeSigles('#siglesChoixNombre','nombre','10'); const nombre=nombreBrut==='tous'?pool.length:Math.min(pool.length,Number(nombreBrut)||10); const organisation=valeurGroupeSigles('#siglesChoixOrganisation','organisation','etapes'); let cibles=choisirSansDoublon(pool,nombre); if(organisation==='etapes')cibles=cibles.sort((a,b)=>Number(a.etape)-Number(b.etape)||Number(a.id)-Number(b.id)); const chrono=valeurGroupeSigles('#siglesChoixChrono','chrono','non')==='oui'; const secondes=Number(valeurGroupeSigles('#siglesChoixSecondes','secondes','30'))||30; const jokers=valeurGroupeSigles('#siglesChoixJokers','jokers','oui')==='oui'; const questions=creerQuestionsEntrainementSigles(cibles,organisation==='melange'); preparerSessionSigles({mode:'entrainement',sigles:cibles,questions,jokersActifs:jokers,titre:`Entraînement Sigles · ${nombre} sigle${nombre===1?'':'s'}`,chronoActif:chrono,secondesQuestion:secondes}); }
-function lancerDeSigles(){ const face=selectionnerSigles('#siglesFaceDe'),resultat=selectionnerSigles('#siglesDeResultat'),lancer=selectionnerSigles('#siglesLancerDe'),jouer=selectionnerSigles('#siglesJouerTirage'); if(!face||!resultat||!lancer||!jouer)return; const valeur=1+Math.floor(Math.random()*6); lancer.disabled=true;jouer.classList.add('masque');face.classList.remove('de-en-lancer');void face.offsetWidth;face.classList.add('de-en-lancer');window.setTimeout(()=>{ etatJeuSigles.nombreTire=valeur;etatJeuSigles.tirageHasard=choisirSansDoublon(SIGLES,valeur);face.dataset.face=String(valeur);face.classList.remove('de-en-lancer');resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les 72 sigles.`;jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`;lancer.textContent='Relancer le dé';lancer.classList.add('principal');lancer.classList.remove('sigles-bouton-secondaire');jouer.classList.remove('masque');lancer.disabled=false;jouer.focus({preventScroll:true}); },420); }
+function lancerDeSigles(){ const face=selectionnerSigles('#siglesFaceDe'),resultat=selectionnerSigles('#siglesDeResultat'),lancer=selectionnerSigles('#siglesLancerDe'),jouer=selectionnerSigles('#siglesJouerTirage'); if(!face||!resultat||!lancer||!jouer)return; const valeur=1+Math.floor(Math.random()*6); lancer.disabled=true;jouer.classList.add('masque');face.classList.remove('de-en-lancer');void face.offsetWidth;face.classList.add('de-en-lancer');window.setTimeout(()=>{ etatJeuSigles.nombreTire=valeur;etatJeuSigles.tirageHasard=choisirSansDoublon(obtenirPoolDomaineSigles(),valeur);face.dataset.face=String(valeur);face.classList.remove('de-en-lancer');resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les ${obtenirPoolDomaineSigles().length} sigles ${libelleDomaineSigles()}.`;jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`;lancer.textContent='Relancer le dé';lancer.classList.add('principal');lancer.classList.remove('sigles-bouton-secondaire');jouer.classList.remove('masque');lancer.disabled=false;jouer.focus({preventScroll:true}); },420); }
 function jouerTirageDeSigles(){ const cibles=[...etatJeuSigles.tirageHasard]; if(!cibles.length)return; preparerSessionMissionSiglesNative({mode:'hasard',sigles:cibles,questions:creerQuestionsHasardSigles(cibles),jokersActifs:true,titre:`Défi du hasard · ${cibles.length} question${cibles.length===1?'':'s'}`,chronoActif:false}); }
 function lancerRevisionSigles(){
     afficherEcran('sigles-revision');
@@ -6991,7 +7043,7 @@ function lancerRevisionEtapeSiglesDepuisRevision(numeroEtape){
     const numero = Number(numeroEtape);
     const cibles = obtenirCiblesARejouerEtapeSigles(numero);
     if(!cibles.length){ afficherNotification(`Aucune question à consolider à l’étape ${numero} de Mission Sigles.`); return; }
-    preparerSessionMissionSiglesNative({mode:'revision', etape:numero, sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:`Réviser mes erreurs · Étape ${numero}`});
+    preparerSessionMissionSiglesNative({mode:'revision', etape:numero, sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:`Réviser mes erreurs · ${libelleEtapeSigles(numero)}`});
 }
 function lancerRevisionEtapeSiglesDepuisQuestion(numeroEtape){
     lancerRevisionEtapeSiglesDepuisRevision(numeroEtape);
@@ -7036,7 +7088,7 @@ function construireRevisionMissionSiglesIndependante(){
     }).join('');
     const etapesDirectes = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const liste = parEtape[numero];
-        return `<button class="revision-etape-bouton" data-action="reviser-etape-sigles" data-etape="${numero}"><span>Étape ${numero}</span><strong>${liste.length}</strong></button>`;
+        return `<button class="revision-etape-bouton" data-action="reviser-etape-sigles" data-etape="${numero}"><span>${libelleEtapeSigles(numero)}</span><strong>${liste.length}</strong></button>`;
     }).join('');
     const dossiers = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
@@ -7045,7 +7097,7 @@ function construireRevisionMissionSiglesIndependante(){
             const suivi = obtenirSauvegardeJeuSigles().erreurs?.[normaliserSigleJeu(cible.sigle)] || {};
             return `<li class="revision-erreur-ligne"><span><strong>${cible.sigle}</strong> · ${significationMissionSigles(cible)}</span><small>Raté ${Number(suivi.nombreErreurs||1)} fois · à revoir jusqu’à réussite</small></li>`;
         }).join('');
-        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs actives':'erreur active'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>Étape ${numero}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
+        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs actives':'erreur active'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
     }).join('');
     zone.innerHTML = `<div class="revision-workspace">
         <article class="revision-toutes-erreurs">
@@ -7065,7 +7117,7 @@ function afficherRevisionMissionSigles(){
     construireRevisionMissionSiglesIndependante();
 }
 
-function lancerEvaluationSigles(){ if(!evaluationSiglesDebloquee()){ouvrirFenetreMessage({titre:'Évaluation encore verrouillée',message:'Maîtrise d’abord les 6 étapes de Mission Sigles en autonomie.',libelleConfirmer:'Compris'});return;} const questions=creerQuestionsEvaluationSigles(); const sigles=[...new Map(questions.flatMap(q=>q.cibles).map(c=>[normaliserSigleJeu(c.sigle),c])).values()]; preparerSessionMissionSiglesNative({mode:'evaluation',sigles,questions,jokersActifs:false,titre:'Évaluation finale · Expert des sigles'}); }
+function lancerEvaluationSigles(){ if(!evaluationSiglesDebloquee()){ouvrirFenetreMessage({titre:'Évaluation encore verrouillée',message:'Maîtrise d’abord les étapes du domaine sélectionné en autonomie.',libelleConfirmer:'Compris'});return;} const questions=creerQuestionsEvaluationSigles(); const sigles=[...new Map(questions.flatMap(q=>q.cibles).map(c=>[normaliserSigleJeu(c.sigle),c])).values()]; preparerSessionMissionSiglesNative({mode:'evaluation',sigles,questions,jokersActifs:false,titre:'Évaluation finale · Expert des sigles'}); }
 function rejouerDerniereSessionSigles(){ const ancienne=etatJeuSigles.configurationDerniereSession;if(!ancienne){retourAccueilSigles();return;} if(ancienne.mode==='parcours'){lancerEtapeSigles(ancienne.etape);return;}if(ancienne.mode==='evaluation'){lancerEvaluationSigles();return;}if(ancienne.mode==='revision'){lancerRevisionSigles();return;}if(ancienne.mode==='hasard'){const cibles=ancienne.sigles.map(x=>obtenirSigleJeu(x.sigle)).filter(Boolean);preparerSessionSigles({...ancienne,sigles:cibles,questions:creerQuestionsHasardSigles(cibles)});return;}const cibles=ancienne.sigles.map(x=>obtenirSigleJeu(x.sigle)).filter(Boolean);preparerSessionSigles({...ancienne,sigles:cibles,questions:creerQuestionsEntrainementSigles(cibles, false)}); }
 function retourAccueilSigles(){ arreterChronoSigles(); etatJeuSigles=creerEtatJeuSigles(); afficherVueSigles('accueil'); actualiserAccueilSigles(); }
 
@@ -7079,11 +7131,19 @@ function estSessionMissionSigles() {
 function obtenirModeMissionSigles() {
     return estSessionMissionSigles() ? String(etat.mode).replace(/^sigles-/, '') : null;
 }
+function libelleEtapeSigles(numero) {
+    const e=obtenirIdentiteEtapeMissionSigles(numero);
+    return `${libelleDomaineSigles(e.domaine)} · Étape ${e.numero}`;
+}
 function obtenirIdentiteEtapeMissionSigles(numero) {
     return ETAPES_MISSION_SIGLES[Number(numero)] || ETAPES_MISSION_SIGLES[1];
 }
 function obtenirThemeVisuelMissionSigles(numero) {
     return ['procedure_ordinaire','information_judiciaire','jugement_educatif_ordinaire','matiere_criminelle_peines','application_execution_peines','commun'][Math.max(0, Math.min(5, Number(numero || 1) - 1))];
+}
+function liensSourcesQuestionSigles(cibles) {
+    const sources=[...new Map(cibles.filter(c=>c.source).map(c=>[c.source.url,c.source])).values()];
+    return sources.map(source=>` <a href="${source.url}" target="_blank" rel="noopener noreferrer">Source officielle · ${echapperHtml(source.reference)}</a>`).join('');
 }
 function convertirQuestionMissionSiglesVersPJJoue(questionSigles, index, configuration) {
     const cible = questionSigles.cible || questionSigles.cibles?.[0] || null;
@@ -7096,7 +7156,7 @@ function convertirQuestionMissionSiglesVersPJJoue(questionSigles, index, configu
         chapitre: 1,
         ordreEtape: index + 1,
         enonce: questionSigles.consigne,
-        explication: questionSigles.explication || '',
+        explication: (questionSigles.explication || '') + liensSourcesQuestionSigles(questionSigles.cibles || []),
         indice: questionSigles.indice || '',
         bonneReponse: '',
         mauvaisesReponses: [],
@@ -7131,7 +7191,7 @@ function convertirQuestionMissionSiglesVersPJJoue(questionSigles, index, configu
     };
 }
 function preparerSessionMissionSiglesNative({ mode, etape = null, sigles, questions, jokersActifs = true, titre, chronoActif = false, secondesQuestion = 30 }) {
-    const configuration = { mode, etape, sigles:[...sigles], jokersActifs, titre, chronoActif, secondesQuestion };
+    const configuration = { domaine:obtenirDomaineSigles(), mode, etape, sigles:[...sigles], jokersActifs, titre, chronoActif, secondesQuestion };
     etatJeuSigles = {
         ...creerEtatJeuSigles(),
         mode,
@@ -7193,7 +7253,7 @@ function reinitialiserMaitriseEtapeMissionSigles(numeroEtape) {
     const etape = obtenirEtatEtapeSigles(numeroEtape);
     etape.autonomes = {};
     etape.validationsSansJoker = {};
-    etape.celebrationSansJokerAffichee = false;
+    etape.celebrationAffichee = false;
     enregistrerSauvegarde();
     if (etat.questionCourante?.missionSigles)
         actualiserSuiviEtapeQuestion(etat.questionCourante);
@@ -7212,25 +7272,25 @@ function terminerSessionMissionSiglesNative() {
         const numero = Number(etat.missionSiglesConfiguration?.etape || etat.etape || 1);
         if (etatJeuSigles.celebrationEtapeADiffuser) {
             celebration = {
-                titre: `Étape ${numero} terminée sans joker !`,
+                titre: `${libelleEtapeSigles(numero)} terminée sans joker !`,
                 message: 'Tous les sigles de cette étape ont finalement été réussis sans joker.',
                 confetti: true
             };
         }
-        titre = `Étape ${numero} · ${obtenirIdentiteEtapeMissionSigles(numero).titre}`;
+        titre = `${libelleEtapeSigles(numero)} · ${obtenirIdentiteEtapeMissionSigles(numero).titre}`;
     }
     if (mode === 'evaluation') {
-        jeu.evaluation.meilleurScore = Math.max(Number(jeu.evaluation.meilleurScore || 0), pourcentage);
-        jeu.evaluation.nombreTentatives = Number(jeu.evaluation.nombreTentatives || 0) + 1;
+        obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).meilleurScore = Math.max(Number(obtenirEvaluationSigles().meilleurScore || 0), pourcentage);
+        obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).nombreTentatives = Number(obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).nombreTentatives || 0) + 1;
         const reussie = pourcentage >= SEUIL_EVALUATION_SIGLES && passees === 0;
-        jeu.evaluation.reussie = Boolean(jeu.evaluation.reussie) || reussie;
+        obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).reussie = Boolean(obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).reussie) || reussie;
         titre = 'Évaluation finale · Expert des sigles';
         resultat = reussie
             ? `Résultat : ${pourcentage} %. Mission Sigles est validée.`
             : `Résultat : ${pourcentage} %. Le seuil attendu est de ${SEUIL_EVALUATION_SIGLES} %.`;
         if (reussie) {
             celebration = pourcentage === 100
-                ? { titre:'72 sigles. Même pas peur.', message:'30 / 30. Mission accomplie.', confetti:true, finale:true }
+                ? { titre:'Mission accomplie. Même pas peur.', message:'30 / 30. Mission accomplie.', confetti:true, finale:true }
                 : { titre:'Évaluation Mission Sigles réussie !', message:`Tu as obtenu ${pourcentage} %.`, confetti:true };
         }
     }
@@ -7275,7 +7335,7 @@ function terminerSessionMissionSiglesNative() {
     lancerCelebrationBilan(celebration);
 }
 function obtenirPoolEntrainementMissionSigles(perimetre) {
-    return String(perimetre) === 'tous' ? [...SIGLES] : obtenirSiglesEtape(Number(perimetre));
+    return ['cjpm','pjj','tous'].includes(String(perimetre)) ? obtenirPoolDomaineSigles(String(perimetre)) : obtenirSiglesEtape(Number(perimetre));
 }
 function actualiserBoutonTousMissionSigles() {
     if (selectionner('#entrainement')?.dataset.contexteEntrainement !== 'sigles') return;
@@ -7308,35 +7368,22 @@ function configurerEntrainementMissionSiglesNatif() {
     entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Choisis ta session');
     entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Entraîne-toi sur les sigles avec exactement les mêmes réglages que dans Quiz CJPM.');
     const resultatDe = selectionner('#resultatDeParcours');
-    if (resultatDe) resultatDe.textContent = 'Lance le dé pour tirer de 1 à 6 questions aléatoires parmi les 72 sigles.';
+    if (resultatDe) resultatDe.textContent = `Lance le dé pour tirer de 1 à 6 questions aléatoires parmi les ${obtenirPoolDomaineSigles().length} sigles ${libelleDomaineSigles()}.`;
     const selectPerimetre = selectionner('#perimetreEntrainement');
     const groupePerimetre = document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
     if (selectPerimetre && groupePerimetre) {
-        selectPerimetre.innerHTML = '<option value="tous">Mission Sigles complète</option>' + [1,2,3,4,5,6].map(numero => `<option value="${numero}">${obtenirIdentiteEtapeMissionSigles(numero).titre}</option>`).join('');
-        const boutons = [...groupePerimetre.querySelectorAll('.choix-bouton')];
-        boutons.forEach((bouton, index) => {
-            if (index === 0) {
-                bouton.dataset.valeur = 'tous';
-                bouton.innerHTML = '<b>Tout Mission Sigles</b><span>Les 6 étapes</span>';
-                bouton.classList.add('entrainement-perimetre-global');
-                bouton.style.removeProperty('--parcours-accent');
-                bouton.style.removeProperty('--parcours-accent-rgb');
-                return;
-            }
-            const identite = obtenirIdentiteEtapeMissionSigles(index);
-            bouton.dataset.valeur = String(index);
-            bouton.innerHTML = `<b>${identite.numero} · ${identite.titre}</b><span>${identite.sousTitre}</span>`;
-            bouton.style.setProperty('--parcours-accent', identite.couleur);
-            bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
-            bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
-        });
-        selectPerimetre.value = 'tous';
-        groupePerimetre.dataset.selectionEffectuee = 'true';
+        const options=[...['cjpm','pjj','tous'].map(d=>({valeur:d,titre:d==='tous'?'Tous les sigles':`Sigles ${libelleDomaineSigles(d)}`,detail:`${obtenirPoolDomaineSigles(d).length} sigles`,couleur:d==='cjpm'?'#d49a00':'#4f8cff',couleurTexte:d==='cjpm'?'#ffd36a':'#9fc2ff',couleurRgb:d==='cjpm'?'212,154,0':'79,140,255'})),
+            ...numerosEtapesSigles('tous').map(n=>({...ETAPES_MISSION_SIGLES[n],valeur:String(n),titre:`${libelleDomaineSigles(ETAPES_MISSION_SIGLES[n].domaine)} ${ETAPES_MISSION_SIGLES[n].numero} · ${ETAPES_MISSION_SIGLES[n].titre}`,detail:`${obtenirSiglesEtape(n).length} sigles`}))];
+        selectPerimetre.innerHTML=options.map(o=>`<option value="${o.valeur}">${o.titre}</option>`).join('');
+        groupePerimetre.innerHTML=options.map(o=>`<button class="choix-bouton" data-valeur="${o.valeur}" type="button" style="--parcours-accent:${o.couleur};--parcours-accent-lisible:${o.couleurTexte};--parcours-accent-rgb:${o.couleurRgb}"><b>${o.titre}</b><span>${o.detail}</span></button>`).join('');
+        selectPerimetre.value=obtenirDomaineSigles();
+        groupePerimetre.dataset.selectionEffectuee='true';
+        initialiserGroupesChoix();
     }
     const selectNombre = selectionner('#nombreQuestionsEntrainement');
     const groupeNombre = document.querySelector('[data-groupe-choix="nombreQuestionsEntrainement"]');
     if (selectNombre && groupeNombre) {
-        selectNombre.innerHTML = Array.from({length:63},(_,i)=>i+10).map(n=>`<option value="${n}">${n}</option>`).join('');
+        selectNombre.innerHTML = Array.from({length:SIGLES.length},(_,i)=>i+1).map(n=>`<option value="${n}">${n}</option>`).join('');
         const boutons = [...groupeNombre.querySelectorAll('.choix-bouton')];
         const valeurs = ['10','20','30','tous'];
         boutons.forEach((bouton,index)=>{ bouton.dataset.valeur = valeurs[index]; bouton.textContent = index === 3 ? 'Tous' : valeurs[index]; bouton.hidden = false; bouton.disabled = false; });
@@ -7357,6 +7404,12 @@ function configurerEntrainementMissionSiglesNatif() {
             const actionOriginale = bouton.onclick;
             bouton.onclick = () => {
                 actionOriginale?.();
+                const perimetre=selectPerimetre.value;
+                obtenirSauvegardeJeuSigles().domaine=['cjpm','pjj','tous'].includes(perimetre)?perimetre:ETAPES_MISSION_SIGLES[Number(perimetre)].domaine;
+                etatJeuSigles.tirageHasard=[];
+                selectionner('#boutonJouerLeTirage')?.classList.add('masque');
+                resultatDe.textContent=`Lance le dé dans ce périmètre de ${obtenirPoolEntrainementMissionSigles(perimetre).length} sigles.`;
+                enregistrerSauvegarde();
                 actualiserBoutonTousMissionSigles();
                 actualiserLimiteQuestionsEntrainement();
                 actualiserBoutonTousMissionSigles();
@@ -7384,7 +7437,7 @@ function restaurerEntrainementPJJoueNatif() {
     const groupePerimetre = document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
     const donnees = [
         ['tous','Tout Quiz CJPM','Les 6 parcours'],
-        ['procedure_ordinaire','01 · De l’enquête à la sanction','Recommandé pour commencer'],
+        ['procedure_ordinaire','01 · De l’enquête à la sanction',''],
         ['information_judiciaire','02 · Information judiciaire','Avant le jugement'],
         ['jugement_educatif_ordinaire','03 · Du jugement à la sanction','Réponse éducative'],
         ['matiere_criminelle_peines','04 · De la qualification criminelle aux peines','Matière criminelle'],
@@ -7393,7 +7446,7 @@ function restaurerEntrainementPJJoueNatif() {
     ];
     if (selectPerimetre && groupePerimetre) {
         selectPerimetre.innerHTML = donnees.map(([v,b])=>`<option value="${v}">${b.replace(/^\d+ · /,'')}</option>`).join('');
-        groupePerimetre.innerHTML = donnees.map(([v,b,sp],index)=>`<button class="choix-bouton${index===0?' actif entrainement-perimetre-global':''}" data-valeur="${v}" type="button"><b>${b}</b><span>${sp}</span></button>`).join('');
+        groupePerimetre.innerHTML = donnees.map(([v,b,sp],index)=>`<button class="choix-bouton${index===0?' actif entrainement-perimetre-global':''}" data-valeur="${v}" type="button"><b>${b}</b>${sp ? `<span>${sp}</span>` : ''}</button>`).join('');
         selectPerimetre.value = 'tous';
         groupePerimetre.dataset.selectionEffectuee = 'true';
     }
@@ -7424,14 +7477,15 @@ function ouvrirEntrainementMissionSiglesNatif() {
 function lancerDeSiglesEntrainementNatif() {
     const face=selectionner('#faceDeParcours'), resultat=selectionner('#resultatDeParcours'), lancer=selectionner('#boutonLancerLeDe'), jouer=selectionner('#boutonJouerLeTirage');
     if(!face||!resultat||!lancer||!jouer)return;
-    const valeur=1+Math.floor(Math.random()*6);
+    const pool=obtenirPoolEntrainementMissionSigles(selectionner('#perimetreEntrainement').value);
+    const valeur=1+Math.floor(Math.random()*Math.min(6,pool.length));
     lancer.disabled=true; jouer.classList.add('masque'); face.classList.remove('de-en-lancer'); void face.offsetWidth; face.classList.add('de-en-lancer');
     window.setTimeout(()=>{
         etat.nombreQuestionsTirageDe=valeur;
         etatJeuSigles.nombreTire=valeur;
-        etatJeuSigles.tirageHasard=choisirSansDoublon(SIGLES,valeur);
+        etatJeuSigles.tirageHasard=choisirSansDoublon(pool,valeur);
         face.dataset.face=String(valeur); face.classList.remove('de-en-lancer');
-        resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les 72 sigles.`;
+        resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les ${pool.length} sigles du périmètre choisi.`;
         jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`; jouer.classList.remove('masque');
         lancer.textContent='Relancer le dé'; lancer.disabled=false; jouer.focus({preventScroll:true});
     },420);

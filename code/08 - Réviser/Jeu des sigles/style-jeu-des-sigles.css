@@ -306,4 +306,14 @@
 }
 
 
+
+/* Deux domaines du même mini-jeu, avec les couleurs déjà présentes. */
+.sigles-domaines{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 24px}
+.sigles-domaines .choix-bouton{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0;padding:14px 18px;border:1px solid rgba(159,194,255,.5);border-left:4px solid #4f8cff;border-radius:14px;background:rgba(79,140,255,.08);color:#dceaff;text-align:left;cursor:pointer}
+.sigles-domaines .choix-bouton[data-domaine-sigles="cjpm"]{border-left-color:#d49a00}
+.sigles-domaines .choix-bouton span{font-size:.88rem}
+.sigles-domaines .choix-bouton[aria-pressed="true"]{outline:2px solid #9fc2ff;outline-offset:2px;background:rgba(79,140,255,.18)}
+.sigles-domaines .choix-bouton:focus-visible{outline:3px solid #ffd36a;outline-offset:3px}
+@media(max-width:520px){.sigles-domaines{gap:10px}.sigles-domaines .choix-bouton{flex:0 0 auto;max-width:100%;padding:12px}}
+
 /* === FIN MORCEAU CSS === */

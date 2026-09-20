@@ -753,14 +753,14 @@ def verifier_revision_supports(page: Page) -> None:
         )
     })""")
     ordre_attendu = {
-        "supports-reperes-pjj": ["support-organisation-pjj", "support-mesures-educatives", "support-sigles-essentiels", "support-jeu-sigles", "support-jeu-mesures"],
+        "supports-reperes-pjj": ["support-organisation-pjj", "support-mesures-educatives", "support-jeu-mesures"],
         "supports-je": ["support-pratique-je", "support-synthese-je"],
         "supports-tpe": ["support-pratique-tpe", "support-synthese-tpe"],
         "supports-ji": ["support-pratique-ji", "support-synthese-ji"],
         "supports-jld": ["support-pratique-jld", "support-synthese-jld"],
         "supports-cam": ["support-pratique-cam", "support-synthese-cam"],
         "supports-jap": ["support-pratique-jap", "support-synthese-jap", "support-fiche-jap", "support-complement-jap"],
-        "supports-transversaux": ["support-tableau-maitre"],
+        "supports-transversaux": ["support-tableau-maitre", "support-sigles-essentiels", "support-jeu-sigles"],
     }
     if (
         donnees["supports"] != 15

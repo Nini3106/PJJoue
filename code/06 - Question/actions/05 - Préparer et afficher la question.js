@@ -415,12 +415,12 @@ function actualiserSuiviEtapeQuestion(question) {
         const finaleMission = obtenirModeMissionSigles() === 'evaluation';
         numeroParcours.textContent = 'Mission Sigles';
         titreParcours.textContent = 'Mission Sigles';
-        numero.textContent = finaleMission ? 'Évaluation finale' : `Étape ${numeroEtape}`;
+        numero.textContent = finaleMission ? `Évaluation ${libelleDomaineSigles(etat.missionSiglesConfiguration?.domaine)}` : libelleEtapeSigles(numeroEtape);
         titre.textContent = finaleMission ? 'Expert des sigles' : identite.titre;
         const modeMission = obtenirModeMissionSigles();
         suivi.classList.toggle('masque', finaleMission || !['parcours', 'revision'].includes(modeMission));
         if (!finaleMission && ['parcours', 'revision'].includes(modeMission)) {
-            compteur.textContent = `${compterMaitrisesEtapeSigles(numeroEtape)}/${NOMBRE_SIGLES_PAR_ETAPE}`;
+            compteur.textContent = `${compterMaitrisesEtapeSigles(numeroEtape)}/${obtenirSiglesEtape(numeroEtape).length}`;
             boutonReinitialiser.disabled = compterMaitrisesEtapeSigles(numeroEtape) === 0;
         }
         actualiserBoutonRevisionEtapeQuestion(question);

@@ -1,29 +1,17 @@
-# Mission Sigles — mini‑PJJoue V1
+# Mission Sigles
 
-Cette page est le mini‑jeu consacré aux 72 sigles de PJJoue.
+Mini-jeu V1 commun à deux domaines : CJPM (par défaut) et PJJ (option).
+Le choix Tous donne accès aux deux ensembles sans doublon.
 
-## Règles pédagogiques
+- `donnees/sigles.json` est la source unique des 96 sigles : 51 CJPM et 45 PJJ.
+- Les 72 identifiants historiques et leurs sigles sont conservés ; 24 entrées sont ajoutées.
+- Cinq étapes CJPM reprennent les couleurs des cinq parcours. Quatre étapes PJJ utilisent le bleu de l’option PJJ. Les SVG existants sont conservés.
+- Les tailles d’étape, jauges, étoiles, compteurs et limites d’entraînement sont calculés à partir des données.
+- Chaque sigle possède une introduction contextualisée et trois distracteurs rédigés. Il est découvert avant d’être demandé seul.
+- Entraînement, dé et erreurs respectent le domaine choisi ; le dé d’entraînement respecte aussi l’étape choisie.
+- Chaque domaine a une évaluation de 30 activités, débloquée par ses seules étapes, sans joker ni passage, avec un seuil de 90 %. Tous garde une évaluation globale distincte.
+- Les acquis de l’ancienne organisation sont migrés par sigle. Les anciens bilans d’étapes restent archivés dans la sauvegarde ; le résultat global historique reste conservé.
+- Le glossaire et les supports sont générés depuis les mêmes données, CJPM puis PJJ.
+- Les ajouts comportent une référence officielle affichée dans les corrections et le glossaire. Les sigles ambigus (AJ, CEDH) sont explicités dans leur contexte. Les règles de droit commun ne se substituent pas au CJPM.
 
-- `donnees/sigles.json` est l’unique source des sigles.
-- Un sigle n’est jamais demandé seul avant d’avoir été introduit dans une activité précédente avec son développement complet.
-- Chacun des 72 sigles possède une question d’introduction contextuelle rédigée explicitement dans `donnees/sigles.json` (`questionIntroduction`) : aucune consigne générique sans sujet n’est autorisée.
-- Les trois distracteurs de chaque introduction sont eux aussi rédigés explicitement (`distracteursIntroduction`) afin d’éviter les formulations automatiques artificielles ou grammaticalement incorrectes.
-- Il n’existe aucun écran qui affiche les développements avant de jouer : l’introduction fait partie du parcours de questions.
-- Les distracteurs n’emploient jamais un sigle encore inconnu.
-- Le parcours comporte 6 étapes de 12 sigles, repérées par les six couleurs des parcours PJJoue.
-- Chaque étape construit la chaîne : introduction en situation → reconnaissance → rappel → réutilisation.
-- La maîtrise autonome exige une bonne réponse sans joker avant toute erreur sur l’activité de rappel.
-- La célébration d’étape se déclenche quand les 12 sigles ont finalement été validés sans joker, même après une nouvelle tentative ou lors d’une session ultérieure.
-- L’entraînement permet de choisir le périmètre, 10 / 20 / 30 / Tous, l’ordre par étapes ou mélangé, le chrono et les jokers.
-- Le Défi du hasard reprend le dé de PJJoue : tirage de 1 à 6 questions, puis bouton de lancement ; les jokers y sont autorisés.
-- « Réviser mes erreurs » rejoue uniquement les sigles encore à consolider.
-- L’évaluation finale comporte 30 activités, sans joker ni passage, et se réussit à 90 %.
-- Les réussites d’étape et d’évaluation déclenchent les confettis et les sons de célébration de PJJoue.
-
-## Fichiers
-
-- `contenu.html` : interface visible.
-- `actions-de-la-page.js` : moteur du mini‑jeu.
-- `style-jeu-des-sigles.css` : styles propres à Mission Sigles.
-
-- « Réviser mes erreurs » réutilise désormais la page Réviser native de PJJoue (même structure, mêmes cartes et mêmes boutons), avec un contenu limité aux erreurs de Mission Sigles.
+Vérification : tests unitaires et recette navigateur `tests/verifier_jeu_sigles.py`, dont migration, séparation des domaines, évaluation et affichage mobile.

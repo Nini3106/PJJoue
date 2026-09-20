@@ -86,38 +86,39 @@ def charger_sigles() -> list[dict]:
     return sigles
 
 
+def rendre_source_sigle(element: dict) -> str:
+    source = element.get("source")
+    if not source:
+        return ""
+    return '<br><a href="{}" rel="noopener noreferrer">Source officielle · {}</a>'.format(
+        html.escape(source["url"], quote=True), html.escape(source["reference"]))
+
+
 def rendre_lignes_sigles_support(sigles: list[dict]) -> str:
     return "\n".join(
         "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(
             html.escape(str(element.get("sigle", ""))),
             html.escape(str(element.get("signification", ""))),
-            html.escape(str(element.get("repere", ""))),
+            html.escape(str(element.get("repere", ""))) + rendre_source_sigle(element),
         )
         for element in sigles
     )
 
 
 def rendre_lignes_sigles_guide(sigles: list[dict], groupe: str) -> str:
-    selection = [element for element in sigles if element.get("guideGroupe") == groupe]
-    return "\n    ".join(
-        "<tr><td>{}</td><td>{}</td></tr>".format(
-            html.escape(str(element.get("sigle", ""))),
-            html.escape(str(element.get("signification", ""))),
-        )
-        for element in selection
-    )
+    selection = sorted((element for element in sigles if element.get("guideGroupe") == groupe), key=lambda x: (x["etape"], x["sigle"]))
+    return rendre_lignes_sigles_support(selection)
 
 
 def remplacer_marqueurs_sigles(texte: str) -> str:
-    if "{{TABLE_SIGLES_" not in texte:
+    if "{{TABLE_SIGLES_" not in texte and "{{NOMBRE_SIGLES}}" not in texte:
         return texte
-    sigles = charger_sigles()
+    sigles = sorted(charger_sigles(), key=lambda x: (x["etape"], x["sigle"]))
     remplacements = {
+        "{{NOMBRE_SIGLES}}": str(len(sigles)),
         "{{TABLE_SIGLES_REVISION}}": rendre_lignes_sigles_support(sigles),
-        "{{TABLE_SIGLES_GUIDE_ORGANISATION}}": rendre_lignes_sigles_guide(sigles, "Organisation et fonctions"),
-        "{{TABLE_SIGLES_GUIDE_SERVICES}}": rendre_lignes_sigles_guide(sigles, "Services, établissements et unités"),
-        "{{TABLE_SIGLES_GUIDE_MESURES}}": rendre_lignes_sigles_guide(sigles, "Mesures et justice des mineurs"),
-        "{{TABLE_SIGLES_GUIDE_AUTRES}}": rendre_lignes_sigles_guide(sigles, "Autres sigles utiles des glossaires PJJ"),
+        "{{TABLE_SIGLES_CJPM}}": rendre_lignes_sigles_guide(sigles, "Sigles CJPM"),
+        "{{TABLE_SIGLES_PJJ}}": rendre_lignes_sigles_guide(sigles, "Sigles PJJ"),
     }
     for marqueur, contenu in remplacements.items():
         texte = texte.replace(marqueur, contenu)

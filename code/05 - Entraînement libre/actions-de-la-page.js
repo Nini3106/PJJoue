@@ -189,7 +189,7 @@ function actualiserLimiteQuestionsEntrainement() {
     if (etat.contexteEntrainement === 'sigles') {
         const perimetre = selectPerimetre.value || 'tous';
         nombreMax = obtenirPoolEntrainementMissionSigles(perimetre).length;
-        const libellePerimetre = perimetre === 'tous' ? 'Mission Sigles complète' : `l’étape ${Number(perimetre)}`;
+        const libellePerimetre = ['cjpm','pjj','tous'].includes(perimetre) ? `le domaine ${libelleDomaineSigles(perimetre)}` : libelleEtapeSigles(Number(perimetre));
         texteDisponibilite = `${nombreMax} sigles disponibles dans ${libellePerimetre}.`;
     } else if (etat.contexteEntrainement === 'mesures') {
         const perimetre = selectPerimetre.value || 'tous';

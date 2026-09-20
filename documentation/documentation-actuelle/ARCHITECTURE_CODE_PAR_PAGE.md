@@ -29,7 +29,7 @@ Chaque dossier contient :
 
 ### Mission Sigles
 
-`08 - Réviser/Jeu des sigles` contient le mini-jeu **Mission Sigles**. Ses données ne sont pas dupliquées dans la page : la liste canonique des 72 sigles se trouve dans `donnees/sigles.json`. Le même fichier alimente le support de révision, le guide `sigles-pjj/` et les activités du mini-jeu lors de la construction.
+`08 - Réviser/Jeu des sigles` contient le mini-jeu **Mission Sigles**. Ses données ne sont pas dupliquées dans la page : la liste canonique des 96 sigles (51 CJPM et 45 PJJ) se trouve dans `donnees/sigles.json`. Le même fichier alimente le support de révision, le guide `sigles-pjj/` et les activités du mini-jeu lors de la construction.
 
 Le module possède une progression locale enregistrée dans la sauvegarde principale de PJJoue. Aucun sigle encore inconnu ne peut être utilisé comme question ou distracteur avant l'affichage de son développement complet.
 
