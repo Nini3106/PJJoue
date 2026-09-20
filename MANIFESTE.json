@@ -232,8 +232,8 @@
       "sha256": "e14bdf66bd3c18c90465e368de4faa4213e7da56f0291af5fabbeadbbf3b2674"
     },
     "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js": {
-      "tailleOctets": 37786,
-      "sha256": "e0bf0abfbca4a124eec5ad22c482e13a03c23370f7157f38cac4319ea96b0963"
+      "tailleOctets": 37784,
+      "sha256": "c135d8040f92eaab95b5ff288f4e055549ffe25965a0e62619c020873fcc46a2"
     },
     "code/01 - Éléments communs/JavaScript - Sons et célébrations.js": {
       "tailleOctets": 6633,
@@ -376,8 +376,8 @@
       "sha256": "230495253dff79a7a29158036d6616cd8f50450fba20ebb30152992e90bc17ad"
     },
     "code/07 - Bilan de la session/actions-de-la-page.js": {
-      "tailleOctets": 25455,
-      "sha256": "24590386c309712e73d69ec0316802aee60e947b53ed85fb0f0cbf513eae2397"
+      "tailleOctets": 25669,
+      "sha256": "3f7076fae1cfd076fd62d21b58dbc8e26cc7fc95a69dcca68441cca5e6a87c93"
     },
     "code/07 - Bilan de la session/contenu.html": {
       "tailleOctets": 2917,
@@ -1144,8 +1144,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 508651,
-      "sha256": "f2c13ebe32b1dba08decf1350068cc0775e5820ec348cfbbafea692b9ccc9933"
+      "tailleOctets": 508863,
+      "sha256": "39532e4cb947c661184fcd5436e759227d7b4c122cc50aef5f1848a3793b6ed0"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12455,
@@ -1221,7 +1221,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5934,
-      "sha256": "88c57f805d546ca95a8ddc90c206e8bc351e2f1aef03447e078011945411df9d"
+      "sha256": "eaec2f05c43904a91ebf2391ce3552d43bc4e15bf06ba43d5276c94c71d483d7"
     },
     "sigles-cjpm/index.html": {
       "tailleOctets": 20369,
@@ -1492,8 +1492,8 @@
       "sha256": "b89d82e4329fe3f274f6e79db75a4c4ffb8c1f7087534aa17ca3f61c33b2f032"
     },
     "tests/test_synchronisation_erreurs.py": {
-      "tailleOctets": 22442,
-      "sha256": "eac89145dd4907ee440d9ac3c1401d7a938278acc3c6bde844405384a7b10191"
+      "tailleOctets": 22450,
+      "sha256": "6989b8d1f7b4bebad8d8a285dc8de6e348c9b18edd8d0968e18b5453c4ec8784"
     },
     "tests/test_validation_donnees.py": {
       "tailleOctets": 6809,

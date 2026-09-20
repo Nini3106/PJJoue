@@ -86,15 +86,17 @@ function obtenirQuestionsAConsoliderSession() {
 }
 function obtenirStatutErreurBilan(reponse, estQuestionPassee) {
     if (reponse?.statut === 'correcte' && reponse.precisions?.aConsolider)
-        return 'Validée sans joker après reprise · à consolider';
-    if (estQuestionPassee)
-        return 'Activité passée';
+        return obtenirLibelleConsolidation({ motifRevision: 'reprise' });
+    if (estQuestionPassee || reponse?.statut === 'passee')
+        return obtenirLibelleConsolidation({ motifRevision: 'passage' });
     if (reponse?.statut === 'aidee') {
         if (reponse.precisions?.aideUtilisee)
-            return 'Réussite avec joker — à consolider';
-        return 'Réussite avec aide — à consolider';
+            return obtenirLibelleConsolidation({ motifRevision: 'joker' });
+        return 'Validée avec aide · à consolider';
     }
-    return 'Réponse incorrecte';
+    if (reponse?.statut === 'incorrecte')
+        return obtenirLibelleConsolidation({ motifRevision: 'incorrecte' });
+    return obtenirLibelleConsolidation();
 }
 function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const zone = selectionner('#listeErreursBilan');

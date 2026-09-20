@@ -601,12 +601,12 @@ function normaliserMotifRevision(motif) {
 }
 function obtenirLibelleConsolidation(suivi) {
     const libelles = {
-        reprise: 'Validée sans joker après reprise · à consolider',
-        joker: 'Réussie avec joker · à consolider',
-        passage: 'Question passée · à consolider',
-        incorrecte: 'Réponse incorrecte · à consolider'
+        reprise: 'Validée après reprise sans joker · à consolider',
+        joker: 'Validée avec joker · à consolider',
+        passage: 'Passée · à consolider',
+        incorrecte: 'Incorrecte · à consolider'
     };
-    return libelles[suivi?.motifRevision] || 'Question à consolider';
+    return libelles[suivi?.motifRevision] || 'Motif non enregistré · à consolider';
 }
 function nettoyerErreurs(erreurs) {
     const erreursNettoyees = {};
@@ -5972,15 +5972,17 @@ function obtenirQuestionsAConsoliderSession() {
 }
 function obtenirStatutErreurBilan(reponse, estQuestionPassee) {
     if (reponse?.statut === 'correcte' && reponse.precisions?.aConsolider)
-        return 'Validée sans joker après reprise · à consolider';
-    if (estQuestionPassee)
-        return 'Activité passée';
+        return obtenirLibelleConsolidation({ motifRevision: 'reprise' });
+    if (estQuestionPassee || reponse?.statut === 'passee')
+        return obtenirLibelleConsolidation({ motifRevision: 'passage' });
     if (reponse?.statut === 'aidee') {
         if (reponse.precisions?.aideUtilisee)
-            return 'Réussite avec joker — à consolider';
-        return 'Réussite avec aide — à consolider';
+            return obtenirLibelleConsolidation({ motifRevision: 'joker' });
+        return 'Validée avec aide · à consolider';
     }
-    return 'Réponse incorrecte';
+    if (reponse?.statut === 'incorrecte')
+        return obtenirLibelleConsolidation({ motifRevision: 'incorrecte' });
+    return obtenirLibelleConsolidation();
 }
 function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const zone = selectionner('#listeErreursBilan');
