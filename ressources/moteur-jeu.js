@@ -4625,11 +4625,11 @@ function reprendreEtapeDepuisDebutQuestion() {
         return;
     const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
     if (question.missionSigles) {
-        lancerEtapeSigles(numeroEtape);
+        lancerEtapeSigles(numeroEtape, { depuisDebut: true });
         return;
     }
     if (question.missionMesures) {
-        lancerEtapeMesures(numeroEtape);
+        lancerEtapeMesures(numeroEtape, { depuisDebut: true });
         return;
     }
     lancerEtapeDepuisDebut(question.theme, numeroEtape);
@@ -6595,6 +6595,24 @@ function creerQuestionsEvaluationSigles() {
     return cibles.map((cible,index)=> index>0 && index%6===5 ? creerQuestionAssociationSigles(choisirSansDoublon(SIGLES,4)) : (index%2?creerQuestionRappelInverseSigles(cible,connus):creerQuestionRappelDirectSigles(cible,SIGLES))).slice(0,30);
 }
 
+function questionSiglesAReprendre(question) {
+    const cibles = question?.cibles || [];
+    return cibles.some(cible => {
+        const etape = obtenirEtatEtapeSigles(Number(cible.etape));
+        const cle = normaliserSigleJeu(cible.sigle);
+        // Une introduction déjà découverte n'a pas besoin d'être rejouée.
+        // Les activités de rappel restent nécessaires tant que le sigle n'est
+        // pas maîtrisé en autonomie, sans joker.
+        return question.estIntroduction
+            ? !sigleEstIntroduit(cle)
+            : etape.autonomes[cle] !== true;
+    });
+}
+
+function obtenirQuestionsRestantesEtapeSigles(numero, questions) {
+    return questions.filter(questionSiglesAReprendre);
+}
+
 function preparerSessionSigles({mode,etape=null,sigles,questions,jokersActifs=true,titre,chronoActif=false,secondesQuestion=30}) {
     arreterChronoSigles();
     etatJeuSigles = { ...creerEtatJeuSigles(), mode, etape, titreSession:titre, siglesSession:[...sigles], questions:[...questions], jokersActifs, chronoActif, secondesQuestion, chronoRestant:secondesQuestion, configurationDerniereSession:{mode,etape,sigles:[...sigles],jokersActifs,titre,chronoActif,secondesQuestion} };
@@ -6676,7 +6694,17 @@ function afficherBilanSigles(pc){ const total=etatJeuSigles.questions.length; if
     if(selectionnerSigles('#siglesBilanSurtitre'))selectionnerSigles('#siglesBilanSurtitre').textContent=surtitre; if(selectionnerSigles('#siglesBilanTitre'))selectionnerSigles('#siglesBilanTitre').textContent=titre; if(selectionnerSigles('#siglesBilanTexte'))selectionnerSigles('#siglesBilanTexte').textContent=texte; if(selectionnerSigles('#siglesBilanIcone'))selectionnerSigles('#siglesBilanIcone').textContent=icone;
 }
 
-function lancerEtapeSigles(numero){ const sigles=obtenirSiglesEtape(numero); preparerSessionMissionSiglesNative({mode:'parcours',etape:numero,sigles,questions:creerQuestionsEtapeSigles(numero),jokersActifs:true,titre:`Étape ${numero} · ${ETAPES_MISSION_SIGLES[numero].titre}`}); }
+function lancerEtapeSigles(numero, { depuisDebut = false } = {}){
+    const sigles = obtenirSiglesEtape(numero);
+    const questionsCompletes = creerQuestionsEtapeSigles(numero);
+    const questions = depuisDebut
+        ? questionsCompletes
+        : obtenirQuestionsRestantesEtapeSigles(numero, questionsCompletes);
+    // Si tout est déjà maîtrisé, conserver une session complète permet encore
+    // d'accéder au bouton « Reprendre depuis le début » depuis l'écran des
+    // questions, sans modifier la progression enregistrée.
+    preparerSessionMissionSiglesNative({mode:'parcours',etape:numero,sigles,questions:questions.length ? questions : questionsCompletes,jokersActifs:true,titre:`Étape ${numero} · ${ETAPES_MISSION_SIGLES[numero].titre}`});
+}
 function lancerEntrainementSigles(){ const perimetre=valeurGroupeSigles('#siglesChoixPerimetre','perimetre','tous'); const pool=perimetre==='tous'?[...SIGLES]:obtenirSiglesEtape(Number(perimetre)); const nombreBrut=valeurGroupeSigles('#siglesChoixNombre','nombre','10'); const nombre=nombreBrut==='tous'?pool.length:Math.min(pool.length,Number(nombreBrut)||10); const organisation=valeurGroupeSigles('#siglesChoixOrganisation','organisation','etapes'); let cibles=choisirSansDoublon(pool,nombre); if(organisation==='etapes')cibles=cibles.sort((a,b)=>Number(a.etape)-Number(b.etape)||Number(a.id)-Number(b.id)); const chrono=valeurGroupeSigles('#siglesChoixChrono','chrono','non')==='oui'; const secondes=Number(valeurGroupeSigles('#siglesChoixSecondes','secondes','30'))||30; const jokers=valeurGroupeSigles('#siglesChoixJokers','jokers','oui')==='oui'; const questions=creerQuestionsEntrainementSigles(cibles,organisation==='melange'); preparerSessionSigles({mode:'entrainement',sigles:cibles,questions,jokersActifs:jokers,titre:`Entraînement Sigles · ${nombre} sigle${nombre===1?'':'s'}`,chronoActif:chrono,secondesQuestion:secondes}); }
 function lancerDeSigles(){ const face=selectionnerSigles('#siglesFaceDe'),resultat=selectionnerSigles('#siglesDeResultat'),lancer=selectionnerSigles('#siglesLancerDe'),jouer=selectionnerSigles('#siglesJouerTirage'); if(!face||!resultat||!lancer||!jouer)return; const valeur=1+Math.floor(Math.random()*6); lancer.disabled=true;jouer.classList.add('masque');face.classList.remove('de-en-lancer');void face.offsetWidth;face.classList.add('de-en-lancer');window.setTimeout(()=>{ etatJeuSigles.nombreTire=valeur;etatJeuSigles.tirageHasard=choisirSansDoublon(SIGLES,valeur);face.dataset.face=String(valeur);face.classList.remove('de-en-lancer');resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les 72 sigles.`;jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`;lancer.textContent='Relancer le dé';lancer.classList.add('principal');lancer.classList.remove('sigles-bouton-secondaire');jouer.classList.remove('masque');lancer.disabled=false;jouer.focus({preventScroll:true}); },420); }
 function jouerTirageDeSigles(){ const cibles=[...etatJeuSigles.tirageHasard]; if(!cibles.length)return; preparerSessionMissionSiglesNative({mode:'hasard',sigles:cibles,questions:creerQuestionsHasardSigles(cibles),jokersActifs:true,titre:`Défi du hasard · ${cibles.length} question${cibles.length===1?'':'s'}`,chronoActif:false}); }
@@ -7376,6 +7404,24 @@ function creerQuestionsEvaluationMesures() {
     }));
 }
 
+function questionMesuresAReprendre(question) {
+    const cibles = question?.cibles || [];
+    return cibles.some(cible => {
+        const etape = obtenirEtatEtapeMesures(Number(cible.etape));
+        const cle = normaliserCleMesure(cible.cle);
+        // Une introduction déjà découverte n'est pas répétée par défaut.
+        // Les rappels et réponses écrites restent proposés tant que le repère
+        // n'est pas maîtrisé en autonomie, sans joker.
+        return question.estIntroduction
+            ? !repereMesureEstIntroduit(cle)
+            : etape.autonomes[cle] !== true;
+    });
+}
+
+function obtenirQuestionsRestantesEtapeMesures(questions) {
+    return questions.filter(questionMesuresAReprendre);
+}
+
 function construireCartesEtapesMesures() {
     const zone = selectionnerMesures('#mesuresEtapes');
     if (!zone) return;
@@ -7519,10 +7565,16 @@ function reinitialiserMaitriseEtapeMissionMesures(numeroEtape) {
     if (etat.questionCourante?.missionMesures) actualiserSuiviEtapeQuestion(etat.questionCourante);
 }
 
-function lancerEtapeMesures(numero) {
+function lancerEtapeMesures(numero, { depuisDebut = false } = {}) {
     const reperes = obtenirReperesMesuresEtape(numero);
     const identite = obtenirIdentiteEtapeMissionMesures(numero);
-    preparerSessionMissionMesuresNative({ mode:'parcours', etape:numero, reperes, questions:creerQuestionsEtapeMesures(numero), jokersActifs:true, titre:`Étape ${identite.numeroFormate} · ${identite.titre}` });
+    const questionsCompletes = creerQuestionsEtapeMesures(numero);
+    const questions = depuisDebut
+        ? questionsCompletes
+        : obtenirQuestionsRestantesEtapeMesures(questionsCompletes);
+    // Une étape entièrement maîtrisée reste rejouable depuis l'écran des
+    // questions, sans effacer les validations conservées.
+    preparerSessionMissionMesuresNative({ mode:'parcours', etape:numero, reperes, questions:questions.length ? questions : questionsCompletes, jokersActifs:true, titre:`Étape ${identite.numeroFormate} · ${identite.titre}` });
 }
 function lancerRevisionMesures() {
     const reperes = obtenirErreursMesuresActives();

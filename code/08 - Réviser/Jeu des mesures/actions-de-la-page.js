@@ -211,6 +211,24 @@ function creerQuestionsEvaluationMesures() {
     }));
 }
 
+function questionMesuresAReprendre(question) {
+    const cibles = question?.cibles || [];
+    return cibles.some(cible => {
+        const etape = obtenirEtatEtapeMesures(Number(cible.etape));
+        const cle = normaliserCleMesure(cible.cle);
+        // Une introduction déjà découverte n'est pas répétée par défaut.
+        // Les rappels et réponses écrites restent proposés tant que le repère
+        // n'est pas maîtrisé en autonomie, sans joker.
+        return question.estIntroduction
+            ? !repereMesureEstIntroduit(cle)
+            : etape.autonomes[cle] !== true;
+    });
+}
+
+function obtenirQuestionsRestantesEtapeMesures(questions) {
+    return questions.filter(questionMesuresAReprendre);
+}
+
 function construireCartesEtapesMesures() {
     const zone = selectionnerMesures('#mesuresEtapes');
     if (!zone) return;
@@ -354,10 +372,16 @@ function reinitialiserMaitriseEtapeMissionMesures(numeroEtape) {
     if (etat.questionCourante?.missionMesures) actualiserSuiviEtapeQuestion(etat.questionCourante);
 }
 
-function lancerEtapeMesures(numero) {
+function lancerEtapeMesures(numero, { depuisDebut = false } = {}) {
     const reperes = obtenirReperesMesuresEtape(numero);
     const identite = obtenirIdentiteEtapeMissionMesures(numero);
-    preparerSessionMissionMesuresNative({ mode:'parcours', etape:numero, reperes, questions:creerQuestionsEtapeMesures(numero), jokersActifs:true, titre:`Étape ${identite.numeroFormate} · ${identite.titre}` });
+    const questionsCompletes = creerQuestionsEtapeMesures(numero);
+    const questions = depuisDebut
+        ? questionsCompletes
+        : obtenirQuestionsRestantesEtapeMesures(questionsCompletes);
+    // Une étape entièrement maîtrisée reste rejouable depuis l'écran des
+    // questions, sans effacer les validations conservées.
+    preparerSessionMissionMesuresNative({ mode:'parcours', etape:numero, reperes, questions:questions.length ? questions : questionsCompletes, jokersActifs:true, titre:`Étape ${identite.numeroFormate} · ${identite.titre}` });
 }
 function lancerRevisionMesures() {
     const reperes = obtenirErreursMesuresActives();
