@@ -105,12 +105,12 @@ function obtenirCiblesARejouerEtapeSigles(numero) {
     const cibles = [...obtenirErreursSiglesActives('tous').filter(cible => Number(cible.etape) === Number(numero)), ...obtenirSiglesNonMaitrisesEtape(numero)];
     return [...new Map(cibles.map(cible => [normaliserSigleJeu(cible.sigle), cible])).values()];
 }
-function enregistrerErreurSigles(cibles) {
+function enregistrerErreurSigles(cibles, motifRevision = 'incorrecte') {
     const erreurs = obtenirSauvegardeJeuSigles().erreurs;
     cibles.forEach(cible => {
         const cle = normaliserSigleJeu(cible.sigle);
         const actuelle = erreurs[cle] || { active:false, nombreErreurs:0, reussitesRevision:0 };
-        erreurs[cle] = { active:true, nombreErreurs:Number(actuelle.nombreErreurs||0)+1, reussitesRevision:0 };
+        erreurs[cle] = { ...actuelle, active:true, motifRevision, nombreErreurs:Number(actuelle.nombreErreurs || 0) + (motifRevision === 'incorrecte' ? 1 : 0), reussitesRevision:motifRevision === 'reprise' ? 1 : 0 };
     });
 }
 function validerRevisionSigles(cibles) {
@@ -122,6 +122,7 @@ function validerRevisionSigles(cibles) {
         // Une nouvelle réussite autonome suffit, dans tous les modes de jeu.
         actuelle.reussitesRevision = 1;
         actuelle.active = false;
+        actuelle.motifRevision = null;
     });
 }
 
@@ -164,7 +165,7 @@ function actualiserAccueilSigles() {
     if (selectionnerSigles('#siglesMeilleurScore')) selectionnerSigles('#siglesMeilleurScore').textContent = `${obtenirEvaluationSigles().meilleurScore || 0}%`;
     if (selectionnerSigles('#siglesJaugeValeur')) selectionnerSigles('#siglesJaugeValeur').style.width = `${pourcentage}%`;
     if (selectionnerSigles('#siglesProgressionGlobale')) selectionnerSigles('#siglesProgressionGlobale').setAttribute('aria-valuenow', String(pourcentage));
-    if (selectionnerSigles('#siglesTexteRevision')) selectionnerSigles('#siglesTexteRevision').textContent = erreurs ? `${erreurs} sigle${erreurs===1?'':'s'} à consolider dans tes erreurs.` : 'Aucun sigle à revoir pour le moment.';
+    if (selectionnerSigles('#siglesTexteRevision')) selectionnerSigles('#siglesTexteRevision').textContent = erreurs ? `${erreurs} sigle${erreurs===1?'':'s'} à consolider.` : 'Aucun sigle à revoir pour le moment.';
     construireCartesEtapesSigles(); actualiserCarteEvaluationSigles(); construireChoixPerimetreSigles();
 }
 function construireCartesEtapesSigles() {
@@ -174,7 +175,7 @@ function construireCartesEtapesSigles() {
         const identite = ETAPES_MISSION_SIGLES[numero]; const maitrises = compterMaitrisesEtapeSigles(numero); const sansJoker = compterValidationsSansJokerEtapeSigles(numero); const nombre = obtenirSiglesEtape(numero).length; const pc = Math.round(maitrises/nombre*100);
         const erreurs = obtenirCiblesARejouerEtapeSigles(numero).length;
         const etoile = sansJoker === obtenirSiglesEtape(numero).length ? creerEtoileFilanteProgression() : '';
-        const revision = `<button class="sigles-etape-revision" data-action="reviser-etape-sigles" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Rejouer uniquement mes erreurs' : 'Aucune erreur à rejouer'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
+        const revision = `<button class="sigles-etape-revision" data-action="reviser-etape-sigles" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Consolider mes réponses' : 'Aucune question à consolider'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
         return `<article class="sigles-etape-carte" data-sigles-etape="${numero}" style="--sigles-etape-accent:${identite.couleur};--sigles-etape-accent-lisible:${identite.couleurTexte};--sigles-etape-rgb:${identite.couleurRgb}"><button class="sigles-etape-ouvrir" data-sigles-etape="${numero}" type="button"><span class="sigles-etape-carte-entete"><span class="sigles-etape-icone" aria-hidden="true">${iconeEtapeSigles(identite.icone)}</span><span class="sigles-etape-numero">${libelleDomaineSigles(identite.domaine)} · ÉTAPE ${identite.numero}</span>${etoile}</span><h3>${identite.titre}</h3><p>${identite.sousTitre}<br>${nombre} sigles · ${nombre*2} activités de parcours.</p><span class="sigles-etape-progression"><i style="width:${pc}%"></i></span><span class="sigles-etape-pied"><span>${maitrises}/${nombre} bonnes réponses · ${sansJoker}/${nombre} sans joker</span><span>${maitrises===nombre?'Maîtrisée ✓':'Ouvrir →'}</span></button>${revision}</article>`;
     }).join('');
     zone.querySelectorAll('.sigles-etape-ouvrir').forEach(b => b.addEventListener('click', () => lancerEtapeSigles(Number(b.dataset.siglesEtape))));
@@ -403,10 +404,10 @@ function validerAssociationSigles() {
 }
 function finaliserQuestionSigles(correcte,cibles,{parJoker=false,passage=false,tempsEcoule=false}={}) {
     if(etatJeuSigles.questionValidee)return; const q=etatJeuSigles.questions[etatJeuSigles.indexQuestion]; etatJeuSigles.questionValidee=true; arreterChronoSigles();
-    if(correcte){ if(q.estIntroduction && q.cible) marquerSigleIntroduit(q.cible.sigle); etatJeuSigles.score += 1; const autonome=!etatJeuSigles.aideUtilisee && !parJoker && etatJeuSigles.tentativesQuestion<=1; if(autonome) etatJeuSigles.reponsesAutonomes += 1; else etatJeuSigles.reponsesAidees += 1;
+    if(correcte){ if(q.estIntroduction && q.cible) marquerSigleIntroduit(q.cible.sigle); etatJeuSigles.score += 1; const autonome=!etatJeuSigles.aideUtilisee && !parJoker; if(autonome) etatJeuSigles.reponsesAutonomes += 1; else etatJeuSigles.reponsesAidees += 1;
         if(q.compteMaitrise){ cibles.forEach(cible=>{ const etape=obtenirEtatEtapeSigles(Number(cible.etape)), cle=normaliserSigleJeu(cible.sigle); if(!etatJeuSigles.aideUtilisee&&!parJoker) etape.validationsSansJoker[cle]=true; if(autonome) etape.autonomes[cle]=true; }); verifierCelebrationEtapeSigles(cibles); }
-        if(!q.estIntroduction && autonome) validerRevisionSigles(cibles); afficherFeedbackSigles('succes',q.explication || 'Bonne réponse.');
-    } else { if(passage||tempsEcoule){ etatJeuSigles.questionsPassees += 1; enregistrerErreurSigles(cibles); afficherFeedbackSigles('erreur',tempsEcoule?'Temps écoulé. Cette question rejoint tes erreurs.':'Question passée. Elle rejoint tes erreurs.'); } }
+        if(autonome && etatJeuSigles.tentativesQuestion > 1) enregistrerErreurSigles(cibles, 'reprise'); else if(!q.estIntroduction && autonome) validerRevisionSigles(cibles); else if(!autonome) enregistrerErreurSigles(cibles, 'joker'); afficherFeedbackSigles('succes',q.explication || 'Bonne réponse.');
+    } else { if(passage||tempsEcoule){ etatJeuSigles.questionsPassees += 1; enregistrerErreurSigles(cibles, 'passage'); afficherFeedbackSigles('erreur',tempsEcoule?'Temps écoulé. Cette question rejoint tes révisions.':'Question passée. Elle rejoint tes révisions.'); } }
     obtenirSauvegardeJeuSigles().statistiques.questionsJouees += 1; enregistrerSauvegarde();
     selectionnerTousSigles('#siglesZoneQuestion button, #siglesZoneQuestion select').forEach(e=>e.disabled=true); selectionnerSigles('#siglesValiderActivite')?.classList.add('masque'); selectionnerSigles('#siglesQuestionSuivante')?.classList.remove('masque'); selectionnerSigles('#siglesPasserQuestion')?.classList.add('masque'); selectionnerSigles('#siglesJokers')?.querySelectorAll('button').forEach(b=>b.disabled=true);
 }
@@ -431,13 +432,13 @@ function terminerSessionSigles(){ arreterChronoSigles(); const total=etatJeuSigl
     if(etatJeuSigles.mode==='evaluation'){ obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).nombreTentatives+=1;obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).meilleurScore=Math.max(obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).meilleurScore||0,pc);etatJeuSigles.evaluationReussie=pc>=SEUIL_EVALUATION_SIGLES&&etatJeuSigles.questionsPassees===0;etatJeuSigles.evaluationParfaite=pc===100&&etatJeuSigles.questionsPassees===0;if(etatJeuSigles.evaluationReussie)obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).reussie=true; }
     enregistrerSauvegarde(); afficherVueSigles('bilan'); afficherBilanSigles(pc); actualiserAccueilSigles(); }
 function afficherBilanSigles(pc){ const total=etatJeuSigles.questions.length; if(selectionnerSigles('#siglesBilanScore'))selectionnerSigles('#siglesBilanScore').textContent=`${etatJeuSigles.score} / ${total} · ${pc}%`; if(selectionnerSigles('#siglesBilanDetails'))selectionnerSigles('#siglesBilanDetails').textContent=`${etatJeuSigles.reponsesAutonomes} réussites autonomes · ${etatJeuSigles.reponsesAidees} avec aide · ${etatJeuSigles.questionsPassees} passées`;
-    let surtitre='Mission Sigles', titre='Session terminée', texte='Les sigles difficiles restent disponibles dans « Réviser mes erreurs ».', icone='✓';
-    if(etatJeuSigles.mode==='parcours'){ const m=etapeSiglesMaitrisee(etatJeuSigles.etape); titre=m?`${libelleEtapeSigles(etatJeuSigles.etape)} maîtrisée`:`${libelleEtapeSigles(etatJeuSigles.etape)} terminée`; texte=m?'Tous les sigles de cette étape sont maîtrisés en autonomie.':'Tu peux rejouer l’étape ou retrouver tes erreurs dans la révision.'; }
+    let surtitre='Mission Sigles', titre='Session terminée', texte='Les sigles difficiles restent disponibles dans « Questions à consolider ».', icone='✓';
+    if(etatJeuSigles.mode==='parcours'){ const m=etapeSiglesMaitrisee(etatJeuSigles.etape); titre=m?`${libelleEtapeSigles(etatJeuSigles.etape)} maîtrisée`:`${libelleEtapeSigles(etatJeuSigles.etape)} terminée`; texte=m?'Tous les sigles de cette étape sont maîtrisés en autonomie.':'Tu peux rejouer l’étape ou retrouver tes questions à consolider dans la révision.'; }
     if(etatJeuSigles.celebrationEtapeADiffuser){ icone='★'; titre=`${libelleEtapeSigles(etatJeuSigles.celebrationEtapeADiffuser)} validée sans joker !`; texte='Tous les sigles de cette étape ont finalement été réussis sans joker. Bravo !'; lancerConfettis(1.35); jouerSonEtapeSansJoker(); }
-    if(etatJeuSigles.mode==='evaluation'){ surtitre='Évaluation finale'; if(etatJeuSigles.evaluationReussie){ titre=etatJeuSigles.evaluationParfaite?'Mission accomplie. Même pas peur.':'Évaluation réussie !';texte=etatJeuSigles.evaluationParfaite?'30 / 30. Mission accomplie.':'Tu dépasses le seuil de 90 %. Bravo !';icone='🏆';lancerConfettis(etatJeuSigles.evaluationParfaite?3:2);jouerSonEvaluationFinale(); } else { titre='Évaluation à consolider';texte='Il faut 90 % pour réussir. Les sigles manqués rejoignent tes erreurs.';icone='↻'; } }
+    if(etatJeuSigles.mode==='evaluation'){ surtitre='Évaluation finale'; if(etatJeuSigles.evaluationReussie){ titre=etatJeuSigles.evaluationParfaite?'Mission accomplie. Même pas peur.':'Évaluation réussie !';texte=etatJeuSigles.evaluationParfaite?'30 / 30. Mission accomplie.':'Tu dépasses le seuil de 90 %. Bravo !';icone='🏆';lancerConfettis(etatJeuSigles.evaluationParfaite?3:2);jouerSonEvaluationFinale(); } else { titre='Évaluation à consolider';texte='Il faut 90 % pour réussir. Les sigles manqués rejoignent tes révisions.';icone='↻'; } }
     if(etatJeuSigles.mode==='hasard'){ titre='Défi du hasard terminé';texte=pc===100?'Tirage parfait ! Le dé était avec toi.':'Le dé a parlé. Tu peux relancer un nouveau tirage quand tu veux.'; }
     if(etatJeuSigles.mode==='revision'){ titre='Révision terminée';texte=obtenirErreursSiglesActives().length?'Il reste quelques sigles à consolider.':'Bravo : aucun sigle actif à revoir.'; }
-    if(etatJeuSigles.mode==='entrainement'&&pc===100&&total>=10){ titre='Entraînement parfait !';texte='Aucune erreur sur cette session.';lancerConfettis(1);jouerSonEtapeSansJoker(); }
+    if(etatJeuSigles.mode==='entrainement'&&pc===100&&total>=10){ titre='Entraînement parfait !';texte='Toutes les réponses de cette session sont validées.';lancerConfettis(1);jouerSonEtapeSansJoker(); }
     if(selectionnerSigles('#siglesBilanSurtitre'))selectionnerSigles('#siglesBilanSurtitre').textContent=surtitre; if(selectionnerSigles('#siglesBilanTitre'))selectionnerSigles('#siglesBilanTitre').textContent=titre; if(selectionnerSigles('#siglesBilanTexte'))selectionnerSigles('#siglesBilanTexte').textContent=texte; if(selectionnerSigles('#siglesBilanIcone'))selectionnerSigles('#siglesBilanIcone').textContent=icone;
 }
 
@@ -460,14 +461,14 @@ function lancerRevisionSigles(){
 }
 function lancerToutesErreursSiglesDepuisRevision(){
     const cibles = obtenirErreursSiglesActives();
-    if(!cibles.length){ afficherNotification('Aucune erreur Sigles à revoir pour le moment.'); return; }
-    preparerSessionMissionSiglesNative({mode:'revision', sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:'Réviser mes erreurs'});
+    if(!cibles.length){ afficherNotification('Aucun sigle à consolider pour le moment.'); return; }
+    preparerSessionMissionSiglesNative({mode:'revision', sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:'Questions à consolider'});
 }
 function lancerRevisionEtapeSiglesDepuisRevision(numeroEtape){
     const numero = Number(numeroEtape);
     const cibles = obtenirCiblesARejouerEtapeSigles(numero);
     if(!cibles.length){ afficherNotification(`Aucune question à consolider à l’étape ${numero} de Mission Sigles.`); return; }
-    preparerSessionMissionSiglesNative({mode:'revision', etape:numero, sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:`Réviser mes erreurs · ${libelleEtapeSigles(numero)}`});
+    preparerSessionMissionSiglesNative({mode:'revision', etape:numero, sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:`Questions à consolider · ${libelleEtapeSigles(numero)}`});
 }
 function lancerRevisionEtapeSiglesDepuisQuestion(numeroEtape){
     lancerRevisionEtapeSiglesDepuisRevision(numeroEtape);
@@ -493,7 +494,7 @@ function afficherEtatVideRevisionMissionSigles(zone){
     zone.innerHTML = `<div class="revision-vide revision-vide-ok">
         <span class="revision-vide-icone" aria-hidden="true">✓</span>
         <span class="surtitre">À jour</span>
-        <h2>Aucune erreur active.</h2>
+        <h2>Aucune question à consolider.</h2>
         <p>Tous les sigles qui avaient besoin d’être retravaillés sont consolidés.</p>
     </div>`;
 }
@@ -508,7 +509,7 @@ function construireRevisionMissionSiglesIndependante(){
     const boutons = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
         const liste = parEtape[numero];
-        return `<button class="revision-parcours-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><span class="revision-parcours-numero">${identite.numero}</span><span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs':'erreur'}</small></span><span class="revision-parcours-action">Réviser →</span></button>`;
+        return `<button class="revision-parcours-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><span class="revision-parcours-numero">${identite.numero}</span><span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'questions à consolider':'question à consolider'}</small></span><span class="revision-parcours-action">Réviser →</span></button>`;
     }).join('');
     const etapesDirectes = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const liste = parEtape[numero];
@@ -519,14 +520,14 @@ function construireRevisionMissionSiglesIndependante(){
         const liste = parEtape[numero];
         const lignes = liste.map(cible => {
             const suivi = obtenirSauvegardeJeuSigles().erreurs?.[normaliserSigleJeu(cible.sigle)] || {};
-            return `<li class="revision-erreur-ligne"><span><strong>${cible.sigle}</strong> · ${significationMissionSigles(cible)}</span><small>Raté ${Number(suivi.nombreErreurs||1)} fois · à revoir jusqu’à réussite</small></li>`;
+            return `<li class="revision-erreur-ligne"><span><strong>${cible.sigle}</strong> · ${significationMissionSigles(cible)}</span><small>${obtenirLibelleConsolidation(suivi)}</small></li>`;
         }).join('');
-        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs actives':'erreur active'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
+        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'questions à consolider':'question à consolider'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
     }).join('');
     zone.innerHTML = `<div class="revision-workspace">
         <article class="revision-toutes-erreurs">
             <div class="revision-toutes-erreurs-icone" aria-hidden="true">↻</div>
-            <div class="revision-toutes-erreurs-texte"><span class="surtitre">Révision rapide</span><h2>Mélange mes erreurs</h2><p>Une session aléatoire avec tes ${total} ${total>1?'sigles à retravailler':'sigle à retravailler'}.</p></div>
+            <div class="revision-toutes-erreurs-texte"><span class="surtitre">Révision rapide</span><h2>Mélange mes questions à consolider</h2><p>Une session aléatoire avec tes ${total} ${total>1?'sigles à retravailler':'sigle à retravailler'}.</p></div>
             <button class="principal" data-action="reviser-toutes-erreurs-sigles">Lancer ${total} ${total>1?'questions':'question'} →</button>
         </article>
         <section class="revision-choix" aria-labelledby="titreRevisionSiglesEtapes">
@@ -535,7 +536,7 @@ function construireRevisionMissionSiglesIndependante(){
             <details class="revision-etapes-details"><summary>Choisir directement une étape</summary><div class="revision-etape-boutons">${etapesDirectes}</div></details>
         </section>
     </div>
-    <section class="revision-inventaire" aria-labelledby="titreInventaireErreursSigles"><div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreursSigles">Tes erreurs actives</h2></div><p>Consulte les sigles qui restent à consolider, étape par étape.</p></div><div class="revision-dossiers">${dossiers}</div></section>`;
+    <section class="revision-inventaire" aria-labelledby="titreInventaireErreursSigles"><div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreursSigles">Tes questions à consolider</h2></div><p>Consulte les sigles qui restent à consolider, étape par étape.</p></div><div class="revision-dossiers">${dossiers}</div></section>`;
 }
 function afficherRevisionMissionSigles(){
     construireRevisionMissionSiglesIndependante();
@@ -663,14 +664,16 @@ function enregistrerResultatMissionSiglesNatif(question, resultat) {
         verifierCelebrationEtapeSigles(cibles);
     }
     if (!resultat.estCorrecte || resultat.reussiteAidee)
-        enregistrerErreurSigles(cibles);
-    if (!meta.estIntroduction && resultat.reussiteAutonome)
+        enregistrerErreurSigles(cibles, resultat.reussiteAidee ? 'joker' : 'incorrecte');
+    if (resultat.reussiteAutonome && resultat.tentatives > 0)
+        enregistrerErreurSigles(cibles, 'reprise');
+    else if (!meta.estIntroduction && resultat.reussiteAutonome)
         validerRevisionSigles(cibles);
     enregistrerSauvegarde();
 }
 function enregistrerPassageMissionSiglesNatif(question) {
     if (!question?.missionSigles) return;
-    enregistrerErreurSigles(obtenirCiblesMissionQuestion(question));
+    enregistrerErreurSigles(obtenirCiblesMissionQuestion(question), 'passage');
     enregistrerSauvegarde();
 }
 function reinitialiserMaitriseEtapeMissionSigles(numeroEtape) {
@@ -723,7 +726,7 @@ function terminerSessionMissionSiglesNative() {
         resultat = pourcentage === 100 ? 'Tirage parfait !' : `Résultat : ${pourcentage} %.`;
     }
     if (mode === 'revision') {
-        titre = 'Réviser mes erreurs · Mission Sigles';
+        titre = 'Questions à consolider · Mission Sigles';
         resultat = obtenirErreursSiglesActives().length
             ? `${obtenirErreursSiglesActives().length} sigle(s) restent à consolider.`
             : 'Aucun sigle actif à revoir.';
@@ -731,7 +734,7 @@ function terminerSessionMissionSiglesNative() {
             const numero = Number(etatJeuSigles.celebrationEtapeADiffuser);
             celebration = {
                 titre: `Étape ${String(numero).padStart(2, '0')} maîtrisée !`,
-                message: 'Les erreurs rejouées ont été réussies sans joker : la progression de l’étape est à jour.',
+                message: 'Les questions rejouées ont été réussies sans joker : la progression de l’étape est à jour.',
                 confetti: true
             };
         }
@@ -744,7 +747,7 @@ function terminerSessionMissionSiglesNative() {
     selectionner('#contexteBilan').textContent = `Mission Sigles · ${titre}`;
     selectionner('#titreBilan').textContent = titre;
     selectionner('#rangBilan').textContent = resultat;
-    afficherErreursBilan(etat.questionsSession.filter(question => etat.erreursSession.has(question.id)), passees);
+    afficherErreursBilan(obtenirQuestionsAConsoliderSession(), passees);
     const continuer = selectionner('#boutonContinuer');
     continuer.textContent = 'Retour à Mission Sigles →';
     continuer.onclick = () => { etat.missionSiglesConfiguration = null; afficherEcran('sigles', { remplacerHistorique:true }); };

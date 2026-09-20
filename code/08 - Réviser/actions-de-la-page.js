@@ -11,7 +11,7 @@ function afficherEtatVideErreurs(zone, aucunePartieJouee) {
             <span class="revision-vide-icone" aria-hidden="true">↺</span>
             <span class="surtitre">Révision</span>
             <h2>Tu n’as pas encore joué.</h2>
-            <p>Commence un parcours : les erreurs à consolider apparaîtront ici automatiquement.</p>
+            <p>Commence un parcours : les questions à consolider apparaîtront ici automatiquement.</p>
             <button class="principal" data-action="ouvrir-parcours-depuis-erreurs">Commencer un parcours →</button>
         </div>`;
         return;
@@ -19,7 +19,7 @@ function afficherEtatVideErreurs(zone, aucunePartieJouee) {
     zone.innerHTML = `<div class="revision-vide revision-vide-ok">
         <span class="revision-vide-icone" aria-hidden="true">✓</span>
         <span class="surtitre">À jour</span>
-        <h2>Aucune erreur active.</h2>
+        <h2>Aucune question à consolider.</h2>
         <p>Tout ce qui avait besoin d’être retravaillé a été consolidé.</p>
     </div>`;
 }
@@ -50,7 +50,7 @@ function construireBoutonsRevisionParcours(groupes) {
         const identite = obtenirIdentiteParcours(theme.id);
         return `<button class="revision-parcours-bouton" data-action="reviser-theme" data-theme="${theme.id}" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}">
             <span class="revision-parcours-numero">${String(index + 1).padStart(2, '0')}</span>
-            <span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'erreur', 'erreurs')}</small></span>
+            <span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'question à consolider', 'questions à consolider')}</small></span>
             <span class="revision-parcours-action">Réviser →</span>
         </button>`;
     }).join('');
@@ -67,13 +67,13 @@ function construireBoutonsRevisionParEtape(groupes) {
     }).join('');
 }
 function construireModesRevisionErreurs(total, groupes) {
-    const libelleErreurs = accorderLibelle(total, 'erreur active', 'erreurs actives');
+    const libelleErreurs = accorderLibelle(total, 'question à consolider', 'questions à consolider');
     return `<div class="revision-workspace">
         <article class="revision-toutes-erreurs">
             <div class="revision-toutes-erreurs-icone" aria-hidden="true">↻</div>
             <div class="revision-toutes-erreurs-texte">
                 <span class="surtitre">Révision rapide</span>
-                <h2>Mélange mes erreurs</h2>
+                <h2>Mélange mes questions à consolider</h2>
                 <p>Une session aléatoire avec tes ${total} ${libelleErreurs}, tous parcours confondus.</p>
             </div>
             <button class="principal" data-action="reviser-toutes-erreurs">Lancer ${total} ${total > 1 ? 'questions' : 'question'} →</button>
@@ -97,7 +97,7 @@ function construireListeErreursEtape(theme, numeroEtape, elements) {
     const cartes = elements.map(({ question, suiviErreur }) => `
         <li class="revision-erreur-ligne">
             <span>${question.enonce.split('\n')[0]}</span>
-            <small>Ratée ${suiviErreur.nombreErreurs || 1} fois · à revoir jusqu’à réussite</small>
+            <small>${obtenirLibelleConsolidation(suiviErreur)}</small>
         </li>`).join('');
     return `<div class="revision-etape-groupe">
         <div class="revision-etape-groupe-entete"><strong>Étape ${numeroEtape} · ${titreEtape}</strong><span>${elements.length}</span></div>
@@ -118,14 +118,14 @@ function construireParcoursErreurs(groupes) {
         return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}">
             <summary>
                 <span class="revision-dossier-numero">${String(index + 1).padStart(2, '0')}</span>
-                <span><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'erreur active', 'erreurs actives')}</small></span>
+                <span><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'question à consolider', 'questions à consolider')}</small></span>
                 <span class="revision-dossier-chevron" aria-hidden="true">⌄</span>
             </summary>
             <div class="revision-dossier-contenu">${etapes}</div>
         </details>`;
     }).join('');
     return `<section class="revision-inventaire" aria-labelledby="titreInventaireErreurs">
-        <div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreurs">Tes erreurs actives</h2></div><p>Consulte les questions qui restent à consolider, parcours par parcours.</p></div>
+        <div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreurs">Tes questions à consolider</h2></div><p>Consulte les questions qui restent à consolider, parcours par parcours.</p></div>
         <div class="revision-dossiers">${dossiers}</div>
     </section>`;
 }

@@ -398,7 +398,7 @@ def principal() -> int:
     exiger("Parcours complet" in moteur, "Le carnet/progression ne matérialise pas le parcours complet.")
     exiger("const reserve = QUESTIONS.filter(question => !question.estEvaluationFinale);" in moteur, "Le Défi du hasard n’utilise pas la banque d’apprentissage complète.")
     exiger("selectionnerQuestionsEquilibrees(reserve, nombreQuestions)" in moteur, "Le Défi du hasard n’équilibre pas le parcours complet.")
-    exiger("Étapes abordées" in page and "Questions à revoir" in page,
+    exiger("Étapes abordées" in page and "Questions à consolider" in page,
            "Les indicateurs de progression doivent employer des libellés précis et cohérents.")
     exiger('role="tabpanel"' in page and 'role="tablist"' in page,
            "Le détail Progression doit conserver sa sémantique d’onglets accessible.")

@@ -6185,6 +6185,9 @@ main.conteneur {
 #bilan .bilan-erreur-element.bilan-erreur-passee {
     border-left-color: #ffc83d;
 }
+#bilan .bilan-erreur-element.bilan-consolidation-validee {
+    border-left-color: var(--icone-verte);
+}
 #bilan .bilan-erreur-numero {
     display: grid;
     place-items: center;
@@ -6231,7 +6234,10 @@ main.conteneur {
     #bilan .bilan-passage-information,
     #bilan .bilan-erreur-meta { align-items:flex-start; flex-direction:column; }
     #bilan .bilan-erreur-element { grid-template-columns:30px minmax(0,1fr); gap:10px; padding:14px; }
-    #bilan .bilan-erreur-numero { width:30px; height:30px; }
+    #bilan .bilan-erreur-element.bilan-consolidation-validee {
+    border-left-color: var(--icone-verte);
+}
+#bilan .bilan-erreur-numero { width:30px; height:30px; }
 }
 #bilan .bilan-attendue-reponse .detaillee-correction {
     margin: 0;

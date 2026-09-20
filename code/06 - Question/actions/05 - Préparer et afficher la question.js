@@ -392,11 +392,11 @@ function actualiserBoutonRevisionEtapeQuestion(question) {
     bouton.classList.toggle('masque', !visible);
     bouton.disabled = !disponible;
     bouton.setAttribute('aria-label', disponible
-        ? `Rejouer uniquement mes erreurs de l’étape ${Number(question.etape || 1)}`
-        : 'Rejouer uniquement mes erreurs');
+        ? `Consolider mes réponses de l’étape ${Number(question.etape || 1)}`
+        : 'Consolider mes réponses');
     definirAideSurvolBouton(bouton, disponible
-        ? `Rejouer les ${erreurs.length} questions à reprendre : erreurs actives et questions déjà introduites non maîtrisées sans joker. Les maîtrises sans joker sont conservées.`
-        : 'Aucune erreur active ou question non maîtrisée sans joker à rejouer dans cette étape');
+        ? `Rejouer les ${erreurs.length} questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.`
+        : 'Aucune question à consolider ou question non maîtrisée sans joker à rejouer dans cette étape');
 }
 function actualiserSuiviEtapeQuestion(question) {
     const conteneur = selectionner('#contexteEtapeQuestion');

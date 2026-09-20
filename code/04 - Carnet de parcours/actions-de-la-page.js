@@ -120,7 +120,7 @@ function afficherDefisParcoursComplet() {
     const nombreEtapesMaitrisees = compterEtapesMaitrisees();
     const evaluationsReussies = THEMES.filter(theme => estEvaluationFinaleReussie(theme.id)).length;
     const meilleureSerie = Number(sauvegarde.meilleureSerie) || 0;
-    const aucuneErreurActive = sauvegarde.aDejaJoue && compterErreursActives() === 0;
+    const aucuneQuestionAConsolider = sauvegarde.aDejaJoue && compterQuestionsAConsolider() === 0;
     const defis = [
         {
             libelle: `Valider les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes sans joker`,
@@ -138,9 +138,9 @@ function afficherDefisParcoursComplet() {
             progression: `${Math.min(meilleureSerie, 5)}/5`
         },
         {
-            libelle: 'Ne garder aucune erreur active',
-            termine: aucuneErreurActive,
-            progression: aucuneErreurActive ? 'Réussi' : `${compterErreursActives()} à revoir`
+            libelle: 'Consolider toutes les questions travaillées',
+            termine: aucuneQuestionAConsolider,
+            progression: aucuneQuestionAConsolider ? 'Réussi' : `${compterQuestionsAConsolider()} à consolider`
         }
     ];
     zone.innerHTML = '';

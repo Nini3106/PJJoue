@@ -73,17 +73,25 @@ function obtenirContexteFinSession() {
         return `Étape ${etat.etape}${etapeProgramme?.titre ? ' · ' + etapeProgramme.titre : ''}`;
     }
     if (etat.mode === 'revision')
-        return 'Révision des erreurs';
+        return 'Consolidation';
     return 'Entraînement libre';
 }
+function obtenirQuestionsAConsoliderSession() {
+    return etat.questionsSession.filter(question => {
+        const reponse = etat.reponsesSession.get(question.id);
+        return etat.erreursSession.has(question.id)
+            || etat.questionsPassees.has(question.id)
+            || reponse?.precisions?.aConsolider === true;
+    });
+}
 function obtenirStatutErreurBilan(reponse, estQuestionPassee) {
+    if (reponse?.statut === 'correcte' && reponse.precisions?.aConsolider)
+        return 'Validée sans joker après reprise · à consolider';
     if (estQuestionPassee)
         return 'Activité passée';
     if (reponse?.statut === 'aidee') {
         if (reponse.precisions?.aideUtilisee)
-            return 'Réussite avec joker — à reprendre';
-        if ((reponse.precisions?.tentatives || 0) > 0)
-            return 'Réussite après une nouvelle tentative — à consolider';
+            return 'Réussite avec joker — à consolider';
         return 'Réussite avec aide — à consolider';
     }
     return 'Réponse incorrecte';
@@ -93,18 +101,19 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const nombre = selectionner('#nombreErreursBilan');
     const boutonContinuer = selectionner('#boutonContinuer');
     const boutonRejouer = selectionner('#boutonRejouerMesErreurs');
+    if (boutonRejouer) boutonRejouer.onclick = () => afficherEcran('erreurs');
     const aDesQuestionsAReprendre = questionsAReprendre.length > 0;
     boutonContinuer?.classList.toggle('principal', !aDesQuestionsAReprendre);
     boutonContinuer?.classList.toggle('secondaire', aDesQuestionsAReprendre);
     boutonRejouer?.classList.toggle('principal', aDesQuestionsAReprendre);
     boutonRejouer?.classList.toggle('secondaire', !aDesQuestionsAReprendre);
     if (nombre)
-        nombre.textContent = `${questionsAReprendre.length} question${questionsAReprendre.length === 1 ? '' : 's'} à reprendre`;
+        nombre.textContent = `${questionsAReprendre.length} question${questionsAReprendre.length === 1 ? '' : 's'} à consolider`;
     if (!zone)
         return;
     const regleLecture = `<div class="bilan-correction-regle">
     <strong>À savoir</strong>
-    <span>Les questions passées sont listées sans dévoiler leur réponse. La correction apparaît seulement lorsqu’une réponse a été tentée et qu’elle était incorrecte.</span>
+    <span>Les questions passées sont listées sans dévoiler leur réponse. Les réponses validées après reprise restent à consolider, sans empêcher la validation de la session.</span>
   </div>`;
     const accordActivitesPassees = nombreQuestionsPassees === 1 ? '' : 's';
     const sujetActivitesPassees = nombreQuestionsPassees > 1 ? 'Elles ne comptent' : 'Elle ne compte';
@@ -123,7 +132,7 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
             + informationPassage
             + '<div class="bilan-parfait">'
             + '<span aria-hidden="true">✓</span>'
-            + '<div><h3>Aucune question à reprendre</h3>'
+            + '<div><h3>Aucune question à consolider</h3>'
             + '<p>Toutes les activités de cette session ont été réussies de manière autonome.</p>'
             + '</div></div>';
         return;
@@ -137,7 +146,10 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
           <span>Tu as passé cette question sans proposer de réponse. Rejoue-la pour essayer de trouver la solution.</span>
         </div>`
             : `<div class="bilan-attendue-reponse">${construireCorrectionDetaillee(question, echapperHtml)}</div>`;
-        return `<article class="bilan-erreur-element ${estPassee ? 'bilan-erreur-passee' : ''}">
+        const classeConsolidation = reponse?.statut === 'correcte'
+            ? 'bilan-consolidation-validee'
+            : (estPassee || reponse?.statut === 'aidee' ? 'bilan-erreur-passee' : '');
+        return `<article class="bilan-erreur-element ${classeConsolidation}">
       <div class="bilan-erreur-numero" aria-hidden="true">${indice + 1}</div>
       <div class="bilan-erreur-corps">
         <div class="bilan-erreur-meta"><span>Question ${question.id}</span><strong>${obtenirStatutErreurBilan(reponse, estPassee)}</strong></div>
@@ -154,12 +166,14 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
         ? { theme: etat.theme, etape: etat.etape }
         : obtenirContexteRevisionEtape(etat.questionCourante);
     if (contexteEtape) {
-        const bilanEtape = obtenirBilanEtape(contexteEtape.theme, contexteEtape.etape);
-        bilanEtape.meilleurScore = Math.max(bilanEtape.meilleurScore || 0, pourcentage);
-        bilanEtape.nombreTentatives = (bilanEtape.nombreTentatives || 0) + 1;
         const etapeTerminee = (etat.mode === 'revision'
             || !etapeNecessiteAutreChapitre(contexteEtape.theme, contexteEtape.etape))
             && nombreQuestionsPassees === 0;
+        // Lire le bilan après le contrôle des chapitres, qui normalise les
+        // objets de progression, pour conserver le score et la célébration.
+        const bilanEtape = obtenirBilanEtape(contexteEtape.theme, contexteEtape.etape);
+        bilanEtape.meilleurScore = Math.max(bilanEtape.meilleurScore || 0, pourcentage);
+        bilanEtape.nombreTentatives = (bilanEtape.nombreTentatives || 0) + 1;
         if (etapeTerminee) {
             const questionsEtape = obtenirQuestionsEtape(contexteEtape.theme, contexteEtape.etape);
             const toutesReussiesEnAutonomie = questionsEtape.length > 0
@@ -246,7 +260,7 @@ function construireBilanSessionOrdinaire({
     let messageResultat;
     if (nombreQuestionsPassees > 0) {
         const activitesPassees = `${nombreQuestionsPassees} activité${nombreQuestionsPassees === 1 ? '' : 's'} passée${nombreQuestionsPassees === 1 ? '' : 's'}`;
-        messageResultat = `${autonomes}, ${reussitesAidees} et ${activitesPassees}. Les activités à reprendre sont détaillées ci-dessous.`;
+        messageResultat = `${autonomes}, ${reussitesAidees} et ${activitesPassees}. Les activités à consolider sont détaillées ci-dessous.`;
         jouerSonReussite();
     }
     else if (etat.mode === 'parcours') {
@@ -258,7 +272,7 @@ function construireBilanSessionOrdinaire({
             jouerSonReussite();
     }
     else if (pourcentage >= 80) {
-        messageResultat = `${autonomes} et ${reussitesAidees}. Les erreurs restent disponibles dans la révision.`;
+        messageResultat = `${autonomes} et ${reussitesAidees}. Les questions à consolider restent disponibles dans la révision.`;
         jouerSonReussite();
     }
     else {
@@ -338,7 +352,7 @@ function actualiserProchaineDestinationBilan() {
         const suivant = THEMES[indexTheme + 1];
         destination.textContent = estEvaluationFinaleReussie(etat.theme) && suivant
             ? `Prochaine destination : parcours ${indexTheme + 2} · ${PROGRAMMES[suivant.id].titre}.`
-            : (estParcoursCompletReussi() ? 'Ton parcours complet est validé.' : 'Tu peux retravailler les erreurs puis refaire cette évaluation.');
+            : (estParcoursCompletReussi() ? 'Ton parcours complet est validé.' : 'Tu peux retravailler les questions à consolider puis refaire cette évaluation.');
         return;
     }
     if (etat.mode === 'parcours') {
@@ -471,9 +485,7 @@ function terminerSession() {
     selectionner('#contexteBilan').textContent = obtenirContexteFinSession();
     selectionner('#titreBilan').textContent = bilan.titre;
     selectionner('#rangBilan').textContent = bilan.messageResultat;
-    const questionsAReprendre = etat.questionsSession.filter(question =>
-        etat.erreursSession.has(question.id)
-    );
+    const questionsAReprendre = obtenirQuestionsAConsoliderSession();
     afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees);
     configurerBoutonContinuerBilan();
     actualiserProchaineDestinationBilan();

@@ -102,12 +102,12 @@ function obtenirCiblesARejouerEtapeMesures(numero) {
     const cibles = [...obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === Number(numero)), ...obtenirReperesNonMaitrisesEtapeMesures(numero)];
     return [...new Map(cibles.map(cible => [normaliserCleMesure(cible.cle), cible])).values()];
 }
-function enregistrerErreurMesures(cibles) {
+function enregistrerErreurMesures(cibles, motifRevision = 'incorrecte') {
     const erreurs = obtenirSauvegardeJeuMesures().erreurs;
     cibles.forEach(cible => {
         const cle = normaliserCleMesure(cible.cle);
         const actuelle = erreurs[cle] || { active:false, nombreErreurs:0, reussitesRevision:0 };
-        erreurs[cle] = { active:true, nombreErreurs:Number(actuelle.nombreErreurs || 0) + 1, reussitesRevision:0 };
+        erreurs[cle] = { ...actuelle, active:true, motifRevision, nombreErreurs:Number(actuelle.nombreErreurs || 0) + (motifRevision === 'incorrecte' ? 1 : 0), reussitesRevision:motifRevision === 'reprise' ? 1 : 0 };
     });
 }
 function validerRevisionMesures(cibles) {
@@ -117,6 +117,7 @@ function validerRevisionMesures(cibles) {
         if (!actuelle?.active) return;
         actuelle.reussitesRevision = 1;
         actuelle.active = false;
+        actuelle.motifRevision = null;
     });
 }
 
@@ -251,7 +252,7 @@ function construireCartesEtapesMesures() {
         const pourcentage = total ? Math.round(maitrises / total * 100) : 0;
         const erreurs = obtenirCiblesARejouerEtapeMesures(numero).length;
         const etoile = total > 0 && sansJoker === total ? creerEtoileFilanteProgression() : '';
-        const revision = `<button class="mesures-etape-revision" data-action="reviser-etape-mesures" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Rejouer uniquement mes erreurs' : 'Aucune erreur à rejouer'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
+        const revision = `<button class="mesures-etape-revision" data-action="reviser-etape-mesures" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Consolider mes réponses' : 'Aucune question à consolider'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
         return `<article class="mesures-etape-carte" data-mesures-etape="${numero}" style="--mesures-etape-accent:${identite.couleur};--mesures-etape-accent-lisible:${identite.couleurTexte};--mesures-etape-rgb:${identite.couleurRgb}"><button class="mesures-etape-ouvrir" data-mesures-etape="${numero}" type="button"><span class="mesures-etape-carte-entete"><span class="mesures-etape-icone" aria-hidden="true">${iconeEtapeMesures(numero)}</span><span class="mesures-etape-numero">ÉTAPE ${identite.numeroFormate}</span>${etoile}</span><h3>${identite.titre}</h3><p>${identite.sousTitre}<br>${total} repère${total===1?'':'s'} · progression juridique.</p><span class="mesures-etape-progression"><i style="width:${pourcentage}%"></i></span><span class="mesures-etape-pied"><span>${maitrises}/${total} bonnes réponses · ${sansJoker}/${total} sans joker</span><span>${maitrises===total?'Maîtrisée ✓':'Ouvrir →'}</span></button>${revision}</article>`;
     }).join('');
     zone.querySelectorAll('.mesures-etape-ouvrir').forEach(bouton => bouton.addEventListener('click', () => lancerEtapeMesures(Number(bouton.dataset.mesuresEtape))));
@@ -365,13 +366,14 @@ function enregistrerResultatMissionMesuresNatif(question, resultat) {
             }
         });
     }
-    if (!resultat.estCorrecte || resultat.reussiteAidee) enregistrerErreurMesures(cibles);
-    if (!meta.estIntroduction && resultat.reussiteAutonome) validerRevisionMesures(cibles);
+    if (!resultat.estCorrecte || resultat.reussiteAidee) enregistrerErreurMesures(cibles, resultat.reussiteAidee ? 'joker' : 'incorrecte');
+    if (resultat.reussiteAutonome && resultat.tentatives > 0) enregistrerErreurMesures(cibles, 'reprise');
+    else if (!meta.estIntroduction && resultat.reussiteAutonome) validerRevisionMesures(cibles);
     enregistrerSauvegarde();
 }
 function enregistrerPassageMissionMesuresNatif(question) {
     if (!question?.missionMesures) return;
-    enregistrerErreurMesures(obtenirCiblesMissionMesuresQuestion(question));
+    enregistrerErreurMesures(obtenirCiblesMissionMesuresQuestion(question), 'passage');
     enregistrerSauvegarde();
 }
 function reinitialiserMaitriseEtapeMissionMesures(numeroEtape) {
@@ -397,10 +399,10 @@ function lancerEtapeMesures(numero, { depuisDebut = false } = {}) {
 function lancerRevisionMesures() {
     const reperes = obtenirErreursMesuresActives();
     if (!reperes.length) {
-        ouvrirFenetreMessage({ titre:'Aucune erreur à réviser', message:'Aucun repère de Mission Mesures n’est actuellement à revoir.', libelleConfirmer:'Très bien' });
+        ouvrirFenetreMessage({ titre:'Aucune question à consolider', message:'Aucun repère de Mission Mesures n’est actuellement à revoir.', libelleConfirmer:'Très bien' });
         return;
     }
-    preparerSessionMissionMesuresNative({ mode:'revision', reperes, questions:creerQuestionsRevisionMesures(reperes), jokersActifs:false, titre:'Réviser mes erreurs · Mission Mesures' });
+    preparerSessionMissionMesuresNative({ mode:'revision', reperes, questions:creerQuestionsRevisionMesures(reperes), jokersActifs:false, titre:'Questions à consolider · Mission Mesures' });
 }
 function lancerRevisionEtapeMesuresDepuisRevision(numeroEtape) {
     const numero = Number(numeroEtape);
@@ -410,7 +412,7 @@ function lancerRevisionEtapeMesuresDepuisRevision(numeroEtape) {
         return;
     }
     const identite = obtenirIdentiteEtapeMissionMesures(numero);
-    preparerSessionMissionMesuresNative({ mode:'revision', etape:numero, reperes, questions:creerQuestionsRevisionMesures(reperes), jokersActifs:false, titre:`Réviser mes erreurs · Étape ${identite.numeroFormate}` });
+    preparerSessionMissionMesuresNative({ mode:'revision', etape:numero, reperes, questions:creerQuestionsRevisionMesures(reperes), jokersActifs:false, titre:`Questions à consolider · Étape ${identite.numeroFormate}` });
 }
 function lancerRevisionEtapeMesuresDepuisQuestion(numeroEtape) {
     lancerRevisionEtapeMesuresDepuisRevision(numeroEtape);
@@ -486,8 +488,8 @@ function lancerEntrainementMissionMesuresNatif() {
 function afficherRevisionMesures() {
     const zone=selectionner('#contenuErreursMesures'); if(!zone)return;
     const erreurs=obtenirErreursMesuresActives();
-    if(!erreurs.length){zone.innerHTML='<div class="revision-vide"><strong>Aucune erreur active.</strong><p>Les repères manqués apparaîtront ici pour être retravaillés.</p></div>';return;}
-    zone.innerHTML=`<div class="mesures-revision-liste">${erreurs.map(cible=>`<article class="mesures-revision-item"><span class="surtitre">Étape ${String(cible.etape).padStart(2,'0')}</span><strong>${cible.titre}</strong><p>${cible.sigle&&cible.developpement?`${cible.developpement} (${cible.sigle})`:cible.questionRappel}</p></article>`).join('')}</div><button class="principal" id="mesuresRevisionDemarrer" type="button">Commencer la révision →</button>`;
+    if(!erreurs.length){zone.innerHTML='<div class="revision-vide"><strong>Aucune question à consolider.</strong><p>Les repères manqués apparaîtront ici pour être retravaillés.</p></div>';return;}
+    zone.innerHTML=`<div class="mesures-revision-liste">${erreurs.map(cible=>`<article class="mesures-revision-item"><span class="surtitre">Étape ${String(cible.etape).padStart(2,'0')}</span><strong>${cible.titre}</strong><p>${cible.sigle&&cible.developpement?`${cible.developpement} (${cible.sigle})`:cible.questionRappel}</p><small>${obtenirLibelleConsolidation(obtenirSauvegardeJeuMesures().erreurs[cible.cle])}</small></article>`).join('')}</div><button class="principal" id="mesuresRevisionDemarrer" type="button">Commencer la révision →</button>`;
     selectionner('#mesuresRevisionDemarrer')?.addEventListener('click',lancerRevisionMesures);
 }
 function terminerSessionMissionMesuresNative() {
@@ -505,17 +507,17 @@ function terminerSessionMissionMesuresNative() {
         if(reussie) celebration={titre:'Évaluation Mission Mesures réussie !',message:`Tu as obtenu ${pourcentage} %.`,confetti:true,finale:pourcentage===100};
     }
     if(mode==='revision'){
-        titre='Réviser mes erreurs · Mission Mesures';
+        titre='Questions à consolider · Mission Mesures';
         resultat=obtenirErreursMesuresActives().length?`${obtenirErreursMesuresActives().length} repère(s) restent à consolider.`:'Aucun repère actif à revoir.';
         if(etatJeuMesures.celebrationEtapeADiffuser){
             const numero=Number(etatJeuMesures.celebrationEtapeADiffuser), identite=obtenirIdentiteEtapeMissionMesures(numero);
-            celebration={titre:`Étape ${identite.numeroFormate} maîtrisée !`,message:'Les erreurs rejouées ont été réussies sans joker : la progression de l’étape est à jour.',confetti:true};
+            celebration={titre:`Étape ${identite.numeroFormate} maîtrisée !`,message:'Les questions rejouées ont été réussies sans joker : la progression de l’étape est à jour.',confetti:true};
         }
     }
     if(mode==='hasard'){titre='Défi du hasard · Mission Mesures';resultat=pourcentage===100?'Tirage parfait !':`Résultat : ${pourcentage} %.`;}
     enregistrerSauvegarde();
     selectionner('#scoreBilan').textContent=`${pourcentage}%`; selectionner('#bonnesReponsesBilan').textContent=`${etat.score}/${total}`; selectionner('#meilleureSerieBilan').textContent=etat.meilleureSerie; selectionner('#gainExperienceBilan').textContent='+0'; selectionner('#contexteBilan').textContent=`Mission Mesures · ${titre}`; selectionner('#titreBilan').textContent=titre; selectionner('#rangBilan').textContent=resultat;
-    afficherErreursBilan(etat.questionsSession.filter(question=>etat.erreursSession.has(question.id)),passees);
+    afficherErreursBilan(obtenirQuestionsAConsoliderSession(),passees);
     const continuer=selectionner('#boutonContinuer'); continuer.textContent='Retour à Mission Mesures →'; continuer.onclick=()=>{etat.missionMesuresConfiguration=null;afficherEcran('mesures',{remplacerHistorique:true});};
     const rejouer=selectionner('#boutonRejouerMesErreurs'); if(rejouer) rejouer.onclick=lancerRevisionMesures;
     selectionner('#prochaineDestinationBilan') && (selectionner('#prochaineDestinationBilan').textContent='Continue Mission Mesures ou retravaille les repères à consolider.');
