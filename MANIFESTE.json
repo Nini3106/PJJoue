@@ -228,8 +228,8 @@
       "sha256": "04a2d654c428fb68baae26ddeab9d527bdcd30178730f6088b690765ef186689"
     },
     "code/01 - Éléments communs/style-general-pjjoue.css": {
-      "tailleOctets": 265500,
-      "sha256": "a215f353e152229a010580a13487d8ce0a0caee90726a0ba0e7094260be08f36"
+      "tailleOctets": 265494,
+      "sha256": "5868bd2985c9488304cb9b62434dbe356cc900a6e093798acc3b6425bea5fbca"
     },
     "code/02 - Accueil/LIRE-MOI.md": {
       "tailleOctets": 556,
@@ -240,8 +240,8 @@
       "sha256": "050599985cc157f33fb9f5895e44ae75c01dcc500fd2f50abc6397c351e4753a"
     },
     "code/02 - Accueil/contenu.html": {
-      "tailleOctets": 2531,
-      "sha256": "f2d3bbe81873804a1573a8c5d38e315e6e9952b5373d47e25871f584c548667c"
+      "tailleOctets": 2477,
+      "sha256": "a32c3ba52aac73c8b7b0b61e0a121994990e99d05f19a11e0dc0c72d7381d4b4"
     },
     "code/03 - Parcours PJJ/LIRE-MOI.md": {
       "tailleOctets": 566,
@@ -784,8 +784,8 @@
       "sha256": "eb8f549047310bf9cd0b8c4300bf72284fecc5d83cf7330e4da716260387db07"
     },
     "index.html": {
-      "tailleOctets": 124940,
-      "sha256": "964687f38f56b34ead877c8db47941f239cd9aefc4e2c90076a4c6e2764650d1"
+      "tailleOctets": 124886,
+      "sha256": "c5c3bf6f1bb62ec8b24dedc4cc1c6e2f2060d0738c28001e4fe87e31fe4ebd7e"
     },
     "manifest.webmanifest": {
       "tailleOctets": 741,
@@ -1076,8 +1076,8 @@
       "sha256": "51a64261c7301ed44340cd3cacc89b8204edcd4adc8beafcf5e0b198d2baa7c4"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 401368,
-      "sha256": "cb116e30334a9e8eebea78b7f42ec2a5e29e0699dbf053c5a017410442d173c7"
+      "tailleOctets": 401362,
+      "sha256": "4d07acd2059e8f4c5abbc89020120b5377f76f6ff7ed727821dd09095fb2ac82"
     },
     "ressources/styles/pjjoue-static.css": {
       "tailleOctets": 20968,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "0767b5735e0c0ad326dfd97bbdc1b8d48f68db88fbadc2e3c04e5aea7c9bd796"
+      "sha256": "b45f77f25531420104edf4008c7428bbb4e241117eb03f00b8d9c21a0263d386"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14807,

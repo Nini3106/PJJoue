@@ -10001,27 +10001,24 @@ body[data-ecran-actif="accueil"] #accueil {
     margin: 0;
 }
 
-/* Les cinq blocs partagent le même espace libre, y compris au-dessus
-   du nom et sous les compteurs. Le trait reste associé au nom du site. */
+/* Les six éléments partagent le même espace libre, y compris de part
+   et d’autre du trait jaune, au-dessus du nom et sous les compteurs. */
 #accueil .accueil-contenu {
     --espace-accueil: clamp(18px,2vw,28px);
     justify-content: space-evenly;
     row-gap: var(--espace-accueil);
 }
 
-#accueil .accueil-identite {
-    order: 1;
-    flex-shrink: 0;
-}
-
-#accueil .accueil-identite .accueil-marque {
+#accueil .accueil-texte-image .accueil-marque {
     margin: 0;
 }
 
-#accueil .accueil-identite .surligne-titre-accueil {
-    margin: 12px 0 0;
+#accueil .accueil-texte-image .surligne-titre-accueil {
+    margin: 0;
 }
 
+#accueil .accueil-marque,
+#accueil .surligne-titre-accueil,
 #accueil .accueil-contenu h1,
 #accueil .accueil-introduction,
 #accueil .accueil-action-principale,
