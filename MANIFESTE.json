@@ -392,8 +392,8 @@
       "sha256": "2b0264c3f615638cf91830b4c7240ee6ff605c0d3e878dea879500f7d4f85609"
     },
     "code/08 - Réviser/style-reviser-et-supports.css": {
-      "tailleOctets": 11956,
-      "sha256": "526b7205038caa49121e4ae7b29502dc5a4c2740a686a4f8106b00df908e9477"
+      "tailleOctets": 12094,
+      "sha256": "624dd16e6189937acdd97cc0ea38c3141c578d3694712f863731f038c802f69f"
     },
     "code/09 - Progression/LIRE-MOI.md": {
       "tailleOctets": 564,
@@ -1076,8 +1076,8 @@
       "sha256": "51a64261c7301ed44340cd3cacc89b8204edcd4adc8beafcf5e0b198d2baa7c4"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 400604,
-      "sha256": "e0167328984f5905a0f65525209e6fee23fe2364e8fde555d1a861fd1516f624"
+      "tailleOctets": 400742,
+      "sha256": "196320dd3b9518f21a13dfa2e4879328e5fdabb88a7ffeab61c4000169c498b7"
     },
     "ressources/styles/pjjoue-static.css": {
       "tailleOctets": 20968,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "a9485a6f3f440ce9503e2d407e2223c9df2b8f5f2cbb6a31ab03d7ff328796c2"
+      "sha256": "50f99cb3f40f0b3defd4caf333f44d0c4d3ae276dc7733df1d0e422b12a58c55"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
@@ -1396,8 +1396,8 @@
       "sha256": "8437f51aa165b95e4f354ab98a82ec62d41f3f3900a9313d8c48615ab82e24ce"
     },
     "tests/verifier_regression_visuelle.py": {
-      "tailleOctets": 87720,
-      "sha256": "c59481dc1ae8dd29a0af26127cd64d029fcef205a87efc0c5c3365409a8e3a37"
+      "tailleOctets": 88053,
+      "sha256": "54f8b108e890180f61a799737fa7602542f23b0db27945a2df27ece0bba0d639"
     }
   }
 }
