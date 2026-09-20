@@ -4726,8 +4726,8 @@ function actualiserBoutonRevisionEtapeQuestion(question) {
         ? `Rejouer uniquement mes erreurs de l’étape ${Number(question.etape || 1)}`
         : 'Rejouer uniquement mes erreurs');
     bouton.title = disponible
-        ? `Rejouer les ${erreurs.length} erreur${erreurs.length > 1 ? 's' : ''} active${erreurs.length > 1 ? 's' : ''} de cette étape`
-        : 'Aucune erreur active à rejouer dans cette étape';
+        ? `Rejouer les ${erreurs.length} questions à reprendre : erreurs actives et questions déjà introduites non maîtrisées sans joker. Les maîtrises sans joker sont conservées.`
+        : 'Aucune erreur active ou question non maîtrisée sans joker à rejouer dans cette étape';
 }
 function actualiserSuiviEtapeQuestion(question) {
     const conteneur = selectionner('#contexteEtapeQuestion');
@@ -8394,6 +8394,146 @@ document.addEventListener('keydown', evenement => {
         premier.focus();
     }
 });
+
+/*
+ * Aides courtes affichées au survol des actions qui demandent un peu de contexte.
+ * Les boutons dont le libellé suffit à comprendre l'action ne reçoivent volontairement
+ * pas de titre : l'interface reste légère et les aides restent utiles.
+ */
+const TITRES_BOUTONS_SURVOL = Object.freeze({
+    boutonInstallerPJJoue: 'Installer PJJoue comme application sur cet appareil.',
+    boutonChangerParcours: 'Revenir à la liste pour choisir un autre parcours.',
+    boutonActionParcours: 'Commencer ou reprendre l’étape actuellement proposée.',
+    boutonParcoursLibre: 'Jouer cette étape sans limite de temps.',
+    boutonParcoursChronometre: 'Jouer cette étape avec une limite de temps par question.',
+    boutonParcours15Secondes: 'Limiter chaque réponse à 15 secondes.',
+    boutonParcours20Secondes: 'Limiter chaque réponse à 20 secondes.',
+    boutonParcours25Secondes: 'Limiter chaque réponse à 25 secondes.',
+    boutonParcours30Secondes: 'Limiter chaque réponse à 30 secondes.',
+    boutonLancerLeDe: 'Tirer au hasard un défi parmi les parcours.',
+    boutonJouerLeTirage: 'Démarrer le défi tiré par le dé.',
+    boutonRejouerErreursEtape: 'Rejouer les erreurs actives et les questions déjà introduites qui ne sont pas encore maîtrisées sans joker. Les maîtrises sans joker sont conservées.',
+    boutonReprendreEtapeDepuisDebut: 'Recommencer l’étape à la première question : les questions déjà maîtrisées restent validées tant qu’elles ne sont pas réinitialisées.',
+    boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les erreurs et la progression générale restent conservées.',
+    boutonJokers: 'Ouvrir les aides disponibles pour cette question.',
+    boutonPasser: 'Passer cette question : elle restera à reprendre et ne sera pas validée.',
+    boutonRejouerMesErreurs: 'Rejouer les questions de la session qui restent à consolider.',
+    boutonRevenirAuParcours: 'Retourner à la carte du parcours.',
+    boutonRefermerSupports: 'Fermer toutes les fiches de support ouvertes.',
+    boutonOuvrirParcours: 'Choisir un parcours pour consulter sa progression détaillée.',
+    boutonExporterMaProgression: 'Télécharger une copie de ta progression pour la conserver ou la transférer.',
+    boutonImporterProgression: 'Charger une progression précédemment exportée.',
+    boutonEnregistrerEtRevenir: 'Enregistrer les réglages et revenir à l’accueil.',
+    boutonReinitialiserTouteLaProgression: 'Effacer toute la progression enregistrée sur cet appareil.',
+    boutonJoker5050: 'Retirer deux réponses incorrectes pour faciliter le choix.',
+    boutonJokerIndice: 'Afficher un indice pédagogique sans valider la réponse.',
+    boutonJokerLangueAuChat: 'Obtenir une explication reformulée comme un conseil.',
+    siglesOuvrirParcours: 'Ouvrir la carte des étapes de Mission Sigles.',
+    siglesOuvrirEntrainement: 'Choisir les sigles, le nombre de questions et les aides.',
+    siglesLancerDe: 'Tirer au hasard une étape et un nombre de sigles.',
+    siglesJouerTirage: 'Démarrer le défi tiré par le dé.',
+    siglesLancerRevision: 'Rejouer uniquement les sigles encore en erreur.',
+    siglesRetourDepuisParcours: 'Revenir à l’accueil de Mission Sigles.',
+    siglesLancerEvaluation: 'Passer l’évaluation finale après la maîtrise autonome des étapes.',
+    mesuresOuvrirParcours: 'Ouvrir la carte des étapes de Mission Mesures.',
+    mesuresOuvrirEntrainement: 'Choisir les mesures, le nombre de questions et les aides.',
+    mesuresLancerDe: 'Tirer au hasard une étape et un nombre de repères.',
+    mesuresJouerTirage: 'Démarrer le défi tiré par le dé.',
+    mesuresLancerRevision: 'Rejouer uniquement les repères encore en erreur.',
+    mesuresRetourDepuisParcours: 'Revenir à l’accueil de Mission Mesures.',
+    mesuresLancerEvaluation: 'Passer l’évaluation finale après la maîtrise autonome des étapes.',
+    carteEvaluationFinale: 'Évaluation finale verrouillée jusqu’à la maîtrise de toutes les étapes.'
+});
+
+const TITRES_ACTIONS_SURVOL = Object.freeze({
+    'rejouer-erreurs-etape': 'Rejouer les erreurs actives et les questions déjà introduites qui ne sont pas encore maîtrisées sans joker. Les maîtrises sans joker sont conservées.',
+    'reviser-theme': 'Ouvrir les erreurs de ce parcours.',
+    'reviser-etape': 'Rejouer les erreurs de cette étape.',
+    'reviser-toutes-erreurs': 'Rejouer toutes les questions encore à revoir.',
+    'ouvrir-parcours-depuis-erreurs': 'Choisir une étape du parcours pour la réviser.',
+    'reviser-etape-sigles': 'Rejouer les sigles encore en erreur dans cette étape.',
+    'reviser-toutes-erreurs-sigles': 'Rejouer tous les sigles encore en erreur.',
+    'ouvrir-mission-sigles-depuis-erreurs': 'Choisir une étape de Mission Sigles pour la réviser.',
+    'reviser-etape-mesures': 'Rejouer les repères encore en erreur dans cette étape.',
+    'reviser-toutes-erreurs-mesures': 'Rejouer tous les repères encore en erreur.',
+    'ouvrir-mission-mesures-depuis-erreurs': 'Choisir une étape de Mission Mesures pour la réviser.'
+});
+
+function obtenirTitreSurvolBouton(bouton) {
+    if (TITRES_BOUTONS_SURVOL[bouton.id])
+        return TITRES_BOUTONS_SURVOL[bouton.id];
+
+    const action = bouton.dataset.action;
+    if (action && TITRES_ACTIONS_SURVOL[action])
+        return TITRES_ACTIONS_SURVOL[action];
+
+    if (bouton.matches('.selecteur-parcours-bouton'))
+        return 'Ouvrir ce parcours et consulter ses étapes.';
+    if (bouton.matches('.progression-pastille'))
+        return 'Afficher la progression détaillée de ce parcours.';
+    if (bouton.matches('.carte-voyage-etape'))
+        return 'Ouvrir les souvenirs et les supports de cette étape.';
+    if (bouton.matches('.sigles-etape-ouvrir, .mesures-etape-ouvrir'))
+        return 'Ouvrir cette étape et reprendre sa progression.';
+    if (bouton.matches('.sigles-etape-revision'))
+        return 'Rejouer uniquement les sigles encore en erreur dans cette étape.';
+    if (bouton.matches('.mesures-etape-revision'))
+        return 'Rejouer uniquement les repères encore en erreur dans cette étape.';
+    if (bouton.matches('.revision-parcours-bouton'))
+        return 'Ouvrir les erreurs de ce parcours.';
+    if (bouton.matches('.revision-etape-bouton'))
+        return 'Rejouer les erreurs de cette étape.';
+
+    const groupe = bouton.closest('[data-proposition]');
+    if (groupe?.dataset.proposition === 'jokers')
+        return 'Choisir si les aides sont disponibles pendant la session.';
+    if (groupe?.dataset.proposition === 'chronometre')
+        return 'Choisir si une limite de temps s’applique à chaque question.';
+    if (bouton.closest('.entrainement-secondes-groupe, #secondesChronometreParcours, #siglesChoixSecondes, #mesuresChoixSecondes'))
+        return `Limiter chaque réponse à ${bouton.textContent.trim()}.`;
+    if (bouton.closest('.entrainement-perimetre-choix, #siglesChoixPerimetre, #mesuresChoixPerimetre'))
+        return 'Choisir le périmètre de questions à travailler.';
+    if (bouton.closest('.entrainement-nombre-choix, #siglesChoixNombre, #mesuresChoixNombre'))
+        return 'Choisir le nombre de questions de la session.';
+    if (bouton.closest('#siglesChoixOrganisation, #mesuresChoixOrganisation'))
+        return 'Choisir l’ordre de présentation des questions.';
+    if (bouton.closest('#siglesChoixChrono, #mesuresChoixChrono'))
+        return 'Activer ou désactiver le chronomètre de la session.';
+    if (bouton.closest('#siglesChoixJokers, #mesuresChoixJokers'))
+        return 'Activer ou désactiver les jokers de la session.';
+
+    return '';
+}
+
+function appliquerTitreSurvolBouton(bouton) {
+    if (!(bouton instanceof HTMLButtonElement) || bouton.title)
+        return;
+    const titre = obtenirTitreSurvolBouton(bouton);
+    if (titre)
+        bouton.title = titre;
+}
+
+function appliquerTitresSurvol(racine = document) {
+    if (racine instanceof HTMLButtonElement)
+        appliquerTitreSurvolBouton(racine);
+    racine.querySelectorAll?.('button').forEach(appliquerTitreSurvolBouton);
+}
+
+function activerAidesAuSurvol() {
+    appliquerTitresSurvol();
+    const observateur = new MutationObserver(mutations => {
+        mutations.forEach(mutation => mutation.addedNodes.forEach(noeud => {
+            if (noeud.nodeType === Node.ELEMENT_NODE)
+                appliquerTitresSurvol(noeud);
+        }));
+    });
+    observateur.observe(document.body, { childList: true, subtree: true });
+}
+
+if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', activerAidesAuSurvol, { once: true });
+else
+    activerAidesAuSurvol();
 window.addEventListener('resize', mesurerHauteurEntete, { passive: true });
 initialiserGroupesChoix();
 initialiserRechercheSupports();
