@@ -2952,13 +2952,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     font-size: clamp(1rem,1.35vw,1.3rem);
     line-height: 1.52;
 }
-.accueil-independance {
-    display: block;
-    margin-top: 8px;
-    font-size: .82em;
-    font-weight: 600;
-    opacity: .9;
-}
 .accueil-action-principale {
     display: flex;
     align-items: center;

@@ -168,7 +168,7 @@ function envoyerEvenementPJJ(nom, parametres = {}) {
 // est décrit séparément par pjjoue_ecran et rattaché à sa page d'origine.
 const LIBELLES_PAGES_ANALYTICS = Object.freeze({
     accueil: 'Accueil',
-    parcours: 'Parcours PJJ',
+    parcours: 'Parcours CJPM',
     entrainement: 'Entraînement libre',
     erreurs: 'Réviser',
     progression: 'Progression',
@@ -211,7 +211,7 @@ function obtenirPageMenuAnalytics(identifiant = etat?.ecran) {
     if (origine.startsWith('mission_mesures_') || String(etat?.mode || '').startsWith('mesures-'))
         return 'Mission Mesures';
     if (etat?.mode === 'parcours' || etat?.mode === 'evaluation-finale' || origine === 'evaluation_finale')
-        return 'Parcours PJJ';
+        return 'Parcours CJPM';
     if (etat?.mode === 'libre' || origine === 'entrainement_libre' || origine === 'defi_du_hasard')
         return 'Entraînement libre';
     if (etat?.mode === 'revision' || origine === 'revision_des_erreurs')
@@ -249,7 +249,7 @@ function obtenirLibelleModeJeuAnalytics() {
     if (origine === 'defi_du_hasard' || mode === 'sigles-hasard' || mode === 'mesures-hasard')
         return 'Défi du hasard';
     if (mode === 'parcours' || mode === 'sigles-parcours' || mode === 'mesures-parcours')
-        return 'Parcours PJJ';
+        return 'Parcours CJPM';
     if (mode === 'libre' || mode === 'sigles-entrainement' || mode === 'mesures-entrainement')
         return 'Entraînement libre';
     if (mode === 'revision' || mode === 'sigles-revision' || mode === 'mesures-revision')

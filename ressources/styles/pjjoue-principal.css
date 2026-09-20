@@ -2951,13 +2951,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     font-size: clamp(1rem,1.35vw,1.3rem);
     line-height: 1.52;
 }
-.accueil-independance {
-    display: block;
-    margin-top: 8px;
-    font-size: .82em;
-    font-weight: 600;
-    opacity: .9;
-}
 .accueil-action-principale {
     display: flex;
     align-items: center;
@@ -11366,11 +11359,10 @@ body[data-ecran-actif="accueil"] #accueil {
 #supports .supports-filtres { display:flex; flex-wrap:wrap; gap:8px; }
 #supports .supports-filtres button { width:max-content; max-width:100%; min-width:0; min-height:42px; padding:0 14px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; }
 #supports .supports-filtres button.actif { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.10); box-shadow:inset 0 0 0 1px var(--jaune-interface); }
+#supports .supports-filtres .support-filtre-parcours { border-color:var(--parcours-accent-lisible); color:var(--parcours-accent-lisible); }
+#supports .supports-filtres .support-filtre-parcours:is(:hover,:focus-visible,.actif) { background:rgba(var(--parcours-accent-rgb),.14); box-shadow:inset 0 0 0 1px var(--parcours-accent-lisible); }
 #supports .supports-parcours-badges { display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
-#supports .support-parcours-badge { display:inline-flex; align-items:center; min-height:27px; padding:2px 9px; border:1px solid currentColor; border-radius:999px; font-size:.9rem; font-style:normal; font-weight:900; }
-#supports .support-parcours-1 { color:#9fc2ff; } #supports .support-parcours-2 { color:#ffd36a; }
-#supports .support-parcours-3 { color:#70d7ea; } #supports .support-parcours-4 { color:#c7afff; }
-#supports .support-parcours-5 { color:#ff91a8; } #supports .support-parcours-6 { color:#70d6ca; }
+#supports .support-parcours-badge { display:inline-flex; align-items:center; min-height:27px; padding:2px 9px; border:1px solid currentColor; border-radius:999px; font-size:.9rem; font-style:normal; font-weight:900; color:var(--parcours-accent-lisible); }
 #supports .support-ressource-guide { display:grid; grid-template-columns:120px minmax(0,1fr) auto; gap:16px; align-items:center; justify-items:stretch; min-height:86px; padding:16px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); color:var(--texte); background:var(--surface-carte); text-align:left; text-decoration:none; }
 #supports .support-ressource-guide:hover { border-color:var(--support-accent,var(--jaune-interface)); transform:translateY(-1px); }
 #supports .support-ressource-guide .support-revision-type { justify-self:start; text-align:left; }

@@ -58,7 +58,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
             parser.labels,
             [
                 "Accueil",
-                "Parcours PJJ",
+                "Parcours CJPM",
                 "Entraînement libre",
                 "Réviser",
                 "Progression",
@@ -77,7 +77,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         js = (CODE / "01 - Éléments communs/Navigation/navigation-locale.js").read_text(encoding="utf-8")
         bloc_menu = js[js.index('const entrees = ['):js.index('];', js.index('const entrees = ['))]
         attendu = [
-            "Accueil", "Parcours PJJ", "Entraînement libre", "Réviser", "Progression",
+            "Accueil", "Parcours CJPM", "Entraînement libre", "Réviser", "Progression",
             "Carnet de parcours", "Supports", "Supports de révision", "Guides", "Mini jeux", "Mission Sigles", "Mission Mesures", "Paramètres",
         ]
         positions = []

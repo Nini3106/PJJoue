@@ -695,6 +695,42 @@ def verifier_menu_principal(page: Page) -> None:
 
 
 def verifier_revision_supports(page: Page) -> None:
+    if page.locator('body').get_attribute('data-ecran-actif') == 'supports':
+        filtres = page.locator('#supports .support-filtre-parcours')
+        assert filtres.all_text_contents() == ['P1', 'P2', 'P3', 'P4', 'P5', 'Option : P6']
+        categories_attendues = [
+            ['supports-je', 'supports-tpe', 'supports-transversaux'],
+            ['supports-ji', 'supports-jld', 'supports-transversaux'],
+            ['supports-reperes-pjj', 'supports-je', 'supports-tpe', 'supports-transversaux'],
+            ['supports-tpe', 'supports-cam', 'supports-transversaux'],
+            ['supports-je', 'supports-tpe', 'supports-jap', 'supports-transversaux'],
+            ['supports-reperes-pjj'],
+        ]
+        progression_avant = page.evaluate('JSON.stringify(sauvegarde)')
+        for index, categories in enumerate(categories_attendues):
+            filtres.nth(index).click()
+            visibles = page.locator('#supports .supports-juridiction:visible').evaluate_all(
+                '(elements) => elements.map(element => element.id)'
+            )
+            assert visibles == categories, f'P{index + 1} : mauvais supports {visibles}'
+            assert filtres.nth(index).get_attribute('aria-pressed') == 'true'
+        page.locator('#supports [data-filtre-supports="tous"]').click()
+        badges_ji = page.locator('#supports-ji .support-parcours-badge')
+        assert badges_ji.all_text_contents() == ['P2']
+        assert page.locator('#supports-jap .support-parcours-badge').all_text_contents() == ['P5']
+        assert page.locator('#supports-reperes-pjj .support-parcours-badge').all_text_contents() == ['P3', 'P6']
+        assert badges_ji.evaluate('(element) => getComputedStyle(element).color') == 'rgb(112, 215, 234)'
+        page.locator('#rechercheSupports').fill('P2')
+        assert page.locator('#supports .supports-juridiction:visible').evaluate_all(
+            '(elements) => elements.map(element => element.id)'
+        ) == categories_attendues[1]
+        page.locator('#rechercheSupports').fill('')
+        page.locator('#boutonRefermerSupports').click()
+        page.evaluate("afficherEcran('accueil'); afficherEcran('supports');")
+        assert filtres.count() == 6, 'Les filtres ne doivent pas se dupliquer à la réouverture.'
+        assert page.evaluate('JSON.stringify(sauvegarde)') == progression_avant
+        page.evaluate('window.scrollTo(0, 0)')
+
     donnees = page.evaluate("""() => ({
         supports: document.querySelectorAll('#supports details.support-revision').length,
         juridictions: document.querySelectorAll('#supports details.supports-juridiction').length,
