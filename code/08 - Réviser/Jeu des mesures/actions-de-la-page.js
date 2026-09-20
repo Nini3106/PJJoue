@@ -366,7 +366,7 @@ function enregistrerResultatMissionMesuresNatif(question, resultat) {
         });
     }
     if (!resultat.estCorrecte || resultat.reussiteAidee) enregistrerErreurMesures(cibles);
-    if (obtenirModeMissionMesures() === 'revision' && resultat.reussiteAutonome) validerRevisionMesures(cibles);
+    if (!meta.estIntroduction && resultat.reussiteAutonome) validerRevisionMesures(cibles);
     enregistrerSauvegarde();
 }
 function enregistrerPassageMissionMesuresNatif(question) {

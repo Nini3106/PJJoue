@@ -36,6 +36,12 @@ La progression pédagogique reprend la logique des parcours principaux : **un si
 
 Le support de révision, les deux guides publics et Mission Sigles utilisent tous la même source `donnees/sigles.json`, afin d’éviter les doublons et les divergences. **Réviser mes erreurs** possède sa propre route `/mission-sigles/revision/` (en ouverture directe `file://`, la route locale passe par `?pjjoue_route=mission-sigles%2Frevision`, sans fragment `#`) : elle reprend le gabarit visuel de Réviser PJJoue mais conserve des données d’erreurs entièrement séparées dans la progression Mission Sigles.
 
+## Synchronisation des erreurs et des acquis
+
+Dans les parcours, Mission Sigles et Mission Mesures, une nouvelle réussite autonome retire l’erreur correspondante des révisions, quel que soit le mode de jeu. Les introductions des mini-jeux ne valident pas un rappel ; une réponse avec aide, une reprise immédiate après correction ou une question passée restent à consolider. Une révision générale ou un entraînement peut aussi consolider une question déjà travaillée dans son étape, sans démarrer une étape jamais visitée.
+
+Les anciennes sauvegardes sont remises en cohérence une seule fois : une erreur associée à un acquis autonome est archivée, en conservant son historique, les étoiles, les scores et la progression. Les anciennes données ne datant pas les réussites et les erreurs, cette migration privilégie les acquis autonomes enregistrés. Une nouvelle erreur après cette migration reste à réviser, même si l’acquis historique est conservé. Le marqueur `erreursSynchronisees` empêche son archivage au prochain chargement.
+
 ## ⚠️ Règle absolue avant toute modification ou publication
 
 Les fichiers publics à la racine du projet et dans les dossiers publiés sont **des fichiers générés**. Ils ne doivent jamais devenir la source de vérité.

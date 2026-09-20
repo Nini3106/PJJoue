@@ -507,6 +507,7 @@ function creerProgressionMesuresInitiale() {
 function creerSauvegardeInitiale() {
     return {
         version: 'V1',
+        erreursSynchronisees: true,
         xp: 0,
         meilleureSerie: 0,
         nombreQuestionsJouees: 0,
@@ -760,6 +761,28 @@ function nettoyerProgressionMesures(sauvegardeBrute) {
         statistiques: { questionsJouees: convertirEntierBorne(statistiques.questionsJouees) }
     };
 }
+function archiverErreursDejaMaitrisees(sauvegardeNettoyee) {
+    // Les anciennes sauvegardes ne datent pas les réussites et les erreurs.
+    // Cette remise en cohérence unique privilégie les acquis autonomes conservés,
+    // sans supprimer l’historique des erreurs ni modifier les validations.
+    for (const [identifiant, erreur] of Object.entries(sauvegardeNettoyee.erreurs)) {
+        const question = QUESTIONS.find(element => String(element.id) === identifiant);
+        const bilan = sauvegardeNettoyee.progression.apprenant[question?.theme]?.[question?.etape];
+        if (!erreur.maitrisee && bilan?.resultats?.[identifiant] === true) {
+            erreur.maitrisee = true;
+            erreur.reussites = Math.max(1, erreur.reussites);
+        }
+    }
+    for (const jeu of [sauvegardeNettoyee.siglesJeu, sauvegardeNettoyee.mesuresJeu]) {
+        const acquis = Object.assign({}, ...Object.values(jeu.etapes).map(etape => etape.autonomes));
+        for (const [cle, erreur] of Object.entries(jeu.erreurs)) {
+            if (erreur.active && acquis[cle] === true) {
+                erreur.active = false;
+                erreur.reussitesRevision = Math.max(1, erreur.reussitesRevision);
+            }
+        }
+    }
+}
 function nettoyerSauvegarde(sauvegardeBrute) {
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
@@ -769,7 +792,7 @@ function nettoyerSauvegarde(sauvegardeBrute) {
         : {};
     const nombreQuestionsJouees = convertirEntierBorne(sauvegardeBrute.nombreQuestionsJouees);
     const identifiantsQuestions = new Set(QUESTIONS.map(question => String(question.id)));
-    return {
+    const nettoyee = {
         ...sauvegardeInitiale,
         version: 'V1',
         xp: convertirEntierBorne(sauvegardeBrute.xp),
@@ -796,6 +819,11 @@ function nettoyerSauvegarde(sauvegardeBrute) {
         siglesJeu: nettoyerProgressionSigles(sauvegardeBrute),
         mesuresJeu: nettoyerProgressionMesures(sauvegardeBrute)
     };
+    // Ne jamais réappliquer cette correction aux nouvelles erreurs : un acquis
+    // reste validé, mais un nouvel échec doit rester disponible pour être rejoué.
+    if (sauvegardeBrute.erreursSynchronisees !== true)
+        archiverErreursDejaMaitrisees(nettoyee);
+    return nettoyee;
 }
 function conserverSauvegardeBrute(contenu) {
     if (!contenu)
@@ -1747,9 +1775,9 @@ function obtenirBilanEtape(theme, etape) {
 }
 /**
  * Retrouver l'étape PJJ concernée lorsqu'une révision a été lancée depuis
- * la carte d'une étape. Une révision générale ne doit pas modifier la
- * progression d'une étape : seul le périmètre explicite « thème:etape:n »
- * autorise cette synchronisation.
+ * la carte d'une étape. Ce contexte permet d’enregistrer les questions
+ * travaillées dans cette étape. Par ailleurs, une nouvelle réussite autonome
+ * peut consolider une question déjà travaillée, dans tous les modes.
  */
 function obtenirContexteRevisionEtape(question = etat.questionCourante) {
     if (etat.mode !== 'revision')
@@ -5160,7 +5188,7 @@ function preparerValidationReponse(question, bouton) {
     actualiserBoutonJokers();
     clearInterval(etat.identifiantMinuteur);
     sauvegarde.aDejaJoue = true;
-    if (!question?.missionSigles) {
+    if (!question?.missionSigles && !question?.missionMesures) {
         marquerEtapeDecouverte(question);
         marquerQuestionJouee(question);
         if (!precedente)
@@ -5201,9 +5229,13 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
         enregistrerSessionEnCours();
         return;
     }
+    const dejaTravaillee = sauvegarde.progression?.apprenant?.[question.theme]?.[question.etape]?.questionsTraitees?.[question.id] === true;
     const contexteEtape = etat.mode === 'parcours'
         ? { theme: question.theme, etape: question.etape }
-        : obtenirContexteRevisionEtape(question);
+        : (obtenirContexteRevisionEtape(question)
+            || (reussiteAutonome && dejaTravaillee && !question.estEvaluationFinale
+                ? { theme: question.theme, etape: question.etape }
+                : null));
     if (!contexteEtape) {
         enregistrerSessionEnCours();
         return;
@@ -5243,9 +5275,9 @@ function traiterReussiteAutonome(question, etaitPassee) {
         delete sauvegarde.erreurs[question.id];
         return;
     }
-    if (etat.mode === 'revision' && sauvegarde.erreurs[question.id]) {
+    if (!question?.missionSigles && !question?.missionMesures && sauvegarde.erreurs[question.id]) {
         const suiviErreur = sauvegarde.erreurs[question.id];
-        // En mode Révision, une réussite autonome suffit : la question n’a plus besoin de rester active.
+        // Toute nouvelle réussite autonome consolide l’erreur, quel que soit le mode.
         suiviErreur.reussites = 1;
         suiviErreur.maitrisee = true;
     }
@@ -5255,7 +5287,7 @@ function traiterReussiteAidee(question, etaitPassee) {
     etat.erreursSession.add(question.id);
     etat.serie = 0;
     jouerSonReussite();
-    if (question?.missionSigles || etat.mode === 'evaluation-finale')
+    if (question?.missionSigles || question?.missionMesures || etat.mode === 'evaluation-finale')
         return;
     const suiviErreur = obtenirSuiviErreur(question);
     if (!etaitPassee)
@@ -5267,7 +5299,7 @@ function traiterReponseIncorrecte(question, etaitPassee) {
     etat.erreursSession.add(question.id);
     etat.serie = 0;
     jouerSonErreur();
-    if (question?.missionSigles || etat.mode === 'evaluation-finale')
+    if (question?.missionSigles || question?.missionMesures || etat.mode === 'evaluation-finale')
         return;
     const suiviErreur = obtenirSuiviErreur(question);
     if (!etaitPassee)
@@ -5408,6 +5440,7 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
         traiterReussiteAidee(question, resultat.etaitPassee);
     else
         traiterReponseIncorrecte(question, resultat.etaitPassee);
+    actualiserSuiviEtapeQuestion(question);
     actualiserIndicateurSerie();
     afficherCorrectionReponse(question, resultat, texteChoisi, precisions);
     enregistrerSauvegarde();
@@ -6719,7 +6752,7 @@ function validerRevisionSigles(cibles) {
         const cle = normaliserSigleJeu(cible.sigle);
         const actuelle = erreurs[cle];
         if (!actuelle?.active) return;
-        // Comme dans Réviser PJJoue, une réussite autonome en révision suffit.
+        // Une nouvelle réussite autonome suffit, dans tous les modes de jeu.
         actuelle.reussitesRevision = 1;
         actuelle.active = false;
     });
@@ -7005,7 +7038,7 @@ function finaliserQuestionSigles(correcte,cibles,{parJoker=false,passage=false,t
     if(etatJeuSigles.questionValidee)return; const q=etatJeuSigles.questions[etatJeuSigles.indexQuestion]; etatJeuSigles.questionValidee=true; arreterChronoSigles();
     if(correcte){ if(q.estIntroduction && q.cible) marquerSigleIntroduit(q.cible.sigle); etatJeuSigles.score += 1; const autonome=!etatJeuSigles.aideUtilisee && !parJoker && etatJeuSigles.tentativesQuestion<=1; if(autonome) etatJeuSigles.reponsesAutonomes += 1; else etatJeuSigles.reponsesAidees += 1;
         if(q.compteMaitrise){ cibles.forEach(cible=>{ const etape=obtenirEtatEtapeSigles(Number(cible.etape)), cle=normaliserSigleJeu(cible.sigle); if(!etatJeuSigles.aideUtilisee&&!parJoker) etape.validationsSansJoker[cle]=true; if(autonome) etape.autonomes[cle]=true; }); verifierCelebrationEtapeSigles(cibles); }
-        if(etatJeuSigles.mode==='revision') validerRevisionSigles(cibles); afficherFeedbackSigles('succes',q.explication || 'Bonne réponse.');
+        if(!q.estIntroduction && autonome) validerRevisionSigles(cibles); afficherFeedbackSigles('succes',q.explication || 'Bonne réponse.');
     } else { if(passage||tempsEcoule){ etatJeuSigles.questionsPassees += 1; enregistrerErreurSigles(cibles); afficherFeedbackSigles('erreur',tempsEcoule?'Temps écoulé. Cette question rejoint tes erreurs.':'Question passée. Elle rejoint tes erreurs.'); } }
     obtenirSauvegardeJeuSigles().statistiques.questionsJouees += 1; enregistrerSauvegarde();
     selectionnerTousSigles('#siglesZoneQuestion button, #siglesZoneQuestion select').forEach(e=>e.disabled=true); selectionnerSigles('#siglesValiderActivite')?.classList.add('masque'); selectionnerSigles('#siglesQuestionSuivante')?.classList.remove('masque'); selectionnerSigles('#siglesPasserQuestion')?.classList.add('masque'); selectionnerSigles('#siglesJokers')?.querySelectorAll('button').forEach(b=>b.disabled=true);
@@ -7264,7 +7297,7 @@ function enregistrerResultatMissionSiglesNatif(question, resultat) {
     }
     if (!resultat.estCorrecte || resultat.reussiteAidee)
         enregistrerErreurSigles(cibles);
-    if (obtenirModeMissionSigles() === 'revision' && resultat.reussiteAutonome)
+    if (!meta.estIntroduction && resultat.reussiteAutonome)
         validerRevisionSigles(cibles);
     enregistrerSauvegarde();
 }
@@ -7908,7 +7941,7 @@ function enregistrerResultatMissionMesuresNatif(question, resultat) {
         });
     }
     if (!resultat.estCorrecte || resultat.reussiteAidee) enregistrerErreurMesures(cibles);
-    if (obtenirModeMissionMesures() === 'revision' && resultat.reussiteAutonome) validerRevisionMesures(cibles);
+    if (!meta.estIntroduction && resultat.reussiteAutonome) validerRevisionMesures(cibles);
     enregistrerSauvegarde();
 }
 function enregistrerPassageMissionMesuresNatif(question) {

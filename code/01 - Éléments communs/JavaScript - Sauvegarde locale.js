@@ -51,6 +51,7 @@ function creerProgressionMesuresInitiale() {
 function creerSauvegardeInitiale() {
     return {
         version: 'V1',
+        erreursSynchronisees: true,
         xp: 0,
         meilleureSerie: 0,
         nombreQuestionsJouees: 0,
@@ -304,6 +305,28 @@ function nettoyerProgressionMesures(sauvegardeBrute) {
         statistiques: { questionsJouees: convertirEntierBorne(statistiques.questionsJouees) }
     };
 }
+function archiverErreursDejaMaitrisees(sauvegardeNettoyee) {
+    // Les anciennes sauvegardes ne datent pas les réussites et les erreurs.
+    // Cette remise en cohérence unique privilégie les acquis autonomes conservés,
+    // sans supprimer l’historique des erreurs ni modifier les validations.
+    for (const [identifiant, erreur] of Object.entries(sauvegardeNettoyee.erreurs)) {
+        const question = QUESTIONS.find(element => String(element.id) === identifiant);
+        const bilan = sauvegardeNettoyee.progression.apprenant[question?.theme]?.[question?.etape];
+        if (!erreur.maitrisee && bilan?.resultats?.[identifiant] === true) {
+            erreur.maitrisee = true;
+            erreur.reussites = Math.max(1, erreur.reussites);
+        }
+    }
+    for (const jeu of [sauvegardeNettoyee.siglesJeu, sauvegardeNettoyee.mesuresJeu]) {
+        const acquis = Object.assign({}, ...Object.values(jeu.etapes).map(etape => etape.autonomes));
+        for (const [cle, erreur] of Object.entries(jeu.erreurs)) {
+            if (erreur.active && acquis[cle] === true) {
+                erreur.active = false;
+                erreur.reussitesRevision = Math.max(1, erreur.reussitesRevision);
+            }
+        }
+    }
+}
 function nettoyerSauvegarde(sauvegardeBrute) {
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
@@ -313,7 +336,7 @@ function nettoyerSauvegarde(sauvegardeBrute) {
         : {};
     const nombreQuestionsJouees = convertirEntierBorne(sauvegardeBrute.nombreQuestionsJouees);
     const identifiantsQuestions = new Set(QUESTIONS.map(question => String(question.id)));
-    return {
+    const nettoyee = {
         ...sauvegardeInitiale,
         version: 'V1',
         xp: convertirEntierBorne(sauvegardeBrute.xp),
@@ -340,6 +363,11 @@ function nettoyerSauvegarde(sauvegardeBrute) {
         siglesJeu: nettoyerProgressionSigles(sauvegardeBrute),
         mesuresJeu: nettoyerProgressionMesures(sauvegardeBrute)
     };
+    // Ne jamais réappliquer cette correction aux nouvelles erreurs : un acquis
+    // reste validé, mais un nouvel échec doit rester disponible pour être rejoué.
+    if (sauvegardeBrute.erreursSynchronisees !== true)
+        archiverErreursDejaMaitrisees(nettoyee);
+    return nettoyee;
 }
 function conserverSauvegardeBrute(contenu) {
     if (!contenu)
