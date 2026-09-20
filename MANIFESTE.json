@@ -308,8 +308,8 @@
       "sha256": "a9a8e000b8ad16fc876d7ece6548ff2543e2d90f77a53f3192bb7d3b1371f3e8"
     },
     "code/06 - Question/actions/05 - Préparer et afficher la question.js": {
-      "tailleOctets": 24717,
-      "sha256": "3035cbb95573cf310f7c10a4d890345696e77a8243dd975698438360cb73841f"
+      "tailleOctets": 24763,
+      "sha256": "7e86b1bc5ad54780dd7d35067569550fbd75aa247ddb0cc867c722aca8993fb5"
     },
     "code/06 - Question/actions/06 - Chronomètre de la question.js": {
       "tailleOctets": 4517,
@@ -352,8 +352,8 @@
       "sha256": "cdb85a3329032ba9748b180d6d9efde443a3c5e08da6c6afcf25ec1479db405a"
     },
     "code/08 - Réviser/Jeu des mesures/actions-de-la-page.js": {
-      "tailleOctets": 35928,
-      "sha256": "26c1c6e63c272dbf400423f8b3b7493157d77745400cc401c595cf06d3e9233e"
+      "tailleOctets": 37037,
+      "sha256": "97b41c2da78b573e7180c08f83054fa066a43a6fbae8d4a2e4aacdc699cd6ae2"
     },
     "code/08 - Réviser/Jeu des mesures/contenu.html": {
       "tailleOctets": 7610,
@@ -368,8 +368,8 @@
       "sha256": "c564da352ee54614846a812788b54fed9db89c1f2f7f6b66d8eac95b3d76ee50"
     },
     "code/08 - Réviser/Jeu des sigles/actions-de-la-page.js": {
-      "tailleOctets": 73303,
-      "sha256": "92916b22d280d3edef87ec6fa2dd2c3762a29f04104cff41f1d81eb763d458e2"
+      "tailleOctets": 74505,
+      "sha256": "69d2b8eb22313585f4d1be9c39779918271df145a8a7747302e7378e37efadae"
     },
     "code/08 - Réviser/Jeu des sigles/contenu.html": {
       "tailleOctets": 7419,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 457178,
-      "sha256": "eed9a4b730603e99076187a92136451e6b8c1661e3e7fcb89bbffcd0704f0ea9"
+      "tailleOctets": 459535,
+      "sha256": "43ec5d10c5be90b69e2cb52499574335f5b098989fdd99bad952a9b64411ca61"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "e9dd15ab2333d0c1eb775279661e8f9922153ce2a8042c72c27d562d5611aac3"
+      "sha256": "22620f2a2fc22459e6a4d764d6436bbbb4d00f8d234fb38af6255bb3cc6e1eca"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,

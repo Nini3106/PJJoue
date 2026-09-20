@@ -342,11 +342,11 @@ function reprendreEtapeDepuisDebutQuestion() {
         return;
     const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
     if (question.missionSigles) {
-        lancerEtapeSigles(numeroEtape);
+        lancerEtapeSigles(numeroEtape, { depuisDebut: true });
         return;
     }
     if (question.missionMesures) {
-        lancerEtapeMesures(numeroEtape);
+        lancerEtapeMesures(numeroEtape, { depuisDebut: true });
         return;
     }
     lancerEtapeDepuisDebut(question.theme, numeroEtape);
