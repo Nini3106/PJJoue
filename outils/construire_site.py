@@ -130,7 +130,14 @@ def lire_texte(chemin_relatif: str) -> str:
     chemin = RACINE / chemin_relatif
     if not chemin.is_file():
         raise ErreurConstruction(f"Fichier source introuvable : {chemin_relatif}")
-    return remplacer_marqueurs_sigles(chemin.read_text(encoding="utf-8"))
+    texte = remplacer_marqueurs_sigles(chemin.read_text(encoding="utf-8"))
+    if "{{COULEUR_ETAPE_PJJ_" in texte:
+        programme = json.loads(CHEMIN_PROGRAMME.read_text(encoding="utf-8"))
+        for etape in programme["commun"]["etapes"]:
+            texte = texte.replace("{{COULEUR_ETAPE_PJJ_" + str(etape["id"]) + "}}", etape["couleur"])
+        if "{{COULEUR_ETAPE_PJJ_" in texte:
+            raise ErreurConstruction(f"Étape PJJ inconnue dans {chemin_relatif}")
+    return texte
 
 
 def verifier_aucun_doublon(valeurs: list[str], libelle: str) -> None:

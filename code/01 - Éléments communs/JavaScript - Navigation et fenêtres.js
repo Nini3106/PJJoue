@@ -477,9 +477,17 @@ function lireRouteDepuisFragment() {
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
 }
 function lireRoute() {
-    const routeRelayee = new URLSearchParams(location.search).get('pjjoue_route');
-    if (routeRelayee)
-        return lireRouteDepuisChemin(routeRelayee === 'accueil' ? '' : routeRelayee);
+    const parametres = new URLSearchParams(location.search);
+    const routeRelayee = parametres.get('pjjoue_route');
+    if (routeRelayee) {
+        const route = lireRouteDepuisChemin(routeRelayee === 'accueil' ? '' : routeRelayee);
+        const etape = Number(parametres.get('etape'));
+        if (route.ecran === 'parcours' && PROGRAMMES[route.theme]?.etapes.some(e => e.id === etape))
+            route.etapeGuide = etape;
+        if (route.ecran === 'sigles' && ['cjpm', 'pjj'].includes(parametres.get('domaine')))
+            route.domaine = parametres.get('domaine');
+        return route;
+    }
 
     // Compatibilité silencieuse avec d’anciens favoris locaux : on sait encore les lire,
     // mais l’adresse est immédiatement réécrite sans # par restaurerRoute().
@@ -514,7 +522,9 @@ function restaurerRoute(route) {
         }
     }
     else if (etatRoute.ecran === 'parcours') {
-        if (etatRoute.theme)
+        if (etatRoute.theme && PROGRAMMES[etatRoute.theme]?.etapes.some(e => e.id === Number(etatRoute.etapeGuide)))
+            lancerEtape(etatRoute.theme, Number(etatRoute.etapeGuide));
+        else if (etatRoute.theme)
             ouvrirParcours(etatRoute.theme);
         else
             ouvrirChoixParcours({ depuisHistorique: true, forcerSortieQuestion: true });
@@ -525,8 +535,11 @@ function restaurerRoute(route) {
         else
             afficherEcran('accueil', { depuisHistorique: true, forcerSortieQuestion: true, remplacerHistorique: true });
     }
-    else
+    else {
+        if (etatRoute.ecran === 'sigles' && ['cjpm', 'pjj'].includes(etatRoute.domaine))
+            choisirDomaineSigles(etatRoute.domaine);
         afficherEcran(etatRoute.ecran || 'accueil', { depuisHistorique: true, forcerSortieQuestion: true });
+    }
     restaurationNavigation = false;
     mettreAJourAdresseNavigation(etat.ecran, true);
 }

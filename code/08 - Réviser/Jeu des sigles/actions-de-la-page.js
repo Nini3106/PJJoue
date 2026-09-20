@@ -11,10 +11,10 @@ const ETAPES_MISSION_SIGLES = Object.freeze({
     3: { numero:'03', titre:'Jugement et réponse éducative', sousTitre:'Parcours 3 · Du jugement à la sanction', domaine:'cjpm', couleur:'#8b5cf6', couleurTexte:'#c7afff', couleurRgb:'139,92,246', icone:'mesures' },
     4: { numero:'04', titre:'Matière criminelle et garanties', sousTitre:'Parcours 4 · Crimes, peines et droits', domaine:'cjpm', couleur:'#e11d48', couleurTexte:'#ff91a8', couleurRgb:'225,29,72', icone:'justice' },
     5: { numero:'05', titre:'Application et exécution des peines', sousTitre:'Parcours 5 · Après la sanction', domaine:'cjpm', couleur:'#0f766e', couleurTexte:'#70d6ca', couleurRgb:'15,118,110', icone:'mesures' },
-    6: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', domaine:'pjj', couleur:'#5fe0a0', couleurTexte:'#5fe0a0', couleurRgb:'95,224,160', icone:'organisation' },
-    7: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', domaine:'pjj', couleur:'#ffcf66', couleurTexte:'#ffcf66', couleurRgb:'255,207,102', icone:'services' },
-    8: { numero:'03', titre:'Placement et détention', sousTitre:'Structures et dispositifs de placement', domaine:'pjj', couleur:'#78aef5', couleurTexte:'#78aef5', couleurRgb:'120,174,245', icone:'placement' },
-    9: { numero:'04', titre:'Partenaires et repères professionnels', sousTitre:'Protection de l’enfance et accompagnement', domaine:'pjj', couleur:'#ffc83d', couleurTexte:'#ffc83d', couleurRgb:'255,200,61', icone:'partenaires' }
+    6: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', domaine:'pjj', etapePjj:5, ...obtenirCouleursEtapePJJ(5), icone:'organisation' },
+    7: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', domaine:'pjj', etapePjj:6, ...obtenirCouleursEtapePJJ(6), icone:'services' },
+    8: { numero:'03', titre:'Placement et détention', sousTitre:'Structures et dispositifs de placement', domaine:'pjj', etapePjj:9, ...obtenirCouleursEtapePJJ(9), icone:'placement' },
+    9: { numero:'04', titre:'Partenaires et repères professionnels', sousTitre:'Protection de l’enfance et accompagnement', domaine:'pjj', etapePjj:11, ...obtenirCouleursEtapePJJ(11), icone:'partenaires' }
 });
 function obtenirDomaineSigles() { return obtenirSauvegardeJeuSigles().domaine || 'cjpm'; }
 function libelleDomaineSigles(domaine=obtenirDomaineSigles()) { return {cjpm:'CJPM',pjj:'PJJ',tous:'CJPM et PJJ'}[domaine] || 'CJPM'; }

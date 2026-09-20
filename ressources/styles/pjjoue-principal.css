@@ -10011,6 +10011,7 @@ body[data-ecran-actif="accueil"] #accueil {
 
 #accueil .accueil-texte-image .accueil-marque {
     margin: 0;
+    font-size: clamp(2rem,3.4vw,3.6rem);
 }
 
 #accueil .accueil-texte-image .surligne-titre-accueil {
@@ -10172,6 +10173,10 @@ body[data-ecran-actif="accueil"] #accueil {
 }
 
 @media (max-width:760px) {
+    #accueil .accueil-texte-image .accueil-marque {
+        font-size: clamp(1.3rem,5.2vw,2.3rem);
+    }
+
     body[data-ecran-actif="accueil"] #accueil .accueil-presentation {
         min-height: 0;
     }
@@ -10519,6 +10524,7 @@ body[data-ecran-actif="accueil"] #accueil {
 #parcours #cartesEtapesFinales { gap:14px; }
 #parcours #cartesEtapesFinales::after { right:-14px; width:14px; }
 #parcours .chemin-etape-texte { max-width:100%; }
+#parcours .chemin-etape-carte[data-theme="commun"] :is(.chemin-etape-numero,.chemin-etape-titre) { color:var(--couleur-etape); }
 #parcours .chemin-etape-titre { min-width:0; max-width:100%; overflow-wrap:anywhere; hyphens:auto; }
 .chemin-ligne-inverse { direction: rtl; }
 .chemin-ligne-inverse > * { direction: ltr; }

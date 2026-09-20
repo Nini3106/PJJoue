@@ -67,6 +67,18 @@ class GuidesCJPMTests(unittest.TestCase):
                         chemin += "index.html"
                     self.assertTrue((RACINE / chemin).is_file(), f"Lien interne absent : {adresse.path}")
 
+    def test_couleurs_guides_pjj_correspondent_aux_etapes_du_parcours(self):
+        etapes = json.loads((RACINE / "donnees/programme.json").read_text())["commun"]["etapes"]
+        couleurs = {e["id"]: e["couleur"] for e in etapes}
+        cartes = LiensHTML((RACINE / "guides/index.html").read_text()).liens
+        for route, numero in {"decouvrir-la-pjj": 1, "organisation-pjj": 5, "metiers-pjj": 4, "structures-pjj": 6}.items():
+            with self.subTest(route=route):
+                carte = next(l for l in cartes if l["href"] == f"../{route}/")
+                self.assertIn(f"--guide-accent:{couleurs[numero]}", carte["style"])
+                self.assertIn(f"--couleur-parcours:{couleurs[numero]}", carte["style"])
+                page = (RACINE / route / "index.html").read_text()
+                self.assertIn(f'--guide-accent:{couleurs[numero]}', page)
+
     def test_nouveaux_guides_mesures_une_fois_et_seulement_apres_consentement(self):
         programme = r'''
 const fs = require('fs');

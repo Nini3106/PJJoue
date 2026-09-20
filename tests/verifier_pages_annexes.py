@@ -8,6 +8,7 @@ import base64
 import mimetypes
 import os
 import re
+from urllib.parse import unquote, urlparse
 
 from playwright.sync_api import sync_playwright
 
@@ -37,7 +38,7 @@ PAGES_BUREAU = [
     "mentions-legales.html",
     "administration.html",
 ]
-PAGES_MOBILE = ["sigles-pjj/index.html", "guides/index.html", "decouvrir-la-pjj/index.html", "sources.html", "administration.html"]
+PAGES_MOBILE = ["mesures-educatives-pjj/index.html", "sigles-pjj/index.html", "guides/index.html", "decouvrir-la-pjj/index.html", "sources.html", "administration.html"]
 PAGES_GUIDES = set(PAGES_BUREAU[:10])
 PAGES_BUREAU += PAGES_CJPM
 PAGES_MOBILE += PAGES_CJPM
@@ -153,6 +154,58 @@ def options_chromium() -> dict:
     return {"headless": True, "args": ["--no-sandbox"]}
 
 
+def verifier_raccourcis_guides(navigateur) -> None:
+    """Suit les vrais boutons et leurs redirections, avec les fichiers publiés."""
+    cibles = {
+        "cjpm-enquete-sanction": ("parcours", "procedure_ordinaire", None),
+        "cjpm-information-judiciaire": ("parcours", "information_judiciaire", None),
+        "cjpm-jugement-sanction-educative": ("parcours", "jugement_educatif_ordinaire", None),
+        "cjpm-matiere-criminelle-peines": ("parcours", "matiere_criminelle_peines", None),
+        "cjpm-application-execution": ("parcours", "application_execution_peines", None),
+        "decouvrir-la-pjj": ("question", "commun", 1),
+        "organisation-pjj": ("question", "commun", 5),
+        "metiers-pjj": ("question", "commun", 4),
+        "structures-pjj": ("question", "commun", 6),
+        "sigles-cjpm": ("sigles", "cjpm", None),
+        "sigles-pjj": ("sigles", "pjj", None),
+        "mesures-educatives-pjj": ("mesures", None, None),
+        "quiz-pjj": ("parcours", "commun", None),
+    }
+    def servir(route):
+        adresse = urlparse(route.request.url)
+        if adresse.hostname != "pjjoue.test":
+            return route.abort()
+        chemin = RACINE / unquote(adresse.path).lstrip("/")
+        if chemin.is_dir():
+            chemin /= "index.html"
+        if chemin.is_file():
+            route.fulfill(path=str(chemin))
+        else:
+            route.fulfill(status=404, body="Introuvable")
+
+    for guide, (ecran, domaine, etape) in cibles.items():
+        contexte = navigateur.new_context(viewport={"width": 390, "height": 844})
+        contexte.route("**/*", servir)
+        page = contexte.new_page()
+        page.goto(f"http://pjjoue.test/{guide}/", wait_until="domcontentloaded")
+        assert page.locator('main section').last.get_attribute('class') == 'guide-appel-action guide-raccourci-final', guide
+        page.locator('.guide-raccourci-final a').click()
+        page.locator(f"#{ecran}.actif").wait_for(state="visible")
+        if ecran == "sigles":
+            assert page.evaluate('obtenirDomaineSigles()') == domaine, guide
+        elif domaine:
+            assert page.evaluate('etat.theme') == domaine, guide
+        if etape:
+            assert page.evaluate('etat.etape') == etape, guide
+            assert page.evaluate('etat.questionsSession.length') > 0, guide
+            # Un retour d’historique vers le parcours ne relance pas une étape.
+            page.evaluate("restaurerRoute({pjjoue:true,ecran:'parcours',theme:'commun',etape:5})")
+            assert page.evaluate('etat.ecran') == 'parcours', guide
+        assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), guide
+        contexte.close()
+    print("OK — 13 raccourcis de guides : parcours, étapes PJJ et domaines des mini-jeux")
+
+
 def main() -> int:
     parseur = argparse.ArgumentParser()
     parseur.add_argument("--filtre", default="", help="Sous-chaîne du chemin des pages à contrôler.")
@@ -186,6 +239,8 @@ def main() -> int:
             page.screenshot(path=str(SORTIE / f"mobile-{nom_capture(adresse)}.png"), full_page=(adresse != 'administration.html'))
             page.close()
             print(f"OK — mobile {adresse}")
+        if not arguments.filtre:
+            verifier_raccourcis_guides(navigateur)
         navigateur.close()
     print(f"OK — pages annexes PJJoue : {len(pages_bureau) + len(pages_mobile)} scénarios")
     return 0

@@ -1612,9 +1612,17 @@ function lireRouteDepuisFragment() {
     return { pjjoue: true, ecran: ecransAutorises.includes(parties[0]) ? parties[0] : 'accueil' };
 }
 function lireRoute() {
-    const routeRelayee = new URLSearchParams(location.search).get('pjjoue_route');
-    if (routeRelayee)
-        return lireRouteDepuisChemin(routeRelayee === 'accueil' ? '' : routeRelayee);
+    const parametres = new URLSearchParams(location.search);
+    const routeRelayee = parametres.get('pjjoue_route');
+    if (routeRelayee) {
+        const route = lireRouteDepuisChemin(routeRelayee === 'accueil' ? '' : routeRelayee);
+        const etape = Number(parametres.get('etape'));
+        if (route.ecran === 'parcours' && PROGRAMMES[route.theme]?.etapes.some(e => e.id === etape))
+            route.etapeGuide = etape;
+        if (route.ecran === 'sigles' && ['cjpm', 'pjj'].includes(parametres.get('domaine')))
+            route.domaine = parametres.get('domaine');
+        return route;
+    }
 
     // Compatibilité silencieuse avec d’anciens favoris locaux : on sait encore les lire,
     // mais l’adresse est immédiatement réécrite sans # par restaurerRoute().
@@ -1649,7 +1657,9 @@ function restaurerRoute(route) {
         }
     }
     else if (etatRoute.ecran === 'parcours') {
-        if (etatRoute.theme)
+        if (etatRoute.theme && PROGRAMMES[etatRoute.theme]?.etapes.some(e => e.id === Number(etatRoute.etapeGuide)))
+            lancerEtape(etatRoute.theme, Number(etatRoute.etapeGuide));
+        else if (etatRoute.theme)
             ouvrirParcours(etatRoute.theme);
         else
             ouvrirChoixParcours({ depuisHistorique: true, forcerSortieQuestion: true });
@@ -1660,8 +1670,11 @@ function restaurerRoute(route) {
         else
             afficherEcran('accueil', { depuisHistorique: true, forcerSortieQuestion: true, remplacerHistorique: true });
     }
-    else
+    else {
+        if (etatRoute.ecran === 'sigles' && ['cjpm', 'pjj'].includes(etatRoute.domaine))
+            choisirDomaineSigles(etatRoute.domaine);
         afficherEcran(etatRoute.ecran || 'accueil', { depuisHistorique: true, forcerSortieQuestion: true });
+    }
     restaurationNavigation = false;
     mettreAJourAdresseNavigation(etat.ecran, true);
 }
@@ -2494,6 +2507,11 @@ function obtenirCouleurTitreEtape(numeroEtape) {
 function obtenirCouleurIconeEtape(numeroEtape) {
     return COULEURS_THEMES_ETAPES[Number(numeroEtape) % COULEURS_THEMES_ETAPES.length];
 }
+function obtenirCouleursEtapePJJ(numeroEtape) {
+    const couleur = PROGRAMMES.commun.etapes.find(etape => etape.id === Number(numeroEtape)).couleur;
+    const couleurRgb = couleur.slice(1).match(/.{2}/g).map(valeur => parseInt(valeur, 16)).join(',');
+    return { couleur, couleurTexte: couleur, couleurRgb };
+}
 const FICHIERS_ICONES_PARCOURS_DECOUVERTE = Object.freeze({
     1: 'icone-loupe-decouverte.svg',
     2: 'icone-public-accompagne.svg',
@@ -2551,7 +2569,9 @@ function afficherEtapes() {
         carte.setAttribute('tabindex', '0');
         carte.dataset.etape = String(etapeProgramme.id);
         carte.dataset.theme = etat.theme;
-        if (etat.theme !== 'commun') {
+        if (etat.theme === 'commun') {
+            carte.style.setProperty('--couleur-etape', etapeProgramme.couleur);
+        } else {
             carte.style.setProperty('--couleur-etape', obtenirCouleurTitreEtape(etapeProgramme.id));
             carte.style.setProperty('--couleur-icone-etape', obtenirCouleurIconeEtape(etapeProgramme.id));
         }
@@ -6591,10 +6611,10 @@ const ETAPES_MISSION_SIGLES = Object.freeze({
     3: { numero:'03', titre:'Jugement et réponse éducative', sousTitre:'Parcours 3 · Du jugement à la sanction', domaine:'cjpm', couleur:'#8b5cf6', couleurTexte:'#c7afff', couleurRgb:'139,92,246', icone:'mesures' },
     4: { numero:'04', titre:'Matière criminelle et garanties', sousTitre:'Parcours 4 · Crimes, peines et droits', domaine:'cjpm', couleur:'#e11d48', couleurTexte:'#ff91a8', couleurRgb:'225,29,72', icone:'justice' },
     5: { numero:'05', titre:'Application et exécution des peines', sousTitre:'Parcours 5 · Après la sanction', domaine:'cjpm', couleur:'#0f766e', couleurTexte:'#70d6ca', couleurRgb:'15,118,110', icone:'mesures' },
-    6: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', domaine:'pjj', couleur:'#5fe0a0', couleurTexte:'#5fe0a0', couleurRgb:'95,224,160', icone:'organisation' },
-    7: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', domaine:'pjj', couleur:'#ffcf66', couleurTexte:'#ffcf66', couleurRgb:'255,207,102', icone:'services' },
-    8: { numero:'03', titre:'Placement et détention', sousTitre:'Structures et dispositifs de placement', domaine:'pjj', couleur:'#78aef5', couleurTexte:'#78aef5', couleurRgb:'120,174,245', icone:'placement' },
-    9: { numero:'04', titre:'Partenaires et repères professionnels', sousTitre:'Protection de l’enfance et accompagnement', domaine:'pjj', couleur:'#ffc83d', couleurTexte:'#ffc83d', couleurRgb:'255,200,61', icone:'partenaires' }
+    6: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', domaine:'pjj', etapePjj:5, ...obtenirCouleursEtapePJJ(5), icone:'organisation' },
+    7: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', domaine:'pjj', etapePjj:6, ...obtenirCouleursEtapePJJ(6), icone:'services' },
+    8: { numero:'03', titre:'Placement et détention', sousTitre:'Structures et dispositifs de placement', domaine:'pjj', etapePjj:9, ...obtenirCouleursEtapePJJ(9), icone:'placement' },
+    9: { numero:'04', titre:'Partenaires et repères professionnels', sousTitre:'Protection de l’enfance et accompagnement', domaine:'pjj', etapePjj:11, ...obtenirCouleursEtapePJJ(11), icone:'partenaires' }
 });
 function obtenirDomaineSigles() { return obtenirSauvegardeJeuSigles().domaine || 'cjpm'; }
 function libelleDomaineSigles(domaine=obtenirDomaineSigles()) { return {cjpm:'CJPM',pjj:'PJJ',tous:'CJPM et PJJ'}[domaine] || 'CJPM'; }

@@ -182,6 +182,8 @@ p, li, dd { color: var(--text-soft); }
 
 .page-information-entete, .guide-page-entete { margin: 0 0 38px; text-align: left; }
 .page-information-entete h1, .guide-page-entete h1 { max-width: 850px; margin-bottom: 16px; }
+.guide-page-entete h1 { font-size:clamp(1.55rem,2.5vw,2.15rem); line-height:1.2; }
+.page-guide h2, .guides-collection h2 { font-size:clamp(1.2rem,2vw,1.5rem); line-height:1.25; }
 .page-information-entete > p:not(.guide-mise-a-jour), .guide-page-entete > p:not(.guide-mise-a-jour) { max-width: 780px; margin: 0; font-size: 1.03rem; line-height: 1.7; }
 .guide-surtitre {
   display: inline-flex; margin: 0 0 12px; color: var(--blue); font-size: .9rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase;
@@ -352,3 +354,6 @@ input:focus, select:focus, textarea:focus { border-color: #6F8FEA; box-shadow: 0
 
 /* Repère de thème commun à la carte du guide et à sa fiche. */
 .page-guide .guide-repere-theme { color:var(--guide-accent); }
+.page-guide .guide-page-entete .guide-etape-reference { margin-bottom:12px; color:var(--guide-accent); font-size:.94rem; }
+.page-guide .guide-raccourci-final { margin-top:34px; }
+.page-guide .guide-bouton-theme { border-color:var(--guide-accent); color:var(--guide-accent); }

@@ -238,6 +238,7 @@
 #parcours #cartesEtapesFinales { gap:14px; }
 #parcours #cartesEtapesFinales::after { right:-14px; width:14px; }
 #parcours .chemin-etape-texte { max-width:100%; }
+#parcours .chemin-etape-carte[data-theme="commun"] :is(.chemin-etape-numero,.chemin-etape-titre) { color:var(--couleur-etape); }
 #parcours .chemin-etape-titre { min-width:0; max-width:100%; overflow-wrap:anywhere; hyphens:auto; }
 .chemin-ligne-inverse { direction: rtl; }
 .chemin-ligne-inverse > * { direction: ltr; }
