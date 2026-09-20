@@ -228,8 +228,8 @@
       "sha256": "04a2d654c428fb68baae26ddeab9d527bdcd30178730f6088b690765ef186689"
     },
     "code/01 - Éléments communs/style-general-pjjoue.css": {
-      "tailleOctets": 265339,
-      "sha256": "485d0b74c4678bbcbd69e39067e763522a4b24bc3ff6b10c48d42d145690b04b"
+      "tailleOctets": 265500,
+      "sha256": "a215f353e152229a010580a13487d8ce0a0caee90726a0ba0e7094260be08f36"
     },
     "code/02 - Accueil/LIRE-MOI.md": {
       "tailleOctets": 556,
@@ -240,8 +240,8 @@
       "sha256": "050599985cc157f33fb9f5895e44ae75c01dcc500fd2f50abc6397c351e4753a"
     },
     "code/02 - Accueil/contenu.html": {
-      "tailleOctets": 2477,
-      "sha256": "461ba897006f313d375d72178eb674a320f2c9b88a1192da882168c586ea5f2c"
+      "tailleOctets": 2531,
+      "sha256": "f2d3bbe81873804a1573a8c5d38e315e6e9952b5373d47e25871f584c548667c"
     },
     "code/03 - Parcours PJJ/LIRE-MOI.md": {
       "tailleOctets": 566,
@@ -280,8 +280,8 @@
       "sha256": "621eb866b710d76d7a152dcad59826b0ea7116287deb63f840e8320d473b3a0b"
     },
     "code/05 - Entraînement libre/contenu.html": {
-      "tailleOctets": 13532,
-      "sha256": "6ee9083f8f453f41f55a9ffbfd5d61b7f903abff432cc413b87d9e3d4f53da20"
+      "tailleOctets": 13493,
+      "sha256": "07bb37e0e680b2bc8a4babb63eaed6579f1a01edadc89c837d3849c04b0374f6"
     },
     "code/05 - Entraînement libre/style-configurateur-entrainement.css": {
       "tailleOctets": 18632,
@@ -784,8 +784,8 @@
       "sha256": "eb8f549047310bf9cd0b8c4300bf72284fecc5d83cf7330e4da716260387db07"
     },
     "index.html": {
-      "tailleOctets": 124925,
-      "sha256": "4b23851f667551d1c26404b0b43d62049e27848f05731fbc6e3b84a5f6562ae9"
+      "tailleOctets": 124940,
+      "sha256": "964687f38f56b34ead877c8db47941f239cd9aefc4e2c90076a4c6e2764650d1"
     },
     "manifest.webmanifest": {
       "tailleOctets": 741,
@@ -1076,8 +1076,8 @@
       "sha256": "51a64261c7301ed44340cd3cacc89b8204edcd4adc8beafcf5e0b198d2baa7c4"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 401207,
-      "sha256": "2c40e70731086651d5fe35f00c043407b035f331d9cc49805f364fb7ab4e57eb"
+      "tailleOctets": 401368,
+      "sha256": "cb116e30334a9e8eebea78b7f42ec2a5e29e0699dbf053c5a017410442d173c7"
     },
     "ressources/styles/pjjoue-static.css": {
       "tailleOctets": 20968,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "10bfac28facef617966c19596966bc85f1aa7a2802f0d24a79ff613de75115be"
+      "sha256": "0767b5735e0c0ad326dfd97bbdc1b8d48f68db88fbadc2e3c04e5aea7c9bd796"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14807,

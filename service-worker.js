@@ -1,5 +1,5 @@
 /* PJJoue garde son application principale disponible après une première visite. */
-const NOM_CACHE = 'pjjoue-application-53f5c3a73a46';
+const NOM_CACHE = 'pjjoue-application-cb53f192c234';
 const RESSOURCES_ESSENTIELLES = [
   './',
   './index.html',
