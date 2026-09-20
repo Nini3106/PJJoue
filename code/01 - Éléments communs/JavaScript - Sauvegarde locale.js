@@ -145,12 +145,12 @@ function normaliserMotifRevision(motif) {
 }
 function obtenirLibelleConsolidation(suivi) {
     const libelles = {
-        reprise: 'Validée sans joker après reprise · à consolider',
-        joker: 'Réussie avec joker · à consolider',
-        passage: 'Question passée · à consolider',
-        incorrecte: 'Réponse incorrecte · à consolider'
+        reprise: 'Validée après reprise sans joker · à consolider',
+        joker: 'Validée avec joker · à consolider',
+        passage: 'Passée · à consolider',
+        incorrecte: 'Incorrecte · à consolider'
     };
-    return libelles[suivi?.motifRevision] || 'Question à consolider';
+    return libelles[suivi?.motifRevision] || 'Motif non enregistré · à consolider';
 }
 function nettoyerErreurs(erreurs) {
     const erreursNettoyees = {};
