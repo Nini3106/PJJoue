@@ -4591,9 +4591,9 @@ function obtenirErreursActivesEtapeQuestion(question) {
         return [];
     const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
     if (question.missionSigles)
-        return obtenirErreursSiglesActives().filter(cible => Number(cible.etape) === numeroEtape);
+        return obtenirCiblesARejouerEtapeSigles(numeroEtape);
     if (question.missionMesures)
-        return obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === numeroEtape);
+        return obtenirCiblesARejouerEtapeMesures(numeroEtape);
     const erreursEnregistrees = Object.entries(sauvegarde.erreurs || {})
         .filter(([_identifiant, suivi]) => suivi?.maitrisee !== true)
         .map(([identifiant]) => QUESTIONS.find(element => String(element.id) === String(identifiant)))
@@ -6368,6 +6368,17 @@ function obtenirErreursSiglesActives() {
     const erreurs = obtenirSauvegardeJeuSigles().erreurs || {};
     return Object.entries(erreurs).filter(([,e]) => e?.active === true).map(([sigle]) => obtenirSigleJeu(sigle)).filter(Boolean);
 }
+function obtenirSiglesNonMaitrisesEtape(numero) {
+    const etape = obtenirEtatEtapeSigles(numero);
+    return obtenirSiglesEtape(numero).filter(cible =>
+        sigleEstIntroduit(cible.sigle)
+        && etape.autonomes[normaliserSigleJeu(cible.sigle)] !== true
+    );
+}
+function obtenirCiblesARejouerEtapeSigles(numero) {
+    const cibles = [...obtenirErreursSiglesActives().filter(cible => Number(cible.etape) === Number(numero)), ...obtenirSiglesNonMaitrisesEtape(numero)];
+    return [...new Map(cibles.map(cible => [normaliserSigleJeu(cible.sigle), cible])).values()];
+}
 function enregistrerErreurSigles(cibles) {
     const erreurs = obtenirSauvegardeJeuSigles().erreurs;
     cibles.forEach(cible => {
@@ -6428,7 +6439,7 @@ function construireCartesEtapesSigles() {
     const zone = selectionnerSigles('#siglesEtapes'); if (!zone) return;
     zone.innerHTML = [1,2,3,4,5,6].map(numero => {
         const identite = ETAPES_MISSION_SIGLES[numero]; const maitrises = compterMaitrisesEtapeSigles(numero); const sansJoker = compterValidationsSansJokerEtapeSigles(numero); const pc = Math.round(maitrises/12*100);
-        const erreurs = obtenirErreursSiglesActives().filter(cible => Number(cible.etape) === numero).length;
+        const erreurs = obtenirCiblesARejouerEtapeSigles(numero).length;
         const etoile = sansJoker === NOMBRE_SIGLES_PAR_ETAPE ? creerEtoileFilanteProgression() : '';
         const revision = `<button class="sigles-etape-revision" data-action="reviser-etape-sigles" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Rejouer uniquement mes erreurs' : 'Aucune erreur à rejouer'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
         return `<article class="sigles-etape-carte" data-sigles-etape="${numero}" style="--sigles-etape-accent:${identite.couleur};--sigles-etape-accent-lisible:${identite.couleurTexte};--sigles-etape-rgb:${identite.couleurRgb}"><button class="sigles-etape-ouvrir" data-sigles-etape="${numero}" type="button"><span class="sigles-etape-carte-entete"><span class="sigles-etape-icone" aria-hidden="true">${iconeEtapeSigles(identite.icone)}</span><span class="sigles-etape-numero">ÉTAPE ${identite.numero}</span>${etoile}</span><h3>${identite.titre}</h3><p>${identite.sousTitre}<br>12 sigles · 24 activités de parcours.</p><span class="sigles-etape-progression"><i style="width:${pc}%"></i></span><span class="sigles-etape-pied"><span>${maitrises}/12 bonnes réponses · ${sansJoker}/12 sans joker</span><span>${maitrises===12?'Maîtrisée ✓':'Ouvrir →'}</span></button>${revision}</article>`;
@@ -6718,8 +6729,8 @@ function lancerToutesErreursSiglesDepuisRevision(){
 }
 function lancerRevisionEtapeSiglesDepuisRevision(numeroEtape){
     const numero = Number(numeroEtape);
-    const cibles = obtenirErreursSiglesActives().filter(cible => Number(cible.etape) === numero);
-    if(!cibles.length){ afficherNotification(`Aucune erreur active à l’étape ${numero} de Mission Sigles.`); return; }
+    const cibles = obtenirCiblesARejouerEtapeSigles(numero);
+    if(!cibles.length){ afficherNotification(`Aucune question à consolider à l’étape ${numero} de Mission Sigles.`); return; }
     preparerSessionMissionSiglesNative({mode:'revision', etape:numero, sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:`Réviser mes erreurs · Étape ${numero}`});
 }
 function lancerRevisionEtapeSiglesDepuisQuestion(numeroEtape){
@@ -7284,6 +7295,17 @@ function obtenirErreursMesuresActives() {
     const erreurs = obtenirSauvegardeJeuMesures().erreurs || {};
     return Object.entries(erreurs).filter(([,erreur]) => erreur?.active === true).map(([cle]) => obtenirRepereMesure(cle)).filter(Boolean);
 }
+function obtenirReperesNonMaitrisesEtapeMesures(numero) {
+    const etape = obtenirEtatEtapeMesures(numero);
+    return obtenirReperesMesuresEtape(numero).filter(cible =>
+        repereMesureEstIntroduit(cible.cle)
+        && etape.autonomes[normaliserCleMesure(cible.cle)] !== true
+    );
+}
+function obtenirCiblesARejouerEtapeMesures(numero) {
+    const cibles = [...obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === Number(numero)), ...obtenirReperesNonMaitrisesEtapeMesures(numero)];
+    return [...new Map(cibles.map(cible => [normaliserCleMesure(cible.cle), cible])).values()];
+}
 function enregistrerErreurMesures(cibles) {
     const erreurs = obtenirSauvegardeJeuMesures().erreurs;
     cibles.forEach(cible => {
@@ -7431,7 +7453,7 @@ function construireCartesEtapesMesures() {
         const maitrises = compterMaitrisesEtapeMesures(numero);
         const sansJoker = compterValidationsSansJokerEtapeMesures(numero);
         const pourcentage = total ? Math.round(maitrises / total * 100) : 0;
-        const erreurs = obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === numero).length;
+        const erreurs = obtenirCiblesARejouerEtapeMesures(numero).length;
         const etoile = total > 0 && sansJoker === total ? creerEtoileFilanteProgression() : '';
         const revision = `<button class="mesures-etape-revision" data-action="reviser-etape-mesures" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Rejouer uniquement mes erreurs' : 'Aucune erreur à rejouer'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
         return `<article class="mesures-etape-carte" data-mesures-etape="${numero}" style="--mesures-etape-accent:${identite.couleur};--mesures-etape-accent-lisible:${identite.couleurTexte};--mesures-etape-rgb:${identite.couleurRgb}"><button class="mesures-etape-ouvrir" data-mesures-etape="${numero}" type="button"><span class="mesures-etape-carte-entete"><span class="mesures-etape-icone" aria-hidden="true">${iconeEtapeMesures(numero)}</span><span class="mesures-etape-numero">ÉTAPE ${identite.numeroFormate}</span>${etoile}</span><h3>${identite.titre}</h3><p>${identite.sousTitre}<br>${total} repère${total===1?'':'s'} · progression juridique.</p><span class="mesures-etape-progression"><i style="width:${pourcentage}%"></i></span><span class="mesures-etape-pied"><span>${maitrises}/${total} bonnes réponses · ${sansJoker}/${total} sans joker</span><span>${maitrises===total?'Maîtrisée ✓':'Ouvrir →'}</span></button>${revision}</article>`;
@@ -7586,9 +7608,9 @@ function lancerRevisionMesures() {
 }
 function lancerRevisionEtapeMesuresDepuisRevision(numeroEtape) {
     const numero = Number(numeroEtape);
-    const reperes = obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === numero);
+    const reperes = obtenirCiblesARejouerEtapeMesures(numero);
     if (!reperes.length) {
-        afficherNotification(`Aucune erreur active à l’étape ${String(numero).padStart(2, '0')} de Mission Mesures.`);
+        afficherNotification(`Aucune question à consolider à l’étape ${String(numero).padStart(2, '0')} de Mission Mesures.`);
         return;
     }
     const identite = obtenirIdentiteEtapeMissionMesures(numero);

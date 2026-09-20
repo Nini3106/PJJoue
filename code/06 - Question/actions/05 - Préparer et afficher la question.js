@@ -308,9 +308,9 @@ function obtenirErreursActivesEtapeQuestion(question) {
         return [];
     const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
     if (question.missionSigles)
-        return obtenirErreursSiglesActives().filter(cible => Number(cible.etape) === numeroEtape);
+        return obtenirCiblesARejouerEtapeSigles(numeroEtape);
     if (question.missionMesures)
-        return obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === numeroEtape);
+        return obtenirCiblesARejouerEtapeMesures(numeroEtape);
     const erreursEnregistrees = Object.entries(sauvegarde.erreurs || {})
         .filter(([_identifiant, suivi]) => suivi?.maitrisee !== true)
         .map(([identifiant]) => QUESTIONS.find(element => String(element.id) === String(identifiant)))
