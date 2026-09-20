@@ -91,6 +91,17 @@ function obtenirErreursMesuresActives() {
     const erreurs = obtenirSauvegardeJeuMesures().erreurs || {};
     return Object.entries(erreurs).filter(([,erreur]) => erreur?.active === true).map(([cle]) => obtenirRepereMesure(cle)).filter(Boolean);
 }
+function obtenirReperesNonMaitrisesEtapeMesures(numero) {
+    const etape = obtenirEtatEtapeMesures(numero);
+    return obtenirReperesMesuresEtape(numero).filter(cible =>
+        repereMesureEstIntroduit(cible.cle)
+        && etape.autonomes[normaliserCleMesure(cible.cle)] !== true
+    );
+}
+function obtenirCiblesARejouerEtapeMesures(numero) {
+    const cibles = [...obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === Number(numero)), ...obtenirReperesNonMaitrisesEtapeMesures(numero)];
+    return [...new Map(cibles.map(cible => [normaliserCleMesure(cible.cle), cible])).values()];
+}
 function enregistrerErreurMesures(cibles) {
     const erreurs = obtenirSauvegardeJeuMesures().erreurs;
     cibles.forEach(cible => {
@@ -238,7 +249,7 @@ function construireCartesEtapesMesures() {
         const maitrises = compterMaitrisesEtapeMesures(numero);
         const sansJoker = compterValidationsSansJokerEtapeMesures(numero);
         const pourcentage = total ? Math.round(maitrises / total * 100) : 0;
-        const erreurs = obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === numero).length;
+        const erreurs = obtenirCiblesARejouerEtapeMesures(numero).length;
         const etoile = total > 0 && sansJoker === total ? creerEtoileFilanteProgression() : '';
         const revision = `<button class="mesures-etape-revision" data-action="reviser-etape-mesures" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Rejouer uniquement mes erreurs' : 'Aucune erreur à rejouer'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
         return `<article class="mesures-etape-carte" data-mesures-etape="${numero}" style="--mesures-etape-accent:${identite.couleur};--mesures-etape-accent-lisible:${identite.couleurTexte};--mesures-etape-rgb:${identite.couleurRgb}"><button class="mesures-etape-ouvrir" data-mesures-etape="${numero}" type="button"><span class="mesures-etape-carte-entete"><span class="mesures-etape-icone" aria-hidden="true">${iconeEtapeMesures(numero)}</span><span class="mesures-etape-numero">ÉTAPE ${identite.numeroFormate}</span>${etoile}</span><h3>${identite.titre}</h3><p>${identite.sousTitre}<br>${total} repère${total===1?'':'s'} · progression juridique.</p><span class="mesures-etape-progression"><i style="width:${pourcentage}%"></i></span><span class="mesures-etape-pied"><span>${maitrises}/${total} bonnes réponses · ${sansJoker}/${total} sans joker</span><span>${maitrises===total?'Maîtrisée ✓':'Ouvrir →'}</span></button>${revision}</article>`;
@@ -393,9 +404,9 @@ function lancerRevisionMesures() {
 }
 function lancerRevisionEtapeMesuresDepuisRevision(numeroEtape) {
     const numero = Number(numeroEtape);
-    const reperes = obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === numero);
+    const reperes = obtenirCiblesARejouerEtapeMesures(numero);
     if (!reperes.length) {
-        afficherNotification(`Aucune erreur active à l’étape ${String(numero).padStart(2, '0')} de Mission Mesures.`);
+        afficherNotification(`Aucune question à consolider à l’étape ${String(numero).padStart(2, '0')} de Mission Mesures.`);
         return;
     }
     const identite = obtenirIdentiteEtapeMissionMesures(numero);
