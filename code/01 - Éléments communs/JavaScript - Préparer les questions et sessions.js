@@ -104,13 +104,13 @@ function obtenirQuestionsSessionEtape(identifiantTheme, etape, chapitre) {
 function obtenirQuestionsRestantesEtape(reserve, identifiantTheme, etape) {
     const bilan = obtenirBilanEtape(identifiantTheme, etape);
     const questionsTraitees = bilan?.questionsTraitees || {};
-    const questionsNonTraitees = reserve.filter(question => !questionsTraitees[question.id]);
-    if (questionsNonTraitees.length)
-        return questionsNonTraitees;
-    // Toutes les questions peuvent avoir été vues alors qu'une ou plusieurs
-    // réponses n'ont pas encore été réussies sans aide. Reprendre ces questions
-    // évite de relancer toute l'étape lorsqu'elle affiche par exemple 9/10.
-    return reserve.filter(question => bilan?.resultats?.[question.id] !== true);
+    // La reprise normale regroupe les deux catégories qui nécessitent encore
+    // un passage : questions jamais vues et questions déjà vues mais pas encore
+    // maîtrisées sans joker. Une question validée sans aide reste exclue.
+    return reserve.filter(question =>
+        !questionsTraitees[question.id]
+        || bilan?.resultats?.[question.id] !== true
+    );
 }
 function lancerEtape(identifiantTheme, etape, chapitre = null, options = {}) {
     // Une étape demandée explicitement remplace toute ancienne session mémorisée.
@@ -143,8 +143,8 @@ function lancerEtape(identifiantTheme, etape, chapitre = null, options = {}) {
         ? reserve
         : obtenirQuestionsRestantesEtape(reserve, identifiantTheme, etape);
     // Une étape déjà parcourue peut encore nécessiter une validation sans joker.
-    // Dans ce cas, on conserve le comportement existant et on rejoue la réserve
-    // du chapitre le moins maîtrisé au lieu de lancer une session vide.
+    // Dans ce cas, on conserve la réserve des questions jamais vues ou encore
+    // non maîtrisées, au lieu de relancer toute l'étape.
     lancerSession(ordonnerQuestionsParcours(questionsRestantes.length ? questionsRestantes : reserve));
 }
 function lancerEtapeDepuisDebut(identifiantTheme, etape) {
