@@ -119,7 +119,7 @@ function validerRevisionSigles(cibles) {
         const cle = normaliserSigleJeu(cible.sigle);
         const actuelle = erreurs[cle];
         if (!actuelle?.active) return;
-        // Comme dans Réviser PJJoue, une réussite autonome en révision suffit.
+        // Une nouvelle réussite autonome suffit, dans tous les modes de jeu.
         actuelle.reussitesRevision = 1;
         actuelle.active = false;
     });
@@ -405,7 +405,7 @@ function finaliserQuestionSigles(correcte,cibles,{parJoker=false,passage=false,t
     if(etatJeuSigles.questionValidee)return; const q=etatJeuSigles.questions[etatJeuSigles.indexQuestion]; etatJeuSigles.questionValidee=true; arreterChronoSigles();
     if(correcte){ if(q.estIntroduction && q.cible) marquerSigleIntroduit(q.cible.sigle); etatJeuSigles.score += 1; const autonome=!etatJeuSigles.aideUtilisee && !parJoker && etatJeuSigles.tentativesQuestion<=1; if(autonome) etatJeuSigles.reponsesAutonomes += 1; else etatJeuSigles.reponsesAidees += 1;
         if(q.compteMaitrise){ cibles.forEach(cible=>{ const etape=obtenirEtatEtapeSigles(Number(cible.etape)), cle=normaliserSigleJeu(cible.sigle); if(!etatJeuSigles.aideUtilisee&&!parJoker) etape.validationsSansJoker[cle]=true; if(autonome) etape.autonomes[cle]=true; }); verifierCelebrationEtapeSigles(cibles); }
-        if(etatJeuSigles.mode==='revision') validerRevisionSigles(cibles); afficherFeedbackSigles('succes',q.explication || 'Bonne réponse.');
+        if(!q.estIntroduction && autonome) validerRevisionSigles(cibles); afficherFeedbackSigles('succes',q.explication || 'Bonne réponse.');
     } else { if(passage||tempsEcoule){ etatJeuSigles.questionsPassees += 1; enregistrerErreurSigles(cibles); afficherFeedbackSigles('erreur',tempsEcoule?'Temps écoulé. Cette question rejoint tes erreurs.':'Question passée. Elle rejoint tes erreurs.'); } }
     obtenirSauvegardeJeuSigles().statistiques.questionsJouees += 1; enregistrerSauvegarde();
     selectionnerTousSigles('#siglesZoneQuestion button, #siglesZoneQuestion select').forEach(e=>e.disabled=true); selectionnerSigles('#siglesValiderActivite')?.classList.add('masque'); selectionnerSigles('#siglesQuestionSuivante')?.classList.remove('masque'); selectionnerSigles('#siglesPasserQuestion')?.classList.add('masque'); selectionnerSigles('#siglesJokers')?.querySelectorAll('button').forEach(b=>b.disabled=true);
@@ -664,7 +664,7 @@ function enregistrerResultatMissionSiglesNatif(question, resultat) {
     }
     if (!resultat.estCorrecte || resultat.reussiteAidee)
         enregistrerErreurSigles(cibles);
-    if (obtenirModeMissionSigles() === 'revision' && resultat.reussiteAutonome)
+    if (!meta.estIntroduction && resultat.reussiteAutonome)
         validerRevisionSigles(cibles);
     enregistrerSauvegarde();
 }

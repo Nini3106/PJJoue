@@ -16,7 +16,7 @@ function preparerValidationReponse(question, bouton) {
     actualiserBoutonJokers();
     clearInterval(etat.identifiantMinuteur);
     sauvegarde.aDejaJoue = true;
-    if (!question?.missionSigles) {
+    if (!question?.missionSigles && !question?.missionMesures) {
         marquerEtapeDecouverte(question);
         marquerQuestionJouee(question);
         if (!precedente)
@@ -57,9 +57,13 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
         enregistrerSessionEnCours();
         return;
     }
+    const dejaTravaillee = sauvegarde.progression?.apprenant?.[question.theme]?.[question.etape]?.questionsTraitees?.[question.id] === true;
     const contexteEtape = etat.mode === 'parcours'
         ? { theme: question.theme, etape: question.etape }
-        : obtenirContexteRevisionEtape(question);
+        : (obtenirContexteRevisionEtape(question)
+            || (reussiteAutonome && dejaTravaillee && !question.estEvaluationFinale
+                ? { theme: question.theme, etape: question.etape }
+                : null));
     if (!contexteEtape) {
         enregistrerSessionEnCours();
         return;
@@ -99,9 +103,9 @@ function traiterReussiteAutonome(question, etaitPassee) {
         delete sauvegarde.erreurs[question.id];
         return;
     }
-    if (etat.mode === 'revision' && sauvegarde.erreurs[question.id]) {
+    if (!question?.missionSigles && !question?.missionMesures && sauvegarde.erreurs[question.id]) {
         const suiviErreur = sauvegarde.erreurs[question.id];
-        // En mode Révision, une réussite autonome suffit : la question n’a plus besoin de rester active.
+        // Toute nouvelle réussite autonome consolide l’erreur, quel que soit le mode.
         suiviErreur.reussites = 1;
         suiviErreur.maitrisee = true;
     }
@@ -111,7 +115,7 @@ function traiterReussiteAidee(question, etaitPassee) {
     etat.erreursSession.add(question.id);
     etat.serie = 0;
     jouerSonReussite();
-    if (question?.missionSigles || etat.mode === 'evaluation-finale')
+    if (question?.missionSigles || question?.missionMesures || etat.mode === 'evaluation-finale')
         return;
     const suiviErreur = obtenirSuiviErreur(question);
     if (!etaitPassee)
@@ -123,7 +127,7 @@ function traiterReponseIncorrecte(question, etaitPassee) {
     etat.erreursSession.add(question.id);
     etat.serie = 0;
     jouerSonErreur();
-    if (question?.missionSigles || etat.mode === 'evaluation-finale')
+    if (question?.missionSigles || question?.missionMesures || etat.mode === 'evaluation-finale')
         return;
     const suiviErreur = obtenirSuiviErreur(question);
     if (!etaitPassee)
@@ -264,6 +268,7 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
         traiterReussiteAidee(question, resultat.etaitPassee);
     else
         traiterReponseIncorrecte(question, resultat.etaitPassee);
+    actualiserSuiviEtapeQuestion(question);
     actualiserIndicateurSerie();
     afficherCorrectionReponse(question, resultat, texteChoisi, precisions);
     enregistrerSauvegarde();

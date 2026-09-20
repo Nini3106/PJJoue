@@ -48,9 +48,9 @@ function obtenirBilanEtape(theme, etape) {
 }
 /**
  * Retrouver l'étape PJJ concernée lorsqu'une révision a été lancée depuis
- * la carte d'une étape. Une révision générale ne doit pas modifier la
- * progression d'une étape : seul le périmètre explicite « thème:etape:n »
- * autorise cette synchronisation.
+ * la carte d'une étape. Ce contexte permet d’enregistrer les questions
+ * travaillées dans cette étape. Par ailleurs, une nouvelle réussite autonome
+ * peut consolider une question déjà travaillée, dans tous les modes.
  */
 function obtenirContexteRevisionEtape(question = etat.questionCourante) {
     if (etat.mode !== 'revision')

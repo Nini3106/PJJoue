@@ -108,8 +108,8 @@
       "sha256": "a9caafe03cd7d5002dba0a41175a7b9e21d0a7a7cc3b32d77e6a8c2073daa717"
     },
     "README.md": {
-      "tailleOctets": 21096,
-      "sha256": "7e81c1f1257b6c51262b07a092f549edb30cb1ae1bab6141711d7c45fd1639ee"
+      "tailleOctets": 22163,
+      "sha256": "fa1160190645bbe94696a487f315153cd695495ba7637fdd0934da3563125351"
     },
     "VERIFIER_PJJOUE.bat": {
       "tailleOctets": 3604,
@@ -232,8 +232,8 @@
       "sha256": "c41524bfc792807772213c7cce0ad8762f7ef39bf7c9cf55ead684189356370a"
     },
     "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js": {
-      "tailleOctets": 31594,
-      "sha256": "adf131691c31e89efa78afdd0662cced4074a0ca1f824a1b6d07b610a3eb755b"
+      "tailleOctets": 33168,
+      "sha256": "a090117d40d5a5d7c9a2073188594f85b0dec16dd81613373f7444d25abf38ab"
     },
     "code/01 - Éléments communs/JavaScript - Sons et célébrations.js": {
       "tailleOctets": 6633,
@@ -356,8 +356,8 @@
       "sha256": "7af43b7887001d62e17827b06668397456c1f1dc4165994a36c884f61d50bc8b"
     },
     "code/06 - Question/actions/07 - Valider corriger et naviguer.js": {
-      "tailleOctets": 16464,
-      "sha256": "f9ff10e202be4a2a14ae9845c483caee12e53afff66f1219e8913e43da1ccb99"
+      "tailleOctets": 16920,
+      "sha256": "30c6baa8019d7e4078a068b223207a5e63557605d760311417911a5fa1f36163"
     },
     "code/06 - Question/actions/08 - Jokers de la question.js": {
       "tailleOctets": 12955,
@@ -392,8 +392,8 @@
       "sha256": "cdb85a3329032ba9748b180d6d9efde443a3c5e08da6c6afcf25ec1479db405a"
     },
     "code/08 - Réviser/Jeu des mesures/actions-de-la-page.js": {
-      "tailleOctets": 37973,
-      "sha256": "f5c2f4ba0c241cbd60a441398448c488239b44bce07aca14427b5fb63f0f92b2"
+      "tailleOctets": 37952,
+      "sha256": "15d10163ea9d78b2412b14a93b57ba398e60a6fc24488da3adde69513a3757b7"
     },
     "code/08 - Réviser/Jeu des mesures/contenu.html": {
       "tailleOctets": 7613,
@@ -408,8 +408,8 @@
       "sha256": "a4f555173d782b95575bbdebb1806c4b0af66fe8ca417579c2f83323e9cc4c84"
     },
     "code/08 - Réviser/Jeu des sigles/actions-de-la-page.js": {
-      "tailleOctets": 82192,
-      "sha256": "34344e727c9e0df3e0e9b0ad08d5d9653279b18d2a1f4ed7990b804b038858b2"
+      "tailleOctets": 82167,
+      "sha256": "fa5c282ac363d0d02f3d554d62803af333b0a03ec885d027787327ffdc55abd6"
     },
     "code/08 - Réviser/Jeu des sigles/contenu.html": {
       "tailleOctets": 7936,
@@ -444,8 +444,8 @@
       "sha256": "bc8a9ecf9672acb24a727fa19a6e97af308302b602597010f9d04d915c29cd1a"
     },
     "code/09 - Progression/actions-de-la-page.js": {
-      "tailleOctets": 11637,
-      "sha256": "938b6665dbb5a758347c8ec2db77cc87ba36e0180bd9ff3fde45a155d514c003"
+      "tailleOctets": 11675,
+      "sha256": "d4c77d2101aa9eab1223322eea7d7c484ca63d79daae114ac210531933bec65a"
     },
     "code/09 - Progression/contenu.html": {
       "tailleOctets": 2549,
@@ -1144,8 +1144,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 499592,
-      "sha256": "0bb21fe42e9b4376595d75c3b2b1672ba918620931076e6f56a927a276c1cf66"
+      "tailleOctets": 501614,
+      "sha256": "4ae1c1550b77957913ebd1e22f9b62a6e0d84822c7309270d849e1e9a74c816b"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12455,
@@ -1221,7 +1221,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5934,
-      "sha256": "de8a70ac8bcb7f218ebed98bb95d5156dc2255b7e85a885535f4e500d5a354f2"
+      "sha256": "dda79404c09b94aab43d279881f9599464a0465362629e6b9043a23ac302db0c"
     },
     "sigles-cjpm/index.html": {
       "tailleOctets": 20310,
@@ -1490,6 +1490,10 @@
     "tests/test_sigles_jeu.py": {
       "tailleOctets": 8023,
       "sha256": "b89d82e4329fe3f274f6e79db75a4c4ffb8c1f7087534aa17ca3f61c33b2f032"
+    },
+    "tests/test_synchronisation_erreurs.py": {
+      "tailleOctets": 13642,
+      "sha256": "92f9f78e2fbbc9991d802599c0174fe6e73d395ec408fba4c9f58c4769abdb43"
     },
     "tests/test_validation_donnees.py": {
       "tailleOctets": 6809,
