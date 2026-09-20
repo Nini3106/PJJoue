@@ -1294,11 +1294,17 @@ def verifier_parametres_mobile_texte_115(page: Page) -> None:
 
 def scenarios() -> list[Scenario]:
     erreurs = """() => {
-        const qs = QUESTIONS.filter(q => !q.estEvaluationFinale).slice(0, 5);
+        const qs = QUESTIONS.filter(q => !q.estEvaluationFinale).filter((q, i, liste) =>
+            liste.findIndex(item => item.theme === q.theme && item.etape === q.etape) === i
+        ).slice(0, 30);
         sauvegarde.aDejaJoue = true;
         sauvegarde.erreurs = {};
         qs.forEach((q, i) => sauvegarde.erreurs[q.id] = {maitrisee:false,nombreErreurs:(i % 2) + 1,reussites:0});
         afficherEcran('erreurs', {remplacerHistorique:true});
+        const details = document.querySelector('#erreurs .revision-etapes-details');
+        if (!details)
+            throw new Error('Liste directe des étapes introuvable');
+        details.open = true;
     }"""
     bilan = """() => {
         const q = QUESTIONS.find(q => !q.estEvaluationFinale);
