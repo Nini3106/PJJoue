@@ -57,11 +57,14 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
         enregistrerSessionEnCours();
         return;
     }
-    if (etat.mode !== 'parcours') {
+    const contexteEtape = etat.mode === 'parcours'
+        ? { theme: question.theme, etape: question.etape }
+        : obtenirContexteRevisionEtape(question);
+    if (!contexteEtape) {
         enregistrerSessionEnCours();
         return;
     }
-    const bilan = obtenirBilanEtape(question.theme, question.etape);
+    const bilan = obtenirBilanEtape(contexteEtape.theme, contexteEtape.etape);
     bilan.questionsTraitees[question.id] = true;
     bilan.resultats[question.id] = bilan.resultats?.[question.id] === true || reussiteAutonome;
     bilan.validationsSansJoker = bilan.validationsSansJoker || {};
@@ -71,7 +74,7 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
         || (estCorrecte && !aideUtilisee);
     if (aideUtilisee)
         etat.etapeAvecJoker = true;
-    synchroniserEtapesReussiesEnAutonomie(PROGRAMMES[question.theme]);
+    synchroniserEtapesReussiesEnAutonomie(PROGRAMMES[contexteEtape.theme]);
     actualiserSuiviEtapeQuestion(question);
     enregistrerSessionEnCours();
 }

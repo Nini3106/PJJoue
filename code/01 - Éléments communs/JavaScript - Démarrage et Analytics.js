@@ -358,4 +358,8 @@ const MESSAGES_ERREUR = [
     'Repère ce qui a orienté la réponse, puis vérifie la bonne règle.'
 ]
 const CLE_SAUVEGARDE = 'pjjoue_v1_sauvegarde';
+// Copie de sécurité conservée avant une éventuelle réécriture de la sauvegarde.
+// Elle permet de récupérer une progression si un navigateur ou une migration
+// rencontre une erreur au chargement.
+const CLE_SAUVEGARDE_SECOURS = 'pjjoue_v1_sauvegarde_secours';
 const CLE_SESSION_EN_COURS = 'pjjoue_v1_session_en_cours';

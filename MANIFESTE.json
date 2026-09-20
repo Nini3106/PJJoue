@@ -176,12 +176,12 @@
       "sha256": "1b35714896b1fa7a3594774dbd9b4f33e5dd8e9bb3642e4b4417c321cbe19130"
     },
     "code/01 - Éléments communs/JavaScript - Brancher les boutons.js": {
-      "tailleOctets": 16391,
-      "sha256": "7d189e5298ccdbb77b33494fc2cf7c610bca33024c10b61778e14490086eb2c4"
+      "tailleOctets": 16429,
+      "sha256": "883c3f565ab376abdfcf5de6a95e2a725dd3309703c69a331d883c139ac8040a"
     },
     "code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js": {
-      "tailleOctets": 23853,
-      "sha256": "94db2927ae086a8e414cc0fe7966490a69f6d3846f3f49b09fccb9dafb7fa8cb"
+      "tailleOctets": 24122,
+      "sha256": "5d3900d18859e3c0e38196148501b426dce82d903e297c48271437182214ac82"
     },
     "code/01 - Éléments communs/JavaScript - Navigation et fenêtres.js": {
       "tailleOctets": 24299,
@@ -192,8 +192,8 @@
       "sha256": "cc634bd60f884143b28c6b81d1ef89b802f4a5a0ab353e5ff5f4fa5140bdd3a5"
     },
     "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js": {
-      "tailleOctets": 29373,
-      "sha256": "be30b23c8ed747ad0c0d85b962b34613dccd6f392f42cd2d7b7896cc86fc896c"
+      "tailleOctets": 30201,
+      "sha256": "025ea8670b09be6c89f83cc96b254a78b15bbc839ccf5777a6df56404a20be5e"
     },
     "code/01 - Éléments communs/JavaScript - Sons et célébrations.js": {
       "tailleOctets": 6633,
@@ -316,8 +316,8 @@
       "sha256": "7af43b7887001d62e17827b06668397456c1f1dc4165994a36c884f61d50bc8b"
     },
     "code/06 - Question/actions/07 - Valider corriger et naviguer.js": {
-      "tailleOctets": 16299,
-      "sha256": "b9addf0cdd5619dfe84ca0f1f8518ec33ae0d5868e7dc7baa4619c633281baa9"
+      "tailleOctets": 16464,
+      "sha256": "f9ff10e202be4a2a14ae9845c483caee12e53afff66f1219e8913e43da1ccb99"
     },
     "code/06 - Question/actions/08 - Jokers de la question.js": {
       "tailleOctets": 12955,
@@ -336,8 +336,8 @@
       "sha256": "230495253dff79a7a29158036d6616cd8f50450fba20ebb30152992e90bc17ad"
     },
     "code/07 - Bilan de la session/actions-de-la-page.js": {
-      "tailleOctets": 23944,
-      "sha256": "7e30255e84d39a156495db4b588485689322e0c54af58f5e56931ea2681f19d8"
+      "tailleOctets": 24713,
+      "sha256": "678363a3de81c0f2751c67ddf4f3e59114725c30cd805d31cdffc61ed8135421"
     },
     "code/07 - Bilan de la session/contenu.html": {
       "tailleOctets": 2909,
@@ -404,8 +404,8 @@
       "sha256": "dff39b526d1926747061d3c4b0c50dda49a7a3faa097bd466812effb1a60195e"
     },
     "code/09 - Progression/actions-de-la-page.js": {
-      "tailleOctets": 10752,
-      "sha256": "b4dcb877eca2f460b3e368d9fd09fb6c17d34de29f3bf2e18f7ebd7d14798e5d"
+      "tailleOctets": 11637,
+      "sha256": "938b6665dbb5a758347c8ec2db77cc87ba36e0180bd9ff3fde45a155d514c003"
     },
     "code/09 - Progression/contenu.html": {
       "tailleOctets": 2549,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 460513,
-      "sha256": "2d3c01a78e1b6bb297cdafaab278b100eed5b8e073b68e6bfff76e097689c3d4"
+      "tailleOctets": 463467,
+      "sha256": "2da2fcd8bd9c95ec2bcc0e30d2b358e441e2fed2156ab859f624427ed9314c76"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "e6f38fd0f1828309ac629fc598888d2f2a79a381c6977ade06254bb52881f29a"
+      "sha256": "748c7c8bfa6f4ffd25067729617aa2ab5a1c6a998afcc5c2ecaa7d9a410c6c80"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,

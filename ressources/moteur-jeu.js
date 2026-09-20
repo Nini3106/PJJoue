@@ -351,6 +351,10 @@ const MESSAGES_ERREUR = [
     'Repère ce qui a orienté la réponse, puis vérifie la bonne règle.'
 ]
 const CLE_SAUVEGARDE = 'pjjoue_v1_sauvegarde';
+// Copie de sécurité conservée avant une éventuelle réécriture de la sauvegarde.
+// Elle permet de récupérer une progression si un navigateur ou une migration
+// rencontre une erreur au chargement.
+const CLE_SAUVEGARDE_SECOURS = 'pjjoue_v1_sauvegarde_secours';
 const CLE_SESSION_EN_COURS = 'pjjoue_v1_session_en_cours';
 // -----------------------------------------------------------------------------
 // Sauvegarde locale et état général
@@ -672,9 +676,23 @@ function nettoyerSauvegarde(sauvegardeBrute) {
         mesuresJeu: nettoyerProgressionMesures(sauvegardeBrute)
     };
 }
+function conserverSauvegardeBrute(contenu) {
+    if (!contenu)
+        return;
+    try {
+        // La première copie est conservée volontairement : une sauvegarde
+        // antérieure reste ainsi disponible même après une mauvaise écriture.
+        if (!localStorage.getItem(CLE_SAUVEGARDE_SECOURS))
+            localStorage.setItem(CLE_SAUVEGARDE_SECOURS, contenu);
+    }
+    catch (erreur) {
+        // Le stockage peut être indisponible en navigation privée.
+    }
+}
 function chargerSauvegarde() {
     try {
         const contenu = localStorage.getItem(CLE_SAUVEGARDE);
+        conserverSauvegardeBrute(contenu);
         return contenu
             ? nettoyerSauvegarde(JSON.parse(contenu))
             : creerSauvegardeInitiale();
@@ -726,9 +744,18 @@ function effacerSauvegardeDuNavigateur() {
         // L’indisponibilité du stockage sera signalée par l’enregistrement suivant.
     }
 }
+function effacerSauvegardeDeSecours() {
+    try {
+        localStorage.removeItem(CLE_SAUVEGARDE_SECOURS);
+    }
+    catch (erreur) {
+        // L’indisponibilité du stockage sera signalée par l’enregistrement suivant.
+    }
+}
 function enregistrerSauvegarde() {
     sauvegarde.version = 'V1';
     try {
+        conserverSauvegardeBrute(localStorage.getItem(CLE_SAUVEGARDE));
         localStorage.setItem(CLE_SAUVEGARDE, JSON.stringify(sauvegarde));
         return true;
     }
@@ -1579,6 +1606,30 @@ function initialiserProgression(theme) {
 function obtenirBilanEtape(theme, etape) {
     initialiserProgression(theme);
     return sauvegarde.progression[obtenirProgressionApprenant()][theme][etape];
+}
+/**
+ * Retrouver l'étape PJJ concernée lorsqu'une révision a été lancée depuis
+ * la carte d'une étape. Une révision générale ne doit pas modifier la
+ * progression d'une étape : seul le périmètre explicite « thème:etape:n »
+ * autorise cette synchronisation.
+ */
+function obtenirContexteRevisionEtape(question = etat.questionCourante) {
+    if (etat.mode !== 'revision')
+        return null;
+    const correspondance = /^([^:]+):etape:(\d+)$/.exec(String(etat.perimetreRevision || ''));
+    if (!correspondance)
+        return null;
+    const contexte = {
+        theme: correspondance[1],
+        etape: Number(correspondance[2])
+    };
+    if (!question
+        || question.missionSigles
+        || question.missionMesures
+        || question.theme !== contexte.theme
+        || Number(question.etape) !== contexte.etape)
+        return null;
+    return contexte;
 }
 function obtenirSeuilMaitrise() { return 90; }
 function obtenirQuestionsEtape(identifiantTheme, etape) {
@@ -4947,11 +4998,14 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
         enregistrerSessionEnCours();
         return;
     }
-    if (etat.mode !== 'parcours') {
+    const contexteEtape = etat.mode === 'parcours'
+        ? { theme: question.theme, etape: question.etape }
+        : obtenirContexteRevisionEtape(question);
+    if (!contexteEtape) {
         enregistrerSessionEnCours();
         return;
     }
-    const bilan = obtenirBilanEtape(question.theme, question.etape);
+    const bilan = obtenirBilanEtape(contexteEtape.theme, contexteEtape.etape);
     bilan.questionsTraitees[question.id] = true;
     bilan.resultats[question.id] = bilan.resultats?.[question.id] === true || reussiteAutonome;
     bilan.validationsSansJoker = bilan.validationsSansJoker || {};
@@ -4961,7 +5015,7 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
         || (estCorrecte && !aideUtilisee);
     if (aideUtilisee)
         etat.etapeAvecJoker = true;
-    synchroniserEtapesReussiesEnAutonomie(PROGRAMMES[question.theme]);
+    synchroniserEtapesReussiesEnAutonomie(PROGRAMMES[contexteEtape.theme]);
     actualiserSuiviEtapeQuestion(question);
     enregistrerSessionEnCours();
 }
@@ -5657,20 +5711,32 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
 function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, jokerUtilise) {
     let evaluationFinaleReussie = false;
     let celebration = null;
-    if (etat.mode === 'parcours') {
-        const bilanEtape = obtenirBilanEtape(etat.theme, etat.etape);
+    const contexteEtape = etat.mode === 'parcours'
+        ? { theme: etat.theme, etape: etat.etape }
+        : obtenirContexteRevisionEtape(etat.questionCourante);
+    if (contexteEtape) {
+        const bilanEtape = obtenirBilanEtape(contexteEtape.theme, contexteEtape.etape);
         bilanEtape.meilleurScore = Math.max(bilanEtape.meilleurScore || 0, pourcentage);
         bilanEtape.nombreTentatives = (bilanEtape.nombreTentatives || 0) + 1;
-        const etapeTerminee = !etapeNecessiteAutreChapitre(etat.theme, etat.etape)
+        const etapeTerminee = (etat.mode === 'revision'
+            || !etapeNecessiteAutreChapitre(contexteEtape.theme, contexteEtape.etape))
             && nombreQuestionsPassees === 0;
         if (etapeTerminee) {
-            const questionsEtape = obtenirQuestionsEtape(etat.theme, etat.etape);
+            const questionsEtape = obtenirQuestionsEtape(contexteEtape.theme, contexteEtape.etape);
             const toutesReussiesEnAutonomie = questionsEtape.length > 0
                 && questionsEtape.every(question => bilanEtape.resultats?.[question.id] === true);
             const etaitDejaValideeSansJoker = bilanEtape.termineeSansJoker === true;
             bilanEtape.termineeSansJoker = etaitDejaValideeSansJoker || toutesReussiesEnAutonomie;
             bilanEtape.jokersUtilises = !bilanEtape.termineeSansJoker;
             const validationsSansJoker = bilanEtape.validationsSansJoker || {};
+            // Les anciennes sauvegardes peuvent ne pas avoir le détail des
+            // validations sans joker, alors que le résultat autonome est déjà
+            // enregistré. Ce résultat constitue bien une maîtrise sans aide.
+            questionsEtape.forEach(question => {
+                if (bilanEtape.resultats?.[question.id] === true)
+                    validationsSansJoker[question.id] = true;
+            });
+            bilanEtape.validationsSansJoker = validationsSansJoker;
             const toutesValideesSansJoker = questionsEtape.length > 0
                 && questionsEtape.every(question => validationsSansJoker[question.id] === true);
             const celebrationDejaAffichee = bilanEtape.celebrationSansJokerAffichee === true;
@@ -5679,8 +5745,8 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
                 // de progression pour garantir leur structure et pourraient sinon perdre
                 // le drapeau porté par l'ancienne référence JavaScript.
                 bilanEtape.celebrationSansJokerAffichee = true;
-                const evaluationDeverrouillee = estProgrammeMaitrise(etat.theme);
-                celebration = obtenirCelebrationEtape(etat.etape, false, evaluationDeverrouillee);
+                const evaluationDeverrouillee = estProgrammeMaitrise(contexteEtape.theme);
+                celebration = obtenirCelebrationEtape(contexteEtape.etape, false, evaluationDeverrouillee);
             }
         }
     }
@@ -8193,6 +8259,7 @@ selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFen
         });
         sauvegarde = creerSauvegardeInitiale();
         effacerSauvegardeDuNavigateur();
+        effacerSauvegardeDeSecours();
         effacerSessionEnCours();
         enregistrerSauvegarde();
         actualiserAccueil();

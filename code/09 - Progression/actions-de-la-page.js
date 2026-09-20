@@ -46,6 +46,30 @@ function obtenirBilanEtape(theme, etape) {
     initialiserProgression(theme);
     return sauvegarde.progression[obtenirProgressionApprenant()][theme][etape];
 }
+/**
+ * Retrouver l'étape PJJ concernée lorsqu'une révision a été lancée depuis
+ * la carte d'une étape. Une révision générale ne doit pas modifier la
+ * progression d'une étape : seul le périmètre explicite « thème:etape:n »
+ * autorise cette synchronisation.
+ */
+function obtenirContexteRevisionEtape(question = etat.questionCourante) {
+    if (etat.mode !== 'revision')
+        return null;
+    const correspondance = /^([^:]+):etape:(\d+)$/.exec(String(etat.perimetreRevision || ''));
+    if (!correspondance)
+        return null;
+    const contexte = {
+        theme: correspondance[1],
+        etape: Number(correspondance[2])
+    };
+    if (!question
+        || question.missionSigles
+        || question.missionMesures
+        || question.theme !== contexte.theme
+        || Number(question.etape) !== contexte.etape)
+        return null;
+    return contexte;
+}
 function obtenirSeuilMaitrise() { return 90; }
 function obtenirQuestionsEtape(identifiantTheme, etape) {
     return QUESTIONS.filter(
