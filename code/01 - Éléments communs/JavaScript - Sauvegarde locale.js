@@ -16,8 +16,11 @@ function creerEvaluationsFinalesInitiales() {
 }
 function creerProgressionSiglesInitiale() {
     return {
+        organisation: 2,
+        domaine: 'cjpm',
+        evaluations: {cjpm:creerEtatEvaluationFinale(),pjj:creerEtatEvaluationFinale()},
         decouverts: {},
-        etapes: Object.fromEntries([1, 2, 3, 4, 5, 6].map(numero => [String(numero), {
+        etapes: Object.fromEntries([...new Set(SIGLES.map(x=>Number(x.etape)))].map(numero => [String(numero), {
             autonomes: {},
             validationsSansJoker: {},
             celebrationAffichee: false,
@@ -190,7 +193,6 @@ function normaliserEtapesDecouvertes(sauvegardeBrute) {
     return resultat;
 }
 function nettoyerProgressionSigles(sauvegardeBrute) {
-    const initiale = creerProgressionSiglesInitiale();
     const brute = estObjetSimple(sauvegardeBrute?.siglesJeu) ? sauvegardeBrute.siglesJeu : {};
     const identifiants = new Set((SIGLES || []).map(element => String(element.sigle || '').toUpperCase()));
     const filtrerSiglesActifs = valeur => estObjetSimple(valeur)
@@ -209,8 +211,13 @@ function nettoyerProgressionSigles(sauvegardeBrute) {
             };
         }
     }
+    const migration=brute.organisation !== 2;
+    const anciennesEtapes=estObjetSimple(brute.etapes)?Object.values(brute.etapes):[];
+    // Reclasser les acquis par sigle, jamais par l'ancien numéro d'étape.
+    const acquisHistoriques=Object.assign({},...anciennesEtapes.map(e=>filtrerSiglesActifs(e?.autonomes)));
+    const sansJokerHistoriques=Object.assign({},...anciennesEtapes.map(e=>filtrerSiglesActifs(e?.validationsSansJoker)));
     const etapes = {};
-    for (let numero = 1; numero <= 6; numero += 1) {
+    for (const numero of new Set(SIGLES.map(x=>Number(x.etape)))) {
         const cle = String(numero);
         const source = estObjetSimple(brute.etapes?.[cle]) ? brute.etapes[cle] : {};
         const autorises = new Set((SIGLES || []).filter(element => Number(element.etape) === numero).map(element => String(element.sigle).toUpperCase()));
@@ -218,16 +225,25 @@ function nettoyerProgressionSigles(sauvegardeBrute) {
             ? Object.fromEntries(Object.entries(valeur).filter(([sigle, actif]) => autorises.has(String(sigle).toUpperCase()) && actif === true))
             : {};
         etapes[cle] = {
-            autonomes: filtrerEtape(source.autonomes),
-            validationsSansJoker: filtrerEtape(source.validationsSansJoker),
-            celebrationAffichee: source.celebrationAffichee === true,
-            nombreTentatives: convertirEntierBorne(source.nombreTentatives),
-            meilleurScore: convertirEntierBorne(source.meilleurScore, 0, 100)
+            autonomes: filtrerEtape(migration?acquisHistoriques:source.autonomes),
+            validationsSansJoker: filtrerEtape(migration?sansJokerHistoriques:source.validationsSansJoker),
+            celebrationAffichee: migration ? [...autorises].every(c=>sansJokerHistoriques[c]) : source.celebrationAffichee === true,
+            nombreTentatives: migration ? 0 : convertirEntierBorne(source.nombreTentatives),
+            meilleurScore: migration ? 0 : convertirEntierBorne(source.meilleurScore, 0, 100)
         };
     }
     const evaluation = estObjetSimple(brute.evaluation) ? brute.evaluation : {};
     const statistiques = estObjetSimple(brute.statistiques) ? brute.statistiques : {};
+    const nettoyerEvaluation = source => ({
+        meilleurScore:convertirEntierBorne(source?.meilleurScore,0,100),
+        nombreTentatives:convertirEntierBorne(source?.nombreTentatives),
+        reussie:source?.reussie===true
+    });
     return {
+        organisation:2,
+        domaine:['cjpm','pjj','tous'].includes(brute.domaine)?brute.domaine:'cjpm',
+        evaluations:{cjpm:nettoyerEvaluation(brute.evaluations?.cjpm),pjj:nettoyerEvaluation(brute.evaluations?.pjj)},
+        historiqueEtapes:migration ? brute.etapes || {} : brute.historiqueEtapes || {},
         decouverts: filtrerSiglesActifs(brute.decouverts),
         etapes,
         erreurs,

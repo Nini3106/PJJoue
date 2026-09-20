@@ -34,19 +34,38 @@ class TestMissionSigles(unittest.TestCase):
     def setUpClass(cls):
         cls.sigles = json.loads((RACINE / 'donnees' / 'sigles.json').read_text(encoding='utf-8'))
 
-    def test_72_sigles_uniques(self):
+    def test_96_sigles_uniques(self):
         cles = [str(element['sigle']).strip().upper() for element in self.sigles]
-        self.assertEqual(len(cles), 72)
-        self.assertEqual(len(set(cles)), 72)
+        self.assertEqual(len(cles), 96)
+        self.assertEqual(len(set(cles)), 96)
 
-    def test_6_etapes_de_12(self):
-        repartition = {numero: 0 for numero in range(1, 7)}
+    def test_deux_domaines_et_cinq_parcours_cjpm(self):
+        repartition = {numero: 0 for numero in range(1, 10)}
         for element in self.sigles:
-            repartition[int(element['etape'])] += 1
-        self.assertEqual(repartition, {numero: 12 for numero in range(1, 7)})
+            numero = int(element['etape'])
+            repartition[numero] += 1
+            self.assertEqual(element['domaine'], 'cjpm' if numero <= 5 else 'pjj')
+        self.assertEqual(repartition, {1:11,2:7,3:10,4:8,5:15,6:12,7:13,8:10,9:10})
+        self.assertEqual(sum(x['domaine']=='cjpm' for x in self.sigles), 51)
+        self.assertEqual(sum(x['domaine']=='pjj' for x in self.sigles), 45)
 
+    def test_identifiants_historiques_conserves(self):
+        historique = "MEJP MEJ MJIE MEE CJ ARSE DP PJJ DPJJ DIR DT RUE SAH UEMO UEAJ UEAT STEMO STEMOI EPE EPEI CER CEF UJPE RRSE CJPM TPE ENPJJ AC AEMO AMP ASE CA CAM CI COPJ DDSE DEPAFI DME DIRA DS EPM JAF JAP JE JI JLD JR MEAT MISP MNA OPJ OPP PEAT PE PEPAD PPU PTF QM MRZ RIS RLC RT SL SP SP/R SSJ SEEPM STEI TIG TNR UEHC UEHD".split()
+        self.assertEqual([(x['id'],x['sigle']) for x in self.sigles[:72]], list(enumerate(historique,1)))
+        self.assertTrue(all(1 <= x['etapeHistorique'] <= 6 for x in self.sigles[:72]))
 
-    def test_72_introductions_contextuelles_avec_sujet(self):
+    def test_ajouts_sources_et_sans_doublons(self):
+        from urllib.parse import urlparse
+        domaines = {'www.legifrance.gouv.fr','www.justice.fr','www.service-public.gouv.fr','www.conseil-etat.fr','www.ohchr.org','www.echr.coe.int'}
+        ajouts = [x for x in self.sigles if x['id'] > 72]
+        self.assertEqual(len(ajouts), 24)
+        for element in ajouts:
+            self.assertEqual(element['domaine'], 'cjpm')
+            self.assertIn(urlparse(element['source']['url']).hostname, domaines)
+            self.assertTrue(element['source']['reference'])
+            self.assertTrue(element['repere'])
+
+    def test_96_introductions_contextuelles_avec_sujet(self):
         formulations_interdites = {
             "Quel intitulé complet est correctement formulé ?",
             "Choisis l’appellation complète exacte.",
@@ -99,12 +118,14 @@ class TestMissionSigles(unittest.TestCase):
                     sigles_guide.append(texte_cellule(cellules[0]).upper())
 
         attendu = {str(element['sigle']).upper() for element in self.sigles}
-        self.assertEqual(len(support), 72)
-        self.assertEqual(len(set(support)), 72)
+        self.assertEqual(len(support), 96)
+        self.assertEqual(len(set(support)), 96)
         self.assertEqual(set(support), attendu)
-        self.assertEqual(len(sigles_guide), 72)
-        self.assertEqual(len(set(sigles_guide)), 72)
+        self.assertEqual(len(sigles_guide), 96)
+        self.assertEqual(len(set(sigles_guide)), 96)
         self.assertEqual(set(sigles_guide), attendu)
+        self.assertTrue(all(next(x for x in self.sigles if x['sigle']==cle)['domaine']=='cjpm' for cle in sigles_guide[:51]))
+        self.assertTrue(all(next(x for x in self.sigles if x['sigle']==cle)['domaine']=='pjj' for cle in sigles_guide[51:]))
 
     def test_jeu_present_dans_index(self):
         html_index = (RACINE / 'index.html').read_text(encoding='utf-8')

@@ -62,11 +62,11 @@ def verifier() -> None:
         page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
         page.on("console", lambda message: erreurs.append(f"console:{message.type}:{message.text}") if message.type == "error" else None)
         page.set_content(html, wait_until="domcontentloaded")
-        page.wait_for_function("() => window.DONNEES_PJJ?.SIGLES?.length === 72 && typeof ouvrirEntrainementMissionSiglesNatif === 'function'")
+        page.wait_for_function("() => window.DONNEES_PJJ?.SIGLES?.length === 96 && typeof ouvrirEntrainementMissionSiglesNatif === 'function'")
         # set_content inline le script sans defer ; on rebranche les jokers après parsing, comme le fait le vrai index avec defer.
         page.evaluate("() => initialiserFenetreJokers()")
 
-        # 1. Accueil Mission Sigles : nom exact, 6 étapes colorées, aucun bouton natif gris.
+        # 1. Accueil Mission Sigles : nom exact, 5 étapes CJPM colorées, aucun bouton natif gris.
         page.evaluate("() => afficherEcran('sigles')")
         assert page.locator("#boutonJeuSigles").text_content().strip() == "Mission Sigles"
         assert page.locator("#siglesEntrainementVue").count() == 0
@@ -92,9 +92,9 @@ def verifier() -> None:
         }""")
         assert espace_retour_titre is not None and abs(espace_retour_titre - 24) <= 1, espace_retour_titre
         cartes = page.locator("#siglesEtapes .sigles-etape-carte")
-        assert cartes.count() == 6
+        assert cartes.count() == 5
         couleurs = page.evaluate("() => [...document.querySelectorAll('#siglesEtapes .sigles-etape-carte')].map(x => getComputedStyle(x).borderTopColor)")
-        assert len(set(couleurs)) == 6, couleurs
+        assert len(set(couleurs)) == 5, couleurs
         verifier_aucun_bouton_gris(page, "#sigles button")
         verifier_aucun_bouton_jaune_plein(page, "#sigles button")
 
@@ -108,9 +108,9 @@ def verifier() -> None:
         assert "Protection judiciaire de la jeunesse" not in donnees[0]["consigne"]
         assert "PJJ" not in donnees[0]["consigne"]
         intro_options = page.evaluate("() => creerQuestionsEtapeSigles(1)[0].options.map(o => o.texte)")
-        assert "Protection judiciaire de la jeunesse" in intro_options
-        assert donnees[4]["sigle"] == "PJJ"
-        assert "Que signifie PJJ" in donnees[4]["consigne"]
+        assert "Code de la justice pénale des mineurs" in intro_options
+        assert donnees[4]["sigle"] == "CJPM"
+        assert "Que signifie CJPM" in donnees[4]["consigne"]
         assert all("famille" not in (q["consigne"] + " " + q["explication"]).lower() for q in donnees)
         introductions = page.evaluate("""() => SIGLES.map(c => { const q=creerQuestionIntroductionSigles(c); return {sigle:c.sigle, consigne:q.consigne, options:q.options.map(o=>o.texte)}; })""")
         formulations_generiques = {
@@ -118,7 +118,7 @@ def verifier() -> None:
             'Choisis l’appellation complète exacte.',
             'Quelle formulation correspond à l’intitulé complet à retenir ?',
         }
-        assert len(introductions) == 72
+        assert len(introductions) == 96
         for intro in introductions:
             assert intro['consigne'] not in formulations_generiques, intro
             assert len(intro['consigne']) >= 45 and intro['consigne'].endswith('?'), intro
@@ -130,7 +130,7 @@ def verifier() -> None:
         assert page.locator("#entrainement").is_visible()
         assert page.locator("#entrainement").get_attribute("data-contexte-entrainement") == "sigles"
         assert page.locator("#entrainement .entrainement-configurateur").count() == 1
-        assert page.locator("#entrainement [data-groupe-choix='perimetreEntrainement'] .choix-bouton").count() == 7
+        assert page.locator("#entrainement [data-groupe-choix='perimetreEntrainement'] .choix-bouton").count() == 12
         assert page.locator("#boutonEntrainement10Questions").inner_text().strip() == "10"
         assert page.locator("#boutonEntrainement20Questions").inner_text().strip() == "20"
         assert page.locator("#boutonEntrainement30Questions").inner_text().strip() == "30"
@@ -197,13 +197,14 @@ def verifier() -> None:
             chrono:etat.chronometreSessionActif, secondes:etat.dureeChronometreSession,
             jokers:etat.jokersSessionActifs
         })""")
-        assert cfg == {"mode":"entrainement", "total":12, "etapes":[2], "chrono":True, "secondes":15, "jokers":False}, cfg
+        assert cfg == {"mode":"entrainement", "total":7, "etapes":[2], "chrono":True, "secondes":15, "jokers":False}, cfg
         assert page.locator("#boutonJokers").is_hidden()
         assert page.locator("#chronometreQuestion").is_visible()
 
         # 7. Réviser mes erreurs passe lui aussi par la carte Question native.
         page.evaluate("""() => {
             afficherEcran('sigles');
+            choisirDomaineSigles('pjj');
             sauvegarde.siglesJeu.erreurs.PJJ = {active:true,nombreErreurs:1,reussitesRevision:0};
             sauvegarde.siglesJeu.erreurs.DPJJ = {active:true,nombreErreurs:1,reussitesRevision:0};
             sauvegarde.siglesJeu.decouverts.PJJ = true;
@@ -230,7 +231,8 @@ def verifier() -> None:
         # 8. Évaluation native : 30 questions, ni joker ni passage.
         page.evaluate("""() => {
             afficherEcran('sigles');
-            [1,2,3,4,5,6].forEach(numero => {
+            choisirDomaineSigles('cjpm');
+            [1,2,3,4,5].forEach(numero => {
                 const e=obtenirEtatEtapeSigles(numero);
                 obtenirSiglesEtape(numero).forEach(x => {e.autonomes[x.sigle]=true; e.validationsSansJoker[x.sigle]=true; sauvegarde.siglesJeu.decouverts[x.sigle]=true;});
             }); enregistrerSauvegarde(); actualiserAccueilSigles(); afficherVueSigles('parcours');
@@ -251,6 +253,60 @@ def verifier() -> None:
             dimensions = page.evaluate("() => ({scroll:document.documentElement.scrollWidth, client:document.documentElement.clientWidth})")
             assert dimensions["scroll"] == dimensions["client"], (selecteur, dimensions)
 
+        # 10. Aucune progression de l’ancienne organisation n’est perdue.
+        migration = page.evaluate("""() => {
+            const ancien={siglesJeu:{decouverts:{PJJ:true,MEJ:true},etapes:{
+                '1':{autonomes:{PJJ:true},validationsSansJoker:{PJJ:true},meilleurScore:95,nombreTentatives:4},
+                '5':{autonomes:{MEJ:true},validationsSansJoker:{MEJ:true}}
+            },erreurs:{PJJ:{active:true,nombreErreurs:2,reussitesRevision:0}},evaluation:{meilleurScore:93,nombreTentatives:2,reussie:true},statistiques:{questionsJouees:80}}};
+            const migre=nettoyerProgressionSigles(ancien);
+            const recharge=nettoyerProgressionSigles({siglesJeu:migre});
+            return {pjj:recharge.etapes['6'].autonomes.PJJ,mej:recharge.etapes['3'].autonomes.MEJ,
+                etoile:recharge.etapes['6'].validationsSansJoker.PJJ,erreur:recharge.erreurs.PJJ.nombreErreurs,
+                evaluation:recharge.evaluation.meilleurScore,questions:recharge.statistiques.questionsJouees,
+                historique:recharge.historiqueEtapes['1'].meilleurScore,domaine:recharge.domaine,
+                nouveau:recharge.etapes['1'].autonomes.CPP===true};
+        }""")
+        assert migration == {'pjj':True,'mej':True,'etoile':True,'erreur':2,'evaluation':93,'questions':80,'historique':95,'domaine':'cjpm','nouveau':False}, migration
+
+        # 11. Chaque domaine a ses étapes, erreurs, tirages et évaluation indépendants.
+        page.evaluate("() => { etat.missionSiglesConfiguration=null; afficherEcran('sigles'); retourAccueilSigles(); }")
+        for domaine, compte, etapes in [('cjpm',51,5),('pjj',45,4),('tous',96,9)]:
+            page.locator('#siglesAccueil [data-domaine-sigles="'+domaine+'"]').click()
+            assert page.evaluate('obtenirDomaineSigles()') == domaine
+            assert page.evaluate('obtenirPoolDomaineSigles().length') == compte
+            assert page.locator('#siglesEtapes article').count() == etapes
+            assert str(compte) in page.locator('#siglesTitreProgression').inner_text()
+            page.locator('#siglesLancerDe').click()
+            page.wait_for_timeout(470)
+            domaines=page.evaluate('etatJeuSigles.tirageHasard.map(x=>x.domaine)')
+            assert domaine=='tous' or all(x==domaine for x in domaines), domaines
+            evaluation=page.evaluate('creerQuestionsEvaluationSigles().flatMap(q=>q.cibles).map(x=>x.domaine)')
+            assert domaine=='tous' or all(x==domaine for x in evaluation), evaluation
+        page.evaluate("choisirDomaineSigles('cjpm')")
+        assert page.evaluate('evaluationSiglesDebloquee()') is True
+        page.evaluate("choisirDomaineSigles('pjj')")
+        assert page.evaluate('evaluationSiglesDebloquee()') is False
+        assert page.evaluate("obtenirErreursSiglesActives().every(x=>x.domaine==='pjj')") is True
+        assert page.evaluate("obtenirErreursSiglesActives('cjpm').every(x=>x.domaine==='cjpm')") is True
+
+        # Les étoiles et jauges utilisent les tailles réelles (7, 11, 15…), jamais 12.
+        assert page.evaluate("""() => {
+            const n=2,e=obtenirEtatEtapeSigles(n),liste=obtenirSiglesEtape(n);
+            e.autonomes={};e.validationsSansJoker={};e.celebrationAffichee=false;
+            liste.slice(0,-1).forEach(x=>{e.autonomes[x.sigle]=true;e.validationsSansJoker[x.sigle]=true;});
+            if(etapeSiglesMaitrisee(n)) return false;
+            const dernier=liste.at(-1);e.autonomes[dernier.sigle]=true;e.validationsSansJoker[dernier.sigle]=true;
+            verifierCelebrationEtapeSigles(liste);
+            return etapeSiglesMaitrisee(n)&&e.celebrationAffichee;
+        }""")
+
+        # Les nouvelles sources sont accessibles dans les corrections natives.
+        assert page.evaluate("""() => {
+            const c=obtenirSigleJeu('DUP');
+            const q=convertirQuestionMissionSiglesVersPJJoue(creerQuestionIntroductionSigles(c),0,{mode:'entrainement'});
+            return q.explication.includes(c.source.url)&&q.explication.includes('Source officielle');
+        }""")
         assert not erreurs, erreurs
         navigateur.close()
     print("OK — Mission Sigles : composants natifs PJJoue · dé vert · aucun bouton gris · question/jokers natifs · entraînement complet · révision · évaluation · mobile")

@@ -433,7 +433,7 @@ Les réponses saisies, la progression enregistrée localement, l’identité et 
 | Action dans le code | Explication simple |
 |---|---|
 | `actualiserAccueilSigles()` | Met à jour le tableau de bord de Mission Sigles. |
-| `construireCartesEtapesSigles()` | Construit les six étapes de douze sigles. |
+| `construireCartesEtapesSigles()` | Construit les étapes du domaine CJPM ou PJJ, avec les effectifs issus des données. |
 | `creerQuestionIntroductionSigles()` | Introduit un sigle et son développement dans une activité avant tout rappel ultérieur. |
 | `lancerEtapeSigles()` | Lance une étape du parcours Sigles. |
 | `lancerEntrainementSigles()` | Lance un entraînement de 10, 20, 30 ou tous les sigles. |
