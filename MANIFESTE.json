@@ -108,8 +108,8 @@
       "sha256": "a9caafe03cd7d5002dba0a41175a7b9e21d0a7a7cc3b32d77e6a8c2073daa717"
     },
     "README.md": {
-      "tailleOctets": 20859,
-      "sha256": "3256bc2f9f4e299ddee6077a2dfbb21e447019ed034c4c021baddd9609a53e74"
+      "tailleOctets": 21088,
+      "sha256": "2d97c1b05062d8e3655dfe61d595e808caf4fc2de860437cdad0e0f4dff49e72"
     },
     "VERIFIER_PJJOUE.bat": {
       "tailleOctets": 3604,
@@ -744,8 +744,8 @@
       "sha256": "ed9d0eeff12cf5354c932dae0794e834b5520909154e5c188b46d22f5e378f9f"
     },
     "documentation/documentation-actuelle/ARCHITECTURE_CODE_PAR_PAGE.md": {
-      "tailleOctets": 3751,
-      "sha256": "8aa547038d4b5fea6f9dba718806f18fac8056dc8422e196f7b8653885f6d2a8"
+      "tailleOctets": 3771,
+      "sha256": "71531ca86786d49d2a3080a35808905d8a2299dc5df2d55d20ddf7dc8d578cae"
     },
     "documentation/documentation-actuelle/AUDIT_JURIDIQUE_MISSION_MESURES_2026-08-30.md": {
       "tailleOctets": 11929,
@@ -776,8 +776,8 @@
       "sha256": "209ca1d762c0a913badbe6d152b942f735c0baada4792c6913b7c345ed118ea1"
     },
     "documentation/documentation-actuelle/MANIFESTE_PRODUIT.md": {
-      "tailleOctets": 1537,
-      "sha256": "8d4455e0ad824d1426d331ce9237cbfc2ca6339fc40c3810b83644c3ec9ce2e2"
+      "tailleOctets": 1887,
+      "sha256": "b70c93fe66d2b88acefb51a9e39232ead7f0e82c70cd2b0a76e08f276b16ed35"
     },
     "documentation/documentation-actuelle/MODIFIER_LES_QUESTIONS_SANS_CASSER_ANALYTICS.md": {
       "tailleOctets": 594,
