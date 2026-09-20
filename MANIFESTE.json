@@ -176,8 +176,8 @@
       "sha256": "1b35714896b1fa7a3594774dbd9b4f33e5dd8e9bb3642e4b4417c321cbe19130"
     },
     "code/01 - Éléments communs/JavaScript - Brancher les boutons.js": {
-      "tailleOctets": 25171,
-      "sha256": "5a359656f8f756fb4def190c7f8c31dd1cfe54d8a0e364b616b569b4962328c7"
+      "tailleOctets": 29749,
+      "sha256": "86acf5dfaf3b8e135d2a9756bc4320f9465dbaa258182666793a323d31387e66"
     },
     "code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js": {
       "tailleOctets": 24122,
@@ -192,8 +192,8 @@
       "sha256": "cc634bd60f884143b28c6b81d1ef89b802f4a5a0ab353e5ff5f4fa5140bdd3a5"
     },
     "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js": {
-      "tailleOctets": 30201,
-      "sha256": "025ea8670b09be6c89f83cc96b254a78b15bbc839ccf5777a6df56404a20be5e"
+      "tailleOctets": 30297,
+      "sha256": "aba88a621bcd25bb522e0a73d7a340fbc7e24b5fbef484de892eefe3b81c302a"
     },
     "code/01 - Éléments communs/JavaScript - Sons et célébrations.js": {
       "tailleOctets": 6633,
@@ -228,8 +228,8 @@
       "sha256": "04a2d654c428fb68baae26ddeab9d527bdcd30178730f6088b690765ef186689"
     },
     "code/01 - Éléments communs/style-general-pjjoue.css": {
-      "tailleOctets": 263748,
-      "sha256": "bfd1ba8baad00706bbae985ea54babdf79d6849ba50c865a20328d4dfb66e344"
+      "tailleOctets": 265377,
+      "sha256": "f96fc9ee5a663944115dcd7651d371b29000e01de29d160e3e46ccd61d39ac16"
     },
     "code/02 - Accueil/LIRE-MOI.md": {
       "tailleOctets": 556,
@@ -308,8 +308,8 @@
       "sha256": "a9a8e000b8ad16fc876d7ece6548ff2543e2d90f77a53f3192bb7d3b1371f3e8"
     },
     "code/06 - Question/actions/05 - Préparer et afficher la question.js": {
-      "tailleOctets": 24780,
-      "sha256": "267b9bd14dae504e5aed28fc0fac23242fc30df451e570d4fe9e9f71272f9d1b"
+      "tailleOctets": 24798,
+      "sha256": "71842887030c8cc14887ca8a53faf71cd086c5123a4cf47ab3f3f8111acc5c61"
     },
     "code/06 - Question/actions/06 - Chronomètre de la question.js": {
       "tailleOctets": 4517,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 472300,
-      "sha256": "d982d33dedf131fbf31341fa4e48b36ed51fc6c07673e332423bfd93a805722c"
+      "tailleOctets": 476992,
+      "sha256": "c766392ac677478988ba25f1738af98f8d08c62a7a087123cca976b85479b240"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1076,8 +1076,8 @@
       "sha256": "51a64261c7301ed44340cd3cacc89b8204edcd4adc8beafcf5e0b198d2baa7c4"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 398975,
-      "sha256": "32cd4c818c98ebe1fad70414b9eadbbaa8912d0ae32b24f502b2f5518e0b9349"
+      "tailleOctets": 400604,
+      "sha256": "e0167328984f5905a0f65525209e6fee23fe2364e8fde555d1a861fd1516f624"
     },
     "ressources/styles/pjjoue-static.css": {
       "tailleOctets": 20968,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "c6154f19c3f5920f05f688e0f438ca89aab8d744d3c09266a48c8720f09f88f6"
+      "sha256": "a9485a6f3f440ce9503e2d407e2223c9df2b8f5f2cbb6a31ab03d7ff328796c2"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
