@@ -1,5 +1,5 @@
 /* PJJoue garde son application principale disponible après une première visite. */
-const NOM_CACHE = 'pjjoue-application-ba3653fdad8a';
+const NOM_CACHE = 'pjjoue-application-74e0ee7d4aec';
 const RESSOURCES_ESSENTIELLES = [
   './',
   './index.html',
@@ -16,6 +16,16 @@ const RESSOURCES_ESSENTIELLES = [
   './ressources/styles/95-consentement.css?v=20260827-final1',
   './guides/index.html',
   './guides/style-de-la-page.css',
+  './cjpm-enquete-sanction/index.html',
+  './cjpm-enquete-sanction/style-de-la-page.css',
+  './cjpm-information-judiciaire/index.html',
+  './cjpm-information-judiciaire/style-de-la-page.css',
+  './cjpm-jugement-sanction-educative/index.html',
+  './cjpm-jugement-sanction-educative/style-de-la-page.css',
+  './cjpm-matiere-criminelle-peines/index.html',
+  './cjpm-matiere-criminelle-peines/style-de-la-page.css',
+  './cjpm-application-execution/index.html',
+  './cjpm-application-execution/style-de-la-page.css',
   './decouvrir-la-pjj/index.html',
   './decouvrir-la-pjj/style-de-la-page.css',
   './organisation-pjj/index.html',

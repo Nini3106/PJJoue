@@ -343,3 +343,9 @@ input:focus, select:focus, textarea:focus { border-color: #6F8FEA; box-shadow: 0
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto; transition: none; animation: none; }
 }
+
+/* Guides CJPM : même fiche que les guides existants, repère du parcours associé. */
+.guide-cjpm .guide-repere-parcours { color:var(--texte-parcours); }
+.guide-cjpm .guide-reference { color:var(--text-soft); font-size:.9rem; }
+.guide-cjpm .guide-bouton-parcours { border-color:var(--couleur-parcours); color:var(--texte-parcours); }
+.guide-cjpm .guide-bouton-parcours:hover,.guide-cjpm .guide-bouton-parcours:focus-visible { border-color:var(--texte-parcours); }
