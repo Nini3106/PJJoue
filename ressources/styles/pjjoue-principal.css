@@ -10001,34 +10001,46 @@ body[data-ecran-actif="accueil"] #accueil {
     margin: 0;
 }
 
-/* Sur grand écran, quatre marges automatiques identiques répartissent
-   exactement l’espace entre la barre jaune, le texte, le bouton,
-   les quatre repères et le bas de l’image. */
+/* Les cinq blocs partagent le même espace libre, y compris au-dessus
+   du nom et sous les compteurs. Le trait reste associé au nom du site. */
+#accueil .accueil-contenu {
+    --espace-accueil: clamp(18px,2vw,28px);
+    justify-content: space-evenly;
+    row-gap: var(--espace-accueil);
+}
+
+#accueil .accueil-identite {
+    order: 1;
+    flex-shrink: 0;
+}
+
+#accueil .accueil-identite .accueil-marque {
+    margin: 0;
+}
+
+#accueil .accueil-identite .surligne-titre-accueil {
+    margin: 12px 0 0;
+}
+
+#accueil .accueil-contenu h1,
+#accueil .accueil-introduction,
+#accueil .accueil-action-principale,
+#accueil .accueil-statistiques {
+    flex-shrink: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 @media (min-width:1281px) {
     #accueil .accueil-contenu {
         top: 0;
         bottom: 0;
         height: 100%;
-        padding-top: clamp(34px,3vw,54px);
-        padding-bottom: 0;
+        padding-block: var(--espace-accueil);
         box-sizing: border-box;
         transform: none;
     }
 
-    #accueil .accueil-introduction {
-        margin-top: auto;
-        margin-bottom: 0;
-    }
-
-    #accueil .accueil-action-principale {
-        margin-top: auto;
-        margin-bottom: 0;
-    }
-
-    #accueil .accueil-statistiques {
-        margin-top: auto;
-        margin-bottom: auto;
-    }
 }
 
 @media (max-width:1280px) {
@@ -10066,8 +10078,7 @@ body[data-ecran-actif="accueil"] #accueil {
         inset: auto;
         width: min(52%, 600px);
         min-height: max(520px,47.75vw);
-        padding: clamp(24px,3.4vw,46px) clamp(22px,4.5vw,64px);
-        padding-bottom: 0;
+        padding: var(--espace-accueil) clamp(22px,4.5vw,64px);
         flex-direction: column;
         align-items: stretch;
         box-sizing: border-box;
@@ -10103,7 +10114,7 @@ body[data-ecran-actif="accueil"] #accueil {
     #accueil .accueil-introduction {
         order: 4;
         max-width: 100%;
-        margin-top: auto;
+        margin-top: 0;
         margin-bottom: 0;
         text-align: left;
     }
@@ -10111,15 +10122,15 @@ body[data-ecran-actif="accueil"] #accueil {
     #accueil .accueil-action-principale {
         order: 5;
         width: 100%;
-        margin-top: auto;
+        margin-top: 0;
         margin-bottom: 0;
     }
 
     #accueil .accueil-statistiques {
         order: 6;
         width: 100%;
-        margin-top: auto;
-        margin-bottom: auto;
+        margin-top: 0;
+        margin-bottom: 0;
         align-items: stretch;
         grid-auto-rows: 1fr;
     }
@@ -10179,7 +10190,7 @@ body[data-ecran-actif="accueil"] #accueil {
     #accueil .accueil-contenu {
         width: 100%;
         min-height: max(610px, calc(100dvh - var(--hauteur-entete,66px)));
-        padding: 26px 18px 0;
+        padding: var(--espace-accueil) 18px;
     }
 
     #accueil .accueil-statistiques {
