@@ -188,8 +188,8 @@
       "sha256": "9b342ae5b52faec134b54bc1383eda851fb308e5d353c491e641b2af4133a37f"
     },
     "code/01 - Éléments communs/JavaScript - Préparer les questions et sessions.js": {
-      "tailleOctets": 16180,
-      "sha256": "6e4e0dbbc7e7a1384aefd6f77028d21b9b3db575a69a4f5ff52b1a69e1cf39d1"
+      "tailleOctets": 16050,
+      "sha256": "cc634bd60f884143b28c6b81d1ef89b802f4a5a0ab353e5ff5f4fa5140bdd3a5"
     },
     "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js": {
       "tailleOctets": 29373,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 457308,
-      "sha256": "bc350ae3d424feeed05bbbe0d54434c28e0cc88b5d46e178206cde14ce22bb14"
+      "tailleOctets": 457178,
+      "sha256": "eed9a4b730603e99076187a92136451e6b8c1661e3e7fcb89bbffcd0704f0ea9"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "05ce8301503bd9ff38d12f7ce8624ed145123d99d92c1f5e66061bb46358fa4c"
+      "sha256": "e9dd15ab2333d0c1eb775279661e8f9922153ce2a8042c72c27d562d5611aac3"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
