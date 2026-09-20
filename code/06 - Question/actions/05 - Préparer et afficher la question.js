@@ -392,8 +392,8 @@ function actualiserBoutonRevisionEtapeQuestion(question) {
         ? `Rejouer uniquement mes erreurs de l’étape ${Number(question.etape || 1)}`
         : 'Rejouer uniquement mes erreurs');
     bouton.title = disponible
-        ? `Rejouer les ${erreurs.length} erreur${erreurs.length > 1 ? 's' : ''} active${erreurs.length > 1 ? 's' : ''} de cette étape`
-        : 'Aucune erreur active à rejouer dans cette étape';
+        ? `Rejouer les ${erreurs.length} questions à reprendre : erreurs actives et questions déjà introduites non maîtrisées sans joker. Les maîtrises sans joker sont conservées.`
+        : 'Aucune erreur active ou question non maîtrisée sans joker à rejouer dans cette étape';
 }
 function actualiserSuiviEtapeQuestion(question) {
     const conteneur = selectionner('#contexteEtapeQuestion');

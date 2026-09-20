@@ -239,9 +239,9 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     boutonParcours30Secondes: 'Limiter chaque réponse à 30 secondes.',
     boutonLancerLeDe: 'Tirer au hasard un défi parmi les parcours.',
     boutonJouerLeTirage: 'Démarrer le défi tiré par le dé.',
-    boutonRejouerErreursEtape: 'Rejouer uniquement les erreurs encore actives de cette étape.',
+    boutonRejouerErreursEtape: 'Rejouer les erreurs actives et les questions déjà introduites qui ne sont pas encore maîtrisées sans joker. Les maîtrises sans joker sont conservées.',
     boutonReprendreEtapeDepuisDebut: 'Recommencer l’étape à la première question : les questions déjà maîtrisées restent validées tant qu’elles ne sont pas réinitialisées.',
-    boutonReinitialiserValidationsSansJoker: 'Effacer uniquement les maîtrises sans joker de cette étape.',
+    boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les erreurs et la progression générale restent conservées.',
     boutonJokers: 'Ouvrir les aides disponibles pour cette question.',
     boutonPasser: 'Passer cette question : elle restera à reprendre et ne sera pas validée.',
     boutonRejouerMesErreurs: 'Rejouer les questions de la session qui restent à consolider.',
@@ -273,7 +273,7 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
 });
 
 const TITRES_ACTIONS_SURVOL = Object.freeze({
-    'rejouer-erreurs-etape': 'Rejouer uniquement les erreurs encore actives de cette étape.',
+    'rejouer-erreurs-etape': 'Rejouer les erreurs actives et les questions déjà introduites qui ne sont pas encore maîtrisées sans joker. Les maîtrises sans joker sont conservées.',
     'reviser-theme': 'Ouvrir les erreurs de ce parcours.',
     'reviser-etape': 'Rejouer les erreurs de cette étape.',
     'reviser-toutes-erreurs': 'Rejouer toutes les questions encore à revoir.',
