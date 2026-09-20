@@ -64,7 +64,7 @@ Analytics recevra toujours :
 pjjoue_identifiant_question = Qxxx
 ```
 
-L’énoncé de la question n’est plus envoyé à Google Analytics. Les analyses reposent sur `pjjoue_identifiant_question`, identifiant permanent de type Qxxx, qui reste stable lorsque la formulation évolue.
+Le suivi peut aussi transmettre un intitulé pédagogique court dans `pjjoue_nom_question` afin que les rapports restent compréhensibles. L’identifiant permanent `pjjoue_identifiant_question` de type Qxxx reste la référence stable lorsque la formulation évolue ; aucune réponse saisie par l’utilisateur n’est transmise.
 
 ### Correction orthographique ou typographique
 
@@ -72,7 +72,7 @@ Une correction de faute, ponctuation, majuscule, accord, espace, formulation plu
 
 ### Identification des questions dans Analytics
 
-Les questions sont suivies uniquement avec leur identifiant permanent `pjjoue_identifiant_question` (par exemple `Q1708`). Le texte de l’énoncé n’est pas transmis à Google Analytics. Pour obtenir un libellé lisible lors d’une analyse, l’ID peut être rapproché localement de la banque de questions du site.
+Les questions sont suivies avec leur identifiant permanent `pjjoue_identifiant_question` (par exemple `Q1708`) et, pour la lisibilité des rapports, avec un intitulé court dans `pjjoue_nom_question`. Les réponses saisies par l’utilisateur ne sont jamais transmises.
 
 ---
 
@@ -654,7 +654,7 @@ Ne pas envoyer :
 
 PJJoue ne possède actuellement pas de comptes utilisateurs. GA4 suit donc des utilisateurs pseudonymes liés au navigateur/appareil, sous réserve du consentement.
 
-L’énoncé d’une question n’est pas envoyé à Google Analytics. Le suivi repose sur l’identifiant permanent `pjjoue_identifiant_question` afin de conserver la continuité des analyses sans transmettre le texte de la question.
+L’intitulé pédagogique court d’une question peut être envoyé dans `pjjoue_nom_question`. Le suivi repose toujours sur l’identifiant permanent `pjjoue_identifiant_question` afin de conserver la continuité des analyses. Les réponses libres et les données personnelles ne sont pas transmises.
 
 ---
 
@@ -692,7 +692,7 @@ Texte principal de la question affiché à l'utilisateur.
 - peut être corrigé, raccourci, reformulé ou clarifié ;
 - peut évoluer après une mise à jour juridique ou pédagogique ;
 - ne change pas l'ID si le fond reste le même ;
-- n’est pas envoyé à Google Analytics ; seul l’identifiant permanent de la question est transmis.
+- peut être envoyé sous forme d’intitulé court dans `pjjoue_nom_question` ; l’identifiant permanent reste la référence historique.
 
 ### `theme`
 

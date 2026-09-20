@@ -62,7 +62,7 @@ initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
 selectionner('#boutonReprendreEtapeDepuisDebut')?.addEventListener('click', reprendreEtapeDepuisDebutQuestion);
 selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
-selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
+selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
 selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
 selectionner('#boutonExporterMaProgression').onclick = exporterProgression;
 const boutonImporterProgression = selectionner('#boutonImporterProgression');
@@ -170,7 +170,7 @@ document.addEventListener('click', evenement => {
     else if (action === 'reviser-theme')
         lancerRevision(cible.dataset.theme);
     else if (action === 'reviser-etape')
-        lancerRevisionEtape(cible.dataset.theme || 'commun', cible.dataset.etape);
+        lancerRevisionEtape(cible.dataset.theme || IDENTIFIANT_PARCOURS_RECOMMANDE, cible.dataset.etape);
     else if (action === 'reviser-toutes-erreurs-sigles')
         lancerToutesErreursSiglesDepuisRevision();
     else if (action === 'reviser-etape-sigles')
@@ -228,7 +228,7 @@ document.addEventListener('keydown', evenement => {
  * pas d'infobulle : l'interface reste légère et les aides restent utiles.
  */
 const TITRES_BOUTONS_SURVOL = Object.freeze({
-    boutonInstallerPJJoue: 'Installer PJJoue comme application sur cet appareil.',
+    boutonInstallerPJJoue: 'Installer Quiz CJPM comme application sur cet appareil.',
     boutonChangerParcours: 'Revenir à la liste pour choisir un autre parcours.',
     boutonActionParcours: 'Commencer ou reprendre l’étape actuellement proposée.',
     boutonParcoursLibre: 'Jouer cette étape sans limite de temps.',
@@ -499,8 +499,8 @@ window.addEventListener('pjjoue:consentement-change', evenement => {
     if (evenement.detail?.analytics !== true)
         return;
     envoyerEvenementPJJ('page_consultee', {
-        pjjoue_page_consultee: obtenirLibellePageAnalytics(etat.ecran),
-        pjjoue_page_precedente: obtenirLibellePageAnalytics('consentement')
+        pjjoue_page_consultee: obtenirPageMenuAnalytics(etat.ecran),
+        pjjoue_ecran: obtenirLibelleEcranAnalytics(etat.ecran)
     });
 });
 window.addEventListener('hashchange', garantirAccueilEnHaut);
@@ -548,6 +548,7 @@ document.addEventListener('click', evenement => {
             const carte = groupe.closest('[data-carte-entrainement]');
             carte?.querySelector('[data-secondes-chronometre]')?.classList.toggle('masque', boutonBascule.dataset.valeur !== 'oui');
         }
+        envoyerOptionDeJeuAnalytics(`${groupe.dataset.proposition === 'jokers' ? 'Jokers' : 'Chronomètre'} : ${boutonBascule.textContent.trim()}`);
         return;
     }
     const boutonSecondes = evenement.target.closest('.entrainement-secondes-groupe .choix-bouton');
@@ -555,6 +556,7 @@ document.addEventListener('click', evenement => {
         const groupe = boutonSecondes.closest('.entrainement-secondes-groupe');
         groupe.dataset.selectionEffectuee = 'true';
         groupe.querySelectorAll('.choix-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === boutonSecondes));
+        envoyerOptionDeJeuAnalytics(`Durée par question : ${boutonSecondes.textContent.trim()}`);
         return;
     }
     const boutonLancer = evenement.target.closest('.entrainement-lancer');
@@ -567,6 +569,11 @@ document.addEventListener('click', evenement => {
         etat.jokersSessionActifs = valeurJokers === 'oui';
         etat.chronometreSessionActif = valeurMinuteur === 'oui';
         etat.dureeChronometreSession = Math.min(30, Math.max(5, secondes));
+        envoyerOptionDeJeuAnalytics(`Lancer la session · ${boutonLancer.dataset.organisationSession === 'melange' ? 'Mélangé' : 'Par ordre d’étapes'}`, {
+            pjjoue_jokers: etat.jokersSessionActifs ? 'Avec' : 'Sans',
+            pjjoue_chrono: etat.chronometreSessionActif ? 'Avec' : 'Sans',
+            pjjoue_temps_par_question: etat.chronometreSessionActif ? etat.dureeChronometreSession : null
+        });
         lancerEntrainementLibre();
         return;
     }
@@ -575,6 +582,7 @@ document.addEventListener('click', evenement => {
         document.querySelectorAll('#choixChronometreParcours .option-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === choixChronometreParcours));
         etat.chronometreParcoursActif = choixChronometreParcours.dataset.valeur === 'oui';
         selectionner('#secondesChronometreParcours')?.classList.toggle('masque', !etat.chronometreParcoursActif);
+        envoyerOptionDeJeuAnalytics(`Chronomètre du parcours : ${choixChronometreParcours.textContent.trim()}`);
         return;
     }
     const secondesParcours = evenement.target.closest('#secondesChronometreParcours .choix-bouton');
@@ -586,6 +594,7 @@ document.addEventListener('click', evenement => {
         });
         const secondes = Number(secondesParcours.dataset.secondes);
         etat.dureeChronometreParcours = Math.min(30, Math.max(5, Number.isFinite(secondes) ? secondes : 15));
+        envoyerOptionDeJeuAnalytics(`Durée par question du parcours : ${secondesParcours.textContent.trim()}`);
         return;
     }
 });

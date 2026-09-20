@@ -6637,8 +6637,11 @@ body:not([data-ecran-actif="accueil"])::before {
         gap: 6px;
     }
     header.entete .marque > span {
-        display: inline;
+        display: inline-block;
+        min-width: 0;
         max-width: 165px;
+        white-space: normal;
+        overflow-wrap: anywhere;
         color: #dcecff;
         font-size: .72rem;
         line-height: 1.15;

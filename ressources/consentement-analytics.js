@@ -175,7 +175,7 @@
             <button class="pjj-consentement-fermer" type="button" aria-label="Fermer sans choisir">×</button>
             <div class="pjj-consentement-contenu">
                 <h2 id="pjjoueConsentementTitre">Mesure d’audience</h2>
-                <p id="pjjoueConsentementTexte">Autoriser Google Analytics à mesurer les visites et les actions utiles dans PJJoue ? Aucun suivi publicitaire n’est utilisé.</p>
+                <p id="pjjoueConsentementTexte">Autoriser Google Analytics à mesurer les visites et les actions utiles dans Quiz CJPM ? Aucun suivi publicitaire n’est utilisé.</p>
                 <a class="pjj-consentement-lien" href="${urlConfidentialite}">En savoir plus</a>
             </div>
             <div class="pjj-consentement-actions">

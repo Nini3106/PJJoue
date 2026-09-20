@@ -4,13 +4,18 @@
  * Couche d'événements métier de PJJoue.
  *
  * Les événements et paramètres métier utilisent le vocabulaire visible dans
- * PJJoue. Seuls des repères techniques et pédagogiques sont envoyés : jamais
- * l'énoncé d'une question, la réponse saisie par l'utilisateur, le contenu
- * d'une sauvegarde, ni une donnée d'identité.
+ * PJJoue. Les libellés pédagogiques publics (page, parcours, étape, question
+ * et type d'activité) peuvent être envoyés pour rendre les rapports lisibles.
+ * La réponse saisie, le contenu d'une sauvegarde, l'adresse IP et toute donnée
+ * d'identité restent exclus du suivi.
  */
 (() => {
     const PREFIXE_EVENEMENT = 'pjjoue_';
     const LONGUEUR_MAXIMALE = 100;
+    const PARAMETRES_INTERDITS = new Set([
+        'adresse_ip', 'ip', 'ip_address', 'email', 'adresse_email',
+        'nom', 'prenom', 'telephone', 'reponse_saisie', 'contenu_sauvegarde'
+    ]);
 
     function consentementAccorde() {
         return window.PJJConsentement?.estAutorise?.() === true;
@@ -29,6 +34,10 @@
     function normaliserParametres(parametres) {
         return Object.fromEntries(
             Object.entries(parametres || {})
+                .filter(([cle]) => {
+                    const cleNormalisee = String(cle).toLowerCase().replace(/^pjjoue_/, '');
+                    return !PARAMETRES_INTERDITS.has(cleNormalisee);
+                })
                 .map(([cle, valeur]) => [cle, normaliserValeur(valeur)])
                 .filter(([, valeur]) => valeur !== null)
         );

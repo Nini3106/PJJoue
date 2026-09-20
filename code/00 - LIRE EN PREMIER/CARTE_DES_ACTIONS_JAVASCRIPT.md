@@ -17,21 +17,43 @@ Les explications sont volontairement simples. Les mots techniques imposés par J
 | Action dans le code | Explication simple |
 |---|---|
 | `creerIconeTheme()` | Crée l’icône du parcours. |
-| `envoyerEvenementPJJ()` | Envoie evenement pjj. |
-| `obtenirLibellePageAnalytics()` | Cherche ou calcule libelle page analytics. |
-| `obtenirLibelleTailleTexteAnalytics()` | Cherche ou calcule libelle taille texte analytics. |
-| `obtenirLibelleModeJeuAnalytics()` | Cherche ou calcule libelle mode jeu analytics. |
-| `obtenirInformationsEtapeAnalytics()` | Cherche ou calcule informations etape analytics. |
-| `obtenirIdentifiantQuestionAnalytics()` | Cherche ou calcule identifiant question analytics. |
-| `obtenirResultatReponseAnalytics()` | Cherche ou calcule resultat reponse analytics. |
-| `obtenirDureeSessionAnalytics()` | Cherche ou calcule duree session analytics. |
-| `obtenirContexteSessionAnalytics()` | Cherche ou calcule contexte session analytics. |
-| `obtenirContexteQuestionAnalytics()` | Cherche ou calcule contexte question analytics. |
-| `envoyerUtilisationJoker()` | Envoie utilisation joker. |
+| `envoyerEvenementPJJ()` | Envoie un événement métier avec son contexte page/écran. |
+| `obtenirLibellePageAnalytics()` | Retourne uniquement le libellé exact d’une page du menu connue. |
+| `obtenirLibelleEcranAnalytics()` | Détermine l’écran interne affiché, par exemple Question ou Résultats. |
+| `obtenirPageMenuAnalytics()` | Rattache un écran interne à la page exacte du menu qui l’a ouvert. |
+| `obtenirLibelleParcoursAnalytics()` | Identifie le parcours ou la mission sélectionné. |
+| `obtenirNomQuestionAnalytics()` | Prépare le nom lisible de la question, sans remplacer son identifiant stable. |
+| `obtenirLibelleTailleTexteAnalytics()` | Traduit le réglage de taille du texte en libellé compréhensible. |
+| `obtenirLibelleModeJeuAnalytics()` | Identifie le type de session : parcours, entraînement, révision, hasard ou évaluation. |
+| `obtenirInformationsEtapeAnalytics()` | Retourne le numéro et le nom de l’étape, y compris l’évaluation finale et les missions. |
+| `obtenirIdentifiantQuestionAnalytics()` | Retourne l’identifiant stable de la question, au format Q001, Q002, etc. |
+| `obtenirResultatReponseAnalytics()` | Traduit le résultat d’une réponse en libellé français. |
+| `obtenirDureeSessionAnalytics()` | Calcule la durée de la session lorsque celle-ci est disponible. |
+| `obtenirContexteSessionAnalytics()` | Prépare page, écran, parcours, étape, options et paramètres de session. |
+| `obtenirContexteQuestionAnalytics()` | Prépare page, parcours, étape, identifiant, nom, position, type et résultat de la question. |
+| `envoyerOptionDeJeuAnalytics()` | Envoie une option propre à la page : joker, chrono, organisation ou réglage choisi. |
+| `obtenirContexteAnalyticsGlobal()` | Ajoute automatiquement le contexte lisible commun à chaque événement. |
+| `envoyerUtilisationJoker()` | Envoie l’utilisation d’un joker avec la question et l’option concernées. |
 | `estRouteAccueil()` | Action interne : est route accueil. |
 | `remettreAccueilEnHaut()` | Action interne : remettre accueil en haut. |
 | `garantirAccueilEnHaut()` | Action interne : garantir accueil en haut. |
 | `echapperHtml()` | Action interne : echapper html. |
+
+### Taxonomie Analytics suivie
+
+Les événements gardent des noms techniques pour rester exploitables dans Google Analytics, mais leurs valeurs sont les libellés français visibles dans PJJoue.
+
+| Niveau suivi | Champ principal | Ce qui remonte |
+|---|---|---|
+| Page du menu | `pjjoue_page_consultee` | Accueil, Parcours PJJ, Entraînement libre, Réviser, Progression, Carnet de parcours, Supports de révision, Guides, Mission Sigles, Mission Mesures ou Paramètres. |
+| Écran interne | `pjjoue_ecran` | Question, Résultats ou écran de révision d’une mission, rattaché à sa page d’origine. |
+| Parcours / mission | `pjjoue_parcours` et `pjjoue_parcours_selectionne` | Le nom exact du parcours PJJ ou de la mission concernée. |
+| Étape | `pjjoue_numero_etape` et `pjjoue_nom_etape` | Le numéro et le nom exacts ; l’évaluation finale est suivie comme l’étape 12. |
+| Question | `pjjoue_identifiant_question`, `pjjoue_nom_question` et `pjjoue_position_question_session` | L’identifiant Qxxx, le nom lisible, la position dans la session et le type de question. |
+| Type de question | `pjjoue_type_question` | Choix unique, Sélection multiple, Relier, Retirer des choix, Réponse écrite, Remettre dans l’ordre, Choisir puis ordonner ou Classer. |
+| Option de la page | `pjjoue_option_de_jeu` | Les options réellement choisies sur la page : organisation, nombre, périmètre, chrono, secondes, jokers, taille du texte, sons et utilisation d’un joker. |
+
+Les réponses saisies, la progression enregistrée localement, l’identité et l’adresse IP ne sont pas envoyées par le suivi PJJoue.
 
 ## `code/01 - Éléments communs/JavaScript - Navigation et fenêtres.js`
 
@@ -421,3 +443,17 @@ Les explications sont volontairement simples. Les mots techniques imposés par J
 | `lancerEvaluationSigles()` | Lance l'évaluation finale de 30 activités sans joker ni passage. |
 | `verifierCelebrationEtapeSigles()` | Déclenche la célébration lorsque les douze sigles ont finalement été validés sans joker. |
 | `terminerSessionSigles()` | Enregistre le bilan, la progression et les célébrations. |
+
+## `code/08 - Réviser/Jeu des mesures/actions-de-la-page.js`
+
+| Action dans le code | Explication simple |
+|---|---|
+| `actualiserAccueilMesures()` | Met à jour le tableau de bord de Mission Mesures. |
+| `construireCartesEtapesMesures()` | Construit les étapes et leur état de progression. |
+| `lancerEtapeMesures()` | Lance une étape du parcours Mesures. |
+| `lancerEntrainementMissionMesuresNatif()` | Lance un entraînement configuré sur les repères de mesure. |
+| `lancerDeMesures()` | Anime le Défi du hasard et prépare le tirage de questions. |
+| `jouerTirageDeMesures()` | Lance les questions tirées par le Défi du hasard. |
+| `lancerRevisionMesures()` | Rejoue les repères en erreur. |
+| `lancerEvaluationMesures()` | Lance l’évaluation finale de Mission Mesures. |
+| `terminerSessionMissionMesuresNative()` | Enregistre le bilan, la progression et les événements de fin de session. |

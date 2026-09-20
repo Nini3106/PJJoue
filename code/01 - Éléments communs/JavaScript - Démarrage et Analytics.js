@@ -25,6 +25,10 @@
 if ('scrollRestoration' in history)
     history.scrollRestoration = 'manual';
 const { THEMES, PROGRAMMES, SOURCES, QUESTIONS, SIGLES = [], MESURES_MISSION = { etapes:[], reperes:[], evaluation:[] } } = window.DONNEES_PJJ;
+// Les identifiants historiques restent inchangés pour préserver les
+// sauvegardes et les routes. Seul l'ordre visible évolue avec le rebranding.
+const IDENTIFIANT_PARCOURS_RECOMMANDE = 'procedure_ordinaire';
+const IDENTIFIANT_PARCOURS_OPTIONNEL = 'commun';
 const TRACES_PICTOGRAMMES = Object.freeze({
     decouvertePjj: '<path d="M4 5.5h6.2c1.1 0 1.8.3 1.8 1.3v12.7c0-1-.7-1.5-1.8-1.5H4z"/><path d="M20 5.5h-6.2c-1.1 0-1.8.3-1.8 1.3v12.7c0-1 .7-1.5 1.8-1.5H20z"/><path d="M7 9h2.5M14.5 9H17M7 12h2.5M14.5 12H17"/>',
     procedureOrdinaire: '<path d="M5 3.5h9l4 4V20.5H5z"/><path d="M14 3.5v4h4M8 11h5M8 15h3"/><circle cx="16.5" cy="15.5" r="3.5"/><path d="m15 15.5 1 1 2-2"/>',
@@ -149,25 +153,37 @@ function creerIconeTheme(identifiant, libelle = '') {
 const selectionner = selecteur => document.querySelector(selecteur);
 const selectionnerTous = selecteur => [...document.querySelectorAll(selecteur)];
 function envoyerEvenementPJJ(nom, parametres = {}) {
-    return window.PJJ_ANALYTICS?.envoyer?.(nom, parametres) === true;
+    // Tous les événements métier partagent le même contexte lisible. Les
+    // paramètres fournis par l'action restent prioritaires : cela permet à
+    // une navigation de décrire la page qui vient réellement d'être ouverte,
+    // et non l'écran précédent encore actif au moment du clic.
+    const contexte = typeof obtenirContexteAnalyticsGlobal === 'function'
+        ? obtenirContexteAnalyticsGlobal()
+        : {};
+    return window.PJJ_ANALYTICS?.envoyer?.(nom, { ...contexte, ...parametres }) === true;
 }
+
+// Ces libellés sont exactement ceux du menu dépliant. Un écran interne
+// (question, résultats ou révision ciblée) n'est pas une page publique : il
+// est décrit séparément par pjjoue_ecran et rattaché à sa page d'origine.
 const LIBELLES_PAGES_ANALYTICS = Object.freeze({
     accueil: 'Accueil',
     parcours: 'Parcours PJJ',
-    carnet: 'Carnet de parcours',
     entrainement: 'Entraînement libre',
-    erreurs: 'Mes erreurs à retravailler',
-    sigles: 'Mission Sigles',
-    'sigles-revision': 'Réviser mes erreurs · Mission Sigles',
-    mesures: 'Mission Mesures',
-    'mesures-revision': 'Réviser mes erreurs · Mission Mesures',
-    supports: 'Supports de révision',
+    erreurs: 'Réviser',
     progression: 'Progression',
-    parametres: 'Paramètres',
+    carnet: 'Carnet de parcours',
+    supports: 'Supports de révision',
+    guides: 'Guides',
+    sigles: 'Mission Sigles',
+    mesures: 'Mission Mesures',
+    parametres: 'Paramètres'
+});
+const LIBELLES_ECRANS_ANALYTICS = Object.freeze({
     question: 'Question',
-    bilan: 'Bilan de la session',
-    consentement: 'Consentement Analytics',
-    aucun: 'Aucune page précédente'
+    bilan: 'Résultats',
+    'sigles-revision': 'Révision des erreurs · Mission Sigles',
+    'mesures-revision': 'Révision des erreurs · Mission Mesures'
 });
 const LIBELLES_JOKERS_ANALYTICS = Object.freeze({
     '50_50': '50/50',
@@ -175,7 +191,49 @@ const LIBELLES_JOKERS_ANALYTICS = Object.freeze({
     langue_au_chat: 'Langue au chat'
 });
 function obtenirLibellePageAnalytics(identifiant) {
-    return LIBELLES_PAGES_ANALYTICS[identifiant] || String(identifiant || 'Page inconnue');
+    return LIBELLES_PAGES_ANALYTICS[identifiant] || null;
+}
+function obtenirLibelleEcranAnalytics(identifiant) {
+    return LIBELLES_ECRANS_ANALYTICS[identifiant] || obtenirLibellePageAnalytics(identifiant) || null;
+}
+function obtenirPageMenuAnalytics(identifiant = etat?.ecran) {
+    const pageDirecte = obtenirLibellePageAnalytics(identifiant);
+    if (pageDirecte)
+        return pageDirecte;
+    if (identifiant === 'sigles-revision')
+        return 'Mission Sigles';
+    if (identifiant === 'mesures-revision')
+        return 'Mission Mesures';
+
+    const origine = String(etat?.origineSessionAnalytics || '');
+    if (origine.startsWith('mission_sigles_') || String(etat?.mode || '').startsWith('sigles-'))
+        return 'Mission Sigles';
+    if (origine.startsWith('mission_mesures_') || String(etat?.mode || '').startsWith('mesures-'))
+        return 'Mission Mesures';
+    if (etat?.mode === 'parcours' || etat?.mode === 'evaluation-finale' || origine === 'evaluation_finale')
+        return 'Parcours PJJ';
+    if (etat?.mode === 'libre' || origine === 'entrainement_libre' || origine === 'defi_du_hasard')
+        return 'Entraînement libre';
+    if (etat?.mode === 'revision' || origine === 'revision_des_erreurs')
+        return 'Réviser';
+    return null;
+}
+function obtenirLibelleParcoursAnalytics(question = null) {
+    const origine = String(etat?.origineSessionAnalytics || '');
+    if (origine.startsWith('mission_sigles_') || question?.missionSigles || String(etat?.mode || '').startsWith('sigles-'))
+        return 'Mission Sigles';
+    if (origine.startsWith('mission_mesures_') || question?.missionMesures || String(etat?.mode || '').startsWith('mesures-'))
+        return 'Mission Mesures';
+    const identifiantTheme = question?.theme || etat?.theme || null;
+    if (identifiantTheme && PROGRAMMES[identifiantTheme])
+        return PROGRAMMES[identifiantTheme].titre;
+    return etat?.perimetreEntrainement === 'tous' ? 'Parcours complet' : null;
+}
+function obtenirNomQuestionAnalytics(question) {
+    const nom = question?.nom || question?.titre || question?.enonce || question?.question;
+    if (!nom)
+        return null;
+    return String(nom).replace(/\s+/g, ' ').trim();
 }
 function obtenirLibelleTailleTexteAnalytics(echelle) {
     const valeur = Number(echelle);
@@ -186,27 +244,56 @@ function obtenirLibelleTailleTexteAnalytics(echelle) {
     return 'Normale';
 }
 function obtenirLibelleModeJeuAnalytics() {
-    if (etat?.origineSessionAnalytics === 'defi_du_hasard')
+    const origine = String(etat?.origineSessionAnalytics || '');
+    const mode = String(etat?.mode || '');
+    if (origine === 'defi_du_hasard' || mode === 'sigles-hasard' || mode === 'mesures-hasard')
         return 'Défi du hasard';
-    if (etat?.mode === 'parcours')
+    if (mode === 'parcours' || mode === 'sigles-parcours' || mode === 'mesures-parcours')
         return 'Parcours PJJ';
-    if (etat?.mode === 'libre')
+    if (mode === 'libre' || mode === 'sigles-entrainement' || mode === 'mesures-entrainement')
         return 'Entraînement libre';
-    if (etat?.mode === 'revision')
+    if (mode === 'revision' || mode === 'sigles-revision' || mode === 'mesures-revision')
         return 'Révision des erreurs';
-    if (etat?.mode === 'evaluation-finale')
+    if (mode === 'evaluation-finale' || mode === 'sigles-evaluation' || mode === 'mesures-evaluation')
         return 'Évaluation finale';
     return null;
 }
 function obtenirInformationsEtapeAnalytics(question = null) {
+    const evaluationFinale = question?.estEvaluationFinale === true
+        || etat?.mode === 'evaluation-finale'
+        || /^(sigles|mesures)-evaluation$/.test(String(etat?.mode || ''));
+    if (evaluationFinale)
+        return { numero: 12, nom: 'Évaluation finale' };
+
+    if (question?.missionSigles || String(etat?.mode || '').startsWith('sigles-')) {
+        const numero = Number(question?.missionSiglesMeta?.numeroEtape || question?.etape || etat?.etape);
+        const numeroValide = Number.isFinite(numero) && numero > 0;
+        const identite = numeroValide && typeof obtenirIdentiteEtapeMissionSigles === 'function'
+            ? obtenirIdentiteEtapeMissionSigles(numero)
+            : null;
+        return {
+            numero: numeroValide ? numero : null,
+            nom: identite?.titre || (numeroValide ? `Étape ${numero}` : null)
+        };
+    }
+    if (question?.missionMesures || String(etat?.mode || '').startsWith('mesures-')) {
+        const numero = Number(question?.missionMesuresMeta?.numeroEtape || question?.etape || etat?.etape);
+        const numeroValide = Number.isFinite(numero) && numero > 0;
+        const identite = numeroValide && typeof obtenirIdentiteEtapeMissionMesures === 'function'
+            ? obtenirIdentiteEtapeMissionMesures(numero)
+            : null;
+        return {
+            numero: numeroValide ? numero : null,
+            nom: identite?.titre || (numeroValide ? `Étape ${numero}` : null)
+        };
+    }
+
     const numeroVisible = Number(question?.etape ?? etat?.etape);
     if (!Number.isFinite(numeroVisible) || numeroVisible <= 0)
         return { numero: null, nom: null };
-    if (numeroVisible === 12)
-        return { numero: 12, nom: 'Évaluation finale' };
-    const identifiantTheme = question?.theme || etat?.theme || 'commun';
+    const identifiantTheme = question?.theme || etat?.theme || IDENTIFIANT_PARCOURS_RECOMMANDE;
     const etapeProgramme = obtenirEtapeProgramme(identifiantTheme, numeroVisible)
-        || obtenirEtapeProgramme('commun', numeroVisible);
+        || obtenirEtapeProgramme(IDENTIFIANT_PARCOURS_RECOMMANDE, numeroVisible);
     // L'ordre visible peut évoluer sans recycler l'identité Analytics permanente.
     // L'identifiant permanent reste stable même si l'ordre d'affichage d'une étape change.
     const numeroPermanent = Number(
@@ -244,14 +331,14 @@ function obtenirDureeSessionAnalytics() {
 }
 function obtenirContexteSessionAnalytics() {
     const modeDeJeu = obtenirLibelleModeJeuAnalytics();
-    if (!modeDeJeu)
-        return {};
-    const identifiantTheme = etat?.theme || etat?.questionCourante?.theme || null;
+    const parcours = obtenirLibelleParcoursAnalytics();
     const contexte = {
+        pjjoue_page_consultee: obtenirPageMenuAnalytics(),
+        pjjoue_ecran: obtenirLibelleEcranAnalytics(etat?.ecran),
         pjjoue_mode_de_jeu: modeDeJeu,
-        pjjoue_parcours: identifiantTheme && PROGRAMMES[identifiantTheme]
-            ? PROGRAMMES[identifiantTheme].titre
-            : (etat?.perimetreEntrainement === 'tous' ? 'Parcours complet' : null),
+        pjjoue_type_session: modeDeJeu,
+        pjjoue_parcours: parcours,
+        pjjoue_parcours_selectionne: parcours,
         pjjoue_nombre_questions: Array.isArray(etat?.questionsSession) && etat.questionsSession.length
             ? etat.questionsSession.length
             : null,
@@ -262,13 +349,14 @@ function obtenirContexteSessionAnalytics() {
         contexte.pjjoue_numero_etape = etape.numero;
         contexte.pjjoue_nom_etape = etape.nom;
     }
-    if (etat.mode === 'parcours') {
+    if (etat.mode === 'parcours' || /^(sigles|mesures)-parcours$/.test(String(etat.mode || ''))) {
         contexte.pjjoue_defi_chrono = etat.chronometreSessionActif ? 'Chronométré' : 'Libre';
         contexte.pjjoue_temps_par_question_defi_chrono = etat.chronometreSessionActif
             ? Number(etat.dureeChronometreSession) || null
             : null;
     }
-    if (etat.mode === 'libre' && etat.origineSessionAnalytics !== 'defi_du_hasard') {
+    if ((etat.mode === 'libre' || /^(sigles|mesures)-entrainement$/.test(String(etat.mode || '')))
+        && etat.origineSessionAnalytics !== 'defi_du_hasard') {
         contexte.pjjoue_mode_entrainement = etat.organisationSession === 'ordonne'
             ? 'Par ordre d’étapes'
             : 'Mélangé';
@@ -277,7 +365,7 @@ function obtenirContexteSessionAnalytics() {
             ? Number(etat.dureeChronometreSession) || null
             : null;
     }
-    if (etat.origineSessionAnalytics === 'defi_du_hasard') {
+    if (etat.origineSessionAnalytics === 'defi_du_hasard' || /^(sigles|mesures)-hasard$/.test(String(etat.mode || ''))) {
         contexte.pjjoue_nombre_questions_defi_du_hasard = Number(etat.nombreQuestionsTirageDe) || null;
     }
     return contexte;
@@ -292,6 +380,7 @@ function obtenirContexteQuestionAnalytics(question) {
         pjjoue_numero_etape: etape.numero,
         pjjoue_nom_etape: etape.nom,
         pjjoue_identifiant_question: obtenirIdentifiantQuestionAnalytics(question),
+        pjjoue_nom_question: obtenirNomQuestionAnalytics(question),
         pjjoue_position_question_session: Number.isFinite(Number(etat?.indexQuestion))
             ? Number(etat.indexQuestion) + 1
             : null,
@@ -301,8 +390,24 @@ function obtenirContexteQuestionAnalytics(question) {
 function envoyerUtilisationJoker(type) {
     envoyerEvenementPJJ('joker_utilise', {
         ...obtenirContexteQuestionAnalytics(etat.questionCourante),
-        pjjoue_joker_utilise: LIBELLES_JOKERS_ANALYTICS[type] || type
+        pjjoue_joker_utilise: LIBELLES_JOKERS_ANALYTICS[type] || type,
+        pjjoue_option_de_jeu: `Joker · ${LIBELLES_JOKERS_ANALYTICS[type] || type}`
     });
+}
+function envoyerOptionDeJeuAnalytics(option, parametres = {}) {
+    const libelle = String(option || '').trim();
+    if (!libelle)
+        return false;
+    return envoyerEvenementPJJ('option_de_jeu_selectionnee', {
+        pjjoue_option_de_jeu: libelle,
+        ...parametres
+    });
+}
+function obtenirContexteAnalyticsGlobal() {
+    return {
+        pjjoue_page_consultee: obtenirPageMenuAnalytics(),
+        pjjoue_ecran: obtenirLibelleEcranAnalytics(etat?.ecran)
+    };
 }
 function estRouteAccueil() {
     if (typeof lireRoute === 'function')

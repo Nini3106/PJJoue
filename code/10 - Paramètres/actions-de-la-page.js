@@ -51,7 +51,7 @@ function exporterProgression() {
     const contenuFichier = new Blob([JSON.stringify(sauvegarde, null, 2)], { type: 'application/json' });
     const lienTelechargement = document.createElement('a');
     lienTelechargement.href = URL.createObjectURL(contenuFichier);
-    lienTelechargement.download = 'PJJoue_progression.json';
+    lienTelechargement.download = 'Quiz_CJPM_progression.json';
     lienTelechargement.click();
     URL.revokeObjectURL(lienTelechargement.href);
     envoyerEvenementPJJ('progression_exportee', {

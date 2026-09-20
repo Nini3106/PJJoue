@@ -4,19 +4,8 @@
  * Le moteur pédagogique et les données restent inchangés.
  */
 const IDENTITES_PARCOURS = Object.freeze({
-    commun: {
-        numero: '01',
-        titre: 'Découvrir la PJJ',
-        chapitre: 'Point de départ',
-        description: 'Missions, publics, professionnels, structures et logique éducative de la PJJ.',
-        niveau: 'Débutant',
-        duree: '≈ 1 h 20',
-        couleur: '#4f8cff',
-        couleurTexte: '#9fc2ff',
-        couleurRgb: '79,140,255'
-    },
     procedure_ordinaire: {
-        numero: '02',
+        numero: '01',
         titre: 'De l’enquête à la sanction',
         chapitre: 'Procédure ordinaire',
         description: 'Suis le dossier depuis l’enquête et l’orientation du parquet jusqu’à la culpabilité, la MEE éventuelle et la sanction.',
@@ -24,10 +13,11 @@ const IDENTITES_PARCOURS = Object.freeze({
         duree: '≈ 1 h 40',
         couleur: '#d49a00',
         couleurTexte: '#ffd36a',
-        couleurRgb: '212,154,0'
+        couleurRgb: '212,154,0',
+        recommande: true
     },
     information_judiciaire: {
-        numero: '03',
+        numero: '02',
         titre: 'Avant le jugement : l’information judiciaire',
         chapitre: 'Avant le jugement',
         description: 'Situe l’information judiciaire avant le jugement et repère le rôle du JI, du JLD et les décisions provisoires.',
@@ -38,7 +28,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         couleurRgb: '8,145,178'
     },
     jugement_educatif_ordinaire: {
-        numero: '04',
+        numero: '03',
         titre: 'Du jugement à la sanction',
         chapitre: 'Jugement éducatif',
         description: 'Comprends le rôle du JE et du TPE et construis la réponse éducative au stade du jugement et de la sanction.',
@@ -49,7 +39,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         couleurRgb: '139,92,246'
     },
     matiere_criminelle_peines: {
-        numero: '05',
+        numero: '04',
         titre: 'De la qualification criminelle aux peines',
         chapitre: 'Matière criminelle',
         description: 'Pars de la qualification et de l’âge aux faits pour identifier la juridiction, puis la sanction ou la peine possible.',
@@ -60,7 +50,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         couleurRgb: '225,29,72'
     },
     application_execution_peines: {
-        numero: '06',
+        numero: '05',
         titre: 'Après la sanction : application et exécution',
         chapitre: 'Application des peines',
         description: 'Après la sanction, suis l’exécution, les aménagements, les incidents et l’articulation entre JE et JAP.',
@@ -69,10 +59,23 @@ const IDENTITES_PARCOURS = Object.freeze({
         couleur: '#0f766e',
         couleurTexte: '#70d6ca',
         couleurRgb: '15,118,110'
+    },
+    commun: {
+        numero: '06',
+        libelleNumero: 'Option : Parcours 06',
+        titre: 'Découvrir la PJJ',
+        chapitre: '',
+        description: 'Missions, publics, professionnels, structures et logique éducative de la PJJ.',
+        niveau: 'Débutant',
+        duree: '≈ 1 h 20',
+        couleur: '#4f8cff',
+        couleurTexte: '#9fc2ff',
+        couleurRgb: '79,140,255',
+        optionnel: true
     }
 });
 function obtenirIdentiteParcours(identifiantTheme) {
-    return IDENTITES_PARCOURS[identifiantTheme] || IDENTITES_PARCOURS.commun;
+    return IDENTITES_PARCOURS[identifiantTheme] || IDENTITES_PARCOURS[IDENTIFIANT_PARCOURS_RECOMMANDE];
 }
 /**
  * Construit le repère de maîtrise autonome. Les deux traits derrière l'étoile
@@ -126,7 +129,7 @@ function actualiserSelecteurParcours() {
                 : progression.pourcentage > 0 ? 'En cours' : 'À découvrir';
         bouton.type = 'button';
         const estDernierParcours = theme.id === THEMES[THEMES.length - 1].id;
-        bouton.className = `selecteur-parcours-bouton${theme.id === 'commun' ? ' parcours-recommande' : ''}${estDernierParcours ? ' parcours-cloture' : ''}`;
+        bouton.className = `selecteur-parcours-bouton${theme.id === IDENTIFIANT_PARCOURS_RECOMMANDE ? ' parcours-recommande' : ''}${estDernierParcours ? ' parcours-cloture' : ''}`;
         bouton.dataset.theme = theme.id;
         bouton.style.setProperty('--parcours-accent', identite.couleur);
         bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
@@ -134,18 +137,25 @@ function actualiserSelecteurParcours() {
         bouton.setAttribute('aria-label', `${identite.titre}. ${progression.maitrisees} étapes maîtrisées sans joker sur ${progression.total}.${progression.evaluationReussie ? ' Évaluation finale réussie.' : ''}`);
         bouton.innerHTML = `
             ${progression.jalonsMaitrises > 0 ? creerEtoileFilanteProgression(progression.jalonsMaitrises) : ''}
-            <span class="selecteur-parcours-numero">Parcours ${identite.numero}</span>
+            <span class="selecteur-parcours-numero">${identite.libelleNumero || `Parcours ${identite.numero}`}</span>
             <span class="selecteur-parcours-icone">${creerIconeTheme(theme.id, '')}</span>
             <span class="selecteur-parcours-statut">${statut}</span>
             <span class="selecteur-parcours-texte">
-                <b>${theme.id === 'commun' ? 'Recommandé pour commencer' : identite.chapitre}</b>
+                ${theme.id === IDENTIFIANT_PARCOURS_RECOMMANDE ? '<b>Recommandé pour commencer</b>' : (identite.chapitre ? `<b>${identite.chapitre}</b>` : '')}
                 <strong>${identite.titre}</strong>
                 <small>${identite.description}</small>
             </span>
             <span class="selecteur-parcours-informations"><span>${identite.niveau}</span><span>${identite.duree}</span></span>
             <span class="selecteur-parcours-progression" aria-hidden="true"><i style="width:${progression.pourcentage}%"></i></span>
             <span class="selecteur-parcours-pied"><span>${progression.maitrisees}/${progression.total} étapes</span><span>Explorer →</span></span>`;
-        bouton.onclick = () => ouvrirParcours(theme.id);
+        bouton.onclick = () => {
+            envoyerEvenementPJJ('parcours_selectionne', {
+                pjjoue_parcours: PROGRAMMES[theme.id]?.titre,
+                pjjoue_parcours_selectionne: PROGRAMMES[theme.id]?.titre,
+                pjjoue_numero_parcours: Number(identite.numero)
+            });
+            ouvrirParcours(theme.id);
+        };
         zone.appendChild(bouton);
     });
 }
@@ -172,7 +182,7 @@ function actualiserEnteteParcours(programme) {
     const icone = selectionner('#iconeParcoursSelectionne');
     if (titre) titre.textContent = identite.titre;
     if (sousTitre) sousTitre.textContent = identite.description;
-    if (surtitre) surtitre.textContent = `${identite.chapitre} · parcours ${obtenirOrdreTheme(programme.id) + 1} sur ${THEMES.length}`;
+    if (surtitre) surtitre.textContent = `${identite.optionnel ? 'Option · ' : ''}${identite.chapitre || identite.titre} · parcours ${obtenirOrdreTheme(programme.id) + 1} sur ${THEMES.length}`;
     if (icone) icone.innerHTML = creerIconeTheme(programme.id, '');
     const libelleProgression = selectionner('#libelleProgressionParcours');
     const pourcentageProgression = selectionner('#pourcentageProgressionParcours');
@@ -190,11 +200,27 @@ function actualiserEnteteParcours(programme) {
     if (prochaineEtape) {
         const dejaCommencee = compterQuestionsTraiteesEtape(programme.id, prochaineEtape.id) > 0;
         boutonAction.textContent = `${dejaCommencee ? 'Reprendre' : 'Commencer'} l’étape ${prochaineEtape.id} →`;
-        boutonAction.onclick = () => lancerEtape(programme.id, prochaineEtape.id);
+        boutonAction.onclick = () => {
+            envoyerEvenementPJJ('etape_selectionnee', {
+                pjjoue_parcours: programme.titre,
+                pjjoue_parcours_selectionne: programme.titre,
+                pjjoue_numero_etape: prochaineEtape.id,
+                pjjoue_nom_etape: prochaineEtape.titre
+            });
+            lancerEtape(programme.id, prochaineEtape.id);
+        };
     }
     else if (!estEvaluationFinaleReussie(programme.id)) {
         boutonAction.textContent = 'Passer l’évaluation finale →';
-        boutonAction.onclick = () => lancerEvaluationFinale(programme.id);
+        boutonAction.onclick = () => {
+            envoyerEvenementPJJ('etape_selectionnee', {
+                pjjoue_parcours: programme.titre,
+                pjjoue_parcours_selectionne: programme.titre,
+                pjjoue_numero_etape: 12,
+                pjjoue_nom_etape: 'Évaluation finale'
+            });
+            lancerEvaluationFinale(programme.id);
+        };
     }
     else {
         boutonAction.textContent = 'Parcours terminé ✓';
@@ -202,7 +228,7 @@ function actualiserEnteteParcours(programme) {
         boutonAction.onclick = null;
     }
 }
-function ouvrirParcours(identifiantTheme = sauvegarde.dernierTheme || 'commun', optionsAffichage = {}) {
+function ouvrirParcours(identifiantTheme = sauvegarde.dernierTheme || IDENTIFIANT_PARCOURS_RECOMMANDE, optionsAffichage = {}) {
     if (!PROGRAMMES[identifiantTheme]) {
         ouvrirChoixParcours(optionsAffichage);
         return;
@@ -275,12 +301,12 @@ const FICHIERS_ICONES_PARCOURS_DECOUVERTE = Object.freeze({
     10: 'icone-mesures-judiciaires.svg',
     11: 'icone-partenaires.svg'
 });
-function obtenirNomIconeEtape(numeroEtape, identifiantTheme = etat.theme || 'commun') {
+function obtenirNomIconeEtape(numeroEtape, identifiantTheme = etat.theme || IDENTIFIANT_PARCOURS_RECOMMANDE) {
     return ICONES_ETAPES_PARCOURS[identifiantTheme]?.[Number(numeroEtape)]
         || ICONES_ETAPES_PARCOURS.commun[Number(numeroEtape)]
         || 'dossier';
 }
-function obtenirBaliseIconeEtape(numeroEtape, identifiantTheme = etat.theme || 'commun') {
+function obtenirBaliseIconeEtape(numeroEtape, identifiantTheme = etat.theme || IDENTIFIANT_PARCOURS_RECOMMANDE) {
     if (identifiantTheme === 'commun') {
         const nomFichier = FICHIERS_ICONES_PARCOURS_DECOUVERTE[Number(numeroEtape)];
         return nomFichier
@@ -346,11 +372,23 @@ function afficherEtapes() {
         carte.addEventListener('click', evenement => {
             if (evenement.target.closest('button'))
                 return;
+            envoyerEvenementPJJ('etape_selectionnee', {
+                pjjoue_parcours: programme.titre,
+                pjjoue_parcours_selectionne: programme.titre,
+                pjjoue_numero_etape: etapeProgramme.id,
+                pjjoue_nom_etape: etapeProgramme.titre
+            });
             lancerEtape(etat.theme, etapeProgramme.id);
         });
         carte.addEventListener('keydown', evenement => {
             if ((evenement.key === 'Enter' || evenement.key === ' ') && !evenement.target.closest('button')) {
                 evenement.preventDefault();
+                envoyerEvenementPJJ('etape_selectionnee', {
+                    pjjoue_parcours: programme.titre,
+                    pjjoue_parcours_selectionne: programme.titre,
+                    pjjoue_numero_etape: etapeProgramme.id,
+                    pjjoue_nom_etape: etapeProgramme.titre
+                });
                 lancerEtape(etat.theme, etapeProgramme.id);
             }
         });
@@ -389,6 +427,14 @@ function afficherEtapes() {
     evaluation.querySelector('.evaluation-statut').textContent = evaluationReussie
         ? `Réussie · meilleur score ${obtenirEvaluationFinaleTheme(etat.theme).meilleurScore}%`
         : (evaluationDeverrouillee ? '50 questions · évaluation complète' : 'Termine les 11 étapes pour l’ouvrir');
-    evaluation.onclick = evaluationDeverrouillee ? () => lancerEvaluationFinale(etat.theme) : null;
+    evaluation.onclick = evaluationDeverrouillee ? () => {
+        envoyerEvenementPJJ('etape_selectionnee', {
+            pjjoue_parcours: programme.titre,
+            pjjoue_parcours_selectionne: programme.titre,
+            pjjoue_numero_etape: 12,
+            pjjoue_nom_etape: 'Évaluation finale'
+        });
+        lancerEvaluationFinale(etat.theme);
+    } : null;
     enregistrerSauvegarde();
 }

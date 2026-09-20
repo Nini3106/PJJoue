@@ -44,7 +44,7 @@ function actualiserCarnetParcours(_programmeIgnore = null) {
     if (!titreSymbolique || !prochaineDestination || !route)
         return;
     const prochainTheme = THEMES.find(theme => obtenirProchaineDestinationParcours(PROGRAMMES[theme.id]));
-    const identiteProchainParcours = obtenirIdentiteParcours(prochainTheme?.id || 'commun');
+    const identiteProchainParcours = obtenirIdentiteParcours(prochainTheme?.id || IDENTIFIANT_PARCOURS_RECOMMANDE);
     const nombreEtapesMaitrisees = compterEtapesMaitrisees();
     const avancement = calculerAvancementCarnetComplet();
     titreSymbolique.textContent = obtenirTitreSymboliqueParcours(nombreEtapesMaitrisees);

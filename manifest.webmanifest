@@ -1,6 +1,6 @@
 {
-  "name": "PJJoue — Découvrir la PJJ et le CJPM",
-  "short_name": "PJJoue",
+  "name": "Quiz CJPM — Comprendre le CJPM et découvrir la PJJ",
+  "short_name": "Quiz CJPM",
   "description": "Site pédagogique indépendant et non officiel pour découvrir la Protection judiciaire de la jeunesse et approfondir le Code de la justice pénale des mineurs (CJPM).",
   "lang": "fr-FR",
   "start_url": "./",

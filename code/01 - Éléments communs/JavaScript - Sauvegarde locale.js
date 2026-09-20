@@ -411,7 +411,7 @@ function enregistrerSauvegarde() {
     catch (erreur) {
         if (!stockageLocalAverti) {
             stockageLocalAverti = true;
-            afficherNotification('Sauvegarde locale indisponible · pense à exporter ta progression avant de fermer PJJoue.');
+            afficherNotification('Sauvegarde locale indisponible · pense à exporter ta progression avant de fermer Quiz CJPM.');
         }
         return false;
     }
@@ -517,7 +517,7 @@ function restaurerSessionEnCours() {
         return false;
     }
     const positionQuestion = Math.min(questions.length - 1, Math.max(0, Number(instantane.indexQuestion) || 0));
-    etat.theme = instantane.theme || questions[positionQuestion]?.theme || 'commun';
+    etat.theme = instantane.theme || questions[positionQuestion]?.theme || IDENTIFIANT_PARCOURS_RECOMMANDE;
     etat.etape = Number(instantane.etape) || Number(questions[positionQuestion]?.etape) || 1;
     etat.chapitre = Number(instantane.chapitre) || 1;
     etat.mode = instantane.mode || 'parcours';

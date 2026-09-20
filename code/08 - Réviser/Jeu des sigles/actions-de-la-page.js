@@ -522,7 +522,7 @@ function obtenirIdentiteEtapeMissionSigles(numero) {
     return ETAPES_MISSION_SIGLES[Number(numero)] || ETAPES_MISSION_SIGLES[1];
 }
 function obtenirThemeVisuelMissionSigles(numero) {
-    return ['commun','procedure_ordinaire','information_judiciaire','jugement_educatif_ordinaire','matiere_criminelle_peines','application_execution_peines'][Math.max(0, Math.min(5, Number(numero || 1) - 1))];
+    return ['procedure_ordinaire','information_judiciaire','jugement_educatif_ordinaire','matiere_criminelle_peines','application_execution_peines','commun'][Math.max(0, Math.min(5, Number(numero || 1) - 1))];
 }
 function convertirQuestionMissionSiglesVersPJJoue(questionSigles, index, configuration) {
     const cible = questionSigles.cible || questionSigles.cibles?.[0] || null;
@@ -745,7 +745,7 @@ function configurerEntrainementMissionSiglesNatif() {
     const entete = ecran.querySelector('.entrainement-entete');
     entete?.querySelector('.surtitre') && (entete.querySelector('.surtitre').textContent = 'Mission Sigles');
     entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Choisis ta session');
-    entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Entraîne-toi sur les sigles avec exactement les mêmes réglages que dans PJJoue.');
+    entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Entraîne-toi sur les sigles avec exactement les mêmes réglages que dans Quiz CJPM.');
     const resultatDe = selectionner('#resultatDeParcours');
     if (resultatDe) resultatDe.textContent = 'Lance le dé pour tirer de 1 à 6 questions aléatoires parmi les 72 sigles.';
     const selectPerimetre = selectionner('#perimetreEntrainement');
@@ -822,13 +822,13 @@ function restaurerEntrainementPJJoueNatif() {
     const selectPerimetre = selectionner('#perimetreEntrainement');
     const groupePerimetre = document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
     const donnees = [
-        ['tous','Tout PJJoue','Les 6 parcours'],
-        ['commun','01 · Découvrir la PJJ','Point de départ'],
-        ['procedure_ordinaire','02 · Du parquet à la sanction','Procédure ordinaire'],
-        ['information_judiciaire','03 · Information judiciaire','Instruction'],
-        ['jugement_educatif_ordinaire','04 · Réponse éducative','Jugement'],
-        ['matiere_criminelle_peines','05 · Crimes et peines','Matière criminelle'],
-        ['application_execution_peines','06 · Décision à l’exécution','Application des peines']
+        ['tous','Tout Quiz CJPM','Les 6 parcours'],
+        ['procedure_ordinaire','01 · De l’enquête à la sanction','Recommandé pour commencer'],
+        ['information_judiciaire','02 · Information judiciaire','Avant le jugement'],
+        ['jugement_educatif_ordinaire','03 · Du jugement à la sanction','Réponse éducative'],
+        ['matiere_criminelle_peines','04 · De la qualification criminelle aux peines','Matière criminelle'],
+        ['application_execution_peines','05 · Après la sanction','Application et exécution'],
+        ['commun','Option · Parcours 06 · Découvrir la PJJ','Culture commune PJJ']
     ];
     if (selectPerimetre && groupePerimetre) {
         selectPerimetre.innerHTML = donnees.map(([v,b])=>`<option value="${v}">${b.replace(/^\d+ · /,'')}</option>`).join('');
@@ -898,12 +898,12 @@ function lancerEntrainementMissionSiglesNatif() {
 }
 
 function initialiserJeuSigles(){ const racine=selectionnerSigles('#sigles');if(!racine||racine.dataset.initialise==='true')return;racine.dataset.initialise='true';
-    selectionnerSigles('#siglesOuvrirParcours')?.addEventListener('click',()=>{actualiserAccueilSigles();afficherVueSigles('parcours');});
-    selectionnerSigles('#siglesOuvrirEntrainement')?.addEventListener('click',()=>{actualiserAccueilSigles();ouvrirEntrainementMissionSiglesNatif();});
+    selectionnerSigles('#siglesOuvrirParcours')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Ouvrir le parcours des étapes');actualiserAccueilSigles();afficherVueSigles('parcours');});
+    selectionnerSigles('#siglesOuvrirEntrainement')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Configurer un entraînement');actualiserAccueilSigles();ouvrirEntrainementMissionSiglesNatif();});
     selectionnerSigles('#siglesRetourDepuisParcours')?.addEventListener('click',retourAccueilSigles); selectionnerSigles('#siglesRetourDepuisEntrainement')?.addEventListener('click',retourAccueilSigles);
-    selectionnerSigles('#siglesLancerEntrainement')?.addEventListener('click',lancerEntrainementSigles); selectionnerSigles('#siglesLancerDe')?.addEventListener('click',lancerDeSigles); selectionnerSigles('#siglesJouerTirage')?.addEventListener('click',jouerTirageDeSigles); selectionnerSigles('#siglesLancerRevision')?.addEventListener('click',lancerRevisionSigles); selectionnerSigles('#siglesLancerEvaluation')?.addEventListener('click',lancerEvaluationSigles);
+    selectionnerSigles('#siglesLancerEntrainement')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Lancer un entraînement');lancerEntrainementSigles();}); selectionnerSigles('#siglesLancerDe')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Défi du hasard · lancer le dé');lancerDeSigles();}); selectionnerSigles('#siglesJouerTirage')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Défi du hasard · jouer le tirage');jouerTirageDeSigles();}); selectionnerSigles('#siglesLancerRevision')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Réviser les erreurs');lancerRevisionSigles();}); selectionnerSigles('#siglesLancerEvaluation')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Évaluation finale');lancerEvaluationSigles();});
     selectionnerSigles('#siglesQuitterSession')?.addEventListener('click',retourAccueilSigles); selectionnerSigles('#siglesPasserQuestion')?.addEventListener('click',passerQuestionSigles); selectionnerSigles('#siglesValiderActivite')?.addEventListener('click',validerAssociationSigles); selectionnerSigles('#siglesQuestionSuivante')?.addEventListener('click',questionSuivanteSigles); selectionnerSigles('#siglesRetourAccueil')?.addEventListener('click',retourAccueilSigles); selectionnerSigles('#siglesRejouerSession')?.addEventListener('click',rejouerDerniereSessionSigles);
-    selectionnerTousSigles('#siglesChoixNombre button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixNombre'),b);})); selectionnerTousSigles('#siglesChoixOrganisation button').forEach(b=>b.addEventListener('click',()=>activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixOrganisation'),b))); selectionnerTousSigles('#siglesChoixChrono button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixChrono'),b);actualiserChoixChronoSigles();})); selectionnerTousSigles('#siglesChoixSecondes button').forEach(b=>b.addEventListener('click',()=>activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixSecondes'),b))); selectionnerTousSigles('#siglesChoixJokers button').forEach(b=>b.addEventListener('click',()=>activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixJokers'),b))); selectionnerTousSigles('[data-joker-sigles]').forEach(b=>b.addEventListener('click',()=>utiliserJokerSigles(b.dataset.jokerSigles)));
+    selectionnerTousSigles('#siglesChoixNombre button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixNombre'),b);envoyerOptionDeJeuAnalytics(`Nombre de questions : ${b.textContent.trim()}`);})); selectionnerTousSigles('#siglesChoixOrganisation button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixOrganisation'),b);envoyerOptionDeJeuAnalytics(`Organisation : ${b.textContent.trim()}`);})); selectionnerTousSigles('#siglesChoixChrono button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixChrono'),b);actualiserChoixChronoSigles();envoyerOptionDeJeuAnalytics(`Chronomètre : ${b.textContent.trim()}`);})); selectionnerTousSigles('#siglesChoixSecondes button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixSecondes'),b);envoyerOptionDeJeuAnalytics(`Durée par question : ${b.textContent.trim()}`);})); selectionnerTousSigles('#siglesChoixJokers button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixJokers'),b);envoyerOptionDeJeuAnalytics(`Jokers : ${b.textContent.trim()}`);})); selectionnerTousSigles('[data-joker-sigles]').forEach(b=>b.addEventListener('click',()=>utiliserJokerSigles(b.dataset.jokerSigles)));
     actualiserAccueilSigles(); actualiserChoixChronoSigles();
 }
 initialiserJeuSigles();

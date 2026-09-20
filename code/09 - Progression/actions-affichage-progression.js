@@ -52,7 +52,7 @@ function construireCarteProgression(theme) {
     carte.innerHTML = `
         <div class="progression-parcours-mis-en-avant-identite">
             <span class="progression-parcours-mis-en-avant-icone">${creerIconeTheme(theme.id, '')}</span>
-            <div><span class="progression-parcours-mis-en-avant-chapitre">${identite.chapitre}</span><h3>${identite.titre}</h3></div>
+            <div><span class="progression-parcours-mis-en-avant-chapitre">${identite.libelleNumero || identite.chapitre}</span><h3>${identite.titre}</h3></div>
         </div>
         <div class="progression-etats">
             <span class="progression-parcours-statut ${avancee.classe}">${avancee.libelle}</span>

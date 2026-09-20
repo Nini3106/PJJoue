@@ -36,7 +36,7 @@ class _MenuParser(HTMLParser):
     def handle_endtag(self, tag: str) -> None:
         if self.in_menu and self.current is not None and tag in {"button", "a", "span"}:
             texte = " ".join("".join(self.current).split())
-            if texte and texte != "Installer PJJoue":
+            if texte and texte != "Installer Quiz CJPM":
                 self.labels.append(texte)
             self.current = None
         if self.in_menu and tag == "nav":
@@ -107,7 +107,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         for page in pages:
             html = page.read_text(encoding="utf-8")
             self.assertIn("page-information-retour", html, f"Bouton Retour absent : {page.relative_to(RACINE)}")
-            self.assertRegex(html, r">\s*← Retour (?:aux guides|à PJJoue)\s*</a>")
+            self.assertRegex(html, r">\s*← Retour (?:aux guides|à Quiz CJPM)\s*</a>")
 
     def test_espacement_retour_titre_est_harmonise_a_24_px(self) -> None:
         general = (CODE / "01 - Éléments communs/style-general-pjjoue.css").read_text(encoding="utf-8")

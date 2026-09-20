@@ -122,7 +122,7 @@ function validerRevisionMesures(cibles) {
 
 function obtenirIdentiteEtapeMissionMesures(numero) { return ETAPES_MISSION_MESURES[Number(numero)] || ETAPES_MISSION_MESURES[1]; }
 function obtenirThemeVisuelMissionMesures(numero) {
-    const themes = ['commun','procedure_ordinaire','information_judiciaire','jugement_educatif_ordinaire','matiere_criminelle_peines','application_execution_peines'];
+    const themes = ['procedure_ordinaire','information_judiciaire','jugement_educatif_ordinaire','matiere_criminelle_peines','application_execution_peines','commun'];
     return themes[(Math.max(1, Number(numero) || 1) - 1) % themes.length];
 }
 function iconeEtapeMesures(numero) {
@@ -449,7 +449,7 @@ function configurerEntrainementMissionMesuresNatif() {
     const entete=ecran.querySelector('.entrainement-entete');
     entete?.querySelector('.surtitre') && (entete.querySelector('.surtitre').textContent='Mission Mesures');
     entete?.querySelector('h1') && (entete.querySelector('h1').textContent='Choisis ta session');
-    entete?.querySelector('p') && (entete.querySelector('p').textContent='Entraîne-toi sur les mesures et leurs modules avec les mêmes réglages que PJJoue.');
+    entete?.querySelector('p') && (entete.querySelector('p').textContent='Entraîne-toi sur les mesures et leurs modules avec les mêmes réglages que Quiz CJPM.');
     selectionner('#resultatDeParcours') && (selectionner('#resultatDeParcours').textContent='Lance le dé pour tirer de 1 à 6 questions aléatoires dans Mission Mesures.');
     const selectPerimetre=selectionner('#perimetreEntrainement');
     const groupe=document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
@@ -524,13 +524,13 @@ function terminerSessionMissionMesuresNative() {
 
 function initialiserJeuMesures() {
     const racine=selectionnerMesures('#mesures'); if(!racine||racine.dataset.initialise==='true')return; racine.dataset.initialise='true';
-    selectionnerMesures('#mesuresOuvrirParcours')?.addEventListener('click',()=>{actualiserAccueilMesures();selectionnerMesures('#mesuresAccueil')?.classList.add('masque');selectionnerMesures('#mesuresParcoursVue')?.classList.remove('masque');window.scrollTo?.({top:0,behavior:'smooth'});});
+    selectionnerMesures('#mesuresOuvrirParcours')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Ouvrir le parcours des étapes');actualiserAccueilMesures();selectionnerMesures('#mesuresAccueil')?.classList.add('masque');selectionnerMesures('#mesuresParcoursVue')?.classList.remove('masque');window.scrollTo?.({top:0,behavior:'smooth'});});
     selectionnerMesures('#mesuresRetourDepuisParcours')?.addEventListener('click',()=>{selectionnerMesures('#mesuresParcoursVue')?.classList.add('masque');selectionnerMesures('#mesuresAccueil')?.classList.remove('masque');actualiserAccueilMesures();});
-    selectionnerMesures('#mesuresOuvrirEntrainement')?.addEventListener('click',ouvrirEntrainementMissionMesuresNatif);
-    selectionnerMesures('#mesuresLancerDe')?.addEventListener('click',lancerDeMesures);
-    selectionnerMesures('#mesuresJouerTirage')?.addEventListener('click',jouerTirageDeMesures);
-    selectionnerMesures('#mesuresLancerRevision')?.addEventListener('click',()=>afficherEcran('mesures-revision'));
-    selectionnerMesures('#mesuresLancerEvaluation')?.addEventListener('click',lancerEvaluationMesures);
+    selectionnerMesures('#mesuresOuvrirEntrainement')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Configurer un entraînement');ouvrirEntrainementMissionMesuresNatif();});
+    selectionnerMesures('#mesuresLancerDe')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Défi du hasard · lancer le dé');lancerDeMesures();});
+    selectionnerMesures('#mesuresJouerTirage')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Défi du hasard · jouer le tirage');jouerTirageDeMesures();});
+    selectionnerMesures('#mesuresLancerRevision')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Réviser les erreurs');afficherEcran('mesures-revision');});
+    selectionnerMesures('#mesuresLancerEvaluation')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Évaluation finale');lancerEvaluationMesures();});
     actualiserAccueilMesures(); afficherRevisionMesures();
 }
 initialiserJeuMesures();

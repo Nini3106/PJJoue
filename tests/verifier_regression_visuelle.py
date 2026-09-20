@@ -606,7 +606,7 @@ def verifier_question_mobile_stable(page: Page) -> None:
         return {normal, grand};
     }""")
     for nom, etat in donnees.items():
-        if not re.fullmatch(r"Parcours\s+\d+\s+Étape\s+\d+", etat["identite"]):
+        if not re.fullmatch(r"Parcours\s+\d+\s+Étape\s+\d+(?:\s+.*)?", etat["identite"]):
             raise AssertionError(f"Question mobile ({nom}) : repère parcours/étape incorrect : {etat}")
         if etat["debordement"] > 1:
             raise AssertionError(f"Question mobile ({nom}) : débordement horizontal : {etat}")
@@ -1406,7 +1406,7 @@ def scenarios() -> list[Scenario]:
         Scenario("bureau-accueil-retour", 1440, 900, "() => { const q=QUESTIONS.find(q=>!q.estEvaluationFinale); sauvegarde.aDejaJoue=true; obtenirBilanEtape(q.theme,q.etape).questionsTraitees[q.id]=true; actualiserAccueil(); afficherEcran('accueil',{remplacerHistorique:true}); }", verifier_accueil_retour),
         Scenario("bureau-menu", 1440, 900, "() => { afficherEcran('accueil',{remplacerHistorique:true}); basculerMenuPrincipal(); }", verifier_menu_principal),
         Scenario("bureau-parcours-choix", 1440, 900, "() => ouvrirChoixParcours({remplacerHistorique:true})", verifier_parcours_choix_bureau),
-        Scenario("bureau-parcours-detail", 1440, 900, "() => { ouvrirChoixParcours({remplacerHistorique:true}); const bouton=document.querySelector('#selecteurParcours .selecteur-parcours-bouton'); afficherInfobullePJJoue(bouton); bouton.click(); afficherInfobullePJJoue(bouton); }", verifier_parcours_detail_bureau),
+        Scenario("bureau-parcours-detail", 1440, 900, "() => { ouvrirChoixParcours({remplacerHistorique:true}); const bouton=document.querySelector('#selecteurParcours [data-theme=\"commun\"]'); afficherInfobullePJJoue(bouton); bouton.click(); afficherInfobullePJJoue(bouton); }", verifier_parcours_detail_bureau),
         Scenario("bureau-large-parcours-crimes", 1920, 1080, "() => { ouvrirChoixParcours({remplacerHistorique:true}); document.querySelector('#selecteurParcours [data-theme=\"matiere_criminelle_peines\"]').click(); }", verifier_parcours_crimes_bureau),
         Scenario("bureau-parcours-chrono", 1440, 900, "() => { ouvrirChoixParcours({remplacerHistorique:true}); document.querySelector('#selecteurParcours .selecteur-parcours-bouton').click(); document.querySelector('.parcours-options-session').open=true; document.querySelector('#boutonParcoursChronometre').click(); }", verifier_chronometre_parcours),
         Scenario("bureau-entrainement", 1440, 900, "() => afficherEcran('entrainement',{remplacerHistorique:true})", verifier_entrainement_bureau),
@@ -1432,7 +1432,7 @@ def scenarios() -> list[Scenario]:
         Scenario("mobile-accueil", 390, 844, "() => { sauvegarde.aDejaJoue=false; actualiserAccueil(); afficherEcran('accueil',{remplacerHistorique:true}); }", verifier_accueil_nouveau),
         Scenario("mobile-menu", 390, 844, "() => { afficherEcran('accueil',{remplacerHistorique:true}); basculerMenuPrincipal(); }", verifier_menu_principal),
         Scenario("mobile-parcours-choix", 390, 844, "() => ouvrirChoixParcours({remplacerHistorique:true})", verifier_parcours_choix_mobile),
-        Scenario("mobile-parcours-detail", 390, 844, "() => { ouvrirChoixParcours({remplacerHistorique:true}); const bouton=document.querySelector('#selecteurParcours .selecteur-parcours-bouton'); afficherInfobullePJJoue(bouton); bouton.click(); afficherInfobullePJJoue(bouton); }", verifier_parcours_detail_mobile),
+        Scenario("mobile-parcours-detail", 390, 844, "() => { ouvrirChoixParcours({remplacerHistorique:true}); const bouton=document.querySelector('#selecteurParcours [data-theme=\"commun\"]'); afficherInfobullePJJoue(bouton); bouton.click(); afficherInfobullePJJoue(bouton); }", verifier_parcours_detail_mobile),
         Scenario("mobile-parcours-chrono", 390, 844, "() => { ouvrirChoixParcours({remplacerHistorique:true}); document.querySelector('#selecteurParcours .selecteur-parcours-bouton').click(); document.querySelector('.parcours-options-session').open=true; document.querySelector('#boutonParcoursChronometre').click(); }", verifier_chronometre_parcours),
         Scenario("mobile-entrainement", 390, 844, "() => afficherEcran('entrainement',{remplacerHistorique:true})", verifier_entrainement_mobile),
         Scenario("mobile-entrainement-options", 390, 844, "() => { afficherEcran('entrainement',{remplacerHistorique:true}); document.querySelectorAll('.entrainement-options-avancees').forEach(options => options.open=true); document.querySelectorAll('[data-proposition=\"chronometre\"] .option-bouton[data-valeur=\"oui\"]').forEach(bouton => bouton.click()); }", verifier_options_entrainement),

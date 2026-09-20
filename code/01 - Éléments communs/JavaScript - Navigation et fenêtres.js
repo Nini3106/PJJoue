@@ -189,7 +189,7 @@ const TITRES_ECRANS = {
     bilan: 'Résultats'
 };
 function actualiserTitrePage(ecran) {
-    document.title = `${TITRES_ECRANS[ecran] || 'PJJoue'} — PJJoue`;
+    document.title = `${TITRES_ECRANS[ecran] || 'Quiz CJPM'} — Quiz CJPM`;
 }
 function afficherEcran(identifiant, optionsAffichage = {}) {
     masquerInfobullePJJoue();
@@ -240,8 +240,10 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     document.body.dataset.ecranActif = identifiant;
     if (courant !== identifiant) {
         envoyerEvenementPJJ('page_consultee', {
-            pjjoue_page_consultee: obtenirLibellePageAnalytics(identifiant),
-            pjjoue_page_precedente: obtenirLibellePageAnalytics(courant || 'aucun')
+            pjjoue_page_consultee: obtenirPageMenuAnalytics(identifiant),
+            pjjoue_ecran: obtenirLibelleEcranAnalytics(identifiant),
+            pjjoue_page_precedente: obtenirPageMenuAnalytics(courant),
+            pjjoue_ecran_precedent: obtenirLibelleEcranAnalytics(courant)
         });
     }
     actualiserTitrePage(identifiant);
@@ -423,7 +425,7 @@ function revenirEnArriere() {
             : (estSessionMissionSigles?.() ? 'sigles'
             : (etat.mode === 'parcours' || etat.mode === 'evaluation-finale' ? 'parcours' : (etat.mode === 'revision' ? 'erreurs' : 'entrainement')));
         if (secours === 'parcours') {
-            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
+            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
             return;
         }
         afficherEcran(secours, { forcerSortieQuestion: true, remplacerHistorique: true });
@@ -435,7 +437,7 @@ function revenirEnArriere() {
     }
     if (etat.ecran === 'bilan') {
         if (etat.mode === 'parcours' || etat.mode === 'evaluation-finale') {
-            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
+            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
             return;
         }
         afficherEcran(etat.mode === 'revision' ? 'erreurs' : (etat.mode === 'sigles-revision' ? 'sigles-revision' : 'entrainement'), { forcerSortieQuestion: true, remplacerHistorique: true });
@@ -508,7 +510,7 @@ function restaurerRoute(route) {
             afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
         }
         else {
-            ouvrirParcours(etatRoute.theme || 'commun', { remplacerHistorique: true });
+            ouvrirParcours(etatRoute.theme || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
         }
     }
     else if (etatRoute.ecran === 'parcours') {

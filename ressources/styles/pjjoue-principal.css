@@ -6636,8 +6636,11 @@ body:not([data-ecran-actif="accueil"])::before {
         gap: 6px;
     }
     header.entete .marque > span {
-        display: inline;
+        display: inline-block;
+        min-width: 0;
         max-width: 165px;
+        white-space: normal;
+        overflow-wrap: anywhere;
         color: #dcecff;
         font-size: .72rem;
         line-height: 1.15;
@@ -12256,6 +12259,23 @@ body[data-ecran-actif="accueil"] #accueil {
 #question .question-reprendre-etape-bouton.masque { display: none; }
 
 @media (max-width:820px) {
+    #question .question-contexte-identites {
+        width: 100%;
+        flex-wrap: wrap;
+        row-gap: 6px;
+    }
+    #question .question-etape-identite {
+        width: auto;
+        max-width: 100%;
+        flex: 0 1 auto;
+    }
+    #question .question-etape-numero-ligne {
+        max-width: 100%;
+    }
+    #question .question-reprendre-etape-bouton {
+        max-width: 100%;
+        white-space: normal;
+    }
     #question .question-etape > .question-carte {
         min-height: 0;
         padding: 20px 16px;

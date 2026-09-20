@@ -240,7 +240,7 @@ def verifier_jeu(navigateur, page_html: str) -> int:
     # Le sélecteur doit exposer six parcours séparés, chacun avec 11 étapes.
     selecteurs = page.locator('#selecteurParcours .selecteur-parcours-bouton')
     assert selecteurs.count() == 6, "Le sélecteur ne propose pas les six parcours."
-    themes_attendus = ["commun", "procedure_ordinaire", "information_judiciaire", "jugement_educatif_ordinaire", "matiere_criminelle_peines", "application_execution_peines"]
+    themes_attendus = ["procedure_ordinaire", "information_judiciaire", "jugement_educatif_ordinaire", "matiere_criminelle_peines", "application_execution_peines", "commun"]
     for index, theme_attendu in enumerate(themes_attendus):
         page.evaluate("() => ouvrirChoixParcours({remplacerHistorique:true})")
         page.wait_for_timeout(40)

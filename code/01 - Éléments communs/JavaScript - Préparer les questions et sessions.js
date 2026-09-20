@@ -150,7 +150,7 @@ function lancerEtape(identifiantTheme, etape, chapitre = null, options = {}) {
 function lancerEtapeDepuisDebut(identifiantTheme, etape) {
     lancerEtape(identifiantTheme, etape, 1, { depuisDebut: true });
 }
-function obtenirQuestionsEvaluationFinale(identifiantTheme = etat.theme || 'commun') {
+function obtenirQuestionsEvaluationFinale(identifiantTheme = etat.theme || IDENTIFIANT_PARCOURS_RECOMMANDE) {
     return QUESTIONS
         .filter(question => question.estEvaluationFinale === true && question.theme === identifiantTheme)
         .sort((questionA, questionB) =>
@@ -158,9 +158,9 @@ function obtenirQuestionsEvaluationFinale(identifiantTheme = etat.theme || 'comm
             || questionA.id - questionB.id
         );
 }
-function lancerEvaluationFinale(identifiantTheme = etat.theme || sauvegarde.dernierTheme || 'commun') {
+function lancerEvaluationFinale(identifiantTheme = etat.theme || sauvegarde.dernierTheme || IDENTIFIANT_PARCOURS_RECOMMANDE) {
     if (!PROGRAMMES[identifiantTheme])
-        identifiantTheme = 'commun';
+        identifiantTheme = IDENTIFIANT_PARCOURS_RECOMMANDE;
     const session = obtenirQuestionsEvaluationFinale(identifiantTheme);
     if (session.length !== 50) {
         afficherNotification('L’évaluation finale de ce parcours est indisponible : banque incomplète.');
@@ -297,7 +297,7 @@ function lancerRevisionEtape(identifiantTheme, etape = null) {
     // Accepte aussi l’appel avec uniquement le numéro de l’étape.
     if (etape === null) {
         etape = identifiantTheme;
-        identifiantTheme = etat.theme || sauvegarde.dernierTheme || 'commun';
+        identifiantTheme = etat.theme || sauvegarde.dernierTheme || IDENTIFIANT_PARCOURS_RECOMMANDE;
     }
     const etapeCible = Number(etape);
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);

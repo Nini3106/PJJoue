@@ -17,6 +17,18 @@ FICHIER_DESTINATION = DOSSIER_DONNEES / "donnees-pjj.js"
 
 def construire_themes(programme: dict[str, Any]) -> list[dict[str, str]]:
     """Construit le catalogue des parcours depuis le programme de référence."""
+    # L'identifiant ``commun`` reste stable pour les sauvegardes, les questions
+    # et les routes historiques. Il devient toutefois l'option 06 dans
+    # l'itinéraire visible : le parcours procédural commence par l'ancien 02.
+    ordre_affichage = (
+        "procedure_ordinaire",
+        "information_judiciaire",
+        "jugement_educatif_ordinaire",
+        "matiere_criminelle_peines",
+        "application_execution_peines",
+        "commun",
+    )
+    rang = {identifiant: index for index, identifiant in enumerate(ordre_affichage)}
     return [
         {
             "id": identifiant,
@@ -25,7 +37,10 @@ def construire_themes(programme: dict[str, Any]) -> list[dict[str, str]]:
             "sousTitre": contenu.get("sousTitre", ""),
             "categorie": contenu.get("categorie", "parcours"),
         }
-        for identifiant, contenu in programme.items()
+        for identifiant, contenu in sorted(
+            programme.items(),
+            key=lambda element: rang.get(element[0], len(ordre_affichage)),
+        )
     ]
 
 

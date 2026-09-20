@@ -18,6 +18,10 @@
 if ('scrollRestoration' in history)
     history.scrollRestoration = 'manual';
 const { THEMES, PROGRAMMES, SOURCES, QUESTIONS, SIGLES = [], MESURES_MISSION = { etapes:[], reperes:[], evaluation:[] } } = window.DONNEES_PJJ;
+// Les identifiants historiques restent inchangés pour préserver les
+// sauvegardes et les routes. Seul l'ordre visible évolue avec le rebranding.
+const IDENTIFIANT_PARCOURS_RECOMMANDE = 'procedure_ordinaire';
+const IDENTIFIANT_PARCOURS_OPTIONNEL = 'commun';
 const TRACES_PICTOGRAMMES = Object.freeze({
     decouvertePjj: '<path d="M4 5.5h6.2c1.1 0 1.8.3 1.8 1.3v12.7c0-1-.7-1.5-1.8-1.5H4z"/><path d="M20 5.5h-6.2c-1.1 0-1.8.3-1.8 1.3v12.7c0-1 .7-1.5 1.8-1.5H20z"/><path d="M7 9h2.5M14.5 9H17M7 12h2.5M14.5 12H17"/>',
     procedureOrdinaire: '<path d="M5 3.5h9l4 4V20.5H5z"/><path d="M14 3.5v4h4M8 11h5M8 15h3"/><circle cx="16.5" cy="15.5" r="3.5"/><path d="m15 15.5 1 1 2-2"/>',
@@ -142,25 +146,37 @@ function creerIconeTheme(identifiant, libelle = '') {
 const selectionner = selecteur => document.querySelector(selecteur);
 const selectionnerTous = selecteur => [...document.querySelectorAll(selecteur)];
 function envoyerEvenementPJJ(nom, parametres = {}) {
-    return window.PJJ_ANALYTICS?.envoyer?.(nom, parametres) === true;
+    // Tous les événements métier partagent le même contexte lisible. Les
+    // paramètres fournis par l'action restent prioritaires : cela permet à
+    // une navigation de décrire la page qui vient réellement d'être ouverte,
+    // et non l'écran précédent encore actif au moment du clic.
+    const contexte = typeof obtenirContexteAnalyticsGlobal === 'function'
+        ? obtenirContexteAnalyticsGlobal()
+        : {};
+    return window.PJJ_ANALYTICS?.envoyer?.(nom, { ...contexte, ...parametres }) === true;
 }
+
+// Ces libellés sont exactement ceux du menu dépliant. Un écran interne
+// (question, résultats ou révision ciblée) n'est pas une page publique : il
+// est décrit séparément par pjjoue_ecran et rattaché à sa page d'origine.
 const LIBELLES_PAGES_ANALYTICS = Object.freeze({
     accueil: 'Accueil',
     parcours: 'Parcours PJJ',
-    carnet: 'Carnet de parcours',
     entrainement: 'Entraînement libre',
-    erreurs: 'Mes erreurs à retravailler',
-    sigles: 'Mission Sigles',
-    'sigles-revision': 'Réviser mes erreurs · Mission Sigles',
-    mesures: 'Mission Mesures',
-    'mesures-revision': 'Réviser mes erreurs · Mission Mesures',
-    supports: 'Supports de révision',
+    erreurs: 'Réviser',
     progression: 'Progression',
-    parametres: 'Paramètres',
+    carnet: 'Carnet de parcours',
+    supports: 'Supports de révision',
+    guides: 'Guides',
+    sigles: 'Mission Sigles',
+    mesures: 'Mission Mesures',
+    parametres: 'Paramètres'
+});
+const LIBELLES_ECRANS_ANALYTICS = Object.freeze({
     question: 'Question',
-    bilan: 'Bilan de la session',
-    consentement: 'Consentement Analytics',
-    aucun: 'Aucune page précédente'
+    bilan: 'Résultats',
+    'sigles-revision': 'Révision des erreurs · Mission Sigles',
+    'mesures-revision': 'Révision des erreurs · Mission Mesures'
 });
 const LIBELLES_JOKERS_ANALYTICS = Object.freeze({
     '50_50': '50/50',
@@ -168,7 +184,49 @@ const LIBELLES_JOKERS_ANALYTICS = Object.freeze({
     langue_au_chat: 'Langue au chat'
 });
 function obtenirLibellePageAnalytics(identifiant) {
-    return LIBELLES_PAGES_ANALYTICS[identifiant] || String(identifiant || 'Page inconnue');
+    return LIBELLES_PAGES_ANALYTICS[identifiant] || null;
+}
+function obtenirLibelleEcranAnalytics(identifiant) {
+    return LIBELLES_ECRANS_ANALYTICS[identifiant] || obtenirLibellePageAnalytics(identifiant) || null;
+}
+function obtenirPageMenuAnalytics(identifiant = etat?.ecran) {
+    const pageDirecte = obtenirLibellePageAnalytics(identifiant);
+    if (pageDirecte)
+        return pageDirecte;
+    if (identifiant === 'sigles-revision')
+        return 'Mission Sigles';
+    if (identifiant === 'mesures-revision')
+        return 'Mission Mesures';
+
+    const origine = String(etat?.origineSessionAnalytics || '');
+    if (origine.startsWith('mission_sigles_') || String(etat?.mode || '').startsWith('sigles-'))
+        return 'Mission Sigles';
+    if (origine.startsWith('mission_mesures_') || String(etat?.mode || '').startsWith('mesures-'))
+        return 'Mission Mesures';
+    if (etat?.mode === 'parcours' || etat?.mode === 'evaluation-finale' || origine === 'evaluation_finale')
+        return 'Parcours PJJ';
+    if (etat?.mode === 'libre' || origine === 'entrainement_libre' || origine === 'defi_du_hasard')
+        return 'Entraînement libre';
+    if (etat?.mode === 'revision' || origine === 'revision_des_erreurs')
+        return 'Réviser';
+    return null;
+}
+function obtenirLibelleParcoursAnalytics(question = null) {
+    const origine = String(etat?.origineSessionAnalytics || '');
+    if (origine.startsWith('mission_sigles_') || question?.missionSigles || String(etat?.mode || '').startsWith('sigles-'))
+        return 'Mission Sigles';
+    if (origine.startsWith('mission_mesures_') || question?.missionMesures || String(etat?.mode || '').startsWith('mesures-'))
+        return 'Mission Mesures';
+    const identifiantTheme = question?.theme || etat?.theme || null;
+    if (identifiantTheme && PROGRAMMES[identifiantTheme])
+        return PROGRAMMES[identifiantTheme].titre;
+    return etat?.perimetreEntrainement === 'tous' ? 'Parcours complet' : null;
+}
+function obtenirNomQuestionAnalytics(question) {
+    const nom = question?.nom || question?.titre || question?.enonce || question?.question;
+    if (!nom)
+        return null;
+    return String(nom).replace(/\s+/g, ' ').trim();
 }
 function obtenirLibelleTailleTexteAnalytics(echelle) {
     const valeur = Number(echelle);
@@ -179,27 +237,56 @@ function obtenirLibelleTailleTexteAnalytics(echelle) {
     return 'Normale';
 }
 function obtenirLibelleModeJeuAnalytics() {
-    if (etat?.origineSessionAnalytics === 'defi_du_hasard')
+    const origine = String(etat?.origineSessionAnalytics || '');
+    const mode = String(etat?.mode || '');
+    if (origine === 'defi_du_hasard' || mode === 'sigles-hasard' || mode === 'mesures-hasard')
         return 'Défi du hasard';
-    if (etat?.mode === 'parcours')
+    if (mode === 'parcours' || mode === 'sigles-parcours' || mode === 'mesures-parcours')
         return 'Parcours PJJ';
-    if (etat?.mode === 'libre')
+    if (mode === 'libre' || mode === 'sigles-entrainement' || mode === 'mesures-entrainement')
         return 'Entraînement libre';
-    if (etat?.mode === 'revision')
+    if (mode === 'revision' || mode === 'sigles-revision' || mode === 'mesures-revision')
         return 'Révision des erreurs';
-    if (etat?.mode === 'evaluation-finale')
+    if (mode === 'evaluation-finale' || mode === 'sigles-evaluation' || mode === 'mesures-evaluation')
         return 'Évaluation finale';
     return null;
 }
 function obtenirInformationsEtapeAnalytics(question = null) {
+    const evaluationFinale = question?.estEvaluationFinale === true
+        || etat?.mode === 'evaluation-finale'
+        || /^(sigles|mesures)-evaluation$/.test(String(etat?.mode || ''));
+    if (evaluationFinale)
+        return { numero: 12, nom: 'Évaluation finale' };
+
+    if (question?.missionSigles || String(etat?.mode || '').startsWith('sigles-')) {
+        const numero = Number(question?.missionSiglesMeta?.numeroEtape || question?.etape || etat?.etape);
+        const numeroValide = Number.isFinite(numero) && numero > 0;
+        const identite = numeroValide && typeof obtenirIdentiteEtapeMissionSigles === 'function'
+            ? obtenirIdentiteEtapeMissionSigles(numero)
+            : null;
+        return {
+            numero: numeroValide ? numero : null,
+            nom: identite?.titre || (numeroValide ? `Étape ${numero}` : null)
+        };
+    }
+    if (question?.missionMesures || String(etat?.mode || '').startsWith('mesures-')) {
+        const numero = Number(question?.missionMesuresMeta?.numeroEtape || question?.etape || etat?.etape);
+        const numeroValide = Number.isFinite(numero) && numero > 0;
+        const identite = numeroValide && typeof obtenirIdentiteEtapeMissionMesures === 'function'
+            ? obtenirIdentiteEtapeMissionMesures(numero)
+            : null;
+        return {
+            numero: numeroValide ? numero : null,
+            nom: identite?.titre || (numeroValide ? `Étape ${numero}` : null)
+        };
+    }
+
     const numeroVisible = Number(question?.etape ?? etat?.etape);
     if (!Number.isFinite(numeroVisible) || numeroVisible <= 0)
         return { numero: null, nom: null };
-    if (numeroVisible === 12)
-        return { numero: 12, nom: 'Évaluation finale' };
-    const identifiantTheme = question?.theme || etat?.theme || 'commun';
+    const identifiantTheme = question?.theme || etat?.theme || IDENTIFIANT_PARCOURS_RECOMMANDE;
     const etapeProgramme = obtenirEtapeProgramme(identifiantTheme, numeroVisible)
-        || obtenirEtapeProgramme('commun', numeroVisible);
+        || obtenirEtapeProgramme(IDENTIFIANT_PARCOURS_RECOMMANDE, numeroVisible);
     // L'ordre visible peut évoluer sans recycler l'identité Analytics permanente.
     // L'identifiant permanent reste stable même si l'ordre d'affichage d'une étape change.
     const numeroPermanent = Number(
@@ -237,14 +324,14 @@ function obtenirDureeSessionAnalytics() {
 }
 function obtenirContexteSessionAnalytics() {
     const modeDeJeu = obtenirLibelleModeJeuAnalytics();
-    if (!modeDeJeu)
-        return {};
-    const identifiantTheme = etat?.theme || etat?.questionCourante?.theme || null;
+    const parcours = obtenirLibelleParcoursAnalytics();
     const contexte = {
+        pjjoue_page_consultee: obtenirPageMenuAnalytics(),
+        pjjoue_ecran: obtenirLibelleEcranAnalytics(etat?.ecran),
         pjjoue_mode_de_jeu: modeDeJeu,
-        pjjoue_parcours: identifiantTheme && PROGRAMMES[identifiantTheme]
-            ? PROGRAMMES[identifiantTheme].titre
-            : (etat?.perimetreEntrainement === 'tous' ? 'Parcours complet' : null),
+        pjjoue_type_session: modeDeJeu,
+        pjjoue_parcours: parcours,
+        pjjoue_parcours_selectionne: parcours,
         pjjoue_nombre_questions: Array.isArray(etat?.questionsSession) && etat.questionsSession.length
             ? etat.questionsSession.length
             : null,
@@ -255,13 +342,14 @@ function obtenirContexteSessionAnalytics() {
         contexte.pjjoue_numero_etape = etape.numero;
         contexte.pjjoue_nom_etape = etape.nom;
     }
-    if (etat.mode === 'parcours') {
+    if (etat.mode === 'parcours' || /^(sigles|mesures)-parcours$/.test(String(etat.mode || ''))) {
         contexte.pjjoue_defi_chrono = etat.chronometreSessionActif ? 'Chronométré' : 'Libre';
         contexte.pjjoue_temps_par_question_defi_chrono = etat.chronometreSessionActif
             ? Number(etat.dureeChronometreSession) || null
             : null;
     }
-    if (etat.mode === 'libre' && etat.origineSessionAnalytics !== 'defi_du_hasard') {
+    if ((etat.mode === 'libre' || /^(sigles|mesures)-entrainement$/.test(String(etat.mode || '')))
+        && etat.origineSessionAnalytics !== 'defi_du_hasard') {
         contexte.pjjoue_mode_entrainement = etat.organisationSession === 'ordonne'
             ? 'Par ordre d’étapes'
             : 'Mélangé';
@@ -270,7 +358,7 @@ function obtenirContexteSessionAnalytics() {
             ? Number(etat.dureeChronometreSession) || null
             : null;
     }
-    if (etat.origineSessionAnalytics === 'defi_du_hasard') {
+    if (etat.origineSessionAnalytics === 'defi_du_hasard' || /^(sigles|mesures)-hasard$/.test(String(etat.mode || ''))) {
         contexte.pjjoue_nombre_questions_defi_du_hasard = Number(etat.nombreQuestionsTirageDe) || null;
     }
     return contexte;
@@ -285,6 +373,7 @@ function obtenirContexteQuestionAnalytics(question) {
         pjjoue_numero_etape: etape.numero,
         pjjoue_nom_etape: etape.nom,
         pjjoue_identifiant_question: obtenirIdentifiantQuestionAnalytics(question),
+        pjjoue_nom_question: obtenirNomQuestionAnalytics(question),
         pjjoue_position_question_session: Number.isFinite(Number(etat?.indexQuestion))
             ? Number(etat.indexQuestion) + 1
             : null,
@@ -294,8 +383,24 @@ function obtenirContexteQuestionAnalytics(question) {
 function envoyerUtilisationJoker(type) {
     envoyerEvenementPJJ('joker_utilise', {
         ...obtenirContexteQuestionAnalytics(etat.questionCourante),
-        pjjoue_joker_utilise: LIBELLES_JOKERS_ANALYTICS[type] || type
+        pjjoue_joker_utilise: LIBELLES_JOKERS_ANALYTICS[type] || type,
+        pjjoue_option_de_jeu: `Joker · ${LIBELLES_JOKERS_ANALYTICS[type] || type}`
     });
+}
+function envoyerOptionDeJeuAnalytics(option, parametres = {}) {
+    const libelle = String(option || '').trim();
+    if (!libelle)
+        return false;
+    return envoyerEvenementPJJ('option_de_jeu_selectionnee', {
+        pjjoue_option_de_jeu: libelle,
+        ...parametres
+    });
+}
+function obtenirContexteAnalyticsGlobal() {
+    return {
+        pjjoue_page_consultee: obtenirPageMenuAnalytics(),
+        pjjoue_ecran: obtenirLibelleEcranAnalytics(etat?.ecran)
+    };
 }
 function estRouteAccueil() {
     if (typeof lireRoute === 'function')
@@ -762,7 +867,7 @@ function enregistrerSauvegarde() {
     catch (erreur) {
         if (!stockageLocalAverti) {
             stockageLocalAverti = true;
-            afficherNotification('Sauvegarde locale indisponible · pense à exporter ta progression avant de fermer PJJoue.');
+            afficherNotification('Sauvegarde locale indisponible · pense à exporter ta progression avant de fermer Quiz CJPM.');
         }
         return false;
     }
@@ -868,7 +973,7 @@ function restaurerSessionEnCours() {
         return false;
     }
     const positionQuestion = Math.min(questions.length - 1, Math.max(0, Number(instantane.indexQuestion) || 0));
-    etat.theme = instantane.theme || questions[positionQuestion]?.theme || 'commun';
+    etat.theme = instantane.theme || questions[positionQuestion]?.theme || IDENTIFIANT_PARCOURS_RECOMMANDE;
     etat.etape = Number(instantane.etape) || Number(questions[positionQuestion]?.etape) || 1;
     etat.chapitre = Number(instantane.chapitre) || 1;
     etat.mode = instantane.mode || 'parcours';
@@ -1203,7 +1308,7 @@ const TITRES_ECRANS = {
     bilan: 'Résultats'
 };
 function actualiserTitrePage(ecran) {
-    document.title = `${TITRES_ECRANS[ecran] || 'PJJoue'} — PJJoue`;
+    document.title = `${TITRES_ECRANS[ecran] || 'Quiz CJPM'} — Quiz CJPM`;
 }
 function afficherEcran(identifiant, optionsAffichage = {}) {
     masquerInfobullePJJoue();
@@ -1254,8 +1359,10 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     document.body.dataset.ecranActif = identifiant;
     if (courant !== identifiant) {
         envoyerEvenementPJJ('page_consultee', {
-            pjjoue_page_consultee: obtenirLibellePageAnalytics(identifiant),
-            pjjoue_page_precedente: obtenirLibellePageAnalytics(courant || 'aucun')
+            pjjoue_page_consultee: obtenirPageMenuAnalytics(identifiant),
+            pjjoue_ecran: obtenirLibelleEcranAnalytics(identifiant),
+            pjjoue_page_precedente: obtenirPageMenuAnalytics(courant),
+            pjjoue_ecran_precedent: obtenirLibelleEcranAnalytics(courant)
         });
     }
     actualiserTitrePage(identifiant);
@@ -1437,7 +1544,7 @@ function revenirEnArriere() {
             : (estSessionMissionSigles?.() ? 'sigles'
             : (etat.mode === 'parcours' || etat.mode === 'evaluation-finale' ? 'parcours' : (etat.mode === 'revision' ? 'erreurs' : 'entrainement')));
         if (secours === 'parcours') {
-            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
+            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
             return;
         }
         afficherEcran(secours, { forcerSortieQuestion: true, remplacerHistorique: true });
@@ -1449,7 +1556,7 @@ function revenirEnArriere() {
     }
     if (etat.ecran === 'bilan') {
         if (etat.mode === 'parcours' || etat.mode === 'evaluation-finale') {
-            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
+            ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
             return;
         }
         afficherEcran(etat.mode === 'revision' ? 'erreurs' : (etat.mode === 'sigles-revision' ? 'sigles-revision' : 'entrainement'), { forcerSortieQuestion: true, remplacerHistorique: true });
@@ -1522,7 +1629,7 @@ function restaurerRoute(route) {
             afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
         }
         else {
-            ouvrirParcours(etatRoute.theme || 'commun', { remplacerHistorique: true });
+            ouvrirParcours(etatRoute.theme || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
         }
     }
     else if (etatRoute.ecran === 'parcours') {
@@ -1971,7 +2078,7 @@ function actualiserCarnetParcours(_programmeIgnore = null) {
     if (!titreSymbolique || !prochaineDestination || !route)
         return;
     const prochainTheme = THEMES.find(theme => obtenirProchaineDestinationParcours(PROGRAMMES[theme.id]));
-    const identiteProchainParcours = obtenirIdentiteParcours(prochainTheme?.id || 'commun');
+    const identiteProchainParcours = obtenirIdentiteParcours(prochainTheme?.id || IDENTIFIANT_PARCOURS_RECOMMANDE);
     const nombreEtapesMaitrisees = compterEtapesMaitrisees();
     const avancement = calculerAvancementCarnetComplet();
     titreSymbolique.textContent = obtenirTitreSymboliqueParcours(nombreEtapesMaitrisees);
@@ -2087,19 +2194,8 @@ function afficherDefisParcoursComplet() {
     });
 }
 const IDENTITES_PARCOURS = Object.freeze({
-    commun: {
-        numero: '01',
-        titre: 'Découvrir la PJJ',
-        chapitre: 'Point de départ',
-        description: 'Missions, publics, professionnels, structures et logique éducative de la PJJ.',
-        niveau: 'Débutant',
-        duree: '≈ 1 h 20',
-        couleur: '#4f8cff',
-        couleurTexte: '#9fc2ff',
-        couleurRgb: '79,140,255'
-    },
     procedure_ordinaire: {
-        numero: '02',
+        numero: '01',
         titre: 'De l’enquête à la sanction',
         chapitre: 'Procédure ordinaire',
         description: 'Suis le dossier depuis l’enquête et l’orientation du parquet jusqu’à la culpabilité, la MEE éventuelle et la sanction.',
@@ -2107,10 +2203,11 @@ const IDENTITES_PARCOURS = Object.freeze({
         duree: '≈ 1 h 40',
         couleur: '#d49a00',
         couleurTexte: '#ffd36a',
-        couleurRgb: '212,154,0'
+        couleurRgb: '212,154,0',
+        recommande: true
     },
     information_judiciaire: {
-        numero: '03',
+        numero: '02',
         titre: 'Avant le jugement : l’information judiciaire',
         chapitre: 'Avant le jugement',
         description: 'Situe l’information judiciaire avant le jugement et repère le rôle du JI, du JLD et les décisions provisoires.',
@@ -2121,7 +2218,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         couleurRgb: '8,145,178'
     },
     jugement_educatif_ordinaire: {
-        numero: '04',
+        numero: '03',
         titre: 'Du jugement à la sanction',
         chapitre: 'Jugement éducatif',
         description: 'Comprends le rôle du JE et du TPE et construis la réponse éducative au stade du jugement et de la sanction.',
@@ -2132,7 +2229,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         couleurRgb: '139,92,246'
     },
     matiere_criminelle_peines: {
-        numero: '05',
+        numero: '04',
         titre: 'De la qualification criminelle aux peines',
         chapitre: 'Matière criminelle',
         description: 'Pars de la qualification et de l’âge aux faits pour identifier la juridiction, puis la sanction ou la peine possible.',
@@ -2143,7 +2240,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         couleurRgb: '225,29,72'
     },
     application_execution_peines: {
-        numero: '06',
+        numero: '05',
         titre: 'Après la sanction : application et exécution',
         chapitre: 'Application des peines',
         description: 'Après la sanction, suis l’exécution, les aménagements, les incidents et l’articulation entre JE et JAP.',
@@ -2152,10 +2249,23 @@ const IDENTITES_PARCOURS = Object.freeze({
         couleur: '#0f766e',
         couleurTexte: '#70d6ca',
         couleurRgb: '15,118,110'
+    },
+    commun: {
+        numero: '06',
+        libelleNumero: 'Option : Parcours 06',
+        titre: 'Découvrir la PJJ',
+        chapitre: '',
+        description: 'Missions, publics, professionnels, structures et logique éducative de la PJJ.',
+        niveau: 'Débutant',
+        duree: '≈ 1 h 20',
+        couleur: '#4f8cff',
+        couleurTexte: '#9fc2ff',
+        couleurRgb: '79,140,255',
+        optionnel: true
     }
 });
 function obtenirIdentiteParcours(identifiantTheme) {
-    return IDENTITES_PARCOURS[identifiantTheme] || IDENTITES_PARCOURS.commun;
+    return IDENTITES_PARCOURS[identifiantTheme] || IDENTITES_PARCOURS[IDENTIFIANT_PARCOURS_RECOMMANDE];
 }
 /**
  * Construit le repère de maîtrise autonome. Les deux traits derrière l'étoile
@@ -2209,7 +2319,7 @@ function actualiserSelecteurParcours() {
                 : progression.pourcentage > 0 ? 'En cours' : 'À découvrir';
         bouton.type = 'button';
         const estDernierParcours = theme.id === THEMES[THEMES.length - 1].id;
-        bouton.className = `selecteur-parcours-bouton${theme.id === 'commun' ? ' parcours-recommande' : ''}${estDernierParcours ? ' parcours-cloture' : ''}`;
+        bouton.className = `selecteur-parcours-bouton${theme.id === IDENTIFIANT_PARCOURS_RECOMMANDE ? ' parcours-recommande' : ''}${estDernierParcours ? ' parcours-cloture' : ''}`;
         bouton.dataset.theme = theme.id;
         bouton.style.setProperty('--parcours-accent', identite.couleur);
         bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
@@ -2217,18 +2327,25 @@ function actualiserSelecteurParcours() {
         bouton.setAttribute('aria-label', `${identite.titre}. ${progression.maitrisees} étapes maîtrisées sans joker sur ${progression.total}.${progression.evaluationReussie ? ' Évaluation finale réussie.' : ''}`);
         bouton.innerHTML = `
             ${progression.jalonsMaitrises > 0 ? creerEtoileFilanteProgression(progression.jalonsMaitrises) : ''}
-            <span class="selecteur-parcours-numero">Parcours ${identite.numero}</span>
+            <span class="selecteur-parcours-numero">${identite.libelleNumero || `Parcours ${identite.numero}`}</span>
             <span class="selecteur-parcours-icone">${creerIconeTheme(theme.id, '')}</span>
             <span class="selecteur-parcours-statut">${statut}</span>
             <span class="selecteur-parcours-texte">
-                <b>${theme.id === 'commun' ? 'Recommandé pour commencer' : identite.chapitre}</b>
+                ${theme.id === IDENTIFIANT_PARCOURS_RECOMMANDE ? '<b>Recommandé pour commencer</b>' : (identite.chapitre ? `<b>${identite.chapitre}</b>` : '')}
                 <strong>${identite.titre}</strong>
                 <small>${identite.description}</small>
             </span>
             <span class="selecteur-parcours-informations"><span>${identite.niveau}</span><span>${identite.duree}</span></span>
             <span class="selecteur-parcours-progression" aria-hidden="true"><i style="width:${progression.pourcentage}%"></i></span>
             <span class="selecteur-parcours-pied"><span>${progression.maitrisees}/${progression.total} étapes</span><span>Explorer →</span></span>`;
-        bouton.onclick = () => ouvrirParcours(theme.id);
+        bouton.onclick = () => {
+            envoyerEvenementPJJ('parcours_selectionne', {
+                pjjoue_parcours: PROGRAMMES[theme.id]?.titre,
+                pjjoue_parcours_selectionne: PROGRAMMES[theme.id]?.titre,
+                pjjoue_numero_parcours: Number(identite.numero)
+            });
+            ouvrirParcours(theme.id);
+        };
         zone.appendChild(bouton);
     });
 }
@@ -2255,7 +2372,7 @@ function actualiserEnteteParcours(programme) {
     const icone = selectionner('#iconeParcoursSelectionne');
     if (titre) titre.textContent = identite.titre;
     if (sousTitre) sousTitre.textContent = identite.description;
-    if (surtitre) surtitre.textContent = `${identite.chapitre} · parcours ${obtenirOrdreTheme(programme.id) + 1} sur ${THEMES.length}`;
+    if (surtitre) surtitre.textContent = `${identite.optionnel ? 'Option · ' : ''}${identite.chapitre || identite.titre} · parcours ${obtenirOrdreTheme(programme.id) + 1} sur ${THEMES.length}`;
     if (icone) icone.innerHTML = creerIconeTheme(programme.id, '');
     const libelleProgression = selectionner('#libelleProgressionParcours');
     const pourcentageProgression = selectionner('#pourcentageProgressionParcours');
@@ -2273,11 +2390,27 @@ function actualiserEnteteParcours(programme) {
     if (prochaineEtape) {
         const dejaCommencee = compterQuestionsTraiteesEtape(programme.id, prochaineEtape.id) > 0;
         boutonAction.textContent = `${dejaCommencee ? 'Reprendre' : 'Commencer'} l’étape ${prochaineEtape.id} →`;
-        boutonAction.onclick = () => lancerEtape(programme.id, prochaineEtape.id);
+        boutonAction.onclick = () => {
+            envoyerEvenementPJJ('etape_selectionnee', {
+                pjjoue_parcours: programme.titre,
+                pjjoue_parcours_selectionne: programme.titre,
+                pjjoue_numero_etape: prochaineEtape.id,
+                pjjoue_nom_etape: prochaineEtape.titre
+            });
+            lancerEtape(programme.id, prochaineEtape.id);
+        };
     }
     else if (!estEvaluationFinaleReussie(programme.id)) {
         boutonAction.textContent = 'Passer l’évaluation finale →';
-        boutonAction.onclick = () => lancerEvaluationFinale(programme.id);
+        boutonAction.onclick = () => {
+            envoyerEvenementPJJ('etape_selectionnee', {
+                pjjoue_parcours: programme.titre,
+                pjjoue_parcours_selectionne: programme.titre,
+                pjjoue_numero_etape: 12,
+                pjjoue_nom_etape: 'Évaluation finale'
+            });
+            lancerEvaluationFinale(programme.id);
+        };
     }
     else {
         boutonAction.textContent = 'Parcours terminé ✓';
@@ -2285,7 +2418,7 @@ function actualiserEnteteParcours(programme) {
         boutonAction.onclick = null;
     }
 }
-function ouvrirParcours(identifiantTheme = sauvegarde.dernierTheme || 'commun', optionsAffichage = {}) {
+function ouvrirParcours(identifiantTheme = sauvegarde.dernierTheme || IDENTIFIANT_PARCOURS_RECOMMANDE, optionsAffichage = {}) {
     if (!PROGRAMMES[identifiantTheme]) {
         ouvrirChoixParcours(optionsAffichage);
         return;
@@ -2358,12 +2491,12 @@ const FICHIERS_ICONES_PARCOURS_DECOUVERTE = Object.freeze({
     10: 'icone-mesures-judiciaires.svg',
     11: 'icone-partenaires.svg'
 });
-function obtenirNomIconeEtape(numeroEtape, identifiantTheme = etat.theme || 'commun') {
+function obtenirNomIconeEtape(numeroEtape, identifiantTheme = etat.theme || IDENTIFIANT_PARCOURS_RECOMMANDE) {
     return ICONES_ETAPES_PARCOURS[identifiantTheme]?.[Number(numeroEtape)]
         || ICONES_ETAPES_PARCOURS.commun[Number(numeroEtape)]
         || 'dossier';
 }
-function obtenirBaliseIconeEtape(numeroEtape, identifiantTheme = etat.theme || 'commun') {
+function obtenirBaliseIconeEtape(numeroEtape, identifiantTheme = etat.theme || IDENTIFIANT_PARCOURS_RECOMMANDE) {
     if (identifiantTheme === 'commun') {
         const nomFichier = FICHIERS_ICONES_PARCOURS_DECOUVERTE[Number(numeroEtape)];
         return nomFichier
@@ -2429,11 +2562,23 @@ function afficherEtapes() {
         carte.addEventListener('click', evenement => {
             if (evenement.target.closest('button'))
                 return;
+            envoyerEvenementPJJ('etape_selectionnee', {
+                pjjoue_parcours: programme.titre,
+                pjjoue_parcours_selectionne: programme.titre,
+                pjjoue_numero_etape: etapeProgramme.id,
+                pjjoue_nom_etape: etapeProgramme.titre
+            });
             lancerEtape(etat.theme, etapeProgramme.id);
         });
         carte.addEventListener('keydown', evenement => {
             if ((evenement.key === 'Enter' || evenement.key === ' ') && !evenement.target.closest('button')) {
                 evenement.preventDefault();
+                envoyerEvenementPJJ('etape_selectionnee', {
+                    pjjoue_parcours: programme.titre,
+                    pjjoue_parcours_selectionne: programme.titre,
+                    pjjoue_numero_etape: etapeProgramme.id,
+                    pjjoue_nom_etape: etapeProgramme.titre
+                });
                 lancerEtape(etat.theme, etapeProgramme.id);
             }
         });
@@ -2472,7 +2617,15 @@ function afficherEtapes() {
     evaluation.querySelector('.evaluation-statut').textContent = evaluationReussie
         ? `Réussie · meilleur score ${obtenirEvaluationFinaleTheme(etat.theme).meilleurScore}%`
         : (evaluationDeverrouillee ? '50 questions · évaluation complète' : 'Termine les 11 étapes pour l’ouvrir');
-    evaluation.onclick = evaluationDeverrouillee ? () => lancerEvaluationFinale(etat.theme) : null;
+    evaluation.onclick = evaluationDeverrouillee ? () => {
+        envoyerEvenementPJJ('etape_selectionnee', {
+            pjjoue_parcours: programme.titre,
+            pjjoue_parcours_selectionne: programme.titre,
+            pjjoue_numero_etape: 12,
+            pjjoue_nom_etape: 'Évaluation finale'
+        });
+        lancerEvaluationFinale(etat.theme);
+    } : null;
     enregistrerSauvegarde();
 }
 function garantirOptionNombreQuestions(selectNombre, valeur) {
@@ -2748,6 +2901,7 @@ function initialiserGroupesChoix() {
                     groupe.dataset.modeSelectionNombre = mode;
                     synchroniserCurseurNombreQuestions(obtenirMaximumNombreQuestions());
                     actualiserEtatBoutonsNombreQuestions(valeur, mode);
+                    envoyerOptionDeJeuAnalytics(`Nombre de questions : ${bouton.textContent.trim() || valeur}`);
                     return;
                 }
 
@@ -2762,6 +2916,14 @@ function initialiserGroupesChoix() {
                     actualiserLimiteQuestionsEntrainement();
                 if (listeDeroulante.id === 'echelleTexte' || listeDeroulante.id === 'sonActif')
                     enregistrerParametres();
+                const nomsOptions = {
+                    perimetreEntrainement: 'Périmètre',
+                    echelleTexte: 'Taille du texte',
+                    sonActif: 'Sons'
+                };
+                const nomOption = nomsOptions[listeDeroulante.id];
+                if (nomOption)
+                    envoyerOptionDeJeuAnalytics(`${nomOption} : ${bouton.textContent.trim() || listeDeroulante.value}`);
             };
         });
     });
@@ -2938,7 +3100,7 @@ function lancerEtape(identifiantTheme, etape, chapitre = null, options = {}) {
 function lancerEtapeDepuisDebut(identifiantTheme, etape) {
     lancerEtape(identifiantTheme, etape, 1, { depuisDebut: true });
 }
-function obtenirQuestionsEvaluationFinale(identifiantTheme = etat.theme || 'commun') {
+function obtenirQuestionsEvaluationFinale(identifiantTheme = etat.theme || IDENTIFIANT_PARCOURS_RECOMMANDE) {
     return QUESTIONS
         .filter(question => question.estEvaluationFinale === true && question.theme === identifiantTheme)
         .sort((questionA, questionB) =>
@@ -2946,9 +3108,9 @@ function obtenirQuestionsEvaluationFinale(identifiantTheme = etat.theme || 'comm
             || questionA.id - questionB.id
         );
 }
-function lancerEvaluationFinale(identifiantTheme = etat.theme || sauvegarde.dernierTheme || 'commun') {
+function lancerEvaluationFinale(identifiantTheme = etat.theme || sauvegarde.dernierTheme || IDENTIFIANT_PARCOURS_RECOMMANDE) {
     if (!PROGRAMMES[identifiantTheme])
-        identifiantTheme = 'commun';
+        identifiantTheme = IDENTIFIANT_PARCOURS_RECOMMANDE;
     const session = obtenirQuestionsEvaluationFinale(identifiantTheme);
     if (session.length !== 50) {
         afficherNotification('L’évaluation finale de ce parcours est indisponible : banque incomplète.');
@@ -3085,7 +3247,7 @@ function lancerRevisionEtape(identifiantTheme, etape = null) {
     // Accepte aussi l’appel avec uniquement le numéro de l’étape.
     if (etape === null) {
         etape = identifiantTheme;
-        identifiantTheme = etat.theme || sauvegarde.dernierTheme || 'commun';
+        identifiantTheme = etat.theme || sauvegarde.dernierTheme || IDENTIFIANT_PARCOURS_RECOMMANDE;
     }
     const etapeCible = Number(etape);
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
@@ -5771,7 +5933,7 @@ function construireBilanEvaluationFinale(pourcentage, evaluationFinaleReussie) {
             messageResultat: `Résultat : ${pourcentage} %. Les connaissances de ce parcours sont validées.`,
             celebration: toutReussi ? {
                 titre: 'Parcours complet accompli !',
-                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Ton carnet PJJoue est complet.`,
+                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Ton carnet Quiz CJPM est complet.`,
                 confetti: true,
                 finale: true
             } : {
@@ -6891,7 +7053,7 @@ function obtenirIdentiteEtapeMissionSigles(numero) {
     return ETAPES_MISSION_SIGLES[Number(numero)] || ETAPES_MISSION_SIGLES[1];
 }
 function obtenirThemeVisuelMissionSigles(numero) {
-    return ['commun','procedure_ordinaire','information_judiciaire','jugement_educatif_ordinaire','matiere_criminelle_peines','application_execution_peines'][Math.max(0, Math.min(5, Number(numero || 1) - 1))];
+    return ['procedure_ordinaire','information_judiciaire','jugement_educatif_ordinaire','matiere_criminelle_peines','application_execution_peines','commun'][Math.max(0, Math.min(5, Number(numero || 1) - 1))];
 }
 function convertirQuestionMissionSiglesVersPJJoue(questionSigles, index, configuration) {
     const cible = questionSigles.cible || questionSigles.cibles?.[0] || null;
@@ -7114,7 +7276,7 @@ function configurerEntrainementMissionSiglesNatif() {
     const entete = ecran.querySelector('.entrainement-entete');
     entete?.querySelector('.surtitre') && (entete.querySelector('.surtitre').textContent = 'Mission Sigles');
     entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Choisis ta session');
-    entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Entraîne-toi sur les sigles avec exactement les mêmes réglages que dans PJJoue.');
+    entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Entraîne-toi sur les sigles avec exactement les mêmes réglages que dans Quiz CJPM.');
     const resultatDe = selectionner('#resultatDeParcours');
     if (resultatDe) resultatDe.textContent = 'Lance le dé pour tirer de 1 à 6 questions aléatoires parmi les 72 sigles.';
     const selectPerimetre = selectionner('#perimetreEntrainement');
@@ -7191,13 +7353,13 @@ function restaurerEntrainementPJJoueNatif() {
     const selectPerimetre = selectionner('#perimetreEntrainement');
     const groupePerimetre = document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
     const donnees = [
-        ['tous','Tout PJJoue','Les 6 parcours'],
-        ['commun','01 · Découvrir la PJJ','Point de départ'],
-        ['procedure_ordinaire','02 · Du parquet à la sanction','Procédure ordinaire'],
-        ['information_judiciaire','03 · Information judiciaire','Instruction'],
-        ['jugement_educatif_ordinaire','04 · Réponse éducative','Jugement'],
-        ['matiere_criminelle_peines','05 · Crimes et peines','Matière criminelle'],
-        ['application_execution_peines','06 · Décision à l’exécution','Application des peines']
+        ['tous','Tout Quiz CJPM','Les 6 parcours'],
+        ['procedure_ordinaire','01 · De l’enquête à la sanction','Recommandé pour commencer'],
+        ['information_judiciaire','02 · Information judiciaire','Avant le jugement'],
+        ['jugement_educatif_ordinaire','03 · Du jugement à la sanction','Réponse éducative'],
+        ['matiere_criminelle_peines','04 · De la qualification criminelle aux peines','Matière criminelle'],
+        ['application_execution_peines','05 · Après la sanction','Application et exécution'],
+        ['commun','Option · Parcours 06 · Découvrir la PJJ','Culture commune PJJ']
     ];
     if (selectPerimetre && groupePerimetre) {
         selectPerimetre.innerHTML = donnees.map(([v,b])=>`<option value="${v}">${b.replace(/^\d+ · /,'')}</option>`).join('');
@@ -7267,12 +7429,12 @@ function lancerEntrainementMissionSiglesNatif() {
 }
 
 function initialiserJeuSigles(){ const racine=selectionnerSigles('#sigles');if(!racine||racine.dataset.initialise==='true')return;racine.dataset.initialise='true';
-    selectionnerSigles('#siglesOuvrirParcours')?.addEventListener('click',()=>{actualiserAccueilSigles();afficherVueSigles('parcours');});
-    selectionnerSigles('#siglesOuvrirEntrainement')?.addEventListener('click',()=>{actualiserAccueilSigles();ouvrirEntrainementMissionSiglesNatif();});
+    selectionnerSigles('#siglesOuvrirParcours')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Ouvrir le parcours des étapes');actualiserAccueilSigles();afficherVueSigles('parcours');});
+    selectionnerSigles('#siglesOuvrirEntrainement')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Configurer un entraînement');actualiserAccueilSigles();ouvrirEntrainementMissionSiglesNatif();});
     selectionnerSigles('#siglesRetourDepuisParcours')?.addEventListener('click',retourAccueilSigles); selectionnerSigles('#siglesRetourDepuisEntrainement')?.addEventListener('click',retourAccueilSigles);
-    selectionnerSigles('#siglesLancerEntrainement')?.addEventListener('click',lancerEntrainementSigles); selectionnerSigles('#siglesLancerDe')?.addEventListener('click',lancerDeSigles); selectionnerSigles('#siglesJouerTirage')?.addEventListener('click',jouerTirageDeSigles); selectionnerSigles('#siglesLancerRevision')?.addEventListener('click',lancerRevisionSigles); selectionnerSigles('#siglesLancerEvaluation')?.addEventListener('click',lancerEvaluationSigles);
+    selectionnerSigles('#siglesLancerEntrainement')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Lancer un entraînement');lancerEntrainementSigles();}); selectionnerSigles('#siglesLancerDe')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Défi du hasard · lancer le dé');lancerDeSigles();}); selectionnerSigles('#siglesJouerTirage')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Défi du hasard · jouer le tirage');jouerTirageDeSigles();}); selectionnerSigles('#siglesLancerRevision')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Réviser les erreurs');lancerRevisionSigles();}); selectionnerSigles('#siglesLancerEvaluation')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Évaluation finale');lancerEvaluationSigles();});
     selectionnerSigles('#siglesQuitterSession')?.addEventListener('click',retourAccueilSigles); selectionnerSigles('#siglesPasserQuestion')?.addEventListener('click',passerQuestionSigles); selectionnerSigles('#siglesValiderActivite')?.addEventListener('click',validerAssociationSigles); selectionnerSigles('#siglesQuestionSuivante')?.addEventListener('click',questionSuivanteSigles); selectionnerSigles('#siglesRetourAccueil')?.addEventListener('click',retourAccueilSigles); selectionnerSigles('#siglesRejouerSession')?.addEventListener('click',rejouerDerniereSessionSigles);
-    selectionnerTousSigles('#siglesChoixNombre button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixNombre'),b);})); selectionnerTousSigles('#siglesChoixOrganisation button').forEach(b=>b.addEventListener('click',()=>activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixOrganisation'),b))); selectionnerTousSigles('#siglesChoixChrono button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixChrono'),b);actualiserChoixChronoSigles();})); selectionnerTousSigles('#siglesChoixSecondes button').forEach(b=>b.addEventListener('click',()=>activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixSecondes'),b))); selectionnerTousSigles('#siglesChoixJokers button').forEach(b=>b.addEventListener('click',()=>activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixJokers'),b))); selectionnerTousSigles('[data-joker-sigles]').forEach(b=>b.addEventListener('click',()=>utiliserJokerSigles(b.dataset.jokerSigles)));
+    selectionnerTousSigles('#siglesChoixNombre button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixNombre'),b);envoyerOptionDeJeuAnalytics(`Nombre de questions : ${b.textContent.trim()}`);})); selectionnerTousSigles('#siglesChoixOrganisation button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixOrganisation'),b);envoyerOptionDeJeuAnalytics(`Organisation : ${b.textContent.trim()}`);})); selectionnerTousSigles('#siglesChoixChrono button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixChrono'),b);actualiserChoixChronoSigles();envoyerOptionDeJeuAnalytics(`Chronomètre : ${b.textContent.trim()}`);})); selectionnerTousSigles('#siglesChoixSecondes button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixSecondes'),b);envoyerOptionDeJeuAnalytics(`Durée par question : ${b.textContent.trim()}`);})); selectionnerTousSigles('#siglesChoixJokers button').forEach(b=>b.addEventListener('click',()=>{activerBoutonGroupeSigles(selectionnerSigles('#siglesChoixJokers'),b);envoyerOptionDeJeuAnalytics(`Jokers : ${b.textContent.trim()}`);})); selectionnerTousSigles('[data-joker-sigles]').forEach(b=>b.addEventListener('click',()=>utiliserJokerSigles(b.dataset.jokerSigles)));
     actualiserAccueilSigles(); actualiserChoixChronoSigles();
 }
 initialiserJeuSigles();
@@ -7394,7 +7556,7 @@ function validerRevisionMesures(cibles) {
 
 function obtenirIdentiteEtapeMissionMesures(numero) { return ETAPES_MISSION_MESURES[Number(numero)] || ETAPES_MISSION_MESURES[1]; }
 function obtenirThemeVisuelMissionMesures(numero) {
-    const themes = ['commun','procedure_ordinaire','information_judiciaire','jugement_educatif_ordinaire','matiere_criminelle_peines','application_execution_peines'];
+    const themes = ['procedure_ordinaire','information_judiciaire','jugement_educatif_ordinaire','matiere_criminelle_peines','application_execution_peines','commun'];
     return themes[(Math.max(1, Number(numero) || 1) - 1) % themes.length];
 }
 function iconeEtapeMesures(numero) {
@@ -7721,7 +7883,7 @@ function configurerEntrainementMissionMesuresNatif() {
     const entete=ecran.querySelector('.entrainement-entete');
     entete?.querySelector('.surtitre') && (entete.querySelector('.surtitre').textContent='Mission Mesures');
     entete?.querySelector('h1') && (entete.querySelector('h1').textContent='Choisis ta session');
-    entete?.querySelector('p') && (entete.querySelector('p').textContent='Entraîne-toi sur les mesures et leurs modules avec les mêmes réglages que PJJoue.');
+    entete?.querySelector('p') && (entete.querySelector('p').textContent='Entraîne-toi sur les mesures et leurs modules avec les mêmes réglages que Quiz CJPM.');
     selectionner('#resultatDeParcours') && (selectionner('#resultatDeParcours').textContent='Lance le dé pour tirer de 1 à 6 questions aléatoires dans Mission Mesures.');
     const selectPerimetre=selectionner('#perimetreEntrainement');
     const groupe=document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
@@ -7796,13 +7958,13 @@ function terminerSessionMissionMesuresNative() {
 
 function initialiserJeuMesures() {
     const racine=selectionnerMesures('#mesures'); if(!racine||racine.dataset.initialise==='true')return; racine.dataset.initialise='true';
-    selectionnerMesures('#mesuresOuvrirParcours')?.addEventListener('click',()=>{actualiserAccueilMesures();selectionnerMesures('#mesuresAccueil')?.classList.add('masque');selectionnerMesures('#mesuresParcoursVue')?.classList.remove('masque');window.scrollTo?.({top:0,behavior:'smooth'});});
+    selectionnerMesures('#mesuresOuvrirParcours')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Ouvrir le parcours des étapes');actualiserAccueilMesures();selectionnerMesures('#mesuresAccueil')?.classList.add('masque');selectionnerMesures('#mesuresParcoursVue')?.classList.remove('masque');window.scrollTo?.({top:0,behavior:'smooth'});});
     selectionnerMesures('#mesuresRetourDepuisParcours')?.addEventListener('click',()=>{selectionnerMesures('#mesuresParcoursVue')?.classList.add('masque');selectionnerMesures('#mesuresAccueil')?.classList.remove('masque');actualiserAccueilMesures();});
-    selectionnerMesures('#mesuresOuvrirEntrainement')?.addEventListener('click',ouvrirEntrainementMissionMesuresNatif);
-    selectionnerMesures('#mesuresLancerDe')?.addEventListener('click',lancerDeMesures);
-    selectionnerMesures('#mesuresJouerTirage')?.addEventListener('click',jouerTirageDeMesures);
-    selectionnerMesures('#mesuresLancerRevision')?.addEventListener('click',()=>afficherEcran('mesures-revision'));
-    selectionnerMesures('#mesuresLancerEvaluation')?.addEventListener('click',lancerEvaluationMesures);
+    selectionnerMesures('#mesuresOuvrirEntrainement')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Configurer un entraînement');ouvrirEntrainementMissionMesuresNatif();});
+    selectionnerMesures('#mesuresLancerDe')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Défi du hasard · lancer le dé');lancerDeMesures();});
+    selectionnerMesures('#mesuresJouerTirage')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Défi du hasard · jouer le tirage');jouerTirageDeMesures();});
+    selectionnerMesures('#mesuresLancerRevision')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Réviser les erreurs');afficherEcran('mesures-revision');});
+    selectionnerMesures('#mesuresLancerEvaluation')?.addEventListener('click',()=>{envoyerOptionDeJeuAnalytics('Évaluation finale');lancerEvaluationMesures();});
     actualiserAccueilMesures(); afficherRevisionMesures();
 }
 initialiserJeuMesures();
@@ -7856,7 +8018,7 @@ function construireCarteProgression(theme) {
     carte.innerHTML = `
         <div class="progression-parcours-mis-en-avant-identite">
             <span class="progression-parcours-mis-en-avant-icone">${creerIconeTheme(theme.id, '')}</span>
-            <div><span class="progression-parcours-mis-en-avant-chapitre">${identite.chapitre}</span><h3>${identite.titre}</h3></div>
+            <div><span class="progression-parcours-mis-en-avant-chapitre">${identite.libelleNumero || identite.chapitre}</span><h3>${identite.titre}</h3></div>
         </div>
         <div class="progression-etats">
             <span class="progression-parcours-statut ${avancee.classe}">${avancee.libelle}</span>
@@ -8029,7 +8191,7 @@ function exporterProgression() {
     const contenuFichier = new Blob([JSON.stringify(sauvegarde, null, 2)], { type: 'application/json' });
     const lienTelechargement = document.createElement('a');
     lienTelechargement.href = URL.createObjectURL(contenuFichier);
-    lienTelechargement.download = 'PJJoue_progression.json';
+    lienTelechargement.download = 'Quiz_CJPM_progression.json';
     lienTelechargement.click();
     URL.revokeObjectURL(lienTelechargement.href);
     envoyerEvenementPJJ('progression_exportee', {
@@ -8237,7 +8399,7 @@ initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
 selectionner('#boutonReprendreEtapeDepuisDebut')?.addEventListener('click', reprendreEtapeDepuisDebutQuestion);
 selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
-selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
+selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
 selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
 selectionner('#boutonExporterMaProgression').onclick = exporterProgression;
 const boutonImporterProgression = selectionner('#boutonImporterProgression');
@@ -8345,7 +8507,7 @@ document.addEventListener('click', evenement => {
     else if (action === 'reviser-theme')
         lancerRevision(cible.dataset.theme);
     else if (action === 'reviser-etape')
-        lancerRevisionEtape(cible.dataset.theme || 'commun', cible.dataset.etape);
+        lancerRevisionEtape(cible.dataset.theme || IDENTIFIANT_PARCOURS_RECOMMANDE, cible.dataset.etape);
     else if (action === 'reviser-toutes-erreurs-sigles')
         lancerToutesErreursSiglesDepuisRevision();
     else if (action === 'reviser-etape-sigles')
@@ -8403,7 +8565,7 @@ document.addEventListener('keydown', evenement => {
  * pas d'infobulle : l'interface reste légère et les aides restent utiles.
  */
 const TITRES_BOUTONS_SURVOL = Object.freeze({
-    boutonInstallerPJJoue: 'Installer PJJoue comme application sur cet appareil.',
+    boutonInstallerPJJoue: 'Installer Quiz CJPM comme application sur cet appareil.',
     boutonChangerParcours: 'Revenir à la liste pour choisir un autre parcours.',
     boutonActionParcours: 'Commencer ou reprendre l’étape actuellement proposée.',
     boutonParcoursLibre: 'Jouer cette étape sans limite de temps.',
@@ -8674,8 +8836,8 @@ window.addEventListener('pjjoue:consentement-change', evenement => {
     if (evenement.detail?.analytics !== true)
         return;
     envoyerEvenementPJJ('page_consultee', {
-        pjjoue_page_consultee: obtenirLibellePageAnalytics(etat.ecran),
-        pjjoue_page_precedente: obtenirLibellePageAnalytics('consentement')
+        pjjoue_page_consultee: obtenirPageMenuAnalytics(etat.ecran),
+        pjjoue_ecran: obtenirLibelleEcranAnalytics(etat.ecran)
     });
 });
 window.addEventListener('hashchange', garantirAccueilEnHaut);
@@ -8723,6 +8885,7 @@ document.addEventListener('click', evenement => {
             const carte = groupe.closest('[data-carte-entrainement]');
             carte?.querySelector('[data-secondes-chronometre]')?.classList.toggle('masque', boutonBascule.dataset.valeur !== 'oui');
         }
+        envoyerOptionDeJeuAnalytics(`${groupe.dataset.proposition === 'jokers' ? 'Jokers' : 'Chronomètre'} : ${boutonBascule.textContent.trim()}`);
         return;
     }
     const boutonSecondes = evenement.target.closest('.entrainement-secondes-groupe .choix-bouton');
@@ -8730,6 +8893,7 @@ document.addEventListener('click', evenement => {
         const groupe = boutonSecondes.closest('.entrainement-secondes-groupe');
         groupe.dataset.selectionEffectuee = 'true';
         groupe.querySelectorAll('.choix-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === boutonSecondes));
+        envoyerOptionDeJeuAnalytics(`Durée par question : ${boutonSecondes.textContent.trim()}`);
         return;
     }
     const boutonLancer = evenement.target.closest('.entrainement-lancer');
@@ -8742,6 +8906,11 @@ document.addEventListener('click', evenement => {
         etat.jokersSessionActifs = valeurJokers === 'oui';
         etat.chronometreSessionActif = valeurMinuteur === 'oui';
         etat.dureeChronometreSession = Math.min(30, Math.max(5, secondes));
+        envoyerOptionDeJeuAnalytics(`Lancer la session · ${boutonLancer.dataset.organisationSession === 'melange' ? 'Mélangé' : 'Par ordre d’étapes'}`, {
+            pjjoue_jokers: etat.jokersSessionActifs ? 'Avec' : 'Sans',
+            pjjoue_chrono: etat.chronometreSessionActif ? 'Avec' : 'Sans',
+            pjjoue_temps_par_question: etat.chronometreSessionActif ? etat.dureeChronometreSession : null
+        });
         lancerEntrainementLibre();
         return;
     }
@@ -8750,6 +8919,7 @@ document.addEventListener('click', evenement => {
         document.querySelectorAll('#choixChronometreParcours .option-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === choixChronometreParcours));
         etat.chronometreParcoursActif = choixChronometreParcours.dataset.valeur === 'oui';
         selectionner('#secondesChronometreParcours')?.classList.toggle('masque', !etat.chronometreParcoursActif);
+        envoyerOptionDeJeuAnalytics(`Chronomètre du parcours : ${choixChronometreParcours.textContent.trim()}`);
         return;
     }
     const secondesParcours = evenement.target.closest('#secondesChronometreParcours .choix-bouton');
@@ -8761,6 +8931,7 @@ document.addEventListener('click', evenement => {
         });
         const secondes = Number(secondesParcours.dataset.secondes);
         etat.dureeChronometreParcours = Math.min(30, Math.max(5, Number.isFinite(secondes) ? secondes : 15));
+        envoyerOptionDeJeuAnalytics(`Durée par question du parcours : ${secondesParcours.textContent.trim()}`);
         return;
     }
 });

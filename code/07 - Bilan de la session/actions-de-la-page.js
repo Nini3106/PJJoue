@@ -208,7 +208,7 @@ function construireBilanEvaluationFinale(pourcentage, evaluationFinaleReussie) {
             messageResultat: `Résultat : ${pourcentage} %. Les connaissances de ce parcours sont validées.`,
             celebration: toutReussi ? {
                 titre: 'Parcours complet accompli !',
-                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Ton carnet PJJoue est complet.`,
+                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Ton carnet Quiz CJPM est complet.`,
                 confetti: true,
                 finale: true
             } : {

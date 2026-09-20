@@ -278,6 +278,7 @@ function initialiserGroupesChoix() {
                     groupe.dataset.modeSelectionNombre = mode;
                     synchroniserCurseurNombreQuestions(obtenirMaximumNombreQuestions());
                     actualiserEtatBoutonsNombreQuestions(valeur, mode);
+                    envoyerOptionDeJeuAnalytics(`Nombre de questions : ${bouton.textContent.trim() || valeur}`);
                     return;
                 }
 
@@ -292,6 +293,14 @@ function initialiserGroupesChoix() {
                     actualiserLimiteQuestionsEntrainement();
                 if (listeDeroulante.id === 'echelleTexte' || listeDeroulante.id === 'sonActif')
                     enregistrerParametres();
+                const nomsOptions = {
+                    perimetreEntrainement: 'Périmètre',
+                    echelleTexte: 'Taille du texte',
+                    sonActif: 'Sons'
+                };
+                const nomOption = nomsOptions[listeDeroulante.id];
+                if (nomOption)
+                    envoyerOptionDeJeuAnalytics(`${nomOption} : ${bouton.textContent.trim() || listeDeroulante.value}`);
             };
         });
     });
