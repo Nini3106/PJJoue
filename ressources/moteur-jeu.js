@@ -1206,6 +1206,7 @@ function actualiserTitrePage(ecran) {
     document.title = `${TITRES_ECRANS[ecran] || 'PJJoue'} — PJJoue`;
 }
 function afficherEcran(identifiant, optionsAffichage = {}) {
+    masquerInfobullePJJoue();
     fermerMenuPrincipal();
     if (identifiant === 'supports')
         initialiserRechercheSupports();
