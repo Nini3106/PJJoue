@@ -603,8 +603,8 @@ function obtenirLibelleConsolidation(suivi) {
     const libelles = {
         reprise: 'Validée après reprise sans joker · à consolider',
         joker: 'Validée avec joker · à consolider',
-        passage: 'Passée · à consolider',
-        incorrecte: 'Incorrecte · à consolider'
+        passage: 'Passée — non répondue',
+        incorrecte: 'Incorrecte — erreur à réviser'
     };
     return libelles[suivi?.motifRevision] || 'Motif non enregistré · à consolider';
 }
@@ -3366,7 +3366,7 @@ function jouerTirageDeParcours() {
     etat.chronometreSessionActif = false;
     lancerSession(session);
 }
-function lancerRevision(identifiantTheme = 'toutes') {
+function lancerRevision(identifiantTheme = 'toutes', categorie = null) {
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
     if (!sauvegarde.aDejaJoue && actif.length === 0) {
         afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir consolider tes réponses.');
@@ -3380,6 +3380,8 @@ function lancerRevision(identifiantTheme = 'toutes') {
     let reserve = QUESTIONS.filter(question => identifiants.includes(question.id) && !question.estEvaluationFinale);
     if (identifiantTheme !== 'toutes')
         reserve = reserve.filter(question => question.theme === identifiantTheme);
+    if (categorie !== null)
+        reserve = reserve.filter(question => obtenirCategorieRevision(sauvegarde.erreurs[question.id]) === categorie);
     if (reserve.length === 0) {
         const theme = THEMES.find(themeCandidat => themeCandidat.id === identifiantTheme);
         afficherNotification(theme ? `Aucune question à consolider dans « ${theme.titre} ».` : 'Aucune question à consolider dans ce thème.');
@@ -6410,6 +6412,86 @@ function obtenirQuestionsAvecErreursActives() {
         }))
         .filter(element => element.question && !element.question.estEvaluationFinale);
 }
+function obtenirCategorieRevision(suivi) {
+    return normaliserMotifRevision(suivi?.motifRevision) || 'inconnu';
+}
+function obtenirElementsCategoriesRevision(jeu) {
+    if (jeu === 'parcours') {
+        return obtenirQuestionsAvecErreursActives().map(({ question, suiviErreur }) => ({
+            cible: question,
+            suivi: suiviErreur,
+            libelle: question.enonce.split('\n')[0],
+            repere: `Parcours ${obtenirOrdreTheme(question.theme) + 1} · Étape ${question.etape}`
+        }));
+    }
+    if (jeu === 'sigles') {
+        return obtenirErreursSiglesActives().map(cible => ({
+            cible,
+            suivi: obtenirSauvegardeJeuSigles().erreurs[normaliserSigleJeu(cible.sigle)],
+            libelle: `${cible.sigle} · ${significationMissionSigles(cible)}`,
+            repere: libelleEtapeSigles(cible.etape)
+        }));
+    }
+    if (jeu === 'mesures') {
+        return obtenirErreursMesuresActives().map(cible => ({
+            cible,
+            suivi: obtenirSauvegardeJeuMesures().erreurs[normaliserCleMesure(cible.cle)],
+            libelle: cible.titre,
+            repere: `Étape ${String(cible.etape).padStart(2, '0')}`
+        }));
+    }
+    return [];
+}
+function construireCategoriesRevision(jeu) {
+    const elements = obtenirElementsCategoriesRevision(jeu);
+    const categories = ['reprise', 'joker', 'passage', 'incorrecte'];
+    if (elements.some(element => obtenirCategorieRevision(element.suivi) === 'inconnu'))
+        categories.push('inconnu');
+    const dossiers = categories.map(categorie => {
+        const selection = elements.filter(element => obtenirCategorieRevision(element.suivi) === categorie);
+        const total = selection.length;
+        const libelle = obtenirLibelleConsolidation({ motifRevision: categorie });
+        const contenu = total
+            ? `<ul>${selection.map(element => `<li><span>${echapperHtml(element.libelle)}</span><small>${echapperHtml(element.repere)}</small></li>`).join('')}</ul>
+               <button class="principal" type="button" data-action="reviser-categorie" data-jeu-revision="${jeu}" data-categorie-revision="${categorie}">Réviser ${total} ${accorderLibelle(total, 'question', 'questions')} →</button>`
+            : '<p>Aucune question dans cette catégorie.</p>';
+        return `<details class="revision-categorie" data-categorie-revision="${categorie}">
+            <summary><span><strong>${libelle}</strong><small>${total} ${accorderLibelle(total, 'question', 'questions')}</small></span><span class="revision-categorie-chevron" aria-hidden="true">⌄</span></summary>
+            <div class="revision-categorie-contenu">${contenu}</div>
+        </details>`;
+    }).join('');
+    return `<section class="revision-categories" aria-labelledby="titreCategoriesRevision-${jeu}">
+        <h2 id="titreCategoriesRevision-${jeu}">Réviser par catégorie</h2>
+        <p>Ouvre une catégorie pour voir ses questions et les rejouer.</p>
+        <div class="revision-categories-grille">${dossiers}</div>
+    </section>`;
+}
+function lancerRevisionCategorie(jeu, categorie) {
+    if (!['parcours', 'sigles', 'mesures'].includes(jeu)
+        || !['reprise', 'joker', 'passage', 'incorrecte', 'inconnu'].includes(categorie)) return;
+    // Relire les données au clic : une réussite peut avoir consolidé une question
+    // depuis l'affichage de la catégorie. Ne jamais réactiver son ancien résultat.
+    const cibles = obtenirElementsCategoriesRevision(jeu)
+        .filter(element => obtenirCategorieRevision(element.suivi) === categorie)
+        .map(element => element.cible);
+    if (!cibles.length) {
+        afficherNotification('Aucune question dans cette catégorie.');
+        return;
+    }
+    if (jeu === 'parcours') {
+        lancerRevision('toutes', categorie);
+        return;
+    }
+    const titre = obtenirLibelleConsolidation({ motifRevision: categorie });
+    if (jeu === 'sigles') {
+        preparerSessionMissionSiglesNative({ mode: 'revision', sigles: cibles,
+            questions: creerQuestionsRevisionSigles(cibles), jokersActifs: false, titre });
+    }
+    else {
+        preparerSessionMissionMesuresNative({ mode: 'revision', reperes: cibles,
+            questions: creerQuestionsRevisionMesures(cibles), jokersActifs: false, titre });
+    }
+}
 function regrouperErreursParParcoursEtEtape(elements) {
     const resultat = {};
     elements.forEach(element => {
@@ -6515,7 +6597,8 @@ function afficherErreurs() {
         return;
     }
     const groupes = regrouperErreursParParcoursEtEtape(questionsAvecErreurs);
-    zone.innerHTML = construireModesRevisionErreurs(questionsAvecErreurs.length, groupes) + construireParcoursErreurs(groupes);
+    zone.innerHTML = construireCategoriesRevision('parcours')
+        + construireModesRevisionErreurs(questionsAvecErreurs.length, groupes) + construireParcoursErreurs(groupes);
 }
 
 function normaliserRechercheSupports(texte) {
@@ -7260,7 +7343,7 @@ function construireRevisionMissionSiglesIndependante(){
         }).join('');
         return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'questions à consolider':'question à consolider'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
     }).join('');
-    zone.innerHTML = `<div class="revision-workspace">
+    zone.innerHTML = construireCategoriesRevision('sigles') + `<div class="revision-workspace">
         <article class="revision-toutes-erreurs">
             <div class="revision-toutes-erreurs-icone" aria-hidden="true">↻</div>
             <div class="revision-toutes-erreurs-texte"><span class="surtitre">Révision rapide</span><h2>Mélange mes questions à consolider</h2><p>Une session aléatoire avec tes ${total} ${total>1?'sigles à retravailler':'sigle à retravailler'}.</p></div>
@@ -8170,7 +8253,7 @@ function afficherRevisionMesures() {
     const zone=selectionner('#contenuErreursMesures'); if(!zone)return;
     const erreurs=obtenirErreursMesuresActives();
     if(!erreurs.length){zone.innerHTML='<div class="revision-vide"><strong>Aucune question à consolider.</strong><p>Les repères manqués apparaîtront ici pour être retravaillés.</p></div>';return;}
-    zone.innerHTML=`<div class="mesures-revision-liste">${erreurs.map(cible=>`<article class="mesures-revision-item"><span class="surtitre">Étape ${String(cible.etape).padStart(2,'0')}</span><strong>${cible.titre}</strong><p>${cible.sigle&&cible.developpement?`${cible.developpement} (${cible.sigle})`:cible.questionRappel}</p><small>${obtenirLibelleConsolidation(obtenirSauvegardeJeuMesures().erreurs[cible.cle])}</small></article>`).join('')}</div><button class="principal" id="mesuresRevisionDemarrer" type="button">Commencer la révision →</button>`;
+    zone.innerHTML=construireCategoriesRevision('mesures') + `<div class="mesures-revision-liste">${erreurs.map(cible=>`<article class="mesures-revision-item"><span class="surtitre">Étape ${String(cible.etape).padStart(2,'0')}</span><strong>${cible.titre}</strong><p>${cible.sigle&&cible.developpement?`${cible.developpement} (${cible.sigle})`:cible.questionRappel}</p><small>${obtenirLibelleConsolidation(obtenirSauvegardeJeuMesures().erreurs[cible.cle])}</small></article>`).join('')}</div><button class="principal" id="mesuresRevisionDemarrer" type="button">Commencer la révision →</button>`;
     selectionner('#mesuresRevisionDemarrer')?.addEventListener('click',lancerRevisionMesures);
 }
 function terminerSessionMissionMesuresNative() {
@@ -8751,6 +8834,8 @@ document.addEventListener('click', evenement => {
         selectionnerAssociation(cible.dataset.cote, cible.dataset.element);
     else if (action === 'attribuer-categorie')
         attribuerCategorie(cible.dataset.element, cible.dataset.categorie);
+    else if (action === 'reviser-categorie')
+        lancerRevisionCategorie(cible.dataset.jeuRevision, cible.dataset.categorieRevision);
     else if (action === 'reviser-toutes-erreurs')
         lancerRevision('toutes');
     else if (action === 'reviser-theme')
@@ -8860,6 +8945,7 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
 
 const TITRES_ACTIONS_SURVOL = Object.freeze({
     'rejouer-erreurs-etape': 'Rejouer les questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.',
+    'reviser-categorie': 'Rejouer uniquement les questions de cette catégorie. Les acquis restent validés.',
     'reviser-theme': 'Ouvrir les questions à consolider de ce parcours.',
     'reviser-etape': 'Rejouer les questions à consolider de cette étape.',
     'reviser-toutes-erreurs': 'Rejouer toutes les questions encore à revoir.',

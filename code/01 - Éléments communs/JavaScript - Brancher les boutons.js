@@ -165,6 +165,8 @@ document.addEventListener('click', evenement => {
         selectionnerAssociation(cible.dataset.cote, cible.dataset.element);
     else if (action === 'attribuer-categorie')
         attribuerCategorie(cible.dataset.element, cible.dataset.categorie);
+    else if (action === 'reviser-categorie')
+        lancerRevisionCategorie(cible.dataset.jeuRevision, cible.dataset.categorieRevision);
     else if (action === 'reviser-toutes-erreurs')
         lancerRevision('toutes');
     else if (action === 'reviser-theme')
@@ -274,6 +276,7 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
 
 const TITRES_ACTIONS_SURVOL = Object.freeze({
     'rejouer-erreurs-etape': 'Rejouer les questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.',
+    'reviser-categorie': 'Rejouer uniquement les questions de cette catégorie. Les acquis restent validés.',
     'reviser-theme': 'Ouvrir les questions à consolider de ce parcours.',
     'reviser-etape': 'Rejouer les questions à consolider de cette étape.',
     'reviser-toutes-erreurs': 'Rejouer toutes les questions encore à revoir.',

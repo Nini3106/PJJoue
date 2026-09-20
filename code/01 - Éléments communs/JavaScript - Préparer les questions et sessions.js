@@ -266,7 +266,7 @@ function jouerTirageDeParcours() {
     etat.chronometreSessionActif = false;
     lancerSession(session);
 }
-function lancerRevision(identifiantTheme = 'toutes') {
+function lancerRevision(identifiantTheme = 'toutes', categorie = null) {
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
     if (!sauvegarde.aDejaJoue && actif.length === 0) {
         afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir consolider tes réponses.');
@@ -280,6 +280,8 @@ function lancerRevision(identifiantTheme = 'toutes') {
     let reserve = QUESTIONS.filter(question => identifiants.includes(question.id) && !question.estEvaluationFinale);
     if (identifiantTheme !== 'toutes')
         reserve = reserve.filter(question => question.theme === identifiantTheme);
+    if (categorie !== null)
+        reserve = reserve.filter(question => obtenirCategorieRevision(sauvegarde.erreurs[question.id]) === categorie);
     if (reserve.length === 0) {
         const theme = THEMES.find(themeCandidat => themeCandidat.id === identifiantTheme);
         afficherNotification(theme ? `Aucune question à consolider dans « ${theme.titre} ».` : 'Aucune question à consolider dans ce thème.');

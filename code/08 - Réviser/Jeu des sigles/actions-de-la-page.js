@@ -524,7 +524,7 @@ function construireRevisionMissionSiglesIndependante(){
         }).join('');
         return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'questions à consolider':'question à consolider'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
     }).join('');
-    zone.innerHTML = `<div class="revision-workspace">
+    zone.innerHTML = construireCategoriesRevision('sigles') + `<div class="revision-workspace">
         <article class="revision-toutes-erreurs">
             <div class="revision-toutes-erreurs-icone" aria-hidden="true">↻</div>
             <div class="revision-toutes-erreurs-texte"><span class="surtitre">Révision rapide</span><h2>Mélange mes questions à consolider</h2><p>Une session aléatoire avec tes ${total} ${total>1?'sigles à retravailler':'sigle à retravailler'}.</p></div>

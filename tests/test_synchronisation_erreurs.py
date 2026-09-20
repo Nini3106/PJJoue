@@ -266,7 +266,7 @@ class SynchronisationErreursTests(unittest.TestCase):
                 for cle in ['acquis','revision','historiqueStable','persiste','consolidee']:
                     self.assertTrue(r[cle],r)
                 self.assertIn('Validée après reprise sans joker · à consolider',r['bilan'])
-                self.assertNotIn('Incorrecte · à consolider',r['bilan'])
+                self.assertNotIn('Incorrecte — erreur à réviser',r['bilan'])
 
     def test_reprise_avec_joker_reste_aidee(self):
         resultats=self.page.evaluate("""() => ['parcours','sigles','mesures'].map(jeu=>{
