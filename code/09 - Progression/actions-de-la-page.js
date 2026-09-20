@@ -56,6 +56,21 @@ function compterQuestionsTraiteesEtape(identifiantTheme, etape) {
     const nombreTraitees = obtenirBilanEtape(identifiantTheme, etape)?.questionsTraitees || {};
     return obtenirQuestionsEtape(identifiantTheme, etape).filter(question => nombreTraitees[question.id]).length;
 }
+/**
+ * Questions déjà travaillées mais qui ne sont pas encore validées sans aide.
+ *
+ * Une étape peut afficher 10/10 questions réalisées tout en n'affichant que
+ * 9/10 maîtrisées sans aide. Ces questions doivent rester rejouables, même si
+ * une ancienne sauvegarde ne possède pas (ou plus) d'entrée correspondante
+ * dans la liste globale des erreurs.
+ */
+function obtenirQuestionsNonMaitriseesEtape(identifiantTheme, etape) {
+    const bilanEtape = obtenirBilanEtape(identifiantTheme, etape);
+    return obtenirQuestionsEtape(identifiantTheme, etape).filter(question =>
+        bilanEtape?.questionsTraitees?.[question.id] === true
+        && bilanEtape?.resultats?.[question.id] !== true
+    );
+}
 function obtenirQuestionsChapitre(identifiantTheme, etape, chapitre) {
     return obtenirQuestionsEtape(identifiantTheme, etape).filter(question =>
         (Number(question.chapitre) || 1) === Number(chapitre)

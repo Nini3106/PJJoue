@@ -1590,6 +1590,21 @@ function compterQuestionsTraiteesEtape(identifiantTheme, etape) {
     const nombreTraitees = obtenirBilanEtape(identifiantTheme, etape)?.questionsTraitees || {};
     return obtenirQuestionsEtape(identifiantTheme, etape).filter(question => nombreTraitees[question.id]).length;
 }
+/**
+ * Questions déjà travaillées mais qui ne sont pas encore validées sans aide.
+ *
+ * Une étape peut afficher 10/10 questions réalisées tout en n'affichant que
+ * 9/10 maîtrisées sans aide. Ces questions doivent rester rejouables, même si
+ * une ancienne sauvegarde ne possède pas (ou plus) d'entrée correspondante
+ * dans la liste globale des erreurs.
+ */
+function obtenirQuestionsNonMaitriseesEtape(identifiantTheme, etape) {
+    const bilanEtape = obtenirBilanEtape(identifiantTheme, etape);
+    return obtenirQuestionsEtape(identifiantTheme, etape).filter(question =>
+        bilanEtape?.questionsTraitees?.[question.id] === true
+        && bilanEtape?.resultats?.[question.id] !== true
+    );
+}
 function obtenirQuestionsChapitre(identifiantTheme, etape, chapitre) {
     return obtenirQuestionsEtape(identifiantTheme, etape).filter(question =>
         (Number(question.chapitre) || 1) === Number(chapitre)
@@ -2350,10 +2365,7 @@ function afficherEtapes() {
           ${etapeValideeEnAutonomie ? creerEtoileFilanteProgression() : ''}
           <span class="chemin-etape-icone" aria-hidden="true">${obtenirBaliseIconeEtape(etapeProgramme.id, etat.theme)}</span>
           <span class="chemin-etape-texte">
-            <span class="chemin-etape-numero-ligne">
-              <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
-              <button class="chemin-etape-reprendre-debut" type="button" aria-label="Reprendre l’étape ${etapeProgramme.id} depuis la première question">Reprendre depuis le début</button>
-            </span>
+            <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
             <span class="chemin-etape-titre">${etapeProgramme.titre}</span>
           </span>
           ${estDestinationActuelle ? '<span class="chemin-position-actuelle">À travailler</span>' : ''}
@@ -2361,11 +2373,6 @@ function afficherEtapes() {
           <span class="chemin-nombre">${etapeValideeEnAutonomie
             ? '<b>Maîtrisée sans aide</b>'
             : `<b>${nombreTraitees}/${total}</b> questions · environ 8 min`}</span>`;
-        const boutonReprendre = carte.querySelector('.chemin-etape-reprendre-debut');
-        boutonReprendre?.addEventListener('click', evenement => {
-            evenement.stopPropagation();
-            lancerEtapeDepuisDebut(etat.theme, etapeProgramme.id);
-        });
         carte.addEventListener('click', evenement => {
             if (evenement.target.closest('button'))
                 return;
@@ -3033,9 +3040,14 @@ function lancerRevisionEtape(identifiantTheme, etape = null) {
         afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir rejouer tes erreurs.');
         return;
     }
-    const identifiants = actif.map(([id]) => Number(id));
+    const identifiants = new Set(actif.map(([id]) => Number(id)));
+    // Une question peut être traitée avec aide (ou passée) sans disposer
+    // d'une entrée d'erreur dans une ancienne sauvegarde. Elle reste pourtant
+    // à consolider dès lors qu'elle n'est pas validée sans aide.
+    obtenirQuestionsNonMaitriseesEtape(identifiantTheme, etapeCible)
+        .forEach(question => identifiants.add(Number(question.id)));
     const reserve = QUESTIONS.filter(question =>
-        identifiants.includes(question.id)
+        identifiants.has(question.id)
         && question.theme === identifiantTheme
         && Number(question.etape) === etapeCible
         && !question.estEvaluationFinale
@@ -4582,11 +4594,15 @@ function obtenirErreursActivesEtapeQuestion(question) {
         return obtenirErreursSiglesActives().filter(cible => Number(cible.etape) === numeroEtape);
     if (question.missionMesures)
         return obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === numeroEtape);
-    return Object.entries(sauvegarde.erreurs || {})
+    const erreursEnregistrees = Object.entries(sauvegarde.erreurs || {})
         .filter(([_identifiant, suivi]) => suivi?.maitrisee !== true)
         .map(([identifiant]) => QUESTIONS.find(element => String(element.id) === String(identifiant)))
         .filter(element => element && !element.estEvaluationFinale
             && element.theme === question.theme && Number(element.etape) === numeroEtape);
+    const erreursDeProgression = obtenirQuestionsNonMaitriseesEtape(question.theme, numeroEtape);
+    return [...new Map([...erreursEnregistrees, ...erreursDeProgression]
+        .filter(Boolean)
+        .map(element => [element.id, element])).values()];
 }
 function rejouerErreursEtapeCourante() {
     const question = etat.questionCourante;
@@ -4602,6 +4618,39 @@ function rejouerErreursEtapeCourante() {
         return;
     }
     lancerRevisionEtape(question.theme, numeroEtape);
+}
+function reprendreEtapeDepuisDebutQuestion() {
+    const question = etat.questionCourante;
+    if (!question)
+        return;
+    const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
+    if (question.missionSigles) {
+        lancerEtapeSigles(numeroEtape);
+        return;
+    }
+    if (question.missionMesures) {
+        lancerEtapeMesures(numeroEtape);
+        return;
+    }
+    lancerEtapeDepuisDebut(question.theme, numeroEtape);
+}
+function actualiserBoutonReprendreEtapeDepuisDebut(question) {
+    const bouton = selectionner('#boutonReprendreEtapeDepuisDebut');
+    if (!bouton)
+        return;
+    const modeParcours = question?.missionSigles
+        ? obtenirModeMissionSigles() === 'parcours'
+        : question?.missionMesures
+            ? obtenirModeMissionMesures() === 'parcours'
+            : etat.mode === 'parcours';
+    const visible = Boolean(question)
+        && !question.estEvaluationFinale
+        && modeParcours;
+    bouton.classList.toggle('masque', !visible);
+    bouton.disabled = !visible;
+    bouton.setAttribute('aria-label', visible
+        ? `Reprendre l’étape ${Number(question.etape || 1)} depuis la première question`
+        : 'Reprendre cette étape depuis la première question');
 }
 function actualiserBoutonRevisionEtapeQuestion(question) {
     const bouton = selectionner('#boutonRejouerErreursEtape');
@@ -4641,6 +4690,7 @@ function actualiserSuiviEtapeQuestion(question) {
     const boutonReinitialiser = selectionner('#boutonReinitialiserValidationsSansJoker');
     if (!conteneur || !identiteParcoursQuestion || !numeroParcours || !titreParcours || !numero || !titre || !suivi || !compteur || !boutonReinitialiser || !question)
         return;
+    actualiserBoutonReprendreEtapeDepuisDebut(question);
     if (question.missionSigles) {
         identiteParcoursQuestion.classList.remove('masque');
         const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
@@ -8043,6 +8093,7 @@ function initialiserFenetreJokers() {
 }
 initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
+selectionner('#boutonReprendreEtapeDepuisDebut')?.addEventListener('click', reprendreEtapeDepuisDebutQuestion);
 selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
 selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
 selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();

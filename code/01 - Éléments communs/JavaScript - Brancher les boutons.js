@@ -60,6 +60,7 @@ function initialiserFenetreJokers() {
 }
 initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
+selectionner('#boutonReprendreEtapeDepuisDebut')?.addEventListener('click', reprendreEtapeDepuisDebutQuestion);
 selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
 selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || 'commun', { remplacerHistorique: true });
 selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
