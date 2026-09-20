@@ -513,7 +513,8 @@ function construireRevisionMissionSiglesIndependante(){
     }).join('');
     const etapesDirectes = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const liste = parEtape[numero];
-        return `<button class="revision-etape-bouton" data-action="reviser-etape-sigles" data-etape="${numero}"><span>${libelleEtapeSigles(numero)}</span><strong>${liste.length}</strong></button>`;
+        const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
+        return `<button class="revision-etape-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--revision-etape-accent:${identite.couleurTexte}"><span>${libelleEtapeSigles(numero)}</span><strong>${liste.length}</strong></button>`;
     }).join('');
     const dossiers = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));

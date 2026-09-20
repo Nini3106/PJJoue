@@ -329,7 +329,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         self.assertIn("border-color:var(--parcours-accent,#4f8cff);", entrainement_css)
         self.assertIn("bouton.style.setProperty('--parcours-accent', identite.couleur);", entrainement_js)
         self.assertIn("border-left:5px solid var(--parcours-accent);", revision_css)
-        self.assertIn("style=\"--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}\"", revision_js)
+        self.assertIn("style=\"--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}\"", revision_js)
         self.assertIn("background: var(--couleur-etape-active);", question_css)
         self.assertIn("border-color: var(--couleur-etape-active,var(--jaune-interface));", question_css)
         self.assertIn("color:var(--parcours-accent-lisible,var(--parcours-accent,#8db9ff));", question_css)

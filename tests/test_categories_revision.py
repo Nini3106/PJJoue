@@ -92,30 +92,59 @@ class CategoriesRevisionTests(unittest.TestCase):
         self.assertEqual(self.page.evaluate('etat.questionsSession.flatMap(q => q.missionSiglesMeta.cibles)'), [resultat['cle']])
 
     def test_categorie_vide_ou_consolidee_ne_relance_pas_dancienne_question(self):
-        self.page.evaluate("""() => {
-            const {cles} = preparerCategories('parcours');
-            sauvegarde.erreurs[cles[3]].maitrisee = true;
-        }""")
-        dossier = self.page.locator('#erreurs .revision-categorie[data-categorie-revision="incorrecte"]')
-        dossier.locator('summary').click()
-        dossier.locator('button').click()
-        self.assertEqual(self.page.evaluate('etat.questionsSession.length'), 0)
-        self.page.evaluate('afficherErreurs()')
-        self.assertEqual(dossier.locator('summary small').inner_text(), '0 questions')
-        self.assertEqual(dossier.locator('button').count(), 0)
+        for jeu in ['parcours', 'sigles', 'mesures']:
+            with self.subTest(jeu=jeu):
+                fixture = self.page.evaluate("""jeu => {
+                    const fixture = preparerCategories(jeu);
+                    const erreurs = jeu === 'parcours' ? sauvegarde.erreurs
+                        : jeu === 'sigles' ? sauvegarde.siglesJeu.erreurs : sauvegarde.mesuresJeu.erreurs;
+                    erreurs[fixture.cles[3]].maitrisee = true;
+                    erreurs[fixture.cles[3]].active = false;
+                    return fixture;
+                }""", jeu)
+                zone = self.page.locator(f"#{fixture['ecran']}")
+                dossier = zone.locator('.revision-categorie[data-categorie-revision="incorrecte"]')
+                dossier.locator('summary').click()
+                dossier.locator('button').click()
+                self.assertEqual(self.page.evaluate('etat.questionsSession.length'), 0)
+                self.page.evaluate('ecran => afficherEcran(ecran)', fixture['ecran'])
+                self.assertEqual(dossier.count(), 0)
+                self.assertEqual(zone.locator('.revision-categorie').count(), 4)
+                self.page.evaluate("""({jeu,ecran}) => {
+                    const erreurs = jeu === 'parcours' ? sauvegarde.erreurs
+                        : jeu === 'sigles' ? sauvegarde.siglesJeu.erreurs : sauvegarde.mesuresJeu.erreurs;
+                    Object.values(erreurs).forEach(suivi => { suivi.maitrisee = true; suivi.active = false; });
+                    afficherEcran(ecran);
+                }""", dict(jeu=jeu, ecran=fixture['ecran']))
+                self.assertEqual(zone.locator('.revision-categories').count(), 0)
+                self.assertEqual(self.page.evaluate('construireCategoriesRevision', jeu), '')
 
     def test_categories_lisibles_sur_mobile_et_ordinateur(self):
         sortie = Path(__file__).resolve().parents[1] / 'test-results' / 'categories-revision'
         sortie.mkdir(parents=True, exist_ok=True)
         for jeu in ['parcours', 'sigles', 'mesures']:
-            fixture = self.page.evaluate('preparerCategories', jeu)
+            fixture = self.page.evaluate("""jeu => {
+                const fixture = preparerCategories(jeu);
+                const erreurs = jeu === 'parcours' ? sauvegarde.erreurs
+                    : jeu === 'sigles' ? sauvegarde.siglesJeu.erreurs : sauvegarde.mesuresJeu.erreurs;
+                [1,2,3].forEach(i => { erreurs[fixture.cles[i]].maitrisee = true; erreurs[fixture.cles[i]].active = false; });
+                if (jeu === 'parcours') {
+                    THEMES.forEach((theme,i) => {
+                        const question = obtenirQuestionsEtape(theme.id, i + 2)[0];
+                        erreurs[question.id] = {maitrisee:false, motifRevision:i % 2 ? 'reprise' : null};
+                    });
+                }
+                afficherEcran(fixture.ecran);
+                return fixture;
+            }""", jeu)
             for largeur in [1440, 390, 320]:
                 with self.subTest(jeu=jeu, largeur=largeur):
                     self.page.set_viewport_size({'width':largeur,'height':1000})
                     self.page.locator(f"#{fixture['ecran']} .revision-categories").scroll_into_view_if_needed()
-                    self.page.evaluate("document.querySelectorAll('.revision-categorie').forEach(d => d.open = true)")
+                    self.page.evaluate("document.querySelectorAll('.revision-categorie,.revision-etapes-details,.revision-dossier').forEach(d => d.open = true)")
                     self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth - innerWidth'), 1)
                     self.assertTrue(self.page.locator(f"#{fixture['ecran']} .revision-categories").is_visible())
+                    self.assertEqual(self.page.locator(f"#{fixture['ecran']} .revision-categorie").count(), 2)
                     self.page.evaluate('document.activeElement?.blur()')
                     self.page.screenshot(path=str(sortie / f'{jeu}-{largeur}.png'), full_page=True)
 
