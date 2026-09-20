@@ -32,6 +32,86 @@ function obtenirQuestionsAvecErreursActives() {
         }))
         .filter(element => element.question && !element.question.estEvaluationFinale);
 }
+function obtenirCategorieRevision(suivi) {
+    return normaliserMotifRevision(suivi?.motifRevision) || 'inconnu';
+}
+function obtenirElementsCategoriesRevision(jeu) {
+    if (jeu === 'parcours') {
+        return obtenirQuestionsAvecErreursActives().map(({ question, suiviErreur }) => ({
+            cible: question,
+            suivi: suiviErreur,
+            libelle: question.enonce.split('\n')[0],
+            repere: `Parcours ${obtenirOrdreTheme(question.theme) + 1} · Étape ${question.etape}`
+        }));
+    }
+    if (jeu === 'sigles') {
+        return obtenirErreursSiglesActives().map(cible => ({
+            cible,
+            suivi: obtenirSauvegardeJeuSigles().erreurs[normaliserSigleJeu(cible.sigle)],
+            libelle: `${cible.sigle} · ${significationMissionSigles(cible)}`,
+            repere: libelleEtapeSigles(cible.etape)
+        }));
+    }
+    if (jeu === 'mesures') {
+        return obtenirErreursMesuresActives().map(cible => ({
+            cible,
+            suivi: obtenirSauvegardeJeuMesures().erreurs[normaliserCleMesure(cible.cle)],
+            libelle: cible.titre,
+            repere: `Étape ${String(cible.etape).padStart(2, '0')}`
+        }));
+    }
+    return [];
+}
+function construireCategoriesRevision(jeu) {
+    const elements = obtenirElementsCategoriesRevision(jeu);
+    const categories = ['reprise', 'joker', 'passage', 'incorrecte'];
+    if (elements.some(element => obtenirCategorieRevision(element.suivi) === 'inconnu'))
+        categories.push('inconnu');
+    const dossiers = categories.map(categorie => {
+        const selection = elements.filter(element => obtenirCategorieRevision(element.suivi) === categorie);
+        const total = selection.length;
+        const libelle = obtenirLibelleConsolidation({ motifRevision: categorie });
+        const contenu = total
+            ? `<ul>${selection.map(element => `<li><span>${echapperHtml(element.libelle)}</span><small>${echapperHtml(element.repere)}</small></li>`).join('')}</ul>
+               <button class="principal" type="button" data-action="reviser-categorie" data-jeu-revision="${jeu}" data-categorie-revision="${categorie}">Réviser ${total} ${accorderLibelle(total, 'question', 'questions')} →</button>`
+            : '<p>Aucune question dans cette catégorie.</p>';
+        return `<details class="revision-categorie" data-categorie-revision="${categorie}">
+            <summary><span><strong>${libelle}</strong><small>${total} ${accorderLibelle(total, 'question', 'questions')}</small></span><span class="revision-categorie-chevron" aria-hidden="true">⌄</span></summary>
+            <div class="revision-categorie-contenu">${contenu}</div>
+        </details>`;
+    }).join('');
+    return `<section class="revision-categories" aria-labelledby="titreCategoriesRevision-${jeu}">
+        <h2 id="titreCategoriesRevision-${jeu}">Réviser par catégorie</h2>
+        <p>Ouvre une catégorie pour voir ses questions et les rejouer.</p>
+        <div class="revision-categories-grille">${dossiers}</div>
+    </section>`;
+}
+function lancerRevisionCategorie(jeu, categorie) {
+    if (!['parcours', 'sigles', 'mesures'].includes(jeu)
+        || !['reprise', 'joker', 'passage', 'incorrecte', 'inconnu'].includes(categorie)) return;
+    // Relire les données au clic : une réussite peut avoir consolidé une question
+    // depuis l'affichage de la catégorie. Ne jamais réactiver son ancien résultat.
+    const cibles = obtenirElementsCategoriesRevision(jeu)
+        .filter(element => obtenirCategorieRevision(element.suivi) === categorie)
+        .map(element => element.cible);
+    if (!cibles.length) {
+        afficherNotification('Aucune question dans cette catégorie.');
+        return;
+    }
+    if (jeu === 'parcours') {
+        lancerRevision('toutes', categorie);
+        return;
+    }
+    const titre = obtenirLibelleConsolidation({ motifRevision: categorie });
+    if (jeu === 'sigles') {
+        preparerSessionMissionSiglesNative({ mode: 'revision', sigles: cibles,
+            questions: creerQuestionsRevisionSigles(cibles), jokersActifs: false, titre });
+    }
+    else {
+        preparerSessionMissionMesuresNative({ mode: 'revision', reperes: cibles,
+            questions: creerQuestionsRevisionMesures(cibles), jokersActifs: false, titre });
+    }
+}
 function regrouperErreursParParcoursEtEtape(elements) {
     const resultat = {};
     elements.forEach(element => {
@@ -137,7 +217,8 @@ function afficherErreurs() {
         return;
     }
     const groupes = regrouperErreursParParcoursEtEtape(questionsAvecErreurs);
-    zone.innerHTML = construireModesRevisionErreurs(questionsAvecErreurs.length, groupes) + construireParcoursErreurs(groupes);
+    zone.innerHTML = construireCategoriesRevision('parcours')
+        + construireModesRevisionErreurs(questionsAvecErreurs.length, groupes) + construireParcoursErreurs(groupes);
 }
 
 function normaliserRechercheSupports(texte) {

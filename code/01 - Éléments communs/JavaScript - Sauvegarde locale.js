@@ -147,8 +147,8 @@ function obtenirLibelleConsolidation(suivi) {
     const libelles = {
         reprise: 'Validée après reprise sans joker · à consolider',
         joker: 'Validée avec joker · à consolider',
-        passage: 'Passée · à consolider',
-        incorrecte: 'Incorrecte · à consolider'
+        passage: 'Passée — non répondue',
+        incorrecte: 'Incorrecte — erreur à réviser'
     };
     return libelles[suivi?.motifRevision] || 'Motif non enregistré · à consolider';
 }

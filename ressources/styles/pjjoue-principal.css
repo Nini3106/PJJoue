@@ -11356,6 +11356,27 @@ body[data-ecran-actif="accueil"] #accueil {
 :is(#erreurs,#sigles-revision) .revision-erreur-ligne small { color:var(--texte-secondaire); font-size:.94rem; line-height:1.45; }
 :is(#erreurs,#sigles-revision) .revision-vide { display:grid; justify-items:center; gap:9px; padding:38px 24px; border:1px solid var(--bordure-carte); border-radius:var(--rayon-tres-grand); background:var(--surface-carte); box-shadow:var(--ombre-carte); text-align:center; }
 
+/* Les catégories partagent la même présentation dans les trois jeux. */
+.revision-categories { display:grid; gap:12px; min-width:0; margin-bottom:22px; }
+.revision-categories h2,
+.revision-categories > p { margin:0; }
+.revision-categories > p { color:var(--texte-secondaire); }
+.revision-categories-grille { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr)); gap:12px; align-items:start; }
+.revision-categorie { min-width:0; overflow:hidden; border:1px solid var(--bordure-carte); border-radius:var(--rayon-grand); background:var(--surface-carte); }
+.revision-categorie > summary { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px; cursor:pointer; }
+.revision-categorie > summary::marker { content:""; }
+.revision-categorie > summary > span:first-child { display:grid; min-width:0; gap:6px; overflow-wrap:anywhere; }
+.revision-categorie > summary:hover,
+.revision-categorie > summary:focus-visible { background:var(--surface-carte-profonde); }
+.revision-categorie-chevron { color:var(--texte-secondaire); transition:transform .18s ease; }
+.revision-categorie[open] > summary .revision-categorie-chevron { transform:rotate(180deg); }
+.revision-categorie small { color:var(--texte-secondaire); }
+.revision-categorie-contenu { display:grid; gap:14px; min-width:0; padding:0 16px 16px; }
+.revision-categorie-contenu ul { display:grid; gap:12px; margin:0; padding:0; list-style:none; }
+.revision-categorie-contenu li { display:grid; gap:4px; padding-top:12px; border-top:1px solid var(--bordure); overflow-wrap:anywhere; }
+.revision-categorie-contenu p { margin:0; color:var(--texte-secondaire); }
+.revision-categorie-contenu button { justify-self:start; width:max-content; max-width:100%; min-width:0; }
+
 /* Supports : mêmes cartes, seules les couleurs de repérage varient. */
 #supports .supports-tout-refermer { justify-self:start; min-height:40px; padding:0 14px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte); background:var(--surface-carte-profonde); }
 #supports .supports-tout-refermer:disabled { opacity:.48; cursor:not-allowed; }

@@ -216,8 +216,8 @@
       "sha256": "a44dd049d7ee3d295ab4e42956457e37a7f6efdc770aff00b7f6ad4170e64af8"
     },
     "code/01 - Éléments communs/JavaScript - Brancher les boutons.js": {
-      "tailleOctets": 31219,
-      "sha256": "5d61d06fb9de15b3230a413b2b0693445068c13667db254704ff98e5691c2921"
+      "tailleOctets": 31468,
+      "sha256": "996739e6404eee9a2d244d73e2ccdaeb78a12c98647eba801cd153bc82bbb44c"
     },
     "code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js": {
       "tailleOctets": 29765,
@@ -228,12 +228,12 @@
       "sha256": "34c0d6a731972f4e0a5aa8da05a24b1b1f50713f3dfb3d2205fcb7c6552439fe"
     },
     "code/01 - Éléments communs/JavaScript - Préparer les questions et sessions.js": {
-      "tailleOctets": 16177,
-      "sha256": "e14bdf66bd3c18c90465e368de4faa4213e7da56f0291af5fabbeadbbf3b2674"
+      "tailleOctets": 16342,
+      "sha256": "e08d8078352c93170687b2a9bde63fe1ae7780c0eebae8f5461ddcb30df2d7cd"
     },
     "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js": {
-      "tailleOctets": 37784,
-      "sha256": "c135d8040f92eaab95b5ff288f4e055549ffe25965a0e62619c020873fcc46a2"
+      "tailleOctets": 37791,
+      "sha256": "6f218a81b11a56f2ec0f8fe75e1da1a599af08b17b49c9b5f8f30c09821fda47"
     },
     "code/01 - Éléments communs/JavaScript - Sons et célébrations.js": {
       "tailleOctets": 6633,
@@ -392,8 +392,8 @@
       "sha256": "cdb85a3329032ba9748b180d6d9efde443a3c5e08da6c6afcf25ec1479db405a"
     },
     "code/08 - Réviser/Jeu des mesures/actions-de-la-page.js": {
-      "tailleOctets": 38372,
-      "sha256": "28d3337bec1a20910a07ce6a066abd6ccd5d344b5c0b83d2d58814208e4cf418"
+      "tailleOctets": 38414,
+      "sha256": "a9db7ac332cc8370c010f6cec967c2025794fdd09af0c21858a084cd03ec6520"
     },
     "code/08 - Réviser/Jeu des mesures/contenu.html": {
       "tailleOctets": 7738,
@@ -408,8 +408,8 @@
       "sha256": "a4f555173d782b95575bbdebb1806c4b0af66fe8ca417579c2f83323e9cc4c84"
     },
     "code/08 - Réviser/Jeu des sigles/actions-de-la-page.js": {
-      "tailleOctets": 82691,
-      "sha256": "cf4d322f02e8789e23752bc81f2b0c4a77c053cd892d15f05e6ac32e93bdf99a"
+      "tailleOctets": 82732,
+      "sha256": "2c20dd7818e516fef0ed7456509c323dedabf4f5266a0c575095ed89402f5ef6"
     },
     "code/08 - Réviser/Jeu des sigles/contenu.html": {
       "tailleOctets": 8064,
@@ -424,16 +424,16 @@
       "sha256": "122f1ddec2913479e17d8d9963289ff52ad12830e2dba75ce217c608e084fc47"
     },
     "code/08 - Réviser/actions-de-la-page.js": {
-      "tailleOctets": 19532,
-      "sha256": "ef44608f48141b677b894736675fec38b1931ec36a6d135aa5a3b04898da07a6"
+      "tailleOctets": 23870,
+      "sha256": "b95c695746e5edbd813c3726a0c52041937bf6a3488ed911b979cf515f172835"
     },
     "code/08 - Réviser/contenu.html": {
       "tailleOctets": 53181,
       "sha256": "09d77277a3172e255709d6adc6b51ce5fcf94139c992980fb8fb6075e0847a58"
     },
     "code/08 - Réviser/style-reviser-et-supports.css": {
-      "tailleOctets": 12176,
-      "sha256": "8a04ee7baceeefdb70b2c68bd16992f8d4787298f3bdfb61ad3baf3b0f9b8c3a"
+      "tailleOctets": 13951,
+      "sha256": "b1ea12852a396518d5ad8142dc650b7933a7c452a3351a8a7ebe28cb3e9f8fd9"
     },
     "code/09 - Progression/LIRE-MOI.md": {
       "tailleOctets": 564,
@@ -1144,8 +1144,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 508863,
-      "sha256": "39532e4cb947c661184fcd5436e759227d7b4c122cc50aef5f1848a3793b6ed0"
+      "tailleOctets": 513705,
+      "sha256": "7bc079f58587ccf2b74f21a105417fbdda9e46ce424e1977a0120809064b2cd4"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12455,
@@ -1192,8 +1192,8 @@
       "sha256": "51a64261c7301ed44340cd3cacc89b8204edcd4adc8beafcf5e0b198d2baa7c4"
     },
     "ressources/styles/pjjoue-principal.css": {
-      "tailleOctets": 403696,
-      "sha256": "b8e3957f3e584aff6d15b83ff32692fc410d6455d2568d9650cbcfde2a77abaf"
+      "tailleOctets": 405471,
+      "sha256": "032408f94f2345ae421a8039cbfec1fce4c8170236417850f3a0190f35440a4a"
     },
     "ressources/styles/pjjoue-static.css": {
       "tailleOctets": 22022,
@@ -1221,7 +1221,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5934,
-      "sha256": "eaec2f05c43904a91ebf2391ce3552d43bc4e15bf06ba43d5276c94c71d483d7"
+      "sha256": "88df980ace5ea987031c798f37807572f0c29c2732a9a14f8aff641c25cad429"
     },
     "sigles-cjpm/index.html": {
       "tailleOctets": 20369,
@@ -1451,6 +1451,10 @@
       "tailleOctets": 7315,
       "sha256": "064f9f13a95c982822bf697280b15bf62ccbd750af25fe437f9c49e9b85bc624"
     },
+    "tests/test_categories_revision.py": {
+      "tailleOctets": 7403,
+      "sha256": "66fe62f7e2747ef54be688093c5c207249c2700985b0eee813da5778b90dbe88"
+    },
     "tests/test_charte_questions.py": {
       "tailleOctets": 14495,
       "sha256": "71ad6ae9406a6af4b8b367161c65f619d4307780bb18decdcf4f64598c462b03"
@@ -1492,8 +1496,8 @@
       "sha256": "b89d82e4329fe3f274f6e79db75a4c4ffb8c1f7087534aa17ca3f61c33b2f032"
     },
     "tests/test_synchronisation_erreurs.py": {
-      "tailleOctets": 22450,
-      "sha256": "6989b8d1f7b4bebad8d8a285dc8de6e348c9b18edd8d0968e18b5453c4ec8784"
+      "tailleOctets": 22456,
+      "sha256": "34599b74711fa07a2501f0a71f68b713ce5ea05d4ec852cbe5c3902e6efe66a3"
     },
     "tests/test_validation_donnees.py": {
       "tailleOctets": 6809,

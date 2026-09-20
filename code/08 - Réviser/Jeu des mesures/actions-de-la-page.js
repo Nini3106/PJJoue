@@ -489,7 +489,7 @@ function afficherRevisionMesures() {
     const zone=selectionner('#contenuErreursMesures'); if(!zone)return;
     const erreurs=obtenirErreursMesuresActives();
     if(!erreurs.length){zone.innerHTML='<div class="revision-vide"><strong>Aucune question à consolider.</strong><p>Les repères manqués apparaîtront ici pour être retravaillés.</p></div>';return;}
-    zone.innerHTML=`<div class="mesures-revision-liste">${erreurs.map(cible=>`<article class="mesures-revision-item"><span class="surtitre">Étape ${String(cible.etape).padStart(2,'0')}</span><strong>${cible.titre}</strong><p>${cible.sigle&&cible.developpement?`${cible.developpement} (${cible.sigle})`:cible.questionRappel}</p><small>${obtenirLibelleConsolidation(obtenirSauvegardeJeuMesures().erreurs[cible.cle])}</small></article>`).join('')}</div><button class="principal" id="mesuresRevisionDemarrer" type="button">Commencer la révision →</button>`;
+    zone.innerHTML=construireCategoriesRevision('mesures') + `<div class="mesures-revision-liste">${erreurs.map(cible=>`<article class="mesures-revision-item"><span class="surtitre">Étape ${String(cible.etape).padStart(2,'0')}</span><strong>${cible.titre}</strong><p>${cible.sigle&&cible.developpement?`${cible.developpement} (${cible.sigle})`:cible.questionRappel}</p><small>${obtenirLibelleConsolidation(obtenirSauvegardeJeuMesures().erreurs[cible.cle])}</small></article>`).join('')}</div><button class="principal" id="mesuresRevisionDemarrer" type="button">Commencer la révision →</button>`;
     selectionner('#mesuresRevisionDemarrer')?.addEventListener('click',lancerRevisionMesures);
 }
 function terminerSessionMissionMesuresNative() {
