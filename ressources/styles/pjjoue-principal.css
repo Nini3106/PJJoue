@@ -11570,12 +11570,13 @@ body[data-ecran-actif="accueil"] #accueil {
 #sigles .option-bouton:disabled,
 #sigles .sigles-bouton-secondaire:disabled { color:var(--texte-secondaire); border-color:var(--bordure); background:var(--surface-carte-profonde); box-shadow:none; }
 
-/* Parcours Sigles : six cartes reprenant les six couleurs de PJJoue. */
+/* Parcours Sigles : couleurs des parcours CJPM et des thèmes PJJ associés. */
 #sigles .sigles-parcours-zone { display:grid; gap:18px; }
 #sigles .sigles-parcours-zone-entete { display:flex; align-items:end; justify-content:space-between; gap:16px; }
 #sigles .sigles-parcours-zone-entete h2 { margin:0 0 4px; }
 #sigles .sigles-parcours-zone-entete p { margin:0; color:var(--texte-secondaire); }
 #sigles .sigles-etapes-grille { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+#sigles .sigles-etapes-grille[data-domaine="pjj"] { grid-template-columns:repeat(2,minmax(0,1fr)); }
 #sigles .sigles-etape-carte { --sigles-etape-accent:#4f8cff; --sigles-etape-accent-lisible:#9fc2ff; --sigles-etape-rgb:79,140,255; position:relative; display:grid; grid-template-rows:1fr auto; gap:0; min-height:280px; overflow:hidden; border:1px solid var(--bordure-carte); border-top:5px solid var(--sigles-etape-accent-lisible); border-radius:var(--rayon-tres-grand); color:var(--texte); background:var(--surface-carte); box-shadow:var(--ombre-carte); text-align:left; transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease; }
 #sigles .sigles-etape-carte:hover { border-color:var(--sigles-etape-accent-lisible); transform:translateY(-2px); }
 #sigles .sigles-etape-ouvrir { display:grid; grid-template-rows:auto auto 1fr auto; gap:11px; width:100%; min-height:275px; padding:22px; border:0; border-radius:0; color:inherit; background:transparent; box-shadow:none; text-align:left; font:inherit; cursor:pointer; }
@@ -11595,12 +11596,12 @@ body[data-ecran-actif="accueil"] #accueil {
 #sigles .sigles-etape-icone { display:grid; place-items:center; width:64px; height:64px; border:1px solid rgba(var(--sigles-etape-rgb),.55); border-radius:17px; color:var(--sigles-etape-accent-lisible); background:rgba(var(--sigles-etape-rgb),.12); }
 #sigles .sigles-etape-icone svg { width:40px; height:40px; fill:none; stroke:currentColor; stroke-width:1.55; stroke-linecap:round; stroke-linejoin:round; }
 #sigles .sigles-etape-numero { color:var(--sigles-etape-accent-lisible); font-weight:950; }
-#sigles .sigles-etape-carte h3 { margin:0; font-size:1.25rem; }
+#sigles .sigles-etape-carte h3 { color:var(--sigles-etape-accent-lisible); margin:0; font-size:1.25rem; }
 #sigles .sigles-etape-carte p { margin:0; color:var(--texte-secondaire); line-height:1.5; }
 #sigles .sigles-etape-progression { height:8px; overflow:hidden; border-radius:999px; background:var(--surface-carte-profonde); }
 #sigles .sigles-etape-progression i { display:block; height:100%; border-radius:inherit; background:var(--sigles-etape-accent); }
 #sigles .sigles-etape-pied { display:flex; justify-content:space-between; gap:10px; color:var(--texte-secondaire); font-size:.9rem; font-weight:750; }
-#sigles .sigles-etape-pied span:last-child { color:var(--sigles-etape-accent-lisible); }
+#sigles .sigles-etape-pied span:last-child { white-space:nowrap; flex-shrink:0; color:var(--sigles-etape-accent-lisible); }
 #sigles .sigles-evaluation-carte { display:grid; grid-template-columns:72px minmax(0,1fr) auto; align-items:center; gap:18px; padding:22px; border:1px solid rgba(255,200,61,.48); border-radius:var(--rayon-tres-grand); background:rgba(255,200,61,.07); }
 #sigles .sigles-evaluation-icone { display:grid; place-items:center; width:68px; height:68px; color:var(--jaune-interface); }
 #sigles .sigles-evaluation-icone svg { width:52px; height:52px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
@@ -11720,6 +11721,7 @@ body[data-ecran-actif="accueil"] #accueil {
 @media (max-width:720px) {
   #sigles .sigles-modes-grille,
   #sigles .sigles-etapes-grille,
+  #sigles .sigles-etapes-grille[data-domaine="pjj"],
   #sigles .sigles-options-grille,
   #sigles .sigles-option-groupe,
   #sigles .sigles-reponses { grid-template-columns:1fr; }
@@ -11762,14 +11764,19 @@ body[data-ecran-actif="accueil"] #accueil {
 
 
 /* Deux domaines du même mini-jeu, avec les couleurs déjà présentes. */
-.sigles-domaines{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 24px}
-.sigles-domaines .choix-bouton{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0;padding:14px 18px;border:1px solid rgba(159,194,255,.5);border-left:4px solid #4f8cff;border-radius:14px;background:rgba(79,140,255,.08);color:#dceaff;text-align:left;cursor:pointer}
-.sigles-domaines .choix-bouton[data-domaine-sigles="cjpm"]{border-left-color:#d49a00}
-.sigles-domaines .choix-bouton span{font-size:.88rem}
-.sigles-domaines .choix-bouton[aria-pressed="true"]{outline:2px solid #9fc2ff;outline-offset:2px;background:rgba(79,140,255,.18)}
-.sigles-domaines .choix-bouton:focus-visible{outline:3px solid #ffd36a;outline-offset:3px}
-@media(max-width:520px){.sigles-domaines{gap:10px}.sigles-domaines .choix-bouton{flex:0 0 auto;max-width:100%;padding:12px}}
-/* Mission Mesures — mini-PJJoue V1. Les styles reprennent les codes visuels du site. */
+:is(#sigles,#sigles-revision) .sigles-domaines{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 24px}
+:is(#sigles,#sigles-revision) .sigles-domaines .choix-bouton{--domaine-accent:#9fc2ff;display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0;padding:14px 18px;border:1px solid rgba(159,194,255,.5);border-left:4px solid #4f8cff;border-radius:14px;background:rgba(79,140,255,.08);color:#dceaff;text-align:left;cursor:pointer}
+:is(#sigles,#sigles-revision) .sigles-domaines .choix-bouton[data-domaine-sigles="cjpm"]{--domaine-accent:#ffd36a;border-left-color:#d49a00}
+:is(#sigles,#sigles-revision) .sigles-domaines .choix-bouton span{font-size:.88rem}
+:is(#sigles,#sigles-revision) .sigles-domaines .choix-bouton[aria-pressed="true"]{outline:2px solid var(--domaine-accent);outline-offset:2px;background:color-mix(in srgb,var(--domaine-accent) 12%,var(--surface-carte))}
+:is(#sigles,#sigles-revision) .sigles-domaines .choix-bouton:focus-visible{outline:3px solid #ffd36a;outline-offset:3px}
+@media(max-width:520px){:is(#sigles,#sigles-revision) .sigles-domaines{gap:10px}:is(#sigles,#sigles-revision) .sigles-domaines .choix-bouton{flex:0 0 auto;max-width:100%;padding:12px}}
+
+/* Les textes de révision utilisent la variante lisible de la couleur d’étape. */
+#sigles-revision .revision-parcours-numero,
+#sigles-revision .revision-parcours-action,
+#sigles-revision .revision-dossier-numero,
+#sigles-revision .revision-dossier-chevron { color:var(--parcours-accent-lisible,var(--parcours-accent)); }/* Mission Mesures — mini-PJJoue V1. Les styles reprennent les codes visuels du site. */
 #mesures { --mesures-vert-parcours-6:#0f766e; --mesures-vert-parcours-6-lisible:#70d6ca; }
 #mesures .mesures-vue { width:min(1180px,100%); margin:0 auto; }
 #mesures .mesures-retour { margin:0 0 24px; }
@@ -12411,7 +12418,7 @@ body[data-ecran-actif="accueil"] #accueil {
 }
 
 /* Le badge Étape reprend la couleur de la carte ; le badge Parcours conserve
-   l'identité canonique du parcours ou l'identité stable des mini-jeux. */
+   l’identité canonique du parcours, ou celle de l’étape dans Mission Sigles. */
 #question .question-etape-identite > span {
     border-color: var(--couleur-etape-active);
     color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));

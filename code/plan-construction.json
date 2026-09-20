@@ -81,6 +81,12 @@
       "style_sortie": "mesures-educatives-pjj/style-de-la-page.css"
     },
     {
+      "source": "code/11 - Guides CJPM/Décoder les sigles CJPM/page.html",
+      "sortie": "sigles-cjpm/index.html",
+      "style_source": "code/11 - Guides CJPM/Décoder les sigles CJPM/style-de-la-page.css",
+      "style_sortie": "sigles-cjpm/style-de-la-page.css"
+    },
+    {
       "source": "code/11 - Guides pour découvrir la PJJ/Sigles essentiels/page.html",
       "sortie": "sigles-pjj/index.html",
       "style_source": "code/11 - Guides pour découvrir la PJJ/Sigles essentiels/style-de-la-page.css",

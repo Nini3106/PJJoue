@@ -28,6 +28,6 @@
 @media (max-width:420px) { .guide-carte-lien { grid-template-columns:44px minmax(0,1fr); gap:12px; padding:14px; } .guide-carte-icone { width:44px; height:44px; } .guide-carte-icone svg { width:28px; height:28px; } .guide-carte-lien > b { display:none; } }
 
 /* Les nouveaux guides reprennent les couleurs canoniques de leurs parcours. */
-.guide-carte-cjpm { border-left:3px solid var(--couleur-parcours); }
-.guide-carte-cjpm:hover,.guide-carte-cjpm:focus-visible { border-color:var(--couleur-parcours); }
+.guide-carte-cjpm,.guide-carte-theme { border-left:3px solid var(--couleur-parcours); }
+.guide-carte-cjpm:hover,.guide-carte-cjpm:focus-visible,.guide-carte-theme:hover,.guide-carte-theme:focus-visible { border-color:var(--couleur-parcours); }
 .guide-carte-numero { font-size:1.3rem; font-weight:900; }

@@ -1,5 +1,3 @@
-# Sigles essentiels
+# Décoder les sigles PJJ
 
-- `page.html` contient toute la page.
-- `style-de-la-page.css` est réservé aux différences visuelles propres à cette page.
-- Le style commun de toutes les pages guides est rangé dans `01 - Éléments communs`.
+Glossaire des 45 sigles PJJ, généré depuis `donnees/sigles.json`. Le guide des 51 sigles CJPM est distinct et accessible par un lien explicite.

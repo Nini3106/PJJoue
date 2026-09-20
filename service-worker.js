@@ -1,5 +1,5 @@
 /* PJJoue garde son application principale disponible après une première visite. */
-const NOM_CACHE = 'pjjoue-application-4ba15910d89b';
+const NOM_CACHE = 'pjjoue-application-379d687911ae';
 const RESSOURCES_ESSENTIELLES = [
   './',
   './index.html',
@@ -36,6 +36,8 @@ const RESSOURCES_ESSENTIELLES = [
   './structures-pjj/style-de-la-page.css',
   './mesures-educatives-pjj/index.html',
   './mesures-educatives-pjj/style-de-la-page.css',
+  './sigles-cjpm/index.html',
+  './sigles-cjpm/style-de-la-page.css',
   './sigles-pjj/index.html',
   './sigles-pjj/style-de-la-page.css',
   './quiz-pjj/index.html',

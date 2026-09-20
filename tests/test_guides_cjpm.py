@@ -1,6 +1,7 @@
 """Vérifie le parcours de lecture, les destinations et le consentement des guides."""
 from html.parser import HTMLParser
 import json
+import re
 from pathlib import Path
 import subprocess
 import unittest
@@ -33,7 +34,16 @@ class GuidesCJPMTests(unittest.TestCase):
         liens = LiensHTML((RACINE / "guides/index.html").read_text()).liens
         cartes = [l["href"] for l in liens if "guide-carte-lien" in l.get("class", "").split()]
         self.assertEqual(cartes[:5], [f"../{route}/" for route in PARCOURS])
-        self.assertIn("../decouvrir-la-pjj/", cartes[5:])
+        self.assertEqual(cartes[5:7], ["../mesures-educatives-pjj/", "../sigles-cjpm/"])
+        self.assertEqual(cartes[-1], "../sigles-pjj/")
+        page = (RACINE / "guides/index.html").read_text()
+        collections = re.findall(r'<section class="guides-collection".*?</section>', page, re.S)
+        self.assertEqual(len(collections), 2)
+        self.assertNotIn("Prendre ses repères", page)
+        self.assertIn("../sigles-cjpm/", collections[0])
+        self.assertNotIn("../sigles-pjj/", collections[0])
+        self.assertIn("../sigles-pjj/", collections[1])
+        self.assertNotIn("../mesures-educatives-pjj/", collections[1])
 
     def test_chaque_guide_mene_au_bon_parcours_et_a_des_pages_existantes(self):
         sitemap = (RACINE / "sitemap.xml").read_text()
@@ -92,7 +102,7 @@ for (const route of routes) {
     assert.ok(envois[0][1].pjjoue_nom_guide.length > 10);
 }
 '''
-        resultat = subprocess.run(["node", "-e", programme, json.dumps(list(PARCOURS))], cwd=RACINE, capture_output=True, text=True)
+        resultat = subprocess.run(["node", "-e", programme, json.dumps([*PARCOURS, "sigles-cjpm", "sigles-pjj", "mesures-educatives-pjj"])], cwd=RACINE, capture_output=True, text=True)
         self.assertEqual(resultat.returncode, 0, resultat.stderr)
 
 

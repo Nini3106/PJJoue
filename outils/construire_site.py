@@ -111,11 +111,13 @@ def rendre_lignes_sigles_guide(sigles: list[dict], groupe: str) -> str:
 
 
 def remplacer_marqueurs_sigles(texte: str) -> str:
-    if "{{TABLE_SIGLES_" not in texte and "{{NOMBRE_SIGLES}}" not in texte:
+    if "{{TABLE_SIGLES_" not in texte and "{{NOMBRE_SIGLES" not in texte:
         return texte
     sigles = sorted(charger_sigles(), key=lambda x: (x["etape"], x["sigle"]))
     remplacements = {
         "{{NOMBRE_SIGLES}}": str(len(sigles)),
+        "{{NOMBRE_SIGLES_CJPM}}": str(sum(x["domaine"] == "cjpm" for x in sigles)),
+        "{{NOMBRE_SIGLES_PJJ}}": str(sum(x["domaine"] == "pjj" for x in sigles)),
         "{{TABLE_SIGLES_REVISION}}": rendre_lignes_sigles_support(sigles),
         "{{TABLE_SIGLES_CJPM}}": rendre_lignes_sigles_guide(sigles, "Sigles CJPM"),
         "{{TABLE_SIGLES_PJJ}}": rendre_lignes_sigles_guide(sigles, "Sigles PJJ"),

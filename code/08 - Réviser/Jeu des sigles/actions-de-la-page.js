@@ -11,10 +11,10 @@ const ETAPES_MISSION_SIGLES = Object.freeze({
     3: { numero:'03', titre:'Jugement et réponse éducative', sousTitre:'Parcours 3 · Du jugement à la sanction', domaine:'cjpm', couleur:'#8b5cf6', couleurTexte:'#c7afff', couleurRgb:'139,92,246', icone:'mesures' },
     4: { numero:'04', titre:'Matière criminelle et garanties', sousTitre:'Parcours 4 · Crimes, peines et droits', domaine:'cjpm', couleur:'#e11d48', couleurTexte:'#ff91a8', couleurRgb:'225,29,72', icone:'justice' },
     5: { numero:'05', titre:'Application et exécution des peines', sousTitre:'Parcours 5 · Après la sanction', domaine:'cjpm', couleur:'#0f766e', couleurTexte:'#70d6ca', couleurRgb:'15,118,110', icone:'mesures' },
-    6: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', domaine:'pjj', couleur:'#4f8cff', couleurTexte:'#9fc2ff', couleurRgb:'79,140,255', icone:'organisation' },
-    7: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', domaine:'pjj', couleur:'#4f8cff', couleurTexte:'#9fc2ff', couleurRgb:'79,140,255', icone:'services' },
-    8: { numero:'03', titre:'Placement et détention', sousTitre:'Structures et dispositifs de placement', domaine:'pjj', couleur:'#4f8cff', couleurTexte:'#9fc2ff', couleurRgb:'79,140,255', icone:'placement' },
-    9: { numero:'04', titre:'Partenaires et repères professionnels', sousTitre:'Protection de l’enfance et accompagnement', domaine:'pjj', couleur:'#4f8cff', couleurTexte:'#9fc2ff', couleurRgb:'79,140,255', icone:'partenaires' }
+    6: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', domaine:'pjj', couleur:'#5fe0a0', couleurTexte:'#5fe0a0', couleurRgb:'95,224,160', icone:'organisation' },
+    7: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', domaine:'pjj', couleur:'#ffcf66', couleurTexte:'#ffcf66', couleurRgb:'255,207,102', icone:'services' },
+    8: { numero:'03', titre:'Placement et détention', sousTitre:'Structures et dispositifs de placement', domaine:'pjj', couleur:'#78aef5', couleurTexte:'#78aef5', couleurRgb:'120,174,245', icone:'placement' },
+    9: { numero:'04', titre:'Partenaires et repères professionnels', sousTitre:'Protection de l’enfance et accompagnement', domaine:'pjj', couleur:'#ffc83d', couleurTexte:'#ffc83d', couleurRgb:'255,200,61', icone:'partenaires' }
 });
 function obtenirDomaineSigles() { return obtenirSauvegardeJeuSigles().domaine || 'cjpm'; }
 function libelleDomaineSigles(domaine=obtenirDomaineSigles()) { return {cjpm:'CJPM',pjj:'PJJ',tous:'CJPM et PJJ'}[domaine] || 'CJPM'; }
@@ -169,6 +169,7 @@ function actualiserAccueilSigles() {
 }
 function construireCartesEtapesSigles() {
     const zone = selectionnerSigles('#siglesEtapes'); if (!zone) return;
+    zone.dataset.domaine = obtenirDomaineSigles();
     zone.innerHTML = numerosEtapesSigles().map(numero => {
         const identite = ETAPES_MISSION_SIGLES[numero]; const maitrises = compterMaitrisesEtapeSigles(numero); const sansJoker = compterValidationsSansJokerEtapeSigles(numero); const nombre = obtenirSiglesEtape(numero).length; const pc = Math.round(maitrises/nombre*100);
         const erreurs = obtenirCiblesARejouerEtapeSigles(numero).length;
@@ -507,7 +508,7 @@ function construireRevisionMissionSiglesIndependante(){
     const boutons = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
         const liste = parEtape[numero];
-        return `<button class="revision-parcours-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}"><span class="revision-parcours-numero">${identite.numero}</span><span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs':'erreur'}</small></span><span class="revision-parcours-action">Réviser →</span></button>`;
+        return `<button class="revision-parcours-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><span class="revision-parcours-numero">${identite.numero}</span><span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs':'erreur'}</small></span><span class="revision-parcours-action">Réviser →</span></button>`;
     }).join('');
     const etapesDirectes = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const liste = parEtape[numero];
@@ -520,7 +521,7 @@ function construireRevisionMissionSiglesIndependante(){
             const suivi = obtenirSauvegardeJeuSigles().erreurs?.[normaliserSigleJeu(cible.sigle)] || {};
             return `<li class="revision-erreur-ligne"><span><strong>${cible.sigle}</strong> · ${significationMissionSigles(cible)}</span><small>Raté ${Number(suivi.nombreErreurs||1)} fois · à revoir jusqu’à réussite</small></li>`;
         }).join('');
-        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs actives':'erreur active'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
+        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs actives':'erreur active'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
     }).join('');
     zone.innerHTML = `<div class="revision-workspace">
         <article class="revision-toutes-erreurs">

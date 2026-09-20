@@ -20,6 +20,7 @@ PAGES_CJPM = [
     "cjpm-jugement-sanction-educative/index.html",
     "cjpm-matiere-criminelle-peines/index.html",
     "cjpm-application-execution/index.html",
+    "sigles-cjpm/index.html",
 ]
 PAGES_BUREAU = [
     "guides/index.html",
@@ -36,7 +37,7 @@ PAGES_BUREAU = [
     "mentions-legales.html",
     "administration.html",
 ]
-PAGES_MOBILE = ["guides/index.html", "decouvrir-la-pjj/index.html", "sources.html", "administration.html"]
+PAGES_MOBILE = ["sigles-pjj/index.html", "guides/index.html", "decouvrir-la-pjj/index.html", "sources.html", "administration.html"]
 PAGES_GUIDES = set(PAGES_BUREAU[:10])
 PAGES_BUREAU += PAGES_CJPM
 PAGES_MOBILE += PAGES_CJPM

@@ -109,23 +109,25 @@ class TestMissionSigles(unittest.TestCase):
             '</tbody></table></div></section>',
         )
 
-        html_guide = (RACINE / 'sigles-pjj' / 'index.html').read_text(encoding='utf-8')
-        sigles_guide = []
-        for tbody in re.findall(r'<tbody>(.*?)</tbody>', html_guide, flags=re.S | re.I):
-            for ligne in re.findall(r'<tr>(.*?)</tr>', tbody, flags=re.S | re.I):
-                cellules = re.findall(r'<td>(.*?)</td>', ligne, flags=re.S | re.I)
-                if cellules:
-                    sigles_guide.append(texte_cellule(cellules[0]).upper())
-
         attendu = {str(element['sigle']).upper() for element in self.sigles}
         self.assertEqual(len(support), 96)
         self.assertEqual(len(set(support)), 96)
         self.assertEqual(set(support), attendu)
-        self.assertEqual(len(sigles_guide), 96)
-        self.assertEqual(len(set(sigles_guide)), 96)
-        self.assertEqual(set(sigles_guide), attendu)
-        self.assertTrue(all(next(x for x in self.sigles if x['sigle']==cle)['domaine']=='cjpm' for cle in sigles_guide[:51]))
-        self.assertTrue(all(next(x for x in self.sigles if x['sigle']==cle)['domaine']=='pjj' for cle in sigles_guide[51:]))
+        reunion = set()
+        for domaine, nombre in [('cjpm', 51), ('pjj', 45)]:
+            html_guide = (RACINE / f'sigles-{domaine}' / 'index.html').read_text(encoding='utf-8')
+            sigles_guide = []
+            for tbody in re.findall(r'<tbody>(.*?)</tbody>', html_guide, flags=re.S | re.I):
+                for ligne in re.findall(r'<tr>(.*?)</tr>', tbody, flags=re.S | re.I):
+                    cellules = re.findall(r'<td>(.*?)</td>', ligne, flags=re.S | re.I)
+                    if cellules:
+                        sigles_guide.append(texte_cellule(cellules[0]).upper())
+            attendus_domaine = {x['sigle'].upper() for x in self.sigles if x['domaine'] == domaine}
+            self.assertEqual(len(sigles_guide), nombre)
+            self.assertEqual(set(sigles_guide), attendus_domaine)
+            self.assertFalse(reunion & set(sigles_guide))
+            reunion.update(sigles_guide)
+        self.assertEqual(reunion, attendu)
 
     def test_jeu_present_dans_index(self):
         html_index = (RACINE / 'index.html').read_text(encoding='utf-8')
