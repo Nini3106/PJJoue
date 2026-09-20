@@ -8558,6 +8558,15 @@ function afficherInfobullePJJoue(declencheur) {
     const texte = declencheur?.dataset.infobulle;
     if (!(declencheur instanceof HTMLButtonElement) || !texte)
         return;
+    const ecran = declencheur.closest('.ecran');
+    if (!declencheur.isConnected
+        || !declencheur.getClientRects().length
+        || declencheur.closest('.masque')
+        || (ecran && !ecran.classList.contains('actif'))) {
+        if (infobullePJJoueActive?.declencheur === declencheur)
+            masquerInfobullePJJoue();
+        return;
+    }
     if (infobullePJJoueActive?.declencheur === declencheur) {
         infobullePJJoueActive.element.textContent = texte;
         positionnerInfobullePJJoue();
@@ -8617,8 +8626,11 @@ function activerAidesAuSurvol() {
     });
     document.addEventListener('pointerout', evenement => {
         const bouton = evenement.target.closest?.('button[data-infobulle]');
-        if (bouton && !bouton.contains(evenement.relatedTarget)
-            && document.activeElement !== bouton)
+        if (bouton && !bouton.contains(evenement.relatedTarget))
+            masquerInfobullePJJoue();
+    });
+    document.addEventListener('click', evenement => {
+        if (evenement.target.closest?.('button[data-infobulle]'))
             masquerInfobullePJJoue();
     });
     document.addEventListener('focusin', evenement => {
