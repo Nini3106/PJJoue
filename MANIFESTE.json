@@ -176,8 +176,8 @@
       "sha256": "1b35714896b1fa7a3594774dbd9b4f33e5dd8e9bb3642e4b4417c321cbe19130"
     },
     "code/01 - Éléments communs/JavaScript - Brancher les boutons.js": {
-      "tailleOctets": 29749,
-      "sha256": "86acf5dfaf3b8e135d2a9756bc4320f9465dbaa258182666793a323d31387e66"
+      "tailleOctets": 30222,
+      "sha256": "687dd73c2a7eda4d93c4861d9645c0a228f01224a1bc8306464f8020129d366a"
     },
     "code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js": {
       "tailleOctets": 24122,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 477022,
-      "sha256": "7a4f2c3a36d66d432b02dc9eaf4b3f28b34594d717213315fa548f034bba70e9"
+      "tailleOctets": 477495,
+      "sha256": "95a481e2c096d8e6695fd7b31d7de77fcfd547877787b9ba95884c5578b7b26e"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "4a80b8544a5825114770275e1ec6d8bd19bac01aaf23b54a822a49f4e104070e"
+      "sha256": "344d36135e84136f682fdd307c20f42e38e307b666fd1e42df94212949f11d9b"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
@@ -1396,8 +1396,8 @@
       "sha256": "8437f51aa165b95e4f354ab98a82ec62d41f3f3900a9313d8c48615ab82e24ce"
     },
     "tests/verifier_regression_visuelle.py": {
-      "tailleOctets": 88587,
-      "sha256": "aeff47451e95fce60e05914d46176d61d5dba8fcd6278f93bf931ae6c4fb7222"
+      "tailleOctets": 88653,
+      "sha256": "5942a81e0c3c5c2d8a19623ba3d8efa2ff7c93c9c8f6b6d8711790ccd07c3788"
     }
   }
 }
