@@ -290,6 +290,23 @@ def verifier() -> None:
         assert page.evaluate("obtenirErreursSiglesActives().every(x=>x.domaine==='pjj')") is True
         assert page.evaluate("obtenirErreursSiglesActives('cjpm').every(x=>x.domaine==='cjpm')") is True
 
+        # Les étapes PJJ conservent leur couleur de la carte jusqu'à la question.
+        page.evaluate("() => { afficherEcran('sigles'); choisirDomaineSigles('pjj'); }")
+        couleurs_pjj = page.evaluate("""() => [...document.querySelectorAll('#siglesEtapes article')].map(c => ({
+            etape:Number(c.dataset.siglesEtape), bord:getComputedStyle(c).borderTopColor,
+            titre:getComputedStyle(c.querySelector('h3')).color
+        }))""")
+        assert len({c['bord'] for c in couleurs_pjj}) == 4, couleurs_pjj
+        for carte in couleurs_pjj:
+            assert carte['titre'] == carte['bord'], carte
+            page.evaluate("n => lancerEtapeSigles(n)", carte['etape'])
+            identite = page.evaluate("""() => ({
+                entete:getComputedStyle(document.querySelector('#question')).getPropertyValue('--parcours-accent-lisible').trim(),
+                reponses:getComputedStyle(document.documentElement).getPropertyValue('--couleur-etape-active-lisible').trim(),
+                attendu:obtenirIdentiteEtapeMissionSigles(etat.etape).couleurTexte
+            })""")
+            assert identite['entete'] == identite['reponses'] == identite['attendu'], identite
+
         # Les étoiles et jauges utilisent les tailles réelles (7, 11, 15…), jamais 12.
         assert page.evaluate("""() => {
             const n=2,e=obtenirEtatEtapeSigles(n),liste=obtenirSiglesEtape(n);

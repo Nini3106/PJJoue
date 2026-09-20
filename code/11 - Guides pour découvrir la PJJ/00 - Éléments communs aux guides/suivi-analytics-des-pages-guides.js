@@ -20,8 +20,9 @@
         ['organisation-pjj', 'Organisation de la PJJ'],
         ['metiers-pjj', 'Métiers de la PJJ'],
         ['structures-pjj', 'Structures de la PJJ'],
-        ['mesures-educatives-pjj', 'Mesures éducatives de la PJJ'],
-        ['sigles-pjj', 'Sigles de la PJJ'],
+        ['mesures-educatives-pjj', 'Comprendre les mesures éducatives'],
+        ['sigles-cjpm', 'Décoder les sigles CJPM'],
+        ['sigles-pjj', 'Décoder les sigles PJJ'],
         ['quiz-pjj', 'Quiz PJJ']
     ];
 

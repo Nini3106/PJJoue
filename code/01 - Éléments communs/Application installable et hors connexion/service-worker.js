@@ -36,6 +36,8 @@ const RESSOURCES_ESSENTIELLES = [
   './structures-pjj/style-de-la-page.css',
   './mesures-educatives-pjj/index.html',
   './mesures-educatives-pjj/style-de-la-page.css',
+  './sigles-cjpm/index.html',
+  './sigles-cjpm/style-de-la-page.css',
   './sigles-pjj/index.html',
   './sigles-pjj/style-de-la-page.css',
   './quiz-pjj/index.html',

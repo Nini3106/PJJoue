@@ -290,7 +290,7 @@
 }
 
 /* Le badge Étape reprend la couleur de la carte ; le badge Parcours conserve
-   l'identité canonique du parcours ou l'identité stable des mini-jeux. */
+   l’identité canonique du parcours, ou celle de l’étape dans Mission Sigles. */
 #question .question-etape-identite > span {
     border-color: var(--couleur-etape-active);
     color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));

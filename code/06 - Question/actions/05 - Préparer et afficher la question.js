@@ -78,7 +78,10 @@ const IDENTITE_PARCOURS_MINI_JEUX = Object.freeze({
 });
 
 function obtenirIdentiteParcoursQuestion(question) {
-    if (question?.missionSigles || question?.missionMesures) {
+    if (question?.missionSigles) {
+        return obtenirIdentiteEtapeMissionSigles(question.missionSiglesMeta?.numeroEtape || question.etape || 1);
+    }
+    if (question?.missionMesures) {
         return IDENTITE_PARCOURS_MINI_JEUX;
     }
     return obtenirIdentiteParcours(question?.theme);

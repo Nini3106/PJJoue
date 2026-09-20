@@ -349,3 +349,6 @@ input:focus, select:focus, textarea:focus { border-color: #6F8FEA; box-shadow: 0
 .guide-cjpm .guide-reference { color:var(--text-soft); font-size:.9rem; }
 .guide-cjpm .guide-bouton-parcours { border-color:var(--couleur-parcours); color:var(--texte-parcours); }
 .guide-cjpm .guide-bouton-parcours:hover,.guide-cjpm .guide-bouton-parcours:focus-visible { border-color:var(--texte-parcours); }
+
+/* Repère de thème commun à la carte du guide et à sa fiche. */
+.page-guide .guide-repere-theme { color:var(--guide-accent); }
