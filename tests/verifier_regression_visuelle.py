@@ -1068,7 +1068,7 @@ def verifier_progression_peuplee(page: Page, mobile: bool = False) -> None:
         or activite["questionsTravaillees"] <= 0
         or activite["questionsARevoir"] != 4
         or activite["etapesMaitrisees"] != 14
-        or activite["libelleQuestionsARevoir"] != "Questions à revoir"
+        or activite["libelleQuestionsARevoir"] != "Questions à consolider"
         or activite["evaluationsReussies"] < 1
     ):
         raise AssertionError(f"Progression peuplée : activité de test incorrecte : {activite}")

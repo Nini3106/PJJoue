@@ -172,7 +172,7 @@ function reinitialiserValidationSansJokerEtape(identifiantTheme, numeroEtape) {
     actualiserSuiviEtapeQuestion(etat.questionCourante);
     actualiserAccueil();
 }
-function compterErreursActives() {
+function compterQuestionsAConsolider() {
     return Object.values(sauvegarde.erreurs || {}).filter(erreur => !erreur.maitrisee).length;
 }
 function compterEtapesMaitrisees() {

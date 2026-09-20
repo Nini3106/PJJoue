@@ -52,6 +52,7 @@ function creerSauvegardeInitiale() {
     return {
         version: 'V1',
         erreursSynchronisees: true,
+        reprisesSansJokerValidees: true,
         xp: 0,
         meilleureSerie: 0,
         nombreQuestionsJouees: 0,
@@ -139,6 +140,18 @@ function nettoyerProgression(progression) {
     }
     return progressionNettoyee;
 }
+function normaliserMotifRevision(motif) {
+    return ['reprise', 'joker', 'passage', 'incorrecte'].includes(motif) ? motif : null;
+}
+function obtenirLibelleConsolidation(suivi) {
+    const libelles = {
+        reprise: 'Validée sans joker après reprise · à consolider',
+        joker: 'Réussie avec joker · à consolider',
+        passage: 'Question passée · à consolider',
+        incorrecte: 'Réponse incorrecte · à consolider'
+    };
+    return libelles[suivi?.motifRevision] || 'Question à consolider';
+}
 function nettoyerErreurs(erreurs) {
     const erreursNettoyees = {};
     if (!estObjetSimple(erreurs))
@@ -155,6 +168,7 @@ function nettoyerErreurs(erreurs) {
         erreursNettoyees[String(identifiantQuestion)] = {
             reussites: convertirEntierBorne(enregistrement.reussites),
             maitrisee: enregistrement.maitrisee === true,
+            motifRevision: normaliserMotifRevision(enregistrement.motifRevision),
             nombreErreurs: convertirEntierBorne(enregistrement.nombreErreurs),
             nombrePassages: convertirEntierBorne(enregistrement.nombrePassages),
             theme: estThemeConnu(enregistrement.theme) ? enregistrement.theme : questionCorrespondante.theme
@@ -207,6 +221,7 @@ function nettoyerProgressionSigles(sauvegardeBrute) {
                 continue;
             erreurs[cle] = {
                 active: valeur.active === true,
+                motifRevision: normaliserMotifRevision(valeur.motifRevision),
                 nombreErreurs: convertirEntierBorne(valeur.nombreErreurs),
                 reussitesRevision: convertirEntierBorne(valeur.reussitesRevision, 0, 2)
             };
@@ -270,6 +285,7 @@ function nettoyerProgressionMesures(sauvegardeBrute) {
             if (!identifiants.has(String(cle)) || !estObjetSimple(valeur)) continue;
             erreurs[String(cle)] = {
                 active: valeur.active === true,
+                motifRevision: normaliserMotifRevision(valeur.motifRevision),
                 nombreErreurs: convertirEntierBorne(valeur.nombreErreurs),
                 reussitesRevision: convertirEntierBorne(valeur.reussitesRevision, 0, 2)
             };
@@ -327,6 +343,40 @@ function archiverErreursDejaMaitrisees(sauvegardeNettoyee) {
         }
     }
 }
+function validerAnciennesReprisesSansJoker(sauvegardeNettoyee) {
+    // L'ancien moteur conservait la validation sans joker mais écartait la
+    // reprise du score autonome. On reconnaît cet acquis une seule fois,
+    // en conservant la question parmi les notions à consolider.
+    for (const etapes of Object.values(sauvegardeNettoyee.progression.apprenant)) {
+        for (const bilan of Object.values(etapes)) {
+            for (const [identifiant, validee] of Object.entries(bilan.validationsSansJoker || {})) {
+                if (!validee || bilan.resultats[identifiant] === true) continue;
+                const question = QUESTIONS.find(element => String(element.id) === identifiant);
+                if (!question || question.estEvaluationFinale) continue;
+                bilan.resultats[identifiant] = true;
+                sauvegardeNettoyee.erreurs[identifiant] = Object.assign(sauvegardeNettoyee.erreurs[identifiant] || {
+                    reussites: 0, maitrisee: false, motifRevision: null,
+                    nombreErreurs: 0, nombrePassages: 0, theme: question.theme
+                }, {
+                    maitrisee: false, reussites: 1, motifRevision: 'reprise'
+                });
+            }
+        }
+    }
+    for (const jeu of [sauvegardeNettoyee.siglesJeu, sauvegardeNettoyee.mesuresJeu]) {
+        for (const etape of Object.values(jeu.etapes)) {
+            for (const [cle, validee] of Object.entries(etape.validationsSansJoker || {})) {
+                if (!validee || etape.autonomes[cle] === true) continue;
+                etape.autonomes[cle] = true;
+                jeu.erreurs[cle] = Object.assign(jeu.erreurs[cle] || {
+                    active: false, motifRevision: null, nombreErreurs: 0, reussitesRevision: 0
+                }, {
+                    active: true, reussitesRevision: 1, motifRevision: 'reprise'
+                });
+            }
+        }
+    }
+}
 function nettoyerSauvegarde(sauvegardeBrute) {
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
@@ -367,6 +417,8 @@ function nettoyerSauvegarde(sauvegardeBrute) {
     // reste validé, mais un nouvel échec doit rester disponible pour être rejoué.
     if (sauvegardeBrute.erreursSynchronisees !== true)
         archiverErreursDejaMaitrisees(nettoyee);
+    if (sauvegardeBrute.reprisesSansJokerValidees !== true)
+        validerAnciennesReprisesSansJoker(nettoyee);
     return nettoyee;
 }
 function conserverSauvegardeBrute(contenu) {
@@ -590,6 +642,37 @@ function restaurerSessionEnCours() {
     etat.optionsSession = restaurerTableauAssociatif(instantane.optionsSession);
     etat.tentativesQuestions = restaurerTableauAssociatif(instantane.tentativesQuestions);
     etat.jokersQuestions = restaurerTableauAssociatif(instantane.jokersQuestions);
+    let reprisesCorrigees = false;
+    for (const question of questions) {
+        const reponse = etat.reponsesSession.get(question.id);
+        const precisions = reponse?.precisions;
+        const jokerUtilise = Object.values(etat.jokersQuestions.get(question.id) || {}).some(valeur => valeur === false);
+        if (reponse?.statut !== 'aidee' || !(precisions?.tentatives > 0)
+            || precisions.aideUtilisee !== false || jokerUtilise) continue;
+        reponse.statut = 'correcte';
+        precisions.aidee = false;
+        precisions.aConsolider = true;
+        etat.erreursSession.delete(question.id);
+        etat.questionsPassees.delete(question.id);
+        if (!question.estEvaluationFinale) {
+            const bilan = obtenirBilanEtape(question.theme, question.etape);
+            if (etat.mode === 'parcours' || bilan.questionsTraitees[question.id] === true) {
+                bilan.questionsTraitees[question.id] = true;
+                bilan.resultats[question.id] = true;
+                bilan.validationsSansJoker[question.id] = true;
+            }
+            Object.assign(obtenirSuiviErreur(question), { maitrisee:false, reussites:1, motifRevision:'reprise' });
+        }
+        reprisesCorrigees = true;
+    }
+    // Les anciennes sessions pouvaient être enregistrées avant le calcul du
+    // score. Les réponses conservées constituent la source de vérité.
+    etat.score = questions.filter(question => etat.reponsesSession.get(question.id)?.statut === 'correcte').length;
+    etat.nombreReponsesAidees = questions.filter(question => etat.reponsesSession.get(question.id)?.statut === 'aidee').length;
+    if (reprisesCorrigees) {
+        Object.values(PROGRAMMES).forEach(synchroniserEtapesReussiesEnAutonomie);
+        enregistrerSauvegarde();
+    }
     etat.brouillonsEcrits = restaurerTableauAssociatif(instantane.brouillonsEcrits);
     etat.brouillonActivite = instantane.brouillonActivite || null;
     etat.questionCourante = questions[positionQuestion];

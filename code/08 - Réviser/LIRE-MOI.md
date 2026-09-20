@@ -22,8 +22,10 @@ L’ordre à conserver est :
 
 Ne pas réempiler tous les supports ouverts les uns sous les autres par défaut : la consultation doit rester progressive et ciblée.
 
-## Règle des erreurs
+## Questions à consolider
 
-En mode **Révision**, une question erronée reste active **jusqu’à sa prochaine réussite autonome**. Une seule réussite suffit alors à la marquer comme maîtrisée.
+Une réponse juste sans joker compte comme validée, même après une reprise. Dans ce dernier cas, elle reste dans les questions à consolider sans empêcher la validation de l’étape ou de la session. Les réponses avec joker, passées ou incorrectes sont également à consolider. Une réussite directe sans joker dans une nouvelle session retire la question de cette liste.
 
-Les règles ou actions utilisées par plusieurs pages restent dans **01 - Éléments communs**. C’est volontaire : on évite de copier le même code à plusieurs endroits ou d’ajouter des surcharges correctives en fin de feuille de style.
+Les clés historiques `erreurs`, `maitrisee` et `active` sont conservées pour la compatibilité des sauvegardes ; elles décrivent le suivi de révision, distinct des acquis de l’étape. `motifRevision` permet de présenter le motif sans assimiler une reprise réussie à une erreur.
+
+Les règles ou actions utilisées par plusieurs pages restent dans **01 - Éléments communs**.

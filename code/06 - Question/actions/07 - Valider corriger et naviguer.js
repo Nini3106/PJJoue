@@ -40,6 +40,7 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
         precisions: {
             ...precisions,
             aidee: reussiteAidee,
+            aConsolider: reussiteAutonome && tentatives > 0,
             tentatives,
             aideUtilisee
         }
@@ -91,26 +92,25 @@ function obtenirSuiviErreur(question) {
     };
     return sauvegarde.erreurs[question.id];
 }
-function traiterReussiteAutonome(question, etaitPassee) {
+function traiterReussiteAutonome(question) {
     etat.score++;
     etat.serie++;
     etat.meilleureSerie = Math.max(etat.meilleureSerie, etat.serie);
     sauvegarde.meilleureSerie = Math.max(sauvegarde.meilleureSerie || 0, etat.serie);
     etat.erreursSession.delete(question.id);
     jouerSonReussite();
-    if (etaitPassee && sauvegarde.erreurs[question.id]
-        && (sauvegarde.erreurs[question.id].nombreErreurs || 0) <= 1) {
-        delete sauvegarde.erreurs[question.id];
-        return;
-    }
-    if (!question?.missionSigles && !question?.missionMesures && sauvegarde.erreurs[question.id]) {
-        const suiviErreur = sauvegarde.erreurs[question.id];
-        // Toute nouvelle réussite autonome consolide l’erreur, quel que soit le mode.
+    if (!question?.missionSigles && !question?.missionMesures && etat.mode !== 'evaluation-finale') {
+        const apresReprise = (etat.tentativesQuestions?.get(question.id) || 0) > 0;
+        if (!apresReprise && !sauvegarde.erreurs[question.id]) return;
+        const suiviErreur = obtenirSuiviErreur(question);
+        // Validation et révision sont indépendantes : la reprise réussie compte
+        // au score, tout en gardant la notion disponible pour consolidation.
         suiviErreur.reussites = 1;
-        suiviErreur.maitrisee = true;
+        suiviErreur.maitrisee = !apresReprise;
+        suiviErreur.motifRevision = apresReprise ? 'reprise' : null;
     }
 }
-function traiterReussiteAidee(question, etaitPassee) {
+function traiterReussiteAidee(question) {
     etat.nombreReponsesAidees = (etat.nombreReponsesAidees || 0) + 1;
     etat.erreursSession.add(question.id);
     etat.serie = 0;
@@ -118,10 +118,9 @@ function traiterReussiteAidee(question, etaitPassee) {
     if (question?.missionSigles || question?.missionMesures || etat.mode === 'evaluation-finale')
         return;
     const suiviErreur = obtenirSuiviErreur(question);
-    if (!etaitPassee)
-        suiviErreur.nombreErreurs = (suiviErreur.nombreErreurs || 0) + 1;
     suiviErreur.reussites = 0;
     suiviErreur.maitrisee = false;
+    suiviErreur.motifRevision = 'joker';
 }
 function traiterReponseIncorrecte(question, etaitPassee) {
     etat.erreursSession.add(question.id);
@@ -134,6 +133,7 @@ function traiterReponseIncorrecte(question, etaitPassee) {
         suiviErreur.nombreErreurs = (suiviErreur.nombreErreurs || 0) + 1;
     suiviErreur.reussites = 0;
     suiviErreur.maitrisee = false;
+    suiviErreur.motifRevision = 'incorrecte';
 }
 function actualiserIndicateurSerie() {
     const indicateur = selectionner('#indicateurSerie');
@@ -151,7 +151,7 @@ function actualiserIndicateurSerie() {
     );
 }
 function obtenirTexteCorrection(question, resultat, texteChoisi, precisions) {
-    const { estCorrecte, reussiteAutonome, reussiteAidee } = resultat;
+    const { estCorrecte, reussiteAutonome, reussiteAidee, tentatives } = resultat;
     const banniereTempsEcoule = etat.delaiDepasse
         ? '<div class="temps-ecoule-correction"><strong>Temps écoulé</strong>'
             + '<span>La bonne réponse et l’explication sont affichées ci-dessous.</span></div>'
@@ -172,7 +172,9 @@ function obtenirTexteCorrection(question, resultat, texteChoisi, precisions) {
         : (reussiteAidee
             ? 'La notion a été comprise, mais cette réponse ne compte pas comme une réussite autonome. Elle rejoint tes révisions.'
             : (reussiteAutonome
-                ? MESSAGES_REUSSITE[Math.floor(Math.random() * MESSAGES_REUSSITE.length)]
+                ? (tentatives > 0
+                    ? 'Bonne réponse validée sans joker. Cette question reste à consolider, sans empêcher la validation de la session.'
+                    : MESSAGES_REUSSITE[Math.floor(Math.random() * MESSAGES_REUSSITE.length)])
                 : MESSAGES_ERREUR[Math.floor(Math.random() * MESSAGES_ERREUR.length)]));
     const repriseDisponible = (etat.tentativesQuestions?.get(question.id) || 0) < 1;
     const boutonRejouer = !estCorrecte
@@ -237,8 +239,8 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
         return false;
     const question = etat.questionCourante;
     const preparation = preparerValidationReponse(question, bouton);
-    const reussiteAidee = estCorrecte
-        && (preparation.tentatives > 0 || preparation.aideUtilisee);
+    // Rejouer ne constitue pas une aide : seul l’usage d’un joker rend la réussite assistée.
+    const reussiteAidee = estCorrecte && preparation.aideUtilisee;
     const resultat = {
         ...preparation,
         estCorrecte,
@@ -263,15 +265,16 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
     });
     enregistrerResultatReponse(question, texteChoisi, precisions, resultat);
     if (resultat.reussiteAutonome)
-        traiterReussiteAutonome(question, resultat.etaitPassee);
+        traiterReussiteAutonome(question);
     else if (resultat.reussiteAidee)
-        traiterReussiteAidee(question, resultat.etaitPassee);
+        traiterReussiteAidee(question);
     else
         traiterReponseIncorrecte(question, resultat.etaitPassee);
     actualiserSuiviEtapeQuestion(question);
     actualiserIndicateurSerie();
     afficherCorrectionReponse(question, resultat, texteChoisi, precisions);
     enregistrerSauvegarde();
+    enregistrerSessionEnCours();
     return true;
 }
 function choisirReponse(bouton, proposition) {
@@ -338,11 +341,11 @@ function passerQuestion() {
     if (!question?.missionSigles && !question?.missionMesures) {
         sauvegarde.erreurs[question.id] = sauvegarde.erreurs[question.id] || { reussites: 0, maitrisee: false, nombreErreurs: 0, theme: question.theme };
         if (!precedente) {
-            sauvegarde.erreurs[question.id].nombreErreurs = (sauvegarde.erreurs[question.id].nombreErreurs || 0) + 1;
             sauvegarde.erreurs[question.id].nombrePassages = (sauvegarde.erreurs[question.id].nombrePassages || 0) + 1;
         }
         sauvegarde.erreurs[question.id].reussites = 0;
         sauvegarde.erreurs[question.id].maitrisee = false;
+        sauvegarde.erreurs[question.id].motifRevision = 'passage';
     }
     enregistrerSauvegarde();
     enregistrerSessionEnCours();

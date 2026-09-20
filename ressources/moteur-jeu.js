@@ -508,6 +508,7 @@ function creerSauvegardeInitiale() {
     return {
         version: 'V1',
         erreursSynchronisees: true,
+        reprisesSansJokerValidees: true,
         xp: 0,
         meilleureSerie: 0,
         nombreQuestionsJouees: 0,
@@ -595,6 +596,18 @@ function nettoyerProgression(progression) {
     }
     return progressionNettoyee;
 }
+function normaliserMotifRevision(motif) {
+    return ['reprise', 'joker', 'passage', 'incorrecte'].includes(motif) ? motif : null;
+}
+function obtenirLibelleConsolidation(suivi) {
+    const libelles = {
+        reprise: 'Validée sans joker après reprise · à consolider',
+        joker: 'Réussie avec joker · à consolider',
+        passage: 'Question passée · à consolider',
+        incorrecte: 'Réponse incorrecte · à consolider'
+    };
+    return libelles[suivi?.motifRevision] || 'Question à consolider';
+}
 function nettoyerErreurs(erreurs) {
     const erreursNettoyees = {};
     if (!estObjetSimple(erreurs))
@@ -611,6 +624,7 @@ function nettoyerErreurs(erreurs) {
         erreursNettoyees[String(identifiantQuestion)] = {
             reussites: convertirEntierBorne(enregistrement.reussites),
             maitrisee: enregistrement.maitrisee === true,
+            motifRevision: normaliserMotifRevision(enregistrement.motifRevision),
             nombreErreurs: convertirEntierBorne(enregistrement.nombreErreurs),
             nombrePassages: convertirEntierBorne(enregistrement.nombrePassages),
             theme: estThemeConnu(enregistrement.theme) ? enregistrement.theme : questionCorrespondante.theme
@@ -663,6 +677,7 @@ function nettoyerProgressionSigles(sauvegardeBrute) {
                 continue;
             erreurs[cle] = {
                 active: valeur.active === true,
+                motifRevision: normaliserMotifRevision(valeur.motifRevision),
                 nombreErreurs: convertirEntierBorne(valeur.nombreErreurs),
                 reussitesRevision: convertirEntierBorne(valeur.reussitesRevision, 0, 2)
             };
@@ -726,6 +741,7 @@ function nettoyerProgressionMesures(sauvegardeBrute) {
             if (!identifiants.has(String(cle)) || !estObjetSimple(valeur)) continue;
             erreurs[String(cle)] = {
                 active: valeur.active === true,
+                motifRevision: normaliserMotifRevision(valeur.motifRevision),
                 nombreErreurs: convertirEntierBorne(valeur.nombreErreurs),
                 reussitesRevision: convertirEntierBorne(valeur.reussitesRevision, 0, 2)
             };
@@ -783,6 +799,40 @@ function archiverErreursDejaMaitrisees(sauvegardeNettoyee) {
         }
     }
 }
+function validerAnciennesReprisesSansJoker(sauvegardeNettoyee) {
+    // L'ancien moteur conservait la validation sans joker mais écartait la
+    // reprise du score autonome. On reconnaît cet acquis une seule fois,
+    // en conservant la question parmi les notions à consolider.
+    for (const etapes of Object.values(sauvegardeNettoyee.progression.apprenant)) {
+        for (const bilan of Object.values(etapes)) {
+            for (const [identifiant, validee] of Object.entries(bilan.validationsSansJoker || {})) {
+                if (!validee || bilan.resultats[identifiant] === true) continue;
+                const question = QUESTIONS.find(element => String(element.id) === identifiant);
+                if (!question || question.estEvaluationFinale) continue;
+                bilan.resultats[identifiant] = true;
+                sauvegardeNettoyee.erreurs[identifiant] = Object.assign(sauvegardeNettoyee.erreurs[identifiant] || {
+                    reussites: 0, maitrisee: false, motifRevision: null,
+                    nombreErreurs: 0, nombrePassages: 0, theme: question.theme
+                }, {
+                    maitrisee: false, reussites: 1, motifRevision: 'reprise'
+                });
+            }
+        }
+    }
+    for (const jeu of [sauvegardeNettoyee.siglesJeu, sauvegardeNettoyee.mesuresJeu]) {
+        for (const etape of Object.values(jeu.etapes)) {
+            for (const [cle, validee] of Object.entries(etape.validationsSansJoker || {})) {
+                if (!validee || etape.autonomes[cle] === true) continue;
+                etape.autonomes[cle] = true;
+                jeu.erreurs[cle] = Object.assign(jeu.erreurs[cle] || {
+                    active: false, motifRevision: null, nombreErreurs: 0, reussitesRevision: 0
+                }, {
+                    active: true, reussitesRevision: 1, motifRevision: 'reprise'
+                });
+            }
+        }
+    }
+}
 function nettoyerSauvegarde(sauvegardeBrute) {
     const sauvegardeInitiale = creerSauvegardeInitiale();
     if (!estObjetSimple(sauvegardeBrute))
@@ -823,6 +873,8 @@ function nettoyerSauvegarde(sauvegardeBrute) {
     // reste validé, mais un nouvel échec doit rester disponible pour être rejoué.
     if (sauvegardeBrute.erreursSynchronisees !== true)
         archiverErreursDejaMaitrisees(nettoyee);
+    if (sauvegardeBrute.reprisesSansJokerValidees !== true)
+        validerAnciennesReprisesSansJoker(nettoyee);
     return nettoyee;
 }
 function conserverSauvegardeBrute(contenu) {
@@ -1046,6 +1098,37 @@ function restaurerSessionEnCours() {
     etat.optionsSession = restaurerTableauAssociatif(instantane.optionsSession);
     etat.tentativesQuestions = restaurerTableauAssociatif(instantane.tentativesQuestions);
     etat.jokersQuestions = restaurerTableauAssociatif(instantane.jokersQuestions);
+    let reprisesCorrigees = false;
+    for (const question of questions) {
+        const reponse = etat.reponsesSession.get(question.id);
+        const precisions = reponse?.precisions;
+        const jokerUtilise = Object.values(etat.jokersQuestions.get(question.id) || {}).some(valeur => valeur === false);
+        if (reponse?.statut !== 'aidee' || !(precisions?.tentatives > 0)
+            || precisions.aideUtilisee !== false || jokerUtilise) continue;
+        reponse.statut = 'correcte';
+        precisions.aidee = false;
+        precisions.aConsolider = true;
+        etat.erreursSession.delete(question.id);
+        etat.questionsPassees.delete(question.id);
+        if (!question.estEvaluationFinale) {
+            const bilan = obtenirBilanEtape(question.theme, question.etape);
+            if (etat.mode === 'parcours' || bilan.questionsTraitees[question.id] === true) {
+                bilan.questionsTraitees[question.id] = true;
+                bilan.resultats[question.id] = true;
+                bilan.validationsSansJoker[question.id] = true;
+            }
+            Object.assign(obtenirSuiviErreur(question), { maitrisee:false, reussites:1, motifRevision:'reprise' });
+        }
+        reprisesCorrigees = true;
+    }
+    // Les anciennes sessions pouvaient être enregistrées avant le calcul du
+    // score. Les réponses conservées constituent la source de vérité.
+    etat.score = questions.filter(question => etat.reponsesSession.get(question.id)?.statut === 'correcte').length;
+    etat.nombreReponsesAidees = questions.filter(question => etat.reponsesSession.get(question.id)?.statut === 'aidee').length;
+    if (reprisesCorrigees) {
+        Object.values(PROGRAMMES).forEach(synchroniserEtapesReussiesEnAutonomie);
+        enregistrerSauvegarde();
+    }
     etat.brouillonsEcrits = restaurerTableauAssociatif(instantane.brouillonsEcrits);
     etat.brouillonActivite = instantane.brouillonActivite || null;
     etat.questionCourante = questions[positionQuestion];
@@ -1340,11 +1423,11 @@ const TITRES_ECRANS = {
     parcours: 'Parcours CJPM',
     carnet: 'Carnet de parcours',
     entrainement: 'Choisis ton mode d’entraînement',
-    erreurs: 'Mes erreurs à retravailler',
+    erreurs: 'Mes questions à consolider',
     sigles: 'Mission Sigles',
-    'sigles-revision': 'Réviser mes erreurs · Mission Sigles',
+    'sigles-revision': 'Questions à consolider · Mission Sigles',
     mesures: 'Mission Mesures',
-    'mesures-revision': 'Réviser mes erreurs · Mission Mesures',
+    'mesures-revision': 'Questions à consolider · Mission Mesures',
     supports: 'Supports de révision',
     progression: 'Progression',
     parametres: 'Paramètres',
@@ -1902,7 +1985,7 @@ function reinitialiserValidationSansJokerEtape(identifiantTheme, numeroEtape) {
     actualiserSuiviEtapeQuestion(etat.questionCourante);
     actualiserAccueil();
 }
-function compterErreursActives() {
+function compterQuestionsAConsolider() {
     return Object.values(sauvegarde.erreurs || {}).filter(erreur => !erreur.maitrisee).length;
 }
 function compterEtapesMaitrisees() {
@@ -1992,7 +2075,7 @@ function actualiserLibellesProgression() {
     }
     const configurations = [
         ['questionsJoueesProgression', 'Question travaillée', 'Questions travaillées'],
-        ['erreursProgression', 'Question à revoir', 'Questions à revoir'],
+        ['erreursProgression', 'Question à consolider', 'Questions à consolider'],
         ['etapesMaitriseesProgression', 'Étape maîtrisée', 'Étapes maîtrisées']
     ];
     configurations.forEach(([identifiant, singulier, pluriel]) => {
@@ -2014,7 +2097,7 @@ function actualiserAccueil() {
     if (jouees)
         jouees.textContent = String(sauvegarde.nombreQuestionsJouees || 0);
     if (erreurs)
-        erreurs.textContent = String(compterErreursActives());
+        erreurs.textContent = String(compterQuestionsAConsolider());
     if (maitrisees)
         maitrisees.textContent = String(compterEtapesMaitrisees());
     actualiserLibellesProgression();
@@ -2214,7 +2297,7 @@ function afficherDefisParcoursComplet() {
     const nombreEtapesMaitrisees = compterEtapesMaitrisees();
     const evaluationsReussies = THEMES.filter(theme => estEvaluationFinaleReussie(theme.id)).length;
     const meilleureSerie = Number(sauvegarde.meilleureSerie) || 0;
-    const aucuneErreurActive = sauvegarde.aDejaJoue && compterErreursActives() === 0;
+    const aucuneQuestionAConsolider = sauvegarde.aDejaJoue && compterQuestionsAConsolider() === 0;
     const defis = [
         {
             libelle: `Valider les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes sans joker`,
@@ -2232,9 +2315,9 @@ function afficherDefisParcoursComplet() {
             progression: `${Math.min(meilleureSerie, 5)}/5`
         },
         {
-            libelle: 'Ne garder aucune erreur active',
-            termine: aucuneErreurActive,
-            progression: aucuneErreurActive ? 'Réussi' : `${compterErreursActives()} à revoir`
+            libelle: 'Consolider toutes les questions travaillées',
+            termine: aucuneQuestionAConsolider,
+            progression: aucuneQuestionAConsolider ? 'Réussi' : `${compterQuestionsAConsolider()} à consolider`
         }
     ];
     zone.innerHTML = '';
@@ -3286,11 +3369,11 @@ function jouerTirageDeParcours() {
 function lancerRevision(identifiantTheme = 'toutes') {
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
     if (!sauvegarde.aDejaJoue && actif.length === 0) {
-        afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir rejouer tes erreurs.');
+        afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir consolider tes réponses.');
         return;
     }
     if (actif.length === 0) {
-        afficherNotification('Bravo : aucune erreur active à rejouer pour le moment.');
+        afficherNotification('Bravo : aucune question à consolider pour le moment.');
         return;
     }
     const identifiants = actif.map(([id]) => Number(id));
@@ -3299,7 +3382,7 @@ function lancerRevision(identifiantTheme = 'toutes') {
         reserve = reserve.filter(question => question.theme === identifiantTheme);
     if (reserve.length === 0) {
         const theme = THEMES.find(themeCandidat => themeCandidat.id === identifiantTheme);
-        afficherNotification(theme ? `Aucune erreur active dans « ${theme.titre} ».` : 'Aucune erreur active dans ce thème.');
+        afficherNotification(theme ? `Aucune question à consolider dans « ${theme.titre} ».` : 'Aucune question à consolider dans ce thème.');
         return;
     }
     etat.mode = 'revision';
@@ -3319,7 +3402,7 @@ function lancerRevisionEtape(identifiantTheme, etape = null) {
     const etapeCible = Number(etape);
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
     if (!sauvegarde.aDejaJoue && actif.length === 0) {
-        afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir rejouer tes erreurs.');
+        afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir consolider tes réponses.');
         return;
     }
     const identifiants = new Set(actif.map(([id]) => Number(id)));
@@ -3335,7 +3418,7 @@ function lancerRevisionEtape(identifiantTheme, etape = null) {
         && !question.estEvaluationFinale
     );
     if (!reserve.length) {
-        afficherNotification(`Aucune erreur active à l’étape ${etapeCible} de ce parcours.`);
+        afficherNotification(`Aucune question à consolider à l’étape ${etapeCible} de ce parcours.`);
         return;
     }
     etat.mode = 'revision';
@@ -4957,11 +5040,11 @@ function actualiserBoutonRevisionEtapeQuestion(question) {
     bouton.classList.toggle('masque', !visible);
     bouton.disabled = !disponible;
     bouton.setAttribute('aria-label', disponible
-        ? `Rejouer uniquement mes erreurs de l’étape ${Number(question.etape || 1)}`
-        : 'Rejouer uniquement mes erreurs');
+        ? `Consolider mes réponses de l’étape ${Number(question.etape || 1)}`
+        : 'Consolider mes réponses');
     definirAideSurvolBouton(bouton, disponible
-        ? `Rejouer les ${erreurs.length} questions à reprendre : erreurs actives et questions déjà introduites non maîtrisées sans joker. Les maîtrises sans joker sont conservées.`
-        : 'Aucune erreur active ou question non maîtrisée sans joker à rejouer dans cette étape');
+        ? `Rejouer les ${erreurs.length} questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.`
+        : 'Aucune question à consolider ou question non maîtrisée sans joker à rejouer dans cette étape');
 }
 function actualiserSuiviEtapeQuestion(question) {
     const conteneur = selectionner('#contexteEtapeQuestion');
@@ -5215,6 +5298,7 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
         precisions: {
             ...precisions,
             aidee: reussiteAidee,
+            aConsolider: reussiteAutonome && tentatives > 0,
             tentatives,
             aideUtilisee
         }
@@ -5266,26 +5350,25 @@ function obtenirSuiviErreur(question) {
     };
     return sauvegarde.erreurs[question.id];
 }
-function traiterReussiteAutonome(question, etaitPassee) {
+function traiterReussiteAutonome(question) {
     etat.score++;
     etat.serie++;
     etat.meilleureSerie = Math.max(etat.meilleureSerie, etat.serie);
     sauvegarde.meilleureSerie = Math.max(sauvegarde.meilleureSerie || 0, etat.serie);
     etat.erreursSession.delete(question.id);
     jouerSonReussite();
-    if (etaitPassee && sauvegarde.erreurs[question.id]
-        && (sauvegarde.erreurs[question.id].nombreErreurs || 0) <= 1) {
-        delete sauvegarde.erreurs[question.id];
-        return;
-    }
-    if (!question?.missionSigles && !question?.missionMesures && sauvegarde.erreurs[question.id]) {
-        const suiviErreur = sauvegarde.erreurs[question.id];
-        // Toute nouvelle réussite autonome consolide l’erreur, quel que soit le mode.
+    if (!question?.missionSigles && !question?.missionMesures && etat.mode !== 'evaluation-finale') {
+        const apresReprise = (etat.tentativesQuestions?.get(question.id) || 0) > 0;
+        if (!apresReprise && !sauvegarde.erreurs[question.id]) return;
+        const suiviErreur = obtenirSuiviErreur(question);
+        // Validation et révision sont indépendantes : la reprise réussie compte
+        // au score, tout en gardant la notion disponible pour consolidation.
         suiviErreur.reussites = 1;
-        suiviErreur.maitrisee = true;
+        suiviErreur.maitrisee = !apresReprise;
+        suiviErreur.motifRevision = apresReprise ? 'reprise' : null;
     }
 }
-function traiterReussiteAidee(question, etaitPassee) {
+function traiterReussiteAidee(question) {
     etat.nombreReponsesAidees = (etat.nombreReponsesAidees || 0) + 1;
     etat.erreursSession.add(question.id);
     etat.serie = 0;
@@ -5293,10 +5376,9 @@ function traiterReussiteAidee(question, etaitPassee) {
     if (question?.missionSigles || question?.missionMesures || etat.mode === 'evaluation-finale')
         return;
     const suiviErreur = obtenirSuiviErreur(question);
-    if (!etaitPassee)
-        suiviErreur.nombreErreurs = (suiviErreur.nombreErreurs || 0) + 1;
     suiviErreur.reussites = 0;
     suiviErreur.maitrisee = false;
+    suiviErreur.motifRevision = 'joker';
 }
 function traiterReponseIncorrecte(question, etaitPassee) {
     etat.erreursSession.add(question.id);
@@ -5309,6 +5391,7 @@ function traiterReponseIncorrecte(question, etaitPassee) {
         suiviErreur.nombreErreurs = (suiviErreur.nombreErreurs || 0) + 1;
     suiviErreur.reussites = 0;
     suiviErreur.maitrisee = false;
+    suiviErreur.motifRevision = 'incorrecte';
 }
 function actualiserIndicateurSerie() {
     const indicateur = selectionner('#indicateurSerie');
@@ -5326,7 +5409,7 @@ function actualiserIndicateurSerie() {
     );
 }
 function obtenirTexteCorrection(question, resultat, texteChoisi, precisions) {
-    const { estCorrecte, reussiteAutonome, reussiteAidee } = resultat;
+    const { estCorrecte, reussiteAutonome, reussiteAidee, tentatives } = resultat;
     const banniereTempsEcoule = etat.delaiDepasse
         ? '<div class="temps-ecoule-correction"><strong>Temps écoulé</strong>'
             + '<span>La bonne réponse et l’explication sont affichées ci-dessous.</span></div>'
@@ -5347,7 +5430,9 @@ function obtenirTexteCorrection(question, resultat, texteChoisi, precisions) {
         : (reussiteAidee
             ? 'La notion a été comprise, mais cette réponse ne compte pas comme une réussite autonome. Elle rejoint tes révisions.'
             : (reussiteAutonome
-                ? MESSAGES_REUSSITE[Math.floor(Math.random() * MESSAGES_REUSSITE.length)]
+                ? (tentatives > 0
+                    ? 'Bonne réponse validée sans joker. Cette question reste à consolider, sans empêcher la validation de la session.'
+                    : MESSAGES_REUSSITE[Math.floor(Math.random() * MESSAGES_REUSSITE.length)])
                 : MESSAGES_ERREUR[Math.floor(Math.random() * MESSAGES_ERREUR.length)]));
     const repriseDisponible = (etat.tentativesQuestions?.get(question.id) || 0) < 1;
     const boutonRejouer = !estCorrecte
@@ -5412,8 +5497,8 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
         return false;
     const question = etat.questionCourante;
     const preparation = preparerValidationReponse(question, bouton);
-    const reussiteAidee = estCorrecte
-        && (preparation.tentatives > 0 || preparation.aideUtilisee);
+    // Rejouer ne constitue pas une aide : seul l’usage d’un joker rend la réussite assistée.
+    const reussiteAidee = estCorrecte && preparation.aideUtilisee;
     const resultat = {
         ...preparation,
         estCorrecte,
@@ -5438,15 +5523,16 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
     });
     enregistrerResultatReponse(question, texteChoisi, precisions, resultat);
     if (resultat.reussiteAutonome)
-        traiterReussiteAutonome(question, resultat.etaitPassee);
+        traiterReussiteAutonome(question);
     else if (resultat.reussiteAidee)
-        traiterReussiteAidee(question, resultat.etaitPassee);
+        traiterReussiteAidee(question);
     else
         traiterReponseIncorrecte(question, resultat.etaitPassee);
     actualiserSuiviEtapeQuestion(question);
     actualiserIndicateurSerie();
     afficherCorrectionReponse(question, resultat, texteChoisi, precisions);
     enregistrerSauvegarde();
+    enregistrerSessionEnCours();
     return true;
 }
 function choisirReponse(bouton, proposition) {
@@ -5513,11 +5599,11 @@ function passerQuestion() {
     if (!question?.missionSigles && !question?.missionMesures) {
         sauvegarde.erreurs[question.id] = sauvegarde.erreurs[question.id] || { reussites: 0, maitrisee: false, nombreErreurs: 0, theme: question.theme };
         if (!precedente) {
-            sauvegarde.erreurs[question.id].nombreErreurs = (sauvegarde.erreurs[question.id].nombreErreurs || 0) + 1;
             sauvegarde.erreurs[question.id].nombrePassages = (sauvegarde.erreurs[question.id].nombrePassages || 0) + 1;
         }
         sauvegarde.erreurs[question.id].reussites = 0;
         sauvegarde.erreurs[question.id].maitrisee = false;
+        sauvegarde.erreurs[question.id].motifRevision = 'passage';
     }
     enregistrerSauvegarde();
     enregistrerSessionEnCours();
@@ -5873,17 +5959,25 @@ function obtenirContexteFinSession() {
         return `Étape ${etat.etape}${etapeProgramme?.titre ? ' · ' + etapeProgramme.titre : ''}`;
     }
     if (etat.mode === 'revision')
-        return 'Révision des erreurs';
+        return 'Consolidation';
     return 'Entraînement libre';
 }
+function obtenirQuestionsAConsoliderSession() {
+    return etat.questionsSession.filter(question => {
+        const reponse = etat.reponsesSession.get(question.id);
+        return etat.erreursSession.has(question.id)
+            || etat.questionsPassees.has(question.id)
+            || reponse?.precisions?.aConsolider === true;
+    });
+}
 function obtenirStatutErreurBilan(reponse, estQuestionPassee) {
+    if (reponse?.statut === 'correcte' && reponse.precisions?.aConsolider)
+        return 'Validée sans joker après reprise · à consolider';
     if (estQuestionPassee)
         return 'Activité passée';
     if (reponse?.statut === 'aidee') {
         if (reponse.precisions?.aideUtilisee)
-            return 'Réussite avec joker — à reprendre';
-        if ((reponse.precisions?.tentatives || 0) > 0)
-            return 'Réussite après une nouvelle tentative — à consolider';
+            return 'Réussite avec joker — à consolider';
         return 'Réussite avec aide — à consolider';
     }
     return 'Réponse incorrecte';
@@ -5893,18 +5987,19 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const nombre = selectionner('#nombreErreursBilan');
     const boutonContinuer = selectionner('#boutonContinuer');
     const boutonRejouer = selectionner('#boutonRejouerMesErreurs');
+    if (boutonRejouer) boutonRejouer.onclick = () => afficherEcran('erreurs');
     const aDesQuestionsAReprendre = questionsAReprendre.length > 0;
     boutonContinuer?.classList.toggle('principal', !aDesQuestionsAReprendre);
     boutonContinuer?.classList.toggle('secondaire', aDesQuestionsAReprendre);
     boutonRejouer?.classList.toggle('principal', aDesQuestionsAReprendre);
     boutonRejouer?.classList.toggle('secondaire', !aDesQuestionsAReprendre);
     if (nombre)
-        nombre.textContent = `${questionsAReprendre.length} question${questionsAReprendre.length === 1 ? '' : 's'} à reprendre`;
+        nombre.textContent = `${questionsAReprendre.length} question${questionsAReprendre.length === 1 ? '' : 's'} à consolider`;
     if (!zone)
         return;
     const regleLecture = `<div class="bilan-correction-regle">
     <strong>À savoir</strong>
-    <span>Les questions passées sont listées sans dévoiler leur réponse. La correction apparaît seulement lorsqu’une réponse a été tentée et qu’elle était incorrecte.</span>
+    <span>Les questions passées sont listées sans dévoiler leur réponse. Les réponses validées après reprise restent à consolider, sans empêcher la validation de la session.</span>
   </div>`;
     const accordActivitesPassees = nombreQuestionsPassees === 1 ? '' : 's';
     const sujetActivitesPassees = nombreQuestionsPassees > 1 ? 'Elles ne comptent' : 'Elle ne compte';
@@ -5923,7 +6018,7 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
             + informationPassage
             + '<div class="bilan-parfait">'
             + '<span aria-hidden="true">✓</span>'
-            + '<div><h3>Aucune question à reprendre</h3>'
+            + '<div><h3>Aucune question à consolider</h3>'
             + '<p>Toutes les activités de cette session ont été réussies de manière autonome.</p>'
             + '</div></div>';
         return;
@@ -5937,7 +6032,10 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
           <span>Tu as passé cette question sans proposer de réponse. Rejoue-la pour essayer de trouver la solution.</span>
         </div>`
             : `<div class="bilan-attendue-reponse">${construireCorrectionDetaillee(question, echapperHtml)}</div>`;
-        return `<article class="bilan-erreur-element ${estPassee ? 'bilan-erreur-passee' : ''}">
+        const classeConsolidation = reponse?.statut === 'correcte'
+            ? 'bilan-consolidation-validee'
+            : (estPassee || reponse?.statut === 'aidee' ? 'bilan-erreur-passee' : '');
+        return `<article class="bilan-erreur-element ${classeConsolidation}">
       <div class="bilan-erreur-numero" aria-hidden="true">${indice + 1}</div>
       <div class="bilan-erreur-corps">
         <div class="bilan-erreur-meta"><span>Question ${question.id}</span><strong>${obtenirStatutErreurBilan(reponse, estPassee)}</strong></div>
@@ -5954,12 +6052,14 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
         ? { theme: etat.theme, etape: etat.etape }
         : obtenirContexteRevisionEtape(etat.questionCourante);
     if (contexteEtape) {
-        const bilanEtape = obtenirBilanEtape(contexteEtape.theme, contexteEtape.etape);
-        bilanEtape.meilleurScore = Math.max(bilanEtape.meilleurScore || 0, pourcentage);
-        bilanEtape.nombreTentatives = (bilanEtape.nombreTentatives || 0) + 1;
         const etapeTerminee = (etat.mode === 'revision'
             || !etapeNecessiteAutreChapitre(contexteEtape.theme, contexteEtape.etape))
             && nombreQuestionsPassees === 0;
+        // Lire le bilan après le contrôle des chapitres, qui normalise les
+        // objets de progression, pour conserver le score et la célébration.
+        const bilanEtape = obtenirBilanEtape(contexteEtape.theme, contexteEtape.etape);
+        bilanEtape.meilleurScore = Math.max(bilanEtape.meilleurScore || 0, pourcentage);
+        bilanEtape.nombreTentatives = (bilanEtape.nombreTentatives || 0) + 1;
         if (etapeTerminee) {
             const questionsEtape = obtenirQuestionsEtape(contexteEtape.theme, contexteEtape.etape);
             const toutesReussiesEnAutonomie = questionsEtape.length > 0
@@ -6046,7 +6146,7 @@ function construireBilanSessionOrdinaire({
     let messageResultat;
     if (nombreQuestionsPassees > 0) {
         const activitesPassees = `${nombreQuestionsPassees} activité${nombreQuestionsPassees === 1 ? '' : 's'} passée${nombreQuestionsPassees === 1 ? '' : 's'}`;
-        messageResultat = `${autonomes}, ${reussitesAidees} et ${activitesPassees}. Les activités à reprendre sont détaillées ci-dessous.`;
+        messageResultat = `${autonomes}, ${reussitesAidees} et ${activitesPassees}. Les activités à consolider sont détaillées ci-dessous.`;
         jouerSonReussite();
     }
     else if (etat.mode === 'parcours') {
@@ -6058,7 +6158,7 @@ function construireBilanSessionOrdinaire({
             jouerSonReussite();
     }
     else if (pourcentage >= 80) {
-        messageResultat = `${autonomes} et ${reussitesAidees}. Les erreurs restent disponibles dans la révision.`;
+        messageResultat = `${autonomes} et ${reussitesAidees}. Les questions à consolider restent disponibles dans la révision.`;
         jouerSonReussite();
     }
     else {
@@ -6138,7 +6238,7 @@ function actualiserProchaineDestinationBilan() {
         const suivant = THEMES[indexTheme + 1];
         destination.textContent = estEvaluationFinaleReussie(etat.theme) && suivant
             ? `Prochaine destination : parcours ${indexTheme + 2} · ${PROGRAMMES[suivant.id].titre}.`
-            : (estParcoursCompletReussi() ? 'Ton parcours complet est validé.' : 'Tu peux retravailler les erreurs puis refaire cette évaluation.');
+            : (estParcoursCompletReussi() ? 'Ton parcours complet est validé.' : 'Tu peux retravailler les questions à consolider puis refaire cette évaluation.');
         return;
     }
     if (etat.mode === 'parcours') {
@@ -6271,9 +6371,7 @@ function terminerSession() {
     selectionner('#contexteBilan').textContent = obtenirContexteFinSession();
     selectionner('#titreBilan').textContent = bilan.titre;
     selectionner('#rangBilan').textContent = bilan.messageResultat;
-    const questionsAReprendre = etat.questionsSession.filter(question =>
-        etat.erreursSession.has(question.id)
-    );
+    const questionsAReprendre = obtenirQuestionsAConsoliderSession();
     afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees);
     configurerBoutonContinuerBilan();
     actualiserProchaineDestinationBilan();
@@ -6289,7 +6387,7 @@ function afficherEtatVideErreurs(zone, aucunePartieJouee) {
             <span class="revision-vide-icone" aria-hidden="true">↺</span>
             <span class="surtitre">Révision</span>
             <h2>Tu n’as pas encore joué.</h2>
-            <p>Commence un parcours : les erreurs à consolider apparaîtront ici automatiquement.</p>
+            <p>Commence un parcours : les questions à consolider apparaîtront ici automatiquement.</p>
             <button class="principal" data-action="ouvrir-parcours-depuis-erreurs">Commencer un parcours →</button>
         </div>`;
         return;
@@ -6297,7 +6395,7 @@ function afficherEtatVideErreurs(zone, aucunePartieJouee) {
     zone.innerHTML = `<div class="revision-vide revision-vide-ok">
         <span class="revision-vide-icone" aria-hidden="true">✓</span>
         <span class="surtitre">À jour</span>
-        <h2>Aucune erreur active.</h2>
+        <h2>Aucune question à consolider.</h2>
         <p>Tout ce qui avait besoin d’être retravaillé a été consolidé.</p>
     </div>`;
 }
@@ -6328,7 +6426,7 @@ function construireBoutonsRevisionParcours(groupes) {
         const identite = obtenirIdentiteParcours(theme.id);
         return `<button class="revision-parcours-bouton" data-action="reviser-theme" data-theme="${theme.id}" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}">
             <span class="revision-parcours-numero">${String(index + 1).padStart(2, '0')}</span>
-            <span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'erreur', 'erreurs')}</small></span>
+            <span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'question à consolider', 'questions à consolider')}</small></span>
             <span class="revision-parcours-action">Réviser →</span>
         </button>`;
     }).join('');
@@ -6345,13 +6443,13 @@ function construireBoutonsRevisionParEtape(groupes) {
     }).join('');
 }
 function construireModesRevisionErreurs(total, groupes) {
-    const libelleErreurs = accorderLibelle(total, 'erreur active', 'erreurs actives');
+    const libelleErreurs = accorderLibelle(total, 'question à consolider', 'questions à consolider');
     return `<div class="revision-workspace">
         <article class="revision-toutes-erreurs">
             <div class="revision-toutes-erreurs-icone" aria-hidden="true">↻</div>
             <div class="revision-toutes-erreurs-texte">
                 <span class="surtitre">Révision rapide</span>
-                <h2>Mélange mes erreurs</h2>
+                <h2>Mélange mes questions à consolider</h2>
                 <p>Une session aléatoire avec tes ${total} ${libelleErreurs}, tous parcours confondus.</p>
             </div>
             <button class="principal" data-action="reviser-toutes-erreurs">Lancer ${total} ${total > 1 ? 'questions' : 'question'} →</button>
@@ -6375,7 +6473,7 @@ function construireListeErreursEtape(theme, numeroEtape, elements) {
     const cartes = elements.map(({ question, suiviErreur }) => `
         <li class="revision-erreur-ligne">
             <span>${question.enonce.split('\n')[0]}</span>
-            <small>Ratée ${suiviErreur.nombreErreurs || 1} fois · à revoir jusqu’à réussite</small>
+            <small>${obtenirLibelleConsolidation(suiviErreur)}</small>
         </li>`).join('');
     return `<div class="revision-etape-groupe">
         <div class="revision-etape-groupe-entete"><strong>Étape ${numeroEtape} · ${titreEtape}</strong><span>${elements.length}</span></div>
@@ -6396,14 +6494,14 @@ function construireParcoursErreurs(groupes) {
         return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}">
             <summary>
                 <span class="revision-dossier-numero">${String(index + 1).padStart(2, '0')}</span>
-                <span><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'erreur active', 'erreurs actives')}</small></span>
+                <span><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'question à consolider', 'questions à consolider')}</small></span>
                 <span class="revision-dossier-chevron" aria-hidden="true">⌄</span>
             </summary>
             <div class="revision-dossier-contenu">${etapes}</div>
         </details>`;
     }).join('');
     return `<section class="revision-inventaire" aria-labelledby="titreInventaireErreurs">
-        <div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreurs">Tes erreurs actives</h2></div><p>Consulte les questions qui restent à consolider, parcours par parcours.</p></div>
+        <div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreurs">Tes questions à consolider</h2></div><p>Consulte les questions qui restent à consolider, parcours par parcours.</p></div>
         <div class="revision-dossiers">${dossiers}</div>
     </section>`;
 }
@@ -6741,12 +6839,12 @@ function obtenirCiblesARejouerEtapeSigles(numero) {
     const cibles = [...obtenirErreursSiglesActives('tous').filter(cible => Number(cible.etape) === Number(numero)), ...obtenirSiglesNonMaitrisesEtape(numero)];
     return [...new Map(cibles.map(cible => [normaliserSigleJeu(cible.sigle), cible])).values()];
 }
-function enregistrerErreurSigles(cibles) {
+function enregistrerErreurSigles(cibles, motifRevision = 'incorrecte') {
     const erreurs = obtenirSauvegardeJeuSigles().erreurs;
     cibles.forEach(cible => {
         const cle = normaliserSigleJeu(cible.sigle);
         const actuelle = erreurs[cle] || { active:false, nombreErreurs:0, reussitesRevision:0 };
-        erreurs[cle] = { active:true, nombreErreurs:Number(actuelle.nombreErreurs||0)+1, reussitesRevision:0 };
+        erreurs[cle] = { ...actuelle, active:true, motifRevision, nombreErreurs:Number(actuelle.nombreErreurs || 0) + (motifRevision === 'incorrecte' ? 1 : 0), reussitesRevision:motifRevision === 'reprise' ? 1 : 0 };
     });
 }
 function validerRevisionSigles(cibles) {
@@ -6758,6 +6856,7 @@ function validerRevisionSigles(cibles) {
         // Une nouvelle réussite autonome suffit, dans tous les modes de jeu.
         actuelle.reussitesRevision = 1;
         actuelle.active = false;
+        actuelle.motifRevision = null;
     });
 }
 
@@ -6800,7 +6899,7 @@ function actualiserAccueilSigles() {
     if (selectionnerSigles('#siglesMeilleurScore')) selectionnerSigles('#siglesMeilleurScore').textContent = `${obtenirEvaluationSigles().meilleurScore || 0}%`;
     if (selectionnerSigles('#siglesJaugeValeur')) selectionnerSigles('#siglesJaugeValeur').style.width = `${pourcentage}%`;
     if (selectionnerSigles('#siglesProgressionGlobale')) selectionnerSigles('#siglesProgressionGlobale').setAttribute('aria-valuenow', String(pourcentage));
-    if (selectionnerSigles('#siglesTexteRevision')) selectionnerSigles('#siglesTexteRevision').textContent = erreurs ? `${erreurs} sigle${erreurs===1?'':'s'} à consolider dans tes erreurs.` : 'Aucun sigle à revoir pour le moment.';
+    if (selectionnerSigles('#siglesTexteRevision')) selectionnerSigles('#siglesTexteRevision').textContent = erreurs ? `${erreurs} sigle${erreurs===1?'':'s'} à consolider.` : 'Aucun sigle à revoir pour le moment.';
     construireCartesEtapesSigles(); actualiserCarteEvaluationSigles(); construireChoixPerimetreSigles();
 }
 function construireCartesEtapesSigles() {
@@ -6810,7 +6909,7 @@ function construireCartesEtapesSigles() {
         const identite = ETAPES_MISSION_SIGLES[numero]; const maitrises = compterMaitrisesEtapeSigles(numero); const sansJoker = compterValidationsSansJokerEtapeSigles(numero); const nombre = obtenirSiglesEtape(numero).length; const pc = Math.round(maitrises/nombre*100);
         const erreurs = obtenirCiblesARejouerEtapeSigles(numero).length;
         const etoile = sansJoker === obtenirSiglesEtape(numero).length ? creerEtoileFilanteProgression() : '';
-        const revision = `<button class="sigles-etape-revision" data-action="reviser-etape-sigles" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Rejouer uniquement mes erreurs' : 'Aucune erreur à rejouer'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
+        const revision = `<button class="sigles-etape-revision" data-action="reviser-etape-sigles" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Consolider mes réponses' : 'Aucune question à consolider'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
         return `<article class="sigles-etape-carte" data-sigles-etape="${numero}" style="--sigles-etape-accent:${identite.couleur};--sigles-etape-accent-lisible:${identite.couleurTexte};--sigles-etape-rgb:${identite.couleurRgb}"><button class="sigles-etape-ouvrir" data-sigles-etape="${numero}" type="button"><span class="sigles-etape-carte-entete"><span class="sigles-etape-icone" aria-hidden="true">${iconeEtapeSigles(identite.icone)}</span><span class="sigles-etape-numero">${libelleDomaineSigles(identite.domaine)} · ÉTAPE ${identite.numero}</span>${etoile}</span><h3>${identite.titre}</h3><p>${identite.sousTitre}<br>${nombre} sigles · ${nombre*2} activités de parcours.</p><span class="sigles-etape-progression"><i style="width:${pc}%"></i></span><span class="sigles-etape-pied"><span>${maitrises}/${nombre} bonnes réponses · ${sansJoker}/${nombre} sans joker</span><span>${maitrises===nombre?'Maîtrisée ✓':'Ouvrir →'}</span></button>${revision}</article>`;
     }).join('');
     zone.querySelectorAll('.sigles-etape-ouvrir').forEach(b => b.addEventListener('click', () => lancerEtapeSigles(Number(b.dataset.siglesEtape))));
@@ -7039,10 +7138,10 @@ function validerAssociationSigles() {
 }
 function finaliserQuestionSigles(correcte,cibles,{parJoker=false,passage=false,tempsEcoule=false}={}) {
     if(etatJeuSigles.questionValidee)return; const q=etatJeuSigles.questions[etatJeuSigles.indexQuestion]; etatJeuSigles.questionValidee=true; arreterChronoSigles();
-    if(correcte){ if(q.estIntroduction && q.cible) marquerSigleIntroduit(q.cible.sigle); etatJeuSigles.score += 1; const autonome=!etatJeuSigles.aideUtilisee && !parJoker && etatJeuSigles.tentativesQuestion<=1; if(autonome) etatJeuSigles.reponsesAutonomes += 1; else etatJeuSigles.reponsesAidees += 1;
+    if(correcte){ if(q.estIntroduction && q.cible) marquerSigleIntroduit(q.cible.sigle); etatJeuSigles.score += 1; const autonome=!etatJeuSigles.aideUtilisee && !parJoker; if(autonome) etatJeuSigles.reponsesAutonomes += 1; else etatJeuSigles.reponsesAidees += 1;
         if(q.compteMaitrise){ cibles.forEach(cible=>{ const etape=obtenirEtatEtapeSigles(Number(cible.etape)), cle=normaliserSigleJeu(cible.sigle); if(!etatJeuSigles.aideUtilisee&&!parJoker) etape.validationsSansJoker[cle]=true; if(autonome) etape.autonomes[cle]=true; }); verifierCelebrationEtapeSigles(cibles); }
-        if(!q.estIntroduction && autonome) validerRevisionSigles(cibles); afficherFeedbackSigles('succes',q.explication || 'Bonne réponse.');
-    } else { if(passage||tempsEcoule){ etatJeuSigles.questionsPassees += 1; enregistrerErreurSigles(cibles); afficherFeedbackSigles('erreur',tempsEcoule?'Temps écoulé. Cette question rejoint tes erreurs.':'Question passée. Elle rejoint tes erreurs.'); } }
+        if(autonome && etatJeuSigles.tentativesQuestion > 1) enregistrerErreurSigles(cibles, 'reprise'); else if(!q.estIntroduction && autonome) validerRevisionSigles(cibles); else if(!autonome) enregistrerErreurSigles(cibles, 'joker'); afficherFeedbackSigles('succes',q.explication || 'Bonne réponse.');
+    } else { if(passage||tempsEcoule){ etatJeuSigles.questionsPassees += 1; enregistrerErreurSigles(cibles, 'passage'); afficherFeedbackSigles('erreur',tempsEcoule?'Temps écoulé. Cette question rejoint tes révisions.':'Question passée. Elle rejoint tes révisions.'); } }
     obtenirSauvegardeJeuSigles().statistiques.questionsJouees += 1; enregistrerSauvegarde();
     selectionnerTousSigles('#siglesZoneQuestion button, #siglesZoneQuestion select').forEach(e=>e.disabled=true); selectionnerSigles('#siglesValiderActivite')?.classList.add('masque'); selectionnerSigles('#siglesQuestionSuivante')?.classList.remove('masque'); selectionnerSigles('#siglesPasserQuestion')?.classList.add('masque'); selectionnerSigles('#siglesJokers')?.querySelectorAll('button').forEach(b=>b.disabled=true);
 }
@@ -7067,13 +7166,13 @@ function terminerSessionSigles(){ arreterChronoSigles(); const total=etatJeuSigl
     if(etatJeuSigles.mode==='evaluation'){ obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).nombreTentatives+=1;obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).meilleurScore=Math.max(obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).meilleurScore||0,pc);etatJeuSigles.evaluationReussie=pc>=SEUIL_EVALUATION_SIGLES&&etatJeuSigles.questionsPassees===0;etatJeuSigles.evaluationParfaite=pc===100&&etatJeuSigles.questionsPassees===0;if(etatJeuSigles.evaluationReussie)obtenirEvaluationSigles(etat.missionSiglesConfiguration?.domaine || obtenirDomaineSigles()).reussie=true; }
     enregistrerSauvegarde(); afficherVueSigles('bilan'); afficherBilanSigles(pc); actualiserAccueilSigles(); }
 function afficherBilanSigles(pc){ const total=etatJeuSigles.questions.length; if(selectionnerSigles('#siglesBilanScore'))selectionnerSigles('#siglesBilanScore').textContent=`${etatJeuSigles.score} / ${total} · ${pc}%`; if(selectionnerSigles('#siglesBilanDetails'))selectionnerSigles('#siglesBilanDetails').textContent=`${etatJeuSigles.reponsesAutonomes} réussites autonomes · ${etatJeuSigles.reponsesAidees} avec aide · ${etatJeuSigles.questionsPassees} passées`;
-    let surtitre='Mission Sigles', titre='Session terminée', texte='Les sigles difficiles restent disponibles dans « Réviser mes erreurs ».', icone='✓';
-    if(etatJeuSigles.mode==='parcours'){ const m=etapeSiglesMaitrisee(etatJeuSigles.etape); titre=m?`${libelleEtapeSigles(etatJeuSigles.etape)} maîtrisée`:`${libelleEtapeSigles(etatJeuSigles.etape)} terminée`; texte=m?'Tous les sigles de cette étape sont maîtrisés en autonomie.':'Tu peux rejouer l’étape ou retrouver tes erreurs dans la révision.'; }
+    let surtitre='Mission Sigles', titre='Session terminée', texte='Les sigles difficiles restent disponibles dans « Questions à consolider ».', icone='✓';
+    if(etatJeuSigles.mode==='parcours'){ const m=etapeSiglesMaitrisee(etatJeuSigles.etape); titre=m?`${libelleEtapeSigles(etatJeuSigles.etape)} maîtrisée`:`${libelleEtapeSigles(etatJeuSigles.etape)} terminée`; texte=m?'Tous les sigles de cette étape sont maîtrisés en autonomie.':'Tu peux rejouer l’étape ou retrouver tes questions à consolider dans la révision.'; }
     if(etatJeuSigles.celebrationEtapeADiffuser){ icone='★'; titre=`${libelleEtapeSigles(etatJeuSigles.celebrationEtapeADiffuser)} validée sans joker !`; texte='Tous les sigles de cette étape ont finalement été réussis sans joker. Bravo !'; lancerConfettis(1.35); jouerSonEtapeSansJoker(); }
-    if(etatJeuSigles.mode==='evaluation'){ surtitre='Évaluation finale'; if(etatJeuSigles.evaluationReussie){ titre=etatJeuSigles.evaluationParfaite?'Mission accomplie. Même pas peur.':'Évaluation réussie !';texte=etatJeuSigles.evaluationParfaite?'30 / 30. Mission accomplie.':'Tu dépasses le seuil de 90 %. Bravo !';icone='🏆';lancerConfettis(etatJeuSigles.evaluationParfaite?3:2);jouerSonEvaluationFinale(); } else { titre='Évaluation à consolider';texte='Il faut 90 % pour réussir. Les sigles manqués rejoignent tes erreurs.';icone='↻'; } }
+    if(etatJeuSigles.mode==='evaluation'){ surtitre='Évaluation finale'; if(etatJeuSigles.evaluationReussie){ titre=etatJeuSigles.evaluationParfaite?'Mission accomplie. Même pas peur.':'Évaluation réussie !';texte=etatJeuSigles.evaluationParfaite?'30 / 30. Mission accomplie.':'Tu dépasses le seuil de 90 %. Bravo !';icone='🏆';lancerConfettis(etatJeuSigles.evaluationParfaite?3:2);jouerSonEvaluationFinale(); } else { titre='Évaluation à consolider';texte='Il faut 90 % pour réussir. Les sigles manqués rejoignent tes révisions.';icone='↻'; } }
     if(etatJeuSigles.mode==='hasard'){ titre='Défi du hasard terminé';texte=pc===100?'Tirage parfait ! Le dé était avec toi.':'Le dé a parlé. Tu peux relancer un nouveau tirage quand tu veux.'; }
     if(etatJeuSigles.mode==='revision'){ titre='Révision terminée';texte=obtenirErreursSiglesActives().length?'Il reste quelques sigles à consolider.':'Bravo : aucun sigle actif à revoir.'; }
-    if(etatJeuSigles.mode==='entrainement'&&pc===100&&total>=10){ titre='Entraînement parfait !';texte='Aucune erreur sur cette session.';lancerConfettis(1);jouerSonEtapeSansJoker(); }
+    if(etatJeuSigles.mode==='entrainement'&&pc===100&&total>=10){ titre='Entraînement parfait !';texte='Toutes les réponses de cette session sont validées.';lancerConfettis(1);jouerSonEtapeSansJoker(); }
     if(selectionnerSigles('#siglesBilanSurtitre'))selectionnerSigles('#siglesBilanSurtitre').textContent=surtitre; if(selectionnerSigles('#siglesBilanTitre'))selectionnerSigles('#siglesBilanTitre').textContent=titre; if(selectionnerSigles('#siglesBilanTexte'))selectionnerSigles('#siglesBilanTexte').textContent=texte; if(selectionnerSigles('#siglesBilanIcone'))selectionnerSigles('#siglesBilanIcone').textContent=icone;
 }
 
@@ -7096,14 +7195,14 @@ function lancerRevisionSigles(){
 }
 function lancerToutesErreursSiglesDepuisRevision(){
     const cibles = obtenirErreursSiglesActives();
-    if(!cibles.length){ afficherNotification('Aucune erreur Sigles à revoir pour le moment.'); return; }
-    preparerSessionMissionSiglesNative({mode:'revision', sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:'Réviser mes erreurs'});
+    if(!cibles.length){ afficherNotification('Aucun sigle à consolider pour le moment.'); return; }
+    preparerSessionMissionSiglesNative({mode:'revision', sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:'Questions à consolider'});
 }
 function lancerRevisionEtapeSiglesDepuisRevision(numeroEtape){
     const numero = Number(numeroEtape);
     const cibles = obtenirCiblesARejouerEtapeSigles(numero);
     if(!cibles.length){ afficherNotification(`Aucune question à consolider à l’étape ${numero} de Mission Sigles.`); return; }
-    preparerSessionMissionSiglesNative({mode:'revision', etape:numero, sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:`Réviser mes erreurs · ${libelleEtapeSigles(numero)}`});
+    preparerSessionMissionSiglesNative({mode:'revision', etape:numero, sigles:cibles, questions:creerQuestionsRevisionSigles(cibles), jokersActifs:false, titre:`Questions à consolider · ${libelleEtapeSigles(numero)}`});
 }
 function lancerRevisionEtapeSiglesDepuisQuestion(numeroEtape){
     lancerRevisionEtapeSiglesDepuisRevision(numeroEtape);
@@ -7129,7 +7228,7 @@ function afficherEtatVideRevisionMissionSigles(zone){
     zone.innerHTML = `<div class="revision-vide revision-vide-ok">
         <span class="revision-vide-icone" aria-hidden="true">✓</span>
         <span class="surtitre">À jour</span>
-        <h2>Aucune erreur active.</h2>
+        <h2>Aucune question à consolider.</h2>
         <p>Tous les sigles qui avaient besoin d’être retravaillés sont consolidés.</p>
     </div>`;
 }
@@ -7144,7 +7243,7 @@ function construireRevisionMissionSiglesIndependante(){
     const boutons = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
         const liste = parEtape[numero];
-        return `<button class="revision-parcours-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><span class="revision-parcours-numero">${identite.numero}</span><span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs':'erreur'}</small></span><span class="revision-parcours-action">Réviser →</span></button>`;
+        return `<button class="revision-parcours-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><span class="revision-parcours-numero">${identite.numero}</span><span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'questions à consolider':'question à consolider'}</small></span><span class="revision-parcours-action">Réviser →</span></button>`;
     }).join('');
     const etapesDirectes = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const liste = parEtape[numero];
@@ -7155,14 +7254,14 @@ function construireRevisionMissionSiglesIndependante(){
         const liste = parEtape[numero];
         const lignes = liste.map(cible => {
             const suivi = obtenirSauvegardeJeuSigles().erreurs?.[normaliserSigleJeu(cible.sigle)] || {};
-            return `<li class="revision-erreur-ligne"><span><strong>${cible.sigle}</strong> · ${significationMissionSigles(cible)}</span><small>Raté ${Number(suivi.nombreErreurs||1)} fois · à revoir jusqu’à réussite</small></li>`;
+            return `<li class="revision-erreur-ligne"><span><strong>${cible.sigle}</strong> · ${significationMissionSigles(cible)}</span><small>${obtenirLibelleConsolidation(suivi)}</small></li>`;
         }).join('');
-        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'erreurs actives':'erreur active'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
+        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'questions à consolider':'question à consolider'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
     }).join('');
     zone.innerHTML = `<div class="revision-workspace">
         <article class="revision-toutes-erreurs">
             <div class="revision-toutes-erreurs-icone" aria-hidden="true">↻</div>
-            <div class="revision-toutes-erreurs-texte"><span class="surtitre">Révision rapide</span><h2>Mélange mes erreurs</h2><p>Une session aléatoire avec tes ${total} ${total>1?'sigles à retravailler':'sigle à retravailler'}.</p></div>
+            <div class="revision-toutes-erreurs-texte"><span class="surtitre">Révision rapide</span><h2>Mélange mes questions à consolider</h2><p>Une session aléatoire avec tes ${total} ${total>1?'sigles à retravailler':'sigle à retravailler'}.</p></div>
             <button class="principal" data-action="reviser-toutes-erreurs-sigles">Lancer ${total} ${total>1?'questions':'question'} →</button>
         </article>
         <section class="revision-choix" aria-labelledby="titreRevisionSiglesEtapes">
@@ -7171,7 +7270,7 @@ function construireRevisionMissionSiglesIndependante(){
             <details class="revision-etapes-details"><summary>Choisir directement une étape</summary><div class="revision-etape-boutons">${etapesDirectes}</div></details>
         </section>
     </div>
-    <section class="revision-inventaire" aria-labelledby="titreInventaireErreursSigles"><div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreursSigles">Tes erreurs actives</h2></div><p>Consulte les sigles qui restent à consolider, étape par étape.</p></div><div class="revision-dossiers">${dossiers}</div></section>`;
+    <section class="revision-inventaire" aria-labelledby="titreInventaireErreursSigles"><div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreursSigles">Tes questions à consolider</h2></div><p>Consulte les sigles qui restent à consolider, étape par étape.</p></div><div class="revision-dossiers">${dossiers}</div></section>`;
 }
 function afficherRevisionMissionSigles(){
     construireRevisionMissionSiglesIndependante();
@@ -7299,14 +7398,16 @@ function enregistrerResultatMissionSiglesNatif(question, resultat) {
         verifierCelebrationEtapeSigles(cibles);
     }
     if (!resultat.estCorrecte || resultat.reussiteAidee)
-        enregistrerErreurSigles(cibles);
-    if (!meta.estIntroduction && resultat.reussiteAutonome)
+        enregistrerErreurSigles(cibles, resultat.reussiteAidee ? 'joker' : 'incorrecte');
+    if (resultat.reussiteAutonome && resultat.tentatives > 0)
+        enregistrerErreurSigles(cibles, 'reprise');
+    else if (!meta.estIntroduction && resultat.reussiteAutonome)
         validerRevisionSigles(cibles);
     enregistrerSauvegarde();
 }
 function enregistrerPassageMissionSiglesNatif(question) {
     if (!question?.missionSigles) return;
-    enregistrerErreurSigles(obtenirCiblesMissionQuestion(question));
+    enregistrerErreurSigles(obtenirCiblesMissionQuestion(question), 'passage');
     enregistrerSauvegarde();
 }
 function reinitialiserMaitriseEtapeMissionSigles(numeroEtape) {
@@ -7359,7 +7460,7 @@ function terminerSessionMissionSiglesNative() {
         resultat = pourcentage === 100 ? 'Tirage parfait !' : `Résultat : ${pourcentage} %.`;
     }
     if (mode === 'revision') {
-        titre = 'Réviser mes erreurs · Mission Sigles';
+        titre = 'Questions à consolider · Mission Sigles';
         resultat = obtenirErreursSiglesActives().length
             ? `${obtenirErreursSiglesActives().length} sigle(s) restent à consolider.`
             : 'Aucun sigle actif à revoir.';
@@ -7367,7 +7468,7 @@ function terminerSessionMissionSiglesNative() {
             const numero = Number(etatJeuSigles.celebrationEtapeADiffuser);
             celebration = {
                 titre: `Étape ${String(numero).padStart(2, '0')} maîtrisée !`,
-                message: 'Les erreurs rejouées ont été réussies sans joker : la progression de l’étape est à jour.',
+                message: 'Les questions rejouées ont été réussies sans joker : la progression de l’étape est à jour.',
                 confetti: true
             };
         }
@@ -7380,7 +7481,7 @@ function terminerSessionMissionSiglesNative() {
     selectionner('#contexteBilan').textContent = `Mission Sigles · ${titre}`;
     selectionner('#titreBilan').textContent = titre;
     selectionner('#rangBilan').textContent = resultat;
-    afficherErreursBilan(etat.questionsSession.filter(question => etat.erreursSession.has(question.id)), passees);
+    afficherErreursBilan(obtenirQuestionsAConsoliderSession(), passees);
     const continuer = selectionner('#boutonContinuer');
     continuer.textContent = 'Retour à Mission Sigles →';
     continuer.onclick = () => { etat.missionSiglesConfiguration = null; afficherEcran('sigles', { remplacerHistorique:true }); };
@@ -7680,12 +7781,12 @@ function obtenirCiblesARejouerEtapeMesures(numero) {
     const cibles = [...obtenirErreursMesuresActives().filter(cible => Number(cible.etape) === Number(numero)), ...obtenirReperesNonMaitrisesEtapeMesures(numero)];
     return [...new Map(cibles.map(cible => [normaliserCleMesure(cible.cle), cible])).values()];
 }
-function enregistrerErreurMesures(cibles) {
+function enregistrerErreurMesures(cibles, motifRevision = 'incorrecte') {
     const erreurs = obtenirSauvegardeJeuMesures().erreurs;
     cibles.forEach(cible => {
         const cle = normaliserCleMesure(cible.cle);
         const actuelle = erreurs[cle] || { active:false, nombreErreurs:0, reussitesRevision:0 };
-        erreurs[cle] = { active:true, nombreErreurs:Number(actuelle.nombreErreurs || 0) + 1, reussitesRevision:0 };
+        erreurs[cle] = { ...actuelle, active:true, motifRevision, nombreErreurs:Number(actuelle.nombreErreurs || 0) + (motifRevision === 'incorrecte' ? 1 : 0), reussitesRevision:motifRevision === 'reprise' ? 1 : 0 };
     });
 }
 function validerRevisionMesures(cibles) {
@@ -7695,6 +7796,7 @@ function validerRevisionMesures(cibles) {
         if (!actuelle?.active) return;
         actuelle.reussitesRevision = 1;
         actuelle.active = false;
+        actuelle.motifRevision = null;
     });
 }
 
@@ -7829,7 +7931,7 @@ function construireCartesEtapesMesures() {
         const pourcentage = total ? Math.round(maitrises / total * 100) : 0;
         const erreurs = obtenirCiblesARejouerEtapeMesures(numero).length;
         const etoile = total > 0 && sansJoker === total ? creerEtoileFilanteProgression() : '';
-        const revision = `<button class="mesures-etape-revision" data-action="reviser-etape-mesures" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Rejouer uniquement mes erreurs' : 'Aucune erreur à rejouer'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
+        const revision = `<button class="mesures-etape-revision" data-action="reviser-etape-mesures" data-etape="${numero}" type="button"${erreurs ? '' : ' disabled'}>${erreurs ? '↻ Consolider mes réponses' : 'Aucune question à consolider'}${erreurs ? ` <strong>${erreurs}</strong>` : ''}</button>`;
         return `<article class="mesures-etape-carte" data-mesures-etape="${numero}" style="--mesures-etape-accent:${identite.couleur};--mesures-etape-accent-lisible:${identite.couleurTexte};--mesures-etape-rgb:${identite.couleurRgb}"><button class="mesures-etape-ouvrir" data-mesures-etape="${numero}" type="button"><span class="mesures-etape-carte-entete"><span class="mesures-etape-icone" aria-hidden="true">${iconeEtapeMesures(numero)}</span><span class="mesures-etape-numero">ÉTAPE ${identite.numeroFormate}</span>${etoile}</span><h3>${identite.titre}</h3><p>${identite.sousTitre}<br>${total} repère${total===1?'':'s'} · progression juridique.</p><span class="mesures-etape-progression"><i style="width:${pourcentage}%"></i></span><span class="mesures-etape-pied"><span>${maitrises}/${total} bonnes réponses · ${sansJoker}/${total} sans joker</span><span>${maitrises===total?'Maîtrisée ✓':'Ouvrir →'}</span></button>${revision}</article>`;
     }).join('');
     zone.querySelectorAll('.mesures-etape-ouvrir').forEach(bouton => bouton.addEventListener('click', () => lancerEtapeMesures(Number(bouton.dataset.mesuresEtape))));
@@ -7943,13 +8045,14 @@ function enregistrerResultatMissionMesuresNatif(question, resultat) {
             }
         });
     }
-    if (!resultat.estCorrecte || resultat.reussiteAidee) enregistrerErreurMesures(cibles);
-    if (!meta.estIntroduction && resultat.reussiteAutonome) validerRevisionMesures(cibles);
+    if (!resultat.estCorrecte || resultat.reussiteAidee) enregistrerErreurMesures(cibles, resultat.reussiteAidee ? 'joker' : 'incorrecte');
+    if (resultat.reussiteAutonome && resultat.tentatives > 0) enregistrerErreurMesures(cibles, 'reprise');
+    else if (!meta.estIntroduction && resultat.reussiteAutonome) validerRevisionMesures(cibles);
     enregistrerSauvegarde();
 }
 function enregistrerPassageMissionMesuresNatif(question) {
     if (!question?.missionMesures) return;
-    enregistrerErreurMesures(obtenirCiblesMissionMesuresQuestion(question));
+    enregistrerErreurMesures(obtenirCiblesMissionMesuresQuestion(question), 'passage');
     enregistrerSauvegarde();
 }
 function reinitialiserMaitriseEtapeMissionMesures(numeroEtape) {
@@ -7975,10 +8078,10 @@ function lancerEtapeMesures(numero, { depuisDebut = false } = {}) {
 function lancerRevisionMesures() {
     const reperes = obtenirErreursMesuresActives();
     if (!reperes.length) {
-        ouvrirFenetreMessage({ titre:'Aucune erreur à réviser', message:'Aucun repère de Mission Mesures n’est actuellement à revoir.', libelleConfirmer:'Très bien' });
+        ouvrirFenetreMessage({ titre:'Aucune question à consolider', message:'Aucun repère de Mission Mesures n’est actuellement à revoir.', libelleConfirmer:'Très bien' });
         return;
     }
-    preparerSessionMissionMesuresNative({ mode:'revision', reperes, questions:creerQuestionsRevisionMesures(reperes), jokersActifs:false, titre:'Réviser mes erreurs · Mission Mesures' });
+    preparerSessionMissionMesuresNative({ mode:'revision', reperes, questions:creerQuestionsRevisionMesures(reperes), jokersActifs:false, titre:'Questions à consolider · Mission Mesures' });
 }
 function lancerRevisionEtapeMesuresDepuisRevision(numeroEtape) {
     const numero = Number(numeroEtape);
@@ -7988,7 +8091,7 @@ function lancerRevisionEtapeMesuresDepuisRevision(numeroEtape) {
         return;
     }
     const identite = obtenirIdentiteEtapeMissionMesures(numero);
-    preparerSessionMissionMesuresNative({ mode:'revision', etape:numero, reperes, questions:creerQuestionsRevisionMesures(reperes), jokersActifs:false, titre:`Réviser mes erreurs · Étape ${identite.numeroFormate}` });
+    preparerSessionMissionMesuresNative({ mode:'revision', etape:numero, reperes, questions:creerQuestionsRevisionMesures(reperes), jokersActifs:false, titre:`Questions à consolider · Étape ${identite.numeroFormate}` });
 }
 function lancerRevisionEtapeMesuresDepuisQuestion(numeroEtape) {
     lancerRevisionEtapeMesuresDepuisRevision(numeroEtape);
@@ -8064,8 +8167,8 @@ function lancerEntrainementMissionMesuresNatif() {
 function afficherRevisionMesures() {
     const zone=selectionner('#contenuErreursMesures'); if(!zone)return;
     const erreurs=obtenirErreursMesuresActives();
-    if(!erreurs.length){zone.innerHTML='<div class="revision-vide"><strong>Aucune erreur active.</strong><p>Les repères manqués apparaîtront ici pour être retravaillés.</p></div>';return;}
-    zone.innerHTML=`<div class="mesures-revision-liste">${erreurs.map(cible=>`<article class="mesures-revision-item"><span class="surtitre">Étape ${String(cible.etape).padStart(2,'0')}</span><strong>${cible.titre}</strong><p>${cible.sigle&&cible.developpement?`${cible.developpement} (${cible.sigle})`:cible.questionRappel}</p></article>`).join('')}</div><button class="principal" id="mesuresRevisionDemarrer" type="button">Commencer la révision →</button>`;
+    if(!erreurs.length){zone.innerHTML='<div class="revision-vide"><strong>Aucune question à consolider.</strong><p>Les repères manqués apparaîtront ici pour être retravaillés.</p></div>';return;}
+    zone.innerHTML=`<div class="mesures-revision-liste">${erreurs.map(cible=>`<article class="mesures-revision-item"><span class="surtitre">Étape ${String(cible.etape).padStart(2,'0')}</span><strong>${cible.titre}</strong><p>${cible.sigle&&cible.developpement?`${cible.developpement} (${cible.sigle})`:cible.questionRappel}</p><small>${obtenirLibelleConsolidation(obtenirSauvegardeJeuMesures().erreurs[cible.cle])}</small></article>`).join('')}</div><button class="principal" id="mesuresRevisionDemarrer" type="button">Commencer la révision →</button>`;
     selectionner('#mesuresRevisionDemarrer')?.addEventListener('click',lancerRevisionMesures);
 }
 function terminerSessionMissionMesuresNative() {
@@ -8083,17 +8186,17 @@ function terminerSessionMissionMesuresNative() {
         if(reussie) celebration={titre:'Évaluation Mission Mesures réussie !',message:`Tu as obtenu ${pourcentage} %.`,confetti:true,finale:pourcentage===100};
     }
     if(mode==='revision'){
-        titre='Réviser mes erreurs · Mission Mesures';
+        titre='Questions à consolider · Mission Mesures';
         resultat=obtenirErreursMesuresActives().length?`${obtenirErreursMesuresActives().length} repère(s) restent à consolider.`:'Aucun repère actif à revoir.';
         if(etatJeuMesures.celebrationEtapeADiffuser){
             const numero=Number(etatJeuMesures.celebrationEtapeADiffuser), identite=obtenirIdentiteEtapeMissionMesures(numero);
-            celebration={titre:`Étape ${identite.numeroFormate} maîtrisée !`,message:'Les erreurs rejouées ont été réussies sans joker : la progression de l’étape est à jour.',confetti:true};
+            celebration={titre:`Étape ${identite.numeroFormate} maîtrisée !`,message:'Les questions rejouées ont été réussies sans joker : la progression de l’étape est à jour.',confetti:true};
         }
     }
     if(mode==='hasard'){titre='Défi du hasard · Mission Mesures';resultat=pourcentage===100?'Tirage parfait !':`Résultat : ${pourcentage} %.`;}
     enregistrerSauvegarde();
     selectionner('#scoreBilan').textContent=`${pourcentage}%`; selectionner('#bonnesReponsesBilan').textContent=`${etat.score}/${total}`; selectionner('#meilleureSerieBilan').textContent=etat.meilleureSerie; selectionner('#gainExperienceBilan').textContent='+0'; selectionner('#contexteBilan').textContent=`Mission Mesures · ${titre}`; selectionner('#titreBilan').textContent=titre; selectionner('#rangBilan').textContent=resultat;
-    afficherErreursBilan(etat.questionsSession.filter(question=>etat.erreursSession.has(question.id)),passees);
+    afficherErreursBilan(obtenirQuestionsAConsoliderSession(),passees);
     const continuer=selectionner('#boutonContinuer'); continuer.textContent='Retour à Mission Mesures →'; continuer.onclick=()=>{etat.missionMesuresConfiguration=null;afficherEcran('mesures',{remplacerHistorique:true});};
     const rejouer=selectionner('#boutonRejouerMesErreurs'); if(rejouer) rejouer.onclick=lancerRevisionMesures;
     selectionner('#prochaineDestinationBilan') && (selectionner('#prochaineDestinationBilan').textContent='Continue Mission Mesures ou retravaille les repères à consolider.');
@@ -8556,7 +8659,7 @@ fichierImporterProgression.onchange = evenement => evenement.target.files[0] && 
 selectionner('#volumeSon').onchange = enregistrerParametres;
 selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFenetreMessage({
     titre: 'Réinitialiser toute la progression ?',
-    message: 'Les scores, les étapes validées et les erreurs enregistrées seront définitivement supprimés de ce navigateur.',
+    message: 'Les scores, les étapes validées et les questions à consolider enregistrées seront définitivement supprimés de ce navigateur.',
     libelleConfirmer: 'Réinitialiser',
     libelleAnnuler: 'Annuler',
     afficherAnnuler: true,
@@ -8720,11 +8823,11 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     boutonParcours30Secondes: 'Limiter chaque réponse à 30 secondes.',
     boutonLancerLeDe: 'Tirer au hasard un défi parmi les parcours.',
     boutonJouerLeTirage: 'Démarrer le défi tiré par le dé.',
-    boutonRejouerErreursEtape: 'Rejouer les erreurs actives et les questions déjà introduites qui ne sont pas encore maîtrisées sans joker. Les maîtrises sans joker sont conservées.',
+    boutonRejouerErreursEtape: 'Rejouer les questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.',
     boutonReprendreEtapeDepuisDebut: 'Recommencer l’étape à la première question : les questions déjà maîtrisées restent validées tant qu’elles ne sont pas réinitialisées.',
-    boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les erreurs et la progression générale restent conservées.',
+    boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les questions à consolider et la progression générale restent conservées.',
     boutonJokers: 'Ouvrir les aides disponibles pour cette question.',
-    boutonPasser: 'Passer cette question : elle restera à reprendre et ne sera pas validée.',
+    boutonPasser: 'Passer cette question : elle restera à consolider et ne sera pas validée.',
     boutonRejouerMesErreurs: 'Rejouer les questions de la session qui restent à consolider.',
     boutonRevenirAuParcours: 'Retourner à la carte du parcours.',
     boutonRefermerSupports: 'Fermer toutes les fiches de support ouvertes.',
@@ -8740,30 +8843,30 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     siglesOuvrirEntrainement: 'Choisir les sigles, le nombre de questions et les aides.',
     siglesLancerDe: 'Tirer au hasard une étape et un nombre de sigles.',
     siglesJouerTirage: 'Démarrer le défi tiré par le dé.',
-    siglesLancerRevision: 'Rejouer uniquement les sigles encore en erreur.',
+    siglesLancerRevision: 'Rejouer uniquement les sigles à consolider.',
     siglesRetourDepuisParcours: 'Revenir à l’accueil de Mission Sigles.',
     siglesLancerEvaluation: 'Passer l’évaluation finale après la maîtrise autonome des étapes.',
     mesuresOuvrirParcours: 'Ouvrir la carte des étapes de Mission Mesures.',
     mesuresOuvrirEntrainement: 'Choisir les mesures, le nombre de questions et les aides.',
     mesuresLancerDe: 'Tirer au hasard une étape et un nombre de repères.',
     mesuresJouerTirage: 'Démarrer le défi tiré par le dé.',
-    mesuresLancerRevision: 'Rejouer uniquement les repères encore en erreur.',
+    mesuresLancerRevision: 'Rejouer uniquement les repères à consolider.',
     mesuresRetourDepuisParcours: 'Revenir à l’accueil de Mission Mesures.',
     mesuresLancerEvaluation: 'Passer l’évaluation finale après la maîtrise autonome des étapes.',
     carteEvaluationFinale: 'Évaluation finale verrouillée jusqu’à la maîtrise de toutes les étapes.'
 });
 
 const TITRES_ACTIONS_SURVOL = Object.freeze({
-    'rejouer-erreurs-etape': 'Rejouer les erreurs actives et les questions déjà introduites qui ne sont pas encore maîtrisées sans joker. Les maîtrises sans joker sont conservées.',
-    'reviser-theme': 'Ouvrir les erreurs de ce parcours.',
-    'reviser-etape': 'Rejouer les erreurs de cette étape.',
+    'rejouer-erreurs-etape': 'Rejouer les questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.',
+    'reviser-theme': 'Ouvrir les questions à consolider de ce parcours.',
+    'reviser-etape': 'Rejouer les questions à consolider de cette étape.',
     'reviser-toutes-erreurs': 'Rejouer toutes les questions encore à revoir.',
     'ouvrir-parcours-depuis-erreurs': 'Choisir une étape du parcours pour la réviser.',
-    'reviser-etape-sigles': 'Rejouer les sigles encore en erreur dans cette étape.',
-    'reviser-toutes-erreurs-sigles': 'Rejouer tous les sigles encore en erreur.',
+    'reviser-etape-sigles': 'Rejouer les sigles à consolider dans cette étape.',
+    'reviser-toutes-erreurs-sigles': 'Rejouer tous les sigles à consolider.',
     'ouvrir-mission-sigles-depuis-erreurs': 'Choisir une étape de Mission Sigles pour la réviser.',
-    'reviser-etape-mesures': 'Rejouer les repères encore en erreur dans cette étape.',
-    'reviser-toutes-erreurs-mesures': 'Rejouer tous les repères encore en erreur.',
+    'reviser-etape-mesures': 'Rejouer les repères à consolider dans cette étape.',
+    'reviser-toutes-erreurs-mesures': 'Rejouer tous les repères à consolider.',
     'ouvrir-mission-mesures-depuis-erreurs': 'Choisir une étape de Mission Mesures pour la réviser.'
 });
 
@@ -8784,13 +8887,13 @@ function obtenirTitreSurvolBouton(bouton) {
     if (bouton.matches('.sigles-etape-ouvrir, .mesures-etape-ouvrir'))
         return 'Ouvrir cette étape et reprendre sa progression.';
     if (bouton.matches('.sigles-etape-revision'))
-        return 'Rejouer uniquement les sigles encore en erreur dans cette étape.';
+        return 'Rejouer uniquement les sigles à consolider dans cette étape.';
     if (bouton.matches('.mesures-etape-revision'))
-        return 'Rejouer uniquement les repères encore en erreur dans cette étape.';
+        return 'Rejouer uniquement les repères à consolider dans cette étape.';
     if (bouton.matches('.revision-parcours-bouton'))
-        return 'Ouvrir les erreurs de ce parcours.';
+        return 'Ouvrir les questions à consolider de ce parcours.';
     if (bouton.matches('.revision-etape-bouton'))
-        return 'Rejouer les erreurs de cette étape.';
+        return 'Rejouer les questions à consolider de cette étape.';
 
     const groupe = bouton.closest('[data-proposition]');
     if (groupe?.dataset.proposition === 'jokers')

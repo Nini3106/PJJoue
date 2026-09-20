@@ -75,7 +75,7 @@ fichierImporterProgression.onchange = evenement => evenement.target.files[0] && 
 selectionner('#volumeSon').onchange = enregistrerParametres;
 selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFenetreMessage({
     titre: 'Réinitialiser toute la progression ?',
-    message: 'Les scores, les étapes validées et les erreurs enregistrées seront définitivement supprimés de ce navigateur.',
+    message: 'Les scores, les étapes validées et les questions à consolider enregistrées seront définitivement supprimés de ce navigateur.',
     libelleConfirmer: 'Réinitialiser',
     libelleAnnuler: 'Annuler',
     afficherAnnuler: true,
@@ -239,11 +239,11 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     boutonParcours30Secondes: 'Limiter chaque réponse à 30 secondes.',
     boutonLancerLeDe: 'Tirer au hasard un défi parmi les parcours.',
     boutonJouerLeTirage: 'Démarrer le défi tiré par le dé.',
-    boutonRejouerErreursEtape: 'Rejouer les erreurs actives et les questions déjà introduites qui ne sont pas encore maîtrisées sans joker. Les maîtrises sans joker sont conservées.',
+    boutonRejouerErreursEtape: 'Rejouer les questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.',
     boutonReprendreEtapeDepuisDebut: 'Recommencer l’étape à la première question : les questions déjà maîtrisées restent validées tant qu’elles ne sont pas réinitialisées.',
-    boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les erreurs et la progression générale restent conservées.',
+    boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les questions à consolider et la progression générale restent conservées.',
     boutonJokers: 'Ouvrir les aides disponibles pour cette question.',
-    boutonPasser: 'Passer cette question : elle restera à reprendre et ne sera pas validée.',
+    boutonPasser: 'Passer cette question : elle restera à consolider et ne sera pas validée.',
     boutonRejouerMesErreurs: 'Rejouer les questions de la session qui restent à consolider.',
     boutonRevenirAuParcours: 'Retourner à la carte du parcours.',
     boutonRefermerSupports: 'Fermer toutes les fiches de support ouvertes.',
@@ -259,30 +259,30 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     siglesOuvrirEntrainement: 'Choisir les sigles, le nombre de questions et les aides.',
     siglesLancerDe: 'Tirer au hasard une étape et un nombre de sigles.',
     siglesJouerTirage: 'Démarrer le défi tiré par le dé.',
-    siglesLancerRevision: 'Rejouer uniquement les sigles encore en erreur.',
+    siglesLancerRevision: 'Rejouer uniquement les sigles à consolider.',
     siglesRetourDepuisParcours: 'Revenir à l’accueil de Mission Sigles.',
     siglesLancerEvaluation: 'Passer l’évaluation finale après la maîtrise autonome des étapes.',
     mesuresOuvrirParcours: 'Ouvrir la carte des étapes de Mission Mesures.',
     mesuresOuvrirEntrainement: 'Choisir les mesures, le nombre de questions et les aides.',
     mesuresLancerDe: 'Tirer au hasard une étape et un nombre de repères.',
     mesuresJouerTirage: 'Démarrer le défi tiré par le dé.',
-    mesuresLancerRevision: 'Rejouer uniquement les repères encore en erreur.',
+    mesuresLancerRevision: 'Rejouer uniquement les repères à consolider.',
     mesuresRetourDepuisParcours: 'Revenir à l’accueil de Mission Mesures.',
     mesuresLancerEvaluation: 'Passer l’évaluation finale après la maîtrise autonome des étapes.',
     carteEvaluationFinale: 'Évaluation finale verrouillée jusqu’à la maîtrise de toutes les étapes.'
 });
 
 const TITRES_ACTIONS_SURVOL = Object.freeze({
-    'rejouer-erreurs-etape': 'Rejouer les erreurs actives et les questions déjà introduites qui ne sont pas encore maîtrisées sans joker. Les maîtrises sans joker sont conservées.',
-    'reviser-theme': 'Ouvrir les erreurs de ce parcours.',
-    'reviser-etape': 'Rejouer les erreurs de cette étape.',
+    'rejouer-erreurs-etape': 'Rejouer les questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.',
+    'reviser-theme': 'Ouvrir les questions à consolider de ce parcours.',
+    'reviser-etape': 'Rejouer les questions à consolider de cette étape.',
     'reviser-toutes-erreurs': 'Rejouer toutes les questions encore à revoir.',
     'ouvrir-parcours-depuis-erreurs': 'Choisir une étape du parcours pour la réviser.',
-    'reviser-etape-sigles': 'Rejouer les sigles encore en erreur dans cette étape.',
-    'reviser-toutes-erreurs-sigles': 'Rejouer tous les sigles encore en erreur.',
+    'reviser-etape-sigles': 'Rejouer les sigles à consolider dans cette étape.',
+    'reviser-toutes-erreurs-sigles': 'Rejouer tous les sigles à consolider.',
     'ouvrir-mission-sigles-depuis-erreurs': 'Choisir une étape de Mission Sigles pour la réviser.',
-    'reviser-etape-mesures': 'Rejouer les repères encore en erreur dans cette étape.',
-    'reviser-toutes-erreurs-mesures': 'Rejouer tous les repères encore en erreur.',
+    'reviser-etape-mesures': 'Rejouer les repères à consolider dans cette étape.',
+    'reviser-toutes-erreurs-mesures': 'Rejouer tous les repères à consolider.',
     'ouvrir-mission-mesures-depuis-erreurs': 'Choisir une étape de Mission Mesures pour la réviser.'
 });
 
@@ -303,13 +303,13 @@ function obtenirTitreSurvolBouton(bouton) {
     if (bouton.matches('.sigles-etape-ouvrir, .mesures-etape-ouvrir'))
         return 'Ouvrir cette étape et reprendre sa progression.';
     if (bouton.matches('.sigles-etape-revision'))
-        return 'Rejouer uniquement les sigles encore en erreur dans cette étape.';
+        return 'Rejouer uniquement les sigles à consolider dans cette étape.';
     if (bouton.matches('.mesures-etape-revision'))
-        return 'Rejouer uniquement les repères encore en erreur dans cette étape.';
+        return 'Rejouer uniquement les repères à consolider dans cette étape.';
     if (bouton.matches('.revision-parcours-bouton'))
-        return 'Ouvrir les erreurs de ce parcours.';
+        return 'Ouvrir les questions à consolider de ce parcours.';
     if (bouton.matches('.revision-etape-bouton'))
-        return 'Rejouer les erreurs de cette étape.';
+        return 'Rejouer les questions à consolider de cette étape.';
 
     const groupe = bouton.closest('[data-proposition]');
     if (groupe?.dataset.proposition === 'jokers')

@@ -422,7 +422,7 @@ def verifier_jeu(navigateur, page_html: str) -> int:
         etat.questionsPassees = new Set();
         etat.brouillonsEcrits = new Map();
         enregistrerResultatReponse(questions[0], '', {}, {
-            estCorrecte: true, reussiteAutonome: false, reussiteAidee: true,
+            estCorrecte: true, reussiteAutonome: true, reussiteAidee: false,
             tentatives: 1, aideUtilisee: false, etaitPassee: false
         });
         enregistrerResultatReponse(questions[1], '', {}, {
@@ -432,13 +432,13 @@ def verifier_jeu(navigateur, page_html: str) -> int:
         const courant = obtenirBilanEtape(theme, numeroEtape);
         return {
             repriseSansJoker: courant.validationsSansJoker[questions[0].id] === true,
-            repriseResteNonAutonome: courant.resultats[questions[0].id] !== true,
+            repriseEstAutonome: courant.resultats[questions[0].id] === true,
             jokerNeComptePas: courant.validationsSansJoker[questions[1].id] !== true
         };
     }""")
     assert validation_apres_reprise == {
         "repriseSansJoker": True,
-        "repriseResteNonAutonome": True,
+        "repriseEstAutonome": True,
         "jokerNeComptePas": True
     }, validation_apres_reprise
 
@@ -477,7 +477,7 @@ def verifier_jeu(navigateur, page_html: str) -> int:
             bilan.validationsSansJoker[question.id] = true;
             // La première question représente une réussite obtenue après reprise :
             // elle n'est pas autonome, mais elle a bien été validée sans joker.
-            bilan.resultats[question.id] = index !== 0;
+            bilan.resultats[question.id] = true;
         });
         etat.mode = 'parcours';
         etat.theme = theme;
@@ -488,14 +488,14 @@ def verifier_jeu(navigateur, page_html: str) -> int:
             premiereCelebration: Boolean(premiere.celebration?.confetti),
             titre: premiere.celebration?.titre || '',
             secondeCelebration: Boolean(seconde.celebration),
-            maitriseeAutonome: bilan.termineeSansJoker === true,
+            maitriseeAutonome: obtenirBilanEtape(theme, numeroEtape).termineeSansJoker === true,
             celebrationMemorisee: obtenirBilanEtape(theme, numeroEtape).celebrationSansJokerAffichee === true
         };
     }""")
     assert celebration_etape_progressive["premiereCelebration"], celebration_etape_progressive
     assert "terminée sans joker" in celebration_etape_progressive["titre"].lower(), celebration_etape_progressive
     assert celebration_etape_progressive["secondeCelebration"] is False, celebration_etape_progressive
-    assert celebration_etape_progressive["maitriseeAutonome"] is False, celebration_etape_progressive
+    assert celebration_etape_progressive["maitriseeAutonome"] is True, celebration_etape_progressive
     assert celebration_etape_progressive["celebrationMemorisee"], celebration_etape_progressive
 
     declenchement_celebration = page.evaluate("""() => new Promise(resolve => {

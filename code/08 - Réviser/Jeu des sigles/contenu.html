@@ -3,7 +3,7 @@
     <header class="presentation-page sigles-accueil-entete">
       <span class="surtitre">Mini‑Quiz CJPM</span>
       <h1>Mission Sigles</h1>
-      <p>Apprends les {{NOMBRE_SIGLES}} sigles utiles aux parcours : un espace CJPM en premier, un espace PJJ en option. Retrouve tes parcours, entraînements, défis et erreurs dans le même mini-jeu.</p>
+      <p>Apprends les {{NOMBRE_SIGLES}} sigles utiles aux parcours : un espace CJPM en premier, un espace PJJ en option. Retrouve tes parcours, entraînements, défis et révisions dans le même mini-jeu.</p>
     </header>
   <div class="sigles-domaines" role="group" aria-label="Choisir les sigles à travailler" data-choix-domaine-sigles></div>
 
@@ -56,8 +56,8 @@
 
         <article class="sigles-mode-carte sigles-mode-revision">
           <span class="sigles-mode-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 8a8 8 0 1 1-1 7"/><path d="M5 4v4H1"/><path d="m9 12 2 2 4-5"/></svg></span>
-          <div><span class="surtitre">Consolidation</span><h3>Réviser mes erreurs</h3><p id="siglesTexteRevision">Aucun sigle à revoir pour le moment.</p></div>
-          <button class="sigles-bouton-secondaire sigles-bouton-mode" id="siglesLancerRevision" type="button">Réviser mes erreurs</button>
+          <div><span class="surtitre">Consolidation</span><h3>Questions à consolider</h3><p id="siglesTexteRevision">Aucun sigle à revoir pour le moment.</p></div>
+          <button class="sigles-bouton-secondaire sigles-bouton-mode" id="siglesLancerRevision" type="button">Questions à consolider</button>
         </article>
       </div>
     </section>
@@ -86,13 +86,13 @@
 </section>
 <section class="ecran" id="sigles-revision">
 <div class="page-entete">
-<h1>Réviser mes erreurs</h1>
+<h1>Questions à consolider</h1>
 <p>Retravaille les sigles qui t’ont posé problème jusqu’à ce qu’ils deviennent solides.</p>
 </div>
 <section aria-labelledby="titreErreursRevisionSigles" class="revision-erreurs">
 <div class="revision-section-entete">
-<div><span class="surtitre">Tes erreurs</span><h2 id="titreErreursRevisionSigles">Sigles à retravailler</h2></div>
-<p>Une erreur disparaît dès que tu la réussis en révision.</p>
+<div><span class="surtitre">Consolidation</span><h2 id="titreErreursRevisionSigles">Sigles à retravailler</h2></div>
+<p>Une réponse rejouée puis juste sans joker est validée et reste à consolider. Réussis-la ensuite sans joker, dès la première tentative, pour la retirer de cette liste.</p>
 </div>
   <div class="sigles-domaines" role="group" aria-label="Choisir les sigles à travailler" data-choix-domaine-sigles></div>
 <div id="contenuErreursSigles"></div>

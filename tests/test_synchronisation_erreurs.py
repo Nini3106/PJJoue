@@ -40,7 +40,7 @@ class SynchronisationErreursTests(unittest.TestCase):
                         etat.jokersSessionActifs=true; etat.chronometreSessionActif=false;
                         lancerSession([q]);
                     };
-                    return {ouvrir, q, active:()=>sauvegarde.erreurs[q.id]?.maitrisee!==true,
+                    return {ouvrir, q, suivi:()=>sauvegarde.erreurs[q.id], active:()=>sauvegarde.erreurs[q.id]?.maitrisee!==true,
                         acquis:()=>obtenirBilanEtape(theme,1).resultats[q.id]===true};
                 }
                 if(jeu==='sigles') {
@@ -48,14 +48,14 @@ class SynchronisationErreursTests(unittest.TestCase):
                     marquerSigleIntroduit(c.sigle); enregistrerErreurSigles([c]);
                     const ouvrir=()=>preparerSessionMissionSiglesNative({mode,etape:numero,
                         sigles:[c],questions:[creerQuestionRappelDirectSigles(c)],titre:'Test'});
-                    return {ouvrir,active:()=>sauvegarde.siglesJeu.erreurs[c.sigle].active,
+                    return {ouvrir,suivi:()=>sauvegarde.siglesJeu.erreurs[c.sigle],active:()=>sauvegarde.siglesJeu.erreurs[c.sigle].active,
                         acquis:()=>obtenirEtatEtapeSigles(numero).autonomes[c.sigle]===true};
                 }
                 const c=obtenirReperesMesuresEtape(1)[0];
                 marquerRepereMesureIntroduit(c.cle); enregistrerErreurMesures([c]);
                 const ouvrir=()=>preparerSessionMissionMesuresNative({mode,etape:1,
                     reperes:[c],questions:creerQuestionsRevisionMesures([c]),titre:'Test'});
-                return {ouvrir,active:()=>sauvegarde.mesuresJeu.erreurs[c.cle].active,
+                return {ouvrir,suivi:()=>sauvegarde.mesuresJeu.erreurs[c.cle],active:()=>sauvegarde.mesuresJeu.erreurs[c.cle].active,
                     acquis:()=>obtenirEtatEtapeMesures(1).autonomes[c.cle]===true};
             };
         }""")
@@ -225,6 +225,137 @@ class SynchronisationErreursTests(unittest.TestCase):
             return {revision,demarree:obtenirBilanEtape('commun',1).questionsTraitees[q.id]===true};
         }""")
         self.assertEqual(r,{'revision':{'active':False,'acquis':True},'demarree':False})
+
+
+    def test_reprise_validee_et_consolidation_independantes_dans_tous_les_modes(self):
+        resultats = self.page.evaluate("""() => {
+            const cas=[];
+            THEMES.forEach(t=>['parcours','libre','revision'].forEach(mode=>cas.push(['parcours',mode,t.id])));
+            ['parcours','entrainement','hasard','revision','evaluation'].forEach(mode=>{
+                cas.push(['sigles',mode,'commun',1],['sigles',mode,'commun',6],['mesures',mode]);
+            });
+            return cas.map(args=>{
+                const f=fixtureErreur(...args); f.ouvrir();
+                finaliserReponse(false,'Incorrect');
+                const historique=f.suivi().nombreErreurs;
+                rejouerQuestionCourante(); finaliserReponse(true,etat.questionCourante.bonneReponse);
+                const q=etat.questionCourante;
+                const resultat={cas:args,score:etat.score,aidees:etat.nombreReponsesAidees,
+                    statut:etat.reponsesSession.get(q.id).statut,erreur:etat.erreursSession.has(q.id),
+                    motif:f.suivi().motifRevision,acquis:f.acquis(),revision:f.active(),
+                    historiqueStable:f.suivi().nombreErreurs===historique,
+                    questionsRevision:obtenirQuestionsAConsoliderSession().length};
+                afficherErreursBilan(obtenirQuestionsAConsoliderSession(),0);
+                resultat.bilan=document.querySelector('#listeErreursBilan').textContent;
+                sauvegarde=nettoyerSauvegarde(JSON.parse(JSON.stringify(sauvegarde)));
+                resultat.persiste=f.active() && f.acquis() && f.suivi().motifRevision==='reprise';
+                f.ouvrir(); finaliserReponse(true,etat.questionCourante.bonneReponse);
+                resultat.consolidee=!f.active() && f.acquis();
+                return resultat;
+            });
+        }""")
+        self.assertEqual(len(resultats),33)
+        for r in resultats:
+            with self.subTest(cas=r['cas']):
+                self.assertEqual(r['score'],1,r)
+                self.assertEqual(r['aidees'],0,r)
+                self.assertEqual(r['statut'],'correcte',r)
+                self.assertFalse(r['erreur'],r)
+                self.assertEqual(r['motif'],'reprise',r)
+                self.assertEqual(r['questionsRevision'],1,r)
+                for cle in ['acquis','revision','historiqueStable','persiste','consolidee']:
+                    self.assertTrue(r[cle],r)
+                self.assertIn('Validée sans joker après reprise · à consolider',r['bilan'])
+                self.assertNotIn('Réponse incorrecte',r['bilan'])
+
+    def test_reprise_avec_joker_reste_aidee(self):
+        resultats=self.page.evaluate("""() => ['parcours','sigles','mesures'].map(jeu=>{
+            const f=fixtureErreur(jeu,'parcours'); f.ouvrir();
+            etat.jokers.indice=false; finaliserReponse(false,'Incorrect');
+            rejouerQuestionCourante(); finaliserReponse(true,etat.questionCourante.bonneReponse);
+            return {jeu,score:etat.score,aidees:etat.nombreReponsesAidees,
+                acquis:f.acquis(),revision:f.active(),motif:f.suivi().motifRevision};
+        })""")
+        for r in resultats:
+            self.assertEqual(r,dict(jeu=r['jeu'],score=0,aidees=1,acquis=False,revision=True,motif='joker'))
+
+    def test_migration_reprises_validees_sans_effacer_consolidation_ni_historique(self):
+        r=self.page.evaluate("""() => {
+            const brut=creerSauvegardeInitiale(); delete brut.reprisesSansJokerValidees;
+            brut.xp=432;
+            const q=obtenirQuestionsEtape('commun',1)[0];
+            brut.progression.apprenant.commun={1:{questionsTraitees:{[q.id]:true},resultats:{[q.id]:false},validationsSansJoker:{[q.id]:true}}};
+            brut.erreurs[q.id]={maitrisee:false,nombreErreurs:8,theme:'commun'};
+            const c=obtenirSiglesEtape(6)[0], m=obtenirReperesMesuresEtape(1)[0];
+            for (const [jeu,cle,n] of [[brut.siglesJeu,c.sigle,6],[brut.mesuresJeu,m.cle,1]]) {
+                jeu.etapes[n].validationsSansJoker[cle]=true;
+                jeu.erreurs[cle]={active:true,nombreErreurs:8};
+            }
+            const avant=JSON.stringify(brut), propre=nettoyerSauvegarde(brut);
+            const suivis=[propre.erreurs[q.id],propre.siglesJeu.erreurs[c.sigle],propre.mesuresJeu.erreurs[m.cle]];
+            const idempotent=JSON.stringify(propre)===JSON.stringify(nettoyerSauvegarde(propre));
+            propre.siglesJeu.erreurs[c.sigle].motifRevision='incorrecte';
+            const nouveau=nettoyerSauvegarde(propre);
+            return {brutInchange:avant===JSON.stringify(brut),xp:propre.xp,idempotent,
+                acquis:[propre.progression.apprenant.commun[1].resultats[q.id],propre.siglesJeu.etapes[6].autonomes[c.sigle],propre.mesuresJeu.etapes[1].autonomes[m.cle]],
+                motifs:suivis.map(s=>s.motifRevision),historique:suivis.map(s=>s.nombreErreurs),
+                actif:[!propre.erreurs[q.id].maitrisee,propre.siglesJeu.erreurs[c.sigle].active,propre.mesuresJeu.erreurs[m.cle].active],
+                nouvelleTentativePreservee:nouveau.siglesJeu.erreurs[c.sigle].motifRevision==='incorrecte'};
+        }""")
+        self.assertEqual(r,dict(brutInchange=True,xp=432,idempotent=True,acquis=[True]*3,
+            motifs=['reprise','incorrecte','reprise'],historique=[8]*3,actif=[True]*3,nouvelleTentativePreservee=True))
+
+    def test_rechargement_session_et_reprise_ancienne(self):
+        for ancienne in [False,True]:
+            with self.subTest(ancienne=ancienne):
+                r=self.page.evaluate("""ancienne => {
+                    const f=fixtureErreur('parcours','parcours'); f.ouvrir();
+                    finaliserReponse(false,'Incorrect'); rejouerQuestionCourante();
+                    finaliserReponse(true,etat.questionCourante.bonneReponse);
+                    const avant=chargerSessionEnCours();
+                    if(ancienne) {
+                        avant.score=0; avant.nombreReponsesAidees=1; avant.erreursSession=[f.q.id];
+                        const rep=avant.reponsesSession.find(([id])=>id===f.q.id)[1];
+                        rep.statut='aidee'; rep.precisions.aidee=true; delete rep.precisions.aConsolider;
+                        localStorage.setItem(CLE_SESSION_EN_COURS,JSON.stringify(avant));
+                    }
+                    etat.score=0; etat.reponsesSession=new Map();
+                    const restauree=restaurerSessionEnCours();
+                    return {restauree,score:etat.score,aidees:etat.nombreReponsesAidees,
+                        statut:etat.reponsesSession.get(f.q.id).statut,erreur:etat.erreursSession.has(f.q.id),
+                        revision:obtenirQuestionsAConsoliderSession().length,motif:f.suivi().motifRevision};
+                }""",ancienne)
+                self.assertEqual(r,dict(restauree=True,score=1,aidees=0,statut='correcte',erreur=False,revision=1,motif='reprise'))
+        self.page.reload(wait_until='domcontentloaded')
+        self.assertTrue(self.page.evaluate('restaurerSessionEnCours()'))
+        self.assertEqual(self.page.evaluate('etat.score'),1)
+        self.assertEqual(self.page.evaluate('obtenirQuestionsAConsoliderSession().length'),1)
+
+    def test_etape_et_session_validees_malgre_consolidation(self):
+        r=self.page.evaluate("""() => {
+            const qs=obtenirQuestionsEtape('commun',1);
+            etat.mode='parcours'; etat.theme='commun'; etat.etape=1;
+            etat.jokersSessionActifs=true; etat.chronometreSessionActif=false;
+            lancerSession(qs);
+            for (let i=0;i<qs.length;i++) {
+                if(i===qs.length-1) {finaliserReponse(false,'Incorrect');rejouerQuestionCourante();}
+                finaliserReponse(true,etat.questionCourante.bonneReponse);
+                if(i<qs.length-1) afficherQuestionSuivante();
+            }
+            terminerSession();
+            const bilan=obtenirBilanEtape('commun',1);
+            return {score:document.querySelector('#scoreBilan').textContent,
+                bonnes:document.querySelector('#bonnesReponsesBilan').textContent,
+                total:qs.length,maitrisee:bilan.termineeSansJoker,celebration:bilan.celebrationSansJokerAffichee,
+                revision:obtenirQuestionsAvecErreursActives().length,
+                libelle:document.querySelector('#nombreErreursBilan').textContent};
+        }""")
+        self.assertEqual(r['score'],'100%')
+        self.assertEqual(r['bonnes'],f"{r['total']}/{r['total']}")
+        self.assertTrue(r['maitrisee'],r)
+        self.assertTrue(r['celebration'],r)
+        self.assertEqual(r['revision'],1)
+        self.assertEqual(r['libelle'],'1 question à consolider')
 
 
 if __name__ == '__main__':

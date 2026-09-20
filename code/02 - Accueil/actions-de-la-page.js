@@ -19,7 +19,7 @@ function actualiserLibellesProgression() {
     }
     const configurations = [
         ['questionsJoueesProgression', 'Question travaillée', 'Questions travaillées'],
-        ['erreursProgression', 'Question à revoir', 'Questions à revoir'],
+        ['erreursProgression', 'Question à consolider', 'Questions à consolider'],
         ['etapesMaitriseesProgression', 'Étape maîtrisée', 'Étapes maîtrisées']
     ];
     configurations.forEach(([identifiant, singulier, pluriel]) => {
@@ -41,7 +41,7 @@ function actualiserAccueil() {
     if (jouees)
         jouees.textContent = String(sauvegarde.nombreQuestionsJouees || 0);
     if (erreurs)
-        erreurs.textContent = String(compterErreursActives());
+        erreurs.textContent = String(compterQuestionsAConsolider());
     if (maitrisees)
         maitrisees.textContent = String(compterEtapesMaitrisees());
     actualiserLibellesProgression();

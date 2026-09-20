@@ -269,11 +269,11 @@ function jouerTirageDeParcours() {
 function lancerRevision(identifiantTheme = 'toutes') {
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
     if (!sauvegarde.aDejaJoue && actif.length === 0) {
-        afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir rejouer tes erreurs.');
+        afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir consolider tes réponses.');
         return;
     }
     if (actif.length === 0) {
-        afficherNotification('Bravo : aucune erreur active à rejouer pour le moment.');
+        afficherNotification('Bravo : aucune question à consolider pour le moment.');
         return;
     }
     const identifiants = actif.map(([id]) => Number(id));
@@ -282,7 +282,7 @@ function lancerRevision(identifiantTheme = 'toutes') {
         reserve = reserve.filter(question => question.theme === identifiantTheme);
     if (reserve.length === 0) {
         const theme = THEMES.find(themeCandidat => themeCandidat.id === identifiantTheme);
-        afficherNotification(theme ? `Aucune erreur active dans « ${theme.titre} ».` : 'Aucune erreur active dans ce thème.');
+        afficherNotification(theme ? `Aucune question à consolider dans « ${theme.titre} ».` : 'Aucune question à consolider dans ce thème.');
         return;
     }
     etat.mode = 'revision';
@@ -302,7 +302,7 @@ function lancerRevisionEtape(identifiantTheme, etape = null) {
     const etapeCible = Number(etape);
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
     if (!sauvegarde.aDejaJoue && actif.length === 0) {
-        afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir rejouer tes erreurs.');
+        afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir consolider tes réponses.');
         return;
     }
     const identifiants = new Set(actif.map(([id]) => Number(id)));
@@ -318,7 +318,7 @@ function lancerRevisionEtape(identifiantTheme, etape = null) {
         && !question.estEvaluationFinale
     );
     if (!reserve.length) {
-        afficherNotification(`Aucune erreur active à l’étape ${etapeCible} de ce parcours.`);
+        afficherNotification(`Aucune question à consolider à l’étape ${etapeCible} de ce parcours.`);
         return;
     }
     etat.mode = 'revision';

@@ -214,7 +214,7 @@ def verifier() -> None:
         page.locator("#siglesLancerRevision").click()
         assert page.locator("#sigles-revision").is_visible()
         assert not page.locator("#erreurs").is_visible()
-        assert page.locator("#sigles-revision h1").inner_text().strip() == "Réviser mes erreurs"
+        assert page.locator("#sigles-revision h1").inner_text().strip() == "Questions à consolider"
         assert "Sigles à retravailler" in page.locator("#titreErreursRevisionSigles").inner_text()
         assert page.locator("#sigles-revision [data-action='reviser-toutes-erreurs-sigles']").is_visible()
         assert page.locator("#sigles-revision [data-action='reviser-etape-sigles']").count() >= 1
