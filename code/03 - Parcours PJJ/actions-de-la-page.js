@@ -288,6 +288,11 @@ function obtenirCouleurTitreEtape(numeroEtape) {
 function obtenirCouleurIconeEtape(numeroEtape) {
     return COULEURS_THEMES_ETAPES[Number(numeroEtape) % COULEURS_THEMES_ETAPES.length];
 }
+function obtenirCouleursEtapePJJ(numeroEtape) {
+    const couleur = PROGRAMMES.commun.etapes.find(etape => etape.id === Number(numeroEtape)).couleur;
+    const couleurRgb = couleur.slice(1).match(/.{2}/g).map(valeur => parseInt(valeur, 16)).join(',');
+    return { couleur, couleurTexte: couleur, couleurRgb };
+}
 const FICHIERS_ICONES_PARCOURS_DECOUVERTE = Object.freeze({
     1: 'icone-loupe-decouverte.svg',
     2: 'icone-public-accompagne.svg',
@@ -345,7 +350,9 @@ function afficherEtapes() {
         carte.setAttribute('tabindex', '0');
         carte.dataset.etape = String(etapeProgramme.id);
         carte.dataset.theme = etat.theme;
-        if (etat.theme !== 'commun') {
+        if (etat.theme === 'commun') {
+            carte.style.setProperty('--couleur-etape', etapeProgramme.couleur);
+        } else {
             carte.style.setProperty('--couleur-etape', obtenirCouleurTitreEtape(etapeProgramme.id));
             carte.style.setProperty('--couleur-icone-etape', obtenirCouleurIconeEtape(etapeProgramme.id));
         }

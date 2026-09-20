@@ -125,7 +125,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         self.assertRegex(sigles, re.compile(r"#sigles \.sigles-accueil-entete,\s*#sigles \.sigles-page-secondaire-entete\s*\{[^}]*text-align:center;", re.S))
         self.assertRegex(mesures, re.compile(r"#mesures \.mesures-accueil-entete,\s*#mesures \.mesures-page-secondaire-entete\s*\{[^}]*text-align:center;", re.S))
         self.assertRegex(guides, re.compile(r"\.guides-entete\s*\{[^}]*text-align:center;", re.S))
-        self.assertRegex(guides, re.compile(r"\.guides-entete h1\s*\{[^}]*font-size:clamp\(1\.65rem,2\.75vw,2\.55rem\);", re.S))
+        self.assertRegex(guides, re.compile(r"\.guides-entete h1\s*\{[^}]*font-size:clamp\(1\.55rem,2\.5vw,2\.15rem\);", re.S))
         self.assertRegex(statique, re.compile(r"\.guide-site-entete\.menu-guide-actif \.guide-navigation-principale a\s*\{[^}]*font-size:\s*1rem;[^}]*font-weight:\s*800;", re.S))
 
     def test_entrainements_missions_acceptent_les_intitules_longs_et_hasard_garde_la_couleur_du_de(self) -> None:

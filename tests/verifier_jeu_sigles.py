@@ -299,11 +299,21 @@ def verifier() -> None:
         assert len({c['bord'] for c in couleurs_pjj}) == 4, couleurs_pjj
         for carte in couleurs_pjj:
             assert carte['titre'] == carte['bord'], carte
+            reference = page.evaluate("""n => {
+                const numero = ETAPES_MISSION_SIGLES[n].etapePjj;
+                const couleur = PROGRAMMES.commun.etapes.find(e => e.id === numero).couleur;
+                ouvrirParcours('commun');
+                const element = document.querySelector(`.chemin-etape-carte[data-theme="commun"][data-etape="${numero}"]`);
+                return { couleur, titre: getComputedStyle(element.querySelector('.chemin-etape-titre')).color,
+                    accent: getComputedStyle(element).getPropertyValue('--couleur-etape').trim() };
+            }""", carte['etape'])
+            assert carte['titre'] == reference['titre'], (carte, reference)
+            assert reference['accent'] == reference['couleur'], reference
             page.evaluate("n => lancerEtapeSigles(n)", carte['etape'])
             identite = page.evaluate("""() => ({
                 entete:getComputedStyle(document.querySelector('#question')).getPropertyValue('--parcours-accent-lisible').trim(),
                 reponses:getComputedStyle(document.documentElement).getPropertyValue('--couleur-etape-active-lisible').trim(),
-                attendu:obtenirIdentiteEtapeMissionSigles(etat.etape).couleurTexte
+                attendu:PROGRAMMES.commun.etapes.find(e => e.id === ETAPES_MISSION_SIGLES[etat.etape].etapePjj).couleur
             })""")
             assert identite['entete'] == identite['reponses'] == identite['attendu'], identite
 
