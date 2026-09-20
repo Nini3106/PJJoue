@@ -452,7 +452,7 @@ function actualiserSuiviEtapeQuestion(question) {
     numeroParcours.textContent = `Parcours ${identite.numero}`;
     titreParcours.textContent = identite.titre;
     numero.textContent = finale ? 'Étape 12' : `Étape ${question.etape}`;
-    titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours PJJ');
+    titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours CJPM');
     suivi.classList.toggle('masque', finale || !['parcours', 'revision'].includes(etat.mode));
     if (finale || !['parcours', 'revision'].includes(etat.mode)) {
         actualiserBoutonRevisionEtapeQuestion(question);

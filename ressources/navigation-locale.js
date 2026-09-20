@@ -91,7 +91,7 @@
     const lienGuides = `${racineApplication.href}guides/${navigationLocale ? 'index.html' : ''}`;
     const entrees = [
       { libelle: 'Accueil', href: lienApplication('accueil') },
-      { libelle: 'Parcours PJJ', href: lienApplication('parcours') },
+      { libelle: 'Parcours CJPM', href: lienApplication('parcours') },
       { libelle: 'Entraînement libre', href: lienApplication('entrainement') },
       { libelle: 'Réviser', href: lienApplication('erreurs') },
       { libelle: 'Progression', href: lienApplication('progression') },

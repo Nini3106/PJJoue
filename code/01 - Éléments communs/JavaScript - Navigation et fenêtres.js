@@ -174,7 +174,7 @@ function ajusterQuestionAEcran() {
 }
 const TITRES_ECRANS = {
     accueil: 'Accueil',
-    parcours: 'Parcours PJJ',
+    parcours: 'Parcours CJPM',
     carnet: 'Carnet de parcours',
     entrainement: 'Choisis ton mode d’entraînement',
     erreurs: 'Mes erreurs à retravailler',

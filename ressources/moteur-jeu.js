@@ -161,7 +161,7 @@ function envoyerEvenementPJJ(nom, parametres = {}) {
 // est décrit séparément par pjjoue_ecran et rattaché à sa page d'origine.
 const LIBELLES_PAGES_ANALYTICS = Object.freeze({
     accueil: 'Accueil',
-    parcours: 'Parcours PJJ',
+    parcours: 'Parcours CJPM',
     entrainement: 'Entraînement libre',
     erreurs: 'Réviser',
     progression: 'Progression',
@@ -204,7 +204,7 @@ function obtenirPageMenuAnalytics(identifiant = etat?.ecran) {
     if (origine.startsWith('mission_mesures_') || String(etat?.mode || '').startsWith('mesures-'))
         return 'Mission Mesures';
     if (etat?.mode === 'parcours' || etat?.mode === 'evaluation-finale' || origine === 'evaluation_finale')
-        return 'Parcours PJJ';
+        return 'Parcours CJPM';
     if (etat?.mode === 'libre' || origine === 'entrainement_libre' || origine === 'defi_du_hasard')
         return 'Entraînement libre';
     if (etat?.mode === 'revision' || origine === 'revision_des_erreurs')
@@ -242,7 +242,7 @@ function obtenirLibelleModeJeuAnalytics() {
     if (origine === 'defi_du_hasard' || mode === 'sigles-hasard' || mode === 'mesures-hasard')
         return 'Défi du hasard';
     if (mode === 'parcours' || mode === 'sigles-parcours' || mode === 'mesures-parcours')
-        return 'Parcours PJJ';
+        return 'Parcours CJPM';
     if (mode === 'libre' || mode === 'sigles-entrainement' || mode === 'mesures-entrainement')
         return 'Entraînement libre';
     if (mode === 'revision' || mode === 'sigles-revision' || mode === 'mesures-revision')
@@ -1293,7 +1293,7 @@ function ajusterQuestionAEcran() {
 }
 const TITRES_ECRANS = {
     accueil: 'Accueil',
-    parcours: 'Parcours PJJ',
+    parcours: 'Parcours CJPM',
     carnet: 'Carnet de parcours',
     entrainement: 'Choisis ton mode d’entraînement',
     erreurs: 'Mes erreurs à retravailler',
@@ -4950,7 +4950,7 @@ function actualiserSuiviEtapeQuestion(question) {
     numeroParcours.textContent = `Parcours ${identite.numero}`;
     titreParcours.textContent = identite.titre;
     numero.textContent = finale ? 'Étape 12' : `Étape ${question.etape}`;
-    titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours PJJ');
+    titre.textContent = finale ? 'Évaluation finale' : (etapeProgramme?.titre || 'Parcours CJPM');
     suivi.classList.toggle('masque', finale || !['parcours', 'revision'].includes(etat.mode));
     if (finale || !['parcours', 'revision'].includes(etat.mode)) {
         actualiserBoutonRevisionEtapeQuestion(question);
@@ -6352,21 +6352,24 @@ function normaliserRechercheSupports(texte) {
         .trim();
 }
 const PARCOURS_PAR_CATEGORIE_SUPPORT = Object.freeze({
-    'supports-reperes-pjj': ['1', '4'],
-    'supports-je': ['2', '4', '6'],
-    'supports-tpe': ['2', '4', '5', '6'],
-    'supports-ji': ['3'],
-    'supports-jld': ['3'],
-    'supports-cam': ['5'],
-    'supports-jap': ['6'],
-    'supports-transversaux': ['2', '3', '4', '5', '6']
+    'supports-reperes-pjj': ['commun', 'jugement_educatif_ordinaire'],
+    'supports-je': ['procedure_ordinaire', 'jugement_educatif_ordinaire', 'application_execution_peines'],
+    'supports-tpe': ['procedure_ordinaire', 'jugement_educatif_ordinaire', 'matiere_criminelle_peines', 'application_execution_peines'],
+    'supports-ji': ['information_judiciaire'],
+    'supports-jld': ['information_judiciaire'],
+    'supports-cam': ['matiere_criminelle_peines'],
+    'supports-jap': ['application_execution_peines'],
+    'supports-transversaux': ['procedure_ordinaire', 'information_judiciaire', 'jugement_educatif_ordinaire', 'matiere_criminelle_peines', 'application_execution_peines']
 });
 function obtenirIndexIdentiteCategorieSupport(categorie) {
     const titreCategorie = categorie.querySelector(':scope > summary')?.textContent || '';
     const parcours = (categorie.dataset.parcoursSupports || '')
         .split(' ')
         .filter(Boolean)
-        .map(numero => `P${numero} parcours ${numero}`)
+        .map(identifiant => {
+            const identite = obtenirIdentiteParcours(identifiant);
+            return `P${Number(identite.numero)} parcours ${Number(identite.numero)} parcours ${identite.numero} ${identite.titre}`;
+        })
         .join(' ');
     return normaliserRechercheSupports(`${titreCategorie} ${parcours}`);
 }
@@ -6430,15 +6433,42 @@ function initialiserClassementSupports() {
     if (!zone || zone.dataset.classementInitialise === 'true')
         return;
     zone.dataset.classementInitialise = 'true';
+    // Numéros, ordre et couleurs viennent du même catalogue que la page Parcours.
+    // Les filtres ciblent les identifiants stables, jamais les anciens numéros.
+    const filtres = zone.querySelector('.supports-filtres');
+    THEMES.forEach(theme => {
+        const identite = obtenirIdentiteParcours(theme.id);
+        const libelle = `${identite.libelleNumero || `Parcours ${identite.numero}`} — ${identite.titre}`;
+        const bouton = document.createElement('button');
+        bouton.type = 'button';
+        bouton.className = 'support-filtre-parcours';
+        bouton.dataset.filtreSupports = theme.id;
+        bouton.textContent = `${identite.optionnel ? 'Option : ' : ''}P${Number(identite.numero)}`;
+        bouton.title = libelle;
+        bouton.setAttribute('aria-label', `Filtrer : ${libelle}`);
+        bouton.setAttribute('aria-pressed', 'false');
+        bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
+        bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
+        filtres?.appendChild(bouton);
+    });
     zone.querySelectorAll('.supports-juridiction').forEach(categorie => {
-        const parcours = PARCOURS_PAR_CATEGORIE_SUPPORT[categorie.id] || [];
+        const rattachements = PARCOURS_PAR_CATEGORIE_SUPPORT[categorie.id] || [];
+        const parcours = THEMES.filter(theme => rattachements.includes(theme.id)).map(theme => theme.id);
         categorie.dataset.parcoursSupports = parcours.join(' ');
         const titre = categorie.querySelector('.support-juridiction-titre');
         if (!titre || !parcours.length)
             return;
         const badges = document.createElement('span');
         badges.className = 'supports-parcours-badges';
-        badges.innerHTML = parcours.map(numero => `<i class="support-parcours-badge support-parcours-${numero}">P${numero}</i>`).join('');
+        parcours.forEach(identifiant => {
+            const identite = obtenirIdentiteParcours(identifiant);
+            const badge = document.createElement('i');
+            badge.className = 'support-parcours-badge';
+            badge.textContent = `P${Number(identite.numero)}`;
+            badge.title = `${identite.libelleNumero || `Parcours ${identite.numero}`} — ${identite.titre}`;
+            badge.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
+            badges.appendChild(badge);
+        });
         titre.appendChild(badges);
     });
 }
