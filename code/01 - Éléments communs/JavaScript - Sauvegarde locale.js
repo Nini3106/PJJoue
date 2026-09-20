@@ -325,9 +325,23 @@ function nettoyerSauvegarde(sauvegardeBrute) {
         mesuresJeu: nettoyerProgressionMesures(sauvegardeBrute)
     };
 }
+function conserverSauvegardeBrute(contenu) {
+    if (!contenu)
+        return;
+    try {
+        // La première copie est conservée volontairement : une sauvegarde
+        // antérieure reste ainsi disponible même après une mauvaise écriture.
+        if (!localStorage.getItem(CLE_SAUVEGARDE_SECOURS))
+            localStorage.setItem(CLE_SAUVEGARDE_SECOURS, contenu);
+    }
+    catch (erreur) {
+        // Le stockage peut être indisponible en navigation privée.
+    }
+}
 function chargerSauvegarde() {
     try {
         const contenu = localStorage.getItem(CLE_SAUVEGARDE);
+        conserverSauvegardeBrute(contenu);
         return contenu
             ? nettoyerSauvegarde(JSON.parse(contenu))
             : creerSauvegardeInitiale();
@@ -379,9 +393,18 @@ function effacerSauvegardeDuNavigateur() {
         // L’indisponibilité du stockage sera signalée par l’enregistrement suivant.
     }
 }
+function effacerSauvegardeDeSecours() {
+    try {
+        localStorage.removeItem(CLE_SAUVEGARDE_SECOURS);
+    }
+    catch (erreur) {
+        // L’indisponibilité du stockage sera signalée par l’enregistrement suivant.
+    }
+}
 function enregistrerSauvegarde() {
     sauvegarde.version = 'V1';
     try {
+        conserverSauvegardeBrute(localStorage.getItem(CLE_SAUVEGARDE));
         localStorage.setItem(CLE_SAUVEGARDE, JSON.stringify(sauvegarde));
         return true;
     }

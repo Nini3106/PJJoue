@@ -150,20 +150,32 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
 function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, jokerUtilise) {
     let evaluationFinaleReussie = false;
     let celebration = null;
-    if (etat.mode === 'parcours') {
-        const bilanEtape = obtenirBilanEtape(etat.theme, etat.etape);
+    const contexteEtape = etat.mode === 'parcours'
+        ? { theme: etat.theme, etape: etat.etape }
+        : obtenirContexteRevisionEtape(etat.questionCourante);
+    if (contexteEtape) {
+        const bilanEtape = obtenirBilanEtape(contexteEtape.theme, contexteEtape.etape);
         bilanEtape.meilleurScore = Math.max(bilanEtape.meilleurScore || 0, pourcentage);
         bilanEtape.nombreTentatives = (bilanEtape.nombreTentatives || 0) + 1;
-        const etapeTerminee = !etapeNecessiteAutreChapitre(etat.theme, etat.etape)
+        const etapeTerminee = (etat.mode === 'revision'
+            || !etapeNecessiteAutreChapitre(contexteEtape.theme, contexteEtape.etape))
             && nombreQuestionsPassees === 0;
         if (etapeTerminee) {
-            const questionsEtape = obtenirQuestionsEtape(etat.theme, etat.etape);
+            const questionsEtape = obtenirQuestionsEtape(contexteEtape.theme, contexteEtape.etape);
             const toutesReussiesEnAutonomie = questionsEtape.length > 0
                 && questionsEtape.every(question => bilanEtape.resultats?.[question.id] === true);
             const etaitDejaValideeSansJoker = bilanEtape.termineeSansJoker === true;
             bilanEtape.termineeSansJoker = etaitDejaValideeSansJoker || toutesReussiesEnAutonomie;
             bilanEtape.jokersUtilises = !bilanEtape.termineeSansJoker;
             const validationsSansJoker = bilanEtape.validationsSansJoker || {};
+            // Les anciennes sauvegardes peuvent ne pas avoir le détail des
+            // validations sans joker, alors que le résultat autonome est déjà
+            // enregistré. Ce résultat constitue bien une maîtrise sans aide.
+            questionsEtape.forEach(question => {
+                if (bilanEtape.resultats?.[question.id] === true)
+                    validationsSansJoker[question.id] = true;
+            });
+            bilanEtape.validationsSansJoker = validationsSansJoker;
             const toutesValideesSansJoker = questionsEtape.length > 0
                 && questionsEtape.every(question => validationsSansJoker[question.id] === true);
             const celebrationDejaAffichee = bilanEtape.celebrationSansJokerAffichee === true;
@@ -172,8 +184,8 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
                 // de progression pour garantir leur structure et pourraient sinon perdre
                 // le drapeau porté par l'ancienne référence JavaScript.
                 bilanEtape.celebrationSansJokerAffichee = true;
-                const evaluationDeverrouillee = estProgrammeMaitrise(etat.theme);
-                celebration = obtenirCelebrationEtape(etat.etape, false, evaluationDeverrouillee);
+                const evaluationDeverrouillee = estProgrammeMaitrise(contexteEtape.theme);
+                celebration = obtenirCelebrationEtape(contexteEtape.etape, false, evaluationDeverrouillee);
             }
         }
     }

@@ -86,6 +86,7 @@ selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFen
         });
         sauvegarde = creerSauvegardeInitiale();
         effacerSauvegardeDuNavigateur();
+        effacerSauvegardeDeSecours();
         effacerSessionEnCours();
         enregistrerSauvegarde();
         actualiserAccueil();
