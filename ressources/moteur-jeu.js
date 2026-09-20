@@ -6442,19 +6442,32 @@ function obtenirElementsCategoriesRevision(jeu) {
     }
     return [];
 }
+function construireReperesRevision(jeu, element) {
+    const cible = element.cible;
+    const badge = (libelle, couleur, couleurTexte = couleur) =>
+        `<span class="revision-repere" style="--repere-accent:${couleur};--repere-texte:${couleurTexte}">${echapperHtml(libelle)}</span>`;
+    if (jeu === 'parcours') {
+        const parcours = obtenirIdentiteParcours(cible.theme);
+        const couleurEtape = obtenirEtapeProgramme(cible.theme, cible.etape)?.couleur || obtenirCouleurTitreEtape(cible.etape);
+        return `<small class="revision-reperes">${badge(`Parcours ${obtenirOrdreTheme(cible.theme) + 1}`, parcours.couleur, parcours.couleurTexte)}${badge(`Étape ${cible.etape}`, couleurEtape)}</small>`;
+    }
+    const etape = jeu === 'sigles' ? obtenirIdentiteEtapeMissionSigles(cible.etape)
+        : obtenirIdentiteEtapeMissionMesures(cible.etape);
+    return `<small class="revision-reperes">${badge(element.repere, etape.couleur, etape.couleurTexte)}</small>`;
+}
 function construireCategoriesRevision(jeu) {
     const elements = obtenirElementsCategoriesRevision(jeu);
+    if (!elements.length) return '';
     const categories = ['reprise', 'joker', 'passage', 'incorrecte'];
     if (elements.some(element => obtenirCategorieRevision(element.suivi) === 'inconnu'))
         categories.push('inconnu');
     const dossiers = categories.map(categorie => {
         const selection = elements.filter(element => obtenirCategorieRevision(element.suivi) === categorie);
         const total = selection.length;
+        if (!total) return '';
         const libelle = obtenirLibelleConsolidation({ motifRevision: categorie });
-        const contenu = total
-            ? `<ul>${selection.map(element => `<li><span>${echapperHtml(element.libelle)}</span><small>${echapperHtml(element.repere)}</small></li>`).join('')}</ul>
-               <button class="principal" type="button" data-action="reviser-categorie" data-jeu-revision="${jeu}" data-categorie-revision="${categorie}">Réviser ${total} ${accorderLibelle(total, 'question', 'questions')} →</button>`
-            : '<p>Aucune question dans cette catégorie.</p>';
+        const contenu = `<ul>${selection.map(element => `<li><span>${echapperHtml(element.libelle)}</span>${construireReperesRevision(jeu, element)}</li>`).join('')}</ul>
+               <button class="principal" type="button" data-action="reviser-categorie" data-jeu-revision="${jeu}" data-categorie-revision="${categorie}">Réviser ${total} ${accorderLibelle(total, 'question', 'questions')} →</button>`;
         return `<details class="revision-categorie" data-categorie-revision="${categorie}">
             <summary><span><strong>${libelle}</strong><small>${total} ${accorderLibelle(total, 'question', 'questions')}</small></span><span class="revision-categorie-chevron" aria-hidden="true">⌄</span></summary>
             <div class="revision-categorie-contenu">${contenu}</div>
@@ -6508,7 +6521,7 @@ function construireBoutonsRevisionParcours(groupes) {
         if (!total)
             return '';
         const identite = obtenirIdentiteParcours(theme.id);
-        return `<button class="revision-parcours-bouton" data-action="reviser-theme" data-theme="${theme.id}" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}">
+        return `<button class="revision-parcours-bouton" data-action="reviser-theme" data-theme="${theme.id}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}">
             <span class="revision-parcours-numero">${String(index + 1).padStart(2, '0')}</span>
             <span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'question à consolider', 'questions à consolider')}</small></span>
             <span class="revision-parcours-action">Réviser →</span>
@@ -6520,8 +6533,10 @@ function construireBoutonsRevisionParEtape(groupes) {
         const erreursParEtape = groupes[theme.id] || {};
         return Object.keys(erreursParEtape).sort((a, b) => Number(a) - Number(b)).map(numeroEtape => {
             const total = erreursParEtape[numeroEtape].length;
-            return `<button class="revision-etape-bouton" data-action="reviser-etape" data-theme="${theme.id}" data-etape="${numeroEtape}">
-                <span>P${index + 1} · Étape ${numeroEtape}</span><strong>${total}</strong>
+            const identite = obtenirIdentiteParcours(theme.id);
+            const couleurEtape = obtenirEtapeProgramme(theme.id, numeroEtape)?.couleur || obtenirCouleurTitreEtape(numeroEtape);
+            return `<button class="revision-etape-bouton" data-action="reviser-etape" data-theme="${theme.id}" data-etape="${numeroEtape}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--revision-etape-accent:${couleurEtape}">
+                <span class="revision-etape-parcours">P${index + 1}</span><span>Étape ${numeroEtape}</span><strong>${total}</strong>
             </button>`;
         }).join('');
     }).join('');
@@ -6554,12 +6569,13 @@ function construireModesRevisionErreurs(total, groupes) {
 }
 function construireListeErreursEtape(theme, numeroEtape, elements) {
     const titreEtape = obtenirEtapeProgramme(theme, numeroEtape)?.titre || '';
+    const couleurEtape = obtenirEtapeProgramme(theme, numeroEtape)?.couleur || obtenirCouleurTitreEtape(numeroEtape);
     const cartes = elements.map(({ question, suiviErreur }) => `
         <li class="revision-erreur-ligne">
             <span>${question.enonce.split('\n')[0]}</span>
             <small>${obtenirLibelleConsolidation(suiviErreur)}</small>
         </li>`).join('');
-    return `<div class="revision-etape-groupe">
+    return `<div class="revision-etape-groupe" style="--revision-etape-accent:${couleurEtape}">
         <div class="revision-etape-groupe-entete"><strong>Étape ${numeroEtape} · ${titreEtape}</strong><span>${elements.length}</span></div>
         <ul>${cartes}</ul>
     </div>`;
@@ -6575,7 +6591,7 @@ function construireParcoursErreurs(groupes) {
             .sort((a, b) => Number(a) - Number(b))
             .map(numero => construireListeErreursEtape(theme.id, numero, erreursParEtape[numero]))
             .join('');
-        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-rgb:${identite.couleurRgb}">
+        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}">
             <summary>
                 <span class="revision-dossier-numero">${String(index + 1).padStart(2, '0')}</span>
                 <span><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'question à consolider', 'questions à consolider')}</small></span>
@@ -7332,7 +7348,8 @@ function construireRevisionMissionSiglesIndependante(){
     }).join('');
     const etapesDirectes = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const liste = parEtape[numero];
-        return `<button class="revision-etape-bouton" data-action="reviser-etape-sigles" data-etape="${numero}"><span>${libelleEtapeSigles(numero)}</span><strong>${liste.length}</strong></button>`;
+        const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
+        return `<button class="revision-etape-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--revision-etape-accent:${identite.couleurTexte}"><span>${libelleEtapeSigles(numero)}</span><strong>${liste.length}</strong></button>`;
     }).join('');
     const dossiers = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
         const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
