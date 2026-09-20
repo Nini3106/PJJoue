@@ -26,3 +26,8 @@
 @media (max-width:900px) { .guides-collection { grid-template-columns:1fr; } }
 @media (max-width:620px) { .page-guides { width:calc(100% - 24px); margin:18px auto 24px; } .guides-grille { grid-template-columns:1fr; } .guide-carte-lien { min-height:0; } .guides-appel-jeu { align-items:stretch; flex-direction:column; } .guides-appel-jeu .guide-bouton { width:max-content; max-width:100%; } }
 @media (max-width:420px) { .guide-carte-lien { grid-template-columns:44px minmax(0,1fr); gap:12px; padding:14px; } .guide-carte-icone { width:44px; height:44px; } .guide-carte-icone svg { width:28px; height:28px; } .guide-carte-lien > b { display:none; } }
+
+/* Les nouveaux guides reprennent les couleurs canoniques de leurs parcours. */
+.guide-carte-cjpm { border-left:3px solid var(--couleur-parcours); }
+.guide-carte-cjpm:hover,.guide-carte-cjpm:focus-visible { border-color:var(--couleur-parcours); }
+.guide-carte-numero { font-size:1.3rem; font-weight:900; }

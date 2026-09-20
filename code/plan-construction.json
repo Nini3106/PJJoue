@@ -21,6 +21,36 @@
       "style_sortie": "guides/style-de-la-page.css"
     },
     {
+      "source": "code/11 - Guides CJPM/De l’enquête à la sanction/page.html",
+      "sortie": "cjpm-enquete-sanction/index.html",
+      "style_source": "code/11 - Guides CJPM/De l’enquête à la sanction/style-de-la-page.css",
+      "style_sortie": "cjpm-enquete-sanction/style-de-la-page.css"
+    },
+    {
+      "source": "code/11 - Guides CJPM/Avant le jugement - L’information judiciaire/page.html",
+      "sortie": "cjpm-information-judiciaire/index.html",
+      "style_source": "code/11 - Guides CJPM/Avant le jugement - L’information judiciaire/style-de-la-page.css",
+      "style_sortie": "cjpm-information-judiciaire/style-de-la-page.css"
+    },
+    {
+      "source": "code/11 - Guides CJPM/Du jugement à la sanction/page.html",
+      "sortie": "cjpm-jugement-sanction-educative/index.html",
+      "style_source": "code/11 - Guides CJPM/Du jugement à la sanction/style-de-la-page.css",
+      "style_sortie": "cjpm-jugement-sanction-educative/style-de-la-page.css"
+    },
+    {
+      "source": "code/11 - Guides CJPM/De la qualification criminelle aux peines/page.html",
+      "sortie": "cjpm-matiere-criminelle-peines/index.html",
+      "style_source": "code/11 - Guides CJPM/De la qualification criminelle aux peines/style-de-la-page.css",
+      "style_sortie": "cjpm-matiere-criminelle-peines/style-de-la-page.css"
+    },
+    {
+      "source": "code/11 - Guides CJPM/Après la sanction - Application et exécution/page.html",
+      "sortie": "cjpm-application-execution/index.html",
+      "style_source": "code/11 - Guides CJPM/Après la sanction - Application et exécution/style-de-la-page.css",
+      "style_sortie": "cjpm-application-execution/style-de-la-page.css"
+    },
+    {
       "source": "code/11 - Guides pour découvrir la PJJ/Qu’est-ce que la PJJ/page.html",
       "sortie": "decouvrir-la-pjj/index.html",
       "style_source": "code/11 - Guides pour découvrir la PJJ/Qu’est-ce que la PJJ/style-de-la-page.css",

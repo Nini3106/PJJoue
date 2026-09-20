@@ -701,7 +701,7 @@ def verifier_revision_supports(page: Page) -> None:
         categories_attendues = [
             ['supports-je', 'supports-tpe', 'supports-transversaux'],
             ['supports-ji', 'supports-jld', 'supports-transversaux'],
-            ['supports-reperes-pjj', 'supports-je', 'supports-tpe', 'supports-transversaux'],
+            ['supports-je', 'supports-tpe', 'supports-transversaux', 'supports-reperes-pjj'],
             ['supports-tpe', 'supports-cam', 'supports-transversaux'],
             ['supports-je', 'supports-tpe', 'supports-jap', 'supports-transversaux'],
             ['supports-reperes-pjj'],
@@ -715,6 +715,13 @@ def verifier_revision_supports(page: Page) -> None:
             assert visibles == categories, f'P{index + 1} : mauvais supports {visibles}'
             assert filtres.nth(index).get_attribute('aria-pressed') == 'true'
         page.locator('#supports [data-filtre-supports="tous"]').click()
+        ordre_tous = page.locator('#supports .supports-juridiction:visible').evaluate_all(
+            '(elements) => elements.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top).map(element => element.id)'
+        )
+        assert ordre_tous == [
+            'supports-je', 'supports-tpe', 'supports-ji', 'supports-jld',
+            'supports-cam', 'supports-jap', 'supports-transversaux', 'supports-reperes-pjj'
+        ], f'Le complément PJJ doit venir après les supports CJPM : {ordre_tous}'
         badges_ji = page.locator('#supports-ji .support-parcours-badge')
         assert badges_ji.all_text_contents() == ['P2']
         assert page.locator('#supports-jap .support-parcours-badge').all_text_contents() == ['P5']

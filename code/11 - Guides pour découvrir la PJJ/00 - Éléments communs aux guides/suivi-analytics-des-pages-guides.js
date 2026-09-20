@@ -11,6 +11,11 @@
 (() => {
     const PAGES = [
         ['guides', 'Accueil des guides'],
+        ['cjpm-enquete-sanction', 'De l’enquête à la sanction'],
+        ['cjpm-information-judiciaire', 'Avant le jugement : l’information judiciaire'],
+        ['cjpm-jugement-sanction-educative', 'Du jugement à la sanction'],
+        ['cjpm-matiere-criminelle-peines', 'De la qualification criminelle aux peines'],
+        ['cjpm-application-execution', 'Après la sanction : application et exécution'],
         ['decouvrir-la-pjj', 'Découvrir la PJJ'],
         ['organisation-pjj', 'Organisation de la PJJ'],
         ['metiers-pjj', 'Métiers de la PJJ'],

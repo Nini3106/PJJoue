@@ -14,6 +14,13 @@ from playwright.sync_api import sync_playwright
 RACINE = Path(__file__).resolve().parents[1]
 SORTIE = RACINE / "test-results" / "pages-annexes"
 
+PAGES_CJPM = [
+    "cjpm-enquete-sanction/index.html",
+    "cjpm-information-judiciaire/index.html",
+    "cjpm-jugement-sanction-educative/index.html",
+    "cjpm-matiere-criminelle-peines/index.html",
+    "cjpm-application-execution/index.html",
+]
 PAGES_BUREAU = [
     "guides/index.html",
     "decouvrir-la-pjj/index.html",
@@ -31,6 +38,9 @@ PAGES_BUREAU = [
 ]
 PAGES_MOBILE = ["guides/index.html", "decouvrir-la-pjj/index.html", "sources.html", "administration.html"]
 PAGES_GUIDES = set(PAGES_BUREAU[:10])
+PAGES_BUREAU += PAGES_CJPM
+PAGES_MOBILE += PAGES_CJPM
+PAGES_GUIDES.update(PAGES_CJPM)
 SCRIPTS_VISUELS = {"donnees-pjj.js", "sources-pjjoue.js", "administration.js"}
 
 

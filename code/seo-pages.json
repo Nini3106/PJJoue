@@ -12,7 +12,27 @@
     {
       "sortie": "guides/index.html",
       "url": "https://pjjoue.fr/guides/",
-      "lastmod": "2026-08-30"
+      "lastmod": "2026-09-20"
+    },
+    {
+      "sortie": "cjpm-enquete-sanction/index.html",
+      "url": "https://pjjoue.fr/cjpm-enquete-sanction/"
+    },
+    {
+      "sortie": "cjpm-information-judiciaire/index.html",
+      "url": "https://pjjoue.fr/cjpm-information-judiciaire/"
+    },
+    {
+      "sortie": "cjpm-jugement-sanction-educative/index.html",
+      "url": "https://pjjoue.fr/cjpm-jugement-sanction-educative/"
+    },
+    {
+      "sortie": "cjpm-matiere-criminelle-peines/index.html",
+      "url": "https://pjjoue.fr/cjpm-matiere-criminelle-peines/"
+    },
+    {
+      "sortie": "cjpm-application-execution/index.html",
+      "url": "https://pjjoue.fr/cjpm-application-execution/"
     },
     {
       "sortie": "decouvrir-la-pjj/index.html",
