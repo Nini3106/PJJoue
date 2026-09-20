@@ -176,8 +176,8 @@
       "sha256": "1b35714896b1fa7a3594774dbd9b4f33e5dd8e9bb3642e4b4417c321cbe19130"
     },
     "code/01 - Éléments communs/JavaScript - Brancher les boutons.js": {
-      "tailleOctets": 16429,
-      "sha256": "883c3f565ab376abdfcf5de6a95e2a725dd3309703c69a331d883c139ac8040a"
+      "tailleOctets": 25171,
+      "sha256": "5a359656f8f756fb4def190c7f8c31dd1cfe54d8a0e364b616b569b4962328c7"
     },
     "code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js": {
       "tailleOctets": 24122,
@@ -308,8 +308,8 @@
       "sha256": "a9a8e000b8ad16fc876d7ece6548ff2543e2d90f77a53f3192bb7d3b1371f3e8"
     },
     "code/06 - Question/actions/05 - Préparer et afficher la question.js": {
-      "tailleOctets": 24689,
-      "sha256": "beddc2a0ea955ecbdd7b4a6669d58b04074a00898ab489b2bf542459742c0541"
+      "tailleOctets": 24780,
+      "sha256": "267b9bd14dae504e5aed28fc0fac23242fc30df451e570d4fe9e9f71272f9d1b"
     },
     "code/06 - Question/actions/06 - Chronomètre de la question.js": {
       "tailleOctets": 4517,
@@ -1028,8 +1028,8 @@
       "sha256": "87941381863c039361b585dced6d40c09871735c5bdd2592637f1489f20cd4d6"
     },
     "ressources/moteur-jeu.js": {
-      "tailleOctets": 463467,
-      "sha256": "2da2fcd8bd9c95ec2bcc0e30d2b358e441e2fed2156ab859f624427ed9314c76"
+      "tailleOctets": 472300,
+      "sha256": "d982d33dedf131fbf31341fa4e48b36ed51fc6c07673e332423bfd93a805722c"
     },
     "ressources/navigation-locale.js": {
       "tailleOctets": 12454,
@@ -1105,7 +1105,7 @@
     },
     "service-worker.js": {
       "tailleOctets": 5352,
-      "sha256": "748c7c8bfa6f4ffd25067729617aa2ab5a1c6a998afcc5c2ecaa7d9a410c6c80"
+      "sha256": "c6154f19c3f5920f05f688e0f438ca89aab8d744d3c09266a48c8720f09f88f6"
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 14766,
