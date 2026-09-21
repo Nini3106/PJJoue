@@ -1468,8 +1468,8 @@
       "sha256": "064f9f13a95c982822bf697280b15bf62ccbd750af25fe437f9c49e9b85bc624"
     },
     "tests/test_categories_revision.py": {
-      "tailleOctets": 9475,
-      "sha256": "9f92c109da27ef521fbd52d4795e62299d2f8318ce47cc8b1f817cdcf501de76"
+      "tailleOctets": 9528,
+      "sha256": "a6bfca0a905efc472d0b36ab359feb460d979c64fa5202f401f5c4f4d76b7057"
     },
     "tests/test_charte_questions.py": {
       "tailleOctets": 14495,
@@ -1552,8 +1552,8 @@
       "sha256": "db2c1057a9090567a7db9ec95c3b7b3dee2b1c6805de563b26eeadad8b8cabb5"
     },
     "tests/verifier_regression_visuelle.py": {
-      "tailleOctets": 91659,
-      "sha256": "34e5b44f5c930578b9c371ca71ddb0d7b2251194013ba6d7722e08a7196742ea"
+      "tailleOctets": 92170,
+      "sha256": "386c1c9d2931260ec3dc7c534521d7e8f9e5910540a51cb4ab506e7339ce5575"
     }
   }
 }

@@ -1349,10 +1349,15 @@ def scenarios() -> list[Scenario]:
         sauvegarde.erreurs = {};
         qs.forEach((q, i) => sauvegarde.erreurs[q.id] = {maitrisee:false,nombreErreurs:(i % 2) + 1,reussites:0});
         afficherEcran('erreurs', {remplacerHistorique:true});
-        const details = document.querySelector('#erreurs .revision-etapes-details');
-        if (!details)
-            throw new Error('Liste directe des étapes introuvable');
-        details.open = true;
+        const zone = document.querySelector('#erreurs');
+        if (zone.querySelectorAll('[data-filtre-revision]').length !== 2
+            || zone.querySelectorAll('[data-revision-selection="parcours"]').length !== 1)
+            throw new Error('Filtres ou action principale de révision incorrects');
+        const questions = [...zone.querySelectorAll('.revision-categorie li > span')];
+        if (questions.length !== qs.length
+            || new Set(questions.map(question => question.textContent)).size !== qs.length)
+            throw new Error('La liste des révisions contient des omissions ou des doublons');
+        zone.querySelectorAll('.revision-categorie').forEach(details => details.open = true);
     }"""
     bilan = """() => {
         const q = QUESTIONS.find(q => !q.estEvaluationFinale);
