@@ -926,8 +926,8 @@ let etat = {
     nombreReponsesAidees: 0,
     chronometreSessionActif: false,
     dureeChronometreSession: 15,
-    chronometreParcoursActif: false,
-    dureeChronometreParcours: 15,
+    chronometreToutesQuestions: false,
+    chronometresQuestions: new Map(),
     nombreQuestionsTirageDe: 0,
     origineSessionAnalytics: null,
     perimetreEntrainement: 'tous',
@@ -1023,6 +1023,8 @@ function creerInstantaneSessionEnCours() {
         jokersSessionActifs: etat.jokersSessionActifs !== false,
         chronometreSessionActif: etat.chronometreSessionActif === true,
         dureeChronometreSession: etat.dureeChronometreSession,
+        chronometreToutesQuestions: etat.chronometreToutesQuestions === true,
+        chronometresQuestions: serialiserTableauAssociatif(etat.chronometresQuestions),
         tempsRestant: etat.tempsRestant,
         delaiDepasse: etat.delaiDepasse === true,
         debutSessionAnalytics: etat.debutSessionAnalytics,
@@ -1147,6 +1149,15 @@ function restaurerSessionEnCours(instantane = chargerSessionEnCours()) {
     etat.chronometreSessionActif = instantane.chronometreSessionActif === true;
     etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(instantane.dureeChronometreSession) || 15));
     etat.tempsRestant = Math.max(0, Number(instantane.tempsRestant) || 0);
+    etat.chronometreToutesQuestions = typeof instantane.chronometreToutesQuestions === 'boolean'
+        ? instantane.chronometreToutesQuestions : etat.chronometreSessionActif;
+    etat.chronometresQuestions = restaurerTableauAssociatif(instantane.chronometresQuestions);
+    if (etat.chronometreSessionActif && !etat.chronometresQuestions.has(questions[positionQuestion].id)) {
+        etat.chronometresQuestions.set(questions[positionQuestion].id, {
+            actif: true, dureeAccordee: etat.dureeChronometreSession,
+            tempsRestant: etat.tempsRestant, termine: instantane.questionValidee === true
+        });
+    }
     etat.delaiDepasse = instantane.delaiDepasse === true;
     etat.debutSessionAnalytics = Number(instantane.debutSessionAnalytics) || Date.now();
     etat.nombreQuestionsTirageDe = Math.max(0, Number(instantane.nombreQuestionsTirageDe) || 0);
@@ -1356,6 +1367,7 @@ function routeLocalePourEcran(identifiant) {
     return '?pjjoue_route=' + encodeURIComponent(routeRelative);
 }
 function routeRelativePourEcran(identifiant) {
+    if (identifiant === 'carnet') identifiant = 'progression';
     if (identifiant === 'parcours' && etat.theme)
         return 'parcours/' + encodeURIComponent(etat.theme);
     return ROUTES_APPLICATION_PROPRES[identifiant] ?? '';
@@ -1480,7 +1492,6 @@ function ajusterQuestionAEcran() {
 const TITRES_ECRANS = {
     accueil: 'Accueil',
     parcours: 'Parcours CJPM',
-    carnet: 'Carnet de parcours',
     entrainement: 'Choisis ton mode d’entraînement',
     erreurs: 'Mes questions à consolider',
     sigles: 'Mission Sigles',
@@ -1500,6 +1511,7 @@ function actualiserTitrePage(ecran) {
         : `${TITRES_ECRANS[ecran] || 'Quiz CJPM'} — Quiz CJPM`;
 }
 function afficherEcran(identifiant, optionsAffichage = {}) {
+    if (identifiant === 'carnet') identifiant = 'progression';
     masquerInfobullePJJoue();
     fermerMenuPrincipal();
     if (identifiant === 'supports')
@@ -1568,10 +1580,6 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
         actualiserAccueilSigles();
     if (identifiant === 'mesures')
         actualiserAccueilMesures();
-    if (identifiant === 'carnet') {
-        THEMES.forEach(theme => initialiserProgression(theme.id));
-        actualiserCarnetParcours();
-    }
     actualiserGroupesChoix();
     actualiserNavigation(identifiant);
     actualiserBoutonRetour();
@@ -2216,7 +2224,7 @@ function obtenirProchaineActionParcoursComplet() {
         if (!estEvaluationFinaleReussie(theme.id))
             return { type: 'evaluation', theme: theme.id };
     }
-    return { type: 'carnet' };
+    return { type: 'progression' };
 }
 function actualiserBoutonCommencer() {
     const bouton = selectionner('#boutonCommencer');
@@ -2243,162 +2251,8 @@ function actualiserBoutonCommencer() {
         bouton.onclick = () => ouvrirParcours(action.theme);
         return;
     }
-    bouton.innerHTML = 'Voir mon carnet complet <span aria-hidden="true">→</span>';
-    bouton.onclick = () => afficherEcran('carnet');
-}
-function obtenirProchaineDestinationParcours(programme) {
-    const etapeAReprendre = obtenirEtapeAReprendre(programme);
-    if (etapeAReprendre) {
-        const nombreQuestions = obtenirQuestionsEtape(programme.id, etapeAReprendre.id).length;
-        const nombreQuestionsTraitees = compterQuestionsTraiteesEtape(programme.id, etapeAReprendre.id);
-        if (nombreQuestionsTraitees < nombreQuestions)
-            return `Parcours ${obtenirOrdreTheme(programme.id) + 1} · étape ${etapeAReprendre.id} · ${etapeAReprendre.titre}`;
-        return `Parcours ${obtenirOrdreTheme(programme.id) + 1} · rejoue l’étape ${etapeAReprendre.id} sans aide pour la consolider.`;
-    }
-    if (!estEvaluationFinaleReussie(programme.id))
-        return `Parcours ${obtenirOrdreTheme(programme.id) + 1} · évaluation finale à réussir.`;
-    return null;
-}
-function obtenirProchaineDestinationComplete() {
-    for (const theme of THEMES) {
-        const destination = obtenirProchaineDestinationParcours(PROGRAMMES[theme.id]);
-        if (destination)
-            return `Prochaine destination : ${destination}`;
-    }
-    const totalEtapes = THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0);
-    return `Carnet complet, option PJJ comprise : les ${totalEtapes} étapes et les ${THEMES.length} évaluations sont validées.`;
-}
-function calculerAvancementCarnetComplet() {
-    const questionsApprentissage = QUESTIONS.filter(question => !question.estEvaluationFinale);
-    if (!questionsApprentissage.length)
-        return 0;
-    const traitees = THEMES.reduce((total, theme) => total + obtenirEtapesProgramme(theme.id).reduce(
-        (sousTotal, etape) => sousTotal + compterQuestionsTraiteesEtape(theme.id, etape.id), 0
-    ), 0);
-    return Math.round(traitees / questionsApprentissage.length * 100);
-}
-function actualiserCarnetParcours(_programmeIgnore = null) {
-    const titreSymbolique = selectionner('#titreSymboliqueParcours');
-    const prochaineDestination = selectionner('#prochaineDestinationParcours');
-    const route = selectionner('#routeCarnetParcours');
-    const journal = selectionner('.carnet-journal');
-    if (!titreSymbolique || !prochaineDestination || !route)
-        return;
-    const prochainTheme = THEMES.find(theme => obtenirProchaineDestinationParcours(PROGRAMMES[theme.id]));
-    const identiteProchainParcours = obtenirIdentiteParcours(prochainTheme?.id || IDENTIFIANT_PARCOURS_RECOMMANDE);
-    const nombreEtapesMaitrisees = compterEtapesMaitrisees();
-    const avancement = calculerAvancementCarnetComplet();
-    titreSymbolique.textContent = obtenirTitreSymboliqueParcours(nombreEtapesMaitrisees);
-    prochaineDestination.textContent = obtenirProchaineDestinationComplete();
-    journal?.style.setProperty('--parcours-accent', identiteProchainParcours.couleur);
-    route.style.setProperty('--avancement-carnet', `${avancement}%`);
-    route.setAttribute('aria-valuenow', String(avancement));
-    route.setAttribute('aria-label', `Avancement dans l’ensemble des parcours : ${avancement}%`);
-    afficherSouvenirsParcoursComplet();
-    afficherDefisParcoursComplet();
-}
-function actualiserResumeCarteParcours(programme) {
-    const resumeCarte = selectionner('#resumeCarteParcours');
-    if (!resumeCarte || !programme)
-        return;
-    const nombreEtapesMaitrisees = programme.etapes.filter(etapeProgramme =>
-        estEtapeMaitrisee(programme.id, etapeProgramme.id)
-    ).length;
-    const nombreEtapesTerminees = programme.etapes.filter(etapeProgramme => {
-        const total = obtenirQuestionsEtape(programme.id, etapeProgramme.id).length;
-        return total > 0 && compterQuestionsTraiteesEtape(programme.id, etapeProgramme.id) >= total;
-    }).length;
-    const evaluationOuverte = nombreEtapesTerminees === programme.etapes.length;
-    const evaluationReussie = estEvaluationFinaleReussie(programme.id);
-    resumeCarte.textContent = evaluationReussie
-        ? `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · évaluation réussie.`
-        : evaluationOuverte
-            ? `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · évaluation ouverte.`
-            : `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · ${nombreEtapesMaitrisees} maîtrisées sans aide.`;
-}
-function afficherSouvenirsParcoursComplet() {
-    const zone = selectionner('#souvenirsParcours');
-    if (!zone)
-        return;
-    const souvenirs = [];
-    THEMES.forEach((theme, indexTheme) => {
-        PROGRAMMES[theme.id].etapes.forEach(etapeProgramme => {
-            if (estEtapeMaitrisee(theme.id, etapeProgramme.id))
-                souvenirs.push({ theme, indexTheme, etapeProgramme });
-        });
-    });
-    zone.innerHTML = '';
-    if (!souvenirs.length) {
-        const message = document.createElement('p');
-        message.className = 'carnet-vide';
-        message.textContent = 'Maîtrise une étape pour conserver ses trois repères essentiels.';
-        zone.appendChild(message);
-        return;
-    }
-    souvenirs.forEach(({ theme, indexTheme, etapeProgramme }, indice) => {
-        const fiche = document.createElement('details');
-        fiche.className = 'souvenir-etape';
-        fiche.dataset.etape = String(etapeProgramme.id);
-        fiche.dataset.theme = theme.id;
-        fiche.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#2d7379');
-        fiche.open = indice === souvenirs.length - 1;
-        const titre = document.createElement('summary');
-        titre.textContent = `Parcours ${indexTheme + 1} · Étape ${etapeProgramme.id} · ${etapeProgramme.titre}`;
-        const liste = document.createElement('ul');
-        (etapeProgramme.souvenirs || []).forEach(souvenir => {
-            const element = document.createElement('li');
-            element.textContent = souvenir;
-            liste.appendChild(element);
-        });
-        fiche.append(titre, liste);
-        zone.appendChild(fiche);
-    });
-}
-function afficherDefisParcoursComplet() {
-    const zone = selectionner('#defisParcours');
-    if (!zone)
-        return;
-    const nombreEtapesMaitrisees = compterEtapesMaitrisees();
-    const evaluationsReussies = THEMES.filter(theme => estEvaluationFinaleReussie(theme.id)).length;
-    const meilleureSerie = Number(sauvegarde.meilleureSerie) || 0;
-    const aucuneQuestionAConsolider = sauvegarde.aDejaJoue && compterQuestionsAConsolider() === 0;
-    const defis = [
-        {
-            libelle: `Valider les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes sans joker`,
-            termine: nombreEtapesMaitrisees === THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0),
-            progression: `${nombreEtapesMaitrisees}/${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)}`
-        },
-        {
-            libelle: `Réussir les ${THEMES.length} évaluations finales`,
-            termine: evaluationsReussies === THEMES.length,
-            progression: `${evaluationsReussies}/${THEMES.length}`
-        },
-        {
-            libelle: 'Enchaîner 5 réussites autonomes',
-            termine: meilleureSerie >= 5,
-            progression: `${Math.min(meilleureSerie, 5)}/5`
-        },
-        {
-            libelle: 'Consolider toutes les questions travaillées',
-            termine: aucuneQuestionAConsolider,
-            progression: aucuneQuestionAConsolider ? 'Réussi' : `${compterQuestionsAConsolider()} à consolider`
-        }
-    ];
-    zone.innerHTML = '';
-    defis.forEach(defi => {
-        const element = document.createElement('li');
-        element.className = defi.termine ? 'defi-termine' : '';
-        const indicateur = document.createElement('span');
-        indicateur.className = 'defi-indicateur';
-        indicateur.setAttribute('aria-hidden', 'true');
-        indicateur.textContent = defi.termine ? '✓' : '○';
-        const libelle = document.createElement('strong');
-        libelle.textContent = defi.libelle;
-        const progression = document.createElement('small');
-        progression.textContent = defi.progression;
-        element.append(indicateur, libelle, progression);
-        zone.appendChild(element);
-    });
+    bouton.innerHTML = 'Voir ma progression <span aria-hidden="true">→</span>';
+    bouton.onclick = () => afficherEcran('progression');
 }
 const IDENTITES_PARCOURS = Object.freeze({
     procedure_ordinaire: {
@@ -2841,6 +2695,26 @@ function afficherEtapes() {
         lancerEvaluationFinale(etat.theme);
     } : null;
     enregistrerSauvegarde();
+}
+
+function actualiserResumeCarteParcours(programme) {
+    const resumeCarte = selectionner('#resumeCarteParcours');
+    if (!resumeCarte || !programme)
+        return;
+    const nombreEtapesMaitrisees = programme.etapes.filter(etapeProgramme =>
+        estEtapeMaitrisee(programme.id, etapeProgramme.id)
+    ).length;
+    const nombreEtapesTerminees = programme.etapes.filter(etapeProgramme => {
+        const total = obtenirQuestionsEtape(programme.id, etapeProgramme.id).length;
+        return total > 0 && compterQuestionsTraiteesEtape(programme.id, etapeProgramme.id) >= total;
+    }).length;
+    const evaluationOuverte = nombreEtapesTerminees === programme.etapes.length;
+    const evaluationReussie = estEvaluationFinaleReussie(programme.id);
+    resumeCarte.textContent = evaluationReussie
+        ? `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · évaluation réussie.`
+        : evaluationOuverte
+            ? `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · évaluation ouverte.`
+            : `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · ${nombreEtapesMaitrisees} maîtrisées sans aide.`;
 }
 function garantirOptionNombreQuestions(selectNombre, valeur) {
     if (!selectNombre)
@@ -3296,12 +3170,8 @@ function lancerEtape(identifiantTheme, etape, chapitre = null, options = {}) {
     etat.origineSessionAnalytics = 'parcours_pjj';
     etat.organisationSession = 'melange';
     etat.jokersSessionActifs = true;
-    etat.chronometreSessionActif = !!etat.chronometreParcoursActif;
-    const secondesParcoursActives = Number(document.querySelector('#secondesChronometreParcours .choix-bouton.actif')?.dataset.secondes);
-    etat.dureeChronometreSession = Math.min(30, Math.max(5, Number.isFinite(secondesParcoursActives)
-        ? secondesParcoursActives
-        : (Number(etat.dureeChronometreParcours) || 15)));
-    etat.dureeChronometreParcours = etat.dureeChronometreSession;
+    etat.chronometreSessionActif = false;
+    etat.dureeChronometreSession = 15;
     const reserve = obtenirQuestionsSessionEtape(identifiantTheme, etape, etat.chapitre);
     const questionsRestantes = depuisDebut
         ? reserve
@@ -4021,6 +3891,7 @@ function lancerSession(session) {
         afficherNotification('Aucune question ne correspond à ce filtre.');
         return;
     }
+    reinitialiserChronometresSession();
     etat.progressionAvantRevision = null;
     etat.brouillonActivite = null;
     if (estSessionEvaluation()) etat.jokersSessionActifs = false;
@@ -5010,7 +4881,7 @@ function configurerChronometreEtFocusQuestion(jokersActifs, modeEvaluationFinale
         }
     }
     else {
-        selectionner('#chronometreQuestion').textContent = '';
+        demarrerChronometreQuestion();
         annulerRappelJokers();
     }
 
@@ -5327,73 +5198,174 @@ function afficherQuestion({ suivreAnalytics = true, reprendreChronometre = false
     }
     enregistrerSessionEnCours();
 }
+// Chaque question conserve son propre temps, même après un retour ou une reprise.
+function reinitialiserChronometresSession() {
+    clearInterval(etat.identifiantMinuteur);
+    etat.identifiantMinuteur = null;
+    etat.chronometresQuestions = new Map();
+    etat.chronometreToutesQuestions = false;
+    etat.chronometreSessionActif = false;
+    etat.dureeChronometreSession = 15;
+    etat.tempsRestant = 0;
+}
+function obtenirChronometreQuestion() {
+    etat.chronometresQuestions = etat.chronometresQuestions || new Map();
+    return etat.chronometresQuestions.get(etat.questionCourante?.id);
+}
+function actualiserCommandeChronometreQuestion() {
+    const commande = selectionner('#boutonChronometreQuestion');
+    const portee = selectionner('#boutonChronometreToutesQuestions');
+    const arret = selectionner('#boutonArreterChronometre');
+    const libelle = selectionner('#chronometreQuestion');
+    if (!commande || !portee || !arret || !libelle) return;
+    const chrono = obtenirChronometreQuestion();
+    const actif = chrono?.actif === true;
+    const plafond = actif && chrono.dureeAccordee >= 30;
+    libelle.textContent = actif ? `${Math.max(0, etat.tempsRestant)} s` : 'Chrono';
+    commande.classList.toggle('est-actif', actif);
+    commande.classList.toggle('temps-court', actif && etat.tempsRestant <= 5 && !etat.questionValidee);
+    commande.disabled = etat.questionValidee || plafond;
+    commande.setAttribute('aria-label', actif
+        ? (plafond ? 'Chronomètre : limite de 30 secondes atteinte' : 'Ajouter 5 secondes au chronomètre, jusqu’à 30 secondes')
+        : 'Activer le chronomètre : 15 secondes');
+    portee.setAttribute('aria-pressed', String(etat.chronometreToutesQuestions === true));
+    portee.setAttribute('aria-label', etat.chronometreToutesQuestions
+        ? 'Garder le chrono pour cette question seulement'
+        : 'Activer le chrono pour toutes les questions de cette session');
+    definirAideSurvolBouton(commande, actif
+        ? (plafond ? 'Budget maximal : 30 secondes.' : 'Clique pour ajouter 5 secondes, jusqu’à 30 secondes au total.')
+        : 'Clique pour activer 15 secondes sur cette question.');
+    definirAideSurvolBouton(portee, etat.chronometreToutesQuestions
+        ? 'Le chrono s’applique à toutes les questions de cette session. Clique pour le garder seulement sur cette question.'
+        : 'Appliquer le chrono à toutes les questions de cette session.');
+    portee.disabled = etat.questionValidee;
+    arret.classList.toggle('masque', !actif);
+    arret.disabled = etat.questionValidee;
+}
+function animerAjoutChronometre(secondes) {
+    const ajout = selectionner('#ajoutChronometreQuestion');
+    if (ajout) {
+        ajout.classList.remove('est-visible');
+        ajout.textContent = `+${secondes} s`;
+        void ajout.offsetWidth;
+        ajout.classList.add('est-visible');
+    }
+    annoncer(`${secondes} secondes ajoutées. ${etat.tempsRestant} secondes restantes.`);
+}
+function ajouterTempsChronometreQuestion() {
+    if (etat.ecran !== 'question' || etat.questionValidee) return;
+    let chrono = obtenirChronometreQuestion();
+    const ajout = chrono?.actif ? Math.min(5, 30 - chrono.dureeAccordee) : 15;
+    if (ajout <= 0) return;
+    if (!chrono?.actif) {
+        chrono = { actif: true, dureeAccordee: 15, tempsRestant: 15, termine: false };
+        etat.chronometresQuestions.set(etat.questionCourante.id, chrono);
+    }
+    else {
+        chrono.dureeAccordee += ajout;
+        chrono.tempsRestant = Math.min(chrono.dureeAccordee, etat.tempsRestant + ajout);
+    }
+    etat.chronometreSessionActif = true;
+    etat.delaiDepasse = false;
+    etat.dureeChronometreSession = chrono.dureeAccordee;
+    reprendreChronometreQuestion(chrono.tempsRestant);
+    animerAjoutChronometre(ajout);
+    enregistrerSessionEnCours();
+}
+function basculerChronometreToutesQuestions() {
+    if (etat.ecran !== 'question' || etat.questionValidee) return;
+    etat.chronometreToutesQuestions = !etat.chronometreToutesQuestions;
+    if (etat.chronometreToutesQuestions && !obtenirChronometreQuestion()?.actif) {
+        ajouterTempsChronometreQuestion();
+    }
+    if (etat.chronometreToutesQuestions) {
+        etat.dureeChronometreSession = obtenirChronometreQuestion()?.dureeAccordee || 15;
+    }
+    actualiserCommandeChronometreQuestion();
+    annoncer(etat.chronometreToutesQuestions
+        ? `Chronomètre activé pour toutes les questions de cette session : ${etat.dureeChronometreSession} secondes par question.`
+        : 'Chronomètre conservé pour cette question seulement.');
+    enregistrerSessionEnCours();
+}
+function desactiverChronometreQuestion() {
+    if (etat.ecran !== 'question' || etat.questionValidee) return;
+    clearInterval(etat.identifiantMinuteur);
+    etat.identifiantMinuteur = null;
+    etat.chronometreToutesQuestions = false;
+    etat.chronometreSessionActif = false;
+    etat.tempsRestant = 0;
+    etat.chronometresQuestions.set(etat.questionCourante.id, { actif: false, dureeAccordee: 0, tempsRestant: 0 });
+    actualiserCommandeChronometreQuestion();
+    annoncer('Chronomètre arrêté.');
+    enregistrerSessionEnCours();
+}
+function terminerChronometreQuestion() {
+    clearInterval(etat.identifiantMinuteur);
+    etat.identifiantMinuteur = null;
+    const chrono = obtenirChronometreQuestion();
+    if (chrono) {
+        chrono.tempsRestant = etat.tempsRestant;
+        chrono.termine = true;
+    }
+    actualiserCommandeChronometreQuestion();
+}
 function gererTempsEcoule() {
-    if (etat.questionValidee)
-        return;
+    if (etat.questionValidee) return;
     clearInterval(etat.identifiantMinuteur);
     etat.identifiantMinuteur = null;
     etat.tempsRestant = 0;
-    const minuteur = selectionner('#chronometreQuestion');
-    if (minuteur)
-        minuteur.textContent = '0s';
-    // Son d'échec
-    if (typeof jouerSonErreur === 'function')
-        jouerSonErreur();
-    // La question est traitée comme une réponse incorrecte,
-    // afin de déclencher la correction complète et l'explication.
-    const question = etat.questionCourante;
-    if (!question)
-        return;
-    const mode = question.modePresentation || obtenirModeQuestion(question);
-    // Mémoriser le dépassement du temps pour adapter la correction.
+    const chrono = obtenirChronometreQuestion();
+    if (chrono) chrono.tempsRestant = 0;
+    if (!etat.questionCourante) return;
+    if (typeof jouerSonErreur === 'function') jouerSonErreur();
     etat.delaiDepasse = true;
-    if (mode === 'choix-unique') {
-        finaliserReponse(false, 'Temps écoulé');
-        return;
-    }
-    if (mode === 'selection-multiple' || mode === 'association' || mode === 'classer' || mode === 'remettre-ordre' || mode === 'eliminer' || mode === 'reponse-ecrite') {
-        finaliserReponse(false, 'Temps écoulé');
-        return;
-    }
+    // La même correction complète s’applique aux sept modes de réponse.
     finaliserReponse(false, 'Temps écoulé');
 }
 function reprendreChronometreQuestion(secondesRestantes = etat.tempsRestant) {
-    if (!etat.chronometreSessionActif || etat.questionValidee || secondesRestantes <= 0)
-        return;
     clearInterval(etat.identifiantMinuteur);
-    etat.tempsRestant = secondesRestantes;
-    const chronometre = selectionner('#chronometreQuestion');
-    if (chronometre)
-        chronometre.textContent = etat.tempsRestant + 's';
-    etat.identifiantMinuteur = setInterval(() => {
-        etat.tempsRestant--;
-        if (chronometre)
-            chronometre.textContent = etat.tempsRestant + 's';
-        if (etat.tempsRestant <= 0) {
-            clearInterval(etat.identifiantMinuteur);
-            etat.identifiantMinuteur = null;
-            gererTempsEcoule();
-        }
-    }, 1000);
-}
-function demarrerChronometreQuestion() {
-    const chronometre = selectionner('#chronometreQuestion');
-    etat.delaiDepasse = false;
-    if (!etat.chronometreSessionActif) {
-        chronometre.textContent = '';
+    etat.identifiantMinuteur = null;
+    if (!etat.chronometreSessionActif || etat.questionValidee) {
+        actualiserCommandeChronometreQuestion();
         return;
     }
-    etat.tempsRestant = Math.min(30, Math.max(5, Number(etat.dureeChronometreSession) || 15));
-    chronometre.textContent = etat.tempsRestant + 's';
+    etat.tempsRestant = Math.min(30, Math.max(0, Number(secondesRestantes) || 0));
+    let chrono = obtenirChronometreQuestion();
+    if (!chrono) {
+        chrono = { actif: true, dureeAccordee: etat.dureeChronometreSession, tempsRestant: etat.tempsRestant, termine: false };
+        etat.chronometresQuestions.set(etat.questionCourante.id, chrono);
+    }
+    chrono.tempsRestant = etat.tempsRestant;
+    actualiserCommandeChronometreQuestion();
+    if (!etat.tempsRestant) { gererTempsEcoule(); return; }
+    const echeance = Date.now() + etat.tempsRestant * 1000;
     etat.identifiantMinuteur = setInterval(() => {
-        etat.tempsRestant--;
-        chronometre.textContent = etat.tempsRestant + 's';
-        if (etat.tempsRestant <= 0) {
-            clearInterval(etat.identifiantMinuteur);
-            etat.identifiantMinuteur = null;
-            gererTempsEcoule();
-        }
-    }, 1000);
+        const restant = Math.max(0, Math.ceil((echeance - Date.now()) / 1000));
+        if (restant === etat.tempsRestant) return;
+        etat.tempsRestant = restant;
+        chrono.tempsRestant = restant;
+        actualiserCommandeChronometreQuestion();
+        if (!restant) gererTempsEcoule();
+        enregistrerSessionEnCours();
+    }, 250);
+}
+function demarrerChronometreQuestion() {
+    etat.delaiDepasse = false;
+    let chrono = obtenirChronometreQuestion();
+    // Rejouer une réponse corrigée ouvre une nouvelle tentative, avec le même budget.
+    if (chrono?.termine && !etat.questionValidee) {
+        chrono.termine = false;
+        chrono.tempsRestant = chrono.dureeAccordee;
+    }
+    if (!chrono && etat.chronometreToutesQuestions) {
+        const duree = Math.min(30, Math.max(5, Number(etat.dureeChronometreSession) || 15));
+        chrono = { actif: true, dureeAccordee: duree, tempsRestant: duree, termine: false };
+        etat.chronometresQuestions.set(etat.questionCourante.id, chrono);
+    }
+    etat.chronometreSessionActif = chrono?.actif === true;
+    etat.tempsRestant = chrono?.tempsRestant || 0;
+    if (etat.chronometreSessionActif && !etat.questionValidee) reprendreChronometreQuestion();
+    else actualiserCommandeChronometreQuestion();
 }
 function preparerValidationReponse(question, bouton) {
     annulerRappelJokers();
@@ -5404,7 +5376,7 @@ function preparerValidationReponse(question, bouton) {
     etat.questionValidee = true;
     fermerFenetreJokers({ restaurerFocus: false });
     actualiserBoutonJokers();
-    clearInterval(etat.identifiantMinuteur);
+    terminerChronometreQuestion();
     sauvegarde.aDejaJoue = true;
     if (!question?.missionSigles && !question?.missionMesures) {
         marquerEtapeDecouverte(question);
@@ -6061,7 +6033,7 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
     if (jokerUtilise) {
         return {
             titre: `Étape ${etapeProgramme} explorée`,
-            message: `Ton carnet avance. Tu pourras rejouer cette étape sans aide pour consolider sa maîtrise.`,
+            message: `Ta progression avance. Tu pourras rejouer cette étape sans aide pour consolider sa maîtrise.`,
             confetti: false
         };
     }
@@ -6069,7 +6041,7 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
     if (evaluationDeverrouillee) {
         return {
             titre: 'Destination finale atteinte !',
-            message: `Les onze étapes de ce parcours sont validées en autonomie. Ton carnet te reconnaît comme « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
+            message: `Les onze étapes de ce parcours sont validées en autonomie. Tu as obtenu le titre « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
             confetti: true
         };
     }
@@ -6304,7 +6276,7 @@ function construireBilanEvaluationFinale(pourcentage, evaluationFinaleReussie) {
             messageResultat: `Résultat : ${pourcentage} %. Les connaissances de ce parcours sont validées.`,
             celebration: toutReussi ? {
                 titre: 'Parcours complet accompli !',
-                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Ton carnet Quiz CJPM est complet.`,
+                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Tous tes parcours Quiz CJPM sont terminés.`,
                 confetti: true,
                 finale: true
             } : {
@@ -6377,8 +6349,8 @@ function configurerBoutonContinuerBilan() {
             boutonContinuer.onclick = () => ouvrirParcours(themeSuivant, { remplacerHistorique: true });
         }
         else if (evaluationReussie && estParcoursCompletReussi()) {
-            boutonContinuer.textContent = 'Voir le carnet complet →';
-            boutonContinuer.onclick = () => afficherEcran('carnet', { remplacerHistorique: true });
+            boutonContinuer.textContent = 'Voir ma progression →';
+            boutonContinuer.onclick = () => afficherEcran('progression', { remplacerHistorique: true });
         }
         else {
             boutonContinuer.textContent = 'Refaire cette évaluation';
@@ -6457,15 +6429,12 @@ function actualiserProchaineDestinationBilan() {
     }
     destination.textContent = 'Choisis une nouvelle session ou rejoins le parcours guidé.';
 }
-function ouvrirSouvenirDepuisCarteFinale(identifiantTheme, numeroEtape) {
-    afficherEcran('carnet', { remplacerHistorique: true });
+function ouvrirEtapeDepuisCarteFinale(identifiantTheme, numeroEtape) {
+    ouvrirParcours(identifiantTheme, { remplacerHistorique: true });
     requestAnimationFrame(() => {
-        const souvenir = selectionner(`#souvenirsParcours [data-theme="${identifiantTheme}"][data-etape="${numeroEtape}"]`);
-        if (!souvenir)
-            return;
-        souvenir.open = true;
-        souvenir.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        souvenir.querySelector('summary')?.focus({ preventScroll: true });
+        const etape = selectionner(`#parcours [data-etape="${numeroEtape}"]`);
+        etape?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        etape?.focus({ preventScroll: true });
     });
 }
 function afficherCarteVoyageFinale() {
@@ -6485,8 +6454,8 @@ function afficherCarteVoyageFinale() {
             bouton.className = 'carte-voyage-etape';
             bouton.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#2d7379');
             bouton.innerHTML = `${obtenirBaliseIconeEtape(etapeProgramme.id, theme.id)}<span>P${indexTheme + 1}·${etapeProgramme.id}</span>`;
-            bouton.setAttribute('aria-label', `Ouvrir les souvenirs du parcours ${indexTheme + 1}, étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
-            bouton.onclick = () => ouvrirSouvenirDepuisCarteFinale(theme.id, etapeProgramme.id);
+            bouton.setAttribute('aria-label', `Ouvrir le parcours ${indexTheme + 1}, étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
+            bouton.onclick = () => ouvrirEtapeDepuisCarteFinale(theme.id, etapeProgramme.id);
             destinations.appendChild(bouton);
         });
         const finaleParcours = document.createElement('span');
@@ -9224,7 +9193,7 @@ function obtenirTitreSurvolBouton(bouton) {
     if (bouton.matches('.progression-pastille'))
         return 'Afficher la progression détaillée de ce parcours.';
     if (bouton.matches('.carte-voyage-etape'))
-        return 'Ouvrir les souvenirs et les supports de cette étape.';
+        return 'Retrouver cette étape dans son parcours.';
     if (bouton.matches('.sigles-etape-ouvrir, .mesures-etape-ouvrir'))
         return 'Ouvrir cette étape et reprendre sa progression.';
     if (bouton.matches('.sigles-etape-revision'))
@@ -9469,31 +9438,17 @@ document.addEventListener('click', evenement => {
         const groupe = boutonBascule.closest('.entrainement-bascule-groupe');
         groupe.dataset.selectionEffectuee = 'true';
         groupe.querySelectorAll('.option-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === boutonBascule));
-        if (groupe.dataset.proposition === 'chronometre') {
-            const carte = groupe.closest('[data-carte-entrainement]');
-            carte?.querySelector('[data-secondes-chronometre]')?.classList.toggle('masque', boutonBascule.dataset.valeur !== 'oui');
-        }
         envoyerOptionDeJeuAnalytics(`${groupe.dataset.proposition === 'jokers' ? 'Jokers' : 'Chronomètre'} : ${boutonBascule.textContent.trim()}`);
-        return;
-    }
-    const boutonSecondes = evenement.target.closest('.entrainement-secondes-groupe .choix-bouton');
-    if (boutonSecondes && !boutonSecondes.closest('#secondesChronometreParcours')) {
-        const groupe = boutonSecondes.closest('.entrainement-secondes-groupe');
-        groupe.dataset.selectionEffectuee = 'true';
-        groupe.querySelectorAll('.choix-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === boutonSecondes));
-        envoyerOptionDeJeuAnalytics(`Durée par question : ${boutonSecondes.textContent.trim()}`);
         return;
     }
     const boutonLancer = evenement.target.closest('.entrainement-lancer');
     if (boutonLancer) {
         const carte = boutonLancer.closest('[data-carte-entrainement]');
         const valeurJokers = carte.querySelector('[data-proposition="jokers"] .option-bouton.actif')?.dataset.valeur || 'oui';
-        const valeurMinuteur = carte.querySelector('[data-proposition="chronometre"] .option-bouton.actif')?.dataset.valeur || 'non';
-        const secondes = Number(carte.querySelector('.entrainement-secondes-groupe .choix-bouton.actif')?.dataset.secondes) || 15;
         etat.organisationSession = boutonLancer.dataset.organisationSession || 'ordonne';
         etat.jokersSessionActifs = valeurJokers === 'oui';
-        etat.chronometreSessionActif = valeurMinuteur === 'oui';
-        etat.dureeChronometreSession = Math.min(30, Math.max(5, secondes));
+        etat.chronometreSessionActif = false;
+        etat.dureeChronometreSession = 15;
         envoyerOptionDeJeuAnalytics(`Lancer la session · ${boutonLancer.dataset.organisationSession === 'melange' ? 'Mélangé' : 'Par ordre d’étapes'}`, {
             pjjoue_jokers: etat.jokersSessionActifs ? 'Avec' : 'Sans',
             pjjoue_chrono: etat.chronometreSessionActif ? 'Avec' : 'Sans',
@@ -9502,24 +9457,10 @@ document.addEventListener('click', evenement => {
         lancerEntrainementLibre();
         return;
     }
-    const choixChronometreParcours = evenement.target.closest('#choixChronometreParcours .option-bouton');
-    if (choixChronometreParcours) {
-        document.querySelectorAll('#choixChronometreParcours .option-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === choixChronometreParcours));
-        etat.chronometreParcoursActif = choixChronometreParcours.dataset.valeur === 'oui';
-        selectionner('#secondesChronometreParcours')?.classList.toggle('masque', !etat.chronometreParcoursActif);
-        envoyerOptionDeJeuAnalytics(`Chronomètre du parcours : ${choixChronometreParcours.textContent.trim()}`);
-        return;
-    }
-    const secondesParcours = evenement.target.closest('#secondesChronometreParcours .choix-bouton');
-    if (secondesParcours) {
-        document.querySelectorAll('#secondesChronometreParcours .choix-bouton').forEach(boutonDuGroupe => {
-            const actif = boutonDuGroupe === secondesParcours;
-            boutonDuGroupe.classList.toggle('actif', actif);
-            boutonDuGroupe.setAttribute('aria-pressed', actif ? 'true' : 'false');
-        });
-        const secondes = Number(secondesParcours.dataset.secondes);
-        etat.dureeChronometreParcours = Math.min(30, Math.max(5, Number.isFinite(secondes) ? secondes : 15));
-        envoyerOptionDeJeuAnalytics(`Durée par question du parcours : ${secondesParcours.textContent.trim()}`);
-        return;
-    }
+});
+
+document.addEventListener('click', evenement => {
+    if (evenement.target.closest('#boutonChronometreQuestion')) ajouterTempsChronometreQuestion();
+    else if (evenement.target.closest('#boutonChronometreToutesQuestions')) basculerChronometreToutesQuestions();
+    else if (evenement.target.closest('#boutonArreterChronometre')) desactiverChronometreQuestion();
 });

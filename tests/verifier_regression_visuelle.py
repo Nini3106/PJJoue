@@ -362,8 +362,7 @@ def verifier_options_entrainement(page: Page) -> None:
             const rectangleCommencer = commencer?.getBoundingClientRect();
             return {
                 optionsOuvertes: Boolean(options?.open),
-                secondesVisibles: !carte.querySelector('.entrainement-chronometre-secondes')
-                    ?.classList.contains('masque'),
+                chronoAbsent: !carte.querySelector('[data-proposition="chronometre"]'),
                 espace: rectangleOptions && rectangleCommencer
                     ? rectangleCommencer.top - rectangleOptions.bottom
                     : -1,
@@ -377,7 +376,7 @@ def verifier_options_entrainement(page: Page) -> None:
     if (
         len(donnees) != 2
         or any(not carte["optionsOuvertes"] for carte in donnees)
-        or any(not carte["secondesVisibles"] for carte in donnees)
+        or any(not carte["chronoAbsent"] for carte in donnees)
         or any(carte["espace"] < 15 for carte in donnees)
         or abs(donnees[0]["espace"] - donnees[1]["espace"]) > 1
         or any(abs(carte["decalageGauche"]) > 1 for carte in donnees)
@@ -492,55 +491,31 @@ def verifier_parcours_crimes_bureau(page: Page) -> None:
     verifier_grille_cartes_parcours_bureau(page)
 
 
-def verifier_chronometre_parcours(page: Page) -> None:
-    donnees = page.evaluate("""() => {
-        const panneau = document.querySelector('.parcours-chronometre-panneau');
-        const secondes = document.querySelector('#secondesChronometreParcours');
-        const groupes = [
-            document.querySelector('#choixChronometreParcours'),
-            secondes?.querySelector('.entrainement-secondes-groupe')
-        ].filter(Boolean);
-        const boutons = groupes.flatMap(groupe => [...groupe.querySelectorAll('button')]);
-        return {
-            panneauVisible: Boolean(panneau) && getComputedStyle(panneau).display !== 'none',
-            secondesVisibles: Boolean(secondes)
-                && !secondes.classList.contains('masque')
-                && getComputedStyle(secondes).display !== 'none',
-            affichagesGroupes: groupes.map(groupe => getComputedStyle(groupe).display),
-            boutons: boutons.map(bouton => {
-                const style = getComputedStyle(bouton);
-                const plage = document.createRange();
-                plage.selectNodeContents(bouton);
-                const largeurTexte = plage.getBoundingClientRect().width;
-                const largeurAttendue = largeurTexte
-                    + Number.parseFloat(style.paddingLeft)
-                    + Number.parseFloat(style.paddingRight)
-                    + Number.parseFloat(style.borderLeftWidth)
-                    + Number.parseFloat(style.borderRightWidth);
-                const rectangle = bouton.getBoundingClientRect();
-                return {
-                    texte: bouton.textContent.trim(),
-                    largeur: rectangle.width,
-                    hauteur: rectangle.height,
-                    surplus: rectangle.width - largeurAttendue
-                };
-            })
-        };
-    }""")
-    boutons_trop_larges = [
-        bouton for bouton in donnees["boutons"]
-        if bouton["surplus"] > 2 or bouton["hauteur"] < 44
-    ]
-    if (
-        not donnees["panneauVisible"]
-        or not donnees["secondesVisibles"]
-        or donnees["affichagesGroupes"] != ["flex", "flex"]
-        or len(donnees["boutons"]) != 6
-        or boutons_trop_larges
-    ):
-        raise AssertionError(
-            f"Chronomètre du parcours : boutons non ajustés à leur texte : {donnees}"
-        )
+def verifier_chronometre_question(page: Page) -> None:
+    assert page.locator('#question .question-carte #boutonChronometreQuestion').is_visible()
+    assert page.locator('#boutonChronometreToutesQuestions').get_attribute('aria-pressed') == 'true'
+    assert page.locator('.parcours-chronometre-panneau, [data-proposition="chronometre"]').count() == 0
+    assert page.evaluate('() => etat.chronometreSessionActif && etat.dureeChronometreSession === 20')
+    for bouton in page.locator('.question-chronometre-commandes button:visible').all():
+        assert bouton.bounding_box()['height'] >= 44
+
+    # Vérifier les vrais clics, le plafond et le retour à une question sans minuterie.
+    page.locator('#boutonChronometreQuestion').click()
+    assert page.locator('#ajoutChronometreQuestion').inner_text() == '+5 s'
+    page.locator('#boutonChronometreQuestion').click()
+    assert page.locator('#boutonChronometreQuestion').is_disabled()
+    assert page.evaluate('() => obtenirChronometreQuestion().dureeAccordee === 30')
+    page.locator('#boutonArreterChronometre').click()
+    assert page.locator('#chronometreQuestion').inner_text() == 'Chrono'
+    assert page.locator('#boutonChronometreToutesQuestions').get_attribute('aria-pressed') == 'false'
+    page.locator('#boutonChronometreToutesQuestions').click()
+    page.locator('#boutonChronometreQuestion').click()
+    assert page.evaluate('() => etat.chronometreSessionActif && etat.dureeChronometreSession === 20')
+
+
+def verifier_ancien_carnet(page: Page) -> None:
+    assert page.locator('#progression').is_visible()
+    assert page.locator('#carnet, #boutonCarnetDeParcours').count() == 0
 
 
 def verifier_parcours_detail_mobile(page: Page) -> None:
@@ -682,14 +657,14 @@ def verifier_menu_principal(page: Page) -> None:
     donnees = page.evaluate("""() => ({
         ouvert: document.querySelector('header.entete')?.classList.contains('menu-mobile-ouvert'),
         plus: Boolean(document.querySelector('#boutonPlus, .navigation-plus, #menuNavigationPlus')),
-        carnet: document.querySelector('#boutonCarnetDeParcours')?.textContent?.trim(),
+        carnet: Boolean(document.querySelector('#boutonCarnetDeParcours')),
         nombreEntrees: document.querySelectorAll('#menuPrincipal > button, #menuPrincipal > a').length,
         visible: getComputedStyle(document.querySelector('#menuPrincipal')).display !== 'none'
     })""")
     if not donnees["ouvert"] or not donnees["visible"] or donnees["plus"]:
         raise AssertionError(f"Menu principal : état invalide : {donnees}")
-    if donnees["carnet"] != "Carnet de parcours":
-        raise AssertionError(f"Menu principal : libellé du carnet incorrect : {donnees}")
+    if donnees["carnet"]:
+        raise AssertionError(f"Menu principal : ancien carnet toujours présent : {donnees}")
     if donnees["nombreEntrees"] < 8:
         raise AssertionError(f"Menu principal : toutes les entrées ne sont pas réunies : {donnees}")
 
@@ -1117,23 +1092,21 @@ def verifier_progression_peuplee(page: Page, mobile: bool = False) -> None:
         raise AssertionError(f"Progression peuplée : relation onglets/panneau invalide : {donnees}")
 
     disposition = donnees["disposition"]
-    sections_mal_encadrees = [
+    sections_encadrees = [
         section for section in disposition["sections"]
         if abs(section["espaceVideBas"] - section["paddingBas"] - section["bordureHaut"]) > 2
-        or section["paddingHaut"] < 18
-        or section["paddingBas"] < 18
-        or section["bordureHaut"] < 1
-        or section["fond"] in ("rgba(0, 0, 0, 0)", "transparent")
-        or section["ombre"] == "none"
+        or section["paddingHaut"] != 0
+        or section["paddingBas"] != 0
+        or section["bordureHaut"] != 0
+        or section["fond"] not in ("rgba(0, 0, 0, 0)", "transparent")
+        or section["ombre"] != "none"
     ]
-    if disposition["studioAlignement"] != "stretch" or sections_mal_encadrees:
+    if disposition["studioAlignement"] != "stretch" or sections_encadrees:
         raise AssertionError(
-            f"Progression peuplée : les deux cadres doivent rester complets et réguliers : {disposition}"
+            f"Progression peuplée : les deux zones doivent rester ouvertes sur le fond de page : {disposition}"
         )
     if any(not section["texteExplicatif"] for section in disposition["sections"]):
-        raise AssertionError(f"Progression peuplée : chaque cadre doit avoir son texte explicatif : {disposition}")
-    if any(section["fond"] == disposition["fondPage"] for section in disposition["sections"]):
-        raise AssertionError(f"Progression peuplée : les cadres doivent se détacher du fond de page : {disposition}")
+        raise AssertionError(f"Progression peuplée : chaque zone doit conserver son texte explicatif : {disposition}")
     vue_ensemble = disposition["vueEnsemble"]
     explorateur = disposition["explorateur"]
     if mobile:
@@ -1456,10 +1429,10 @@ def scenarios() -> list[Scenario]:
         Scenario("bureau-parcours-choix", 1440, 900, "() => ouvrirChoixParcours({remplacerHistorique:true})", verifier_parcours_choix_bureau),
         Scenario("bureau-parcours-detail", 1440, 900, "() => { ouvrirChoixParcours({remplacerHistorique:true}); const bouton=document.querySelector('#selecteurParcours [data-theme=\"commun\"]'); afficherInfobullePJJoue(bouton); bouton.click(); afficherInfobullePJJoue(bouton); }", verifier_parcours_detail_bureau),
         Scenario("bureau-large-parcours-crimes", 1920, 1080, "() => { ouvrirChoixParcours({remplacerHistorique:true}); document.querySelector('#selecteurParcours [data-theme=\"matiere_criminelle_peines\"]').click(); }", verifier_parcours_crimes_bureau),
-        Scenario("bureau-parcours-chrono", 1440, 900, "() => { ouvrirChoixParcours({remplacerHistorique:true}); document.querySelector('#selecteurParcours .selecteur-parcours-bouton').click(); document.querySelector('.parcours-options-session').open=true; document.querySelector('#boutonParcoursChronometre').click(); }", verifier_chronometre_parcours),
+        Scenario("bureau-parcours-chrono", 1440, 900, "() => { lancerEtape('procedure_ordinaire',1); ajouterTempsChronometreQuestion(); ajouterTempsChronometreQuestion(); basculerChronometreToutesQuestions(); }", verifier_chronometre_question),
         Scenario("bureau-entrainement", 1440, 900, "() => afficherEcran('entrainement',{remplacerHistorique:true})", verifier_entrainement_bureau),
-        Scenario("bureau-entrainement-options", 1440, 900, "() => { afficherEcran('entrainement',{remplacerHistorique:true}); document.querySelectorAll('.entrainement-options-avancees').forEach(options => options.open=true); document.querySelectorAll('[data-proposition=\"chronometre\"] .option-bouton[data-valeur=\"oui\"]').forEach(bouton => bouton.click()); }", verifier_options_entrainement),
-        Scenario("bureau-carnet", 1440, 900, "() => {etat.theme='commun';afficherEcran('carnet',{remplacerHistorique:true});}"),
+        Scenario("bureau-entrainement-options", 1440, 900, "() => { afficherEcran('entrainement',{remplacerHistorique:true}); document.querySelectorAll('.entrainement-options-avancees').forEach(options => options.open=true); }", verifier_options_entrainement),
+        Scenario("bureau-carnet", 1440, 900, "() => {etat.theme='commun';afficherEcran('carnet',{remplacerHistorique:true});}", verifier_ancien_carnet),
         Scenario("bureau-revision", 1440, 900, erreurs, verifier_revision_supports),
         Scenario("bureau-supports", 1440, 900, "() => afficherEcran('supports',{remplacerHistorique:true})", verifier_revision_supports),
         Scenario("bureau-supports-ouvert", 1440, 900, supports_ouvert, verifier_supports_ouvert_bureau),
@@ -1481,9 +1454,9 @@ def scenarios() -> list[Scenario]:
         Scenario("mobile-menu", 390, 844, "() => { afficherEcran('accueil',{remplacerHistorique:true}); basculerMenuPrincipal(); }", verifier_menu_principal),
         Scenario("mobile-parcours-choix", 390, 844, "() => ouvrirChoixParcours({remplacerHistorique:true})", verifier_parcours_choix_mobile),
         Scenario("mobile-parcours-detail", 390, 844, "() => { ouvrirChoixParcours({remplacerHistorique:true}); const bouton=document.querySelector('#selecteurParcours [data-theme=\"commun\"]'); afficherInfobullePJJoue(bouton); bouton.click(); afficherInfobullePJJoue(bouton); }", verifier_parcours_detail_mobile),
-        Scenario("mobile-parcours-chrono", 390, 844, "() => { ouvrirChoixParcours({remplacerHistorique:true}); document.querySelector('#selecteurParcours .selecteur-parcours-bouton').click(); document.querySelector('.parcours-options-session').open=true; document.querySelector('#boutonParcoursChronometre').click(); }", verifier_chronometre_parcours),
+        Scenario("mobile-parcours-chrono", 390, 844, "() => { lancerEtape('procedure_ordinaire',1); ajouterTempsChronometreQuestion(); ajouterTempsChronometreQuestion(); basculerChronometreToutesQuestions(); }", verifier_chronometre_question),
         Scenario("mobile-entrainement", 390, 844, "() => afficherEcran('entrainement',{remplacerHistorique:true})", verifier_entrainement_mobile),
-        Scenario("mobile-entrainement-options", 390, 844, "() => { afficherEcran('entrainement',{remplacerHistorique:true}); document.querySelectorAll('.entrainement-options-avancees').forEach(options => options.open=true); document.querySelectorAll('[data-proposition=\"chronometre\"] .option-bouton[data-valeur=\"oui\"]').forEach(bouton => bouton.click()); }", verifier_options_entrainement),
+        Scenario("mobile-entrainement-options", 390, 844, "() => { afficherEcran('entrainement',{remplacerHistorique:true}); document.querySelectorAll('.entrainement-options-avancees').forEach(options => options.open=true); }", verifier_options_entrainement),
         Scenario("mobile-revision", 390, 844, erreurs, verifier_revision_supports),
         Scenario("mobile-supports", 390, 844, "() => afficherEcran('supports',{remplacerHistorique:true})", verifier_revision_supports),
         Scenario("mobile-supports-ouvert", 390, 844, supports_ouvert, verifier_supports_ouvert_mobile),

@@ -263,7 +263,7 @@ function configurerChronometreEtFocusQuestion(jokersActifs, modeEvaluationFinale
         }
     }
     else {
-        selectionner('#chronometreQuestion').textContent = '';
+        demarrerChronometreQuestion();
         annulerRappelJokers();
     }
 

@@ -96,7 +96,7 @@ function obtenirProchaineActionParcoursComplet() {
         if (!estEvaluationFinaleReussie(theme.id))
             return { type: 'evaluation', theme: theme.id };
     }
-    return { type: 'carnet' };
+    return { type: 'progression' };
 }
 function actualiserBoutonCommencer() {
     const bouton = selectionner('#boutonCommencer');
@@ -123,6 +123,6 @@ function actualiserBoutonCommencer() {
         bouton.onclick = () => ouvrirParcours(action.theme);
         return;
     }
-    bouton.innerHTML = 'Voir mon carnet complet <span aria-hidden="true">→</span>';
-    bouton.onclick = () => afficherEcran('carnet');
+    bouton.innerHTML = 'Voir ma progression <span aria-hidden="true">→</span>';
+    bouton.onclick = () => afficherEcran('progression');
 }

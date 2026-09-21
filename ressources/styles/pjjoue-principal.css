@@ -10668,11 +10668,13 @@ body[data-ecran-actif="accueil"] #accueil {
     align-items:start;
     gap:16px;
     width:100%;
-    padding:22px;
-    border:1px solid var(--bordure-carte);
-    border-radius:var(--rayon-tres-grand);
-    background:var(--surface-carte);
-    box-shadow:var(--ombre-carte);
+    padding:24px 0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+
+    border-top:1px solid var(--bordure);
 }
 #entrainement .entrainement-etape-config > div {
     min-width:0;
@@ -10824,10 +10826,12 @@ body[data-ecran-actif="accueil"] #accueil {
     gap:8px;
     width:100%;
     min-height:0;
-    padding:14px 16px;
-    border:1px solid var(--bordure);
-    border-radius:14px;
-    background:var(--surface-carte-profonde);
+    padding:8px 0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+
+    box-shadow:none;
 }
 #entrainement .entrainement-personnalise-entete,
 #entrainement .entrainement-personnalise-bornes {
@@ -10887,12 +10891,12 @@ body[data-ecran-actif="accueil"] #accueil {
     touch-action:none;
 }
 
-/* Étape 3 — deux cartes jumelles. */
+/* Étape 3 — deux modes ouverts sur le fond de page. */
 #entrainement .entrainement-grille {
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
     align-items:stretch;
-    gap:16px;
+    gap:32px;
     width:100%;
     margin:0;
 }
@@ -10904,11 +10908,11 @@ body[data-ecran-actif="accueil"] #accueil {
     gap:10px;
     height:100%;
     min-height:0;
-    padding:20px;
-    border:1px solid var(--bordure-carte);
-    border-radius:18px;
-    background:var(--surface-carte);
-    box-shadow:var(--ombre-carte);
+    padding:8px 0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
 }
 #entrainement .entrainement-carte .entrainement-icone {
     width:58px;
@@ -10999,10 +11003,12 @@ body[data-ecran-actif="accueil"] #accueil {
     gap:10px;
     width:100%;
     margin:10px 0 0;
-    padding:12px;
-    border:1px solid rgba(145,198,245,.28);
-    border-radius:13px;
-    background:rgba(7,49,99,.28);
+    padding:8px 0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+
+    box-shadow:none;
 }
 #entrainement .entrainement-option,
 #entrainement .entrainement-chronometre-secondes {
@@ -11066,6 +11072,11 @@ body[data-ecran-actif="accueil"] #accueil {
     background:rgba(57,215,196,.14);
 }
 
+#entrainement .entrainement-carte + .entrainement-carte {
+    border-left:1px solid var(--bordure);
+    padding-left:32px;
+}
+
 /* Défi du hasard */
 #entrainement .entrainement-hasard {
     display:grid;
@@ -11073,12 +11084,12 @@ body[data-ecran-actif="accueil"] #accueil {
     align-items:center;
     gap:22px;
     margin-bottom:24px;
-    padding:clamp(22px,3vw,30px);
-    border:1px solid var(--bordure-carte);
-    border-left:5px solid var(--entrainement-hasard-accent);
-    border-radius:var(--rayon-tres-grand);
-    background:linear-gradient(135deg,rgba(255,200,61,.13),var(--surface-carte) 45%,var(--surface-carte-profonde));
-    box-shadow:var(--ombre-carte);
+    padding:12px 0 28px;
+    border:0;
+    border-left:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
 }
 #entrainement .entrainement-hasard-texte h2 {
     font-size:clamp(1.45rem,2.5vw,1.85rem);
@@ -11116,10 +11127,10 @@ body[data-ecran-actif="accueil"] #accueil {
 #entrainement .de-objet {
     display:grid;
     place-items:center;
-    width:84px;
-    height:84px;
-    padding:6px;
-    border-radius:20px;
+    width:56px;
+    height:56px;
+    padding:4px;
+    border-radius:14px;
     color:var(--entrainement-hasard-accent);
     background:rgba(var(--entrainement-hasard-accent-rgb),.08);
     transform-origin:center;
@@ -11173,6 +11184,11 @@ body[data-ecran-actif="accueil"] #accueil {
 }
 
 @media (max-width:980px) {
+    #entrainement .entrainement-carte + .entrainement-carte {
+        border-left:0;
+        border-top:1px solid var(--bordure);
+        padding:24px 0 0;
+    }
     #entrainement .entrainement-perimetre-choix {
         grid-template-columns:repeat(2,minmax(0,1fr));
     }
@@ -11189,8 +11205,8 @@ body[data-ecran-actif="accueil"] #accueil {
         grid-template-columns:1fr;
     }
     #entrainement .de-objet {
-        width:76px;
-        height:76px;
+        width:48px;
+        height:48px;
     }
     #entrainement .choix-bouton,
     #entrainement .option-bouton,
@@ -11208,14 +11224,14 @@ body[data-ecran-actif="accueil"] #accueil {
     #entrainement .entrainement-etape-config.entrainement-etape-modes {
         grid-template-columns:1fr;
         gap:12px;
-        padding:17px;
+        padding:22px 0;
     }
     #entrainement .entrainement-etape-numero {
         width:38px;
         height:38px;
     }
     #entrainement .entrainement-carte {
-        padding:17px 15px;
+        padding:8px 0;
     }
     #entrainement .entrainement-option,
     #entrainement .entrainement-chronometre-secondes {
@@ -11224,9 +11240,9 @@ body[data-ecran-actif="accueil"] #accueil {
         gap:7px;
     }
 }/* Tableau visible de la page Progression. */
-.progression-studio { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px; align-items:stretch; }
+.progression-studio { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:40px; align-items:stretch; }
 .progression-vue-ensemble,
-.progression-explorateur { display:grid; grid-template-rows:auto 1fr; align-content:start; align-self:stretch; gap:16px; min-width:0; height:100%; padding:22px; border:1px solid var(--bordure); border-radius:var(--rayon-tres-grand); background:var(--surface-carte); box-shadow:var(--ombre-carte); }
+.progression-explorateur { display:grid; grid-template-rows:auto 1fr; align-content:start; align-self:stretch; gap:16px; min-width:0; height:100%; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; }
 .progression-vue-ensemble-entete,
 .progression-explorateur-entete { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; min-height:148px; margin:0; padding:0; }
 .progression-vue-ensemble-entete > div,
@@ -11239,7 +11255,7 @@ body[data-ecran-actif="accueil"] #accueil {
 .progression-explorateur-entete .secondaire:hover { border-color:var(--jaune-interface); color:var(--jaune-interface); }
 .progression-colonne-contenu { display:grid; grid-template-rows:auto 1fr; align-content:start; gap:14px; min-height:0; height:100%; }
 .progression-tableau-bord { display:grid; min-height:208px; margin:0; }
-.progression-global { display:grid; grid-template-columns:104px minmax(0,1fr); gap:18px; min-height:0; height:100%; padding:18px; border:1px solid var(--bordure); border-radius:var(--rayon-grand); background:var(--surface-carte-profonde); }
+.progression-global { display:grid; grid-template-columns:104px minmax(0,1fr); gap:18px; min-height:0; height:100%; padding:18px 0; border:0; border-radius:0; background:transparent; box-shadow:none; }
 .progression-score { display: grid; place-content: center; text-align: center; }
 .progression-score strong { color: var(--jaune-interface); font-size: 2rem; }
 .progression-score span { color: var(--texte-secondaire); font-size: .94rem; }
@@ -11260,7 +11276,7 @@ body[data-ecran-actif="accueil"] #accueil {
 .progression-jalon.est-complet b { background:var(--parcours-accent); box-shadow:0 0 0 3px rgba(var(--parcours-accent-rgb),.18); }
 .progression-jalon.est-complet b::after { content:'✓'; color:var(--bleu-nuit-950); font-size:.58rem; font-weight:950; line-height:1; }
 .progression-vue-ensemble-metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:12px; height:100%; }
-#progression .progression-vue-ensemble-metrics .progression-statistique { display:grid; grid-template-rows:minmax(2.55em,auto) auto; align-content:center; gap:7px; min-height:88px; height:100%; padding:14px 16px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); background:var(--surface-carte-profonde); }
+#progression .progression-vue-ensemble-metrics .progression-statistique { display:grid; grid-template-rows:minmax(2.55em,auto) auto; align-content:center; gap:7px; min-height:88px; height:100%; padding:18px 0; border:0; border-radius:0; background:transparent; box-shadow:none; border-top:1px solid var(--bordure); }
 #progression .progression-vue-ensemble-metrics .progression-statistique > span { margin:0; color:var(--texte-secondaire); font-size:.94rem; line-height:1.35; }
 #progression .progression-vue-ensemble-metrics .progression-statistique > strong { margin:0; color:var(--texte); font-size:1.55rem; line-height:1; }
 .progression-pastilles { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:10px; min-height:208px; margin:0; }
@@ -11272,7 +11288,7 @@ body[data-ecran-actif="accueil"] #accueil {
 .progression-detail-parcours:focus-visible { outline:3px solid var(--jaune-interface); outline-offset:4px; border-radius:var(--rayon-grand); }
 .progression-detail-parcours,
 .progression-parcours-mis-en-avant { height:100%; }
-.progression-parcours-mis-en-avant { display:grid; align-content:start; gap:14px; min-height:0; padding:18px; border:1px solid var(--bordure); border-top:5px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:var(--rayon-grand); background:var(--surface-carte-profonde); }
+.progression-parcours-mis-en-avant { display:grid; align-content:start; gap:14px; min-height:0; padding:18px 0; border:0; border-top:3px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:0; background:transparent; box-shadow:none; }
 .progression-parcours-mis-en-avant-identite { display: flex; gap: 13px; align-items: center; }
 .progression-parcours-mis-en-avant-identite > div { min-width:0; }
 .progression-parcours-mis-en-avant-icone { display:grid; place-items:center; flex:0 0 58px; width:58px; height:58px; color:var(--parcours-accent-lisible,var(--parcours-accent)); }
@@ -11287,7 +11303,7 @@ body[data-ecran-actif="accueil"] #accueil {
 .progression-etat-ouverte { color:var(--parcours-accent-lisible,var(--parcours-accent)); background:rgba(var(--parcours-accent-rgb),.15); }
 .progression-etat-verrouillee { color:var(--texte-secondaire); }
 .progression-parcours-mis-en-avant-avancee { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
-.progression-parcours-mis-en-avant-avancee > div { display: grid; gap: 3px; padding: 11px; border: 1px solid var(--bordure); border-radius: 11px; }
+.progression-parcours-mis-en-avant-avancee > div { display: grid; gap: 3px; padding:8px 0; border:0; border-radius:0; }
 .progression-parcours-mis-en-avant-avancee strong { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:1.35rem; }
 .progression-parcours-mis-en-avant-avancee span { color: var(--texte-secondaire); font-size: .94rem; }
 .progression-parcours-mis-en-avant > .barre { height:8px; margin:0; }
@@ -11308,7 +11324,7 @@ body[data-ecran-actif="accueil"] #accueil {
   .progression-vue-ensemble-entete h2, .progression-explorateur-entete h2 { min-height:0; }
 }
 @media (max-width:560px) {
-  .progression-vue-ensemble, .progression-explorateur { height:auto; padding:18px; }
+  .progression-vue-ensemble, .progression-explorateur { height:auto; padding:0; }
   .progression-vue-ensemble-entete, .progression-explorateur-entete { display:grid; }
   .progression-vue-ensemble-entete, .progression-explorateur-entete { min-height:0; }
   .progression-explorateur-entete .secondaire { justify-self:start; }
@@ -12152,52 +12168,7 @@ body[data-ecran-actif="accueil"] #accueil {
   #mesures .mesures-etape-carte { animation:none; transition:none; }
 }
 
-/* Finitions du Carnet : cartes à hauteur de contenu et en-tête lisible. */
-#carnet .carnet-journal .carnet-parcours-details {
-    align-items: start;
-}
-
-#carnet .carnet-journal .carnet-souvenirs,
-#carnet .carnet-journal .carnet-defis {
-    align-self: start;
-}
-
-#carnet .carnet-souvenirs:has(.carnet-vide) #souvenirsParcours {
-    max-height: none;
-    overflow: visible;
-    padding-right: 0;
-    scrollbar-gutter: auto;
-}
-
-#carnet .carnet-souvenirs:has(.carnet-vide) .carnet-vide {
-    max-width: 62ch;
-    margin: 0;
-    padding: 11px 13px;
-    border-radius: var(--rayon-moyen);
-    color: var(--texte-secondaire);
-    background: rgba(8,56,108,.32);
-}
-
-@media (max-width:620px) {
-    #carnet .carnet-journal-entete {
-        display: grid;
-        grid-template-columns: minmax(0,1fr);
-        justify-items: start;
-        gap: 12px;
-    }
-
-    #carnet .carnet-journal-entete > div {
-        min-width: 0;
-    }
-
-    #carnet .carnet-journal .carnet-parcours-titre {
-        grid-column: 1;
-        grid-row: auto;
-        justify-self: start;
-        max-width: 100%;
-        white-space: normal;
-    }
-}/* Finitions de la page Question : hauteur naturelle et commandes stables. */
+/* Finitions de la page Question : hauteur naturelle et commandes stables. */
 #question #enonceQuestion {
     text-wrap: pretty;
 }
@@ -12597,7 +12568,74 @@ body[data-ecran-actif="accueil"] #accueil {
     word-break: normal;
 }
 /* === FIN cohérence couleurs de l'étape === */
-/* Finitions du bilan : un résumé, puis des sections sœurs non imbriquées. */
+
+/* Le chrono appartient à la carte ; aucune option préalable n’est nécessaire. */
+#question .question-chronometre-commandes {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:flex-end;
+    gap:6px;
+    margin:0 0 12px;
+}
+#question .question-chronometre-commandes button {
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    width:auto;
+    min-height:44px;
+    padding:8px 11px;
+    border:1px solid var(--bordure);
+    border-radius:999px;
+    color:var(--texte-secondaire);
+    background:transparent;
+    box-shadow:none;
+    font-size:.82rem;
+    font-weight:750;
+}
+#question .question-chronometre-commandes button.masque { display:none; }
+#question .question-chronometre-bouton svg {
+    width:20px;
+    height:20px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+#question .question-chronometre-commandes .est-actif,
+#question .question-chronometre-commandes [aria-pressed="true"] {
+    border-color:var(--couleur-etape-active-lisible,#9fc2ff);
+    color:var(--couleur-etape-active-lisible,#9fc2ff);
+    background:color-mix(in srgb,var(--couleur-etape-active,#4f8cff) 12%,transparent);
+}
+#question .question-chronometre-commandes button:disabled { opacity:.7; cursor:default; }
+#question .question-chronometre-commandes .temps-court { color:#ffb7b7; border-color:#ffb7b7; }
+#question .question-chronometre-commandes .question-chronometre-arret { border-color:transparent; }
+#question #chronometreQuestion { min-width:40px; font-variant-numeric:tabular-nums; }
+#question .question-chronometre-ajout {
+    position:absolute;
+    inset:auto 0 100%;
+    opacity:0;
+    color:var(--couleur-etape-active-lisible,#9fc2ff);
+    text-align:center;
+    pointer-events:none;
+    font-weight:900;
+}
+#question .question-chronometre-ajout.est-visible { animation:tempsAjoute .8s ease-out forwards; }
+@keyframes tempsAjoute {
+    0% { opacity:1; transform:translateY(8px); }
+    65% { opacity:1; }
+    100% { opacity:0; transform:translateY(-18px); }
+}
+@keyframes tempsAjouteSansMouvement {
+    0%, 65% { opacity:1; }
+    100% { opacity:0; }
+}
+@media (prefers-reduced-motion:reduce) {
+    #question .question-chronometre-ajout.est-visible { animation-name:tempsAjouteSansMouvement; }
+}/* Finitions du bilan : un résumé, puis des sections sœurs non imbriquées. */
 #bilan.ecran.actif {
     display: grid;
     gap: 24px;

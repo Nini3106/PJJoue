@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
  <head>
- <script src="ressources/consentement-analytics.js?v=03108c40a50d" defer></script>
- <script src="ressources/navigation-locale.js?v=03108c40a50d" defer></script>
+ <script src="ressources/consentement-analytics.js?v=fe45293f1877" defer></script>
+ <script src="ressources/navigation-locale.js?v=fe45293f1877" defer></script>
 <meta charset="utf-8"/>
   <base href="./"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
@@ -26,8 +26,8 @@
   <meta content="summary_large_image" name="twitter:card"/>
   <meta content="default-src 'self'; script-src 'self' 'sha256-GW2oYsRTeWShIjkgm2IMeEluvBbLcOrEwaq3oOAEGIM=' 'sha256-qh/c/CvY76sHcEVgWMfQQGZzfeZoitbxce1/RhQ+kWw=' 'sha256-ItAmAWRxciYKfMfcAanjDGttuQ/nghlVDCGi8dDLT9I=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; font-src 'self'; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src https://www.googletagmanager.com" http-equiv="Content-Security-Policy"/>
   <title>Quiz CJPM — Justice pénale des mineurs</title>
-  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=03108c40a50d">
-  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=03108c40a50d">
+  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=fe45293f1877">
+  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=fe45293f1877">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Quiz CJPM","alternateName":"PJJoue","url":"https://pjjoue.fr/","description":"Révise le CJPM avec des quiz sur la justice pénale des mineurs, les mesures éducatives et les peines. 960 questions au total, option PJJ comprise.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
 </head>
  <body data-ecran-actif="accueil">
@@ -51,7 +51,6 @@
     <button id="boutonEntrainementLibre" data-ecran="entrainement" type="button">Entraînement libre</button>
     <button id="boutonReviser" data-ecran="erreurs" type="button">Réviser</button>
     <button id="boutonProgression" data-ecran="progression" type="button">Progression</button>
-    <button id="boutonCarnetDeParcours" data-ecran="carnet" type="button">Carnet de parcours</button>
     <span class="navigation-section-separation" aria-hidden="true"></span>
     <span class="navigation-section-titre">Supports</span>
     <button id="boutonSupportsRevision" data-ecran="supports" type="button">Supports de révision</button>
@@ -150,33 +149,6 @@
           <h2 id="titreDestinationsParcours">Les 11 étapes</h2>
           <p id="resumeCarteParcours"></p>
         </div>
-        <details class="parcours-options-session">
-          <summary>
-            <span class="parcours-options-session-titre">Chronomètre</span>
-            <span class="parcours-options-session-statut">Optionnel</span>
-          </summary>
-          <section class="parcours-chronometre-panneau" aria-labelledby="titreChronometreParcours">
-            <div class="parcours-chronometre-texte">
-              <strong id="titreChronometreParcours">Rythme de la session</strong>
-              <span>Tu peux limiter le temps de réponse pour cette étape.</span>
-            </div>
-            <div class="parcours-chronometre-commandes">
-              <div class="parcours-bascule-groupe" id="choixChronometreParcours">
-                <button id="boutonParcoursLibre" class="option-bouton actif" data-valeur="non" type="button">Sans chrono</button>
-                <button id="boutonParcoursChronometre" class="option-bouton" data-valeur="oui" type="button">Avec chrono</button>
-              </div>
-              <div class="parcours-secondes masque" id="secondesChronometreParcours">
-                <span>Temps par question</span>
-                <div class="entrainement-secondes-groupe">
-                  <button id="boutonParcours15Secondes" class="choix-bouton actif" data-secondes="15" type="button">15 s</button>
-                  <button id="boutonParcours20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button>
-                  <button id="boutonParcours25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button>
-                  <button id="boutonParcours30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button>
-                </div>
-              </div>
-            </div>
-          </section>
-        </details>
       </div>
 
       <div class="chemin-ligne" id="ligneParcours1"></div>
@@ -194,50 +166,11 @@
     </section>
   </section>
 </section>
-<section class="ecran" id="carnet">
-  <header class="page-entete carnet-page-entete">
-    <span class="surtitre">Journal du joueur</span>
-    <h1>Carnet de parcours</h1>
-    <p>Retrouve les repères que tu as réellement consolidés et les défis qui jalonnent ta progression.</p>
-  </header>
-
-  <section class="carnet-journal" aria-labelledby="titreCarnetParcours">
-    <div class="carnet-journal-entete">
-      <div>
-        <span class="surtitre">Ton chemin</span>
-        <h2 id="titreCarnetParcours">Les traces de tes parcours</h2>
-      </div>
-      <span class="carnet-parcours-titre" id="titreSymboliqueParcours">Nouveau départ</span>
-    </div>
-
-    <div class="carnet-prochaine-destination">
-      <span aria-hidden="true">→</span>
-      <p id="prochaineDestinationParcours">Ta première destination t’attend.</p>
-    </div>
-
-    <div class="carnet-parcours-route" id="routeCarnetParcours" role="progressbar" aria-label="Avancement dans l’ensemble des parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-      <span class="carnet-parcours-trace"><i></i></span>
-      <span aria-hidden="true" class="carnet-parcours-position">●</span>
-    </div>
-    <div class="carnet-parcours-reperes" aria-hidden="true"><span>Départ</span><span>66 étapes</span><span>6 évaluations</span></div>
-
-    <div class="carnet-parcours-details">
-      <section aria-labelledby="titreSouvenirsParcours" class="carnet-souvenirs">
-        <div class="carnet-section-entete"><span aria-hidden="true">◇</span><div><span class="surtitre">Ce que tu as débloqué</span><h3 id="titreSouvenirsParcours">Souvenirs de parcours</h3></div></div>
-        <div id="souvenirsParcours"><p class="carnet-vide">Maîtrise une étape pour conserver ses trois repères essentiels.</p></div>
-      </section>
-      <section aria-labelledby="titreDefisParcours" class="carnet-defis">
-        <div class="carnet-section-entete"><span aria-hidden="true">⚑</span><div><span class="surtitre">À accomplir</span><h3 id="titreDefisParcours">Défis personnels</h3></div></div>
-        <ul id="defisParcours"></ul>
-      </section>
-    </div>
-  </section>
-</section>
 <section class="ecran" id="entrainement">
   <header class="page-entete entrainement-entete">
     <span class="surtitre">Entraînement libre</span>
     <h1>Choisis ta session</h1>
-    <p>Lance un défi surprise en un clic ou compose précisément ce que tu veux travailler, la durée et l’ordre des questions.</p>
+    <p>Lance un défi surprise en un clic ou compose précisément ce que tu veux travailler, le nombre et l’ordre des questions.</p>
   </header>
 
   <section class="entrainement-hasard" aria-labelledby="titreDefiDe">
@@ -368,8 +301,6 @@
               <summary>Options avancées</summary>
               <div class="entrainement-options">
                 <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic"><button id="boutonEntrainementOrdonneAvecJokers" class="option-bouton" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementOrdonneSansJokers" class="option-bouton" data-valeur="non" type="button">Sans</button></div></div>
-                <div class="entrainement-option"><span>Chrono</span><div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic"><button id="boutonEntrainementOrdonneSansChronometre" class="option-bouton" data-valeur="non" type="button">Sans</button><button id="boutonEntrainementOrdonneAvecChronometre" class="option-bouton" data-valeur="oui" type="button">Avec</button></div></div>
-                <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre=""><span>Temps par question</span><div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic"><button id="boutonEntrainementOrdonne15Secondes" class="choix-bouton" data-secondes="15" type="button">15 s</button><button id="boutonEntrainementOrdonne20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button><button id="boutonEntrainementOrdonne25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button><button id="boutonEntrainementOrdonne30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button></div></div>
               </div>
             </details>
             <button id="boutonLancerEntrainementOrdonne" class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">Commencer →</button>
@@ -384,8 +315,6 @@
               <summary>Options avancées</summary>
               <div class="entrainement-options">
                 <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic"><button id="boutonEntrainementMelangeAvecJokers" class="option-bouton" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementMelangeSansJokers" class="option-bouton" data-valeur="non" type="button">Sans</button></div></div>
-                <div class="entrainement-option"><span>Chrono</span><div class="entrainement-bascule-groupe" data-proposition="chronometre" data-selection-visuelle="au-clic"><button id="boutonEntrainementMelangeSansChronometre" class="option-bouton" data-valeur="non" type="button">Sans</button><button id="boutonEntrainementMelangeAvecChronometre" class="option-bouton" data-valeur="oui" type="button">Avec</button></div></div>
-                <div class="entrainement-chronometre-secondes masque" data-secondes-chronometre=""><span>Temps par question</span><div class="entrainement-secondes-groupe" data-selection-visuelle="au-clic"><button id="boutonEntrainementMelange15Secondes" class="choix-bouton" data-secondes="15" type="button">15 s</button><button id="boutonEntrainementMelange20Secondes" class="choix-bouton" data-secondes="20" type="button">20 s</button><button id="boutonEntrainementMelange25Secondes" class="choix-bouton" data-secondes="25" type="button">25 s</button><button id="boutonEntrainementMelange30Secondes" class="choix-bouton" data-secondes="30" type="button">30 s</button></div></div>
               </div>
             </details>
             <button id="boutonLancerEntrainementMelange" class="entrainement-lancer principal" data-organisation-session="melange" type="button">Commencer →</button>
@@ -408,8 +337,6 @@
       <button class="question-revision-etape-bouton masque" data-action="rejouer-erreurs-etape" id="boutonRejouerErreursEtape" type="button">
        Consolider mes réponses
       </button>
-      <div class="chronometre" id="chronometreQuestion">
-      </div>
       <div aria-live="polite" class="indicateur-serie masque" id="indicateurSerie">
        <span aria-hidden="true">✦</span>
        <strong></strong>
@@ -438,6 +365,15 @@
      </h2>
      <div class="question-etape">
       <div class="question question-carte">
+       <div class="question-chronometre-commandes" role="group" aria-label="Chronomètre de la question">
+        <button id="boutonChronometreQuestion" class="question-chronometre-bouton" type="button" aria-label="Activer le chronomètre : 15 secondes">
+         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 2h6M12 2v3m6 1 2-2"/><circle cx="12" cy="14" r="8"/><path d="M12 9v5l3 2"/></svg>
+         <span id="chronometreQuestion">Chrono</span>
+         <span id="ajoutChronometreQuestion" class="question-chronometre-ajout" aria-hidden="true"></span>
+        </button>
+        <button id="boutonChronometreToutesQuestions" class="question-chronometre-portee" type="button" aria-pressed="false" aria-label="Activer le chrono pour toutes les questions de cette session">Toutes les questions</button>
+        <button id="boutonArreterChronometre" class="question-chronometre-arret masque" type="button" aria-label="Arrêter le chronomètre">Arrêter</button>
+       </div>
        <div class="reperes" id="reperesQuestion">
        </div>
        <div class="reponses" id="zoneReponses">
@@ -524,11 +460,11 @@
     </div>
      <section aria-labelledby="titreCarteVoyageFinale" class="carte-voyage-finale masque" id="carteVoyageFinale">
       <div class="carte-voyage-entete">
-       <div><span>Ton carnet complet</span><h2 id="titreCarteVoyageFinale">La carte de ton voyage</h2></div>
+       <div><span>Tous tes parcours validés</span><h2 id="titreCarteVoyageFinale">La carte de ton voyage</h2></div>
        <strong>Tous les parcours, option PJJ comprise</strong>
       </div>
       <div class="carte-voyage-destinations" id="destinationsVoyageFinal"></div>
-      <p>Sélectionne une étape pour retrouver ses souvenirs pédagogiques dans ton carnet.</p>
+      <p>Sélectionne une étape pour retrouver son parcours.</p>
      </section>
      <section aria-labelledby="titreErreursBilan" class="bilan-erreurs-panneau">
       <div class="bilan-section-entete">
@@ -973,7 +909,7 @@
 
         <article class="sigles-mode-carte sigles-mode-entrainement">
           <span class="sigles-mode-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 6-6M16 6h2v2"/></svg></span>
-          <div><span class="surtitre">Session sur mesure</span><h3>Entraînement Sigles</h3><p>Choisis l’étape, le nombre de sigles, l’ordre, le chrono et les jokers.</p></div>
+          <div><span class="surtitre">Session sur mesure</span><h3>Entraînement Sigles</h3><p>Choisis l’étape, le nombre de sigles, l’ordre et les jokers.</p></div>
           <button class="sigles-bouton-secondaire sigles-bouton-mode" id="siglesOuvrirEntrainement" type="button">Configurer l’entraînement</button>
         </article>
 
@@ -1069,7 +1005,7 @@
 
         <article class="mesures-mode-carte mesures-mode-entrainement">
           <span class="mesures-mode-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 6-6M16 6h2v2"/></svg></span>
-          <div><span class="surtitre">Session sur mesure</span><h3>Entraînement Mesures</h3><p>Choisis une étape, le nombre de questions, l’ordre, le chrono et les jokers.</p></div>
+          <div><span class="surtitre">Session sur mesure</span><h3>Entraînement Mesures</h3><p>Choisis une étape, le nombre de questions, l’ordre et les jokers.</p></div>
           <button class="mesures-bouton-secondaire mesures-bouton-mode" id="mesuresOuvrirEntrainement" type="button">Configurer l’entraînement</button>
         </article>
 
@@ -1268,10 +1204,10 @@
     <a href="mentions-legales.html">Mentions légales</a>
    </nav>
   </footer>
-  <script defer="" src="donnees/donnees-pjj.js?v=03108c40a50d">
+  <script defer="" src="donnees/donnees-pjj.js?v=fe45293f1877">
   </script>
-  <script defer="" src="ressources/analytics-pjjoue.js?v=03108c40a50d"></script>
-  <script defer="" src="ressources/moteur-jeu.js?v=03108c40a50d">
+  <script defer="" src="ressources/analytics-pjjoue.js?v=fe45293f1877"></script>
+  <script defer="" src="ressources/moteur-jeu.js?v=fe45293f1877">
   </script>
   <dialog aria-describedby="texteFenetreQuitterSession" aria-labelledby="titreFenetreQuitterSession" class="pjj-fenetre" id="fenetreQuitterSession">
    <div class="pjj-fenetre-panneau">

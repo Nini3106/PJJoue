@@ -400,4 +400,71 @@
 }
 /* === FIN cohérence couleurs de l'étape === */
 
+/* Le chrono appartient à la carte ; aucune option préalable n’est nécessaire. */
+#question .question-chronometre-commandes {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:flex-end;
+    gap:6px;
+    margin:0 0 12px;
+}
+#question .question-chronometre-commandes button {
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    width:auto;
+    min-height:44px;
+    padding:8px 11px;
+    border:1px solid var(--bordure);
+    border-radius:999px;
+    color:var(--texte-secondaire);
+    background:transparent;
+    box-shadow:none;
+    font-size:.82rem;
+    font-weight:750;
+}
+#question .question-chronometre-commandes button.masque { display:none; }
+#question .question-chronometre-bouton svg {
+    width:20px;
+    height:20px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+#question .question-chronometre-commandes .est-actif,
+#question .question-chronometre-commandes [aria-pressed="true"] {
+    border-color:var(--couleur-etape-active-lisible,#9fc2ff);
+    color:var(--couleur-etape-active-lisible,#9fc2ff);
+    background:color-mix(in srgb,var(--couleur-etape-active,#4f8cff) 12%,transparent);
+}
+#question .question-chronometre-commandes button:disabled { opacity:.7; cursor:default; }
+#question .question-chronometre-commandes .temps-court { color:#ffb7b7; border-color:#ffb7b7; }
+#question .question-chronometre-commandes .question-chronometre-arret { border-color:transparent; }
+#question #chronometreQuestion { min-width:40px; font-variant-numeric:tabular-nums; }
+#question .question-chronometre-ajout {
+    position:absolute;
+    inset:auto 0 100%;
+    opacity:0;
+    color:var(--couleur-etape-active-lisible,#9fc2ff);
+    text-align:center;
+    pointer-events:none;
+    font-weight:900;
+}
+#question .question-chronometre-ajout.est-visible { animation:tempsAjoute .8s ease-out forwards; }
+@keyframes tempsAjoute {
+    0% { opacity:1; transform:translateY(8px); }
+    65% { opacity:1; }
+    100% { opacity:0; transform:translateY(-18px); }
+}
+@keyframes tempsAjouteSansMouvement {
+    0%, 65% { opacity:1; }
+    100% { opacity:0; }
+}
+@media (prefers-reduced-motion:reduce) {
+    #question .question-chronometre-ajout.est-visible { animation-name:tempsAjouteSansMouvement; }
+}
 /* === FIN MORCEAU CSS === */

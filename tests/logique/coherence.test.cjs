@@ -147,7 +147,7 @@ const preparerRetourRevision=jeu=>`init();
  jeu==='mesures'?`const cs=obtenirReperesMesuresEtape(1).slice(0,4);preparerSessionMissionMesuresNative({mode:'parcours',etape:1,reperes:cs,questions:creerQuestionsRevisionMesures(cs),titre:'Test'});`:''}
  finaliserReponse(false,'erreur');afficherQuestionSuivante();
  finaliserReponse(true,etat.questionCourante.bonneReponse);afficherQuestionSuivante();
- etat.chronometreSessionActif=true;etat.tempsRestant=11;
+ basculerChronometreToutesQuestions();ajouterTempsChronometreQuestion();etat.tempsRestant=11;obtenirChronometreQuestion().tempsRestant=11;
  selectionner('#reponseEcrite').value='brouillon conservé';
  etat.brouillonActivite={identifiantQuestion:etat.questionCourante.id,elementsSelectionnes:['a']};`;
 
@@ -163,6 +163,8 @@ for(const jeu of ['parcours','sigles','mesures'])test(`${jeu} : revenir exacteme
  assert.equal(n.run('reprendreProgressionApresRevision()'),true);
  assert.deepEqual(normaliser(n.run('({mode:etat.mode,index:etat.indexQuestion,id:etat.questionCourante.id,score:etat.score,questions:etat.questionsSession.map(q=>q.id)})')),avant);
  assert.equal(n.run('etat.tempsRestant'),11);
+ assert.equal(n.run('etat.chronometreToutesQuestions'),true);
+ assert.equal(n.run('obtenirChronometreQuestion().dureeAccordee'),20);
  assert.deepEqual(normaliser(n.run('etat.brouillonActivite.elementsSelectionnes')),['a']);
  // Le faux DOM ne réaffiche pas le brouillon ; vérifier la copie avant son prochain enregistrement.
  assert.equal(m.run('etat.progressionAvantRevision.brouillonsEcrits.find(([id])=>id===etat.progressionAvantRevision.questions[2])[1]'),'brouillon conservé');

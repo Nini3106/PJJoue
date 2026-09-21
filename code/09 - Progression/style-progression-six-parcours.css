@@ -1,8 +1,8 @@
 /* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=0004 === */
 /* Tableau visible de la page Progression. */
-.progression-studio { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px; align-items:stretch; }
+.progression-studio { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:40px; align-items:stretch; }
 .progression-vue-ensemble,
-.progression-explorateur { display:grid; grid-template-rows:auto 1fr; align-content:start; align-self:stretch; gap:16px; min-width:0; height:100%; padding:22px; border:1px solid var(--bordure); border-radius:var(--rayon-tres-grand); background:var(--surface-carte); box-shadow:var(--ombre-carte); }
+.progression-explorateur { display:grid; grid-template-rows:auto 1fr; align-content:start; align-self:stretch; gap:16px; min-width:0; height:100%; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; }
 .progression-vue-ensemble-entete,
 .progression-explorateur-entete { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; min-height:148px; margin:0; padding:0; }
 .progression-vue-ensemble-entete > div,
@@ -15,7 +15,7 @@
 .progression-explorateur-entete .secondaire:hover { border-color:var(--jaune-interface); color:var(--jaune-interface); }
 .progression-colonne-contenu { display:grid; grid-template-rows:auto 1fr; align-content:start; gap:14px; min-height:0; height:100%; }
 .progression-tableau-bord { display:grid; min-height:208px; margin:0; }
-.progression-global { display:grid; grid-template-columns:104px minmax(0,1fr); gap:18px; min-height:0; height:100%; padding:18px; border:1px solid var(--bordure); border-radius:var(--rayon-grand); background:var(--surface-carte-profonde); }
+.progression-global { display:grid; grid-template-columns:104px minmax(0,1fr); gap:18px; min-height:0; height:100%; padding:18px 0; border:0; border-radius:0; background:transparent; box-shadow:none; }
 .progression-score { display: grid; place-content: center; text-align: center; }
 .progression-score strong { color: var(--jaune-interface); font-size: 2rem; }
 .progression-score span { color: var(--texte-secondaire); font-size: .94rem; }
@@ -36,7 +36,7 @@
 .progression-jalon.est-complet b { background:var(--parcours-accent); box-shadow:0 0 0 3px rgba(var(--parcours-accent-rgb),.18); }
 .progression-jalon.est-complet b::after { content:'✓'; color:var(--bleu-nuit-950); font-size:.58rem; font-weight:950; line-height:1; }
 .progression-vue-ensemble-metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:12px; height:100%; }
-#progression .progression-vue-ensemble-metrics .progression-statistique { display:grid; grid-template-rows:minmax(2.55em,auto) auto; align-content:center; gap:7px; min-height:88px; height:100%; padding:14px 16px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); background:var(--surface-carte-profonde); }
+#progression .progression-vue-ensemble-metrics .progression-statistique { display:grid; grid-template-rows:minmax(2.55em,auto) auto; align-content:center; gap:7px; min-height:88px; height:100%; padding:18px 0; border:0; border-radius:0; background:transparent; box-shadow:none; border-top:1px solid var(--bordure); }
 #progression .progression-vue-ensemble-metrics .progression-statistique > span { margin:0; color:var(--texte-secondaire); font-size:.94rem; line-height:1.35; }
 #progression .progression-vue-ensemble-metrics .progression-statistique > strong { margin:0; color:var(--texte); font-size:1.55rem; line-height:1; }
 .progression-pastilles { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:10px; min-height:208px; margin:0; }
@@ -48,7 +48,7 @@
 .progression-detail-parcours:focus-visible { outline:3px solid var(--jaune-interface); outline-offset:4px; border-radius:var(--rayon-grand); }
 .progression-detail-parcours,
 .progression-parcours-mis-en-avant { height:100%; }
-.progression-parcours-mis-en-avant { display:grid; align-content:start; gap:14px; min-height:0; padding:18px; border:1px solid var(--bordure); border-top:5px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:var(--rayon-grand); background:var(--surface-carte-profonde); }
+.progression-parcours-mis-en-avant { display:grid; align-content:start; gap:14px; min-height:0; padding:18px 0; border:0; border-top:3px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:0; background:transparent; box-shadow:none; }
 .progression-parcours-mis-en-avant-identite { display: flex; gap: 13px; align-items: center; }
 .progression-parcours-mis-en-avant-identite > div { min-width:0; }
 .progression-parcours-mis-en-avant-icone { display:grid; place-items:center; flex:0 0 58px; width:58px; height:58px; color:var(--parcours-accent-lisible,var(--parcours-accent)); }
@@ -63,7 +63,7 @@
 .progression-etat-ouverte { color:var(--parcours-accent-lisible,var(--parcours-accent)); background:rgba(var(--parcours-accent-rgb),.15); }
 .progression-etat-verrouillee { color:var(--texte-secondaire); }
 .progression-parcours-mis-en-avant-avancee { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
-.progression-parcours-mis-en-avant-avancee > div { display: grid; gap: 3px; padding: 11px; border: 1px solid var(--bordure); border-radius: 11px; }
+.progression-parcours-mis-en-avant-avancee > div { display: grid; gap: 3px; padding:8px 0; border:0; border-radius:0; }
 .progression-parcours-mis-en-avant-avancee strong { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:1.35rem; }
 .progression-parcours-mis-en-avant-avancee span { color: var(--texte-secondaire); font-size: .94rem; }
 .progression-parcours-mis-en-avant > .barre { height:8px; margin:0; }
@@ -84,7 +84,7 @@
   .progression-vue-ensemble-entete h2, .progression-explorateur-entete h2 { min-height:0; }
 }
 @media (max-width:560px) {
-  .progression-vue-ensemble, .progression-explorateur { height:auto; padding:18px; }
+  .progression-vue-ensemble, .progression-explorateur { height:auto; padding:0; }
   .progression-vue-ensemble-entete, .progression-explorateur-entete { display:grid; }
   .progression-vue-ensemble-entete, .progression-explorateur-entete { min-height:0; }
   .progression-explorateur-entete .secondaire { justify-self:start; }

@@ -188,9 +188,8 @@ def verifier() -> None:
         page.locator("#boutonEntrainementTousQuestions").click()
         page.locator("[data-carte-entrainement='melange'] details summary").click()
         page.locator("#boutonEntrainementMelangeSansJokers").click()
-        page.locator("#boutonEntrainementMelangeAvecChronometre").click()
-        page.locator("#boutonEntrainementMelange15Secondes").click()
         page.locator("#boutonLancerEntrainementMelange").click()
+        page.locator("#boutonChronometreToutesQuestions").click()
         cfg = page.evaluate("""() => ({
             mode:obtenirModeMissionSigles(), total:etat.questionsSession.length,
             etapes:[...new Set(etatJeuSigles.siglesSession.map(x=>x.etape))],

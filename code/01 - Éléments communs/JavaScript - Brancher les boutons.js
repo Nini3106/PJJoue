@@ -310,7 +310,7 @@ function obtenirTitreSurvolBouton(bouton) {
     if (bouton.matches('.progression-pastille'))
         return 'Afficher la progression détaillée de ce parcours.';
     if (bouton.matches('.carte-voyage-etape'))
-        return 'Ouvrir les souvenirs et les supports de cette étape.';
+        return 'Retrouver cette étape dans son parcours.';
     if (bouton.matches('.sigles-etape-ouvrir, .mesures-etape-ouvrir'))
         return 'Ouvrir cette étape et reprendre sa progression.';
     if (bouton.matches('.sigles-etape-revision'))
@@ -555,31 +555,17 @@ document.addEventListener('click', evenement => {
         const groupe = boutonBascule.closest('.entrainement-bascule-groupe');
         groupe.dataset.selectionEffectuee = 'true';
         groupe.querySelectorAll('.option-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === boutonBascule));
-        if (groupe.dataset.proposition === 'chronometre') {
-            const carte = groupe.closest('[data-carte-entrainement]');
-            carte?.querySelector('[data-secondes-chronometre]')?.classList.toggle('masque', boutonBascule.dataset.valeur !== 'oui');
-        }
         envoyerOptionDeJeuAnalytics(`${groupe.dataset.proposition === 'jokers' ? 'Jokers' : 'Chronomètre'} : ${boutonBascule.textContent.trim()}`);
-        return;
-    }
-    const boutonSecondes = evenement.target.closest('.entrainement-secondes-groupe .choix-bouton');
-    if (boutonSecondes && !boutonSecondes.closest('#secondesChronometreParcours')) {
-        const groupe = boutonSecondes.closest('.entrainement-secondes-groupe');
-        groupe.dataset.selectionEffectuee = 'true';
-        groupe.querySelectorAll('.choix-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === boutonSecondes));
-        envoyerOptionDeJeuAnalytics(`Durée par question : ${boutonSecondes.textContent.trim()}`);
         return;
     }
     const boutonLancer = evenement.target.closest('.entrainement-lancer');
     if (boutonLancer) {
         const carte = boutonLancer.closest('[data-carte-entrainement]');
         const valeurJokers = carte.querySelector('[data-proposition="jokers"] .option-bouton.actif')?.dataset.valeur || 'oui';
-        const valeurMinuteur = carte.querySelector('[data-proposition="chronometre"] .option-bouton.actif')?.dataset.valeur || 'non';
-        const secondes = Number(carte.querySelector('.entrainement-secondes-groupe .choix-bouton.actif')?.dataset.secondes) || 15;
         etat.organisationSession = boutonLancer.dataset.organisationSession || 'ordonne';
         etat.jokersSessionActifs = valeurJokers === 'oui';
-        etat.chronometreSessionActif = valeurMinuteur === 'oui';
-        etat.dureeChronometreSession = Math.min(30, Math.max(5, secondes));
+        etat.chronometreSessionActif = false;
+        etat.dureeChronometreSession = 15;
         envoyerOptionDeJeuAnalytics(`Lancer la session · ${boutonLancer.dataset.organisationSession === 'melange' ? 'Mélangé' : 'Par ordre d’étapes'}`, {
             pjjoue_jokers: etat.jokersSessionActifs ? 'Avec' : 'Sans',
             pjjoue_chrono: etat.chronometreSessionActif ? 'Avec' : 'Sans',
@@ -588,24 +574,10 @@ document.addEventListener('click', evenement => {
         lancerEntrainementLibre();
         return;
     }
-    const choixChronometreParcours = evenement.target.closest('#choixChronometreParcours .option-bouton');
-    if (choixChronometreParcours) {
-        document.querySelectorAll('#choixChronometreParcours .option-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === choixChronometreParcours));
-        etat.chronometreParcoursActif = choixChronometreParcours.dataset.valeur === 'oui';
-        selectionner('#secondesChronometreParcours')?.classList.toggle('masque', !etat.chronometreParcoursActif);
-        envoyerOptionDeJeuAnalytics(`Chronomètre du parcours : ${choixChronometreParcours.textContent.trim()}`);
-        return;
-    }
-    const secondesParcours = evenement.target.closest('#secondesChronometreParcours .choix-bouton');
-    if (secondesParcours) {
-        document.querySelectorAll('#secondesChronometreParcours .choix-bouton').forEach(boutonDuGroupe => {
-            const actif = boutonDuGroupe === secondesParcours;
-            boutonDuGroupe.classList.toggle('actif', actif);
-            boutonDuGroupe.setAttribute('aria-pressed', actif ? 'true' : 'false');
-        });
-        const secondes = Number(secondesParcours.dataset.secondes);
-        etat.dureeChronometreParcours = Math.min(30, Math.max(5, Number.isFinite(secondes) ? secondes : 15));
-        envoyerOptionDeJeuAnalytics(`Durée par question du parcours : ${secondesParcours.textContent.trim()}`);
-        return;
-    }
+});
+
+document.addEventListener('click', evenement => {
+    if (evenement.target.closest('#boutonChronometreQuestion')) ajouterTempsChronometreQuestion();
+    else if (evenement.target.closest('#boutonChronometreToutesQuestions')) basculerChronometreToutesQuestions();
+    else if (evenement.target.closest('#boutonArreterChronometre')) desactiverChronometreQuestion();
 });

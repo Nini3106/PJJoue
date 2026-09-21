@@ -2,7 +2,6 @@
   "pages_principales": {
     "accueil": "code/02 - Accueil/contenu.html",
     "parcours": "code/03 - Parcours PJJ/contenu.html",
-    "carnet": "code/04 - Carnet de parcours/contenu.html",
     "entrainement": "code/05 - Entraînement libre/contenu.html",
     "question": "code/06 - Question/contenu.html",
     "bilan": "code/07 - Bilan de la session/contenu.html",
@@ -161,10 +160,6 @@
       "debut_code_apres_entete_lignes": 7
     },
     {
-      "source": "code/04 - Carnet de parcours/actions-de-la-page.js",
-      "debut_code_apres_entete_lignes": 7
-    },
-    {
       "source": "code/03 - Parcours PJJ/actions-de-la-page.js",
       "debut_code_apres_entete_lignes": 5
     },
@@ -271,11 +266,6 @@
       "sortie": "pjjoue-principal.css",
       "ordre": 6,
       "source": "code/10 - Paramètres/style-parametres-alignes.css"
-    },
-    {
-      "sortie": "pjjoue-principal.css",
-      "ordre": 40,
-      "source": "code/04 - Carnet de parcours/style-de-la-page.css"
     },
     {
       "sortie": "pjjoue-principal.css",

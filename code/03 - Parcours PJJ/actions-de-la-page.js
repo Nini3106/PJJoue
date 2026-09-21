@@ -445,3 +445,23 @@ function afficherEtapes() {
     } : null;
     enregistrerSauvegarde();
 }
+
+function actualiserResumeCarteParcours(programme) {
+    const resumeCarte = selectionner('#resumeCarteParcours');
+    if (!resumeCarte || !programme)
+        return;
+    const nombreEtapesMaitrisees = programme.etapes.filter(etapeProgramme =>
+        estEtapeMaitrisee(programme.id, etapeProgramme.id)
+    ).length;
+    const nombreEtapesTerminees = programme.etapes.filter(etapeProgramme => {
+        const total = obtenirQuestionsEtape(programme.id, etapeProgramme.id).length;
+        return total > 0 && compterQuestionsTraiteesEtape(programme.id, etapeProgramme.id) >= total;
+    }).length;
+    const evaluationOuverte = nombreEtapesTerminees === programme.etapes.length;
+    const evaluationReussie = estEvaluationFinaleReussie(programme.id);
+    resumeCarte.textContent = evaluationReussie
+        ? `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · évaluation réussie.`
+        : evaluationOuverte
+            ? `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · évaluation ouverte.`
+            : `${nombreEtapesTerminees}/${programme.etapes.length} étapes terminées · ${nombreEtapesMaitrisees} maîtrisées sans aide.`;
+}

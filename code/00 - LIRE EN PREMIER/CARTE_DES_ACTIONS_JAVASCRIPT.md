@@ -161,14 +161,7 @@ Les réponses saisies, la progression enregistrée localement, l’identité et 
 | `obtenirBaliseIconeEtape()` | Cherche ou calcule balise icone etape. |
 | `afficherEtapes()` | Affiche etapes. |
 
-## `code/04 - Carnet de parcours/actions-de-la-page.js`
-
-| Action dans le code | Explication simple |
-|---|---|
-| `obtenirProchaineDestinationParcours()` | Cherche ou calcule prochaine destination parcours. |
-| `calculerAvancementCarnetParcours()` | Calcule avancement carnet parcours. |
-| `actualiserCarnetParcours()` | Met à jour carnet parcours. |
-| `actualiserResumeCarteParcours()` | Met à jour resume carte parcours. |
+| `actualiserResumeCarteParcours()` | Met à jour le résumé des étapes et de l’évaluation du parcours. |
 
 ## `code/05 - Entraînement libre/actions-de-la-page.js`
 
@@ -292,7 +285,11 @@ Les réponses saisies, la progression enregistrée localement, l’identité et 
 | `afficherQuestion()` | Affiche question. |
 | `gererTempsEcoule()` | Action interne : gerer temps ecoule. |
 | `reprendreChronometreQuestion()` | Action interne : reprendre chronometre question. |
-| `demarrerChronometreQuestion()` | Action interne : demarrer chronometre question. |
+| `demarrerChronometreQuestion()` | Retrouve le temps restant de la question ou applique le réglage de session. |
+| `ajouterTempsChronometreQuestion()` | Active 15 secondes puis ajoute 5 secondes, jusqu’à un budget total de 30 secondes. |
+| `basculerChronometreToutesQuestions()` | Applique le chrono à la question seule ou à toute la session. |
+| `desactiverChronometreQuestion()` | Arrête le chrono et désactive sa portée générale. |
+| `terminerChronometreQuestion()` | Fige le chrono lors de la correction. |
 
 ## `code/06 - Question/actions/07 - Valider corriger et naviguer.js`
 
