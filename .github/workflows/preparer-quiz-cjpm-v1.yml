@@ -1,0 +1,11 @@
+name: Préparer la publication Quiz CJPM V1
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  attente:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Préparation sans publication
+        run: echo "Transfert préparatoire uniquement. La branche main reste inchangée."
