@@ -128,6 +128,14 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const nombre = selectionner('#nombreErreursBilan');
     const boutonContinuer = selectionner('#boutonContinuer');
     const boutonRejouer = selectionner('#boutonRejouerMesErreurs');
+    const boutonReprendre = selectionner('#boutonReprendreProgressionBilan');
+    const progression = etat.progressionAvantRevision;
+    const reponsesAvantRevision = restaurerTableauAssociatif(progression?.reponsesSession);
+    const resteUneProgression = Boolean(progression?.questions?.some(identifiant => !reponsesAvantRevision.has(identifiant)));
+    if (boutonReprendre) {
+        boutonReprendre.classList.toggle('masque', !resteUneProgression);
+        boutonReprendre.disabled = !resteUneProgression;
+    }
     const jeu = estSessionMissionSigles() ? 'sigles' : estSessionMissionMesures() ? 'mesures' : 'parcours';
     if (boutonRejouer) {
         boutonRejouer.textContent = 'Refaire les questions à consolider';

@@ -293,6 +293,7 @@ class CategoriesRevisionTests(unittest.TestCase):
                 else:
                     self.page.locator('#fermerFenetreCelebration').click()
                 self.assertNotEqual(self.page.locator('#boutonContinuer').inner_text(), 'Reprendre ma progression')
+                self.assertFalse(self.page.locator('#boutonReprendreProgressionBilan').is_visible())
                 bouton = self.page.locator('#boutonRejouerMesErreurs')
                 self.assertTrue(bouton.is_visible())
                 self.assertEqual(bouton.inner_text(), 'Refaire les questions à consolider')
@@ -306,6 +307,76 @@ class CategoriesRevisionTests(unittest.TestCase):
                     }
                 }""")
                 self.assertFalse(bouton.is_visible())
+
+    def terminer_la_session_et_fermer_celebration(self):
+        self.page.evaluate("""() => {
+            while (etat.ecran === 'question') {
+                finaliserReponse(true, etat.questionCourante.bonneReponse);
+                afficherQuestionSuivante();
+            }
+        }""")
+        try:
+            self.page.locator('#fenetreCelebration[open]').wait_for(state='visible', timeout=600)
+        except DelaiPlaywright:
+            pass
+        else:
+            self.page.locator('#fermerFenetreCelebration').click()
+
+    def test_bilan_revision_reprend_la_progression_suspendue_dans_les_trois_jeux(self):
+        html_navigable = self.html.replace('mettreAJourAdresseNavigation = () => {}; ', '')
+        self.contexte.route('**/*', lambda route: route.fulfill(body=html_navigable, content_type='text/html')
+                            if route.request.is_navigation_request() else route.abort())
+        sortie = Path(__file__).resolve().parents[1] / 'test-results' / 'reprise-bilan'
+        sortie.mkdir(parents=True, exist_ok=True)
+        for jeu in ['parcours', 'sigles', 'mesures']:
+            with self.subTest(jeu=jeu):
+                self.page.reload(wait_until='domcontentloaded')
+                avant = self.preparer_parcours_suspendable(jeu)
+                saisie = self.page.locator('#reponseEcrite')
+                brouillon = saisie.is_visible()
+                if brouillon:
+                    saisie.fill('brouillon avant révision')
+                self.page.locator('#boutonRejouerErreursEtape').click()
+                self.page.reload(wait_until='domcontentloaded')
+                self.terminer_la_session_et_fermer_celebration()
+                self.assertEqual(self.page.evaluate('etat.ecran'), 'bilan')
+                bouton = self.page.locator('#boutonReprendreProgressionBilan')
+                self.assertTrue(bouton.is_visible())
+                self.assertTrue(bouton.is_enabled())
+                self.assertEqual(bouton.inner_text(), 'Reprendre ma progression')
+                self.assertIn('Revenir à la question', bouton.get_attribute('data-infobulle'))
+                for largeur in [320, 390, 1440]:
+                    self.page.set_viewport_size({'width': largeur, 'height': 1000})
+                    bouton.scroll_into_view_if_needed()
+                    self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth - innerWidth'), 1)
+                    self.page.screenshot(path=str(sortie / f'{jeu}-{largeur}.png'), full_page=True)
+                bouton.click()
+                apres = self.page.evaluate("""() => ({id:etat.questionCourante.id,index:etat.indexQuestion,
+                    score:etat.score,enonce:document.querySelector('#enonceQuestion').textContent})""")
+                self.assertEqual(apres, avant)
+                if brouillon:
+                    self.assertEqual(saisie.input_value(), 'brouillon avant révision')
+                self.assertEqual(self.page.locator('#boutonReprendreEtapeDepuisDebut').inner_text(), 'Reprendre depuis le début')
+                self.terminer_la_session_et_fermer_celebration()
+                self.assertFalse(bouton.is_visible())
+
+    def test_bilan_revision_masque_la_reprise_si_la_session_etait_deja_terminee(self):
+        for jeu in ['parcours', 'sigles', 'mesures']:
+            with self.subTest(jeu=jeu):
+                self.page.reload(wait_until='domcontentloaded')
+                self.preparer_parcours_suspendable(jeu)
+                self.page.evaluate("""() => {
+                    while (etat.indexQuestion < etat.questionsSession.length - 1) {
+                        finaliserReponse(true, etat.questionCourante.bonneReponse);
+                        afficherQuestionSuivante();
+                    }
+                    finaliserReponse(true, etat.questionCourante.bonneReponse);
+                }""")
+                self.page.locator('#boutonRejouerErreursEtape').click()
+                self.terminer_la_session_et_fermer_celebration()
+                bouton = self.page.locator('#boutonReprendreProgressionBilan')
+                self.assertFalse(bouton.is_visible())
+                self.assertFalse(bouton.is_enabled())
 
 
 if __name__ == '__main__':
