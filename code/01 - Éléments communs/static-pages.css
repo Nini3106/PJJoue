@@ -94,7 +94,7 @@ p, li, dd { color: var(--text-soft); }
 .guide-site-marque small { color:#e8efef; font-size: .86rem; }
 .guide-site-entete nav { display: flex; gap: 8px; }
 .guide-site-entete nav a {
-  display: inline-flex; align-items: center; min-height: 44px; padding: 9px 12px; border-radius: 11px; color:#e8efef; text-decoration: none; font-size: .92rem; font-weight: 650;
+  display: inline-flex; align-items: center; min-height: 44px; padding: 9px 12px; border-radius: 11px; color:#e8efef; text-decoration: none; font-size: .92rem; font-weight: 760;
 }
 .guide-site-entete nav a:hover { color: #fffefa; background: rgba(255,255,255,.10); }
 .guide-site-entete nav a[aria-current="page"] { color: var(--amber); background: var(--accent-doux); }
@@ -115,7 +115,7 @@ p, li, dd { color: var(--text-soft); }
   border-radius: 13px;
   background: #174f89;
   color: #fffefa;
-  font-weight: 650;
+  font-weight: 780;
   cursor: pointer;
 }
 .guide-bouton-menu-principal:hover,
@@ -150,12 +150,12 @@ p, li, dd { color: var(--text-soft); }
   border-radius: 11px;
   color: var(--text-soft);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 800;
   text-align: left;
 }
 .guide-site-entete.menu-guide-actif .guide-navigation-principale a:hover { color: var(--text); background: var(--surface-raised); }
 .guide-site-entete.menu-guide-actif .guide-navigation-principale a[aria-current="page"] { color: var(--amber); background: var(--accent-doux); }
-.guide-site-entete.menu-guide-actif .guide-navigation-section-titre { display:block; margin:7px 2px 2px; padding:9px 11px 4px; border-top:0; color:var(--amber); font-size:.72rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase; }
+.guide-site-entete.menu-guide-actif .guide-navigation-section-titre { display:block; margin:7px 2px 2px; padding:9px 11px 4px; border-top:0; color:var(--amber); font-size:.72rem; font-weight:900; letter-spacing:.11em; text-transform:uppercase; }
 .guide-site-entete.menu-guide-actif .guide-navigation-section-separation { display:block; height:1px; margin:5px 2px; background:rgba(255,255,255,.15); }
 .guide-site-entete.menu-guide-actif .guide-navigation-principale a.guide-navigation-mini-jeu { border:1px solid rgba(255,200,61,.34); }
 .guide-site-entete.menu-guide-actif .guide-navigation-principale a.guide-navigation-mini-jeu:hover,
@@ -186,7 +186,7 @@ p, li, dd { color: var(--text-soft); }
 .page-guide h2, .guides-collection h2 { font-size:clamp(1.2rem,2vw,1.5rem); line-height:1.25; }
 .page-information-entete > p:not(.guide-mise-a-jour), .guide-page-entete > p:not(.guide-mise-a-jour) { max-width: 780px; margin: 0; font-size: 1.03rem; line-height: 1.7; }
 .guide-surtitre {
-  display: inline-flex; margin: 0 0 12px; color: var(--blue); font-size: .9rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  display: inline-flex; margin: 0 0 12px; color: var(--blue); font-size: .9rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase;
 }
 .guide-mise-a-jour { margin: 14px 0 0; color: var(--text-faint); font-size: .88rem; }
 
@@ -213,18 +213,18 @@ p, li, dd { color: var(--text-soft); }
 .guide-carte, .guide-profil, .guide-carte-parcours { position:relative; padding:20px; border:1px solid var(--line); border-radius:12px; background:var(--surface); box-shadow:none; }
 .guide-carte h3, .guide-profil h3, .guide-carte-parcours h3 { margin-bottom: 8px; font-size: 1.06rem; }
 .guide-carte p:last-child, .guide-profil p:last-child, .guide-carte-parcours p:last-child { margin-bottom: 0; }
-.guide-carte-chiffre { display: block; margin-bottom: 8px; color: var(--blue); font-size: 1.8rem; font-weight: 700; }
+.guide-carte-chiffre { display: block; margin-bottom: 8px; color: var(--blue); font-size: 1.8rem; font-weight: 900; }
 .guide-etapes { counter-reset: pjj-step; display: grid; gap: 12px; padding: 0; list-style: none; }
 .guide-etapes li { position:relative; margin:0; padding:17px 18px 17px 58px; border-bottom:1px solid var(--line); background:var(--surface); }
-.guide-etapes li::before { counter-increment: pjj-step; content: counter(pjj-step); position: absolute; left: 16px; top: 15px; display: grid; width: 30px; height: 30px; place-items: center; border-radius: 10px; color: var(--blue); background: var(--surface-raised); font-size: .8rem; font-weight: 700; }
+.guide-etapes li::before { counter-increment: pjj-step; content: counter(pjj-step); position: absolute; left: 16px; top: 15px; display: grid; width: 30px; height: 30px; place-items: center; border-radius: 10px; color: var(--blue); background: var(--surface-raised); font-size: .8rem; font-weight: 900; }
 .guide-liste-coches { display: grid; gap: 9px; padding: 0; list-style: none; }
 .guide-liste-coches li { position: relative; margin: 0; padding-left: 28px; }
-.guide-liste-coches li::before { content: "✓"; position: absolute; left: 0; top: 0; display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; color: #0f766e; background: #ccfbf1; font-size: .72rem; font-weight: 700; }
+.guide-liste-coches li::before { content: "✓"; position: absolute; left: 0; top: 0; display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; color: #0f766e; background: #ccfbf1; font-size: .72rem; font-weight: 900; }
 
 .guide-bouton, .guide-video-bouton {
   display: inline-flex; align-items: center; justify-content: center; min-height: 46px; margin-top: 6px; padding: 0 18px;
   border:1px solid #6f94c0; border-radius:13px; color:#fffefa; background:#174f89;
-  box-shadow:none; cursor:pointer; text-decoration:none; font-weight:650;
+  box-shadow:none; cursor:pointer; text-decoration:none; font-weight:840;
 }
 .guide-bouton:hover, .guide-bouton:focus-visible, .guide-video-bouton:hover, .guide-video-bouton:focus-visible { color:#fffefa; border-color:var(--amber); background:rgba(255,200,61,.08); transform:none; }
 
@@ -236,7 +236,7 @@ p, li, dd { color: var(--text-soft); }
   color: var(--text);
   background: var(--surface-soft);
   cursor: pointer;
-  font-weight: 650;
+  font-weight: 780;
 }
 .page-information button.secondaire:hover { border-color: var(--blue); color: var(--blue-deep); background: var(--surface-raised); }
 
@@ -253,7 +253,7 @@ p, li, dd { color: var(--text-soft); }
 .guide-sources { padding-top: 4px; }
 .guide-sources ul { display: grid; gap: 10px; padding: 0; list-style: none; }
 .guide-sources li { margin: 0; padding: 15px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-soft); }
-.guide-sources li a { display: inline-block; font-weight: 650; }
+.guide-sources li a { display: inline-block; font-weight: 780; }
 .guide-sources li span { display: block; margin-top: 4px; color: var(--text-soft); font-size: .9rem; }
 .guide-navigation-liens { margin-top: 38px; padding-top: 30px; border-top: 1px solid var(--line); }
 .guide-navigation-liens > div, .guide-parcours-liens { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -266,23 +266,23 @@ p, li, dd { color: var(--text-soft); }
 .guide-video-zone { aspect-ratio: 16/9; display: grid; place-items: center; overflow: hidden; border-radius: 14px; background: linear-gradient(145deg,var(--surface-raised),var(--surface-soft)); }
 .guide-video-contenu { margin-top: 14px; }
 .guide-video-meta, .guide-videos-note { color: var(--text-faint); font-size: .88rem; }
-.guide-video-lien { font-weight: 650; }
+.guide-video-lien { font-weight: 760; }
 
 .page-information-liste { display: grid; gap: 0; margin: 0 0 18px; }
 .page-information-liste > div { display: grid; grid-template-columns: minmax(180px,.8fr) minmax(0,1.7fr); gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.page-information-liste dt { color: var(--text-soft); font-weight: 650; }
+.page-information-liste dt { color: var(--text-soft); font-weight: 820; }
 .page-information-liste dd { margin: 0; }
 .page-information address { font-style: normal; line-height: 1.7; }
 
 .sources-introduction { margin-bottom: 24px; }
-.sources-compteur { margin: 0 0 14px; color: var(--text-soft); font-size: .9rem; font-weight: 650; }
+.sources-compteur { margin: 0 0 14px; color: var(--text-soft); font-size: .9rem; font-weight: 760; }
 .sources-liste { display: grid; gap: 12px; }
 .source-fiche { padding: 20px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); box-shadow: var(--shadow-xs); }
 .source-fiche h2 { margin: 0 0 14px; font-size: 1.12rem; line-height: 1.35; }
 .source-fiche h2 a { color: var(--blue); }
 .source-fiche dl { display: grid; gap: 10px; margin: 0; }
 .source-fiche dl div { display: grid; grid-template-columns: minmax(150px,190px) 1fr; gap: 12px; }
-.source-fiche dt { color: var(--text-soft); font-weight: 650; }
+.source-fiche dt { color: var(--text-soft); font-weight: 820; }
 .source-fiche dd { margin: 0; color: var(--text-soft); line-height: 1.55; }
 
 .produit-pied-page {
@@ -293,10 +293,10 @@ p, li, dd { color: var(--text-soft); }
 .produit-pied-page nav { display: flex; flex-wrap: wrap; gap: 0 8px; }
 .produit-pied-page a { color: var(--text-soft); overflow-wrap: anywhere; }
 .produit-pied-page nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; }
-.produit-pied-page a[aria-current="page"] { color: var(--amber); font-weight: 650; text-decoration-thickness: 2px; }
+.produit-pied-page a[aria-current="page"] { color: var(--amber); font-weight: 800; text-decoration-thickness: 2px; }
 
 .sommaire-guide { margin: 0 0 28px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface-soft); overflow: hidden; }
-.sommaire-guide summary { padding: 14px 16px; color: var(--text-soft); font-weight: 650; cursor: pointer; }
+.sommaire-guide summary { padding: 14px 16px; color: var(--text-soft); font-weight: 820; cursor: pointer; }
 .sommaire-guide[open] summary { border-bottom: 1px solid var(--line); }
 .sommaire-guide ol { display: grid; gap: 7px; margin: 0; padding: 14px 22px 18px 42px; }
 .sommaire-guide a { color: var(--text-soft); }
@@ -315,8 +315,8 @@ p, li, dd { color: var(--text-soft); }
 /* Administration locale : même langage visuel, densité adaptée à un outil. */
 body:not(.page-information-corps):not(.guide-public-corps) > main { width: min(1220px, calc(100% - 40px)); margin: 36px auto; }
 .barre-outils { position: sticky; top: 12px; z-index: 40; display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; padding: 14px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,254,250,.95); box-shadow: var(--shadow-sm); }
-.barre-outils label { display: grid; gap: 5px; color: var(--text-soft); font-size: .88rem; font-weight: 650; }
-.barre-outils button, body:not(.page-information-corps):not(.guide-public-corps) button { min-height: 42px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 12px; color: var(--text-soft); background: var(--surface); cursor: pointer; font-weight: 650; }
+.barre-outils label { display: grid; gap: 5px; color: var(--text-soft); font-size: .88rem; font-weight: 760; }
+.barre-outils button, body:not(.page-information-corps):not(.guide-public-corps) button { min-height: 42px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 12px; color: var(--text-soft); background: var(--surface); cursor: pointer; font-weight: 760; }
 input, select, textarea { min-height: 42px; padding: 9px 11px; border: 1px solid var(--line-strong); border-radius: 11px; color: var(--text); background: var(--surface); outline: none; }
 input:focus, select:focus, textarea:focus { border-color: #6F8FEA; box-shadow: 0 0 0 3px rgba(45,115,121,.12); }
 
@@ -357,78 +357,3 @@ input:focus, select:focus, textarea:focus { border-color: #6F8FEA; box-shadow: 0
 .page-guide .guide-page-entete .guide-etape-reference { margin-bottom:12px; color:var(--guide-accent); font-size:.94rem; }
 .page-guide .guide-raccourci-final { margin-top:34px; }
 .page-guide .guide-bouton-theme { border-color:var(--guide-accent); color:var(--guide-accent); }
-
-/* Présentation commune issue de l’audit visuel. */
-.page-information,
-.page-guide { width:min(var(--content),calc(100% - 48px)); margin:32px auto; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; overflow:visible; }
-.page-information-entete h1,
-.guide-page-entete h1 { font-size:clamp(1.8rem,3.2vw,2.55rem); line-height:1.2; letter-spacing:-.025em; font-weight:700; }
-.page-information-entete,
-.guide-page-entete { margin-bottom:28px; }
-.page-information h2,
-.page-guide h2 { font-weight:650; line-height:1.3; }
-.page-information > section > p,
-.page-guide > section > p { max-width:82ch; }
-.page-information-encadre,
-.guide-appel-action { padding:20px 0; border:0; border-block:1px solid var(--line); border-radius:0; background:transparent; box-shadow:none; }
-.guide-appel-action::after { content:none; }
-.guide-carte,
-.guide-profil,
-.guide-carte-parcours { padding:18px 0; border:0; border-top:2px solid var(--guide-accent,var(--line)); border-radius:0; background:transparent; }
-.guide-grille { gap:16px 28px; }
-.guide-etapes li { padding:16px 0 16px 48px; background:transparent; }
-.guide-etapes li::before { left:0; top:16px; border-radius:50%; }
-.guide-bouton,
-.guide-video-bouton,
-.page-information-retour,
-.guide-navigation-liens a,
-.guide-parcours-liens a { border-radius:10px; font-weight:600; }
-.page-information-retour { box-shadow:none; background:transparent; }
-.guide-sources li { padding:12px 0; border:0; border-bottom:1px solid var(--line); border-radius:0; background:transparent; }
-.guide-tableau-conteneur { border-width:1px 0; border-radius:0; }
-.guide-tableau { background:transparent; }
-.guide-tableau th,
-.guide-tableau td { padding:13px 12px; line-height:1.6; }
-.guide-tableau th { text-transform:none; letter-spacing:0; font-size:.9rem; font-weight:600; background:var(--surface); }
-.sommaire-guide { border-width:1px 0; border-radius:0; background:transparent; }
-.sommaire-guide summary { padding:14px 0; font-weight:600; }
-.sommaire-guide ol { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 28px; padding:16px 0 18px 22px; }
-.guide-video-carte { padding:16px 0; border:0; border-top:1px solid var(--line); border-radius:0; background:transparent; box-shadow:none; }
-.guide-video-zone { min-height:150px; aspect-ratio:auto; border-radius:10px; background:var(--surface); }
-.guide-video-zone:has(iframe) { aspect-ratio:16 / 9; }
-.guide-video-zone iframe { width:100%; height:100%; border:0; }
-.guide-video-bouton { gap:12px; min-height:52px; padding:12px 18px; }
-.guide-video-bouton::before { content:'▶'; color:var(--amber); font-size:1.15rem; }
-.guide-site-entete.menu-guide-actif .guide-navigation-principale a.guide-navigation-mini-jeu { border-color:transparent; }
-.produit-pied-page { width:min(var(--content),calc(100% - 48px)); font-size:.82rem; padding-block:24px 18px; }
-.bouton-retour-haut-guide { color:var(--text); background:var(--surface); border-radius:10px; box-shadow:var(--shadow-xs); }
-.recherche-ressources { display:grid; gap:8px; max-width:620px; margin:22px 0 12px; font-weight:600; }
-.recherche-ressources input { width:100%; min-width:0; min-height:46px; }
-.recherche-ressources input::placeholder { color:var(--text-faint); opacity:1; }
-.recherche-ressources-compteur { margin:0 0 16px; font-size:.88rem; color:var(--text-soft); }
-.guide-tableau tr[hidden],
-.source-fiche[hidden] { display:none; }
-.source-fiche { padding:20px 0; border:0; border-top:1px solid var(--line); border-radius:0; background:transparent; box-shadow:none; }
-.source-fiche dl { gap:6px; font-size:.9rem; }
-@media (min-width:621px) {
-    .guide-grille-2 > :last-child:nth-child(odd) { grid-column:auto; width:auto; justify-self:stretch; }
-}
-@media (min-width:821px) {
-    .guide-videos-grille > :last-child:nth-child(odd) { grid-column:auto; width:auto; justify-self:stretch; }
-}
-@media (max-width:620px) {
-    .page-information,
-    .page-guide { width:calc(100% - 32px); margin-block:22px 30px; padding:0; }
-    .page-information-encadre,
-    .guide-appel-action { padding:18px 0; }
-    .sommaire-guide ol { grid-template-columns:1fr; }
-    .produit-pied-page { width:calc(100% - 32px); }
-    :is(.page-sigles-cjpm,.page-sigles-pjj) .guide-tableau,
-    :is(.page-sigles-cjpm,.page-sigles-pjj) .guide-tableau tbody { display:block; }
-    :is(.page-sigles-cjpm,.page-sigles-pjj) .guide-tableau thead { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
-    :is(.page-sigles-cjpm,.page-sigles-pjj) .guide-tableau tr { display:block; padding:16px 0; border-bottom:1px solid var(--line); }
-    :is(.page-sigles-cjpm,.page-sigles-pjj) .guide-tableau tr[hidden] { display:none; }
-    :is(.page-sigles-cjpm,.page-sigles-pjj) .guide-tableau td { display:block; width:auto; padding:5px 0; border:0; }
-    :is(.page-sigles-cjpm,.page-sigles-pjj) .guide-tableau td:first-child { color:var(--guide-accent,var(--amber)); font-size:1.15rem; font-weight:700; }
-    :is(.page-sigles-cjpm,.page-sigles-pjj) .guide-tableau td:last-child { font-size:.88rem; color:var(--text-soft); }
-}

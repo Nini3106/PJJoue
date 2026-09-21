@@ -15,7 +15,7 @@
   width: 100%;
 }
 .parcours-detail-vue { display:grid; gap:20px; }
-.parcours-retour-liste { justify-self:start; min-height:44px; padding:0 16px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:650; }
+.parcours-retour-liste { justify-self:start; min-height:44px; padding:0 16px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:850; }
 .parcours-retour-liste:hover, .parcours-retour-liste:focus-visible { border-color:var(--jaune-interface); color:var(--jaune-interface); }
 
 .parcours-selection-entete {
@@ -118,7 +118,7 @@
   transform:translate(-50%,-50%);
   color:var(--texte);
   font-size:.78rem;
-  font-weight:700;
+  font-weight:950;
   font-variant-numeric:tabular-nums;
   line-height:1;
   text-align:center;
@@ -161,8 +161,8 @@
 #parcours .selecteur-parcours-icone .theme-icone,
 #parcours .parcours-detail-icone .theme-icone { color:inherit; }
 
-.selecteur-parcours-numero { grid-area: numero; color: #fff; font-weight: 700; }
-.selecteur-parcours-statut { grid-area: statut; color: var(--texte-secondaire); font-size: .94rem; font-weight: 650; }
+.selecteur-parcours-numero { grid-area: numero; color: #fff; font-weight: 900; }
+.selecteur-parcours-statut { grid-area: statut; color: var(--texte-secondaire); font-size: .94rem; font-weight: 800; }
 .selecteur-parcours-texte { grid-area: texte; }
 .selecteur-parcours-texte b { display: block; margin-bottom: 6px; color: var(--parcours-accent-lisible,var(--parcours-accent)); font-size: 1rem; }
 .selecteur-parcours-texte strong { display: block; margin-bottom: 7px; color: var(--texte); font-size: 1.3rem; line-height: 1.18; }
@@ -171,7 +171,7 @@
 .selecteur-parcours-informations span + span::before { content: "•"; margin-right: 14px; color:var(--parcours-accent-lisible,var(--parcours-accent)); }
 .selecteur-parcours-progression { grid-area: progression; height: 8px; margin-top: 6px; overflow: hidden; border-radius: 99px; background: var(--surface-carte-profonde); }
 .selecteur-parcours-progression i { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--parcours-accent); }
-.selecteur-parcours-pied { grid-area: pied; display: flex; justify-content: space-between; gap: 12px; color: var(--texte-secondaire); font-size: .94rem; font-weight: 650; }
+.selecteur-parcours-pied { grid-area: pied; display: flex; justify-content: space-between; gap: 12px; color: var(--texte-secondaire); font-size: .94rem; font-weight: 750; }
 .selecteur-parcours-pied span:last-child { color: var(--parcours-accent-lisible,var(--parcours-accent)); }
 
 .parcours-detail-entete {
@@ -214,13 +214,13 @@
 .carte-parcours-titres p { max-width:68ch; margin:0; color:var(--texte-secondaire); }
 #parcours .parcours-options-session { width:100%; max-width:360px; justify-self:end; }
 #parcours .parcours-options-session[open] { grid-column:1 / -1; max-width:none; }
-#parcours .parcours-options-session > summary { display:flex; align-items:center; justify-content:flex-start; gap:10px; min-height:48px; padding:0 14px; border:1px solid var(--bordure); border-radius:14px; color:var(--texte); background:var(--surface-carte-profonde); cursor:pointer; font-size:1rem; font-weight:650; list-style:none; transition:border-color .18s ease, background .18s ease; }
+#parcours .parcours-options-session > summary { display:flex; align-items:center; justify-content:flex-start; gap:10px; min-height:48px; padding:0 14px; border:1px solid var(--bordure); border-radius:14px; color:var(--texte); background:var(--surface-carte-profonde); cursor:pointer; font-size:1rem; font-weight:800; list-style:none; transition:border-color .18s ease, background .18s ease; }
 #parcours .parcours-options-session > summary::-webkit-details-marker { display:none; }
 #parcours .parcours-options-session > summary::after { content:'+'; margin-left:auto; color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:1.25rem; font-weight:500; line-height:1; }
 #parcours .parcours-options-session[open] > summary { border-color:var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:12px 12px 0 0; background:rgba(var(--parcours-accent-rgb),.1); }
 #parcours .parcours-options-session[open] > summary::after { content:'−'; }
 .parcours-options-session-titre { min-width:0; }
-.parcours-options-session-statut { padding:5px 10px; border-radius:999px; color:var(--texte-secondaire); background:var(--surface-secondaire); font-size:.94rem; font-weight:650; }
+.parcours-options-session-statut { padding:5px 10px; border-radius:999px; color:var(--texte-secondaire); background:var(--surface-secondaire); font-size:.94rem; font-weight:750; }
 #parcours .parcours-chronometre-panneau { display:grid; grid-template-columns:minmax(240px,.8fr) minmax(0,1.2fr); align-items:center; gap:22px; width:100%; min-width:0; margin:0; padding:20px 18px; border:1px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-top:0; border-radius:0 0 14px 14px; background:var(--surface-carte-profonde); }
 #parcours .parcours-chronometre-texte { display:grid; align-items:start; gap:4px; }
 #parcours .parcours-chronometre-texte strong { color:var(--texte); }
@@ -261,7 +261,7 @@
 .revision-supports { display: grid; gap: 18px; }
 .revision-supports-entete { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; }
 .supports-outils { display: grid; gap: 14px; padding: 18px; border: 1px solid var(--bordure); border-radius: var(--rayon-grand); background: var(--surface-carte); }
-.supports-recherche { display: grid; gap: 7px; color: var(--texte); font-weight: 650; }
+.supports-recherche { display: grid; gap: 7px; color: var(--texte); font-weight: 750; }
 .supports-recherche input { min-height: 46px; padding: 0 14px; border: 1px solid var(--bordure); border-radius: 12px; color: var(--texte); background: var(--surface-carte-profonde); }
 .supports-filtres { display: flex; flex-wrap: wrap; gap: 8px; }
 .supports-filtres button { min-height: 40px; padding: 0 14px; border: 1px solid var(--bordure); border-radius: 999px; color: var(--texte-secondaire); background: var(--surface-carte-profonde); }
@@ -279,7 +279,7 @@
 #supports-transversaux { --support-accent:#f49ac2; }
 .supports-juridiction > summary { display: flex; align-items: center; gap: 14px; min-height: 68px; padding: 14px 18px; color: var(--texte); cursor: pointer; }
 .supports-juridiction > summary::marker { content: ""; }
-.support-juridiction-abreviation { display: grid; place-items: center; min-width: 52px; height: 42px; border-radius: 10px; color: var(--support-accent); background: rgba(255,255,255,.055); font-size: .94rem; font-weight: 650; }
+.support-juridiction-abreviation { display: grid; place-items: center; min-width: 52px; height: 42px; border-radius: 10px; color: var(--support-accent); background: rgba(255,255,255,.055); font-size: .94rem; font-weight: 850; }
 .support-juridiction-titre { display: grid; gap: 3px; }
 .support-juridiction-titre strong { color: var(--texte); }
 .support-juridiction-titre small { color: var(--texte-secondaire); font-size: .94rem; }
@@ -289,7 +289,7 @@
 .support-revision { overflow: hidden; border: 1px solid var(--bordure); border-radius: var(--rayon-moyen); background: var(--surface-carte-profonde); }
 .support-revision > summary { display: flex; align-items: center; gap: 14px; padding: 15px 17px; cursor: pointer; }
 .support-revision > summary::marker { content: ""; }
-.support-revision-type { min-width: 122px; color: var(--support-accent); font-size: .94rem; font-weight: 650; }
+.support-revision-type { min-width: 122px; color: var(--support-accent); font-size: .94rem; font-weight: 850; }
 .support-revision-titre { display: grid; gap: 3px; }
 .support-revision-titre small { color: var(--texte-secondaire); font-size:.94rem; line-height:1.45; }
 .support-revision-chevron { margin-left: auto; color: var(--support-accent); }
@@ -338,39 +338,5 @@
   #parcours .chemin-ligne { grid-template-columns: 1fr; }
   .revision-supports-entete { display: grid; }
 }
-
-
-/* Audit visuel : hiérarchie, espaces et cadres allégés. */
-#parcours .selecteur-parcours-bouton { grid-template-columns:52px minmax(0,1fr) auto; min-height:0; padding:20px; gap:8px 16px; border-top-width:2px; border-radius:12px; box-shadow:none; }
-#parcours .selecteur-parcours-icone { width:52px; height:52px; border:0; border-radius:0; background:transparent; }
-#parcours .selecteur-parcours-icone svg { width:44px; height:44px; }
-#parcours .selecteur-parcours-texte strong { font-size:1.22rem; line-height:1.35; font-weight:650; }
-#parcours .selecteur-parcours-numero,
-#parcours .selecteur-parcours-statut,
-#parcours .selecteur-parcours-informations,
-#parcours .selecteur-parcours-pied { font-size:.85rem; font-weight:500; }
-#parcours .selecteur-parcours-progression { height:5px; margin-top:9px; }
-#parcours .parcours-detail-entete { padding:12px 0 24px; border:0; border-bottom:1px solid var(--bordure); background:transparent; border-radius:0; }
-#parcours .parcours-detail-icone { width:56px; height:56px; border:0; background:transparent; }
-#parcours .parcours-detail-actions { padding:0; border:0; border-radius:0; background:transparent; }
-#parcours .parcours-carte-zone { padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; }
-#parcours .parcours-carte-entete-v1 { margin-block:8px 20px; }
-#parcours .chemin-etape-carte,
-#parcours #cartesEtapesFinales .chemin-etape-carte,
-#parcours .chemin-evaluation-carte { min-height:168px; padding:18px 16px; border-top-width:2px; border-radius:12px; box-shadow:none; }
-#parcours .chemin-etape-titre { hyphens:none; overflow-wrap:normal; word-break:normal; line-height:1.4; font-weight:650; font-size:1rem; }
-#parcours .chemin-etape-icone { width:42px; height:42px; margin:0 0 10px; }
-#parcours .chemin-etape-icone svg { width:38px; height:38px; }
-#parcours .chemin-evaluation-carte:disabled { opacity:.82; }
-@media (max-width:720px) {
-    #parcours .selecteur-parcours-bouton { grid-template-columns:42px minmax(0,1fr); padding:17px; gap:8px 12px; }
-    #parcours .selecteur-parcours-icone { width:42px; height:42px; }
-    #parcours .chemin-etape-carte,
-    #parcours #cartesEtapesFinales .chemin-etape-carte,
-    #parcours .chemin-evaluation-carte { min-height:140px; }
-}
-
-#parcours .selecteur-parcours-grille { grid-auto-rows:1fr; }
-@media (max-width:720px) { #parcours .selecteur-parcours-grille { grid-auto-rows:auto; } }
 
 /* === FIN MORCEAU CSS === */

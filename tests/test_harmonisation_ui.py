@@ -125,7 +125,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         self.assertRegex(mesures, re.compile(r"#mesures \.mesures-accueil-entete,\s*#mesures \.mesures-page-secondaire-entete\s*\{[^}]*text-align:center;", re.S))
         self.assertRegex(guides, re.compile(r"\.guides-entete\s*\{[^}]*text-align:center;", re.S))
         self.assertRegex(guides, re.compile(r"\.guides-entete h1\s*\{[^}]*font-size:clamp\(1\.55rem,2\.5vw,2\.15rem\);", re.S))
-        self.assertRegex(statique, re.compile(r"\.guide-site-entete\.menu-guide-actif \.guide-navigation-principale a\s*\{[^}]*font-size:\s*1rem;[^}]*font-weight:\s*600;", re.S))
+        self.assertRegex(statique, re.compile(r"\.guide-site-entete\.menu-guide-actif \.guide-navigation-principale a\s*\{[^}]*font-size:\s*1rem;[^}]*font-weight:\s*800;", re.S))
 
     def test_entrainements_missions_acceptent_les_intitules_longs_et_hasard_garde_la_couleur_du_de(self) -> None:
         entrainement = (CODE / "05 - Entraînement libre/style-configurateur-entrainement.css").read_text(encoding="utf-8")
@@ -285,10 +285,10 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         css_genere = (RACINE / "ressources/styles/pjjoue-principal.css").read_text(encoding="utf-8")
         self.assertRegex(css_genere, re.compile(r"#entrainement \.entrainement-perimetre-choix \{[^}]*display:grid;[^}]*grid-template-columns:repeat\(4,minmax\(0,1fr\)\);", re.S), "La grille harmonisée des parcours doit être compilée dans le site public.")
         self.assertIn("#entrainement .entrainement-etape-config.entrainement-etape-modes {", css)
-        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-etape-config,\s*#entrainement \.entrainement-etape-config\.entrainement-etape-modes \{[^}]*border:0;[^}]*background:transparent;", re.S))
+        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-etape-config,\s*#entrainement \.entrainement-etape-config\.entrainement-etape-modes \{[^}]*border:1px solid var\(--bordure-carte\);[^}]*background:var\(--surface-carte\);", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-nombre-config \{[^}]*grid-template-columns:1fr;", re.S))
         self.assertRegex(css_genere, re.compile(r"#entrainement \.entrainement-grille \{[^}]*grid-template-columns:\s*repeat\(2,minmax\(0,1fr\)\);", re.S))
-        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-options-avancees summary \{[^}]*width:max-content;[^}]*border:0;", re.S))
+        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-options-avancees summary \{[^}]*width:max-content;[^}]*border:1px solid var\(--bordure\);", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \{[^}]*display:grid;[^}]*grid-template-columns:repeat\(4,minmax\(0,1fr\)\);", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \.choix-bouton \{[^}]*height:82px;[^}]*min-height:82px;", re.S))
         self.assertNotRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \.choix-bouton \{[^}]*\n\s*width:100%;", re.S))
@@ -303,7 +303,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         general = (CODE / "01 - Éléments communs/style-general-pjjoue.css").read_text(encoding="utf-8")
         statique = (CODE / "01 - Éléments communs/static-pages.css").read_text(encoding="utf-8")
         self.assertRegex(statique, re.compile(r"\.guide-site-entete\.menu-guide-actif \.guide-navigation-principale a:hover \{ color: var\(--text\); background: var\(--surface-raised\); \}"))
-        self.assertRegex(general, re.compile(r"header\.entete \.navigation button,\s*header\.entete \.navigation \.navigation-lien \{[^}]*color: #d5e6f7;[^}]*font-weight: 600;", re.S))
+        self.assertRegex(general, re.compile(r"header\.entete \.navigation button,\s*header\.entete \.navigation \.navigation-lien \{[^}]*color: #d5e6f7;[^}]*font-weight: 800;", re.S))
         self.assertRegex(general, re.compile(r"header\.entete \.navigation button:hover,[^{]+\{[^}]*color: #fff;[^}]*border-color: transparent;[^}]*background: #1b568f;", re.S))
 
 
@@ -324,7 +324,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         question_js = (CODE / "06 - Question/actions/05 - Préparer et afficher la question.js").read_text(encoding="utf-8")
 
         self.assertIn("border-top: 5px solid var(--parcours-accent-lisible,var(--parcours-accent));", parcours_css)
-        self.assertIn("border-left:3px solid var(--parcours-accent,var(--bordure));", entrainement_css)
+        self.assertIn("border-left:5px solid var(--parcours-accent,var(--bordure));", entrainement_css)
         self.assertIn("border-color:var(--parcours-accent,#4f8cff);", entrainement_css)
         self.assertIn("bouton.style.setProperty('--parcours-accent', identite.couleur);", entrainement_js)
         self.assertIn("border-left:5px solid var(--parcours-accent);", revision_css)

@@ -8513,6 +8513,7 @@ function construireCarteProgression(theme) {
     const libelleObjectifs = accorderLibelle(avancee.jalonsValides, 'objectif validé', 'objectifs validés');
     carte.innerHTML = `
         <div class="progression-parcours-mis-en-avant-identite">
+            <span class="progression-parcours-mis-en-avant-icone">${creerIconeTheme(theme.id, '')}</span>
             <div><span class="progression-parcours-mis-en-avant-chapitre">${identite.libelleNumero || identite.chapitre}</span><h3>${identite.titre}</h3></div>
         </div>
         <div class="progression-etats">
@@ -8524,13 +8525,6 @@ function construireCarteProgression(theme) {
             <div class="progression-parcours-mis-en-avant-etapes"><strong>${avancee.jalonsValides}/${avancee.jalonsTotal}</strong><span>${libelleObjectifs}</span></div>
         </div>
         <div class="barre" role="progressbar" aria-label="Progression dans ${identite.titre}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${avancee.pourcentage}" aria-valuetext="${avancee.jalonsValides} ${libelleObjectifs} sur ${avancee.jalonsTotal}"><i style="width:${avancee.pourcentage}%"></i></div>`;
-    const ouvrir = document.createElement('button');
-    ouvrir.type = 'button';
-    ouvrir.className = 'principal progression-ouvrir-selection';
-    ouvrir.textContent = 'Ouvrir ce parcours →';
-    ouvrir.setAttribute('aria-label', `Ouvrir le parcours ${identite.titre}`);
-    ouvrir.onclick = () => ouvrirParcours(theme.id);
-    carte.appendChild(ouvrir);
     return carte;
 }
 function construireCarteProgressionComplete() {
@@ -8560,20 +8554,21 @@ function construireCarteProgressionComplete() {
     carte.className = 'progression-global';
     carte.innerHTML = `
         <div class="progression-score">
-            <strong>${progression}<span>%</span></strong>
-            <span>des objectifs validés</span>
+            <strong>${progression}%</strong>
+            <span>total · option PJJ comprise</span>
         </div>
         <div class="progression-global-corps">
-            <p><strong>${cjpmValides}/${parcoursCJPM.length} parcours CJPM validés${cjpmValides === parcoursCJPM.length ? " · CJPM terminé ✓" : ""}</strong></p>
+            <p><strong>${cjpmValides}/${parcoursCJPM.length} parcours CJPM validés${cjpmValides === parcoursCJPM.length ? " · CJPM terminé ✓" : ""}</strong> · l’option PJJ est suivie séparément ci-dessous.</p>
             <div class="progression-global-entete">
                 <div><strong>${jalonsValides}/${totalJalons} ${libelleObjectifs}</strong><span>${totalEtapes} étapes · ${totalEvaluations} évaluations</span></div>
+                <span class="progression-global-statut">${parcoursComplet ? 'Parcours complet validé ✓' : 'En cours'}</span>
             </div>
-        </div>
-        <div class="progression-rail" role="progressbar" aria-label="Progression globale" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progression}" aria-valuetext="${jalonsValides} ${libelleObjectifs} sur ${totalJalons} : ${totalEtapes} étapes et ${totalEvaluations} évaluations">
-            <span class="progression-rail-remplissage" style="width:${progression}%"></span>
-            <div class="progression-jalons">${jalons}</div>
-        </div>
-        <p class="progression-global-note">${parcoursComplet ? 'Parcours complet validé ✓ · Les cinq parcours CJPM et l’option Découvrir la PJJ sont validés.' : 'Le total inclut l’option Découvrir la PJJ, indépendante de la validation des cinq parcours CJPM.'}</p>`;
+            <div class="progression-rail" role="progressbar" aria-label="Progression globale" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progression}" aria-valuetext="${jalonsValides} ${libelleObjectifs} sur ${totalJalons} : ${totalEtapes} étapes et ${totalEvaluations} évaluations">
+                <span class="progression-rail-remplissage" style="width:${progression}%"></span>
+                <div class="progression-jalons">${jalons}</div>
+            </div>
+            <p>${parcoursComplet ? 'Les cinq parcours CJPM et l’option Découvrir la PJJ sont validés.' : 'Ce total comprend les cinq parcours CJPM et l’option Découvrir la PJJ. L’option reste indépendante de la validation des parcours CJPM.'}</p>
+        </div>`;
     return carte;
 }
 function obtenirThemeProgressionParDefaut() {

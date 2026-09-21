@@ -3,11 +3,11 @@
 #parametres .formulaire-grille { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
 #parametres .parametre { display:grid; grid-template-columns:minmax(0,1fr); align-content:start; gap:14px; min-height:148px; padding:20px; border:1px solid var(--bordure-carte); border-radius:var(--rayon-grand); background:var(--surface-carte); box-shadow:var(--ombre-douce); }
 #parametres .choix-libelle,
-#parametres .parametre > label { color:var(--texte); font-weight:650; }
+#parametres .parametre > label { color:var(--texte); font-weight:850; }
 #parametres .parametres-choix .choix-groupe { display:flex; flex-wrap:wrap; align-items:center; width:max-content; max-width:100%; }
 #parametres .parametres-choix .choix-groupe[data-groupe-choix="sonActif"] { justify-content:flex-start; }
 #parametres .parametres-choix .choix-groupe[data-groupe-choix="echelleTexte"] { justify-content:flex-start; }
-#parametres .parametres-choix .choix-groupe .choix-bouton { width:max-content; max-width:100%; min-width:0; min-height:46px; height:auto; padding:8px 12px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:650; white-space:normal; }
+#parametres .parametres-choix .choix-groupe .choix-bouton { width:max-content; max-width:100%; min-width:0; min-height:46px; height:auto; padding:8px 12px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; white-space:normal; }
 #parametres .parametres-choix .choix-groupe .choix-bouton.actif,
 #parametres .parametres-choix .choix-groupe .choix-bouton.selectionne,
 #parametres .parametres-choix .choix-groupe .choix-bouton[aria-pressed="true"] { border-color:#4f8cff; color:var(--texte); background:rgba(79,140,255,.16); box-shadow:inset 0 0 0 1px #4f8cff; }
@@ -17,13 +17,13 @@
 #parametres .parametre-sauvegarde .parametres-actions-boutons { grid-column:2; }
 #parametres .parametres-actions-boutons { display:flex; flex-wrap:wrap; align-items:center; width:100%; max-width:100%; gap:9px; }
 #parametres .parametres-actions-boutons > button,
-#parametres .progression-importation { display:flex; align-items:center; justify-content:center; min-height:46px; padding:10px 14px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:650; text-align:center; cursor:pointer; }
+#parametres .progression-importation { display:flex; align-items:center; justify-content:center; min-height:46px; padding:10px 14px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; text-align:center; cursor:pointer; }
 #parametres .fichier-importation-visuellement-cache { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); border:0; white-space:nowrap; }
 #parametres .parametres-actions-boutons .principal { border-color:#6f94c0; color:var(--texte); background:var(--surface-carte-profonde); }
 #parametres .parametres-actions-boutons .principal:hover,
 #parametres .parametres-actions-boutons .principal:focus-visible { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.08); }
 #parametres .parametres-actions-principales { grid-column:1/-1; display:flex; justify-content:flex-start; padding-top:4px; }
-#parametres .parametres-actions-principales button { min-height:50px; padding:11px 28px; border-radius:12px; font-weight:650; }
+#parametres .parametres-actions-principales button { min-height:50px; padding:11px 28px; border-radius:12px; font-weight:850; }
 #parametres .parametres-actions-principales .principal { border:1px solid #6f94c0; color:var(--texte); background:var(--surface-carte-profonde); }
 #parametres .parametres-actions-principales .principal:hover,
 #parametres .parametres-actions-principales .principal:focus-visible { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.08); }
@@ -31,7 +31,7 @@
 #parametres .parametres-zone-sensible-texte { display:grid; gap:5px; }
 #parametres .parametres-zone-sensible h2 { margin:0; color:var(--texte); font-size:1rem; }
 #parametres .parametres-zone-sensible p { margin:0; color:var(--texte-secondaire); line-height:1.5; }
-#parametres .parametres-zone-sensible .danger { min-height:50px; padding:11px 18px; border:1px solid #ef7890; border-radius:12px; color:#fff; background:#ca3453; font-weight:650; }
+#parametres .parametres-zone-sensible .danger { min-height:50px; padding:11px 18px; border:1px solid #ef7890; border-radius:12px; color:#fff; background:#ca3453; font-weight:850; }
 #parametres .parametres-zone-sensible .danger:hover,
 #parametres .parametres-zone-sensible .danger:focus-visible { border-color:#ffabc0; color:#fff; background:#b82b48; }
 @media (max-width:900px) {
@@ -52,19 +52,4 @@
   #parametres .parametres-zone-sensible { grid-template-columns:1fr; align-items:stretch; }
   #parametres .parametres-zone-sensible .danger { width:max-content; max-width:100%; }
 }
-
-/* Audit visuel : hiérarchie, espaces et cadres allégés. */
-#parametres .formulaire-grille { max-width:880px; margin-inline:auto; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 28px; }
-#parametres .parametre { grid-column:1 / -1; grid-template-columns:minmax(180px,.6fr) minmax(0,1.4fr); align-items:center; min-height:0; padding:22px 0; border:0; border-bottom:1px solid var(--bordure); border-radius:0; background:transparent; box-shadow:none; }
-#parametres .parametre-son,
-#parametres .parametre-volume { grid-column:auto; grid-template-columns:1fr; gap:10px; }
-#parametres .parametre-sauvegarde .parametres-actions-boutons { gap:8px; }
-#parametres .parametres-actions-principales { padding-block:22px; }
-#parametres .parametres-zone-sensible { margin:0; padding:20px 0; border-width:1px 0 0; border-radius:0; background:transparent; }
-@media (max-width:620px) {
-    #parametres .formulaire-grille { grid-template-columns:1fr; }
-    #parametres .parametre { grid-template-columns:1fr; gap:12px; padding-block:18px; }
-    #parametres .parametre-sauvegarde .parametres-actions-boutons { grid-column:1; }
-}
-#parametres .parametres-actions-boutons > button[hidden] { display:none; }
 /* === FIN MORCEAU CSS === */

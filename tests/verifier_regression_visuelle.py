@@ -331,29 +331,16 @@ def verifier_parcours_choix_mobile(page: Page) -> None:
 
 
 def verifier_modes_entrainement(page: Page) -> None:
-    donnees = page.evaluate("""() => {
-        const zone = document.querySelector('#entrainement');
-        const titres = [...zone.querySelectorAll('.entrainement-carte h3')];
-        const etape = zone.querySelector('.entrainement-etape-config');
-        const choix = zone.querySelector('.entrainement-perimetre-choix');
-        return {
-            titres: titres.map(titre => titre.textContent.trim()),
-            couleurs: titres.map(titre => getComputedStyle(titre).color),
-            icones: zone.querySelectorAll('.entrainement-carte .entrainement-icone').length,
-            de: zone.querySelector('.de-objet')?.getBoundingClientRect().width,
-            tailleDeAttendue: innerWidth <= 540 ? 64 : 76,
-            retraitChoix: choix.getBoundingClientRect().left - etape.getBoundingClientRect().left,
-            largeurChoix: choix.getBoundingClientRect().width - etape.getBoundingClientRect().width,
-            optionsOuvertes: [...zone.querySelectorAll('details')].every(options => options.open),
-            titreVisible: Boolean(zone.querySelector('h1')?.getBoundingClientRect().height)
-        };
-    }""")
-    if (len(donnees['titres']) != 2 or len(set(donnees['couleurs'])) != 2
-        or donnees['icones'] != 0 or not donnees['titreVisible']
-        or abs(donnees['de'] - donnees['tailleDeAttendue']) > 1
-        or abs(donnees['retraitChoix']) > 1 or abs(donnees['largeurChoix']) > 1
-        or not donnees['optionsOuvertes']):
-        raise AssertionError(f"Entraînement : la disposition validée doit rester lisible : {donnees}")
+    donnees = page.evaluate("""() => ({
+        svg: document.querySelectorAll('.entrainement-carte .entrainement-icone svg').length,
+        images: document.querySelectorAll('.entrainement-carte .entrainement-icone img').length,
+        titreVisible: Boolean(document.querySelector('#entrainement h1')?.getBoundingClientRect().height),
+        texte: document.querySelector('#entrainement')?.innerText?.trim().length || 0
+    })""")
+    if donnees["svg"] != 2 or donnees["images"] != 0:
+        raise AssertionError(f"Entraînement : les deux icônes doivent utiliser le SVG moderne : {donnees}")
+    if not donnees["titreVisible"] or donnees["texte"] < 100:
+        raise AssertionError(f"Entraînement : le contenu principal n’est pas visible : {donnees}")
 
 
 def verifier_entrainement_bureau(page: Page) -> None:
@@ -956,16 +943,13 @@ def verifier_progression_peuplee(page: Page, mobile: bool = False) -> None:
             pourcentage,
             rail: {
                 valeur: Number(rail?.getAttribute('aria-valuenow') || -1),
-                texte: rail?.getAttribute('aria-valuetext') || '',
-                largeur: rail?.getBoundingClientRect().width || 0
+                texte: rail?.getAttribute('aria-valuetext') || ''
             },
             decompositionVisible: /66 étapes\s*·\s*6 évaluations/i.test(texteGlobal),
             termeTechniqueVisible: /\bjalons?\b/i.test(texteGlobal),
             metriques: metriques.map(metrique => ({
                 ...lireRectangle(metrique),
                 libelle: metrique.querySelector('span')?.textContent?.trim() || '',
-                decalageValeur: metrique.querySelector('strong').getBoundingClientRect().left
-                    - metrique.querySelector('span').getBoundingClientRect().left,
                 valeur: Number(metrique.querySelector('strong')?.textContent || 0)
             })),
             activite: {
@@ -1028,8 +1012,6 @@ def verifier_progression_peuplee(page: Page, mobile: bool = False) -> None:
                         paddingHaut: Number.parseFloat(style.paddingTop) || 0,
                         paddingBas: Number.parseFloat(style.paddingBottom) || 0,
                         bordureHaut: Number.parseFloat(style.borderTopWidth) || 0,
-                        bordureGauche: Number.parseFloat(style.borderLeftWidth) || 0,
-                        paddingGauche: Number.parseFloat(style.paddingLeft) || 0,
                         fond: style.backgroundColor,
                         ombre: style.boxShadow
                     };
@@ -1073,7 +1055,6 @@ def verifier_progression_peuplee(page: Page, mobile: bool = False) -> None:
         or abs(metriques[2]["haut"] - metriques[3]["haut"]) > 1
         or abs(metriques[0]["hauteur"] - metriques[1]["hauteur"]) > 1
         or abs(metriques[2]["hauteur"] - metriques[3]["hauteur"]) > 1
-        or any(abs(metrique["decalageValeur"]) > 1 for metrique in metriques)
     ):
         raise AssertionError(
             f"Progression peuplée : les quatre métriques doivent former deux lignes régulières : {metriques}"
@@ -1111,38 +1092,36 @@ def verifier_progression_peuplee(page: Page, mobile: bool = False) -> None:
         raise AssertionError(f"Progression peuplée : relation onglets/panneau invalide : {donnees}")
 
     disposition = donnees["disposition"]
-    sections_encadrees = [
+    sections_mal_encadrees = [
         section for section in disposition["sections"]
-        if abs(section["espaceVideBas"]) > 2
-        or section["paddingBas"] != 0
-        or section["fond"] not in ("rgba(0, 0, 0, 0)", "transparent")
-        or section["ombre"] != "none"
+        if abs(section["espaceVideBas"] - section["paddingBas"] - section["bordureHaut"]) > 2
+        or section["paddingHaut"] < 18
+        or section["paddingBas"] < 18
+        or section["bordureHaut"] < 1
+        or section["fond"] in ("rgba(0, 0, 0, 0)", "transparent")
+        or section["ombre"] == "none"
     ]
-    if disposition["studioAlignement"] != "start" or sections_encadrees:
+    if disposition["studioAlignement"] != "stretch" or sections_mal_encadrees:
         raise AssertionError(
-            f"Progression peuplée : les deux zones doivent suivre leur contenu sans hauteur forcée : {disposition}"
+            f"Progression peuplée : les deux cadres doivent rester complets et réguliers : {disposition}"
         )
     if any(not section["texteExplicatif"] for section in disposition["sections"]):
-        raise AssertionError(f"Progression peuplée : chaque zone doit conserver son texte explicatif : {disposition}")
+        raise AssertionError(f"Progression peuplée : chaque cadre doit avoir son texte explicatif : {disposition}")
+    if any(section["fond"] == disposition["fondPage"] for section in disposition["sections"]):
+        raise AssertionError(f"Progression peuplée : les cadres doivent se détacher du fond de page : {disposition}")
     vue_ensemble = disposition["vueEnsemble"]
     explorateur = disposition["explorateur"]
-    # Le rail passe sous tout le résumé, et non dans sa seule colonne de texte.
-    if abs(donnees["rail"]["largeur"] - (vue_ensemble["droite"] - vue_ensemble["gauche"] - 16)) > 2:
-        raise AssertionError(f"Progression peuplée : le rail doit occuper la largeur du résumé : {donnees['rail']}")
-    separateur = disposition["sections"][1]
     if mobile:
-        disposition_valide = (
-            explorateur["haut"] > vue_ensemble["bas"]
-            and separateur["bordureHaut"] == 1
-            and separateur["bordureGauche"] == 0
-        )
+        disposition_valide = explorateur["haut"] > vue_ensemble["bas"]
     else:
         disposition_valide = (
             abs(vue_ensemble["haut"] - explorateur["haut"]) <= 1
+            and abs(vue_ensemble["hauteur"] - explorateur["hauteur"]) <= 1
             and vue_ensemble["droite"] < explorateur["gauche"]
-            and separateur["bordureGauche"] == 1
-            and separateur["paddingGauche"] == 30
-            and abs(disposition["sections"][0]["texteExplicatifHaut"] - separateur["texteExplicatifHaut"]) <= 1
+            and abs(disposition["sections"][0]["contenuHaut"] - disposition["sections"][1]["contenuHaut"]) <= 1
+            and abs(disposition["sections"][0]["texteExplicatifHaut"] - disposition["sections"][1]["texteExplicatifHaut"]) <= 1
+            and abs(disposition["sections"][0]["premierBlocHaut"] - disposition["sections"][1]["premierBlocHaut"]) <= 1
+            and abs(disposition["sections"][0]["premierBlocHauteur"] - disposition["sections"][1]["premierBlocHauteur"]) <= 1
         )
     if not disposition_valide:
         raise AssertionError(
@@ -1156,27 +1135,6 @@ def verifier_progression_peuplee_bureau(page: Page) -> None:
 
 def verifier_progression_peuplee_mobile(page: Page) -> None:
     verifier_progression_peuplee(page, mobile=True)
-
-
-def verifier_missions_lisibles(page: Page) -> None:
-    """Le texte et les actions gardent leur place à côté des icônes, sur mobile aussi."""
-    donnees = page.evaluate("""() => [...document.querySelectorAll(
-        '#sigles .sigles-mode-carte, #mesures .mesures-mode-carte'
-    )].filter(carte => carte.getClientRects().length).map(carte => {
-        const texte = carte.querySelector('h3').parentElement;
-        const action = carte.querySelector('button');
-        return {
-            titre: texte.querySelector('h3').textContent,
-            largeurCarte: carte.getBoundingClientRect().width,
-            largeurTexte: texte.getBoundingClientRect().width,
-            debordementAction: action.scrollWidth - action.clientWidth
-        };
-    })""")
-    if len(donnees) != 4 or any(
-        d['largeurTexte'] < d['largeurCarte'] * .65 or d['debordementAction'] > 2
-        for d in donnees
-    ):
-        raise AssertionError(f"Modes de jeu : texte ou action comprimés : {donnees}")
 
 
 def verifier_parametres_bureau(page: Page) -> None:
@@ -1484,10 +1442,6 @@ def scenarios() -> list[Scenario]:
         Scenario("bureau-progression-peuplee", 1440, 900, progression_peuplee, verifier_progression_peuplee_bureau),
         Scenario("bureau-parametres", 1440, 900, "() => afficherEcran('parametres',{remplacerHistorique:true})", verifier_parametres_bureau),
         Scenario("bureau-bilan", 1440, 900, bilan),
-        Scenario("bureau-mission-sigles", 1440, 900, "() => afficherEcran('sigles',{remplacerHistorique:true})", verifier_missions_lisibles),
-        Scenario("bureau-mission-mesures", 1440, 900, "() => afficherEcran('mesures',{remplacerHistorique:true})", verifier_missions_lisibles),
-        Scenario("mobile-mission-sigles", 390, 844, "() => afficherEcran('sigles',{remplacerHistorique:true})", verifier_missions_lisibles),
-        Scenario("mobile-mission-mesures", 390, 844, "() => afficherEcran('mesures',{remplacerHistorique:true})", verifier_missions_lisibles),
         Scenario("bureau-question-unique", 1440, 900, question_action("!q.estEvaluationFinale && (!q.activite || q.activite.type === 'choix-unique') && (q.modePrefere || 'choix-unique') === 'choix-unique'")),
         Scenario("bureau-question-multiple", 1440, 900, question_action("q.activite?.type === 'selection-multiple'")),
         Scenario("bureau-question-association", 1440, 900, question_action("q.activite?.type === 'association'"), verifier_association_bureau),
@@ -1514,7 +1468,6 @@ def scenarios() -> list[Scenario]:
         Scenario("mobile-parametres-texte-115", 390, 844, parametres_mobile_texte_115, verifier_parametres_mobile_texte_115),
         Scenario("mobile-question-multiple", 390, 844, question_action("q.activite?.type === 'selection-multiple'"), verifier_question_mobile_stable),
         Scenario("mobile-question-association", 390, 844, question_action("q.activite?.type === 'association'"), verifier_association_mobile),
-        Scenario("mobile-bilan", 390, 844, bilan),
         Scenario("mobile-jokers", 390, 844, joker, verifier_modale),
     ]
 

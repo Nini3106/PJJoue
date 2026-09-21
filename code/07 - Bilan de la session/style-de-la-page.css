@@ -107,30 +107,4 @@
         padding: 18px 16px;
     }
 }
-
-/* Audit visuel : hiérarchie, espaces et cadres allégés. */
-#bilan .bilan-resume-carte { padding:0 0 24px; border:0; border-bottom:1px solid var(--bordure); border-radius:0; background:transparent; box-shadow:none; }
-#bilan .bilan-resume-entete { gap:20px; margin-bottom:22px; }
-#bilan #titreBilan { font-size:clamp(1.65rem,3vw,2.35rem); font-weight:650; line-height:1.25; }
-#bilan .bilan-resume-carte .bilan-statistiques { gap:22px; padding:0; }
-#bilan .bilan-statistiques .statistique { min-height:0; padding:8px 0; border:0; border-radius:0; background:transparent; }
-#bilan .bilan-statistiques .statistique strong { font-size:2rem; font-weight:650; }
-#bilan .bilan-prochaine-destination { margin-top:18px; padding:12px 0; border:0; border-radius:0; background:transparent; }
-#bilan .bilan-erreurs-panneau { padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; }
-#bilan .bilan-erreur-element { padding:18px 0 18px 12px; border-width:0 0 1px 3px; border-radius:0; background:transparent; box-shadow:none; }
-#bilan .bilan-erreur-element h3 { font-weight:650; line-height:1.45; }
-#bilan .bilan-actions { padding:0 0 20px; border-bottom:1px solid var(--bordure); }
-#bilan .bilan-actions .principal,
-#bilan #boutonReprendreProgressionBilan { border-color:var(--jaune-interface); }
-#bilan .bilan-actions .discret { border-color:transparent; }
-@media (max-width:760px) {
-    #bilan .bilan-resume-carte .bilan-statistiques { grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
-    #bilan .bilan-statistiques .statistique strong { font-size:1.6rem; }
-    #bilan .bilan-actions { display:flex; flex-wrap:wrap; }
-}
-
-#bilan .bilan-correction-regle,
-#bilan .bilan-passage-information { padding:14px 0; border:0; border-bottom:1px solid var(--bordure); border-radius:0; background:transparent; box-shadow:none; }
-#bilan #boutonReprendreProgressionBilan { order:-2; }
-
 /* === FIN MORCEAU CSS === */

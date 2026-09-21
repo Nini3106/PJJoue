@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
  <head>
- <script src="ressources/consentement-analytics.js?v=8373a938202c" defer></script>
- <script src="ressources/navigation-locale.js?v=8373a938202c" defer></script>
+ <script src="ressources/consentement-analytics.js?v=6899d106e72b" defer></script>
+ <script src="ressources/navigation-locale.js?v=6899d106e72b" defer></script>
 <meta charset="utf-8"/>
   <base href="./"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
@@ -26,8 +26,8 @@
   <meta content="summary_large_image" name="twitter:card"/>
   <meta content="default-src 'self'; script-src 'self' 'sha256-GW2oYsRTeWShIjkgm2IMeEluvBbLcOrEwaq3oOAEGIM=' 'sha256-qh/c/CvY76sHcEVgWMfQQGZzfeZoitbxce1/RhQ+kWw=' 'sha256-ItAmAWRxciYKfMfcAanjDGttuQ/nghlVDCGi8dDLT9I=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; font-src 'self'; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src https://www.googletagmanager.com" http-equiv="Content-Security-Policy"/>
   <title>Quiz CJPM — Justice pénale des mineurs</title>
-  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=8373a938202c">
-  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=8373a938202c">
+  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=6899d106e72b">
+  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=6899d106e72b">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Quiz CJPM","alternateName":"PJJoue","url":"https://pjjoue.fr/","description":"Révise le CJPM avec des quiz sur la justice pénale des mineurs, les mesures éducatives et les peines. 960 questions au total, option PJJ comprise.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
 </head>
  <body data-ecran-actif="accueil">
@@ -291,6 +291,9 @@
         <h2 id="titreModeEntrainement">Comment veux-tu jouer ?</h2>
         <div class="entrainement-grille">
           <article class="entrainement-carte entrainement-ordonne" data-carte-entrainement="ordonne">
+            <div aria-hidden="true" class="entrainement-icone">
+              <svg viewBox="0 0 32 32" focusable="false"><path d="M11 7h15M11 16h15M11 25h15"/><circle cx="5.5" cy="7" r="2.25"/><circle cx="5.5" cy="16" r="2.25"/><circle cx="5.5" cy="25" r="2.25"/><path d="m4.5 7 1 1 2-2M4.5 16l1 1 2-2M4.5 25l1 1 2-2"/></svg>
+            </div>
             <h3>Par ordre d’étapes</h3>
             <p>Suis la progression pédagogique du parcours choisi.</p>
             <details class="entrainement-options-avancees" open>
@@ -302,6 +305,9 @@
             <button id="boutonLancerEntrainementOrdonne" class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">Commencer →</button>
           </article>
           <article class="entrainement-carte entrainement-melange" data-carte-entrainement="melange">
+            <div aria-hidden="true" class="entrainement-icone">
+              <svg viewBox="0 0 32 32" focusable="false"><path d="M4 9h4c6 0 6 14 13 14h6"/><path d="m23 19 4 4-4 4"/><path d="M4 23h4c2.8 0 4.4-3.1 6.2-6.4"/><path d="M16.8 12.1C18.7 9.8 20.3 9 23 9h4"/><path d="m23 5 4 4-4 4"/></svg>
+            </div>
             <h3>Mélangé</h3>
             <p>Brasse les questions du périmètre choisi.</p>
             <details class="entrainement-options-avancees" open>
@@ -380,7 +386,7 @@
      <div class="question-commande-ligne">
       <div class="suivant-ligne">
        <button aria-label="Question précédente" class="precedent-bouton" id="boutonQuestionPrecedente">
-        <span class="libelle-bureau">← Question précédente</span><span aria-hidden="true" class="libelle-mobile">Précédente</span>
+        <span class="libelle-bureau">← Question précédente</span><span aria-hidden="true" class="libelle-mobile">← Précédente</span>
        </button>
        <button class="principal masque" id="boutonValider" type="button">
         Valider
@@ -451,20 +457,6 @@
       <div><strong>Prochaine destination</strong><span id="prochaineDestinationBilan">Continue ton parcours.</span></div>
      </aside>
     </div>
-     <div class="actions bilan-actions">
-      <button class="secondaire masque" id="boutonReprendreProgressionBilan" type="button" disabled>
-       Reprendre ma progression
-      </button>
-      <button class="principal" id="boutonContinuer" type="button">
-       Continuer
-      </button>
-      <button class="secondaire" id="boutonRejouerMesErreurs" type="button">
-       Refaire les questions à consolider
-      </button>
-     <button class="discret" id="boutonRevenirAuParcours" type="button">
-       Revenir au parcours
-      </button>
-     </div>
      <section aria-labelledby="titreCarteVoyageFinale" class="carte-voyage-finale masque" id="carteVoyageFinale">
       <div class="carte-voyage-entete">
        <div><span>Tous tes parcours validés</span><h2 id="titreCarteVoyageFinale">La carte de ton voyage</h2></div>
@@ -490,7 +482,20 @@
       <div id="listeErreursBilan">
       </div>
      </section>
-
+     <div class="actions bilan-actions">
+      <button class="secondaire masque" id="boutonReprendreProgressionBilan" type="button" disabled>
+       Reprendre ma progression
+      </button>
+      <button class="principal" id="boutonContinuer" type="button">
+       Continuer
+      </button>
+      <button class="secondaire" id="boutonRejouerMesErreurs" type="button">
+       Refaire les questions à consolider
+      </button>
+     <button class="discret" id="boutonRevenirAuParcours" type="button">
+       Revenir au parcours
+      </button>
+     </div>
    </section>
    
 <section class="ecran" id="erreurs">
@@ -1084,11 +1089,11 @@
           <h2 id="titreParcoursProgression">Voir un parcours en détail</h2>
           <p>Consulte son avancement, les étapes maîtrisées et l’état de son évaluation.</p>
         </div>
+        <button class="secondaire" id="boutonOuvrirParcours" type="button">Tous les parcours →</button>
       </header>
       <div class="progression-colonne-contenu">
         <div class="progression-pastilles" id="listeProgressionParcours" role="tablist" aria-label="Choisir un parcours à afficher"></div>
         <div class="progression-detail-parcours" id="detailProgressionParcours" role="tabpanel" tabindex="0" aria-labelledby="ongletProgressionParcours-commun"></div>
-        <button class="secondaire progression-ouvrir-parcours" id="boutonOuvrirParcours" type="button">Tous les parcours →</button>
       </div>
     </section>
   </div>
@@ -1198,10 +1203,10 @@
     <a href="mentions-legales.html">Mentions légales</a>
    </nav>
   </footer>
-  <script defer="" src="donnees/donnees-pjj.js?v=8373a938202c">
+  <script defer="" src="donnees/donnees-pjj.js?v=6899d106e72b">
   </script>
-  <script defer="" src="ressources/analytics-pjjoue.js?v=8373a938202c"></script>
-  <script defer="" src="ressources/moteur-jeu.js?v=8373a938202c">
+  <script defer="" src="ressources/analytics-pjjoue.js?v=6899d106e72b"></script>
+  <script defer="" src="ressources/moteur-jeu.js?v=6899d106e72b">
   </script>
   <dialog aria-describedby="texteFenetreQuitterSession" aria-labelledby="titreFenetreQuitterSession" class="pjj-fenetre" id="fenetreQuitterSession">
    <div class="pjj-fenetre-panneau">
