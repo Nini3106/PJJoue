@@ -325,7 +325,13 @@ def verifier() -> None:
             if(etapeSiglesMaitrisee(n)) return false;
             const dernier=liste.at(-1);e.autonomes[dernier.sigle]=true;e.validationsSansJoker[dernier.sigle]=true;
             verifierCelebrationEtapeSigles(liste);
-            return etapeSiglesMaitrisee(n)&&e.celebrationAffichee;
+            if(!etapeSiglesMaitrisee(n)||e.celebrationAffichee) return false;
+            etat.questionsSession=liste.map((c,i)=>convertirQuestionMissionSiglesVersPJJoue(
+                creerQuestionIntroductionSigles(c),i,{mode:'parcours',etape:n}));
+            const celebration=collecterCelebrationMission('sigles');
+            return celebration?.confetti===true
+                && obtenirEtatEtapeSigles(n).celebrationAffichee
+                && collecterCelebrationMission('sigles')===null;
         }""")
 
         # Les nouvelles sources sont accessibles dans les corrections natives.
