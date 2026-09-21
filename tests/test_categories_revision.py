@@ -119,6 +119,54 @@ class CategoriesRevisionTests(unittest.TestCase):
                 self.assertEqual(zone.locator('.revision-categories').count(), 0)
                 self.assertEqual(self.page.evaluate('construireCategoriesRevision', jeu), '')
 
+    def test_menus_de_filtres_au_clavier_et_sur_mobile(self):
+        for jeu in ['parcours', 'sigles', 'mesures']:
+            with self.subTest(jeu=jeu):
+                fixture = self.page.evaluate("""jeu => {
+                    const fixture = preparerCategories(jeu);
+                    const cible = jeu === 'parcours' ? obtenirQuestionsEtape('commun',2)[0]
+                        : jeu === 'sigles' ? obtenirSiglesEtape(2)[0] : obtenirReperesMesuresEtape(2)[0];
+                    const erreurs = jeu === 'parcours' ? sauvegarde.erreurs
+                        : jeu === 'sigles' ? sauvegarde.siglesJeu.erreurs : sauvegarde.mesuresJeu.erreurs;
+                    const cle = jeu === 'parcours' ? cible.id
+                        : jeu === 'sigles' ? normaliserSigleJeu(cible.sigle) : normaliserCleMesure(cible.cle);
+                    erreurs[cle] = {active:true, maitrisee:false, motifRevision:'passage', nombreErreurs:1};
+                    afficherEcran(fixture.ecran);
+                    return fixture;
+                }""", jeu)
+                self.page.set_viewport_size({'width':320, 'height':844})
+                entete = self.page.locator(f'#filtreRevisionEtape-{jeu}')
+                menu = self.page.locator(f'#{fixture["ecran"]} [data-filtre-revision="etape"]')
+                entete.click()
+                self.assertTrue(menu.evaluate('(menu) => menu.open'))
+                options = menu.locator('[role="option"]')
+                self.assertGreaterEqual(options.count(), 3)
+                self.assertEqual(menu.locator('[aria-selected="true"]').count(), 1)
+                rectangles = options.evaluate_all("""elements => elements.map(element => {
+                    const r = element.getBoundingClientRect();
+                    return {gauche:r.left, droite:r.right, hauteur:r.height};
+                })""")
+                for rect in rectangles:
+                    self.assertGreaterEqual(rect['gauche'], 0)
+                    self.assertLessEqual(rect['droite'], 320)
+                    self.assertGreaterEqual(rect['hauteur'], 44)
+                entete.press('Escape')
+                self.assertFalse(menu.evaluate('(menu) => menu.open'))
+                entete.press('ArrowDown')
+                self.page.locator(':focus').press('End')
+                self.assertEqual(self.page.locator(':focus').get_attribute('data-valeur-filtre'), options.last.get_attribute('data-valeur-filtre'))
+                self.page.locator(':focus').press('Home')
+                valeurs = options.evaluate_all('(elements) => elements.map(element => element.dataset.valeurFiltre)')
+                for _ in range(valeurs.index('2')):
+                    self.page.locator(':focus').press('ArrowDown')
+                self.page.locator(':focus').press('Enter')
+                self.assertIn('2', entete.inner_text())
+                self.assertFalse(menu.evaluate('(menu) => menu.open'))
+                self.assertEqual(self.page.evaluate('document.activeElement.id'), f'filtreRevisionEtape-{jeu}')
+                self.assertEqual(self.page.locator(f'#{fixture["ecran"]} .revision-categorie li').count(), 1)
+                self.page.locator(f'[data-revision-selection="{jeu}"]').click()
+                self.assertTrue(self.page.evaluate('etat.questionsSession.every(question => Number(question.etape) === 2)'))
+
     def test_categories_lisibles_sur_mobile_et_ordinateur(self):
         sortie = Path(__file__).resolve().parents[1] / 'test-results' / 'categories-revision'
         sortie.mkdir(parents=True, exist_ok=True)
@@ -147,6 +195,24 @@ class CategoriesRevisionTests(unittest.TestCase):
                     self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth - innerWidth'), 1)
                     self.assertTrue(self.page.locator(f"#{fixture['ecran']} .revision-categories").is_visible())
                     self.assertEqual(self.page.locator(f"#{fixture['ecran']} .revision-categorie").count(), 2)
+                    boutons = self.page.locator(
+                        f"#{fixture['ecran']} .revision-categorie button, "
+                        f"#{fixture['ecran']} [data-revision-selection]"
+                    ).evaluate_all("""elements => elements.map(bouton => {
+                        const style = getComputedStyle(bouton);
+                        const rect = bouton.getBoundingClientRect();
+                        return {texte:bouton.textContent, hauteur:rect.height,
+                            bordure:style.borderTopStyle, rayon:parseFloat(style.borderRadius),
+                            couleur:style.backgroundColor, droite:rect.right, gauche:rect.left};
+                    })""")
+                    self.assertEqual(len(boutons), 3)
+                    for bouton in boutons:
+                        self.assertGreaterEqual(bouton['hauteur'], 44, bouton)
+                        self.assertEqual(bouton['bordure'], 'solid', bouton)
+                        self.assertGreaterEqual(bouton['rayon'], 10, bouton)
+                        self.assertEqual(bouton['couleur'], 'rgb(16, 71, 127)', bouton)
+                        self.assertGreaterEqual(bouton['gauche'], 0, bouton)
+                        self.assertLessEqual(bouton['droite'], largeur, bouton)
                     self.page.evaluate('document.activeElement?.blur()')
                     self.page.screenshot(path=str(sortie / f'{jeu}-{largeur}.png'), full_page=True)
 
