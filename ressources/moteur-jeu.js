@@ -5147,6 +5147,9 @@ function actualiserBoutonReprendreEtapeDepuisDebut(question) {
         : visible
         ? `Reprendre l’étape ${Number(question.etape || 1)} depuis la première question`
         : 'Reprendre cette étape depuis la première question');
+    definirAideSurvolBouton(bouton, retourDisponible
+        ? 'Revenir à la question laissée dans le parcours, avec les réponses et le brouillon conservés.'
+        : 'Recommencer l’étape à la première question : les questions déjà maîtrisées restent validées tant qu’elles ne sont pas réinitialisées.');
 }
 function actualiserBoutonRevisionEtapeQuestion(question) {
     const bouton = selectionner('#boutonRejouerErreursEtape');

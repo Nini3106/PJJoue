@@ -258,6 +258,7 @@ class CategoriesRevisionTests(unittest.TestCase):
                 self.page.locator('#boutonRejouerErreursEtape').click()
                 self.assertEqual(bouton.inner_text(), 'Reprendre ma progression')
                 self.assertTrue(bouton.is_visible())
+                self.assertIn('Revenir à la question', bouton.get_attribute('data-infobulle'))
                 self.page.reload(wait_until='domcontentloaded')
                 self.assertEqual(bouton.inner_text(), 'Reprendre ma progression')
                 bouton.click()
