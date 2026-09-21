@@ -67,7 +67,7 @@ class SynchronisationErreursTests(unittest.TestCase):
         resultats = self.page.evaluate("""() => {
             const cas=[];
             THEMES.forEach(t=>['parcours','libre','revision'].forEach(mode=>cas.push(['parcours',mode,t.id])));
-            ['parcours','entrainement','hasard','revision'].forEach(mode=>{
+            ['parcours','entrainement','hasard','revision','evaluation'].forEach(mode=>{
                 cas.push(['sigles',mode,'commun',1],['sigles',mode,'commun',6],['mesures',mode]);
             });
             return cas.map(args=>{

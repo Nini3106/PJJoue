@@ -6090,12 +6090,12 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     if (boutonRejouer) {
         boutonRejouer.textContent = 'Voir mes révisions';
         boutonRejouer.onclick = () => afficherEcran(jeu === 'parcours' ? 'erreurs' : `${jeu}-revision`);
-        boutonRejouer.classList.toggle('masque', !obtenirElementsCategoriesRevision(jeu).length || estSessionEvaluation());
+        boutonRejouer.classList.toggle('masque', !obtenirElementsCategoriesRevision(jeu).length);
     }
     const retour = selectionner('#boutonRevenirAuParcours');
     retour?.classList.toggle('masque', jeu !== 'parcours');
     if (retour) retour.onclick = revenirAuParcoursDuBilan;
-    const aDesQuestionsAReprendre = questionsAReprendre.length > 0;
+    const aDesQuestionsAReprendre = questionsAReprendre.length > 0 && obtenirElementsCategoriesRevision(jeu).length > 0;
     boutonContinuer?.classList.toggle('principal', !aDesQuestionsAReprendre);
     boutonContinuer?.classList.toggle('secondaire', aDesQuestionsAReprendre);
     boutonRejouer?.classList.toggle('principal', aDesQuestionsAReprendre);
