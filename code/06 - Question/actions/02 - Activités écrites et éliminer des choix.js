@@ -48,7 +48,7 @@ function obtenirConfigurationValidation() {
         return { libelle: 'Valider mes retraits', action: 'valider-eliminations' };
     }
     if (['selection-multiple', 'remettre-ordre', 'association', 'classer'].includes(mode)) {
-        return { libelle: 'Valider cette réponse', action: 'valider-activite' };
+        return { libelle: 'Valider', action: 'valider-activite' };
     }
     // Les questions à choix simple se valident directement au clic :
     // pas de bouton Valider supplémentaire.

@@ -554,7 +554,11 @@ document.addEventListener('click', evenement => {
     if (boutonBascule) {
         const groupe = boutonBascule.closest('.entrainement-bascule-groupe');
         groupe.dataset.selectionEffectuee = 'true';
-        groupe.querySelectorAll('.option-bouton').forEach(boutonDuGroupe => boutonDuGroupe.classList.toggle('actif', boutonDuGroupe === boutonBascule));
+        groupe.querySelectorAll('.option-bouton').forEach(boutonDuGroupe => {
+            const actif = boutonDuGroupe === boutonBascule;
+            boutonDuGroupe.classList.toggle('actif', actif);
+            boutonDuGroupe.setAttribute('aria-pressed', String(actif));
+        });
         envoyerOptionDeJeuAnalytics(`${groupe.dataset.proposition === 'jokers' ? 'Jokers' : 'Chronomètre'} : ${boutonBascule.textContent.trim()}`);
         return;
     }

@@ -20,22 +20,22 @@
 :is(#erreurs,#sigles-revision) .revision-dossier:last-child:nth-child(odd) { grid-column:1 / -1; }
 :is(#erreurs,#sigles-revision) .revision-parcours-bouton { display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:13px; align-items:center; min-height:76px; padding:13px 15px; border:1px solid var(--bordure); border-left:5px solid var(--parcours-accent); border-radius:var(--rayon-moyen); color:var(--texte); background:var(--surface-carte-profonde); text-align:left; }
 :is(#erreurs,#sigles-revision) .revision-parcours-bouton:hover { border-color:var(--parcours-accent); transform:translateY(-1px); }
-:is(#erreurs,#sigles-revision) .revision-parcours-numero { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-weight:900; }
+:is(#erreurs,#sigles-revision) .revision-parcours-numero { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-weight:700; }
 :is(#erreurs,#sigles-revision) .revision-parcours-texte { display:grid; gap:4px; }
 :is(#erreurs,#sigles-revision) .revision-parcours-texte small { color:var(--texte-secondaire); font-size:.94rem; }
-:is(#erreurs,#sigles-revision) .revision-parcours-action { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-weight:850; }
+:is(#erreurs,#sigles-revision) .revision-parcours-action { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-weight:650; }
 :is(#erreurs,#sigles-revision) .revision-etapes-details { width:100%; min-width:0; padding:14px 16px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); background:var(--surface-carte-profonde); box-sizing:border-box; }
-:is(#erreurs,#sigles-revision) .revision-etapes-details summary { color:var(--texte); font-weight:850; cursor:pointer; }
+:is(#erreurs,#sigles-revision) .revision-etapes-details summary { color:var(--texte); font-weight:650; cursor:pointer; }
 :is(#erreurs,#sigles-revision) .revision-etape-boutons { display:flex; flex-wrap:wrap; align-items:center; width:100%; min-width:0; max-width:100%; gap:8px; margin-top:13px; box-sizing:border-box; }
 :is(#erreurs,#sigles-revision) .revision-etape-bouton { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:46px; padding:10px 12px; border:1px solid var(--revision-etape-accent); border-radius:10px; color:var(--revision-etape-accent); background:var(--surface-carte); }
-:is(#erreurs,#sigles-revision) .revision-etape-parcours { padding:2px 6px; border-left:3px solid var(--parcours-accent); color:var(--parcours-accent-lisible); font-weight:850; }
+:is(#erreurs,#sigles-revision) .revision-etape-parcours { padding:2px 6px; border-left:3px solid var(--parcours-accent); color:var(--parcours-accent-lisible); font-weight:650; }
 :is(#erreurs,#sigles-revision) .revision-dossier { align-self:start; height:auto; overflow:hidden; border:1px solid var(--bordure); border-left:5px solid var(--parcours-accent); border-radius:var(--rayon-grand); background:var(--surface-carte-profonde); }
 :is(#erreurs,#sigles-revision) .revision-dossier > summary { display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:12px; align-items:center; min-height:68px; padding:14px 16px; cursor:pointer; }
 :is(#erreurs,#sigles-revision) .revision-dossier > summary::marker { content:""; }
 :is(#erreurs,#sigles-revision) .revision-dossier > summary > span:nth-child(2) { display:grid; gap:3px; }
 :is(#erreurs,#sigles-revision) .revision-dossier small { color:var(--texte-secondaire); font-size:.94rem; }
 :is(#erreurs,#sigles-revision) .revision-dossier-numero,
-:is(#erreurs,#sigles-revision) .revision-dossier-chevron { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-weight:900; }
+:is(#erreurs,#sigles-revision) .revision-dossier-chevron { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-weight:700; }
 :is(#erreurs,#sigles-revision) .revision-dossier-contenu { display:grid; gap:10px; padding:0 15px 15px; }
 :is(#erreurs,#sigles-revision) .revision-etape-groupe { padding:13px; border:1px solid var(--bordure); border-left:3px solid var(--revision-etape-accent,var(--parcours-accent)); border-radius:11px; background:var(--surface-carte); }
 :is(#erreurs,#sigles-revision) .revision-etape-groupe-entete { display:flex; justify-content:space-between; gap:12px; color:var(--revision-etape-accent,var(--parcours-accent-lisible)); }
@@ -63,13 +63,13 @@
 .revision-categorie-contenu ul { display:grid; gap:12px; margin:0; padding:0; list-style:none; }
 .revision-categorie-contenu li { display:grid; gap:4px; padding-top:12px; border-top:1px solid var(--bordure); overflow-wrap:anywhere; }
 .revision-categorie-contenu p { margin:0; color:var(--texte-secondaire); }
-.revision-categorie-contenu button { justify-self:start; width:max-content; max-width:100%; min-width:0; min-height:44px; padding:10px 16px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font:inherit; font-weight:800; line-height:1.4; white-space:normal; text-align:left; cursor:pointer; }
+.revision-categorie-contenu button { justify-self:start; width:max-content; max-width:100%; min-width:0; min-height:44px; padding:10px 16px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font:inherit; font-weight:650; line-height:1.4; white-space:normal; text-align:left; cursor:pointer; }
 .revision-categorie-contenu button:hover { border-color:var(--jaune-interface); background:var(--surface-carte); }
 .revision-categorie-contenu button:focus-visible,
 .revision-selecteur > summary:focus-visible,
 .revision-selecteur-options button:focus-visible { outline:3px solid var(--jaune-interface); outline-offset:3px; }
 .revision-reperes { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
-.revision-repere { display:inline-block; max-width:100%; padding:3px 9px; border:1px solid var(--repere-accent); border-radius:999px; color:var(--repere-texte); background:color-mix(in srgb,var(--repere-accent) 12%,transparent); font-weight:750; line-height:1.4; }
+.revision-repere { display:inline-block; max-width:100%; padding:3px 9px; border:1px solid var(--repere-accent); border-radius:999px; color:var(--repere-texte); background:color-mix(in srgb,var(--repere-accent) 12%,transparent); font-weight:650; line-height:1.4; }
 
 /* Supports : mêmes cartes, seules les couleurs de repérage varient. */
 #supports .supports-tout-refermer { justify-self:start; min-height:40px; padding:0 14px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte); background:var(--surface-carte-profonde); }
@@ -92,12 +92,12 @@
 #supports .support-tableau th { color:var(--support-accent); background:var(--surface-carte); }
 #supports .masque-recherche-support { display:none; }
 #supports .supports-filtres { display:flex; flex-wrap:wrap; gap:8px; }
-#supports .supports-filtres button { width:max-content; max-width:100%; min-width:0; min-height:42px; padding:0 14px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; }
+#supports .supports-filtres button { width:max-content; max-width:100%; min-width:0; min-height:42px; padding:0 14px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:650; }
 #supports .supports-filtres button.actif { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.10); box-shadow:inset 0 0 0 1px var(--jaune-interface); }
 #supports .supports-filtres .support-filtre-parcours { border-color:var(--parcours-accent-lisible); color:var(--parcours-accent-lisible); }
 #supports .supports-filtres .support-filtre-parcours:is(:hover,:focus-visible,.actif) { background:rgba(var(--parcours-accent-rgb),.14); box-shadow:inset 0 0 0 1px var(--parcours-accent-lisible); }
 #supports .supports-parcours-badges { display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
-#supports .support-parcours-badge { display:inline-flex; align-items:center; min-height:27px; padding:2px 9px; border:1px solid currentColor; border-radius:999px; font-size:.9rem; font-style:normal; font-weight:900; color:var(--parcours-accent-lisible); }
+#supports .support-parcours-badge { display:inline-flex; align-items:center; min-height:27px; padding:2px 9px; border:1px solid currentColor; border-radius:999px; font-size:.9rem; font-style:normal; font-weight:700; color:var(--parcours-accent-lisible); }
 #supports .support-ressource-guide { display:grid; grid-template-columns:120px minmax(0,1fr) auto; gap:16px; align-items:center; justify-items:stretch; min-height:86px; padding:16px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); color:var(--texte); background:var(--surface-carte); text-align:left; text-decoration:none; }
 #supports .support-ressource-guide:hover { border-color:var(--support-accent,var(--jaune-interface)); transform:translateY(-1px); }
 #supports .support-ressource-guide .support-revision-type { justify-self:start; text-align:left; }
@@ -134,9 +134,9 @@
 .revision-filtres p{margin:0 0 16px;line-height:1.5}
 .revision-filtres-champs{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:18px}
 .revision-filtre{display:flex;flex-direction:column;gap:8px;min-width:0;max-width:100%;flex:1 1 240px}
-.revision-filtre > span{color:var(--texte-secondaire);font-weight:750}
+.revision-filtre > span{color:var(--texte-secondaire);font-weight:650}
 .revision-selecteur{position:relative;min-width:0}
-.revision-selecteur > summary{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:48px;padding:12px 16px;border:1px solid var(--filtre-accent,var(--bordure));border-radius:12px;color:var(--texte);background:var(--surface-carte-profonde);font-weight:750;line-height:1.4;cursor:pointer;list-style:none}
+.revision-selecteur > summary{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:48px;padding:12px 16px;border:1px solid var(--filtre-accent,var(--bordure));border-radius:12px;color:var(--texte);background:var(--surface-carte-profonde);font-weight:650;line-height:1.4;cursor:pointer;list-style:none}
 .revision-selecteur > summary::marker{content:""}
 .revision-selecteur > summary::-webkit-details-marker{display:none}
 .revision-selecteur > summary > span:first-child{min-width:0;overflow-wrap:anywhere}
@@ -151,4 +151,37 @@
 .revision-selecteur-options button:hover{border-color:var(--filtre-accent,var(--jaune-interface));background:var(--surface-carte-profonde)}
 :is(#erreurs,#sigles-revision,#mesures-revision) .revision-filtres button{min-width:0;max-width:100%;min-height:44px;white-space:normal;text-align:left}
 
+
+/* Audit visuel : hiérarchie, espaces et cadres allégés. */
+:is(#erreurs,#sigles-revision,#mesures-revision) .revision-section-entete { gap:10px 28px; align-items:start; }
+:is(#erreurs,#sigles-revision,#mesures-revision) .revision-section-entete p { font-size:.9rem; line-height:1.6; }
+:is(#erreurs,#sigles-revision,#mesures-revision) .revision-filtres { padding:0 0 22px; border:0; border-bottom:1px solid var(--bordure); border-radius:0; background:transparent; }
+:is(#erreurs,#sigles-revision,#mesures-revision) .revision-filtres-champs { margin-bottom:12px; gap:12px; }
+.revision-categorie { border-width:0 0 1px; border-radius:0; background:transparent; }
+.revision-categorie > summary { padding:16px 0; }
+.revision-categorie-contenu { padding:0 0 18px; }
+.revision-categorie-contenu > button { order:-1; }
+.revision-repere { border-width:0 0 0 3px; border-radius:0; padding:2px 8px; font-weight:600; }
+#supports .supports-outils { padding:0 0 22px; border:0; border-bottom:1px solid var(--bordure); border-radius:0; background:transparent; }
+#supports .supports-juridiction { border-width:0 0 1px; border-radius:0; background:transparent; box-shadow:none; }
+#supports .supports-juridiction > summary { padding:16px 0; border-left:3px solid var(--support-accent); padding-left:12px; }
+#supports .supports-juridiction-contenu { padding:0 0 18px; gap:0; }
+#supports .support-revision { border-width:0 0 1px; border-radius:0; background:transparent; }
+#supports .support-revision > summary { padding:16px 12px; }
+#supports .support-revision-contenu { padding:8px 12px 22px; }
+#supports .support-revision-contenu :is(.support-bloc,.support-comparaison > div,.support-comparaison > article,.support-section) { padding:14px 0; border:0; border-top:1px solid var(--bordure); border-radius:0; background:transparent; box-shadow:none; }
+#supports .support-ressource-guide { border-width:0 0 1px; border-radius:0; padding:16px 12px; background:transparent; box-shadow:none; }
+#supports .support-juridiction-abreviation { background:transparent; }
+@media (max-width:620px) {
+    #supports .support-revision-contenu { padding-inline:0; }
+    #supports .support-revision > summary { padding-inline:0; gap:10px; }
+    #supports .support-ressource-guide { padding-inline:0; }
+    :is(#erreurs,#sigles-revision,#mesures-revision) .revision-section-entete { gap:10px; }
+}
+
+/* Présentation commune issue de l’audit visuel. */
+#supports .support-repere,
+#supports .support-attention { padding:14px 0 14px 12px; border-width:0 0 0 3px; border-radius:0; background:transparent; }
+#supports .support-frise > li { padding:14px 0 14px 12px; border-radius:0; background:transparent; }
+#supports .support-tableau-conteneur { border-width:1px 0; border-radius:0; }
 /* === FIN MORCEAU CSS === */

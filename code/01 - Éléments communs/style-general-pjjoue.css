@@ -150,7 +150,7 @@ header.entete {
     min-width: max-content;
     color: #fff;
     font-size: 1.08rem;
-    font-weight: 850;
+    font-weight: 650;
     letter-spacing: -.02em;
 }
 .marque b {
@@ -168,7 +168,7 @@ header.entete {
     padding: 8px 14px;
     color: #fff;
     background: var(--surface-carte-profonde);
-    font-weight: 800;
+    font-weight: 650;
     transition: transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
 }
 .discret {
@@ -179,7 +179,7 @@ header.entete {
     color: var(--texte-secondaire);
     background: transparent;
     box-shadow: none;
-    font-weight: 800;
+    font-weight: 650;
     transition: transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
 }
 .bouton-retour:active,.discret:active {
@@ -203,7 +203,7 @@ header.entete {
     padding: 8px 14px;
     color: #fff;
     background: var(--surface-secondaire);
-    font-weight: 800;
+    font-weight: 650;
     text-decoration: none;
     cursor: pointer;
     transition: transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
@@ -251,7 +251,7 @@ header.entete {
     margin-bottom: 7px;
     color: var(--texte-secondaire);
     font-size: .94rem;
-    font-weight: 800;
+    font-weight: 650;
     letter-spacing: .08em;
     text-transform: uppercase;
 }
@@ -337,7 +337,7 @@ p {
     border: 1px solid rgba(255,224,149,.86);
     border-radius: 999px;
     font-size: .78rem;
-    font-weight: 900;
+    font-weight: 700;
     color: #fff;
     background: var(--surface-secondaire);
     border-color: #6f94c0;
@@ -390,7 +390,7 @@ p {
 .compteur,.chronometre {
     min-width: max-content;
     color: var(--texte-secondaire);
-    font-weight: 750
+    font-weight: 650
 }
 #reperesQuestion {
     display: grid;
@@ -472,7 +472,7 @@ p {
     color: var(--bleu-nuit-950);
     background: var(--accent);
     font-size: .75rem;
-    font-weight: 800
+    font-weight: 650
 }
 .reponses {
     display: grid;
@@ -485,7 +485,7 @@ p {
     width: 31px;
     height: 31px;
     border-radius: 50%;
-    font-weight: 950;
+    font-weight: 700;
     color: var(--bleu-nuit-950);
     background: var(--accent);
 }
@@ -507,7 +507,7 @@ p {
     align-items: center;
     border: 1px solid #6f94c0;
     border-radius: 999px;
-    font-weight: 750;
+    font-weight: 650;
     min-height: 34px;
     padding: 5px 10px;
     gap: 6px;
@@ -669,7 +669,7 @@ p {
     margin-top: 5px;
     color: var(--accent);
     font-size: .74rem;
-    font-weight: 850
+    font-weight: 650
 }
 .association-panneau {
     position: relative;
@@ -894,7 +894,7 @@ p {
 }
 .source a {
     color: var(--accent);
-    font-weight: 850
+    font-weight: 650
 }
 .notification {
     position: fixed;
@@ -1105,7 +1105,7 @@ p {
         margin: 0 0 2px;
         color: var(--accent);
         font-size: .78rem;
-        font-weight: 850;
+        font-weight: 650;
         letter-spacing: .01em;
     }
     .association-colonne button .association-repere {
@@ -1113,7 +1113,7 @@ p {
         margin-top: 5px;
         color: var(--accent);
         font-size: .72rem;
-        font-weight: 850;
+        font-weight: 650;
     }
     .suivant-ligne {
         flex-direction: row;
@@ -1227,7 +1227,7 @@ p {
     border: 1px solid #6f94c0;
     border-radius: 12px;
     padding: 9px 16px;
-    font-weight: 800;
+    font-weight: 650;
     transition: transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
     color: #fff;
     background: var(--surface-carte-profonde);
@@ -1345,7 +1345,7 @@ p {
     border-color: #6f94c0;
     background: linear-gradient(135deg,var(--surface-secondaire),#215f9e);
     font-size: var(--taille-action-question);
-    font-weight: 800;
+    font-weight: 650;
     letter-spacing: .01em;
     min-height: 38px;
     padding: 7px 12px;
@@ -1468,7 +1468,7 @@ h3 {
     content: "×";
     transform: translateY(-50%);
     font-size: 1.35rem;
-    font-weight: 950;
+    font-weight: 700;
     color: var(--accent)
 }
 .elimination-choix.elimine {
@@ -1725,11 +1725,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: var(--accent);
     font-size: .82rem;
     letter-spacing: .07em;
-    font-weight: 900;
+    font-weight: 700;
 }
 .evaluation-titre {
     font-size: 1.35rem;
-    font-weight: 900;
+    font-weight: 700;
     margin-top: 4px;
 }
 .evaluation-statut {
@@ -1787,7 +1787,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .carte-parcours-entete .carte-parcours-surtitre {
     color: #7ce8dc;
     font-size: .76rem;
-    font-weight: 850;
+    font-weight: 650;
     letter-spacing: .08em;
     text-transform: uppercase;
 }
@@ -1953,7 +1953,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: var(--texte);
     font-size: 1rem;
     line-height: 1.25;
-    font-weight: 800;
+    font-weight: 650;
 }
 @media (min-width:1100px) and (max-height:950px) {
     #parcours .programme-objectif-interieur {
@@ -2154,7 +2154,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: var(--bleu-nuit-950);
     background: var(--jaune-interface);
     font-size: .94rem;
-    font-weight: 850;
+    font-weight: 650;
     animation: arriveePositionParcours .55s ease both;
 }
 #parcours.transition-vers-etape .chemin-etape-carte {
@@ -2215,7 +2215,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     display: block;
     color: var(--couleur-etape,var(--accent));
     font-size: .82rem;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: .055em;
     margin-bottom: 8px;
 }
@@ -2223,10 +2223,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     display: block;
     font-size: 1.18rem;
     line-height: 1.18;
-    font-weight: 900;
-    word-break: normal;
-    overflow-wrap: normal;
-    hyphens: none;
+    font-weight: 700;
+
 }
 #parcours .chemin-progression {
     grid-column: 1 / -1;
@@ -2725,7 +2723,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: #e7f3ff;
     border: 1px solid rgba(142,199,251,.38);
     background: var(--surface-carte);
-    font-weight: 800;
+    font-weight: 650;
 }
 #carnet .carnet-defi-hasard-actions .secondaire:hover,
 #carnet .carnet-defi-hasard-actions .secondaire:focus-visible {
@@ -2918,7 +2916,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     margin: 0 0 14px;
     color: var(--jaune-interface);
     font-size: clamp(2.4rem,4.2vw,4.5rem);
-    font-weight: 900;
+    font-weight: 700;
     line-height: 1;
     letter-spacing: -.055em;
 }
@@ -2970,7 +2968,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     background: var(--jaune-interface);
     border-radius: 999px;
     cursor: pointer;
-    font-weight: 900;
+    font-weight: 700;
     appearance: none;
     -webkit-appearance: none;
 }
@@ -3087,7 +3085,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 #question .compteur,#question .chronometre {
     color: #c8def3;
     font-size: .95rem;
-    font-weight: 750;
+    font-weight: 650;
 }
 #question .indicateur-serie {
     min-width: max-content;
@@ -3109,7 +3107,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: var(--jaune-interface);
 }
 #question .indicateur-serie strong {
-    font-weight: 850;
+    font-weight: 650;
 }
 #question .indicateur-serie.serie-remarquable {
     color: var(--bleu-nuit-950);
@@ -3133,7 +3131,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     border: 1px solid rgba(145,198,245,.22);
     background: rgba(10,60,115,.38);
     color: #dcecff;
-    font-weight: 750;
+    font-weight: 650;
     padding: calc(5px * var(--densite-question))
     calc(9px * var(--densite-question));
     font-size: calc(.82rem * var(--densite-question));
@@ -3143,7 +3141,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     margin: 0;
     color: #fff;
     letter-spacing: -.018em;
-    font-weight: 850;
+    font-weight: 650;
     font-size: clamp(
     1.12rem,
     calc(1.82rem * var(--densite-question)),
@@ -3171,7 +3169,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     border: 1px solid rgba(145,198,245,.34);
     background: var(--surface-carte-profonde);
     color: #dcecff;
-    font-weight: 850;
+    font-weight: 650;
     width: calc(31px * var(--densite-question));
     min-width: calc(31px * var(--densite-question));
     height: calc(31px * var(--densite-question));
@@ -3429,14 +3427,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     border-radius: 999px;
     color: #fff;
     background: color-mix(in srgb, var(--couleur-etape-active) 16%, rgba(6,45,91,.72));
-    font-weight: 850;
+    font-weight: 650;
 }
 #question .question-etape-identite > strong {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     color: #eef7ff;
-    font-weight: 750;
+    font-weight: 650;
 }
 #question .question-autonomie {
     flex: 0 0 auto;
@@ -3457,7 +3455,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     background: rgba(8,50,101,.52);
     font: inherit;
     font-size: .76rem;
-    font-weight: 750;
+    font-weight: 650;
 }
 #question .question-autonomie-reinitialiser:hover:not(:disabled),
 #question .question-autonomie-reinitialiser:focus-visible {
@@ -3575,7 +3573,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     background: rgba(79,140,255,.16);
     border-color: #4f8cff;
     box-shadow: inset 0 0 0 1px #4f8cff;
-    font-weight: 900;
+    font-weight: 700;
 }
 .entrainement-secondes-groupe {
     display: flex;
@@ -3629,7 +3627,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 #carnet .carnet-parcours-surtitre {
     color: #9fc7ec;
     font-size: .76rem;
-    font-weight: 800;
+    font-weight: 650;
     letter-spacing: .08em;
     text-transform: uppercase;
 }
@@ -3646,7 +3644,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: var(--jaune-interface);
     background: rgba(6,47,96,.48);
     font-size: .94rem;
-    font-weight: 800;
+    font-weight: 650;
 }
 #carnet #prochaineDestinationParcours {
     margin: 10px 0 14px;
@@ -3770,7 +3768,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: #edf6ff;
     cursor: pointer;
     font-size: .84rem;
-    font-weight: 800;
+    font-weight: 650;
 }
 #carnet .souvenir-etape ul {
     margin: 0;
@@ -3859,7 +3857,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 #question .temps-ecoule-correction strong {
     color: #fff;
     font-size: 1.05rem;
-    font-weight: 950;
+    font-weight: 700;
 }
 #question .temps-ecoule-correction span {
     color: #ffe8eb;
@@ -4066,14 +4064,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 #progression .progression-statistique strong {
     color: #fff;
-    font-weight: 950;
+    font-weight: 700;
     font-size: clamp(1.5rem,2.2vw,2rem);
     line-height: 1;
 }
 #progression .progression-statistique span {
     margin-top: 7px;
     color: #e9f4ff;
-    font-weight: 850;
+    font-weight: 650;
 }
 #progression .progression-statistique small {
     margin-top: 3px;
@@ -4102,7 +4100,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: #fff;
     border: 1px solid #6f94c0;
     background: var(--surface-carte-profonde);
-    font-weight: 800;
+    font-weight: 650;
 }
 #progression .progression-actions button:hover,#progression .progression-importation:hover {
     color: #fff;
@@ -4206,7 +4204,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     background: var(--jaune-interface);
     color: var(--texte-sur-jaune);
     font-size: .82rem;
-    font-weight: 900;
+    font-weight: 700;
     white-space: nowrap;
 }
 :is(#erreurs,#sigles-revision,#mesures-revision) .erreurs-parcours-liste {
@@ -4221,7 +4219,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 :is(#erreurs,#sigles-revision,#mesures-revision) .erreurs-parcours-enonce {
     color: #eef7ff;
-    font-weight: 750;
+    font-weight: 650;
     line-height: 1.35;
     margin-bottom: 4px;
     overflow-wrap: anywhere;
@@ -4320,7 +4318,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 #progression .progression-decouverte-statistique .experience-valeur {
     font-size: 2.2rem;
     line-height: 1;
-    font-weight: 950;
+    font-weight: 700;
     color: #fff;
     display: block;
 }
@@ -4330,7 +4328,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     margin: 0;
     font-size: 1rem;
     line-height: 1.2;
-    font-weight: 850;
+    font-weight: 650;
 }
 #parametres .sources-panneau {
     width: 100%;
@@ -4461,7 +4459,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: #082f5f;
     background: #38d39f;
     box-shadow: 0 0 0 5px rgba(56,211,159,.14);
-    font-weight: 950;
+    font-weight: 700;
     animation: allumageJalon .22s ease-out both;
 }
 @keyframes allumageJalon {
@@ -4662,7 +4660,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 #question #enonceQuestion {
     color: #fff;
     letter-spacing: -.018em;
-    font-weight: 850;
+    font-weight: 650;
     font-size: clamp(
     1.12rem,
     calc(1.82rem * var(--densite-question)),
@@ -5585,7 +5583,7 @@ main.conteneur {
     background: rgba(79,140,255,.16);
     border-color: #4f8cff;
     box-shadow: inset 0 0 0 1px #4f8cff;
-    font-weight: 900;
+    font-weight: 700;
 }
 /* Fenêtre de confirmation de sortie de session. */
 .pjj-fenetre {
@@ -5683,7 +5681,7 @@ main.conteneur {
     color: #fff;
     background: var(--surface-carte-profonde);
     border-color: #6f94c0;
-    font-weight: 900;
+    font-weight: 700;
 }
 #confirmerQuitterSession:hover,
 #confirmerQuitterSession:focus-visible {
@@ -5720,7 +5718,7 @@ main.conteneur {
     border-radius: 13px;
     background: #2867a8;
     color: #fff;
-    font-weight: 800;
+    font-weight: 650;
 }
 #question .choisir-ordre-proposition:hover,
 #question .choisir-ordre-proposition:focus-visible {
@@ -5823,7 +5821,7 @@ main.conteneur {
     border-radius: 16px;
     background: var(--surface-carte-profonde);
     color: #fff;
-    font-weight: 900;
+    font-weight: 700;
     cursor: pointer;
 }
 .celebration-continuer:hover,
@@ -5903,7 +5901,7 @@ main.conteneur {
     color: #ffe49b;
     background: rgba(255,200,87,.08);
     font-size: .82rem;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: .035em;
 }
 #bilan #titreBilan {
@@ -5941,7 +5939,7 @@ main.conteneur {
 #bilan .bilan-statistiques span {
     color: #cfe2f5;
     font-size: .88rem;
-    font-weight: 750;
+    font-weight: 650;
     text-align: center;
 }
 #bilan .bilan-prochaine-destination {
@@ -5964,7 +5962,7 @@ main.conteneur {
     display: grid;
     place-items: center;
     font-size: 1.25rem;
-    font-weight: 900;
+    font-weight: 700;
 }
 #bilan .bilan-prochaine-destination div {
     min-width: 0;
@@ -6002,7 +6000,7 @@ main.conteneur {
 #bilan .carte-voyage-entete span {
     color: #a9c9e9;
     font-size: .76rem;
-    font-weight: 850;
+    font-weight: 650;
     letter-spacing: .07em;
     text-transform: uppercase;
 }
@@ -6054,7 +6052,7 @@ main.conteneur {
     right: 4px;
     bottom: 2px;
     font-size: .65rem;
-    font-weight: 900;
+    font-weight: 700;
 }
 #bilan button.carte-voyage-etape:hover,
 #bilan button.carte-voyage-etape:focus-visible {
@@ -6116,7 +6114,7 @@ main.conteneur {
     margin-bottom: 4px;
     color: #a9c9e9;
     font-size: .78rem;
-    font-weight: 850;
+    font-weight: 650;
     letter-spacing: .06em;
     text-transform: uppercase;
 }
@@ -6131,7 +6129,7 @@ main.conteneur {
     color: #e8f4ff;
     background: rgba(24,79,136,.62);
     font-size: .82rem;
-    font-weight: 850;
+    font-weight: 650;
 }
 #bilan #listeErreursBilan {
     max-height: min(380px,45vh);
@@ -6197,7 +6195,7 @@ main.conteneur {
     border-radius: 50%;
     color: var(--bleu-nuit-950);
     background: #ffc83d;
-    font-weight: 900;
+    font-weight: 700;
 }
 #bilan .bilan-erreur-corps {
     display: grid;
@@ -6268,7 +6266,7 @@ main.conteneur {
     color: #062e28;
     background: #5fe0a0;
     font-size: 1.55rem;
-    font-weight: 950;
+    font-weight: 700;
 }
 #bilan .bilan-parfait h3 {
     margin: 0 0 5px;
@@ -6413,7 +6411,7 @@ main.conteneur {
     letter-spacing: .08em;
     text-transform: uppercase;
     font-size: .94rem;
-    font-weight: 950;
+    font-weight: 700;
 }
 #question .joker-onglet-icone {
     color: var(--accent);
@@ -6545,7 +6543,7 @@ body:not([data-ecran-actif="accueil"])::before {
     padding: 0 17px;
     border-radius: 12px;
     font-size: .95rem;
-    font-weight: 850;
+    font-weight: 650;
     letter-spacing: 0;
     text-transform: none;
     white-space: nowrap;
@@ -6806,7 +6804,7 @@ body:not([data-ecran-actif="accueil"])::before {
 #question .activite-consigne span {
     padding: 4px 8px;
     font-size: .72rem;
-    font-weight: 850;
+    font-weight: 650;
 }
 #question .activite-consigne b {
     color: #d8e8f7;
@@ -6952,7 +6950,7 @@ body:not([data-ecran-actif="accueil"])::before {
     color: #fff;
     background: var(--surface-carte);
     box-shadow: 0 6px 16px rgba(0,22,55,.16);
-    font-weight: 900;
+    font-weight: 700;
     cursor: pointer;
 }
 .joker-fenetre .joker-icone {
@@ -6999,7 +6997,7 @@ body:not([data-ecran-actif="accueil"])::before {
     padding-top: 15px;
     border-top: 1px solid rgba(142,199,251,.24);
     color: #ffe49b;
-    font-weight: 800;
+    font-weight: 650;
     text-align: center;
 }
 @media (max-width:1220px) {
@@ -7155,7 +7153,7 @@ body:not([data-ecran-actif="accueil"])::before {
     border-bottom: 1px solid var(--bordure);
 }
 .page-information-liste dt {
-    font-weight: 800;
+    font-weight: 650;
 }
 .page-information-liste dd {
     margin: 0;
@@ -7175,7 +7173,7 @@ body:not([data-ecran-actif="accueil"])::before {
     margin-top: 0;
 }
 .produit-pied-page a[aria-current="page"] {
-    font-weight: 850;
+    font-weight: 650;
     text-decoration-thickness: 2px;
 }
 @media (max-width:580px) {
@@ -7243,7 +7241,7 @@ body:not([data-ecran-actif="accueil"])::before {
     border-radius: 999px;
     color: #fff;
     background: rgba(5,38,80,.48);
-    font-weight: 800;
+    font-weight: 650;
     text-decoration: none;
 }
 .guide-site-entete nav a:hover,
@@ -7272,7 +7270,7 @@ body:not([data-ecran-actif="accueil"])::before {
     margin-bottom: 8px;
     color: var(--jaune-interface);
     font-size: .82rem;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: .08em;
     text-transform: uppercase;
 }
@@ -7351,7 +7349,7 @@ body:not([data-ecran-actif="accueil"])::before {
     place-items: center;
     color: var(--bleu-nuit-950);
     background: var(--jaune-interface);
-    font-weight: 950;
+    font-weight: 700;
 }
 .guide-liste-coches {
     padding-left: 0;
@@ -7366,7 +7364,7 @@ body:not([data-ecran-actif="accueil"])::before {
     position: absolute;
     left: 4px;
     color: var(--accent);
-    font-weight: 950;
+    font-weight: 700;
 }
 .guide-appel-action {
     padding: 22px;
@@ -7412,7 +7410,7 @@ body:not([data-ecran-actif="accueil"])::before {
 }
 .guide-tableau td:first-child {
     width: 120px;
-    font-weight: 900;
+    font-weight: 700;
 }
 .guide-tableau tr:last-child td {
     border-bottom: 0;
@@ -7497,7 +7495,7 @@ body:not([data-ecran-actif="accueil"])::before {
     border-radius: 15px;
     color: var(--texte);
     background: rgba(255,255,255,.035);
-    font-weight: 800;
+    font-weight: 650;
     line-height: 1.35;
     text-decoration: none;
 }
@@ -7526,7 +7524,7 @@ body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil
     color: var(--jaune-interface);
     background: rgba(255,200,61,.08);
     font-size: .75rem;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: .04em;
     text-transform: uppercase;
 }
@@ -7547,7 +7545,7 @@ body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil
     color: var(--texte);
     background: rgba(255,255,255,.035);
     font-size: .86rem;
-    font-weight: 800;
+    font-weight: 650;
     text-decoration: none;
 }
 .guide-parcours-liens a:hover {
@@ -7674,7 +7672,7 @@ body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil
     color: #fff;
     background: var(--surface-carte-profonde);
     font: inherit;
-    font-weight: 900;
+    font-weight: 700;
     cursor: pointer;
 }
 .guide-video-bouton:hover {
@@ -7724,14 +7722,14 @@ body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil
 .guide-video-meta {
     color: var(--texte-secondaire);
     font-size: .82rem;
-    font-weight: 800;
+    font-weight: 650;
 }
 .guide-video-lien {
     width: fit-content;
     margin-top: auto;
     padding-top: 2px;
     font-size: .88rem;
-    font-weight: 800;
+    font-weight: 650;
 }
 @media (max-width:760px) {
     .guide-videos-grille {
@@ -7754,7 +7752,7 @@ body[data-ecran-actif]:not([data-ecran-actif="accueil"]) .guides-publics-accueil
     color: #fff;
     background: #0b315d;
     box-shadow: 0 12px 30px rgba(0,18,48,.34);
-    font-weight: 850;
+    font-weight: 650;
     opacity: 0;
     pointer-events: none;
     transform: translate(-50%,12px);
@@ -7822,7 +7820,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     box-shadow: 0 8px 22px rgba(0,18,48,.28);
     font: inherit;
     font-size: .82rem;
-    font-weight: 850;
+    font-weight: 650;
     opacity: 0;
     visibility: hidden;
     cursor: pointer;
@@ -7856,7 +7854,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
 .sommaire-guide summary {
     padding: 14px 17px;
     color: var(--jaune-interface);
-    font-weight: 900;
+    font-weight: 700;
     cursor: pointer;
 }
 
@@ -7921,7 +7919,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     border-radius: 999px;
     font-size: 1rem;
     line-height: 1.2;
-    font-weight: 850;
+    font-weight: 650;
 }
 #fenetreMessage.fenetre-reussite .pjj-fenetre-panneau {
     border-color: rgba(95,224,160,.48);
@@ -8194,7 +8192,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     content: "✓";
     font-size: 1.75rem;
     line-height: 1;
-    font-weight: 950;
+    font-weight: 700;
 }
 #fenetreMessage.fenetre-reussite #confirmerFenetreMessage {
     color: #062e28;
@@ -8239,7 +8237,7 @@ header.entete .navigation .bouton-installer-pjjoue::before {
     content: "?";
     font-size: 1.7rem;
     line-height: 1;
-    font-weight: 950;
+    font-weight: 700;
 }
 #fenetreMessage.fenetre-avertissement #confirmerFenetreMessage {
     color: #fff;
@@ -9176,7 +9174,7 @@ label.secondaire,
     border-radius: 0;
     background: transparent;
     font-style: normal;
-    font-weight: 800;
+    font-weight: 650;
     line-height: 1;
     opacity: 1;
     transform: none;
@@ -9315,7 +9313,7 @@ header.entete .navigation .navigation-lien {
     background: transparent;
     box-shadow: none;
     font-size: 1rem;
-    font-weight: 800;
+    font-weight: 600;
     text-align: left;
 }
 
@@ -9383,7 +9381,7 @@ header.entete .navigation .navigation-section-titre {
     border-top:0;
     color:var(--jaune-interface);
     font-size:.72rem;
-    font-weight:900;
+    font-weight:700;
     letter-spacing:.11em;
     text-transform:uppercase;
 }
@@ -9428,7 +9426,7 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
     border-radius:12px;
     color:var(--texte);
     background:var(--surface-carte-profonde);
-    font-weight:800;
+    font-weight:650;
 }
 #erreurs .revision-lien-supports:hover,
 #erreurs .revision-lien-supports:focus-visible {
@@ -9463,7 +9461,7 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
     min-height:30px;
     padding:4px 10px;
     border-radius:999px;
-    font-weight:850;
+    font-weight:650;
     white-space:nowrap;
 }
 #question .question-parcours-identite > span {
@@ -9541,7 +9539,7 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
     align-items: baseline;
     white-space: nowrap;
     font-size: 1.08rem;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: -.04em;
 }
 .pjj-consentement-marque-pjj {
@@ -9565,7 +9563,7 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
     display: inline-block;
     margin-top: 7px;
     color: #fff1b8;
-    font-weight: 800;
+    font-weight: 650;
     text-underline-offset: 3px;
 }
 .pjj-consentement-actions {
@@ -9581,7 +9579,7 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
     max-width: 100%;
     border-radius: 999px;
     padding: 8px 16px;
-    font-weight: 900;
+    font-weight: 700;
     cursor: pointer;
     transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
 }
@@ -9636,7 +9634,7 @@ header.entete .navigation .navigation-mini-jeu:focus-visible {
     background: rgba(12, 42, 77, .94);
     box-shadow: 0 8px 24px rgba(2, 12, 30, .28);
     font-size: .82rem;
-    font-weight: 850;
+    font-weight: 650;
     cursor: pointer;
 }
 .pjj-consentement-preferences:hover {
@@ -10224,7 +10222,7 @@ body[data-ecran-actif="accueil"] #accueil {
 #carnet .carnet-journal-entete h2 { margin:4px 0 0; font-size:1.45rem; }
 #carnet .carnet-journal .surtitre { font-size:.94rem; }
 #carnet .carnet-prochaine-destination { display:flex; align-items:center; gap:11px; padding:15px 17px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); background:var(--surface-carte-profonde); }
-#carnet .carnet-prochaine-destination > span { color:var(--parcours-accent,var(--jaune-interface)); font-size:1.25rem; font-weight:900; }
+#carnet .carnet-prochaine-destination > span { color:var(--parcours-accent,var(--jaune-interface)); font-size:1.25rem; font-weight:700; }
 #carnet .carnet-prochaine-destination p { margin:0; color:var(--texte); font-size:1rem; line-height:1.55; }
 #carnet .carnet-journal .carnet-parcours-titre { font-size:1rem; }
 #carnet .carnet-journal .carnet-parcours-reperes { font-size:1rem; }
@@ -10292,5 +10290,73 @@ body[data-ecran-actif="accueil"] #accueil {
 @media (prefers-reduced-motion:reduce) {
     .infobulle-pjjoue { transition:none; }
 }
+
+
+/* Audit visuel : hiérarchie, espaces et cadres allégés. */
+:root {
+    --rayon-tres-grand:16px;
+    --rayon-grand:12px;
+    --rayon-moyen:10px;
+    --ombre-carte:0 2px 8px rgba(0,19,52,.08);
+}
+body[data-ecran-actif]:not([data-ecran-actif="accueil"]) main.conteneur {
+    width:min(1120px,calc(100% - 48px));
+    margin-inline:auto;
+    padding:24px 0 40px;
+}
+body[data-ecran-actif] .barre-actions-page {
+    width:100%;
+    margin:0 0 24px;
+    padding:0;
+}
+body[data-ecran-actif] .ecran > .page-entete {
+    padding-top:0;
+    margin:0 auto 32px;
+}
+body[data-ecran-actif] .page-entete h1 {
+    font-size:clamp(1.8rem,3vw,2.5rem);
+    font-weight:700;
+    line-height:1.2;
+    letter-spacing:-.025em;
+}
+body[data-ecran-actif] .page-entete > p { margin:12px auto 0; max-width:70ch; line-height:1.6; }
+body[data-ecran-actif] .surtitre { font-size:.76rem; font-weight:650; letter-spacing:.09em; }
+body[data-ecran-actif] :is(.principal,.secondaire,.discret,.option-bouton,.choix-bouton,.bouton-retour) {
+    border-radius:10px;
+    font-weight:650;
+    box-shadow:none;
+}
+body[data-ecran-actif] .principal:not(.bouton-commencer) { background:var(--surface-carte-profonde); }
+body[data-ecran-actif] .discret { background:transparent; }
+body[data-ecran-actif] .produit-pied-page {
+    width:min(1120px,calc(100% - 48px));
+    padding:24px 0 18px;
+    font-size:.82rem;
+    line-height:1.55;
+}
+body[data-ecran-actif] .produit-pied-page::before { top:0; left:0; right:0; }
+body[data-ecran-actif] .produit-pied-page p { margin:5px 0; font-size:inherit; }
+body[data-ecran-actif] .produit-pied-page .version { display:inline-flex; width:max-content; padding:0; border:0; background:transparent; }
+body[data-ecran-actif] header.entete .navigation :is(button,a) { font-weight:600; border-radius:8px; }
+body[data-ecran-actif] header.entete .navigation .navigation-mini-jeu { border-color:transparent; }
+@media (max-width:620px) {
+    body[data-ecran-actif]:not([data-ecran-actif="accueil"]) main.conteneur { width:calc(100% - 32px); padding-top:18px; }
+    body[data-ecran-actif] .ecran > .page-entete { margin-bottom:24px; }
+    body[data-ecran-actif] .produit-pied-page { width:calc(100% - 32px); padding-block:20px 16px; }
+}
+
+/* Présentation commune issue de l’audit visuel. */
+#accueil .accueil-statistiques > li { border:0; border-radius:0; background:transparent; box-shadow:none; padding:8px 16px; }
+#accueil .accueil-statistiques > li + li { border-left:1px solid rgba(198,216,239,.35); }
+#accueil .accueil-statistiques .accueil-statistique-icone { width:36px; height:36px; }
+#accueil .accueil-statistiques strong { font-size:1.65rem; font-weight:650; }
+@media (max-width:620px) {
+    #accueil .accueil-statistiques > li { padding:8px 10px; }
+    #accueil .accueil-statistiques > li:nth-child(odd) { border-left:0; }
+}
+
+/* Le titre, sa description et le pied de page suivent un rythme compact. */
+body[data-ecran-actif] .page-entete h1 { margin-block:0 12px; }
+body[data-ecran-actif] .produit-pied-page .produit-repere { display:inline-flex; width:max-content; max-width:100%; min-height:0; margin-bottom:8px; padding:0; border:0; border-radius:0; background:transparent; font-size:.78rem; }
 
 /* === FIN MORCEAU CSS === */

@@ -1158,6 +1158,27 @@ def verifier_progression_peuplee_mobile(page: Page) -> None:
     verifier_progression_peuplee(page, mobile=True)
 
 
+def verifier_missions_lisibles(page: Page) -> None:
+    """Le texte et les actions gardent leur place à côté des icônes, sur mobile aussi."""
+    donnees = page.evaluate("""() => [...document.querySelectorAll(
+        '#sigles .sigles-mode-carte, #mesures .mesures-mode-carte'
+    )].filter(carte => carte.getClientRects().length).map(carte => {
+        const texte = carte.querySelector('h3').parentElement;
+        const action = carte.querySelector('button');
+        return {
+            titre: texte.querySelector('h3').textContent,
+            largeurCarte: carte.getBoundingClientRect().width,
+            largeurTexte: texte.getBoundingClientRect().width,
+            debordementAction: action.scrollWidth - action.clientWidth
+        };
+    })""")
+    if len(donnees) != 4 or any(
+        d['largeurTexte'] < d['largeurCarte'] * .65 or d['debordementAction'] > 2
+        for d in donnees
+    ):
+        raise AssertionError(f"Modes de jeu : texte ou action comprimés : {donnees}")
+
+
 def verifier_parametres_bureau(page: Page) -> None:
     donnees = page.evaluate("""() => {
         const groupeSon = document.querySelector('#parametres [data-groupe-choix="sonActif"]');
@@ -1463,6 +1484,10 @@ def scenarios() -> list[Scenario]:
         Scenario("bureau-progression-peuplee", 1440, 900, progression_peuplee, verifier_progression_peuplee_bureau),
         Scenario("bureau-parametres", 1440, 900, "() => afficherEcran('parametres',{remplacerHistorique:true})", verifier_parametres_bureau),
         Scenario("bureau-bilan", 1440, 900, bilan),
+        Scenario("bureau-mission-sigles", 1440, 900, "() => afficherEcran('sigles',{remplacerHistorique:true})", verifier_missions_lisibles),
+        Scenario("bureau-mission-mesures", 1440, 900, "() => afficherEcran('mesures',{remplacerHistorique:true})", verifier_missions_lisibles),
+        Scenario("mobile-mission-sigles", 390, 844, "() => afficherEcran('sigles',{remplacerHistorique:true})", verifier_missions_lisibles),
+        Scenario("mobile-mission-mesures", 390, 844, "() => afficherEcran('mesures',{remplacerHistorique:true})", verifier_missions_lisibles),
         Scenario("bureau-question-unique", 1440, 900, question_action("!q.estEvaluationFinale && (!q.activite || q.activite.type === 'choix-unique') && (q.modePrefere || 'choix-unique') === 'choix-unique'")),
         Scenario("bureau-question-multiple", 1440, 900, question_action("q.activite?.type === 'selection-multiple'")),
         Scenario("bureau-question-association", 1440, 900, question_action("q.activite?.type === 'association'"), verifier_association_bureau),
@@ -1489,6 +1514,7 @@ def scenarios() -> list[Scenario]:
         Scenario("mobile-parametres-texte-115", 390, 844, parametres_mobile_texte_115, verifier_parametres_mobile_texte_115),
         Scenario("mobile-question-multiple", 390, 844, question_action("q.activite?.type === 'selection-multiple'"), verifier_question_mobile_stable),
         Scenario("mobile-question-association", 390, 844, question_action("q.activite?.type === 'association'"), verifier_association_mobile),
+        Scenario("mobile-bilan", 390, 844, bilan),
         Scenario("mobile-jokers", 390, 844, joker, verifier_modale),
     ]
 

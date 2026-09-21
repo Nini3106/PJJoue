@@ -90,7 +90,7 @@
     background: color-mix(in srgb, var(--couleur-etape-active, #4f8cff) 12%, transparent);
     box-shadow: none;
     font-size: .78rem;
-    font-weight: 850;
+    font-weight: 650;
     line-height: 1.15;
     text-align: center;
     white-space: normal;
@@ -122,7 +122,7 @@
     color: var(--couleur-etape-active-lisible, #7de0d5);
     background: color-mix(in srgb, var(--couleur-etape-active, #2d7379) 14%, transparent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--couleur-etape-active, #2d7379) 12%, transparent);
-    font-weight: 850;
+    font-weight: 650;
     white-space: nowrap;
 }
 #question .question-reprendre-etape-bouton {
@@ -134,7 +134,7 @@
     background: color-mix(in srgb, var(--couleur-etape-active, #4f8cff) 12%, transparent);
     box-shadow: none;
     font-size: .76rem;
-    font-weight: 850;
+    font-weight: 650;
     line-height: 1.15;
     white-space: nowrap;
 }
@@ -423,7 +423,7 @@
     background:transparent;
     box-shadow:none;
     font-size:.82rem;
-    font-weight:750;
+    font-weight:650;
 }
 #question .question-chronometre-commandes button.masque { display:none; }
 #question .question-chronometre-bouton svg {
@@ -452,7 +452,7 @@
     color:var(--couleur-etape-active-lisible,#9fc2ff);
     text-align:center;
     pointer-events:none;
-    font-weight:900;
+    font-weight:700;
 }
 #question .question-chronometre-ajout.est-visible { animation:tempsAjoute .8s ease-out forwards; }
 @keyframes tempsAjoute {
@@ -467,4 +467,29 @@
 @media (prefers-reduced-motion:reduce) {
     #question .question-chronometre-ajout.est-visible { animation-name:tempsAjouteSansMouvement; }
 }
+
+/* Audit visuel : hiérarchie, espaces et cadres allégés. */
+#question .question-contexte-etape { margin-block:10px 16px; padding-block:10px; border-width:0 0 1px; border-radius:0; background:transparent; box-shadow:none; }
+#question .question-contexte-identites { gap:10px; }
+#question .question-autonomie { padding-block:6px; background:transparent; }
+#question :is(.question-revision-etape-bouton,.question-reprendre-etape-bouton,.question-autonomie-reinitialiser) { border-radius:8px; font-weight:600; }
+#question .question-chronometre-commandes { margin-bottom:8px; gap:4px; }
+#question .question-chronometre-commandes button { border-radius:8px; padding:7px 9px; font-weight:600; }
+#question .question-chronometre-commandes .question-chronometre-arret { padding-inline:7px; }
+#question .question-carte { border-radius:14px; box-shadow:none; }
+#question .ecrite-zone :is(input,textarea)::placeholder { color:var(--texte-secondaire); opacity:1; }
+#question .classement-element { border-width:0 0 1px; border-radius:0; box-shadow:none; }
+#question .detaillee-correction-ligne { border-radius:6px; box-shadow:none; }
+#question .explication-detaillee-contenu { box-shadow:none; }
+
+#question .question-contexte-identites { display:flex; flex-wrap:wrap; }
+#question .question-etape-identite,
+#question .question-etape-numero-ligne { display:contents; }
+#question .question-parcours-identite { flex:0 0 auto; }
+#question .question-contexte-identites .question-reprendre-etape-bouton { margin:0; }
+@media (max-width:620px) {
+    #question .suivant-ligne .precedent-bouton { padding-inline:8px; font-size:.8rem; }
+    #question .suivant-ligne #boutonValider { padding-inline:12px; }
+}
+
 /* === FIN MORCEAU CSS === */

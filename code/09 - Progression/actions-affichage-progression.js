@@ -62,6 +62,13 @@ function construireCarteProgression(theme) {
             <div class="progression-parcours-mis-en-avant-etapes"><strong>${avancee.jalonsValides}/${avancee.jalonsTotal}</strong><span>${libelleObjectifs}</span></div>
         </div>
         <div class="barre" role="progressbar" aria-label="Progression dans ${identite.titre}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${avancee.pourcentage}" aria-valuetext="${avancee.jalonsValides} ${libelleObjectifs} sur ${avancee.jalonsTotal}"><i style="width:${avancee.pourcentage}%"></i></div>`;
+    const ouvrir = document.createElement('button');
+    ouvrir.type = 'button';
+    ouvrir.className = 'principal progression-ouvrir-selection';
+    ouvrir.textContent = 'Ouvrir ce parcours →';
+    ouvrir.setAttribute('aria-label', `Ouvrir le parcours ${identite.titre}`);
+    ouvrir.onclick = () => ouvrirParcours(theme.id);
+    carte.appendChild(ouvrir);
     return carte;
 }
 function construireCarteProgressionComplete() {
@@ -92,10 +99,10 @@ function construireCarteProgressionComplete() {
     carte.innerHTML = `
         <div class="progression-score">
             <strong>${progression}<span>%</span></strong>
-            <span>total · option PJJ comprise</span>
+            <span>des objectifs validés</span>
         </div>
         <div class="progression-global-corps">
-            <p><strong>${cjpmValides}/${parcoursCJPM.length} parcours CJPM validés${cjpmValides === parcoursCJPM.length ? " · CJPM terminé ✓" : ""}</strong><span>L’option PJJ est suivie séparément ci-dessous.</span></p>
+            <p><strong>${cjpmValides}/${parcoursCJPM.length} parcours CJPM validés${cjpmValides === parcoursCJPM.length ? " · CJPM terminé ✓" : ""}</strong></p>
             <div class="progression-global-entete">
                 <div><strong>${jalonsValides}/${totalJalons} ${libelleObjectifs}</strong><span>${totalEtapes} étapes · ${totalEvaluations} évaluations</span></div>
             </div>
@@ -104,7 +111,7 @@ function construireCarteProgressionComplete() {
             <span class="progression-rail-remplissage" style="width:${progression}%"></span>
             <div class="progression-jalons">${jalons}</div>
         </div>
-        <p class="progression-global-note">${parcoursComplet ? 'Parcours complet validé ✓ · Les cinq parcours CJPM et l’option Découvrir la PJJ sont validés.' : 'Ce total comprend les cinq parcours CJPM et l’option Découvrir la PJJ. L’option reste indépendante de la validation des parcours CJPM.'}</p>`;
+        <p class="progression-global-note">${parcoursComplet ? 'Parcours complet validé ✓ · Les cinq parcours CJPM et l’option Découvrir la PJJ sont validés.' : 'Le total inclut l’option Découvrir la PJJ, indépendante de la validation des cinq parcours CJPM.'}</p>`;
     return carte;
 }
 function obtenirThemeProgressionParDefaut() {
