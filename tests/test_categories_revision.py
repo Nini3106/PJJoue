@@ -51,7 +51,7 @@ class CategoriesRevisionTests(unittest.TestCase):
 
     def test_categories_et_sessions_ciblees_des_trois_jeux(self):
         motifs = ['reprise', 'joker', 'passage', 'incorrecte', 'inconnu']
-        libelles = ['Validée après reprise sans joker · à consolider',
+        libelles = ['Question rejouée après erreur · à consolider',
                     'Validée avec joker · à consolider', 'Passée — non répondue',
                     'Incorrecte — erreur à réviser', 'Motif non enregistré · à consolider']
         for jeu in ['parcours', 'sigles', 'mesures']:
