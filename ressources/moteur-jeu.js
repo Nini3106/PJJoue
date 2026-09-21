@@ -6147,6 +6147,14 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const nombre = selectionner('#nombreErreursBilan');
     const boutonContinuer = selectionner('#boutonContinuer');
     const boutonRejouer = selectionner('#boutonRejouerMesErreurs');
+    const boutonReprendre = selectionner('#boutonReprendreProgressionBilan');
+    const progression = etat.progressionAvantRevision;
+    const reponsesAvantRevision = restaurerTableauAssociatif(progression?.reponsesSession);
+    const resteUneProgression = Boolean(progression?.questions?.some(identifiant => !reponsesAvantRevision.has(identifiant)));
+    if (boutonReprendre) {
+        boutonReprendre.classList.toggle('masque', !resteUneProgression);
+        boutonReprendre.disabled = !resteUneProgression;
+    }
     const jeu = estSessionMissionSigles() ? 'sigles' : estSessionMissionMesures() ? 'mesures' : 'parcours';
     if (boutonRejouer) {
         boutonRejouer.textContent = 'Refaire les questions à consolider';
@@ -8967,6 +8975,7 @@ function initialiserFenetreJokers() {
 initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
 selectionner('#boutonReprendreEtapeDepuisDebut')?.addEventListener('click', reprendreEtapeDepuisDebutQuestion);
+selectionner('#boutonReprendreProgressionBilan')?.addEventListener('click', reprendreProgressionApresRevision);
 selectionner('#boutonRejouerMesErreurs').onclick = rejouerQuestionsAConsoliderBilan;
 selectionner('#boutonRevenirAuParcours').onclick = revenirAuParcoursDuBilan;
 selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
@@ -9153,6 +9162,7 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     boutonJouerLeTirage: 'Démarrer le défi tiré par le dé.',
     boutonRejouerErreursEtape: 'Rejouer les questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.',
     boutonReprendreEtapeDepuisDebut: 'Recommencer l’étape à la première question : les questions déjà maîtrisées restent validées tant qu’elles ne sont pas réinitialisées.',
+    boutonReprendreProgressionBilan: 'Revenir à la question laissée dans le parcours, avec les réponses et le brouillon conservés.',
     boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les questions à consolider et la progression générale restent conservées.',
     boutonJokers: 'Ouvrir les aides disponibles pour cette question.',
     boutonPasser: 'Passer cette question : elle restera à consolider et ne sera pas validée.',

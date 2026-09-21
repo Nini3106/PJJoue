@@ -61,6 +61,7 @@ function initialiserFenetreJokers() {
 initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
 selectionner('#boutonReprendreEtapeDepuisDebut')?.addEventListener('click', reprendreEtapeDepuisDebutQuestion);
+selectionner('#boutonReprendreProgressionBilan')?.addEventListener('click', reprendreProgressionApresRevision);
 selectionner('#boutonRejouerMesErreurs').onclick = rejouerQuestionsAConsoliderBilan;
 selectionner('#boutonRevenirAuParcours').onclick = revenirAuParcoursDuBilan;
 selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
@@ -247,6 +248,7 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     boutonJouerLeTirage: 'Démarrer le défi tiré par le dé.',
     boutonRejouerErreursEtape: 'Rejouer les questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.',
     boutonReprendreEtapeDepuisDebut: 'Recommencer l’étape à la première question : les questions déjà maîtrisées restent validées tant qu’elles ne sont pas réinitialisées.',
+    boutonReprendreProgressionBilan: 'Revenir à la question laissée dans le parcours, avec les réponses et le brouillon conservés.',
     boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les questions à consolider et la progression générale restent conservées.',
     boutonJokers: 'Ouvrir les aides disponibles pour cette question.',
     boutonPasser: 'Passer cette question : elle restera à consolider et ne sera pas validée.',
