@@ -127,7 +127,10 @@ function contientExpressionComplete(texte, expression) {
 function contientNegation(texte) {
     return normaliserReponseEvaluation(texte)
         .split(' ')
-        .some(mot => MOTS_NEGATION_REPONSE.has(mot));
+        .some(mot => MOTS_NEGATION_REPONSE.has(mot)
+            // Tolérer « aucne » sans assimiler « une » ou « autre » à une négation.
+            || (mot.startsWith('auc') && ['aucun', 'aucune'].some(
+                negation => calculerDistanceTextes(mot, negation) <= 1)));
 }
 function contientNegationInattendue(champ, variantesAttendues) {
     return contientNegation(champ)

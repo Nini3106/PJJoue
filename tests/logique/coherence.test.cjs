@@ -36,7 +36,8 @@ test('Une question passée puis révisée valide son étape depuis toute entrée
 test('Les montants et négations sont exacts, les variantes déclarées restent acceptées',()=>{
  const {run}=creerMoteur();
  const cas=[[1652,'8 500 euros',false],[1652,'500 euros',false],[1652,'7500 euros',true],[1652,'7 500 euros',true],[1652,'7 500 ou 8 500 euros',false],
- [1464,'Avec délai',false],[1464,'Dans un délai',false],[1464,'délai',false],[1464,'Sans délai',true],[1464,'sans delai',true],[1280,'2 ans',false]];
+ [1464,'Avec délai',false],[1464,'Dans un délai',false],[1464,'délai',false],[1464,'Sans délai',true],[1464,'sans delai',true],[1280,'2 ans',false],
+ [1504,'Aucne peine',true],[1504,'Une peine',false],[1504,'Autre peine',false],[1504,'Peine',false]];
  for(const [id,reponse,attendu]of cas)assert.equal(run(`validerReponseEcriteSouple(${JSON.stringify(reponse)},QUESTIONS.find(q=>q.id===${id}))`),attendu,`${id}: ${reponse}`);
  const refuses=run(`QUESTIONS.filter(q=>q.modePrefere==='reponse-ecrite').flatMap(q=>[q.bonneReponse,...(q.reponsesAcceptees||[])].filter(v=>!validerReponseEcriteSouple(v,q)).map(v=>[q.id,v]))`);
  assert.deepEqual(normaliser(refuses),[]);
