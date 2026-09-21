@@ -533,7 +533,12 @@ function restaurerRoute(route) {
             ouvrirChoixParcours({ depuisHistorique: true, forcerSortieQuestion: true });
     }
     else if (etatRoute.ecran === 'bilan') {
-        if (etat.questionsSession?.length)
+        const reprise = chargerSessionEnCours();
+        if (!etat.questionsSession?.length && reprise?.retourDepuisBilanRevision && restaurerSessionEnCours(reprise)) {
+            afficherEcran('question', { depuisHistorique: true, forcerSortieQuestion: true });
+            afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+        }
+        else if (etat.questionsSession?.length)
             afficherEcran('bilan', { depuisHistorique: true, forcerSortieQuestion: true });
         else
             afficherEcran('accueil', { depuisHistorique: true, forcerSortieQuestion: true, remplacerHistorique: true });

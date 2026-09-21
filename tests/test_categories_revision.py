@@ -1,7 +1,7 @@
 """Parcours réels des catégories de révision, dans les trois jeux."""
 import unittest
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, TimeoutError as DelaiPlaywright
 from verifier_interface import construire_page_jeu, lancer_chromium
 
 
@@ -215,6 +215,97 @@ class CategoriesRevisionTests(unittest.TestCase):
                         self.assertLessEqual(bouton['droite'], largeur, bouton)
                     self.page.evaluate('document.activeElement?.blur()')
                     self.page.screenshot(path=str(sortie / f'{jeu}-{largeur}.png'), full_page=True)
+
+
+    def preparer_parcours_suspendable(self, jeu):
+        if self.page.locator('#fenetreCelebration').is_visible():
+            self.page.locator('#fermerFenetreCelebration').click()
+        return self.page.evaluate("""jeu => {
+            sauvegarde = creerSauvegardeInitiale();
+            sauvegarde.parametres.son = false;
+            etat.chronometreParcoursActif = false;
+            choisirDomaineSigles('cjpm');
+            if (jeu === 'parcours') lancerEtape('procedure_ordinaire', 1);
+            else if (jeu === 'sigles') {
+                const cs = obtenirSiglesEtape(6).slice(0,4);
+                preparerSessionMissionSiglesNative({mode:'parcours',etape:6,sigles:cs,
+                    questions:creerQuestionsRevisionSigles(cs),titre:'Test'});
+            } else {
+                const cs = obtenirReperesMesuresEtape(1).slice(0,4);
+                preparerSessionMissionMesuresNative({mode:'parcours',etape:1,reperes:cs,
+                    questions:creerQuestionsRevisionMesures(cs),titre:'Test'});
+            }
+            finaliserReponse(false, 'erreur'); afficherQuestionSuivante();
+            finaliserReponse(true, etat.questionCourante.bonneReponse); afficherQuestionSuivante();
+            return {id:etat.questionCourante.id,index:etat.indexQuestion,score:etat.score,
+                enonce:document.querySelector('#enonceQuestion').textContent};
+        }""", jeu)
+
+    def test_retour_au_parcours_depuis_revision_meme_apres_rechargement(self):
+        html_navigable = self.html.replace('mettreAJourAdresseNavigation = () => {}; ', '')
+        self.contexte.route('**/*', lambda route: route.fulfill(body=html_navigable, content_type='text/html')
+                            if route.request.is_navigation_request() else route.abort())
+        self.page.reload(wait_until='domcontentloaded')
+        for jeu in ['parcours', 'sigles', 'mesures']:
+            with self.subTest(jeu=jeu):
+                avant = self.preparer_parcours_suspendable(jeu)
+                bouton = self.page.locator('#boutonReprendreEtapeDepuisDebut')
+                self.assertEqual(bouton.inner_text(), 'Reprendre depuis le début')
+                saisie = self.page.locator('#reponseEcrite')
+                brouillon = saisie.is_visible()
+                if brouillon:
+                    saisie.fill('réponse en cours')
+                self.page.locator('#boutonRejouerErreursEtape').click()
+                self.assertEqual(bouton.inner_text(), 'Reprendre ma progression')
+                self.assertTrue(bouton.is_visible())
+                self.assertIn('Revenir à la question', bouton.get_attribute('data-infobulle'))
+                self.page.reload(wait_until='domcontentloaded')
+                self.assertEqual(bouton.inner_text(), 'Reprendre ma progression')
+                self.assertIn('Revenir à la question', bouton.get_attribute('data-infobulle'))
+                bouton.click()
+                apres = self.page.evaluate("""() => ({id:etat.questionCourante.id,index:etat.indexQuestion,
+                    score:etat.score,enonce:document.querySelector('#enonceQuestion').textContent})""")
+                self.assertEqual(apres, avant)
+                if brouillon:
+                    self.assertEqual(saisie.input_value(), 'réponse en cours')
+                self.assertEqual(bouton.inner_text(), 'Reprendre depuis le début')
+                self.assertTrue(bouton.is_visible())
+
+    def test_bilan_relance_directement_les_questions_de_la_session(self):
+        for jeu in ['parcours', 'sigles', 'mesures']:
+            with self.subTest(jeu=jeu):
+                self.page.reload(wait_until='domcontentloaded')
+                self.preparer_parcours_suspendable(jeu)
+                attendues = self.page.evaluate("""() => {
+                    passerQuestion();
+                    while (etat.ecran === 'question') {
+                        finaliserReponse(true, etat.questionCourante.bonneReponse);
+                        afficherQuestionSuivante();
+                    }
+                    return obtenirQuestionsAConsoliderSession().map(q => [q.id,q.enonce]);
+                }""")
+                self.assertEqual(len(attendues), 2)
+                # La célébration éventuelle s'ouvre après l'animation du bilan.
+                try:
+                    self.page.locator('#fenetreCelebration[open]').wait_for(state='visible', timeout=600)
+                except DelaiPlaywright:
+                    pass
+                else:
+                    self.page.locator('#fermerFenetreCelebration').click()
+                self.assertNotEqual(self.page.locator('#boutonContinuer').inner_text(), 'Reprendre ma progression')
+                bouton = self.page.locator('#boutonRejouerMesErreurs')
+                self.assertTrue(bouton.is_visible())
+                self.assertEqual(bouton.inner_text(), 'Refaire les questions à consolider')
+                bouton.click()
+                self.assertEqual(self.page.evaluate('etat.ecran'), 'question')
+                self.assertEqual(self.page.evaluate('etat.questionsSession.map(q => [q.id,q.enonce])'), attendues)
+                self.page.evaluate("""() => {
+                    while (etat.ecran === 'question') {
+                        finaliserReponse(true, etat.questionCourante.bonneReponse);
+                        afficherQuestionSuivante();
+                    }
+                }""")
+                self.assertFalse(bouton.is_visible())
 
 
 if __name__ == '__main__':

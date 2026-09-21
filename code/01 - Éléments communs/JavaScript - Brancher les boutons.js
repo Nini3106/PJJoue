@@ -61,7 +61,7 @@ function initialiserFenetreJokers() {
 initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
 selectionner('#boutonReprendreEtapeDepuisDebut')?.addEventListener('click', reprendreEtapeDepuisDebutQuestion);
-selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
+selectionner('#boutonRejouerMesErreurs').onclick = rejouerQuestionsAConsoliderBilan;
 selectionner('#boutonRevenirAuParcours').onclick = revenirAuParcoursDuBilan;
 selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
 selectionner('#boutonExporterMaProgression').onclick = exporterProgression;
@@ -250,7 +250,7 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les questions à consolider et la progression générale restent conservées.',
     boutonJokers: 'Ouvrir les aides disponibles pour cette question.',
     boutonPasser: 'Passer cette question : elle restera à consolider et ne sera pas validée.',
-    boutonRejouerMesErreurs: 'Voir les questions à consolider dans le jeu en cours.',
+    boutonRejouerMesErreurs: 'Refaire directement les questions ratées, passées ou à consolider de cette session.',
     boutonRevenirAuParcours: 'Retourner à la carte du parcours.',
     boutonRefermerSupports: 'Fermer toutes les fiches de support ouvertes.',
     boutonOuvrirParcours: 'Choisir un parcours pour consulter sa progression détaillée.',
@@ -294,6 +294,8 @@ const TITRES_ACTIONS_SURVOL = Object.freeze({
 });
 
 function obtenirTitreSurvolBouton(bouton) {
+    if (bouton.id === 'boutonReprendreEtapeDepuisDebut' && etat.progressionAvantRevision)
+        return 'Revenir à la question laissée dans le parcours, avec les réponses et le brouillon conservés.';
     if (TITRES_BOUTONS_SURVOL[bouton.id])
         return TITRES_BOUTONS_SURVOL[bouton.id];
 
