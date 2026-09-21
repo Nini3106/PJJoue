@@ -11765,7 +11765,9 @@
     "reponsesAcceptees": [
       "Déclaration de culpabilité",
       "la déclaration de culpabilité",
-      "culpabilité déclarée"
+      "culpabilité déclarée",
+      "culpabilité",
+      "la culpabilité"
     ],
     "typeReponseAttendue": "texte-court"
   },

@@ -129,3 +129,15 @@ for(const jeu of ['sigles','mesures'])test(`Mission ${jeu} : une étape terminé
  assert.equal(r[0],true);assert.equal(r[1],null);
  if(jeu==='sigles')assert.match(r[2],/PJJ.*Étape 0?1/);
 });
+
+
+test('La culpabilité seule est acceptée pour la décision acquise, en apprentissage et en évaluation',()=>{
+ const {run}=creerMoteur();
+ const cas=[['Déclaration de culpabilité',true],['culpabilité déclarée',true],['la culpabilité',true],
+ ['culpabilité',true],['LA CULPABILITE',true],['culpabilté',true],
+ ['pas de culpabilité',false],['non culpabilité',false],['sans culpabilité',false],
+ ['la sanction',false],['la déclaration',false],['',false]];
+ for(const validation of ['validerReponseEcriteSouple','validerReponseEcriteEvaluation'])
+  for(const [reponse,attendu]of cas)
+   assert.equal(run(`${validation}(${JSON.stringify(reponse)},QUESTIONS.find(q=>q.id===1072))`),attendu,`${validation}: ${reponse}`);
+});
