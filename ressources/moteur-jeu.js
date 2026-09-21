@@ -6590,6 +6590,24 @@ function filtrerElementsRevision(jeu, elements) {
     return elements.filter(({ cible }) => (jeu !== 'parcours' || filtres.theme === 'toutes' || cible.theme === filtres.theme)
         && (filtres.etape === 'toutes' || Number(cible.etape) === Number(filtres.etape)));
 }
+function construireMenuFiltreRevision(jeu, champ, libelle, choix, valeur) {
+    const id = `filtreRevision${champ === 'theme' ? 'Parcours' : 'Etape'}-${jeu}`;
+    const courant = choix.find(option => String(option.valeur) === String(valeur)) || choix[0];
+    return `<div class="revision-filtre"><span id="${id}-libelle">${libelle}</span>
+        <details class="revision-selecteur" data-filtre-revision="${champ}">
+            <summary id="${id}" aria-haspopup="listbox" aria-expanded="false" aria-controls="${id}-options" aria-labelledby="${id}-libelle ${id}-valeur" ${courant.couleur ? `style="--filtre-accent:${courant.couleur}"` : ''}>
+                <span id="${id}-valeur">${echapperHtml(courant.libelle)}</span><span class="revision-selecteur-chevron" aria-hidden="true">⌄</span>
+            </summary>
+            <div id="${id}-options" class="revision-selecteur-options" role="listbox" aria-labelledby="${id}-libelle">
+                ${choix.map(option => `<button type="button" role="option" aria-selected="${String(option.valeur) === String(valeur)}" tabindex="${String(option.valeur) === String(valeur) ? '0' : '-1'}" data-valeur-filtre="${echapperHtml(String(option.valeur))}" ${option.couleur ? `style="--filtre-accent:${option.couleur}"` : ''}><span>${echapperHtml(option.libelle)}</span><span aria-hidden="true">${String(option.valeur) === String(valeur) ? '✓' : ''}</span></button>`).join('')}
+            </div>
+        </details></div>`;
+}
+function fermerMenusRevisionAuClic(evenement) {
+    document.querySelectorAll('.revision-selecteur[open]').forEach(menu => {
+        if (!menu.contains(evenement.target)) menu.open = false;
+    });
+}
 function construireEspaceRevision(jeu, zone) {
     const elements = obtenirElementsCategoriesRevision(jeu);
     const filtres = obtenirFiltresRevision(jeu);
@@ -6599,29 +6617,49 @@ function construireEspaceRevision(jeu, zone) {
         .map(({ cible }) => Number(cible.etape)))].sort((a,b) => a-b);
     if (!etapes.includes(Number(filtres.etape))) filtres.etape = 'toutes';
     const selection = filtrerElementsRevision(jeu, elements);
-    const identite = jeu === 'parcours' && filtres.theme !== 'toutes' ? obtenirIdentiteParcours(filtres.theme) : null;
-    const couleurEtape = filtres.etape === 'toutes' ? null : jeu === 'parcours'
-        ? (obtenirEtapeProgramme(filtres.theme, Number(filtres.etape))?.couleur || obtenirCouleurTitreEtape(Number(filtres.etape)))
-        : (jeu === 'sigles' ? obtenirIdentiteEtapeMissionSigles(filtres.etape) : obtenirIdentiteEtapeMissionMesures(filtres.etape)).couleur;
+    const choixParcours = [{ valeur:'toutes', libelle:'Tous les parcours' }, ...themes.map(theme => {
+        const identite = obtenirIdentiteParcours(theme.id);
+        return { valeur:theme.id, libelle:identite.titre, couleur:identite.couleurTexte || identite.couleur };
+    })];
+    const choixEtapes = [{ valeur:'toutes', libelle:'Toutes les étapes' }, ...etapes.map(numero => ({
+        valeur:String(numero), libelle:jeu === 'sigles' ? libelleEtapeSigles(numero) : `Étape ${numero}`,
+        couleur:jeu === 'parcours' ? (obtenirEtapeProgramme(filtres.theme, numero)?.couleur || obtenirCouleurTitreEtape(numero))
+            : (jeu === 'sigles' ? obtenirIdentiteEtapeMissionSigles(numero) : obtenirIdentiteEtapeMissionMesures(numero)).couleur
+    }))];
     zone.innerHTML = `<section class="revision-filtres" aria-label="Choisir les questions à réviser">
         <p>Choisis un périmètre, puis révise toute la sélection ou une catégorie ci-dessous. Chaque question apparaît une seule fois.</p>
         <div class="revision-filtres-champs">
-        ${jeu === 'parcours' ? `<label for="filtreRevisionParcours-${jeu}">Parcours<select id="filtreRevisionParcours-${jeu}" data-filtre-revision="theme" ${identite ? `style="border-color:${identite.couleur};color:${identite.couleurTexte}"` : ''}>
-            <option value="toutes">Tous les parcours</option>${themes.map(theme => `<option value="${theme.id}" ${filtres.theme === theme.id ? 'selected' : ''}>${echapperHtml(obtenirIdentiteParcours(theme.id).titre)}</option>`).join('')}</select></label>` : ''}
-        <label for="filtreRevisionEtape-${jeu}">Étape<select id="filtreRevisionEtape-${jeu}" data-filtre-revision="etape" ${couleurEtape ? `style="border-color:${couleurEtape}"` : ''}>
-            <option value="toutes">Toutes les étapes</option>${etapes.map(numero => `<option value="${numero}" ${Number(filtres.etape) === numero ? 'selected' : ''}>${jeu === 'sigles' ? libelleEtapeSigles(numero) : `Étape ${numero}`}</option>`).join('')}</select></label>
+        ${jeu === 'parcours' ? construireMenuFiltreRevision(jeu, 'theme', 'Parcours', choixParcours, filtres.theme) : ''}
+        ${construireMenuFiltreRevision(jeu, 'etape', 'Étape', choixEtapes, filtres.etape)}
         </div>
         <button class="principal" type="button" data-revision-selection="${jeu}">Réviser la sélection · ${selection.length} ${accorderLibelle(selection.length, 'question', 'questions')} →</button>
         </section>${construireCategoriesRevision(jeu)}`;
-    zone.querySelectorAll('[data-filtre-revision]').forEach(champ => {
-        champ.onchange = () => {
-            const identifiant = champ.id;
-            filtres[champ.dataset.filtreRevision] = champ.value;
-            if (champ.dataset.filtreRevision === 'theme') filtres.etape = 'toutes';
-            construireEspaceRevision(jeu, zone);
-            selectionner(`#${identifiant}`)?.focus();
+    zone.querySelectorAll('[data-filtre-revision]').forEach(menu => {
+        const entete = menu.querySelector('summary');
+        const options = [...menu.querySelectorAll('[role="option"]')];
+        menu.ontoggle = () => entete.setAttribute('aria-expanded', String(menu.open));
+        menu.onfocusout = evenement => {
+            if (evenement.relatedTarget && !menu.contains(evenement.relatedTarget)) menu.open = false;
         };
+        menu.onkeydown = evenement => {
+            if (evenement.key === 'Escape') { evenement.preventDefault(); menu.open = false; entete.focus(); return; }
+            if (!['ArrowDown','ArrowUp','Home','End'].includes(evenement.key)) return;
+            evenement.preventDefault(); menu.open = true;
+            const index = options.indexOf(document.activeElement);
+            const suivant = evenement.key === 'Home' ? 0 : evenement.key === 'End' ? options.length - 1
+                : index < 0 ? Math.max(0, options.findIndex(option => option.getAttribute('aria-selected') === 'true'))
+                    : (index + (evenement.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+            options.forEach((option, position) => { option.tabIndex = position === suivant ? 0 : -1; });
+            options[suivant]?.focus();
+        };
+        options.forEach(option => { option.onclick = () => {
+            filtres[menu.dataset.filtreRevision] = option.dataset.valeurFiltre;
+            if (menu.dataset.filtreRevision === 'theme') filtres.etape = 'toutes';
+            construireEspaceRevision(jeu, zone);
+            selectionner(`#${entete.id}`)?.focus();
+        }; });
     });
+    document.addEventListener('click', fermerMenusRevisionAuClic);
     const bouton = zone.querySelector('[data-revision-selection]');
     if (bouton) bouton.onclick = () => lancerRevisionSelection(jeu);
 }

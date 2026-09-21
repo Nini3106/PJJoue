@@ -217,7 +217,7 @@ def verifier() -> None:
         assert page.locator("#sigles-revision h1").inner_text().strip() == "Questions à consolider"
         assert "Sigles à retravailler" in page.locator("#titreErreursRevisionSigles").inner_text()
         assert page.locator("#sigles-revision [data-revision-selection='sigles']").is_visible()
-        assert page.locator("#filtreRevisionEtape-sigles option").count() >= 2
+        assert page.locator("#filtreRevisionEtape-sigles-options [role='option']").count() >= 2
         # La page Réviser de PJJoue reste indépendante et conserve son contenu d’origine.
         page.evaluate("() => afficherEcran('erreurs')")
         assert page.locator("#erreurs h1").inner_text().strip() == "Réviser"
