@@ -133,19 +133,19 @@ def construire_page() -> str:
 
     page = re.sub(r'<meta[^>]+http-equiv="Content-Security-Policy"[^>]*/?>', "", page, flags=re.I)
     page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue|navigation-locale)\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue|navigation-locale)\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
         "", page, flags=re.I,
     )
-    page = re.sub(r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css")[^>]*>\s*', "", page, flags=re.I)
+    page = re.sub(r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css(?:\?[^\"]*)?")[^>]*>\s*', "", page, flags=re.I)
     page = page.replace("</head>", f"<style>{css}</style></head>", 1)
     page = page.replace("<head>", '<head><base href="http://pjjoue.test/">', 1)
     page = integrer_images_html(page)
     page = re.sub(
-        r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
         lambda _: f"<script>{donnees}</script>", page, count=1, flags=re.I,
     )
     page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/moteur-jeu\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="ressources/moteur-jeu\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
         lambda _: f"<script>{moteur}</script>", page, count=1, flags=re.I,
     )
     # Les icônes du parcours 1 sont créées dynamiquement par le moteur : leur

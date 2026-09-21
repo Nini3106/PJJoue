@@ -75,8 +75,69 @@ function construireReperesRevision(jeu, element) {
         : obtenirIdentiteEtapeMissionMesures(cible.etape);
     return `<small class="revision-reperes">${badge(element.repere, etape.couleur, etape.couleurTexte)}</small>`;
 }
-function construireCategoriesRevision(jeu) {
+function obtenirFiltresRevision(jeu) {
+    etat.filtresRevision = etat.filtresRevision || {};
+    etat.filtresRevision[jeu] = etat.filtresRevision[jeu] || { theme: 'toutes', etape: 'toutes' };
+    return etat.filtresRevision[jeu];
+}
+function filtrerElementsRevision(jeu, elements) {
+    const filtres = obtenirFiltresRevision(jeu);
+    return elements.filter(({ cible }) => (jeu !== 'parcours' || filtres.theme === 'toutes' || cible.theme === filtres.theme)
+        && (filtres.etape === 'toutes' || Number(cible.etape) === Number(filtres.etape)));
+}
+function construireEspaceRevision(jeu, zone) {
     const elements = obtenirElementsCategoriesRevision(jeu);
+    const filtres = obtenirFiltresRevision(jeu);
+    const themes = jeu === 'parcours' ? THEMES.filter(theme => elements.some(({ cible }) => cible.theme === theme.id)) : [];
+    if (jeu === 'parcours' && !themes.some(theme => theme.id === filtres.theme)) filtres.theme = 'toutes';
+    const etapes = [...new Set(elements.filter(({ cible }) => filtres.theme === 'toutes' || cible.theme === filtres.theme)
+        .map(({ cible }) => Number(cible.etape)))].sort((a,b) => a-b);
+    if (!etapes.includes(Number(filtres.etape))) filtres.etape = 'toutes';
+    const selection = filtrerElementsRevision(jeu, elements);
+    const identite = jeu === 'parcours' && filtres.theme !== 'toutes' ? obtenirIdentiteParcours(filtres.theme) : null;
+    const couleurEtape = filtres.etape === 'toutes' ? null : jeu === 'parcours'
+        ? (obtenirEtapeProgramme(filtres.theme, Number(filtres.etape))?.couleur || obtenirCouleurTitreEtape(Number(filtres.etape)))
+        : (jeu === 'sigles' ? obtenirIdentiteEtapeMissionSigles(filtres.etape) : obtenirIdentiteEtapeMissionMesures(filtres.etape)).couleur;
+    zone.innerHTML = `<section class="revision-filtres" aria-label="Choisir les questions à réviser">
+        <p>Choisis un périmètre, puis révise toute la sélection ou une catégorie ci-dessous. Chaque question apparaît une seule fois.</p>
+        <div class="revision-filtres-champs">
+        ${jeu === 'parcours' ? `<label for="filtreRevisionParcours-${jeu}">Parcours<select id="filtreRevisionParcours-${jeu}" data-filtre-revision="theme" ${identite ? `style="border-color:${identite.couleur};color:${identite.couleurTexte}"` : ''}>
+            <option value="toutes">Tous les parcours</option>${themes.map(theme => `<option value="${theme.id}" ${filtres.theme === theme.id ? 'selected' : ''}>${echapperHtml(obtenirIdentiteParcours(theme.id).titre)}</option>`).join('')}</select></label>` : ''}
+        <label for="filtreRevisionEtape-${jeu}">Étape<select id="filtreRevisionEtape-${jeu}" data-filtre-revision="etape" ${couleurEtape ? `style="border-color:${couleurEtape}"` : ''}>
+            <option value="toutes">Toutes les étapes</option>${etapes.map(numero => `<option value="${numero}" ${Number(filtres.etape) === numero ? 'selected' : ''}>${jeu === 'sigles' ? libelleEtapeSigles(numero) : `Étape ${numero}`}</option>`).join('')}</select></label>
+        </div>
+        <button class="principal" type="button" data-revision-selection="${jeu}">Réviser la sélection · ${selection.length} ${accorderLibelle(selection.length, 'question', 'questions')} →</button>
+        </section>${construireCategoriesRevision(jeu)}`;
+    zone.querySelectorAll('[data-filtre-revision]').forEach(champ => {
+        champ.onchange = () => {
+            const identifiant = champ.id;
+            filtres[champ.dataset.filtreRevision] = champ.value;
+            if (champ.dataset.filtreRevision === 'theme') filtres.etape = 'toutes';
+            construireEspaceRevision(jeu, zone);
+            selectionner(`#${identifiant}`)?.focus();
+        };
+    });
+    const bouton = zone.querySelector('[data-revision-selection]');
+    if (bouton) bouton.onclick = () => lancerRevisionSelection(jeu);
+}
+function lancerRevisionSelection(jeu, categorie = null) {
+    const cibles = filtrerElementsRevision(jeu, obtenirElementsCategoriesRevision(jeu))
+        .filter(element => categorie === null || obtenirCategorieRevision(element.suivi) === categorie)
+        .map(element => element.cible);
+    if (!cibles.length) { afficherNotification('Aucune question dans cette sélection.'); return; }
+    if (jeu === 'parcours') {
+        const filtres = obtenirFiltresRevision(jeu);
+        lancerRevision(filtres.theme, categorie, filtres.etape);
+        return;
+    }
+    const titre = categorie ? obtenirLibelleConsolidation({ motifRevision: categorie }) : 'Questions à consolider';
+    if (jeu === 'sigles') preparerSessionMissionSiglesNative({ mode: 'revision', sigles: cibles,
+        questions: creerQuestionsRevisionSigles(cibles), jokersActifs: false, titre });
+    if (jeu === 'mesures') preparerSessionMissionMesuresNative({ mode: 'revision', reperes: cibles,
+        questions: creerQuestionsRevisionMesures(cibles), jokersActifs: false, titre });
+}
+function construireCategoriesRevision(jeu) {
+    const elements = filtrerElementsRevision(jeu, obtenirElementsCategoriesRevision(jeu));
     if (!elements.length) return '';
     const categories = ['reprise', 'joker', 'passage', 'incorrecte'];
     if (elements.some(element => obtenirCategorieRevision(element.suivi) === 'inconnu'))
@@ -102,129 +163,10 @@ function construireCategoriesRevision(jeu) {
 function lancerRevisionCategorie(jeu, categorie) {
     if (!['parcours', 'sigles', 'mesures'].includes(jeu)
         || !['reprise', 'joker', 'passage', 'incorrecte', 'inconnu'].includes(categorie)) return;
-    // Relire les données au clic : une réussite peut avoir consolidé une question
-    // depuis l'affichage de la catégorie. Ne jamais réactiver son ancien résultat.
-    const cibles = obtenirElementsCategoriesRevision(jeu)
-        .filter(element => obtenirCategorieRevision(element.suivi) === categorie)
-        .map(element => element.cible);
-    if (!cibles.length) {
-        afficherNotification('Aucune question dans cette catégorie.');
-        return;
-    }
-    if (jeu === 'parcours') {
-        lancerRevision('toutes', categorie);
-        return;
-    }
-    const titre = obtenirLibelleConsolidation({ motifRevision: categorie });
-    if (jeu === 'sigles') {
-        preparerSessionMissionSiglesNative({ mode: 'revision', sigles: cibles,
-            questions: creerQuestionsRevisionSigles(cibles), jokersActifs: false, titre });
-    }
-    else {
-        preparerSessionMissionMesuresNative({ mode: 'revision', reperes: cibles,
-            questions: creerQuestionsRevisionMesures(cibles), jokersActifs: false, titre });
-    }
+    // Les mêmes filtres servent à la liste et à la session, relus au clic.
+    lancerRevisionSelection(jeu, categorie);
 }
-function regrouperErreursParParcoursEtEtape(elements) {
-    const resultat = {};
-    elements.forEach(element => {
-        const theme = element.question.theme;
-        const numeroEtape = Number(element.question.etape);
-        resultat[theme] = resultat[theme] || {};
-        (resultat[theme][numeroEtape] = resultat[theme][numeroEtape] || []).push(element);
-    });
-    return resultat;
-}
-function construireBoutonsRevisionParcours(groupes) {
-    return THEMES.map((theme, index) => {
-        const total = Object.values(groupes[theme.id] || {}).reduce((somme, liste) => somme + liste.length, 0);
-        if (!total)
-            return '';
-        const identite = obtenirIdentiteParcours(theme.id);
-        return `<button class="revision-parcours-bouton" data-action="reviser-theme" data-theme="${theme.id}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}">
-            <span class="revision-parcours-numero">${String(index + 1).padStart(2, '0')}</span>
-            <span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'question à consolider', 'questions à consolider')}</small></span>
-            <span class="revision-parcours-action">Réviser →</span>
-        </button>`;
-    }).join('');
-}
-function construireBoutonsRevisionParEtape(groupes) {
-    return THEMES.map((theme, index) => {
-        const erreursParEtape = groupes[theme.id] || {};
-        return Object.keys(erreursParEtape).sort((a, b) => Number(a) - Number(b)).map(numeroEtape => {
-            const total = erreursParEtape[numeroEtape].length;
-            const identite = obtenirIdentiteParcours(theme.id);
-            const couleurEtape = obtenirEtapeProgramme(theme.id, numeroEtape)?.couleur || obtenirCouleurTitreEtape(numeroEtape);
-            return `<button class="revision-etape-bouton" data-action="reviser-etape" data-theme="${theme.id}" data-etape="${numeroEtape}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--revision-etape-accent:${couleurEtape}">
-                <span class="revision-etape-parcours">P${index + 1}</span><span>Étape ${numeroEtape}</span><strong>${total}</strong>
-            </button>`;
-        }).join('');
-    }).join('');
-}
-function construireModesRevisionErreurs(total, groupes) {
-    const libelleErreurs = accorderLibelle(total, 'question à consolider', 'questions à consolider');
-    return `<div class="revision-workspace">
-        <article class="revision-toutes-erreurs">
-            <div class="revision-toutes-erreurs-icone" aria-hidden="true">↻</div>
-            <div class="revision-toutes-erreurs-texte">
-                <span class="surtitre">Révision rapide</span>
-                <h2>Mélange mes questions à consolider</h2>
-                <p>Une session aléatoire avec tes ${total} ${libelleErreurs}, tous parcours confondus.</p>
-            </div>
-            <button class="principal" data-action="reviser-toutes-erreurs">Lancer ${total} ${total > 1 ? 'questions' : 'question'} →</button>
-        </article>
 
-        <section class="revision-choix" aria-labelledby="titreRevisionParcours">
-            <div class="revision-section-entete">
-                <div><span class="surtitre">Cibler</span><h2 id="titreRevisionParcours">Choisis ce que tu veux renforcer</h2></div>
-                <p>Un parcours complet ou une étape précise.</p>
-            </div>
-            <div class="revision-parcours-boutons">${construireBoutonsRevisionParcours(groupes)}</div>
-            <details class="revision-etapes-details">
-                <summary>Choisir directement une étape</summary>
-                <div class="revision-etape-boutons">${construireBoutonsRevisionParEtape(groupes)}</div>
-            </details>
-        </section>
-    </div>`;
-}
-function construireListeErreursEtape(theme, numeroEtape, elements) {
-    const titreEtape = obtenirEtapeProgramme(theme, numeroEtape)?.titre || '';
-    const couleurEtape = obtenirEtapeProgramme(theme, numeroEtape)?.couleur || obtenirCouleurTitreEtape(numeroEtape);
-    const cartes = elements.map(({ question, suiviErreur }) => `
-        <li class="revision-erreur-ligne">
-            <span>${question.enonce.split('\n')[0]}</span>
-            <small>${obtenirLibelleConsolidation(suiviErreur)}</small>
-        </li>`).join('');
-    return `<div class="revision-etape-groupe" style="--revision-etape-accent:${couleurEtape}">
-        <div class="revision-etape-groupe-entete"><strong>Étape ${numeroEtape} · ${titreEtape}</strong><span>${elements.length}</span></div>
-        <ul>${cartes}</ul>
-    </div>`;
-}
-function construireParcoursErreurs(groupes) {
-    const dossiers = THEMES.map((theme, index) => {
-        const erreursParEtape = groupes[theme.id] || {};
-        const total = Object.values(erreursParEtape).reduce((somme, liste) => somme + liste.length, 0);
-        if (!total)
-            return '';
-        const identite = obtenirIdentiteParcours(theme.id);
-        const etapes = Object.keys(erreursParEtape)
-            .sort((a, b) => Number(a) - Number(b))
-            .map(numero => construireListeErreursEtape(theme.id, numero, erreursParEtape[numero]))
-            .join('');
-        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}">
-            <summary>
-                <span class="revision-dossier-numero">${String(index + 1).padStart(2, '0')}</span>
-                <span><strong>${identite.titre}</strong><small>${total} ${accorderLibelle(total, 'question à consolider', 'questions à consolider')}</small></span>
-                <span class="revision-dossier-chevron" aria-hidden="true">⌄</span>
-            </summary>
-            <div class="revision-dossier-contenu">${etapes}</div>
-        </details>`;
-    }).join('');
-    return `<section class="revision-inventaire" aria-labelledby="titreInventaireErreurs">
-        <div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreurs">Tes questions à consolider</h2></div><p>Consulte les questions qui restent à consolider, parcours par parcours.</p></div>
-        <div class="revision-dossiers">${dossiers}</div>
-    </section>`;
-}
 function afficherErreurs() {
     const zone = selectionner('#contenuErreurs');
     const questionsAvecErreurs = obtenirQuestionsAvecErreursActives();
@@ -232,9 +174,7 @@ function afficherErreurs() {
         afficherEtatVideErreurs(zone, !sauvegarde.aDejaJoue);
         return;
     }
-    const groupes = regrouperErreursParParcoursEtEtape(questionsAvecErreurs);
-    zone.innerHTML = construireCategoriesRevision('parcours')
-        + construireModesRevisionErreurs(questionsAvecErreurs.length, groupes) + construireParcoursErreurs(groupes);
+    construireEspaceRevision('parcours', zone);
 }
 
 function normaliserRechercheSupports(texte) {

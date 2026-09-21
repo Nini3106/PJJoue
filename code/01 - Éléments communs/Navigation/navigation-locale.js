@@ -235,11 +235,47 @@
   });
 
   if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
-    window.addEventListener('load', () => {
-      const adresseServiceWorker = new URL('service-worker.js', racineApplication).href;
-      navigator.serviceWorker.register(adresseServiceWorker).catch(() => {
-        // Le site reste entièrement utilisable si le navigateur refuse ce mode.
-      });
+    let rechargementEnCours = false;
+    let miseAJourDisponible = false;
+    let controleurConnu = navigator.serviceWorker.controller;
+    const appliquerMiseAJour = () => {
+      if (!miseAJourDisponible || rechargementEnCours) return;
+      // Une écriture refusée ne doit jamais faire perdre la question en cours.
+      if (window.preparerMiseAJourPJJoue && !window.preparerMiseAJourPJJoue()) return;
+      rechargementEnCours = true;
+      window.location.reload();
+    };
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      const nouveauControleur = navigator.serviceWorker.controller;
+      if (controleurConnu && nouveauControleur !== controleurConnu) {
+        miseAJourDisponible = true;
+        appliquerMiseAJour();
+      }
+      controleurConnu = nouveauControleur;
+    });
+    window.addEventListener('load', async () => {
+      try {
+        const adresseServiceWorker = new URL('service-worker.js', racineApplication).href;
+        const inscription = await navigator.serviceWorker.register(adresseServiceWorker, { updateViaCache: 'none' });
+        let verificationEnCours = false;
+        const verifierMiseAJour = async () => {
+          appliquerMiseAJour();
+          if (verificationEnCours || navigator.onLine === false || document.visibilityState === 'hidden') return;
+          verificationEnCours = true;
+          try { await inscription.update(); }
+          catch (erreur) { /* Hors connexion : garder la version complète déjà disponible. */ }
+          finally { verificationEnCours = false; }
+        };
+        verifierMiseAJour();
+        window.addEventListener('online', verifierMiseAJour);
+        window.addEventListener('focus', verifierMiseAJour);
+        window.addEventListener('pageshow', verifierMiseAJour);
+        document.addEventListener('visibilitychange', verifierMiseAJour);
+        // Les onglets restés ouverts reçoivent aussi les nouvelles publications.
+        window.setInterval(verifierMiseAJour, 60000);
+      } catch (erreur) {
+        // Le site reste utilisable si le navigateur refuse le service worker.
+      }
     });
   }
 

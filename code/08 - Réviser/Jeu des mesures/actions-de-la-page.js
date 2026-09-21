@@ -286,10 +286,14 @@ function actualiserAccueilMesures() {
 function convertirQuestionMissionMesuresVersPJJoue(questionMesures, index, configuration) {
     const cible = questionMesures.cible || questionMesures.cibles?.[0] || null;
     const numeroEtape = Number(questionMesures.etape || cible?.etape || configuration.etape || 1);
-    const identifiant = 920000 + (Number(cible?.id || numeroEtape * 100) * 20) + (index % 20);
+    // Une activité possède sa propre clé de session, même si elle porte sur
+    // une notion déjà rencontrée. L'identité Analytics historique reste distincte.
+    const identifiantHistorique = 920000 + (Number(cible?.id || numeroEtape * 100) * 20) + (index % 20);
+    const identifiant = 920000000 + index;
     const source = questionMesures.source || cible?.source || '';
     const base = {
-        id:identifiant,
+        id: identifiant,
+        identifiantHistorique,
         theme:obtenirThemeVisuelMissionMesures(numeroEtape),
         etape:numeroEtape,
         chapitre:1,
@@ -361,7 +365,6 @@ function enregistrerResultatMissionMesuresNatif(question, resultat) {
         numeros.forEach(numero => {
             const etape = obtenirEtatEtapeMesures(numero);
             if (etapeMesuresMaitrisee(numero) && !etape.celebrationAffichee) {
-                etape.celebrationAffichee = true;
                 etatJeuMesures.celebrationEtapeADiffuser = numero;
             }
         });
@@ -489,8 +492,7 @@ function afficherRevisionMesures() {
     const zone=selectionner('#contenuErreursMesures'); if(!zone)return;
     const erreurs=obtenirErreursMesuresActives();
     if(!erreurs.length){zone.innerHTML='<div class="revision-vide"><strong>Aucune question à consolider.</strong><p>Les repères manqués apparaîtront ici pour être retravaillés.</p></div>';return;}
-    zone.innerHTML=construireCategoriesRevision('mesures') + `<div class="mesures-revision-liste">${erreurs.map(cible=>`<article class="mesures-revision-item"><span class="surtitre">Étape ${String(cible.etape).padStart(2,'0')}</span><strong>${cible.titre}</strong><p>${cible.sigle&&cible.developpement?`${cible.developpement} (${cible.sigle})`:cible.questionRappel}</p><small>${obtenirLibelleConsolidation(obtenirSauvegardeJeuMesures().erreurs[cible.cle])}</small></article>`).join('')}</div><button class="principal" id="mesuresRevisionDemarrer" type="button">Commencer la révision →</button>`;
-    selectionner('#mesuresRevisionDemarrer')?.addEventListener('click',lancerRevisionMesures);
+    construireEspaceRevision('mesures', zone);
 }
 function terminerSessionMissionMesuresNative() {
     clearInterval(etat.identifiantMinuteur);
@@ -515,11 +517,12 @@ function terminerSessionMissionMesuresNative() {
         }
     }
     if(mode==='hasard'){titre='Défi du hasard · Mission Mesures';resultat=pourcentage===100?'Tirage parfait !':`Résultat : ${pourcentage} %.`;}
+    if (mode !== 'evaluation') celebration = collecterCelebrationMission('mesures');
     enregistrerSauvegarde();
-    selectionner('#scoreBilan').textContent=`${pourcentage}%`; selectionner('#bonnesReponsesBilan').textContent=`${etat.score}/${total}`; selectionner('#meilleureSerieBilan').textContent=etat.meilleureSerie; selectionner('#gainExperienceBilan').textContent='+0'; selectionner('#contexteBilan').textContent=`Mission Mesures · ${titre}`; selectionner('#titreBilan').textContent=titre; selectionner('#rangBilan').textContent=resultat;
+    selectionner('#scoreBilan').textContent=`${pourcentage}%`; selectionner('#bonnesReponsesBilan').textContent=`${etat.score}/${total}`; selectionner('#meilleureSerieBilan').textContent=etat.meilleureSerie; selectionner('#contexteBilan').textContent=`Mission Mesures · ${titre}`; selectionner('#titreBilan').textContent=titre; selectionner('#rangBilan').textContent=resultat;
     afficherErreursBilan(obtenirQuestionsAConsoliderSession(),passees);
     const continuer=selectionner('#boutonContinuer'); continuer.textContent='Retour à Mission Mesures →'; continuer.onclick=()=>{etat.missionMesuresConfiguration=null;afficherEcran('mesures',{remplacerHistorique:true});};
-    const rejouer=selectionner('#boutonRejouerMesErreurs'); if(rejouer) rejouer.onclick=lancerRevisionMesures;
+    const rejouer=selectionner('#boutonRejouerMesErreurs'); if(rejouer) rejouer.onclick=()=>afficherEcran('mesures-revision');
     selectionner('#prochaineDestinationBilan') && (selectionner('#prochaineDestinationBilan').textContent='Continue Mission Mesures ou retravaille les repères à consolider.');
     selectionner('#carteVoyageFinale')?.classList.add('masque'); effacerSessionEnCours(); afficherEcran('bilan',{remplacerHistorique:true}); actualiserAccueilMesures(); lancerCelebrationBilan(celebration);
 }

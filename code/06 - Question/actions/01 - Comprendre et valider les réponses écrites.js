@@ -8,6 +8,9 @@
 // -----------------------------------------------------------------------------
 // Validation des réponses et données communes aux activités
 // -----------------------------------------------------------------------------
+function estSessionEvaluation() {
+    return ['evaluation-finale', 'sigles-evaluation', 'mesures-evaluation'].includes(etat.mode);
+}
 function obtenirModeQuestion(question) {
     return question?.activite?.type || 'choix-unique';
 }
@@ -185,6 +188,8 @@ function obtenirRacineSouple(mot) {
 function motsCorrespondentSouplement(motSaisi, motAttendu) {
     if (motSaisi === motAttendu)
         return true;
+    if (/\d/.test(motSaisi + motAttendu))
+        return false;
     const longueurMaximale = Math.max(motSaisi.length, motAttendu.length);
     if (longueurMaximale >= 4) {
         const tolerance = longueurMaximale >= 9 ? 2 : 1;
@@ -219,10 +224,29 @@ function compterMotsAttendusPresents(motsSaisis, motsAttendus) {
     }
     return correspondances;
 }
-function correspondAVarianteEvaluation(champ, variante) {
+function extraireNombresReponse(texte) {
+    // 7 500, 7 500 et 7500 représentent le même montant ; aucun chiffre
+    // n'est toléré comme faute de frappe ou éliminé comme petit mot.
+    const nombres = String(texte).replace(/(\d)[ \u00a0\u202f](?=\d{3}(?:\D|$))/g, '$1')
+        .match(/\d+(?:[.,]\d+)?/g) || [];
+    return nombres.map(nombre => Number(nombre.replace(',', '.')));
+}
+function respecteSensEtNombres(champ, variante, { concepts = false } = {}) {
+    const attendus = extraireNombresReponse(variante);
+    const saisis = extraireNombresReponse(champ);
+    if (attendus.some(nombre => !saisis.includes(nombre))) return false;
+    if (!concepts && saisis.some(nombre => !attendus.includes(nombre))) return false;
+    // Une négation requise ne peut pas disparaître, ni une négation contraire
+    // être ajoutée. Les synonymes positifs restent possibles via les variantes.
+    if (!concepts && contientNegation(champ) !== contientNegation(variante)) return false;
+    if (contientExpressionComplete(normaliserReponseEvaluation(variante), 'sans delai')
+        && /\b(avec|dans)\b.*\bdelai\b/.test(normaliserReponseEvaluation(champ))) return false;
+    return true;
+}
+function correspondAVarianteEvaluation(champ, variante, options = {}) {
     const reponseSaisie = normaliserReponseEvaluation(champ);
     const reponseAttendue = normaliserReponseEvaluation(variante);
-    if (!reponseSaisie || !reponseAttendue)
+    if (!reponseSaisie || !reponseAttendue || !respecteSensEtNombres(champ, variante, options))
         return false;
     if (reponseSaisie === reponseAttendue || contientExpressionComplete(reponseSaisie, reponseAttendue))
         return true;
@@ -278,14 +302,15 @@ function validerReponseEcriteEvaluation(champ, question) {
     const correspondanceDeclaree = reponsesDeclarees.some(variante => correspondAVarianteEvaluation(champ, variante));
     const correspondanceDeclareeExacte = reponsesDeclarees.some(variante => {
         const reponseAttendue = normaliserReponseEvaluation(variante);
-        return reponseNormalisee === reponseAttendue || contientExpressionComplete(reponseNormalisee, reponseAttendue);
+        return respecteSensEtNombres(champ, variante)
+            && (reponseNormalisee === reponseAttendue || contientExpressionComplete(reponseNormalisee, reponseAttendue));
     });
     if (!groupesConcepts.length)
         return correspondanceDeclaree;
     if (correspondanceDeclareeExacte)
         return true;
     const nombreCorrespondances = groupesConcepts.filter(groupe =>
-        Array.isArray(groupe) && groupe.some(variante => correspondAVarianteEvaluation(champ, variante))
+        Array.isArray(groupe) && groupe.some(variante => correspondAVarianteEvaluation(champ, variante, { concepts: true }))
     ).length;
     if (nombreCorrespondances < Number(question.nombreConceptsRequis || groupesConcepts.length))
         return false;

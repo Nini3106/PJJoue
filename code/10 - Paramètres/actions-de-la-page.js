@@ -58,6 +58,56 @@ function exporterProgression() {
         pjjoue_page_consultee: 'Progression'
     });
 }
+const CLE_SAUVEGARDE_AVANT_IMPORT = 'pjjoue_v1_sauvegarde_avant_import';
+function validerFichierProgression(importee) {
+    if (!estObjetSimple(importee) || importee.version !== 'V1'
+        || !estObjetSimple(importee.progression?.apprenant) || !estObjetSimple(importee.erreurs))
+        throw Error('Ce fichier n’est pas une sauvegarde Quiz CJPM V1. Ta progression est conservée.');
+    return nettoyerSauvegarde(importee);
+}
+function appliquerProgressionImportee(progression) {
+    const ancienne = JSON.stringify(sauvegarde);
+    // Écrire avant de remplacer l'état en mémoire : une panne de stockage
+    // laisse la progression courante intacte et n'annonce jamais un faux succès.
+    localStorage.setItem(CLE_SAUVEGARDE_AVANT_IMPORT, ancienne);
+    localStorage.setItem(CLE_SAUVEGARDE, JSON.stringify(progression));
+    sauvegarde = progression;
+    effacerSessionEnCours();
+    etat.questionsSession = [];
+    etat.questionCourante = null;
+    etat.mode = null;
+    chargerParametres();
+    actualiserAccueil();
+    envoyerEvenementPJJ('progression_importee', { pjjoue_page_consultee: 'Progression' });
+    afficherNotification('Progression importée et vérifiée');
+    actualiserRestaurationAvantImport();
+}
+function actualiserRestaurationAvantImport() {
+    const bouton = selectionner('#boutonAnnulerDernierImport');
+    if (!bouton) return;
+    try { bouton.hidden = !localStorage.getItem(CLE_SAUVEGARDE_AVANT_IMPORT); }
+    catch (erreur) { bouton.hidden = true; }
+}
+function annulerDernierImport() {
+    try {
+        const contenu = localStorage.getItem(CLE_SAUVEGARDE_AVANT_IMPORT);
+        if (!contenu) return;
+        const ancienne = validerFichierProgression(JSON.parse(contenu));
+        localStorage.setItem(CLE_SAUVEGARDE, JSON.stringify(ancienne));
+        sauvegarde = ancienne;
+        effacerSessionEnCours();
+        etat.questionsSession = [];
+        etat.questionCourante = null;
+        etat.mode = null;
+        localStorage.removeItem(CLE_SAUVEGARDE_AVANT_IMPORT);
+        chargerParametres();
+        actualiserAccueil();
+        actualiserRestaurationAvantImport();
+        afficherNotification('Progression précédant l’import restaurée');
+    } catch (erreur) {
+        ouvrirFenetreMessage({ titre: 'Restauration impossible', message: erreur.message, libelleConfirmer: 'Fermer' });
+    }
+}
 function importerProgression(fichier) {
     if (!fichier)
         return;
@@ -69,20 +119,17 @@ function importerProgression(fichier) {
     lecteur.onload = () => {
         try {
             const importee = JSON.parse(lecteur.result);
-            if (!estObjetSimple(importee))
-                throw Error('le contenu n’est pas un objet de sauvegarde');
-            if (importee.progression != null && !estObjetSimple(importee.progression))
-                throw Error('la progression est mal structurée');
-            if (importee.erreurs != null && !estObjetSimple(importee.erreurs))
-                throw Error('la banque de révision est mal structurée');
-            sauvegarde = nettoyerSauvegarde(importee);
-            effacerSauvegardeDuNavigateur();
-            enregistrerSauvegarde();
-            actualiserAccueil();
-            envoyerEvenementPJJ('progression_importee', {
-                pjjoue_page_consultee: 'Progression'
+            const progression = validerFichierProgression(importee);
+            const nombre = Number(progression.nombreQuestionsJouees || 0);
+            ouvrirFenetreMessage({
+                titre: 'Importer cette progression ?',
+                message: `Cette sauvegarde contient ${nombre} question${nombre === 1 ? '' : 's'} jouée${nombre === 1 ? '' : 's'}. Elle remplacera la progression de cet appareil. Tu pourras annuler cet import.`,
+                libelleConfirmer: 'Importer', libelleAnnuler: 'Annuler', afficherAnnuler: true,
+                apresConfirmation: () => {
+                    try { appliquerProgressionImportee(progression); }
+                    catch (erreur) { ouvrirFenetreMessage({ titre: 'Import impossible', message: 'Le stockage est indisponible. Ta progression actuelle est conservée.', libelleConfirmer: 'Fermer' }); }
+                }
             });
-            afficherNotification('Progression importée et vérifiée');
         }
         catch (erreur) {
             ouvrirFenetreMessage({ titre: 'Import impossible', message: erreur.message, libelleConfirmer: 'Fermer' });

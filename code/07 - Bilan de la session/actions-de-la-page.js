@@ -98,12 +98,45 @@ function obtenirStatutErreurBilan(reponse, estQuestionPassee) {
         return obtenirLibelleConsolidation({ motifRevision: 'incorrecte' });
     return obtenirLibelleConsolidation();
 }
+function revenirAuParcoursDuBilan() {
+    if (estSessionMissionSigles()) return afficherEcran('sigles', { remplacerHistorique: true });
+    if (estSessionMissionMesures()) return afficherEcran('mesures', { remplacerHistorique: true });
+    ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
+}
+function collecterCelebrationMission(jeu) {
+    const sigles = jeu === 'sigles';
+    const cibles = etat.questionsSession.flatMap(question => sigles
+        ? obtenirCiblesMissionQuestion(question) : obtenirCiblesMissionMesuresQuestion(question));
+    const numeros = [...new Set(cibles.map(cible => Number(cible.etape)))];
+    const validees = numeros.filter(numero => {
+        const maitrisee = sigles ? compterMaitrisesEtapeSigles(numero) === obtenirSiglesEtape(numero).length
+            : etapeMesuresMaitrisee(numero);
+        const etape = sigles ? obtenirEtatEtapeSigles(numero) : obtenirEtatEtapeMesures(numero);
+        if (!maitrisee || etape.celebrationAffichee) return false;
+        etape.celebrationAffichee = true;
+        return true;
+    });
+    if (!validees.length) return null;
+    return {
+        titre: validees.length === 1 ? `Étape ${validees[0]} maîtrisée !` : `${validees.length} étapes maîtrisées !`,
+        message: `Mission ${sigles ? 'Sigles' : 'Mesures'} : toutes les notions de ${validees.length === 1 ? 'cette étape ont' : 'ces étapes ont'} été réussies sans joker.`,
+        confetti: true
+    };
+}
 function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const zone = selectionner('#listeErreursBilan');
     const nombre = selectionner('#nombreErreursBilan');
     const boutonContinuer = selectionner('#boutonContinuer');
     const boutonRejouer = selectionner('#boutonRejouerMesErreurs');
-    if (boutonRejouer) boutonRejouer.onclick = () => afficherEcran('erreurs');
+    const jeu = estSessionMissionSigles() ? 'sigles' : estSessionMissionMesures() ? 'mesures' : 'parcours';
+    if (boutonRejouer) {
+        boutonRejouer.textContent = 'Voir mes révisions';
+        boutonRejouer.onclick = () => afficherEcran(jeu === 'parcours' ? 'erreurs' : `${jeu}-revision`);
+        boutonRejouer.classList.toggle('masque', !obtenirElementsCategoriesRevision(jeu).length || estSessionEvaluation());
+    }
+    const retour = selectionner('#boutonRevenirAuParcours');
+    retour?.classList.toggle('masque', jeu !== 'parcours');
+    if (retour) retour.onclick = revenirAuParcoursDuBilan;
     const aDesQuestionsAReprendre = questionsAReprendre.length > 0;
     boutonContinuer?.classList.toggle('principal', !aDesQuestionsAReprendre);
     boutonContinuer?.classList.toggle('secondaire', aDesQuestionsAReprendre);
@@ -213,6 +246,26 @@ function mettreAJourProgressionFinSession(pourcentage, nombreQuestionsPassees, j
         evaluationFinaleReussie = pourcentage >= seuil && nombreQuestionsPassees === 0;
         evaluation.reussie = Boolean(evaluation.reussie) || evaluationFinaleReussie;
     }
+    // Une révision globale, une catégorie ou un entraînement peut achever
+    // plusieurs étapes. Leur validation ne dépend pas du chemin emprunté.
+    const celebrations = celebration ? [celebration] : [];
+    const etapesVues = new Set();
+    for (const question of etat.questionsSession) {
+        if (question.estEvaluationFinale || question.missionSigles || question.missionMesures) continue;
+        const cle = `${question.theme}:${question.etape}`;
+        if (etapesVues.has(cle)) continue;
+        etapesVues.add(cle);
+        if (!estEtapeMaitrisee(question.theme, question.etape)) continue;
+        const bilan = obtenirBilanEtape(question.theme, question.etape);
+        if (bilan.celebrationSansJokerAffichee) continue;
+        bilan.celebrationSansJokerAffichee = true;
+        celebrations.push(obtenirCelebrationEtape(question.etape, false, estProgrammeMaitrise(question.theme)));
+    }
+    celebration = celebrations.length > 1 ? {
+        titre: `${celebrations.length} étapes maîtrisées !`,
+        message: 'Toutes les questions de ces étapes ont été validées sans joker. Ta progression est à jour.',
+        confetti: true
+    } : celebrations[0] || null;
     return { evaluationFinaleReussie, celebration };
 }
 function construireBilanEvaluationFinale(pourcentage, evaluationFinaleReussie) {
@@ -483,7 +536,6 @@ function terminerSession() {
     selectionner('#scoreBilan').textContent = pourcentage + '%';
     selectionner('#bonnesReponsesBilan').textContent = etat.score + '/' + total;
     selectionner('#meilleureSerieBilan').textContent = etat.meilleureSerie;
-    selectionner('#gainExperienceBilan').textContent = '+' + gain;
     selectionner('#contexteBilan').textContent = obtenirContexteFinSession();
     selectionner('#titreBilan').textContent = bilan.titre;
     selectionner('#rangBilan').textContent = bilan.messageResultat;

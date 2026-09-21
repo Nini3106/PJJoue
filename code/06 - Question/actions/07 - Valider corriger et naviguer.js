@@ -62,7 +62,7 @@ function enregistrerResultatReponse(question, texteChoisi, precisions, resultat)
     const contexteEtape = etat.mode === 'parcours'
         ? { theme: question.theme, etape: question.etape }
         : (obtenirContexteRevisionEtape(question)
-            || (reussiteAutonome && dejaTravaillee && !question.estEvaluationFinale
+            || (reussiteAutonome && (dejaTravaillee || etat.mode === 'revision') && !question.estEvaluationFinale
                 ? { theme: question.theme, etape: question.etape }
                 : null));
     if (!contexteEtape) {
@@ -179,7 +179,7 @@ function obtenirTexteCorrection(question, resultat, texteChoisi, precisions) {
     const repriseDisponible = (etat.tentativesQuestions?.get(question.id) || 0) < 1;
     const boutonRejouer = !estCorrecte
         && !reussiteAidee
-        && etat.mode !== 'evaluation-finale'
+        && !estSessionEvaluation()
         && repriseDisponible
         ? '<button class="principal reessayer-question-bouton" id="rejouerQuestion" '
             + 'type="button">Rejouer la question</button>'
@@ -284,7 +284,7 @@ function obtenirLibelleNombreJokers(nombre) {
     return nombre === 1 ? 'un joker' : nombre === 2 ? 'deux jokers' : nombre === 3 ? 'trois jokers' : `${nombre} jokers`;
 }
 function demanderPassageQuestion() {
-    if (etat.questionValidee)
+    if (etat.questionValidee || estSessionEvaluation())
         return;
     const disponibles = compterJokersDisponibles();
     const tempsEnPause = etat.tempsRestant;
@@ -311,6 +311,7 @@ function demanderPassageQuestion() {
     });
 }
 function passerQuestion() {
+    if (estSessionEvaluation()) return;
     if (etat.questionValidee)
         return;
     annulerRappelJokers();

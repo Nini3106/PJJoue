@@ -62,9 +62,11 @@ initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
 selectionner('#boutonReprendreEtapeDepuisDebut')?.addEventListener('click', reprendreEtapeDepuisDebutQuestion);
 selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
-selectionner('#boutonRevenirAuParcours').onclick = () => ouvrirParcours(etat.theme || sauvegarde.dernierTheme || obtenirProchainThemeIncomplet() || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
+selectionner('#boutonRevenirAuParcours').onclick = revenirAuParcoursDuBilan;
 selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
 selectionner('#boutonExporterMaProgression').onclick = exporterProgression;
+selectionner('#boutonAnnulerDernierImport')?.addEventListener('click', annulerDernierImport);
+actualiserRestaurationAvantImport();
 const boutonImporterProgression = selectionner('#boutonImporterProgression');
 const fichierImporterProgression = selectionner('#fichierImporterProgression');
 boutonImporterProgression.onclick = () => {
@@ -87,6 +89,8 @@ selectionner('#boutonReinitialiserTouteLaProgression').onclick = () => ouvrirFen
         sauvegarde = creerSauvegardeInitiale();
         effacerSauvegardeDuNavigateur();
         effacerSauvegardeDeSecours();
+        try { localStorage.removeItem(CLE_SAUVEGARDE_AVANT_IMPORT); } catch (erreur) { /* Stockage indisponible. */ }
+        actualiserRestaurationAvantImport();
         effacerSessionEnCours();
         enregistrerSauvegarde();
         actualiserAccueil();
@@ -246,7 +250,7 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les questions à consolider et la progression générale restent conservées.',
     boutonJokers: 'Ouvrir les aides disponibles pour cette question.',
     boutonPasser: 'Passer cette question : elle restera à consolider et ne sera pas validée.',
-    boutonRejouerMesErreurs: 'Rejouer les questions de la session qui restent à consolider.',
+    boutonRejouerMesErreurs: 'Voir les questions à consolider dans le jeu en cours.',
     boutonRevenirAuParcours: 'Retourner à la carte du parcours.',
     boutonRefermerSupports: 'Fermer toutes les fiches de support ouvertes.',
     boutonOuvrirParcours: 'Choisir un parcours pour consulter sa progression détaillée.',

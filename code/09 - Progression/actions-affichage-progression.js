@@ -85,15 +85,18 @@ function construireCarteProgressionComplete() {
             <i aria-hidden="true">${String(index + 1).padStart(2, '0')}</i><b aria-hidden="true"></b>
         </span>`;
     }).join('');
+    const parcoursCJPM = avancees.filter(({ theme }) => !obtenirIdentiteParcours(theme.id).optionnel);
+    const cjpmValides = parcoursCJPM.filter(({ avancee }) => avancee.estComplet).length;
     const parcoursComplet = estParcoursCompletReussi();
     const carte = document.createElement('div');
     carte.className = 'progression-global';
     carte.innerHTML = `
         <div class="progression-score">
             <strong>${progression}%</strong>
-            <span>progression globale</span>
+            <span>total · option PJJ comprise</span>
         </div>
         <div class="progression-global-corps">
+            <p><strong>${cjpmValides}/${parcoursCJPM.length} parcours CJPM validés${cjpmValides === parcoursCJPM.length ? " · CJPM terminé ✓" : ""}</strong> · l’option PJJ est suivie séparément ci-dessous.</p>
             <div class="progression-global-entete">
                 <div><strong>${jalonsValides}/${totalJalons} ${libelleObjectifs}</strong><span>${totalEtapes} étapes · ${totalEvaluations} évaluations</span></div>
                 <span class="progression-global-statut">${parcoursComplet ? 'Parcours complet validé ✓' : 'En cours'}</span>
@@ -102,7 +105,7 @@ function construireCarteProgressionComplete() {
                 <span class="progression-rail-remplissage" style="width:${progression}%"></span>
                 <div class="progression-jalons">${jalons}</div>
             </div>
-            <p>${parcoursComplet ? 'Les six parcours sont validés.' : 'Chaque parcours avance indépendamment et contribue à ta progression globale.'}</p>
+            <p>${parcoursComplet ? 'Les cinq parcours CJPM et l’option Découvrir la PJJ sont validés.' : 'Ce total comprend les cinq parcours CJPM et l’option Découvrir la PJJ. L’option reste indépendante de la validation des parcours CJPM.'}</p>
         </div>`;
     return carte;
 }

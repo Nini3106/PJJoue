@@ -525,6 +525,7 @@ function restaurerEnsemble(valeur) {
     return Array.isArray(valeur) ? new Set(valeur) : new Set();
 }
 function effacerSessionEnCours() {
+    try { sessionStorage.removeItem(CLE_SESSION_EN_COURS); } catch (erreur) { /* Stockage par onglet indisponible. */ }
     try {
         localStorage.removeItem(CLE_SESSION_EN_COURS);
     }
@@ -533,8 +534,6 @@ function effacerSessionEnCours() {
     }
 }
 function enregistrerSessionEnCours() {
-    if (estSessionMissionSigles())
-        return false;
     if (etat.ecran !== 'question' || !etat.questionsSession?.length || !etat.questionCourante)
         return false;
     const saisieActive = selectionner('#reponseEcrite');
@@ -543,12 +542,15 @@ function enregistrerSessionEnCours() {
         etat.brouillonsEcrits.set(etat.questionCourante.id, saisieActive.value || '');
     }
     const instantane = {
-        version: 1,
+        version: 2,
         enregistreLe: Date.now(),
         theme: etat.theme,
         etape: etat.etape,
         chapitre: etat.chapitre,
         mode: etat.mode,
+        missionSiglesConfiguration: estSessionMissionSigles() ? etat.missionSiglesConfiguration : null,
+        missionMesuresConfiguration: estSessionMissionMesures() ? etat.missionMesuresConfiguration : null,
+        questionsMission: estSessionMissionSigles() || estSessionMissionMesures() ? etat.questionsSession : null,
         organisationSession: etat.organisationSession,
         origineSessionAnalytics: etat.origineSessionAnalytics,
         perimetreRevision: etat.perimetreRevision || null,
@@ -579,20 +581,31 @@ function enregistrerSessionEnCours() {
         brouillonActivite: etat.brouillonActivite || null
     };
     try {
-        localStorage.setItem(CLE_SESSION_EN_COURS, JSON.stringify(instantane));
+        const contenu = JSON.stringify(instantane);
+        localStorage.setItem(CLE_SESSION_EN_COURS, contenu);
+        // Chaque onglet retrouve sa propre session après une mise à jour.
+        try { sessionStorage.setItem(CLE_SESSION_EN_COURS, contenu); } catch (erreur) { /* Repli sur la sauvegarde locale. */ }
         return true;
     }
     catch (erreur) {
         return false;
     }
 }
+function preparerMiseAJourAutomatique() {
+    // Les actions ont déjà enregistré la progression. Ne pas réécrire ici
+    // une ancienne copie en mémoire si un autre onglet a joué entre-temps.
+    return etat.ecran !== 'question' || enregistrerSessionEnCours();
+}
+window.preparerMiseAJourPJJoue = preparerMiseAJourAutomatique;
 function chargerSessionEnCours() {
     try {
-        const contenu = localStorage.getItem(CLE_SESSION_EN_COURS);
+        let contenuOnglet = null;
+        try { contenuOnglet = sessionStorage.getItem(CLE_SESSION_EN_COURS); } catch (erreur) { /* Repli local. */ }
+        const contenu = contenuOnglet || localStorage.getItem(CLE_SESSION_EN_COURS);
         if (!contenu)
             return null;
         const instantane = JSON.parse(contenu);
-        if (!instantane || instantane.version !== 1 || !Array.isArray(instantane.questions))
+        if (!instantane || ![1, 2].includes(instantane.version) || !Array.isArray(instantane.questions))
             return null;
         return instantane;
     }
@@ -604,11 +617,21 @@ function restaurerSessionEnCours() {
     const instantane = chargerSessionEnCours();
     if (!instantane)
         return false;
-    const questions = instantane.questions
+    const mission = String(instantane.mode || '').match(/^(sigles|mesures)-(parcours|revision|evaluation|entrainement|hasard)$/);
+    const questionsMission = mission && instantane.version === 2 && Array.isArray(instantane.questionsMission)
+        ? instantane.questionsMission.filter(question => {
+            const meta = mission[1] === 'sigles' ? question?.missionSiglesMeta : question?.missionMesuresMeta;
+            return estObjetSimple(question) && Number.isSafeInteger(question.id)
+                && typeof question.enonce === 'string' && typeof question.bonneReponse === 'string'
+                && Array.isArray(meta?.cibles) && meta.mode === mission[2]
+                && meta.cibles.every(cle => mission[1] === 'sigles' ? obtenirSigleJeu(cle) : obtenirRepereMesure(cle));
+        }) : null;
+    const questions = questionsMission || instantane.questions
         .map(identifiant => QUESTIONS.find(question => Number(question.id) === Number(identifiant)))
         .filter(Boolean)
         .map(question => ({ ...question, modePresentation: question.modePrefere || obtenirModeQuestion(question) }));
-    if (!questions.length || questions.length !== instantane.questions.length) {
+    if (!questions.length || questions.length > 1000 || questions.length !== instantane.questions.length
+        || new Set(questions.map(question => question.id)).size !== questions.length) {
         effacerSessionEnCours();
         return false;
     }
@@ -617,6 +640,23 @@ function restaurerSessionEnCours() {
     etat.etape = Number(instantane.etape) || Number(questions[positionQuestion]?.etape) || 1;
     etat.chapitre = Number(instantane.chapitre) || 1;
     etat.mode = instantane.mode || 'parcours';
+    etat.missionSiglesConfiguration = instantane.missionSiglesConfiguration || null;
+    etat.missionMesuresConfiguration = instantane.missionMesuresConfiguration || null;
+    if (mission?.[1] === 'sigles') {
+        const configuration = etat.missionSiglesConfiguration;
+        if (!configuration || configuration.mode !== mission[2]) { effacerSessionEnCours(); return false; }
+        choisirDomaineSigles(configuration.domaine || 'cjpm');
+        etatJeuSigles = { ...creerEtatJeuSigles(), ...configuration,
+            titreSession: configuration.titre, siglesSession: configuration.sigles || [],
+            configurationDerniereSession: configuration };
+    }
+    if (mission?.[1] === 'mesures') {
+        const configuration = etat.missionMesuresConfiguration;
+        if (!configuration || configuration.mode !== mission[2]) { effacerSessionEnCours(); return false; }
+        etatJeuMesures = { ...creerEtatJeuMesures(), ...configuration,
+            titreSession: configuration.titre, reperesSession: configuration.reperes || [],
+            configurationDerniereSession: configuration };
+    }
     etat.organisationSession = instantane.organisationSession || 'ordonne';
     etat.origineSessionAnalytics = instantane.origineSessionAnalytics || null;
     etat.perimetreRevision = instantane.perimetreRevision || null;
@@ -628,7 +668,7 @@ function restaurerSessionEnCours() {
     etat.nombreReponsesAidees = Math.max(0, Number(instantane.nombreReponsesAidees) || 0);
     etat.sessionAvecJoker = instantane.sessionAvecJoker === true;
     etat.etapeAvecJoker = instantane.etapeAvecJoker === true;
-    etat.jokersSessionActifs = instantane.jokersSessionActifs !== false;
+    etat.jokersSessionActifs = !estSessionEvaluation() && instantane.jokersSessionActifs !== false;
     etat.chronometreSessionActif = instantane.chronometreSessionActif === true;
     etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(instantane.dureeChronometreSession) || 15));
     etat.tempsRestant = Math.max(0, Number(instantane.tempsRestant) || 0);
@@ -654,7 +694,7 @@ function restaurerSessionEnCours() {
         precisions.aConsolider = true;
         etat.erreursSession.delete(question.id);
         etat.questionsPassees.delete(question.id);
-        if (!question.estEvaluationFinale) {
+        if (!question.estEvaluationFinale && !question.missionSigles && !question.missionMesures) {
             const bilan = obtenirBilanEtape(question.theme, question.etape);
             if (etat.mode === 'parcours' || bilan.questionsTraitees[question.id] === true) {
                 bilan.questionsTraitees[question.id] = true;

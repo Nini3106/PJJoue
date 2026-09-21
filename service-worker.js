@@ -1,47 +1,45 @@
 /* PJJoue garde son application principale disponible après une première visite. */
-const NOM_CACHE = 'pjjoue-application-2d26e7faa12d';
+const NOM_CACHE = 'pjjoue-application-db35a6bce686';
 const RESSOURCES_ESSENTIELLES = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './donnees/donnees-pjj.js',
-  './ressources/moteur-jeu.js',
-  './ressources/navigation-locale.js',
-  './ressources/navigation-locale.js?v=20260828-menu2',
-  './ressources/consentement-analytics.js',
-  './ressources/videos-guides.js',
-  './ressources/styles/pjjoue-principal.css?v=20260828-coherence12',
-  './ressources/styles/pjjoue-static.css?v=20260828-menu2',
-  './ressources/styles/95-consentement.css',
-  './ressources/styles/95-consentement.css?v=20260827-final1',
+  './donnees/donnees-pjj.js?v=db35a6bce686',
+  './ressources/moteur-jeu.js?v=db35a6bce686',
+  './ressources/navigation-locale.js?v=db35a6bce686',
+  './ressources/consentement-analytics.js?v=db35a6bce686',
+  './ressources/videos-guides.js?v=db35a6bce686',
+  './ressources/styles/pjjoue-principal.css?v=db35a6bce686',
+  './ressources/styles/pjjoue-static.css?v=db35a6bce686',
+  './ressources/styles/95-consentement.css?v=db35a6bce686',
   './guides/index.html',
-  './guides/style-de-la-page.css',
+  './guides/style-de-la-page.css?v=db35a6bce686',
   './cjpm-enquete-sanction/index.html',
-  './cjpm-enquete-sanction/style-de-la-page.css',
+  './cjpm-enquete-sanction/style-de-la-page.css?v=db35a6bce686',
   './cjpm-information-judiciaire/index.html',
-  './cjpm-information-judiciaire/style-de-la-page.css',
+  './cjpm-information-judiciaire/style-de-la-page.css?v=db35a6bce686',
   './cjpm-jugement-sanction-educative/index.html',
-  './cjpm-jugement-sanction-educative/style-de-la-page.css',
+  './cjpm-jugement-sanction-educative/style-de-la-page.css?v=db35a6bce686',
   './cjpm-matiere-criminelle-peines/index.html',
-  './cjpm-matiere-criminelle-peines/style-de-la-page.css',
+  './cjpm-matiere-criminelle-peines/style-de-la-page.css?v=db35a6bce686',
   './cjpm-application-execution/index.html',
-  './cjpm-application-execution/style-de-la-page.css',
+  './cjpm-application-execution/style-de-la-page.css?v=db35a6bce686',
   './decouvrir-la-pjj/index.html',
-  './decouvrir-la-pjj/style-de-la-page.css',
+  './decouvrir-la-pjj/style-de-la-page.css?v=db35a6bce686',
   './organisation-pjj/index.html',
-  './organisation-pjj/style-de-la-page.css',
+  './organisation-pjj/style-de-la-page.css?v=db35a6bce686',
   './metiers-pjj/index.html',
-  './metiers-pjj/style-de-la-page.css',
+  './metiers-pjj/style-de-la-page.css?v=db35a6bce686',
   './structures-pjj/index.html',
-  './structures-pjj/style-de-la-page.css',
+  './structures-pjj/style-de-la-page.css?v=db35a6bce686',
   './mesures-educatives-pjj/index.html',
-  './mesures-educatives-pjj/style-de-la-page.css',
+  './mesures-educatives-pjj/style-de-la-page.css?v=db35a6bce686',
   './sigles-cjpm/index.html',
-  './sigles-cjpm/style-de-la-page.css',
+  './sigles-cjpm/style-de-la-page.css?v=db35a6bce686',
   './sigles-pjj/index.html',
-  './sigles-pjj/style-de-la-page.css',
+  './sigles-pjj/style-de-la-page.css?v=db35a6bce686',
   './quiz-pjj/index.html',
-  './quiz-pjj/style-de-la-page.css',
+  './quiz-pjj/style-de-la-page.css?v=db35a6bce686',
   './ressources/panorama-accueil.webp',
   './ressources/panorama-accueil-mobile.webp',
   './favicon.ico',
@@ -60,20 +58,26 @@ const RESSOURCES_ESSENTIELLES = [
   './ressources/icones-parcours/icone-partenaires.svg',
 ];
 
-async function precacherSeparément(cache) {
-  await Promise.all(RESSOURCES_ESSENTIELLES.map(async ressource => {
-    try {
-      await cache.add(ressource);
-    } catch (erreur) {
-      console.warn('[PJJoue] Ressource non précachée :', ressource, erreur);
-    }
+function estRessourceIndispensable(ressource) {
+  return ressource === './' || ressource === './index.html'
+    || /(?:donnees-pjj|moteur-jeu|navigation-locale)\.js/.test(ressource)
+    || /pjjoue-principal\.css/.test(ressource);
+}
+async function precacherApplication(cache) {
+  // Le nouveau moteur ne peut prendre la main qu'après le téléchargement
+  // complet de l'application. Un réseau interrompu garde l'ancienne version.
+  const indispensables = RESSOURCES_ESSENTIELLES.filter(estRessourceIndispensable);
+  await cache.addAll(indispensables.map(ressource => new Request(ressource, { cache: 'reload' })));
+  await Promise.all(RESSOURCES_ESSENTIELLES.filter(ressource => !estRessourceIndispensable(ressource)).map(async ressource => {
+    try { await cache.add(new Request(ressource, { cache: 'reload' })); }
+    catch (erreur) { console.warn('[PJJoue] Ressource secondaire non précachée :', ressource); }
   }));
 }
 
 self.addEventListener('install', evenement => {
   evenement.waitUntil(
     caches.open(NOM_CACHE)
-      .then(cache => precacherSeparément(cache))
+      .then(cache => precacherApplication(cache))
       .then(() => self.skipWaiting())
   );
 });
@@ -83,20 +87,22 @@ self.addEventListener('activate', evenement => {
     caches.keys()
       .then(noms => Promise.all(noms
         .filter(nom => nom.startsWith('pjjoue-application-') && nom !== NOM_CACHE)
+        .slice(0, -1)
         .map(nom => caches.delete(nom))))
       .then(() => self.clients.claim())
   );
 });
 
 async function trouverNavigationEnCache(requete) {
-  const reponseExacte = await caches.match(requete);
+  const cache = await caches.open(NOM_CACHE);
+  const reponseExacte = await cache.match(requete);
   if (reponseExacte)
     return reponseExacte;
 
   const adresse = new URL(requete.url);
   if (adresse.pathname.endsWith('/')) {
     const adresseIndex = new URL('index.html', adresse).href;
-    const reponseIndex = await caches.match(adresseIndex);
+    const reponseIndex = await cache.match(adresseIndex);
     if (reponseIndex)
       return reponseIndex;
   }
@@ -118,7 +124,7 @@ async function trouverNavigationEnCache(requete) {
   }
 
   const accueil = new URL('index.html', racine).href;
-  return caches.match(accueil);
+  return cache.match(accueil);
 }
 
 self.addEventListener('fetch', evenement => {
@@ -129,8 +135,16 @@ self.addEventListener('fetch', evenement => {
 
   if (requete.mode === 'navigate') {
     evenement.respondWith(
-      fetch(requete)
+      caches.open(NOM_CACHE).then(async cache => {
+        // Une page déjà installée reste liée à son moteur jusqu'à activation
+        // complète de la version suivante. Les nouveaux scripts sont prêts
+        // avant le rechargement automatique des onglets.
+        const connue = await cache.match(requete, { ignoreSearch: true });
+        if (connue) return connue;
+        return fetch(requete, { cache: 'no-cache' });
+      })
         .then(reponse => {
+          if (!reponse.ok) throw new Error('Navigation indisponible');
           const copie = reponse.clone();
           return caches.open(NOM_CACHE)
             .then(cache => cache.put(requete, copie))

@@ -11436,7 +11436,15 @@ body[data-ecran-actif="accueil"] #accueil {
   #supports .support-revision[open] > summary .support-revision-type { min-width:0; }
   #supports .support-revision[open] > summary .support-revision-titre { grid-column:1; min-width:0; }
   #supports .support-revision[open] > summary .support-revision-chevron { grid-column:2; grid-row:1 / span 2; align-self:center; }
-}/* Paramètres : grille régulière et commandes alignées. */
+}
+/* Un périmètre commun, puis une seule liste classée par motif. */
+.revision-filtres{margin:0 0 24px;padding:20px;border:1px solid var(--bordure, #326189);border-radius:18px;background:var(--panneau, #103c66)}
+.revision-filtres p{margin:0 0 16px;line-height:1.5}
+.revision-filtres-champs{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:18px}
+.revision-filtres-champs label{display:flex;flex-direction:column;gap:8px;min-width:0;max-width:100%;flex:1 1 240px}
+.revision-filtres-champs select{box-sizing:border-box;max-width:100%;min-width:0;padding:10px;border:1px solid #6e9ec8;border-radius:10px;color:#fff;background:#103c66;font:inherit}
+.revision-filtres button{max-width:100%;white-space:normal;text-align:left}
+/* Paramètres : grille régulière et commandes alignées. */
 #parametres .formulaire-grille { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
 #parametres .parametre { display:grid; grid-template-columns:minmax(0,1fr); align-content:start; gap:14px; min-height:148px; padding:20px; border:1px solid var(--bordure-carte); border-radius:var(--rayon-grand); background:var(--surface-carte); box-shadow:var(--ombre-douce); }
 #parametres .choix-libelle,
