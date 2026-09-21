@@ -11292,6 +11292,15 @@ body[data-ecran-actif="accueil"] #accueil {
 .progression-parcours-mis-en-avant-avancee span { color: var(--texte-secondaire); font-size: .94rem; }
 .progression-parcours-mis-en-avant > .barre { height:8px; margin:0; }
 
+/* Partager les lignes garde les deux colonnes alignées même si le texte grandit. */
+@media (min-width:981px) {
+  @supports (grid-template-rows:subgrid) {
+    .progression-studio { grid-template-rows:auto auto 1fr; }
+    .progression-vue-ensemble, .progression-explorateur { grid-row:span 3; grid-template-rows:subgrid; }
+    .progression-colonne-contenu { grid-row:span 2; grid-template-rows:subgrid; }
+  }
+}
+
 @media (max-width:980px) {
   .progression-studio { grid-template-columns:1fr; }
   .progression-vue-ensemble, .progression-explorateur { height:auto; }
