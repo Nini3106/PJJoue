@@ -112,3 +112,19 @@ test('Les filtres et le lancement de révision sélectionnent exactement les mê
  const prevus=filtrerElementsRevision('parcours',obtenirElementsCategoriesRevision('parcours')).map(e=>e.cible.id).sort();
  lancerRevisionCategorie('parcours','passage');return [prevus,etat.questionsSession.map(q=>q.id).sort()];})()`)),[[1011,1012],[1011,1012]]);
 });
+
+for(const jeu of ['sigles','mesures'])test(`Mission ${jeu} : une étape terminée en entraînement est célébrée une seule fois`,()=>{
+ const {run}=creerMoteur();
+ const r=run(`(()=>{init();const sigles=${jeu==='sigles'},numero=sigles?6:1;
+ const cibles=sigles?obtenirSiglesEtape(numero):obtenirReperesMesuresEtape(numero);
+ const e=sigles?obtenirEtatEtapeSigles(numero):obtenirEtatEtapeMesures(numero);
+ for(const c of cibles.slice(0,-1)){const cle=sigles?normaliserSigleJeu(c.sigle):normaliserCleMesure(c.cle);e.autonomes[cle]=true;e.validationsSansJoker[cle]=true;}
+ const derniere=[cibles.at(-1)];
+ if(sigles)preparerSessionMissionSiglesNative({mode:'entrainement',etape:numero,sigles:derniere,questions:creerQuestionsRevisionSigles(derniere),titre:'Test'});
+ else preparerSessionMissionMesuresNative({mode:'entrainement',etape:numero,reperes:derniere,questions:creerQuestionsRevisionMesures(derniere),titre:'Test'});
+ finaliserReponse(true,etat.questionCourante.bonneReponse);
+ const premiere=collecterCelebrationMission('${jeu}');const seconde=collecterCelebrationMission('${jeu}');
+ return [premiere?.confetti,seconde,premiere?.titre];})()`);
+ assert.equal(r[0],true);assert.equal(r[1],null);
+ if(jeu==='sigles')assert.match(r[2],/PJJ.*Étape 0?1/);
+});

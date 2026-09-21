@@ -6076,7 +6076,7 @@ function collecterCelebrationMission(jeu) {
     });
     if (!validees.length) return null;
     return {
-        titre: validees.length === 1 ? `Étape ${validees[0]} maîtrisée !` : `${validees.length} étapes maîtrisées !`,
+        titre: validees.length === 1 ? `${sigles ? libelleEtapeSigles(validees[0]) : `Étape ${validees[0]}`} maîtrisée !` : `${validees.length} étapes maîtrisées !`,
         message: `Mission ${sigles ? 'Sigles' : 'Mesures'} : toutes les notions de ${validees.length === 1 ? 'cette étape ont' : 'ces étapes ont'} été réussies sans joker.`,
         confetti: true
     };
@@ -6650,7 +6650,7 @@ function construireCategoriesRevision(jeu) {
         if (!total) return '';
         const libelle = obtenirLibelleConsolidation({ motifRevision: categorie });
         const contenu = `<ul>${selection.map(element => `<li><span>${echapperHtml(element.libelle)}</span>${construireReperesRevision(jeu, element)}</li>`).join('')}</ul>
-               <button class="principal" type="button" data-action="reviser-categorie" data-jeu-revision="${jeu}" data-categorie-revision="${categorie}">Réviser ${total} ${accorderLibelle(total, 'question', 'questions')} →</button>`;
+               <button class="secondaire" type="button" data-action="reviser-categorie" data-jeu-revision="${jeu}" data-categorie-revision="${categorie}">Réviser ${total} ${accorderLibelle(total, 'question', 'questions')} →</button>`;
         return `<details class="revision-categorie" data-categorie-revision="${categorie}">
             <summary><span><strong>${libelle}</strong><small>${total} ${accorderLibelle(total, 'question', 'questions')}</small></span><span class="revision-categorie-chevron" aria-hidden="true">⌄</span></summary>
             <div class="revision-categorie-contenu">${contenu}</div>

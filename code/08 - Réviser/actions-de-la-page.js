@@ -148,7 +148,7 @@ function construireCategoriesRevision(jeu) {
         if (!total) return '';
         const libelle = obtenirLibelleConsolidation({ motifRevision: categorie });
         const contenu = `<ul>${selection.map(element => `<li><span>${echapperHtml(element.libelle)}</span>${construireReperesRevision(jeu, element)}</li>`).join('')}</ul>
-               <button class="principal" type="button" data-action="reviser-categorie" data-jeu-revision="${jeu}" data-categorie-revision="${categorie}">Réviser ${total} ${accorderLibelle(total, 'question', 'questions')} →</button>`;
+               <button class="secondaire" type="button" data-action="reviser-categorie" data-jeu-revision="${jeu}" data-categorie-revision="${categorie}">Réviser ${total} ${accorderLibelle(total, 'question', 'questions')} →</button>`;
         return `<details class="revision-categorie" data-categorie-revision="${categorie}">
             <summary><span><strong>${libelle}</strong><small>${total} ${accorderLibelle(total, 'question', 'questions')}</small></span><span class="revision-categorie-chevron" aria-hidden="true">⌄</span></summary>
             <div class="revision-categorie-contenu">${contenu}</div>

@@ -118,7 +118,7 @@ function collecterCelebrationMission(jeu) {
     });
     if (!validees.length) return null;
     return {
-        titre: validees.length === 1 ? `Étape ${validees[0]} maîtrisée !` : `${validees.length} étapes maîtrisées !`,
+        titre: validees.length === 1 ? `${sigles ? libelleEtapeSigles(validees[0]) : `Étape ${validees[0]}`} maîtrisée !` : `${validees.length} étapes maîtrisées !`,
         message: `Mission ${sigles ? 'Sigles' : 'Mesures'} : toutes les notions de ${validees.length === 1 ? 'cette étape ont' : 'ces étapes ont'} été réussies sans joker.`,
         confetti: true
     };

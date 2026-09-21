@@ -67,7 +67,7 @@ class SynchronisationErreursTests(unittest.TestCase):
         resultats = self.page.evaluate("""() => {
             const cas=[];
             THEMES.forEach(t=>['parcours','libre','revision'].forEach(mode=>cas.push(['parcours',mode,t.id])));
-            ['parcours','entrainement','hasard','revision','evaluation'].forEach(mode=>{
+            ['parcours','entrainement','hasard','revision'].forEach(mode=>{
                 cas.push(['sigles',mode,'commun',1],['sigles',mode,'commun',6],['mesures',mode]);
             });
             return cas.map(args=>{
@@ -231,7 +231,7 @@ class SynchronisationErreursTests(unittest.TestCase):
         resultats = self.page.evaluate("""() => {
             const cas=[];
             THEMES.forEach(t=>['parcours','libre','revision'].forEach(mode=>cas.push(['parcours',mode,t.id])));
-            ['parcours','entrainement','hasard','revision','evaluation'].forEach(mode=>{
+            ['parcours','entrainement','hasard','revision'].forEach(mode=>{
                 cas.push(['sigles',mode,'commun',1],['sigles',mode,'commun',6],['mesures',mode]);
             });
             return cas.map(args=>{
@@ -254,7 +254,7 @@ class SynchronisationErreursTests(unittest.TestCase):
                 return resultat;
             });
         }""")
-        self.assertEqual(len(resultats),33)
+        self.assertEqual(len(resultats),30)
         for r in resultats:
             with self.subTest(cas=r['cas']):
                 self.assertEqual(r['score'],1,r)
@@ -267,6 +267,24 @@ class SynchronisationErreursTests(unittest.TestCase):
                     self.assertTrue(r[cle],r)
                 self.assertIn('Validée après reprise sans joker · à consolider',r['bilan'])
                 self.assertNotIn('Incorrecte — erreur à réviser',r['bilan'])
+
+    def test_evaluations_sans_reprise_joker_ni_passage(self):
+        for jeu in ['parcours', 'sigles', 'mesures']:
+            with self.subTest(jeu=jeu):
+                r = self.page.evaluate("""jeu => {
+                    const f=fixtureErreur(jeu,jeu==='parcours'?'evaluation-finale':'evaluation'); f.ouvrir();
+                    const passeesAvant=etat.questionsPassees.size;
+                    const passerCache=document.querySelector('#boutonPasser').classList.contains('masque');
+                    const jokersCaches=document.querySelector('#boutonJokers').classList.contains('masque');
+                    passerQuestion(); finaliserReponse(false,'Incorrect');
+                    const repriseAbsente=!document.querySelector('#rejouerQuestion');
+                    rejouerQuestionCourante(); finaliserReponse(true,etat.questionCourante.bonneReponse);
+                    return {score:etat.score,reprises:etat.tentativesQuestions.size,
+                        passageInchange:etat.questionsPassees.size===passeesAvant,
+                        passerCache,jokersCaches,repriseAbsente};
+                }""", jeu)
+                self.assertEqual(r,dict(score=0,reprises=0,passageInchange=True,
+                                        passerCache=True,jokersCaches=True,repriseAbsente=True))
 
     def test_reprise_avec_joker_reste_aidee(self):
         resultats=self.page.evaluate("""() => ['parcours','sigles','mesures'].map(jeu=>{

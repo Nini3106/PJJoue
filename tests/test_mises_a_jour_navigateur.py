@@ -59,7 +59,9 @@ class MisesAJourNavigateurTests(unittest.TestCase):
         for jeu in ['parcours', 'sigles', 'mesures']:
             with self.subTest(jeu=jeu):
                 ServeurVersions.revision = 'aaaaaaaaaaaa'
-                contexte = self.navigateur.new_context(viewport={'width':390,'height':844})
+                # Autoriser l’instrumentation Playwright dans ce contexte de test uniquement.
+                # La CSP publiée reste inchangée et contrôlée par la recette statique.
+                contexte = self.navigateur.new_context(viewport={'width':390,'height':844}, bypass_csp=True)
                 page = contexte.new_page()
                 try:
                     page.goto(self.url, wait_until='load')
