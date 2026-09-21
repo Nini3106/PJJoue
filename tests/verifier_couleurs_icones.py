@@ -56,8 +56,10 @@ def principal() -> int:
 
     if '<img ' in ENTRAINEMENT or 'icones-interface' in ENTRAINEMENT:
         erreurs.append('L’entraînement doit conserver ses pictogrammes intégrés au document.')
-    if len(re.findall(r'<div[^>]+class="entrainement-icone"[^>]*>\s*<svg\b', ENTRAINEMENT)) != 2:
-        erreurs.append('Les deux modes d’entraînement doivent chacun posséder un pictogramme SVG intégré.')
+    if 'class="de-contour"' not in ENTRAINEMENT or 'viewBox="0 0 72 72"' not in ENTRAINEMENT:
+        erreurs.append('Le dé doit conserver son dessin SVG original intégré.')
+    if len(re.findall(r'<h3>', ENTRAINEMENT)) != 2 or 'class="entrainement-icone"' in ENTRAINEMENT:
+        erreurs.append('Les deux modes doivent être identifiés par leur titre coloré, sans icône décorative.')
 
     # Les six cartes de parcours utilisent la même bibliothèque de traits.
     mapping_themes = re.search(r'const ICONES_THEMES = Object\.freeze\(\{(.*?)\n\}\);', DEMARRAGE, re.S)

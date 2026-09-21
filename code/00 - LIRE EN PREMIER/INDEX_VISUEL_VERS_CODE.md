@@ -121,8 +121,8 @@ Les icônes de l’interface principale utilisent désormais **un seul langage S
 | Dessin SVG commun | `TRACES_PICTOGRAMMES` | `code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js` |
 | Icône d’une étape | `ICONES_ETAPES_PARCOURS` | `code/03 - Parcours PJJ/actions-de-la-page.js` |
 | Icône de l’évaluation finale | `trophee` | `code/03 - Parcours PJJ/` + bibliothèque commune |
-| Par ordre d’étapes | `entrainement-ordonne` / `entrainement-icone` | `code/05 - Entraînement libre/contenu.html` |
-| Mélangé | `entrainement-melange` / `entrainement-icone` | `code/05 - Entraînement libre/contenu.html` |
+| Par ordre d’étapes | `entrainement-ordonne h3` | `code/05 - Entraînement libre/contenu.html` |
+| Mélangé | `entrainement-melange h3` | `code/05 - Entraînement libre/contenu.html` |
 | Défi du hasard | `#faceDeParcours` | `code/05 - Entraînement libre/contenu.html` |
 | Icônes des guides | `.guide-carte-icone` | `code/11 - Guides pour découvrir la PJJ/Accueil des guides/` |
 
