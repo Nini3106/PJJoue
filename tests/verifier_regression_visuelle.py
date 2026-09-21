@@ -1589,8 +1589,16 @@ def verifier_scenario(navigateur, html: str, scenario: Scenario, actualiser_refe
             attendue = Image.open(reference).convert('RGBA')
             exact = comparaison_pixel_exacte_active()
             if actuelle.width != attendue.width:
+                hors_ecran = page.evaluate("""() => [...document.querySelectorAll('body *')]
+                    .filter(element => {
+                        const r = element.getBoundingClientRect();
+                        return r.width > 0 && r.height > 0 && r.right > innerWidth + 1;
+                    }).slice(0, 12).map(element => ({
+                        element: element.id || element.className || element.tagName,
+                        droite: element.getBoundingClientRect().right
+                    }))""")
                 raise AssertionError(
-                    f"{scenario.nom} : largeur de capture différente, {actuelle.width}px au lieu de {attendue.width}px."
+                    f"{scenario.nom} : largeur de capture différente, {actuelle.width}px au lieu de {attendue.width}px : {hors_ecran}"
                 )
             if actuelle.height != attendue.height:
                 if exact:
@@ -1645,11 +1653,18 @@ def main() -> int:
         navigation_http_locale = navigation_http_locale_disponible(navigateur)
         if not navigation_http_locale:
             print("INFO — navigation HTTP locale bloquée : fallback visuel set_content activé une seule fois.")
+        echecs = []
         for scenario in selection:
-            verifier_scenario(navigateur, html, scenario, arguments.actualiser_references, navigation_http_locale)
-            print(f"OK — {scenario.nom}")
+            try:
+                verifier_scenario(navigateur, html, scenario, arguments.actualiser_references, navigation_http_locale)
+                print(f"OK — {scenario.nom}")
+            except Exception as erreur:
+                echecs.append(f"{scenario.nom} : {erreur}")
+                print(f"ÉCHEC — {echecs[-1]}")
         navigateur.close()
 
+    if echecs:
+        raise AssertionError("Recette visuelle : " + "\n".join(echecs))
     mode = "pixel par pixel + structure" if comparaison_pixel_exacte_active() else "structure + captures (pixel exact sur demande dans l'environnement de référence)"
     print(f"OK — recette visuelle moderne : {len(selection)} scénarios, {mode}, captures dans {SORTIE}")
     return 0

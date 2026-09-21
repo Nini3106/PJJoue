@@ -38,6 +38,15 @@ jobs:
       - name: Contrôler le code et l’interface
         run: npm test
 
+      - name: Conserver les captures en cas d’échec
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostic-interface
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Contrôler les liens officiels chaque semaine
         if: github.event_name == 'schedule'
         run: python outils/verifier_liens_officiels.py

@@ -1,7 +1,7 @@
 /* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=0005 === */
 /* Page Réviser : composition complète dans le langage visuel de PJJoue. */
 :is(#erreurs,#sigles-revision) .revision-erreurs,
-:is(#erreurs,#sigles-revision) #contenuErreurs { display:grid; gap:22px; }
+:is(#erreurs,#sigles-revision) #contenuErreurs { display:grid; grid-template-columns:minmax(0,1fr); gap:22px; min-width:0; }
 :is(#erreurs,#sigles-revision) .revision-section-entete { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; }
 :is(#erreurs,#sigles-revision) .revision-section-entete h2 { margin:0; }
 :is(#erreurs,#sigles-revision) .revision-section-entete p { max-width:560px; margin:0; color:var(--texte-secondaire); }
@@ -126,11 +126,11 @@
   #supports .support-revision[open] > summary .support-revision-chevron { grid-column:2; grid-row:1 / span 2; align-self:center; }
 }
 /* Un périmètre commun, puis une seule liste classée par motif. */
-.revision-filtres{margin:0 0 24px;padding:20px;border:1px solid var(--bordure, #326189);border-radius:18px;background:var(--panneau, #103c66)}
+.revision-filtres{min-width:0;margin:0 0 24px;padding:20px;border:1px solid var(--bordure, #326189);border-radius:18px;background:var(--panneau, #103c66)}
 .revision-filtres p{margin:0 0 16px;line-height:1.5}
 .revision-filtres-champs{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:18px}
 .revision-filtres-champs label{display:flex;flex-direction:column;gap:8px;min-width:0;max-width:100%;flex:1 1 240px}
-.revision-filtres-champs select{box-sizing:border-box;max-width:100%;min-width:0;padding:10px;border:1px solid #6e9ec8;border-radius:10px;color:#fff;background:#103c66;font:inherit}
-.revision-filtres button{max-width:100%;white-space:normal;text-align:left}
+.revision-filtres-champs select{box-sizing:border-box;width:100%;max-width:100%;min-width:0;padding:10px;border:1px solid #6e9ec8;border-radius:10px;color:#fff;background:#103c66;font:inherit}
+.revision-filtres button{min-width:0;max-width:100%;white-space:normal;text-align:left}
 
 /* === FIN MORCEAU CSS === */
