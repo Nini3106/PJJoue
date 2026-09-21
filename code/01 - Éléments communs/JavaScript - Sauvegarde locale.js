@@ -470,8 +470,8 @@ let etat = {
     nombreReponsesAidees: 0,
     chronometreSessionActif: false,
     dureeChronometreSession: 15,
-    chronometreParcoursActif: false,
-    dureeChronometreParcours: 15,
+    chronometreToutesQuestions: false,
+    chronometresQuestions: new Map(),
     nombreQuestionsTirageDe: 0,
     origineSessionAnalytics: null,
     perimetreEntrainement: 'tous',
@@ -567,6 +567,8 @@ function creerInstantaneSessionEnCours() {
         jokersSessionActifs: etat.jokersSessionActifs !== false,
         chronometreSessionActif: etat.chronometreSessionActif === true,
         dureeChronometreSession: etat.dureeChronometreSession,
+        chronometreToutesQuestions: etat.chronometreToutesQuestions === true,
+        chronometresQuestions: serialiserTableauAssociatif(etat.chronometresQuestions),
         tempsRestant: etat.tempsRestant,
         delaiDepasse: etat.delaiDepasse === true,
         debutSessionAnalytics: etat.debutSessionAnalytics,
@@ -691,6 +693,15 @@ function restaurerSessionEnCours(instantane = chargerSessionEnCours()) {
     etat.chronometreSessionActif = instantane.chronometreSessionActif === true;
     etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(instantane.dureeChronometreSession) || 15));
     etat.tempsRestant = Math.max(0, Number(instantane.tempsRestant) || 0);
+    etat.chronometreToutesQuestions = typeof instantane.chronometreToutesQuestions === 'boolean'
+        ? instantane.chronometreToutesQuestions : etat.chronometreSessionActif;
+    etat.chronometresQuestions = restaurerTableauAssociatif(instantane.chronometresQuestions);
+    if (etat.chronometreSessionActif && !etat.chronometresQuestions.has(questions[positionQuestion].id)) {
+        etat.chronometresQuestions.set(questions[positionQuestion].id, {
+            actif: true, dureeAccordee: etat.dureeChronometreSession,
+            tempsRestant: etat.tempsRestant, termine: instantane.questionValidee === true
+        });
+    }
     etat.delaiDepasse = instantane.delaiDepasse === true;
     etat.debutSessionAnalytics = Number(instantane.debutSessionAnalytics) || Date.now();
     etat.nombreQuestionsTirageDe = Math.max(0, Number(instantane.nombreQuestionsTirageDe) || 0);

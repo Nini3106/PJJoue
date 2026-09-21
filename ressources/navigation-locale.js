@@ -95,7 +95,6 @@
       { libelle: 'Entraînement libre', href: lienApplication('entrainement') },
       { libelle: 'Réviser', href: lienApplication('erreurs') },
       { libelle: 'Progression', href: lienApplication('progression') },
-      { libelle: 'Carnet de parcours', href: lienApplication('carnet') },
       { separation: true },
       { section: 'Supports' },
       { libelle: 'Supports de révision', href: lienApplication('supports') },

@@ -42,7 +42,7 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
     if (jokerUtilise) {
         return {
             titre: `Étape ${etapeProgramme} explorée`,
-            message: `Ton carnet avance. Tu pourras rejouer cette étape sans aide pour consolider sa maîtrise.`,
+            message: `Ta progression avance. Tu pourras rejouer cette étape sans aide pour consolider sa maîtrise.`,
             confetti: false
         };
     }
@@ -50,7 +50,7 @@ function obtenirCelebrationEtape(etape, jokerUtilise, evaluationDeverrouillee = 
     if (evaluationDeverrouillee) {
         return {
             titre: 'Destination finale atteinte !',
-            message: `Les onze étapes de ce parcours sont validées en autonomie. Ton carnet te reconnaît comme « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
+            message: `Les onze étapes de ce parcours sont validées en autonomie. Tu as obtenu le titre « ${titreSymbolique} » et l’évaluation finale est maintenant ouverte.`,
             confetti: true
         };
     }
@@ -285,7 +285,7 @@ function construireBilanEvaluationFinale(pourcentage, evaluationFinaleReussie) {
             messageResultat: `Résultat : ${pourcentage} %. Les connaissances de ce parcours sont validées.`,
             celebration: toutReussi ? {
                 titre: 'Parcours complet accompli !',
-                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Ton carnet Quiz CJPM est complet.`,
+                message: `Tu as validé les ${THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0)} étapes et réussi les ${THEMES.length} évaluations finales. Tous tes parcours Quiz CJPM sont terminés.`,
                 confetti: true,
                 finale: true
             } : {
@@ -358,8 +358,8 @@ function configurerBoutonContinuerBilan() {
             boutonContinuer.onclick = () => ouvrirParcours(themeSuivant, { remplacerHistorique: true });
         }
         else if (evaluationReussie && estParcoursCompletReussi()) {
-            boutonContinuer.textContent = 'Voir le carnet complet →';
-            boutonContinuer.onclick = () => afficherEcran('carnet', { remplacerHistorique: true });
+            boutonContinuer.textContent = 'Voir ma progression →';
+            boutonContinuer.onclick = () => afficherEcran('progression', { remplacerHistorique: true });
         }
         else {
             boutonContinuer.textContent = 'Refaire cette évaluation';
@@ -438,15 +438,12 @@ function actualiserProchaineDestinationBilan() {
     }
     destination.textContent = 'Choisis une nouvelle session ou rejoins le parcours guidé.';
 }
-function ouvrirSouvenirDepuisCarteFinale(identifiantTheme, numeroEtape) {
-    afficherEcran('carnet', { remplacerHistorique: true });
+function ouvrirEtapeDepuisCarteFinale(identifiantTheme, numeroEtape) {
+    ouvrirParcours(identifiantTheme, { remplacerHistorique: true });
     requestAnimationFrame(() => {
-        const souvenir = selectionner(`#souvenirsParcours [data-theme="${identifiantTheme}"][data-etape="${numeroEtape}"]`);
-        if (!souvenir)
-            return;
-        souvenir.open = true;
-        souvenir.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        souvenir.querySelector('summary')?.focus({ preventScroll: true });
+        const etape = selectionner(`#parcours [data-etape="${numeroEtape}"]`);
+        etape?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        etape?.focus({ preventScroll: true });
     });
 }
 function afficherCarteVoyageFinale() {
@@ -466,8 +463,8 @@ function afficherCarteVoyageFinale() {
             bouton.className = 'carte-voyage-etape';
             bouton.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#2d7379');
             bouton.innerHTML = `${obtenirBaliseIconeEtape(etapeProgramme.id, theme.id)}<span>P${indexTheme + 1}·${etapeProgramme.id}</span>`;
-            bouton.setAttribute('aria-label', `Ouvrir les souvenirs du parcours ${indexTheme + 1}, étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
-            bouton.onclick = () => ouvrirSouvenirDepuisCarteFinale(theme.id, etapeProgramme.id);
+            bouton.setAttribute('aria-label', `Ouvrir le parcours ${indexTheme + 1}, étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
+            bouton.onclick = () => ouvrirEtapeDepuisCarteFinale(theme.id, etapeProgramme.id);
             destinations.appendChild(bouton);
         });
         const finaleParcours = document.createElement('span');

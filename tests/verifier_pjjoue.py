@@ -392,10 +392,10 @@ def principal() -> int:
     for numero, identifiant in enumerate(THEMES_ATTENDUS, start=1):
         exiger(f'value="{identifiant}"' in page or identifiant == "commun", f"Le parcours {numero} manque dans l’interface.")
         exiger(f'value="{identifiant}"' in administration, f"Le parcours {numero} manque dans l’administration.")
-    exiger("data-theme=" in moteur and "reviser-etape" in moteur, "La révision par parcours/étape est incomplète.")
+    exiger("carte.dataset.theme = etat.theme" in moteur and "lancerRevisionEtape(question.theme, numeroEtape)" in moteur, "La révision par parcours/étape est incomplète.")
     exiger("lancerRevisionEtape(cible.dataset.theme" in moteur and "ouvrir-parcours-depuis-erreurs" in moteur,
            "Les actions Réviser par étape et Commencer un parcours doivent être réellement branchées.")
-    exiger("Parcours complet" in moteur, "Le carnet/progression ne matérialise pas le parcours complet.")
+    exiger("Parcours complet" in moteur, "La progression ne matérialise pas le parcours complet.")
     exiger("const reserve = QUESTIONS.filter(question => !question.estEvaluationFinale);" in moteur, "Le Défi du hasard n’utilise pas la banque d’apprentissage complète.")
     exiger("selectionnerQuestionsEquilibrees(reserve, nombreQuestions)" in moteur, "Le Défi du hasard n’équilibre pas le parcours complet.")
     exiger("Étapes abordées" in page and "Questions à consolider" in page,

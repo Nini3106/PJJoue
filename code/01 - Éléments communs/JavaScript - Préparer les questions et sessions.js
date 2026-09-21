@@ -132,12 +132,8 @@ function lancerEtape(identifiantTheme, etape, chapitre = null, options = {}) {
     etat.origineSessionAnalytics = 'parcours_pjj';
     etat.organisationSession = 'melange';
     etat.jokersSessionActifs = true;
-    etat.chronometreSessionActif = !!etat.chronometreParcoursActif;
-    const secondesParcoursActives = Number(document.querySelector('#secondesChronometreParcours .choix-bouton.actif')?.dataset.secondes);
-    etat.dureeChronometreSession = Math.min(30, Math.max(5, Number.isFinite(secondesParcoursActives)
-        ? secondesParcoursActives
-        : (Number(etat.dureeChronometreParcours) || 15)));
-    etat.dureeChronometreParcours = etat.dureeChronometreSession;
+    etat.chronometreSessionActif = false;
+    etat.dureeChronometreSession = 15;
     const reserve = obtenirQuestionsSessionEtape(identifiantTheme, etape, etat.chapitre);
     const questionsRestantes = depuisDebut
         ? reserve

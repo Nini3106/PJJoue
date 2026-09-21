@@ -14,7 +14,7 @@ function preparerValidationReponse(question, bouton) {
     etat.questionValidee = true;
     fermerFenetreJokers({ restaurerFocus: false });
     actualiserBoutonJokers();
-    clearInterval(etat.identifiantMinuteur);
+    terminerChronometreQuestion();
     sauvegarde.aDejaJoue = true;
     if (!question?.missionSigles && !question?.missionMesures) {
         marquerEtapeDecouverte(question);

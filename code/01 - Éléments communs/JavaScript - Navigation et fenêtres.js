@@ -51,6 +51,7 @@ function routeLocalePourEcran(identifiant) {
     return '?pjjoue_route=' + encodeURIComponent(routeRelative);
 }
 function routeRelativePourEcran(identifiant) {
+    if (identifiant === 'carnet') identifiant = 'progression';
     if (identifiant === 'parcours' && etat.theme)
         return 'parcours/' + encodeURIComponent(etat.theme);
     return ROUTES_APPLICATION_PROPRES[identifiant] ?? '';
@@ -175,7 +176,6 @@ function ajusterQuestionAEcran() {
 const TITRES_ECRANS = {
     accueil: 'Accueil',
     parcours: 'Parcours CJPM',
-    carnet: 'Carnet de parcours',
     entrainement: 'Choisis ton mode d’entraînement',
     erreurs: 'Mes questions à consolider',
     sigles: 'Mission Sigles',
@@ -195,6 +195,7 @@ function actualiserTitrePage(ecran) {
         : `${TITRES_ECRANS[ecran] || 'Quiz CJPM'} — Quiz CJPM`;
 }
 function afficherEcran(identifiant, optionsAffichage = {}) {
+    if (identifiant === 'carnet') identifiant = 'progression';
     masquerInfobullePJJoue();
     fermerMenuPrincipal();
     if (identifiant === 'supports')
@@ -263,10 +264,6 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
         actualiserAccueilSigles();
     if (identifiant === 'mesures')
         actualiserAccueilMesures();
-    if (identifiant === 'carnet') {
-        THEMES.forEach(theme => initialiserProgression(theme.id));
-        actualiserCarnetParcours();
-    }
     actualiserGroupesChoix();
     actualiserNavigation(identifiant);
     actualiserBoutonRetour();

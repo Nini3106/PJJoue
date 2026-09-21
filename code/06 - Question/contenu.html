@@ -10,8 +10,6 @@
       <button class="question-revision-etape-bouton masque" data-action="rejouer-erreurs-etape" id="boutonRejouerErreursEtape" type="button">
        Consolider mes réponses
       </button>
-      <div class="chronometre" id="chronometreQuestion">
-      </div>
       <div aria-live="polite" class="indicateur-serie masque" id="indicateurSerie">
        <span aria-hidden="true">✦</span>
        <strong></strong>
@@ -40,6 +38,15 @@
      </h2>
      <div class="question-etape">
       <div class="question question-carte">
+       <div class="question-chronometre-commandes" role="group" aria-label="Chronomètre de la question">
+        <button id="boutonChronometreQuestion" class="question-chronometre-bouton" type="button" aria-label="Activer le chronomètre : 15 secondes">
+         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 2h6M12 2v3m6 1 2-2"/><circle cx="12" cy="14" r="8"/><path d="M12 9v5l3 2"/></svg>
+         <span id="chronometreQuestion">Chrono</span>
+         <span id="ajoutChronometreQuestion" class="question-chronometre-ajout" aria-hidden="true"></span>
+        </button>
+        <button id="boutonChronometreToutesQuestions" class="question-chronometre-portee" type="button" aria-pressed="false" aria-label="Activer le chrono pour toutes les questions de cette session">Toutes les questions</button>
+        <button id="boutonArreterChronometre" class="question-chronometre-arret masque" type="button" aria-label="Arrêter le chronomètre">Arrêter</button>
+       </div>
        <div class="reperes" id="reperesQuestion">
        </div>
        <div class="reponses" id="zoneReponses">

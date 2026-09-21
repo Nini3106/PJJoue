@@ -141,7 +141,7 @@ def verifier_ouverture_locale(navigateur) -> bool:
     assert page.locator("body").get_attribute("data-ecran-actif") == "accueil"
     assert page.url.endswith('/index.html') and '#' not in page.url, page.url
 
-    for ecran in ("parcours", "supports", "entrainement", "progression", "carnet", "parametres"):
+    for ecran in ("parcours", "supports", "entrainement", "progression", "parametres"):
         page.evaluate("ecran => afficherEcran(ecran)", ecran)
     page.evaluate("() => ouvrirParcours('matiere_criminelle_peines')")
     page.wait_for_timeout(150)

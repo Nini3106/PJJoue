@@ -219,7 +219,6 @@ code/
 
 ├── Accueil/
 ├── Parcours PJJ/
-├── Carnet de parcours/
 ├── Entraînement libre/
 ├── Question/
 ├── Bilan de la session/
@@ -532,9 +531,16 @@ Avant publication, `PREPARER_PJJOUE_AVANT_PUSH.bat` doit reconstruire les donné
 - La taille de texte par défaut est **Normale (1)** pour un nouvel utilisateur ; une préférence explicitement enregistrée ensuite doit être conservée.
 - Sur mobile, la géométrie de la barre **Précédente / Valider / Passer ou Suivante / Jokers** doit rester stable quelle que soit la taille de texte choisie dans Paramètres.
 - Dans **Entraînement libre**, les boutons **Commencer** sont placés directement sous **Options avancées** et alignés avec le début de ce bloc.
-- Dans **Entraînement libre**, les étapes 1, 2 et 3 utilisent le même grand encadrement et la même géométrie générale ; les **choix de périmètre sont rangés dans une grille régulière alignée à gauche (4 colonnes sur grand écran, 2 puis 1 en responsive), sans centrage de la dernière ligne** ; PJJoue garde une hauteur commune de 82 px et les Missions peuvent grandir avec leur texte ; les deux cartes de mode sont jumelles et **Options avancées** reste un déclencheur compact dimensionné à son texte.
+- Dans **Entraînement libre**, les étapes 1, 2 et 3 sont ouvertes sur le fond de page, séparées par un trait fin, sans grands encadrements imbriqués ; les **choix de périmètre sont rangés dans une grille régulière alignée à gauche (4 colonnes sur grand écran, 2 puis 1 en responsive), sans centrage de la dernière ligne** ; PJJoue garde une hauteur commune de 82 px et les Missions peuvent grandir avec leur texte ; les deux modes gardent une géométrie jumelle sans cadre extérieur et **Options avancées** reste un déclencheur compact dimensionné à son texte.
 - Sur la page **Réviser**, le titre principal reste réellement centré ; le bouton **Supports de révision** peut rester à droite sur grand écran mais ne doit jamais décaler le titre.
 - Le survol de toutes les entrées du **menu dépliant** reprend celui des Guides : texte secondaire au repos, **texte blanc sur fond bleu relevé `#1b568f` au survol/focus** ; l’entrée active reste jaune.
 - Conserver **24 px** entre un bouton Retour et le titre qui suit.
 - Le menu est structuré en trois groupes : navigation principale, **Supports**, puis **Mini jeux**. Ajouter les futurs mini-jeux dans ce dernier groupe sans modifier les deux premiers. **Paramètres** reste l’entrée utilitaire finale, placée après la section Mini jeux.
 - Toute modification de ces règles doit être contrôlée sur bureau et mobile avant publication.
+
+### Refonte validée le 21 septembre 2026
+
+- Progression et Entraînement libre conservent leurs couleurs ; les cadres décoratifs imbriqués sont retirés. Les cartes de sélection restent visibles.
+- Le Carnet de parcours est retiré ; ses anciennes routes renvoient vers Progression. Les acquis sont conservés.
+- Le dé conserve son SVG et sa rotation, avec une taille réduite.
+- Le chrono se règle uniquement sur la carte Question : 15 secondes, puis +5 secondes par clic, pour un budget maximal de 30 secondes. Son contrôle de portée active toutes les questions de la session. Le temps restant et la portée sont conservés à la reprise.

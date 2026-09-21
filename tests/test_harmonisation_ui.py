@@ -62,7 +62,6 @@ class HarmonisationInterfaceTests(unittest.TestCase):
                 "Entraînement libre",
                 "Réviser",
                 "Progression",
-                "Carnet de parcours",
                 "Supports",
                 "Supports de révision",
                 "Guides",
@@ -78,7 +77,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         bloc_menu = js[js.index('const entrees = ['):js.index('];', js.index('const entrees = ['))]
         attendu = [
             "Accueil", "Parcours CJPM", "Entraînement libre", "Réviser", "Progression",
-            "Carnet de parcours", "Supports", "Supports de révision", "Guides", "Mini jeux", "Mission Sigles", "Mission Mesures", "Paramètres",
+            "Supports", "Supports de révision", "Guides", "Mini jeux", "Mission Sigles", "Mission Mesures", "Paramètres",
         ]
         positions = []
         for libelle in attendu:
@@ -286,7 +285,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         css_genere = (RACINE / "ressources/styles/pjjoue-principal.css").read_text(encoding="utf-8")
         self.assertRegex(css_genere, re.compile(r"#entrainement \.entrainement-perimetre-choix \{[^}]*display:grid;[^}]*grid-template-columns:repeat\(4,minmax\(0,1fr\)\);", re.S), "La grille harmonisée des parcours doit être compilée dans le site public.")
         self.assertIn("#entrainement .entrainement-etape-config.entrainement-etape-modes {", css)
-        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-etape-config,\s*#entrainement \.entrainement-etape-config\.entrainement-etape-modes \{[^}]*border:1px solid var\(--bordure-carte\);[^}]*background:var\(--surface-carte\);", re.S))
+        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-etape-config,\s*#entrainement \.entrainement-etape-config\.entrainement-etape-modes \{[^}]*border:0;[^}]*background:transparent;", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-nombre-config \{[^}]*grid-template-columns:1fr;", re.S))
         self.assertRegex(css_genere, re.compile(r"#entrainement \.entrainement-grille \{[^}]*grid-template-columns:\s*repeat\(2,minmax\(0,1fr\)\);", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-options-avancees summary \{[^}]*width:max-content;[^}]*border:1px solid var\(--bordure\);", re.S))

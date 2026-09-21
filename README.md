@@ -213,7 +213,7 @@ Les questions, réponses, modes de jeu et données pédagogiques restent gérés
 le moteur V1.
 
 La navigation principale est regroupée dans un menu unique ouvrable et repliable.
-Le **Carnet de parcours** y possède sa propre entrée. Sur l'accueil,
+La page **Progression** centralise le suivi ; les anciens liens du Carnet y renvoient. Sur l'accueil,
 **S'entraîner librement** n'est proposé qu'aux utilisateurs dont une progression
 a déjà été enregistrée. La page **Réviser** rassemble les questions à retravailler. La page **Supports** classe les ressources par juridiction, avec la fiche pratique puis la fiche synthétique avant les éventuels compléments.
 
@@ -241,13 +241,13 @@ Le contrôle des liens officiels ne bloque que les anomalies confirmées (adress
 - les **boutons de jeu** utilisent un contour de la **même couleur que leur icône ou leur mode** ;
 - seule l’action **« Réinitialiser toute la progression »** conserve son traitement rouge de danger ;
 - l’espace entre un bouton **Retour** et le titre qui suit est harmonisé à **24 px** sur les pages de l’application, Mission Sigles et les guides ;
-- le menu principal suit cet ordre : **Accueil, Parcours PJJ, Entraînement libre, Réviser, Progression, Carnet de parcours**, puis la section **Supports** (`Supports de révision`, `Guides`), puis la section **Mini jeux** (`Mission Sigles`, puis les futurs mini-jeux comme `Mission Mesures`), et enfin **Paramètres** ;
+- le menu principal suit cet ordre : **Accueil, Parcours PJJ, Entraînement libre, Réviser, Progression**, puis la section **Supports** (`Supports de révision`, `Guides`), puis la section **Mini jeux** (`Mission Sigles`, puis les futurs mini-jeux comme `Mission Mesures`), et enfin **Paramètres** ;
 - sur la page **Réviser**, le titre **Réviser** reste réellement centré dans la page ; le bouton **Supports de révision** reste placé à droite sur grand écran sans décaler le titre ;
 - sur chaque question d’un parcours, afficher sur **une seule ligne** deux repères compacts adjacents **« Parcours X »** et **« Étape X »**, **sans séparateur `:`** ; les noms du parcours et de l’étape ne sont pas répétés dans ce bandeau ;
 - dans **Paramètres**, la taille de texte initiale est **Normale (1)** tant que l’utilisateur n’a pas choisi une autre taille ; une préférence déjà enregistrée reste respectée ;
 - sur mobile, la position des commandes de question (**Précédente / Valider / Passer ou Suivante / Jokers**) est fixe et ne doit pas changer quand l’utilisateur choisit Compacte, Normale ou Grande ;
 - dans **Entraînement libre**, chaque bouton **Commencer** reste directement sous son bloc **Options avancées**, aligné sur son bord gauche.
-- la page **Entraînement libre** conserve une géométrie harmonisée : étapes 1, 2 et 3 dans le même type de grand encadrement, cartes de modes jumelles, déclencheur **Options avancées** compact et **7 choix de parcours strictement identiques en 230 × 82 px** ;
+- la page **Entraînement libre** conserve une géométrie harmonisée : étapes 1, 2 et 3 ouvertes sur le fond de page avec des séparateurs fins, modes de géométrie jumelle sans encadrement extérieur, déclencheur **Options avancées** compact et **7 choix de parcours strictement identiques en 230 × 82 px** ;
 - tous les menus dépliants utilisent le **même survol que les Guides** : texte adouci au repos, texte blanc sur fond bleu relevé au survol/focus, entrée active en jaune ;
 - les deux repères de question **Parcours X** et **Étape X** conservent séparément la couleur du parcours et celle de l’étape, sans ponctuation entre eux.
 - **Règle d’identité couleur obligatoire** : tout bouton, badge, carte ou encadrement relié à un parcours ou à une étape reprend sa couleur canonique au minimum par son contour/accent, son survol-focus s’il est interactif, ou son repère coloré s’il est informatif. Une couleur ne doit jamais être recopiée localement si une identité canonique existe : les cartes de parcours, les étapes, l’Entraînement, Réviser, les erreurs actives, les cartes de question et les badges `Parcours X` / `Étape X` doivent tous rester synchronisés avec la même source de vérité.
@@ -257,3 +257,5 @@ Ces règles font partie de l’identité visuelle de PJJoue V1 et doivent être 
 ## Relecture humaine finale
 
 - `documentation/documentation-actuelle/RAPPORT_RELECTURE_HUMAINE_FINALE_2026-08-31.md` — dernière passe humaine sur les 960 questions avant gel de la V1.
+
+Le chronomètre se règle uniquement dans la carte Question : activation à 15 secondes, puis ajouts de 5 secondes jusqu’à un budget maximal de 30 secondes. Le bouton « Toutes les questions » applique ce réglage à la session en cours. Chaque question conserve son temps restant lors des retours et des reprises.
