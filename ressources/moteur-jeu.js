@@ -601,7 +601,7 @@ function normaliserMotifRevision(motif) {
 }
 function obtenirLibelleConsolidation(suivi) {
     const libelles = {
-        reprise: 'Validée après reprise sans joker · à consolider',
+        reprise: 'Question rejouée après erreur · à consolider',
         joker: 'Validée avec joker · à consolider',
         passage: 'Passée — non répondue',
         incorrecte: 'Incorrecte — erreur à réviser'

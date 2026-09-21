@@ -265,7 +265,7 @@ class SynchronisationErreursTests(unittest.TestCase):
                 self.assertEqual(r['questionsRevision'],1,r)
                 for cle in ['acquis','revision','historiqueStable','persiste','consolidee']:
                     self.assertTrue(r[cle],r)
-                self.assertIn('Validée après reprise sans joker · à consolider',r['bilan'])
+                self.assertIn('Question rejouée après erreur · à consolider',r['bilan'])
                 self.assertNotIn('Incorrecte — erreur à réviser',r['bilan'])
 
     def test_evaluations_sans_reprise_joker_ni_passage(self):
