@@ -1468,8 +1468,8 @@
       "sha256": "064f9f13a95c982822bf697280b15bf62ccbd750af25fe437f9c49e9b85bc624"
     },
     "tests/test_categories_revision.py": {
-      "tailleOctets": 13712,
-      "sha256": "fefd728b3c468a4efc2900002221847650218b55587a8ef323877d381b3d2881"
+      "tailleOctets": 14155,
+      "sha256": "bec34f26711cb2887286ae91da7aefdd028f2f4ce008c0304f2b319107cec8c5"
     },
     "tests/test_charte_questions.py": {
       "tailleOctets": 14495,

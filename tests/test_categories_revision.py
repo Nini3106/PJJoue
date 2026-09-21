@@ -154,6 +154,11 @@ class CategoriesRevisionTests(unittest.TestCase):
                 self.assertFalse(menu.evaluate('(menu) => menu.open'))
                 entete.press('ArrowDown')
                 self.page.locator(':focus').press('End')
+                self.assertEqual(self.page.locator(':focus').get_attribute('data-valeur-filtre'), options.last.get_attribute('data-valeur-filtre'))
+                self.page.locator(':focus').press('Home')
+                valeurs = options.evaluate_all('(elements) => elements.map(element => element.dataset.valeurFiltre)')
+                for _ in range(valeurs.index('2')):
+                    self.page.locator(':focus').press('ArrowDown')
                 self.page.locator(':focus').press('Enter')
                 self.assertIn('2', entete.inner_text())
                 self.assertFalse(menu.evaluate('(menu) => menu.open'))
