@@ -219,6 +219,7 @@ code/
 
 ├── Accueil/
 ├── Parcours PJJ/
+├── Carnet de parcours/
 ├── Entraînement libre/
 ├── Question/
 ├── Bilan de la session/
@@ -521,7 +522,7 @@ Avant publication, `PREPARER_PJJOUE_AVANT_PUSH.bat` doit reconstruire les donné
 ## 12. Harmonisation visuelle obligatoire
 
 - Le **seul bouton jaune plein** autorisé est **« Commencer » / « Reprendre » sur l’accueil**. Aucun autre bouton ne reçoit d’aplat jaune ; le jaune reste un accent de contour, survol ou focus.
-- **Tous les boutons d’action doivent épouser leur texte** : largeur pilotée par le contenu et son padding, jamais de largeur forcée à `100%`, jamais d’étirement de grille/flex qui agrandit artificiellement le contour, et pas de `min-width` décoratif. `max-width:100%` sert seulement de garde-fou anti-débordement. **Exception volontaire : les cartes de sélection du périmètre dans Entraînement libre occupent toutes la largeur de leur colonne dans une grille régulière (4 colonnes sur grand écran, 2 sur mobile avec « Tout Quiz CJPM » sur toute la largeur). PJJoue conserve une hauteur commune de 82 px sur ordinateur et adapte la hauteur au texte sur mobile ; Mission Sigles et Mission Mesures adaptent leur hauteur aux intitulés plus longs.**
+- **Tous les boutons d’action doivent épouser leur texte** : largeur pilotée par le contenu et son padding, jamais de largeur forcée à `100%`, jamais d’étirement de grille/flex qui agrandit artificiellement le contour, et pas de `min-width` décoratif. `max-width:100%` sert seulement de garde-fou anti-débordement. **Exception volontaire : les cartes de sélection du périmètre dans Entraînement libre occupent toutes la largeur de leur colonne dans une grille régulière (4 colonnes sur grand écran, 2 puis 1 en responsive). PJJoue conserve une hauteur commune de 82 px ; Mission Sigles et Mission Mesures adaptent leur hauteur aux intitulés plus longs.**
 - Les boutons d’un mode de jeu prennent le contour de la couleur de leur icône/mode.
 - Le bouton de réinitialisation globale reste rouge : c’est l’unique exception de danger prévue.
 - Sur une question de parcours, le repère supérieur doit tenir sur une seule ligne avec deux badges adjacents **« Parcours X »** et **« Étape X »**, **sans séparateur `:`** ; ne pas réafficher les noms du parcours et de l’étape dans ce repère.
@@ -531,25 +532,18 @@ Avant publication, `PREPARER_PJJOUE_AVANT_PUSH.bat` doit reconstruire les donné
 - La taille de texte par défaut est **Normale (1)** pour un nouvel utilisateur ; une préférence explicitement enregistrée ensuite doit être conservée.
 - Sur mobile, la géométrie de la barre **Précédente / Valider / Passer ou Suivante / Jokers** doit rester stable quelle que soit la taille de texte choisie dans Paramètres.
 - Dans **Entraînement libre**, les boutons **Commencer** sont placés directement sous **Options avancées** et alignés avec le début de ce bloc.
-- Dans **Entraînement libre**, les étapes 1, 2 et 3 sont ouvertes sur le fond de page, séparées par un trait fin, sans grands encadrements imbriqués ; les **choix de périmètre sont rangés dans une grille régulière alignée à gauche (4 colonnes sur grand écran, 2 sur mobile avec « Tout Quiz CJPM » sur toute la largeur), sans centrage de la dernière ligne** ; PJJoue garde une hauteur commune de 82 px sur ordinateur et adapte la hauteur au texte sur mobile et les Missions peuvent grandir avec leur texte ; les deux modes gardent une géométrie jumelle sans cadre extérieur et **Options avancées** reste un texte dépliable sans cadre, ouvert par défaut.
+- Dans **Entraînement libre**, les étapes 1, 2 et 3 utilisent le même grand encadrement et la même géométrie générale ; les **choix de périmètre sont rangés dans une grille régulière alignée à gauche (4 colonnes sur grand écran, 2 puis 1 en responsive), sans centrage de la dernière ligne** ; PJJoue garde une hauteur commune de 82 px et les Missions peuvent grandir avec leur texte ; les deux cartes de mode sont jumelles et **Options avancées** reste un déclencheur compact dimensionné à son texte.
 - Sur la page **Réviser**, le titre principal reste réellement centré ; le bouton **Supports de révision** peut rester à droite sur grand écran mais ne doit jamais décaler le titre.
 - Le survol de toutes les entrées du **menu dépliant** reprend celui des Guides : texte secondaire au repos, **texte blanc sur fond bleu relevé `#1b568f` au survol/focus** ; l’entrée active reste jaune.
 - Conserver **24 px** entre un bouton Retour et le titre qui suit.
 - Le menu est structuré en trois groupes : navigation principale, **Supports**, puis **Mini jeux**. Ajouter les futurs mini-jeux dans ce dernier groupe sans modifier les deux premiers. **Paramètres** reste l’entrée utilitaire finale, placée après la section Mini jeux.
 - Toute modification de ces règles doit être contrôlée sur bureau et mobile avant publication.
 
-### Refonte validée le 21 septembre 2026
 
-- Progression et Entraînement libre conservent leurs couleurs ; les cadres décoratifs imbriqués sont retirés. Les cartes de sélection restent visibles.
-- Le Carnet de parcours est retiré ; ses anciennes routes renvoient vers Progression. Les acquis sont conservés.
-- Le dé conserve son SVG et sa rotation, dans une zone de 76 px sur ordinateur et 64 px sur mobile.
-- Respecter la disposition de la maquette validée : choix d’entraînement en pleine largeur sous chaque titre ; Progression en deux colonnes de hauteur naturelle, séparées par un trait, avec rail sur toute la largeur du résumé et statistiques alignées à gauche. Ne pas forcer les hauteurs des colonnes ou de leurs premiers blocs.
-- Le chrono se règle uniquement sur la carte Question : 15 secondes, puis +5 secondes par clic, pour un budget maximal de 30 secondes. Son contrôle de portée active toutes les questions de la session. Le temps restant et la portée sont conservés à la reprise.
+### Retour aux encadrements demandé le 21 septembre 2026
 
-### Audit visuel appliqué — conservation des actions
-
-- Le style, les proportions et la disposition des boutons peuvent évoluer ; toutes les actions et leurs conditions de disponibilité sont conservées.
-- La palette et les couleurs canoniques des parcours/étapes restent inchangées.
-- Les grands regroupements décoratifs sont ouverts ; les contrôles interactifs restent reconnaissables, avec sélection, survol et focus visibles.
-- Les actions du bilan précèdent les détails de consolidation ; les sauvegardes, scores, validations, reprises, jokers et chronomètres conservent leurs règles.
-- Les recherches des glossaires et des sources filtrent seulement l’affichage. Toutes les entrées, leurs liens et les textes d’origine restent accessibles après effacement de la recherche.
+- Rétablir la présentation avec cartes et encadrements du commit db4a8d6, antérieur aux refontes des PR 43, 44 et 45. Cette demande remplace les consignes ultérieures d’ouverture des regroupements.
+- Conserver les couleurs des parcours, les boutons et les règles de progression, de révision et de sauvegarde.
+- Le Carnet reste retiré et ses anciennes routes renvoient vers Progression.
+- Le chrono reste sur la carte Question : 15 secondes, puis +5 secondes par clic, jusqu’à 30 secondes, pour une question ou toute la session.
+- Conserver le correctif de lisibilité de l’administration et l’état actif explicite du choix Avec/Sans jokers.

@@ -338,10 +338,6 @@
     {
       "source": "code/01 - Éléments communs/consentement.css",
       "sortie": "ressources/styles/95-consentement.css"
-    },
-    {
-      "source": "code/11 - Guides pour découvrir la PJJ/00 - Éléments communs aux guides/recherche-des-sigles.js",
-      "sortie": "ressources/recherche-des-sigles.js"
     }
   ]
 }

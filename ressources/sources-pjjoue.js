@@ -37,18 +37,6 @@
 
   sources.sort((a, b) => String(a.titre).localeCompare(String(b.titre), 'fr'))
     .forEach(source => zone?.appendChild(construireFiche(source)));
-  const recherche = document.querySelector('#rechercheSources');
-  const normaliser = valeur => valeur.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr');
-  const fiches = [...(zone?.querySelectorAll('.source-fiche') || [])].map(fiche => ({ fiche, texte: normaliser(fiche.textContent) }));
-  const filtrer = () => {
-    const mots = normaliser(recherche?.value.trim() || '').split(/\s+/).filter(Boolean);
-    let visibles = 0;
-    fiches.forEach(({ fiche, texte }) => {
-      fiche.hidden = !mots.every(mot => texte.includes(mot));
-      if (!fiche.hidden) visibles++;
-    });
-    if (compteur) compteur.textContent = mots.length ? `${visibles} source${visibles > 1 ? 's' : ''} trouvée${visibles > 1 ? 's' : ''} sur ${sources.length}` : `${sources.length} sources officielles référencées`;
-  };
-  recherche?.addEventListener('input', filtrer);
-  filtrer();
+  if (compteur)
+    compteur.textContent = `${sources.length} sources officielles référencées`;
 })();

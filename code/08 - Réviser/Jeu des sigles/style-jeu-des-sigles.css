@@ -88,7 +88,7 @@
   color:var(--texte);
   background:rgba(7,49,99,.38);
   box-shadow:none;
-  font-weight:650;
+  font-weight:800;
   transition:border-color .18s ease,background .18s ease,transform .18s ease;
 }
 #sigles .sigles-bouton-mode:hover:not(:disabled),
@@ -107,7 +107,7 @@
 }
 
 /* Boutons secondaires propres au module : jamais de gris navigateur. */
-#sigles .sigles-bouton-secondaire { min-height:40px; padding:9px 15px; border:1px solid rgba(142,199,251,.55); border-radius:12px; color:var(--texte); background:rgba(7,49,99,.38); font-weight:650; transition:border-color .18s ease,background .18s ease,transform .18s ease; }
+#sigles .sigles-bouton-secondaire { min-height:40px; padding:9px 15px; border:1px solid rgba(142,199,251,.55); border-radius:12px; color:var(--texte); background:rgba(7,49,99,.38); font-weight:800; transition:border-color .18s ease,background .18s ease,transform .18s ease; }
 #sigles .sigles-bouton-secondaire:hover,
 #sigles .sigles-bouton-secondaire:focus-visible { border-color:var(--accent); background:#17558f; }
 #sigles button:disabled { cursor:not-allowed; opacity:.62; }
@@ -128,7 +128,7 @@
 #sigles .sigles-etape-ouvrir { display:grid; grid-template-rows:auto auto 1fr auto; gap:11px; width:100%; min-height:275px; padding:22px; border:0; border-radius:0; color:inherit; background:transparent; box-shadow:none; text-align:left; font:inherit; cursor:pointer; }
 #sigles .sigles-etape-ouvrir:hover,
 #sigles .sigles-etape-ouvrir:focus-visible { color:inherit; background:rgba(var(--sigles-etape-rgb),.07); box-shadow:none; transform:none; }
-#sigles .sigles-etape-revision { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:44px; margin:0; padding:10px 16px; border:0; border-top:1px solid rgba(var(--sigles-etape-rgb),.35); border-radius:0; color:var(--sigles-etape-accent-lisible); background:rgba(var(--sigles-etape-rgb),.10); box-shadow:none; text-align:left; font:inherit; font-size:.88rem; font-weight:650; cursor:pointer; }
+#sigles .sigles-etape-revision { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:44px; margin:0; padding:10px 16px; border:0; border-top:1px solid rgba(var(--sigles-etape-rgb),.35); border-radius:0; color:var(--sigles-etape-accent-lisible); background:rgba(var(--sigles-etape-rgb),.10); box-shadow:none; text-align:left; font:inherit; font-size:.88rem; font-weight:850; cursor:pointer; }
 #sigles .sigles-etape-revision:hover:not(:disabled),
 #sigles .sigles-etape-revision:focus-visible:not(:disabled) { color:var(--texte); background:rgba(var(--sigles-etape-rgb),.19); box-shadow:inset 0 0 0 1px var(--sigles-etape-accent-lisible); }
 #sigles .sigles-etape-revision:disabled { color:var(--texte-secondaire); background:var(--surface-carte-profonde); border-top-color:var(--bordure); opacity:.72; cursor:not-allowed; }
@@ -141,12 +141,12 @@
 #sigles .sigles-etape-carte-entete { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 #sigles .sigles-etape-icone { display:grid; place-items:center; width:64px; height:64px; border:1px solid rgba(var(--sigles-etape-rgb),.55); border-radius:17px; color:var(--sigles-etape-accent-lisible); background:rgba(var(--sigles-etape-rgb),.12); }
 #sigles .sigles-etape-icone svg { width:40px; height:40px; fill:none; stroke:currentColor; stroke-width:1.55; stroke-linecap:round; stroke-linejoin:round; }
-#sigles .sigles-etape-numero { color:var(--sigles-etape-accent-lisible); font-weight:700; }
+#sigles .sigles-etape-numero { color:var(--sigles-etape-accent-lisible); font-weight:950; }
 #sigles .sigles-etape-carte h3 { color:var(--sigles-etape-accent-lisible); margin:0; font-size:1.25rem; }
 #sigles .sigles-etape-carte p { margin:0; color:var(--texte-secondaire); line-height:1.5; }
 #sigles .sigles-etape-progression { height:8px; overflow:hidden; border-radius:999px; background:var(--surface-carte-profonde); }
 #sigles .sigles-etape-progression i { display:block; height:100%; border-radius:inherit; background:var(--sigles-etape-accent); }
-#sigles .sigles-etape-pied { display:flex; justify-content:space-between; gap:10px; color:var(--texte-secondaire); font-size:.9rem; font-weight:650; }
+#sigles .sigles-etape-pied { display:flex; justify-content:space-between; gap:10px; color:var(--texte-secondaire); font-size:.9rem; font-weight:750; }
 #sigles .sigles-etape-pied span:last-child { white-space:nowrap; flex-shrink:0; color:var(--sigles-etape-accent-lisible); }
 #sigles .sigles-evaluation-carte { display:grid; grid-template-columns:72px minmax(0,1fr) auto; align-items:center; gap:18px; padding:22px; border:1px solid rgba(255,200,61,.48); border-radius:var(--rayon-tres-grand); background:rgba(255,200,61,.07); }
 #sigles .sigles-evaluation-icone { display:grid; place-items:center; width:68px; height:68px; color:var(--jaune-interface); }
@@ -159,7 +159,7 @@
 /* Configurateur : même grammaire visuelle que la page Entraînement de PJJoue. */
 #sigles .sigles-configurateur { display:grid; gap:22px; }
 #sigles .sigles-config-etape { display:grid; grid-template-columns:48px minmax(0,1fr); gap:16px; padding:22px; border:1px solid var(--bordure-carte); border-radius:var(--rayon-tres-grand); background:var(--surface-carte); box-shadow:var(--ombre-carte); }
-#sigles .sigles-config-numero { display:grid; place-items:center; width:42px; height:42px; border:1px solid var(--bordure); border-radius:50%; color:var(--texte-sur-jaune); background:var(--jaune-interface); font-weight:700; }
+#sigles .sigles-config-numero { display:grid; place-items:center; width:42px; height:42px; border:1px solid var(--bordure); border-radius:50%; color:var(--texte-sur-jaune); background:var(--jaune-interface); font-weight:900; }
 #sigles .sigles-config-etape h2 { margin:5px 0 12px; }
 #sigles .sigles-config-aide { margin:-4px 0 12px; color:var(--texte-secondaire); font-size:.94rem; }
 
@@ -175,7 +175,7 @@
 #sigles .choix-bouton[aria-pressed="true"],
 #sigles .option-bouton.actif,
 #sigles .option-bouton.selectionne,
-#sigles .option-bouton[aria-pressed="true"] { color:var(--texte); border-color:#4f8cff; background:rgba(79,140,255,.16); box-shadow:inset 0 0 0 1px #4f8cff; font-weight:700; }
+#sigles .option-bouton[aria-pressed="true"] { color:var(--texte); border-color:#4f8cff; background:rgba(79,140,255,.16); box-shadow:inset 0 0 0 1px #4f8cff; font-weight:900; }
 
 /* Étapes : même principe que les six cartes de périmètre de l'entraînement PJJoue. */
 #sigles .sigles-perimetre-choix { display:flex; flex-wrap:wrap; align-items:center; gap:9px; }
@@ -210,7 +210,7 @@
 #sigles .sigles-option-groupe .option-bouton span { color:var(--texte-secondaire); font-size:.9rem; }
 #sigles .sigles-options-grille { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
 #sigles .sigles-option { display:grid; gap:8px; padding:14px; border:1px solid var(--bordure); border-radius:var(--rayon-moyen); background:var(--surface-carte-profonde); }
-#sigles .sigles-option > span { font-weight:650; }
+#sigles .sigles-option > span { font-weight:850; }
 #sigles .sigles-bascule-groupe { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 #sigles .sigles-bascule-groupe .option-bouton { min-height:44px; text-align:center; }
 #sigles .sigles-secondes { display:grid; gap:8px; margin-top:12px; }
@@ -226,11 +226,11 @@
 #sigles .sigles-session-entete { display:flex; align-items:start; justify-content:space-between; gap:18px; }
 #sigles .sigles-session-entete h1 { margin:2px 0 0; font-size:1.45rem; }
 #sigles .sigles-session-meta { display:flex; align-items:center; gap:8px; }
-#sigles .sigles-session-meta > span { flex:0 0 auto; padding:7px 11px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte-secondaire); background:var(--surface-carte-profonde); font-weight:650; }
+#sigles .sigles-session-meta > span { flex:0 0 auto; padding:7px 11px; border:1px solid var(--bordure); border-radius:999px; color:var(--texte-secondaire); background:var(--surface-carte-profonde); font-weight:800; }
 #sigles .sigles-session-meta .sigles-chrono { color:var(--jaune-interface); border-color:rgba(255,200,61,.5); }
-#sigles .sigles-question-consigne { margin:0; color:var(--texte); font-size:1.15rem; font-weight:650; line-height:1.55; }
+#sigles .sigles-question-consigne { margin:0; color:var(--texte); font-size:1.15rem; font-weight:800; line-height:1.55; }
 #sigles .sigles-reponses { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-#sigles .sigles-reponse { min-height:76px; padding:14px 16px; border:1px solid #6f94c0; border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); text-align:left; font-weight:650; line-height:1.45; }
+#sigles .sigles-reponse { min-height:76px; padding:14px 16px; border:1px solid #6f94c0; border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); text-align:left; font-weight:750; line-height:1.45; }
 #sigles .sigles-reponse:hover:not(:disabled),
 #sigles .sigles-reponse:focus-visible:not(:disabled) { border-color:var(--accent); background:#17558f; }
 #sigles .sigles-reponse-correcte { border-color:#3ddc97; background:rgba(61,220,151,.12); }
@@ -241,7 +241,7 @@
 #sigles .sigles-association strong { color:var(--accent); }
 #sigles .sigles-association select { width:100%; min-height:44px; padding:8px 10px; border:1px solid #6f94c0; border-radius:10px; color:var(--texte); background:var(--surface-secondaire); }
 #sigles .sigles-jokers { display:flex; flex-wrap:wrap; gap:8px; }
-#sigles .sigles-jokers button { min-height:38px; padding:0 13px; border:1px solid rgba(255,200,61,.48); border-radius:999px; color:var(--jaune-interface); background:rgba(255,200,61,.08); font-weight:650; }
+#sigles .sigles-jokers button { min-height:38px; padding:0 13px; border:1px solid rgba(255,200,61,.48); border-radius:999px; color:var(--jaune-interface); background:rgba(255,200,61,.08); font-weight:850; }
 #sigles .sigles-jokers button:hover:not(:disabled),
 #sigles .sigles-jokers button:focus-visible:not(:disabled) { background:rgba(255,200,61,.15); border-color:var(--jaune-interface); }
 #sigles .sigles-aide,
@@ -255,7 +255,7 @@
 #sigles .sigles-bilan-carte { justify-items:center; max-width:760px; margin:40px auto 0; text-align:center; }
 #sigles .sigles-bilan-icone { display:grid; place-items:center; width:72px; height:72px; border:1px solid rgba(112,214,202,.55); border-radius:22px; color:var(--sigles-vert-parcours-6-lisible); background:rgba(15,118,110,.12); font-size:2rem; }
 #sigles .sigles-bilan-carte h1 { margin:0; }
-#sigles .sigles-bilan-score { margin:0; color:var(--jaune-interface); font-size:2rem; font-weight:700; }
+#sigles .sigles-bilan-score { margin:0; color:var(--jaune-interface); font-size:2rem; font-weight:950; }
 #sigles .sigles-bilan-details { color:var(--texte-secondaire); }
 
 @media (max-width:980px) {
@@ -292,6 +292,8 @@
   #sigles .sigles-tableau-bord-principal { align-items:flex-start; }
   #sigles .sigles-embleme { flex-basis:58px; width:58px; height:58px; }
   #sigles .sigles-indicateurs { grid-template-columns:1fr 1fr; }
+  #sigles .sigles-mode-carte { grid-template-columns:1fr; grid-template-rows:auto auto auto; grid-template-areas:"icone" "texte" "action"; }
+  #sigles .sigles-mode-hasard { grid-template-columns:1fr; grid-template-areas:"de" "texte" "action"; }
   #sigles .sigles-mode-carte > .sigles-bouton-mode { width:max-content; max-width:100%; }
   #sigles .sigles-hasard-actions { width:max-content; max-width:100%; }
   #sigles .sigles-hasard-actions button { flex:0 0 auto; width:max-content; max-width:100%; }
@@ -321,21 +323,4 @@
 #sigles-revision .revision-parcours-action,
 #sigles-revision .revision-dossier-numero,
 #sigles-revision .revision-dossier-chevron { color:var(--parcours-accent-lisible,var(--parcours-accent)); }
-
-/* Audit visuel : hiérarchie, espaces et cadres allégés. */
-#sigles .sigles-tableau-bord { padding:0 0 22px; border:0; border-bottom:1px solid var(--bordure); border-radius:0; background:transparent; box-shadow:none; gap:14px; }
-#sigles .sigles-embleme { width:48px; height:48px; flex-basis:48px; border:0; background:transparent; }
-#sigles .sigles-indicateurs div { min-height:0; padding:8px 0; border:0; border-radius:0; background:transparent; }
-#sigles .sigles-indicateurs strong { font-size:1.6rem; font-weight:650; }
-#sigles .sigles-mode-carte { grid-template-columns:var(--largeur-icone-mode,48px) minmax(0,1fr); min-height:0; padding:20px 0; border-width:2px 0 0; border-radius:0; background:transparent; box-shadow:none; gap:12px 16px; }
-#sigles .sigles-mode-icone { width:48px; height:48px; border:0; background:transparent; }
-#sigles .sigles-mode-carte h3 { font-size:1.2rem; font-weight:650; }
-#sigles .sigles-mode-carte p { font-size:.93rem; }
-#sigles .sigles-etape-carte { min-height:0; border-top-width:2px; border-radius:12px; box-shadow:none; }
-#sigles .sigles-etape-ouvrir { min-height:220px; padding:18px; }
-@media (max-width:620px) {
-    #sigles .sigles-indicateurs { gap:12px 16px; }
-    #sigles .sigles-mode-carte { padding-block:18px; }
-}
-#sigles .sigles-mode-hasard { --largeur-icone-mode:72px; }
 /* === FIN MORCEAU CSS === */
