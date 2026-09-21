@@ -261,6 +261,7 @@ class CategoriesRevisionTests(unittest.TestCase):
                 self.assertIn('Revenir à la question', bouton.get_attribute('data-infobulle'))
                 self.page.reload(wait_until='domcontentloaded')
                 self.assertEqual(bouton.inner_text(), 'Reprendre ma progression')
+                self.assertIn('Revenir à la question', bouton.get_attribute('data-infobulle'))
                 bouton.click()
                 apres = self.page.evaluate("""() => ({id:etat.questionCourante.id,index:etat.indexQuestion,
                     score:etat.score,enonce:document.querySelector('#enonceQuestion').textContent})""")

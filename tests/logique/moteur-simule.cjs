@@ -18,6 +18,8 @@ c.document.querySelectorAll=()=>[];
 vm.runInContext(`
 
 annulerRappelJokers=()=>{};fermerFenetreJokers=()=>{};actualiserBoutonJokers=()=>{};
+// Le branchement DOM est exclu du banc ; les vraies infobulles sont vérifiées dans Chromium.
+definirAideSurvolBouton=(bouton,texte)=>{bouton.dataset.infobulle=texte;};
 actualiserSuiviEtapeQuestion=()=>{};actualiserIndicateurSerie=()=>{};afficherCorrectionReponse=()=>{};
 jouerSonReussite=()=>{};jouerSonErreur=()=>{};envoyerEvenementPJJ=()=>{};
 afficherEcran=(e)=>{etat.ecran=e};

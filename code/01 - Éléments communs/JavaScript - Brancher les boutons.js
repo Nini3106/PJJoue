@@ -294,6 +294,8 @@ const TITRES_ACTIONS_SURVOL = Object.freeze({
 });
 
 function obtenirTitreSurvolBouton(bouton) {
+    if (bouton.id === 'boutonReprendreEtapeDepuisDebut' && etat.progressionAvantRevision)
+        return 'Revenir à la question laissée dans le parcours, avec les réponses et le brouillon conservés.';
     if (TITRES_BOUTONS_SURVOL[bouton.id])
         return TITRES_BOUTONS_SURVOL[bouton.id];
 
