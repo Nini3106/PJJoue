@@ -242,13 +242,19 @@ class CategoriesRevisionTests(unittest.TestCase):
         }""", jeu)
 
     def test_retour_au_parcours_depuis_revision_meme_apres_rechargement(self):
-        self.contexte.route('**/*', lambda route: route.fulfill(body=self.html, content_type='text/html')
+        html_navigable = self.html.replace('mettreAJourAdresseNavigation = () => {}; ', '')
+        self.contexte.route('**/*', lambda route: route.fulfill(body=html_navigable, content_type='text/html')
                             if route.request.is_navigation_request() else route.abort())
+        self.page.reload(wait_until='domcontentloaded')
         for jeu in ['parcours', 'sigles', 'mesures']:
             with self.subTest(jeu=jeu):
                 avant = self.preparer_parcours_suspendable(jeu)
                 bouton = self.page.locator('#boutonReprendreEtapeDepuisDebut')
                 self.assertEqual(bouton.inner_text(), 'Reprendre depuis le début')
+                saisie = self.page.locator('#reponseEcrite')
+                brouillon = saisie.is_visible()
+                if brouillon:
+                    saisie.fill('réponse en cours')
                 self.page.locator('#boutonRejouerErreursEtape').click()
                 self.assertEqual(bouton.inner_text(), 'Reprendre ma progression')
                 self.assertTrue(bouton.is_visible())
@@ -258,6 +264,8 @@ class CategoriesRevisionTests(unittest.TestCase):
                 apres = self.page.evaluate("""() => ({id:etat.questionCourante.id,index:etat.indexQuestion,
                     score:etat.score,enonce:document.querySelector('#enonceQuestion').textContent})""")
                 self.assertEqual(apres, avant)
+                if brouillon:
+                    self.assertEqual(saisie.input_value(), 'réponse en cours')
                 self.assertEqual(bouton.inner_text(), 'Reprendre depuis le début')
                 self.assertTrue(bouton.is_visible())
 
@@ -274,6 +282,8 @@ class CategoriesRevisionTests(unittest.TestCase):
                     return obtenirQuestionsAConsoliderSession().map(q => [q.id,q.enonce]);
                 }""")
                 self.assertEqual(len(attendues), 2)
+                if self.page.locator('#fenetreCelebration').is_visible():
+                    self.page.locator('#fermerFenetreCelebration').click()
                 self.assertNotEqual(self.page.locator('#boutonContinuer').inner_text(), 'Reprendre ma progression')
                 bouton = self.page.locator('#boutonRejouerMesErreurs')
                 self.assertTrue(bouton.is_visible())
