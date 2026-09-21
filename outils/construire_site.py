@@ -396,7 +396,7 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
     # Le nom du cache change automatiquement dès qu'un fichier public généré
     # ou qu'une ressource précachée change. Cela couvre notamment
     # donnees/donnees-pjj.js, les images et les icônes copiées telles quelles.
-    empreinte_cache = hashlib.sha256()
+    empreinte_cache = hashlib.sha256(sorties["service-worker.js"].encode("utf-8"))
     for chemin, contenu in sorted(sorties.items()):
         if chemin != "service-worker.js":
             empreinte_cache.update(chemin.encode("utf-8"))
@@ -420,6 +420,35 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
     sorties["service-worker.js"] = sorties["service-worker.js"].replace(
         "__VERSION_CACHE_PJJOUE__", version_cache
     )
+
+    # Chaque document référence les scripts/styles de sa version. Un ancien
+    # service worker ne peut plus répondre avec un script d'une autre version.
+    motif_asset = re.compile(r"((?:src|href)=[\"'])([^\"']+\.(?:js|css))(?:\?[^\"']*)?([\"'])", re.I)
+    def versionner_asset(correspondance):
+        prefixe, adresse, suffixe = correspondance.groups()
+        if re.match(r"(?:https?:)?//|data:", adresse):
+            return correspondance.group(0)
+        return f"{prefixe}{adresse}?v={version_cache}{suffixe}"
+    for chemin in list(sorties):
+        if chemin.endswith(".html"):
+            sorties[chemin] = motif_asset.sub(versionner_asset, sorties[chemin])
+    sorties["service-worker.js"] = re.sub(
+        r"(['\"])(\./[^'\"]+\.(?:js|css))(?:\?[^'\"]*)?\1",
+        lambda m: f"{m[1]}{m[2]}?v={version_cache}{m[1]}",
+        sorties["service-worker.js"],
+    )
+    # Les anciens alias d'URL peuvent devenir identiques après versionnage.
+    # Dédupliquer le précache pour respecter Cache.addAll.
+    lignes_cache = sorties["service-worker.js"].splitlines()
+    ressources_vues = set()
+    lignes_uniques = []
+    for ligne in lignes_cache:
+        if re.match(r"  ['\"]\./", ligne):
+            if ligne in ressources_vues:
+                continue
+            ressources_vues.add(ligne)
+        lignes_uniques.append(ligne)
+    sorties["service-worker.js"] = "\n".join(lignes_uniques) + "\n"
 
     # Dernier garde-fou : aucun marqueur de construction ne doit sortir du dossier code.
     for sortie, contenu in sorties.items():

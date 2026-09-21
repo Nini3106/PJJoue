@@ -216,14 +216,14 @@ def verifier() -> None:
         assert not page.locator("#erreurs").is_visible()
         assert page.locator("#sigles-revision h1").inner_text().strip() == "Questions à consolider"
         assert "Sigles à retravailler" in page.locator("#titreErreursRevisionSigles").inner_text()
-        assert page.locator("#sigles-revision [data-action='reviser-toutes-erreurs-sigles']").is_visible()
-        assert page.locator("#sigles-revision [data-action='reviser-etape-sigles']").count() >= 1
+        assert page.locator("#sigles-revision [data-revision-selection='sigles']").is_visible()
+        assert page.locator("#filtreRevisionEtape-sigles option").count() >= 2
         # La page Réviser de PJJoue reste indépendante et conserve son contenu d’origine.
         page.evaluate("() => afficherEcran('erreurs')")
         assert page.locator("#erreurs h1").inner_text().strip() == "Réviser"
         assert page.locator("#titreErreursRevision").inner_text().strip() == "Questions à retravailler"
         page.evaluate("() => afficherEcran('sigles-revision')")
-        page.locator("[data-action='reviser-toutes-erreurs-sigles']").click()
+        page.locator("[data-revision-selection='sigles']").click()
         assert page.locator("#question").is_visible()
         assert page.evaluate("() => obtenirModeMissionSigles()") == "revision"
         assert sorted(page.evaluate("() => etatJeuSigles.siglesSession.map(x=>x.sigle)")) == ["DPJJ","PJJ"]
@@ -325,7 +325,13 @@ def verifier() -> None:
             if(etapeSiglesMaitrisee(n)) return false;
             const dernier=liste.at(-1);e.autonomes[dernier.sigle]=true;e.validationsSansJoker[dernier.sigle]=true;
             verifierCelebrationEtapeSigles(liste);
-            return etapeSiglesMaitrisee(n)&&e.celebrationAffichee;
+            if(!etapeSiglesMaitrisee(n)||e.celebrationAffichee) return false;
+            etat.questionsSession=liste.map((c,i)=>convertirQuestionMissionSiglesVersPJJoue(
+                creerQuestionIntroductionSigles(c),i,{mode:'parcours',etape:n}));
+            const celebration=collecterCelebrationMission('sigles');
+            return celebration?.confetti===true
+                && obtenirEtatEtapeSigles(n).celebrationAffichee
+                && collecterCelebrationMission('sigles')===null;
         }""")
 
         # Les nouvelles sources sont accessibles dans les corrections natives.

@@ -25,7 +25,7 @@ function obtenirProchaineDestinationComplete() {
             return `Prochaine destination : ${destination}`;
     }
     const totalEtapes = THEMES.reduce((total, theme) => total + (PROGRAMMES[theme.id]?.etapes?.length || 0), 0);
-    return `Parcours complet réussi : les ${totalEtapes} étapes et les ${THEMES.length} évaluations sont validées.`;
+    return `Carnet complet, option PJJ comprise : les ${totalEtapes} étapes et les ${THEMES.length} évaluations sont validées.`;
 }
 function calculerAvancementCarnetComplet() {
     const questionsApprentissage = QUESTIONS.filter(question => !question.estEvaluationFinale);

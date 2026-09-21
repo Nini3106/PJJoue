@@ -307,7 +307,7 @@ function obtenirInformationsEtapeAnalytics(question = null) {
     };
 }
 function obtenirIdentifiantQuestionAnalytics(question) {
-    const identifiant = Number(question?.id);
+    const identifiant = Number(question?.identifiantHistorique ?? question?.id);
     if (!Number.isFinite(identifiant))
         return null;
     return `Q${String(Math.trunc(identifiant)).padStart(3, '0')}`;

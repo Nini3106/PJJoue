@@ -60,20 +60,26 @@ const RESSOURCES_ESSENTIELLES = [
   './ressources/icones-parcours/icone-partenaires.svg',
 ];
 
-async function precacherSeparément(cache) {
-  await Promise.all(RESSOURCES_ESSENTIELLES.map(async ressource => {
-    try {
-      await cache.add(ressource);
-    } catch (erreur) {
-      console.warn('[PJJoue] Ressource non précachée :', ressource, erreur);
-    }
+function estRessourceIndispensable(ressource) {
+  return ressource === './' || ressource === './index.html'
+    || /(?:donnees-pjj|moteur-jeu|navigation-locale)\.js/.test(ressource)
+    || /pjjoue-principal\.css/.test(ressource);
+}
+async function precacherApplication(cache) {
+  // Le nouveau moteur ne peut prendre la main qu'après le téléchargement
+  // complet de l'application. Un réseau interrompu garde l'ancienne version.
+  const indispensables = RESSOURCES_ESSENTIELLES.filter(estRessourceIndispensable);
+  await cache.addAll(indispensables.map(ressource => new Request(ressource, { cache: 'reload' })));
+  await Promise.all(RESSOURCES_ESSENTIELLES.filter(ressource => !estRessourceIndispensable(ressource)).map(async ressource => {
+    try { await cache.add(new Request(ressource, { cache: 'reload' })); }
+    catch (erreur) { console.warn('[PJJoue] Ressource secondaire non précachée :', ressource); }
   }));
 }
 
 self.addEventListener('install', evenement => {
   evenement.waitUntil(
     caches.open(NOM_CACHE)
-      .then(cache => precacherSeparément(cache))
+      .then(cache => precacherApplication(cache))
       .then(() => self.skipWaiting())
   );
 });
@@ -83,20 +89,22 @@ self.addEventListener('activate', evenement => {
     caches.keys()
       .then(noms => Promise.all(noms
         .filter(nom => nom.startsWith('pjjoue-application-') && nom !== NOM_CACHE)
+        .slice(0, -1)
         .map(nom => caches.delete(nom))))
       .then(() => self.clients.claim())
   );
 });
 
 async function trouverNavigationEnCache(requete) {
-  const reponseExacte = await caches.match(requete);
+  const cache = await caches.open(NOM_CACHE);
+  const reponseExacte = await cache.match(requete);
   if (reponseExacte)
     return reponseExacte;
 
   const adresse = new URL(requete.url);
   if (adresse.pathname.endsWith('/')) {
     const adresseIndex = new URL('index.html', adresse).href;
-    const reponseIndex = await caches.match(adresseIndex);
+    const reponseIndex = await cache.match(adresseIndex);
     if (reponseIndex)
       return reponseIndex;
   }
@@ -118,7 +126,7 @@ async function trouverNavigationEnCache(requete) {
   }
 
   const accueil = new URL('index.html', racine).href;
-  return caches.match(accueil);
+  return cache.match(accueil);
 }
 
 self.addEventListener('fetch', evenement => {
@@ -129,8 +137,16 @@ self.addEventListener('fetch', evenement => {
 
   if (requete.mode === 'navigate') {
     evenement.respondWith(
-      fetch(requete)
+      caches.open(NOM_CACHE).then(async cache => {
+        // Une page déjà installée reste liée à son moteur jusqu'à activation
+        // complète de la version suivante. Les nouveaux scripts sont prêts
+        // avant le rechargement automatique des onglets.
+        const connue = await cache.match(requete, { ignoreSearch: true });
+        if (connue) return connue;
+        return fetch(requete, { cache: 'no-cache' });
+      })
         .then(reponse => {
+          if (!reponse.ok) throw new Error('Navigation indisponible');
           const copie = reponse.clone();
           return caches.open(NOM_CACHE)
             .then(cache => cache.put(requete, copie))

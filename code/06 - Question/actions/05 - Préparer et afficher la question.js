@@ -7,7 +7,7 @@
  */
 function rejouerQuestionCourante() {
     const question = etat.questionCourante;
-    if (!question || !etat.questionValidee)
+    if (!question || !etat.questionValidee || estSessionEvaluation())
         return;
     const nombreReprises = etat.tentativesQuestions?.get(question.id) || 0;
     if (nombreReprises >= 1) {
@@ -391,9 +391,8 @@ function actualiserBoutonRevisionEtapeQuestion(question) {
     const disponible = visible && erreurs.length > 0;
     bouton.classList.toggle('masque', !visible);
     bouton.disabled = !disponible;
-    bouton.setAttribute('aria-label', disponible
-        ? `Consolider mes réponses de l’étape ${Number(question.etape || 1)}`
-        : 'Consolider mes réponses');
+    bouton.textContent = 'Réviser cette étape';
+    bouton.setAttribute('aria-label', `Réviser les questions à consolider de l’étape ${Number(question.etape || 1)}`);
     definirAideSurvolBouton(bouton, disponible
         ? `Rejouer les ${erreurs.length} questions à consolider : réponses rejouées, passées ou aidées et notions non maîtrisées. Les maîtrises sans joker sont conservées.`
         : 'Aucune question à consolider ou question non maîtrisée sans joker à rejouer dans cette étape');
@@ -425,6 +424,7 @@ function actualiserSuiviEtapeQuestion(question) {
         if (!finaleMission && ['parcours', 'revision'].includes(modeMission)) {
             compteur.textContent = `${compterMaitrisesEtapeSigles(numeroEtape)}/${obtenirSiglesEtape(numeroEtape).length}`;
             boutonReinitialiser.disabled = compterMaitrisesEtapeSigles(numeroEtape) === 0;
+            boutonReinitialiser.setAttribute('aria-label', `Réinitialiser la maîtrise sans joker de l’étape ${numeroEtape} de Mission Sigles`);
         }
         actualiserBoutonRevisionEtapeQuestion(question);
         return;
@@ -444,6 +444,7 @@ function actualiserSuiviEtapeQuestion(question) {
             const total = obtenirReperesMesuresEtape(numeroEtape).length;
             compteur.textContent = `${compterMaitrisesEtapeMesures(numeroEtape)}/${total}`;
             boutonReinitialiser.disabled = compterMaitrisesEtapeMesures(numeroEtape) === 0;
+            boutonReinitialiser.setAttribute('aria-label', `Réinitialiser la maîtrise sans joker de l’étape ${numeroEtape} de Mission Mesures`);
         }
         actualiserBoutonRevisionEtapeQuestion(question);
         return;
@@ -467,7 +468,7 @@ function actualiserSuiviEtapeQuestion(question) {
     boutonReinitialiser.disabled = nombreAutonomes === 0;
     boutonReinitialiser.setAttribute(
         'aria-label',
-        `Réinitialiser les ${nombreAutonomes} questions maîtrisées sans aide de l’étape ${question.etape}`
+        `Réinitialiser la maîtrise sans joker de l’étape ${question.etape}`
     );
     actualiserBoutonRevisionEtapeQuestion(question);
 }

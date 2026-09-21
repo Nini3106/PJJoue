@@ -166,7 +166,7 @@ function afficherActiviteEliminer(question, reponse) {
         <div class="activite-consigne"><span>Retirer des choix</span><b>${echapperHtml(consigne)}</b></div>
         ${rappelJoker}
         <div class="elimination-grille">${boutonsPropositions}</div>
-        <div class="elimination-compteur">${elementsElimines.length}/${nombreAttendu} proposition${nombreAttendu > 1 ? 's' : ''} écartée${elementsElimines.length > 1 ? 's' : ''}</div>
+        <div class="elimination-compteur">${elementsElimines.length}/${nombreAttendu} proposition${nombreAttendu > 1 ? 's' : ''} écartée${nombreAttendu > 1 ? 's' : ''}</div>
     </div>`;
     actualiserBoutonValider();
 }

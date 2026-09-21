@@ -133,19 +133,19 @@ def construire_page() -> str:
 
     page = re.sub(r'<meta[^>]+http-equiv="Content-Security-Policy"[^>]*/?>', "", page, flags=re.I)
     page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue|navigation-locale)\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue|navigation-locale)\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
         "", page, flags=re.I,
     )
-    page = re.sub(r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css")[^>]*>\s*', "", page, flags=re.I)
+    page = re.sub(r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css(?:\?[^\"]*)?")[^>]*>\s*', "", page, flags=re.I)
     page = page.replace("</head>", f"<style>{css}</style></head>", 1)
     page = page.replace("<head>", '<head><base href="http://pjjoue.test/">', 1)
     page = integrer_images_html(page)
     page = re.sub(
-        r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
         lambda _: f"<script>{donnees}</script>", page, count=1, flags=re.I,
     )
     page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/moteur-jeu\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="ressources/moteur-jeu\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
         lambda _: f"<script>{moteur}</script>", page, count=1, flags=re.I,
     )
     # Les icônes du parcours 1 sont créées dynamiquement par le moteur : leur
@@ -1349,10 +1349,15 @@ def scenarios() -> list[Scenario]:
         sauvegarde.erreurs = {};
         qs.forEach((q, i) => sauvegarde.erreurs[q.id] = {maitrisee:false,nombreErreurs:(i % 2) + 1,reussites:0});
         afficherEcran('erreurs', {remplacerHistorique:true});
-        const details = document.querySelector('#erreurs .revision-etapes-details');
-        if (!details)
-            throw new Error('Liste directe des étapes introuvable');
-        details.open = true;
+        const zone = document.querySelector('#erreurs');
+        if (zone.querySelectorAll('[data-filtre-revision]').length !== 2
+            || zone.querySelectorAll('[data-revision-selection="parcours"]').length !== 1)
+            throw new Error('Filtres ou action principale de révision incorrects');
+        const questions = [...zone.querySelectorAll('.revision-categorie li > span')];
+        if (questions.length !== qs.length
+            || new Set(questions.map(question => question.textContent)).size !== qs.length)
+            throw new Error('La liste des révisions contient des omissions ou des doublons');
+        zone.querySelectorAll('.revision-categorie').forEach(details => details.open = true);
     }"""
     bilan = """() => {
         const q = QUESTIONS.find(q => !q.estEvaluationFinale);
@@ -1584,8 +1589,16 @@ def verifier_scenario(navigateur, html: str, scenario: Scenario, actualiser_refe
             attendue = Image.open(reference).convert('RGBA')
             exact = comparaison_pixel_exacte_active()
             if actuelle.width != attendue.width:
+                hors_ecran = page.evaluate("""() => [...document.querySelectorAll('body *')]
+                    .filter(element => {
+                        const r = element.getBoundingClientRect();
+                        return r.width > 0 && r.height > 0 && r.right > innerWidth + 1;
+                    }).slice(0, 12).map(element => ({
+                        element: element.id || element.className || element.tagName,
+                        droite: element.getBoundingClientRect().right
+                    }))""")
                 raise AssertionError(
-                    f"{scenario.nom} : largeur de capture différente, {actuelle.width}px au lieu de {attendue.width}px."
+                    f"{scenario.nom} : largeur de capture différente, {actuelle.width}px au lieu de {attendue.width}px : {hors_ecran}"
                 )
             if actuelle.height != attendue.height:
                 if exact:
@@ -1640,11 +1653,18 @@ def main() -> int:
         navigation_http_locale = navigation_http_locale_disponible(navigateur)
         if not navigation_http_locale:
             print("INFO — navigation HTTP locale bloquée : fallback visuel set_content activé une seule fois.")
+        echecs = []
         for scenario in selection:
-            verifier_scenario(navigateur, html, scenario, arguments.actualiser_references, navigation_http_locale)
-            print(f"OK — {scenario.nom}")
+            try:
+                verifier_scenario(navigateur, html, scenario, arguments.actualiser_references, navigation_http_locale)
+                print(f"OK — {scenario.nom}")
+            except Exception as erreur:
+                echecs.append(f"{scenario.nom} : {erreur}")
+                print(f"ÉCHEC — {echecs[-1]}")
         navigateur.close()
 
+    if echecs:
+        raise AssertionError("Recette visuelle : " + "\n".join(echecs))
     mode = "pixel par pixel + structure" if comparaison_pixel_exacte_active() else "structure + captures (pixel exact sur demande dans l'environnement de référence)"
     print(f"OK — recette visuelle moderne : {len(selection)} scénarios, {mode}, captures dans {SORTIE}")
     return 0

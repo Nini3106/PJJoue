@@ -40,19 +40,19 @@ def construire_page_jeu() -> str:
     page = re.sub(r'<!-- Google Tag Manager -->.*?<!-- End Google Tag Manager -->\s*', "", page, count=1, flags=re.S | re.I)
     page = re.sub(r'<!-- Google Tag Manager \(noscript\) -->.*?<!-- End Google Tag Manager \(noscript\) -->\s*', "", page, count=1, flags=re.S | re.I)
     page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue|navigation-locale)\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue|navigation-locale)\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
         "", page, flags=re.I,
     )
-    page = re.sub(r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css")[^>]*>\s*', "", page, flags=re.I)
+    page = re.sub(r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css(?:\?[^\"]*)?")[^>]*>\s*', "", page, flags=re.I)
     page = page.replace("</head>", f"<style>{feuille}</style></head>", 1)
     page = page.replace('src="ressources/panorama-accueil-calme.png"', f'src="data:image/png;base64,{image}"')
     graine = "<script>let graineTest=123456789;Math.random=()=>{graineTest=(1103515245*graineTest+12345)%2147483648;return graineTest/2147483648};</script>"
     page = re.sub(
-        r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
         lambda _: graine + f"<script>{donnees}</script>", page, count=1, flags=re.I,
     )
     page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/moteur-jeu\.js")[^>]*>\s*</script>',
+        r'<script\b(?=[^>]*src="ressources/moteur-jeu\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
         lambda _: f"<script>{moteur}</script>", page, count=1, flags=re.I,
     )
     return page
@@ -63,9 +63,9 @@ def construire_page_administration() -> str:
     feuille = (RACINE / "ressources/administration.css").read_text(encoding="utf-8")
     donnees = (RACINE / "donnees/donnees-pjj.js").read_text(encoding="utf-8")
     administration = (RACINE / "ressources/administration.js").read_text(encoding="utf-8")
-    page = re.sub(r'<link\b(?=[^>]*href="ressources/administration\.css")[^>]*>', f"<style>{feuille}</style>", page, count=1, flags=re.I)
-    page = re.sub(r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js")[^>]*>\s*</script>', lambda _: f"<script>{donnees}</script>", page, count=1, flags=re.I)
-    page = re.sub(r'<script\b(?=[^>]*src="ressources/administration\.js")[^>]*>\s*</script>', lambda _: f"<script>{administration}</script>", page, count=1, flags=re.I)
+    page = re.sub(r'<link\b(?=[^>]*href="ressources/administration\.css(?:\?[^\"]*)?")[^>]*>', f"<style>{feuille}</style>", page, count=1, flags=re.I)
+    page = re.sub(r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js(?:\?[^\"]*)?")[^>]*>\s*</script>', lambda _: f"<script>{donnees}</script>", page, count=1, flags=re.I)
+    page = re.sub(r'<script\b(?=[^>]*src="ressources/administration\.js(?:\?[^\"]*)?")[^>]*>\s*</script>', lambda _: f"<script>{administration}</script>", page, count=1, flags=re.I)
     return page
 
 

@@ -414,7 +414,7 @@ function finaliserQuestionSigles(correcte,cibles,{parJoker=false,passage=false,t
 function afficherFeedbackSigles(type,texte){ const z=selectionnerSigles('#siglesFeedback'); if(!z)return; z.dataset.type=type; z.textContent=texte; z.classList.remove('masque'); }
 function passerQuestionSigles(){ if(etatJeuSigles.mode==='evaluation'||etatJeuSigles.questionValidee)return; const q=etatJeuSigles.questions[etatJeuSigles.indexQuestion]; finaliserQuestionSigles(false,q.cibles,{passage:true}); }
 function questionSuivanteSigles(){ etatJeuSigles.indexQuestion += 1; afficherQuestionSigles(); }
-function verifierCelebrationEtapeSigles(cibles){ const numeros=[...new Set(cibles.map(c=>Number(c.etape)))]; numeros.forEach(n=>{ const e=obtenirEtatEtapeSigles(n); if(compterValidationsSansJokerEtapeSigles(n)===obtenirSiglesEtape(n).length && !e.celebrationAffichee){ e.celebrationAffichee=true; etatJeuSigles.celebrationEtapeADiffuser=n; } }); }
+function verifierCelebrationEtapeSigles(cibles){ const numeros=[...new Set(cibles.map(c=>Number(c.etape)))]; numeros.forEach(n=>{ const e=obtenirEtatEtapeSigles(n); if(compterValidationsSansJokerEtapeSigles(n)===obtenirSiglesEtape(n).length && !e.celebrationAffichee){ etatJeuSigles.celebrationEtapeADiffuser=n; } }); }
 
 function utiliserJokerSigles(type) {
     if(!etatJeuSigles.jokersActifs||etatJeuSigles.questionValidee)return; const q=etatJeuSigles.questions[etatJeuSigles.indexQuestion]; etatJeuSigles.aideUtilisee=true; const bouton=selectionnerSigles(`[data-joker-sigles="${type}"]`); if(bouton)bouton.disabled=true;
@@ -498,47 +498,16 @@ function afficherEtatVideRevisionMissionSigles(zone){
         <p>Tous les sigles qui avaient besoin d’être retravaillés sont consolidés.</p>
     </div>`;
 }
-function construireRevisionMissionSiglesIndependante(){
-    const cibles = obtenirErreursSiglesActives();
+function construireRevisionMissionSiglesIndependante() {
     const zone = selectionner('#contenuErreursSigles');
-    if(!zone) return;
-    if(!cibles.length){ afficherEtatVideRevisionMissionSigles(zone); return; }
-    const parEtape = {};
-    cibles.forEach(cible => (parEtape[Number(cible.etape)] = parEtape[Number(cible.etape)] || []).push(cible));
-    const total = cibles.length;
-    const boutons = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
-        const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
-        const liste = parEtape[numero];
-        return `<button class="revision-parcours-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><span class="revision-parcours-numero">${identite.numero}</span><span class="revision-parcours-texte"><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'questions à consolider':'question à consolider'}</small></span><span class="revision-parcours-action">Réviser →</span></button>`;
-    }).join('');
-    const etapesDirectes = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
-        const liste = parEtape[numero];
-        const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
-        return `<button class="revision-etape-bouton" data-action="reviser-etape-sigles" data-etape="${numero}" style="--revision-etape-accent:${identite.couleurTexte}"><span>${libelleEtapeSigles(numero)}</span><strong>${liste.length}</strong></button>`;
-    }).join('');
-    const dossiers = Object.keys(parEtape).sort((a,b)=>Number(a)-Number(b)).map(numero => {
-        const identite = obtenirIdentiteEtapeMissionSigles(Number(numero));
-        const liste = parEtape[numero];
-        const lignes = liste.map(cible => {
-            const suivi = obtenirSauvegardeJeuSigles().erreurs?.[normaliserSigleJeu(cible.sigle)] || {};
-            return `<li class="revision-erreur-ligne"><span><strong>${cible.sigle}</strong> · ${significationMissionSigles(cible)}</span><small>${obtenirLibelleConsolidation(suivi)}</small></li>`;
-        }).join('');
-        return `<details class="revision-dossier" style="--parcours-accent:${identite.couleur};--parcours-accent-lisible:${identite.couleurTexte};--parcours-accent-rgb:${identite.couleurRgb}"><summary><span class="revision-dossier-numero">${identite.numero}</span><span><strong>${identite.titre}</strong><small>${liste.length} ${liste.length>1?'questions à consolider':'question à consolider'}</small></span><span class="revision-dossier-chevron" aria-hidden="true">⌄</span></summary><div class="revision-dossier-contenu"><div class="revision-etape-groupe"><div class="revision-etape-groupe-entete"><strong>${libelleEtapeSigles(numero)}</strong><span>${liste.length}</span></div><ul>${lignes}</ul></div></div></details>`;
-    }).join('');
-    zone.innerHTML = construireCategoriesRevision('sigles') + `<div class="revision-workspace">
-        <article class="revision-toutes-erreurs">
-            <div class="revision-toutes-erreurs-icone" aria-hidden="true">↻</div>
-            <div class="revision-toutes-erreurs-texte"><span class="surtitre">Révision rapide</span><h2>Mélange mes questions à consolider</h2><p>Une session aléatoire avec tes ${total} ${total>1?'sigles à retravailler':'sigle à retravailler'}.</p></div>
-            <button class="principal" data-action="reviser-toutes-erreurs-sigles">Lancer ${total} ${total>1?'questions':'question'} →</button>
-        </article>
-        <section class="revision-choix" aria-labelledby="titreRevisionSiglesEtapes">
-            <div class="revision-section-entete"><div><span class="surtitre">Cibler</span><h2 id="titreRevisionSiglesEtapes">Choisis ce que tu veux renforcer</h2></div><p>Une étape précise de Mission Sigles.</p></div>
-            <div class="revision-parcours-boutons">${boutons}</div>
-            <details class="revision-etapes-details"><summary>Choisir directement une étape</summary><div class="revision-etape-boutons">${etapesDirectes}</div></details>
-        </section>
-    </div>
-    <section class="revision-inventaire" aria-labelledby="titreInventaireErreursSigles"><div class="revision-section-entete"><div><span class="surtitre">Détail</span><h2 id="titreInventaireErreursSigles">Tes questions à consolider</h2></div><p>Consulte les sigles qui restent à consolider, étape par étape.</p></div><div class="revision-dossiers">${dossiers}</div></section>`;
+    if (!zone) return;
+    if (!obtenirErreursSiglesActives().length) {
+        zone.innerHTML = '<div class="revision-vide"><strong>Aucune question à consolider.</strong><p>Les sigles à retravailler apparaîtront ici.</p></div>';
+        return;
+    }
+    construireEspaceRevision('sigles', zone);
 }
+
 function afficherRevisionMissionSigles(){
     construireRevisionMissionSiglesIndependante();
 }
@@ -574,9 +543,13 @@ function liensSourcesQuestionSigles(cibles) {
 function convertirQuestionMissionSiglesVersPJJoue(questionSigles, index, configuration) {
     const cible = questionSigles.cible || questionSigles.cibles?.[0] || null;
     const numeroEtape = Number(cible?.etape || configuration.etape || 1);
-    const identifiant = 900000 + (Number(cible?.id || 0) * 20) + (index % 20);
+    // Une activité possède sa propre clé de session, même si elle porte sur
+    // une notion déjà rencontrée. L'identité Analytics historique reste distincte.
+    const identifiantHistorique = 900000 + (Number(cible?.id || 0) * 20) + (index % 20);
+    const identifiant = 900000000 + index;
     const base = {
         id: identifiant,
+        identifiantHistorique,
         theme: obtenirThemeVisuelMissionSigles(numeroEtape),
         etape: numeroEtape,
         chapitre: 1,
@@ -740,11 +713,11 @@ function terminerSessionMissionSiglesNative() {
             };
         }
     }
+    if (mode !== 'evaluation') celebration = collecterCelebrationMission('sigles');
     enregistrerSauvegarde();
     selectionner('#scoreBilan').textContent = `${pourcentage}%`;
     selectionner('#bonnesReponsesBilan').textContent = `${etat.score}/${total}`;
     selectionner('#meilleureSerieBilan').textContent = etat.meilleureSerie;
-    selectionner('#gainExperienceBilan').textContent = '+0';
     selectionner('#contexteBilan').textContent = `Mission Sigles · ${titre}`;
     selectionner('#titreBilan').textContent = titre;
     selectionner('#rangBilan').textContent = resultat;
@@ -753,7 +726,7 @@ function terminerSessionMissionSiglesNative() {
     continuer.textContent = 'Retour à Mission Sigles →';
     continuer.onclick = () => { etat.missionSiglesConfiguration = null; afficherEcran('sigles', { remplacerHistorique:true }); };
     const rejouer = selectionner('#boutonRejouerMesErreurs');
-    if (rejouer) rejouer.onclick = lancerRevisionSigles;
+    if (rejouer) rejouer.onclick = () => afficherEcran('sigles-revision');
     const destination = selectionner('#prochaineDestinationBilan');
     if (destination) destination.textContent = mode === 'parcours' ? 'Continue Mission Sigles ou rejoue les sigles à consolider.' : 'Choisis une nouvelle session dans Mission Sigles.';
     selectionner('#carteVoyageFinale')?.classList.add('masque');

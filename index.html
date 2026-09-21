@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
  <head>
- <script src="ressources/consentement-analytics.js" defer></script>
- <script src="ressources/navigation-locale.js" defer></script>
+ <script src="ressources/consentement-analytics.js?v=797a0a72b7e2" defer></script>
+ <script src="ressources/navigation-locale.js?v=797a0a72b7e2" defer></script>
 <meta charset="utf-8"/>
   <base href="./"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
@@ -26,8 +26,8 @@
   <meta content="summary_large_image" name="twitter:card"/>
   <meta content="default-src 'self'; script-src 'self' 'sha256-GW2oYsRTeWShIjkgm2IMeEluvBbLcOrEwaq3oOAEGIM=' 'sha256-qh/c/CvY76sHcEVgWMfQQGZzfeZoitbxce1/RhQ+kWw=' 'sha256-ItAmAWRxciYKfMfcAanjDGttuQ/nghlVDCGi8dDLT9I=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; font-src 'self'; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src https://www.googletagmanager.com" http-equiv="Content-Security-Policy"/>
   <title>Quiz CJPM — Justice pénale des mineurs</title>
-  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=20260828-coherence12">
-  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=20260827-final1">
+  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=797a0a72b7e2">
+  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=797a0a72b7e2">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Quiz CJPM","alternateName":"PJJoue","url":"https://pjjoue.fr/","description":"Approfondis le code de la justice pénale des mineurs avec 5 parcours CJPM. 960 questions au total, avec une option pour découvrir la PJJ.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
 </head>
  <body data-ecran-actif="accueil">
@@ -516,14 +516,6 @@
         meilleure série
        </span>
       </div>
-      <div class="statistique">
-       <strong id="gainExperienceBilan">
-        +0
-       </strong>
-       <span>
-        points de progression
-       </span>
-      </div>
      </div>
      <aside class="bilan-prochaine-destination">
       <span aria-hidden="true" class="bilan-destination-icone">➜</span>
@@ -533,7 +525,7 @@
      <section aria-labelledby="titreCarteVoyageFinale" class="carte-voyage-finale masque" id="carteVoyageFinale">
       <div class="carte-voyage-entete">
        <div><span>Ton carnet complet</span><h2 id="titreCarteVoyageFinale">La carte de ton voyage</h2></div>
-       <strong>11 destinations parcourues</strong>
+       <strong>Tous les parcours, option PJJ comprise</strong>
       </div>
       <div class="carte-voyage-destinations" id="destinationsVoyageFinal"></div>
       <p>Sélectionne une étape pour retrouver ses souvenirs pédagogiques dans ton carnet.</p>
@@ -560,7 +552,7 @@
        Continuer
       </button>
       <button class="secondaire" id="boutonRejouerMesErreurs" type="button">
-       Consolider mes réponses
+       Voir mes révisions
       </button>
      <button class="discret" id="boutonRevenirAuParcours" type="button">
        Revenir au parcours
@@ -1237,6 +1229,7 @@
       <p>Conserve une copie de ta progression ou récupère-la sur un autre appareil.</p>
       <div class="parametres-actions-boutons">
        <button class="secondaire" id="boutonExporterMaProgression" type="button">Exporter ma progression</button>
+       <button class="secondaire" id="boutonAnnulerDernierImport" type="button" hidden>Annuler le dernier import</button>
        <button aria-controls="fichierImporterProgression" class="secondaire progression-importation" id="boutonImporterProgression" type="button">Importer une progression</button>
        <input accept="application/json" aria-hidden="true" class="fichier-importation-visuellement-cache" id="fichierImporterProgression" tabindex="-1" type="file">
       </div>
@@ -1272,10 +1265,10 @@
     <a href="mentions-legales.html">Mentions légales</a>
    </nav>
   </footer>
-  <script defer="" src="donnees/donnees-pjj.js">
+  <script defer="" src="donnees/donnees-pjj.js?v=797a0a72b7e2">
   </script>
-  <script defer="" src="ressources/analytics-pjjoue.js"></script>
-  <script defer="" src="ressources/moteur-jeu.js">
+  <script defer="" src="ressources/analytics-pjjoue.js?v=797a0a72b7e2"></script>
+  <script defer="" src="ressources/moteur-jeu.js?v=797a0a72b7e2">
   </script>
   <dialog aria-describedby="texteFenetreQuitterSession" aria-labelledby="titreFenetreQuitterSession" class="pjj-fenetre" id="fenetreQuitterSession">
    <div class="pjj-fenetre-panneau">

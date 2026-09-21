@@ -141,7 +141,9 @@ class CategoriesRevisionTests(unittest.TestCase):
                 with self.subTest(jeu=jeu, largeur=largeur):
                     self.page.set_viewport_size({'width':largeur,'height':1000})
                     self.page.locator(f"#{fixture['ecran']} .revision-categories").scroll_into_view_if_needed()
-                    self.page.evaluate("document.querySelectorAll('.revision-categorie,.revision-etapes-details,.revision-dossier').forEach(d => d.open = true)")
+                    self.page.locator(f"#{fixture['ecran']} .revision-categorie").evaluate_all(
+                        '(categories) => categories.forEach(categorie => categorie.open = true)'
+                    )
                     self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth - innerWidth'), 1)
                     self.assertTrue(self.page.locator(f"#{fixture['ecran']} .revision-categories").is_visible())
                     self.assertEqual(self.page.locator(f"#{fixture['ecran']} .revision-categorie").count(), 2)

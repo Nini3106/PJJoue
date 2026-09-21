@@ -107,7 +107,7 @@ function calculerProgressionParcours(identifiantTheme) {
     return {
         maitrisees,
         total,
-        pourcentage: total ? Math.round(maitrisees / total * 100) : 0,
+        pourcentage: totalJalons ? Math.round(jalonsMaitrises / totalJalons * 100) : 0,
         evaluationReussie,
         jalonsMaitrises,
         totalJalons
@@ -187,7 +187,7 @@ function actualiserEnteteParcours(programme) {
     const libelleProgression = selectionner('#libelleProgressionParcours');
     const pourcentageProgression = selectionner('#pourcentageProgressionParcours');
     const barre = selectionner('#progressionParcoursSelectionne');
-    if (libelleProgression) libelleProgression.textContent = `${progression.maitrisees} / ${progression.total} étapes maîtrisées`;
+    if (libelleProgression) libelleProgression.textContent = `${progression.jalonsMaitrises} / ${progression.totalJalons} objectifs · étapes et évaluation`;
     if (pourcentageProgression) pourcentageProgression.textContent = `${progression.pourcentage}%`;
     if (barre) {
         barre.setAttribute('aria-valuenow', String(progression.pourcentage));

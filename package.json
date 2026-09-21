@@ -5,7 +5,7 @@
   "description": "PJJoue V1 — 6 parcours intégrés, 960 questions, 66 étapes et 6 évaluations finales",
   "scripts": {
     "dev": "node outils/serveur-previsualisation.js",
-    "test": "npm run controle:javascript && npm run controle:css && npm run test:unitaire && npm run controle:accessibilite && npm run controle:sources && python tests/verifier_pjjoue.py && npm run controle:navigation-libre && npm run controle:couleurs-icones && npm run controle:identite-v1 && npm run test:visuel && npm run test:pages-annexes && npm run test:interface && npm run test:sigles",
+    "test": "npm run controle:javascript && npm run controle:css && npm run test:logique && npm run test:unitaire && npm run controle:accessibilite && npm run controle:sources && python tests/verifier_pjjoue.py && npm run controle:navigation-libre && npm run controle:couleurs-icones && npm run controle:identite-v1 && npm run test:visuel && npm run test:pages-annexes && npm run test:interface && npm run test:sigles",
     "controle:javascript": "eslint ressources/*.js",
     "controle:css": "npm run controle:css:doublons && npm run controle:css:structure",
     "controle:css:doublons": "node outils/controler_css.js doublons",
@@ -32,7 +32,8 @@
     "test:sigles": "python tests/verifier_jeu_sigles.py",
     "controle:noms-fichiers": "python outils/verifier_noms_fichiers.py",
     "controle:manifeste": "python outils/construire_manifeste.py --verifier",
-    "archive:utf8": "python outils/creer_archive_utf8.py"
+    "archive:utf8": "python outils/creer_archive_utf8.py",
+    "test:logique": "node --test tests/logique/*.test.cjs"
   },
   "keywords": [
     "PJJ",

@@ -266,7 +266,7 @@ function jouerTirageDeParcours() {
     etat.chronometreSessionActif = false;
     lancerSession(session);
 }
-function lancerRevision(identifiantTheme = 'toutes', categorie = null) {
+function lancerRevision(identifiantTheme = 'toutes', categorie = null, numeroEtape = 'toutes') {
     const actif = Object.entries(sauvegarde.erreurs || {}).filter(([, erreur]) => !erreur.maitrisee);
     if (!sauvegarde.aDejaJoue && actif.length === 0) {
         afficherNotification('Tu n’as pas encore joué. Commence une partie avant de pouvoir consolider tes réponses.');
@@ -280,6 +280,8 @@ function lancerRevision(identifiantTheme = 'toutes', categorie = null) {
     let reserve = QUESTIONS.filter(question => identifiants.includes(question.id) && !question.estEvaluationFinale);
     if (identifiantTheme !== 'toutes')
         reserve = reserve.filter(question => question.theme === identifiantTheme);
+    if (numeroEtape !== 'toutes')
+        reserve = reserve.filter(question => Number(question.etape) === Number(numeroEtape));
     if (categorie !== null)
         reserve = reserve.filter(question => obtenirCategorieRevision(sauvegarde.erreurs[question.id]) === categorie);
     if (reserve.length === 0) {
