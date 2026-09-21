@@ -1,7 +1,7 @@
 """Parcours réels des catégories de révision, dans les trois jeux."""
 import unittest
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, TimeoutError as DelaiPlaywright
 from verifier_interface import construire_page_jeu, lancer_chromium
 
 
@@ -273,6 +273,7 @@ class CategoriesRevisionTests(unittest.TestCase):
     def test_bilan_relance_directement_les_questions_de_la_session(self):
         for jeu in ['parcours', 'sigles', 'mesures']:
             with self.subTest(jeu=jeu):
+                self.page.reload(wait_until='domcontentloaded')
                 self.preparer_parcours_suspendable(jeu)
                 attendues = self.page.evaluate("""() => {
                     passerQuestion();
@@ -283,7 +284,12 @@ class CategoriesRevisionTests(unittest.TestCase):
                     return obtenirQuestionsAConsoliderSession().map(q => [q.id,q.enonce]);
                 }""")
                 self.assertEqual(len(attendues), 2)
-                if self.page.locator('#fenetreCelebration').is_visible():
+                # La célébration éventuelle s'ouvre après l'animation du bilan.
+                try:
+                    self.page.locator('#fenetreCelebration[open]').wait_for(state='visible', timeout=600)
+                except DelaiPlaywright:
+                    pass
+                else:
                     self.page.locator('#fermerFenetreCelebration').click()
                 self.assertNotEqual(self.page.locator('#boutonContinuer').inner_text(), 'Reprendre ma progression')
                 bouton = self.page.locator('#boutonRejouerMesErreurs')
