@@ -525,6 +525,7 @@ function restaurerEnsemble(valeur) {
     return Array.isArray(valeur) ? new Set(valeur) : new Set();
 }
 function effacerSessionEnCours() {
+    etat.progressionAvantRevision = null;
     try { sessionStorage.removeItem(CLE_SESSION_EN_COURS); } catch (erreur) { /* Stockage par onglet indisponible. */ }
     try {
         localStorage.removeItem(CLE_SESSION_EN_COURS);
@@ -533,7 +534,7 @@ function effacerSessionEnCours() {
         // Une session technique ne doit jamais bloquer le jeu si le stockage est indisponible.
     }
 }
-function enregistrerSessionEnCours() {
+function creerInstantaneSessionEnCours() {
     if (etat.ecran !== 'question' || !etat.questionsSession?.length || !etat.questionCourante)
         return false;
     const saisieActive = selectionner('#reponseEcrite');
@@ -541,8 +542,9 @@ function enregistrerSessionEnCours() {
         etat.brouillonsEcrits = etat.brouillonsEcrits || new Map();
         etat.brouillonsEcrits.set(etat.questionCourante.id, saisieActive.value || '');
     }
-    const instantane = {
+    return {
         version: 2,
+        progressionAvantRevision: etat.progressionAvantRevision || null,
         enregistreLe: Date.now(),
         theme: etat.theme,
         etape: etat.etape,
@@ -580,6 +582,8 @@ function enregistrerSessionEnCours() {
         brouillonsEcrits: serialiserTableauAssociatif(etat.brouillonsEcrits),
         brouillonActivite: etat.brouillonActivite || null
     };
+}
+function ecrireInstantaneSessionEnCours(instantane) {
     try {
         const contenu = JSON.stringify(instantane);
         localStorage.setItem(CLE_SESSION_EN_COURS, contenu);
@@ -590,6 +594,17 @@ function enregistrerSessionEnCours() {
     catch (erreur) {
         return false;
     }
+}
+function enregistrerSessionEnCours() {
+    const instantane = creerInstantaneSessionEnCours();
+    return instantane ? ecrireInstantaneSessionEnCours(instantane) : false;
+}
+function terminerSauvegardeSession() {
+    // Le bilan de révision conserve le point de retour, y compris après une mise à jour.
+    if (etat.progressionAvantRevision)
+        return ecrireInstantaneSessionEnCours({ ...etat.progressionAvantRevision, retourDepuisBilanRevision: true });
+    effacerSessionEnCours();
+    return true;
 }
 function preparerMiseAJourAutomatique() {
     // Les actions ont déjà enregistré la progression. Ne pas réécrire ici
@@ -613,8 +628,7 @@ function chargerSessionEnCours() {
         return null;
     }
 }
-function restaurerSessionEnCours() {
-    const instantane = chargerSessionEnCours();
+function restaurerSessionEnCours(instantane = chargerSessionEnCours()) {
     if (!instantane)
         return false;
     const mission = String(instantane.mode || '').match(/^(sigles|mesures)-(parcours|revision|evaluation|entrainement|hasard)$/);
@@ -657,6 +671,11 @@ function restaurerSessionEnCours() {
             titreSession: configuration.titre, reperesSession: configuration.reperes || [],
             configurationDerniereSession: configuration };
     }
+    const progression = instantane.progressionAvantRevision;
+    etat.progressionAvantRevision = progression
+        && ['parcours', 'sigles-parcours', 'mesures-parcours'].includes(progression.mode)
+        && Array.isArray(progression.questions)
+        ? { ...progression, progressionAvantRevision: null } : null;
     etat.organisationSession = instantane.organisationSession || 'ordonne';
     etat.origineSessionAnalytics = instantane.origineSessionAnalytics || null;
     etat.perimetreRevision = instantane.perimetreRevision || null;

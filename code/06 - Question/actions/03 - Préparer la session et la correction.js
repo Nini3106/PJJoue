@@ -10,6 +10,8 @@ function lancerSession(session) {
         afficherNotification('Aucune question ne correspond à ce filtre.');
         return;
     }
+    etat.progressionAvantRevision = null;
+    etat.brouillonActivite = null;
     if (estSessionEvaluation()) etat.jokersSessionActifs = false;
     const questionsPreparees = preparerSession(session);
     etat.questionsSession = questionsPreparees;

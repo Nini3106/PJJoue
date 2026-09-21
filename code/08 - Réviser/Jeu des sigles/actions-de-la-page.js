@@ -589,7 +589,7 @@ function convertirQuestionMissionSiglesVersPJJoue(questionSigles, index, configu
         mauvaisesReponses: options.filter(option => option.correcte !== true).map(option => option.texte)
     };
 }
-function preparerSessionMissionSiglesNative({ mode, etape = null, sigles, questions, jokersActifs = true, titre, chronoActif = false, secondesQuestion = 30 }) {
+function preparerSessionMissionSiglesNative({ questionsDejaConverties = false, mode, etape = null, sigles, questions, jokersActifs = true, titre, chronoActif = false, secondesQuestion = 30 }) {
     const configuration = { domaine:obtenirDomaineSigles(), mode, etape, sigles:[...sigles], jokersActifs, titre, chronoActif, secondesQuestion };
     etatJeuSigles = {
         ...creerEtatJeuSigles(),
@@ -613,7 +613,8 @@ function preparerSessionMissionSiglesNative({ mode, etape = null, sigles, questi
     etat.chronometreSessionActif = chronoActif === true;
     etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(secondesQuestion) || 30));
     etat.missionSiglesConfiguration = configuration;
-    const questionsPJJoue = questions.map((question, index) => convertirQuestionMissionSiglesVersPJJoue(question, index, configuration));
+    const questionsPJJoue = questionsDejaConverties ? questions
+        : questions.map((question, index) => convertirQuestionMissionSiglesVersPJJoue(question, index, configuration));
     lancerSession(questionsPJJoue);
 }
 function obtenirCiblesMissionQuestion(question) {
@@ -725,12 +726,10 @@ function terminerSessionMissionSiglesNative() {
     const continuer = selectionner('#boutonContinuer');
     continuer.textContent = 'Retour à Mission Sigles →';
     continuer.onclick = () => { etat.missionSiglesConfiguration = null; afficherEcran('sigles', { remplacerHistorique:true }); };
-    const rejouer = selectionner('#boutonRejouerMesErreurs');
-    if (rejouer) rejouer.onclick = () => afficherEcran('sigles-revision');
     const destination = selectionner('#prochaineDestinationBilan');
     if (destination) destination.textContent = mode === 'parcours' ? 'Continue Mission Sigles ou rejoue les sigles à consolider.' : 'Choisis une nouvelle session dans Mission Sigles.';
     selectionner('#carteVoyageFinale')?.classList.add('masque');
-    effacerSessionEnCours();
+    terminerSauvegardeSession();
     afficherEcran('bilan', { remplacerHistorique:true });
     actualiserAccueilSigles();
     lancerCelebrationBilan(celebration);

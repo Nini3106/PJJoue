@@ -981,6 +981,7 @@ function restaurerEnsemble(valeur) {
     return Array.isArray(valeur) ? new Set(valeur) : new Set();
 }
 function effacerSessionEnCours() {
+    etat.progressionAvantRevision = null;
     try { sessionStorage.removeItem(CLE_SESSION_EN_COURS); } catch (erreur) { /* Stockage par onglet indisponible. */ }
     try {
         localStorage.removeItem(CLE_SESSION_EN_COURS);
@@ -989,7 +990,7 @@ function effacerSessionEnCours() {
         // Une session technique ne doit jamais bloquer le jeu si le stockage est indisponible.
     }
 }
-function enregistrerSessionEnCours() {
+function creerInstantaneSessionEnCours() {
     if (etat.ecran !== 'question' || !etat.questionsSession?.length || !etat.questionCourante)
         return false;
     const saisieActive = selectionner('#reponseEcrite');
@@ -997,8 +998,9 @@ function enregistrerSessionEnCours() {
         etat.brouillonsEcrits = etat.brouillonsEcrits || new Map();
         etat.brouillonsEcrits.set(etat.questionCourante.id, saisieActive.value || '');
     }
-    const instantane = {
+    return {
         version: 2,
+        progressionAvantRevision: etat.progressionAvantRevision || null,
         enregistreLe: Date.now(),
         theme: etat.theme,
         etape: etat.etape,
@@ -1036,6 +1038,8 @@ function enregistrerSessionEnCours() {
         brouillonsEcrits: serialiserTableauAssociatif(etat.brouillonsEcrits),
         brouillonActivite: etat.brouillonActivite || null
     };
+}
+function ecrireInstantaneSessionEnCours(instantane) {
     try {
         const contenu = JSON.stringify(instantane);
         localStorage.setItem(CLE_SESSION_EN_COURS, contenu);
@@ -1046,6 +1050,17 @@ function enregistrerSessionEnCours() {
     catch (erreur) {
         return false;
     }
+}
+function enregistrerSessionEnCours() {
+    const instantane = creerInstantaneSessionEnCours();
+    return instantane ? ecrireInstantaneSessionEnCours(instantane) : false;
+}
+function terminerSauvegardeSession() {
+    // Le bilan de révision conserve le point de retour, y compris après une mise à jour.
+    if (etat.progressionAvantRevision)
+        return ecrireInstantaneSessionEnCours({ ...etat.progressionAvantRevision, retourDepuisBilanRevision: true });
+    effacerSessionEnCours();
+    return true;
 }
 function preparerMiseAJourAutomatique() {
     // Les actions ont déjà enregistré la progression. Ne pas réécrire ici
@@ -1069,8 +1084,7 @@ function chargerSessionEnCours() {
         return null;
     }
 }
-function restaurerSessionEnCours() {
-    const instantane = chargerSessionEnCours();
+function restaurerSessionEnCours(instantane = chargerSessionEnCours()) {
     if (!instantane)
         return false;
     const mission = String(instantane.mode || '').match(/^(sigles|mesures)-(parcours|revision|evaluation|entrainement|hasard)$/);
@@ -1113,6 +1127,11 @@ function restaurerSessionEnCours() {
             titreSession: configuration.titre, reperesSession: configuration.reperes || [],
             configurationDerniereSession: configuration };
     }
+    const progression = instantane.progressionAvantRevision;
+    etat.progressionAvantRevision = progression
+        && ['parcours', 'sigles-parcours', 'mesures-parcours'].includes(progression.mode)
+        && Array.isArray(progression.questions)
+        ? { ...progression, progressionAvantRevision: null } : null;
     etat.organisationSession = instantane.organisationSession || 'ordonne';
     etat.origineSessionAnalytics = instantane.origineSessionAnalytics || null;
     etat.perimetreRevision = instantane.perimetreRevision || null;
@@ -1819,7 +1838,12 @@ function restaurerRoute(route) {
             ouvrirChoixParcours({ depuisHistorique: true, forcerSortieQuestion: true });
     }
     else if (etatRoute.ecran === 'bilan') {
-        if (etat.questionsSession?.length)
+        const reprise = chargerSessionEnCours();
+        if (!etat.questionsSession?.length && reprise?.retourDepuisBilanRevision && restaurerSessionEnCours(reprise)) {
+            afficherEcran('question', { depuisHistorique: true, forcerSortieQuestion: true });
+            afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+        }
+        else if (etat.questionsSession?.length)
             afficherEcran('bilan', { depuisHistorique: true, forcerSortieQuestion: true });
         else
             afficherEcran('accueil', { depuisHistorique: true, forcerSortieQuestion: true, remplacerHistorique: true });
@@ -3997,6 +4021,8 @@ function lancerSession(session) {
         afficherNotification('Aucune question ne correspond à ce filtre.');
         return;
     }
+    etat.progressionAvantRevision = null;
+    etat.brouillonActivite = null;
     if (estSessionEvaluation()) etat.jokersSessionActifs = false;
     const questionsPreparees = preparerSession(session);
     etat.questionsSession = questionsPreparees;
@@ -5047,20 +5073,45 @@ function obtenirErreursActivesEtapeQuestion(question) {
 }
 function rejouerErreursEtapeCourante() {
     const question = etat.questionCourante;
-    if (!question)
+    if (!question || !['parcours', 'sigles-parcours', 'mesures-parcours'].includes(etat.mode)
+        || !obtenirErreursActivesEtapeQuestion(question).length)
         return;
+    const progression = creerInstantaneSessionEnCours();
+    if (!progression)
+        return;
+    // Une copie indépendante empêche les brouillons de révision de modifier le parcours suspendu.
+    const retour = JSON.parse(JSON.stringify(progression));
+    const questionsAvant = etat.questionsSession;
     const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
-    if (question.missionSigles) {
+    if (question.missionSigles)
         lancerRevisionEtapeSiglesDepuisQuestion(numeroEtape);
-        return;
-    }
-    if (question.missionMesures) {
+    else if (question.missionMesures)
         lancerRevisionEtapeMesuresDepuisQuestion(numeroEtape);
-        return;
+    else
+        lancerRevisionEtape(question.theme, numeroEtape);
+    if (etat.questionsSession !== questionsAvant) {
+        etat.progressionAvantRevision = retour;
+        actualiserBoutonReprendreEtapeDepuisDebut(etat.questionCourante);
+        enregistrerSessionEnCours();
     }
-    lancerRevisionEtape(question.theme, numeroEtape);
+}
+function reprendreProgressionApresRevision() {
+    const progression = etat.progressionAvantRevision;
+    if (!progression)
+        return false;
+    clearInterval(etat.identifiantMinuteur);
+    if (!restaurerSessionEnCours(progression))
+        return false;
+    afficherEcran('question', { remplacerHistorique: true, forcerSortieQuestion: true });
+    afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+    enregistrerSessionEnCours();
+    return true;
 }
 function reprendreEtapeDepuisDebutQuestion() {
+    if (etat.progressionAvantRevision) {
+        reprendreProgressionApresRevision();
+        return;
+    }
     const question = etat.questionCourante;
     if (!question)
         return;
@@ -5079,6 +5130,8 @@ function actualiserBoutonReprendreEtapeDepuisDebut(question) {
     const bouton = selectionner('#boutonReprendreEtapeDepuisDebut');
     if (!bouton)
         return;
+    const retourDisponible = Boolean(etat.progressionAvantRevision);
+    bouton.textContent = retourDisponible ? 'Reprendre ma progression' : 'Reprendre depuis le début';
     const modeParcours = question?.missionSigles
         ? obtenirModeMissionSigles() === 'parcours'
         : question?.missionMesures
@@ -5086,10 +5139,12 @@ function actualiserBoutonReprendreEtapeDepuisDebut(question) {
             : etat.mode === 'parcours';
     const visible = Boolean(question)
         && !question.estEvaluationFinale
-        && modeParcours;
+        && (modeParcours || retourDisponible);
     bouton.classList.toggle('masque', !visible);
     bouton.disabled = !visible;
-    bouton.setAttribute('aria-label', visible
+    bouton.setAttribute('aria-label', retourDisponible
+        ? 'Reprendre ma progression à la question où je me suis arrêté'
+        : visible
         ? `Reprendre l’étape ${Number(question.etape || 1)} depuis la première question`
         : 'Reprendre cette étape depuis la première question');
 }
@@ -6091,14 +6146,14 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const boutonRejouer = selectionner('#boutonRejouerMesErreurs');
     const jeu = estSessionMissionSigles() ? 'sigles' : estSessionMissionMesures() ? 'mesures' : 'parcours';
     if (boutonRejouer) {
-        boutonRejouer.textContent = 'Voir mes révisions';
-        boutonRejouer.onclick = () => afficherEcran(jeu === 'parcours' ? 'erreurs' : `${jeu}-revision`);
-        boutonRejouer.classList.toggle('masque', !obtenirElementsCategoriesRevision(jeu).length);
+        boutonRejouer.textContent = 'Refaire les questions à consolider';
+        boutonRejouer.onclick = rejouerQuestionsAConsoliderBilan;
+        boutonRejouer.classList.toggle('masque', !questionsAReprendre.length);
     }
     const retour = selectionner('#boutonRevenirAuParcours');
     retour?.classList.toggle('masque', jeu !== 'parcours');
     if (retour) retour.onclick = revenirAuParcoursDuBilan;
-    const aDesQuestionsAReprendre = questionsAReprendre.length > 0 && obtenirElementsCategoriesRevision(jeu).length > 0;
+    const aDesQuestionsAReprendre = questionsAReprendre.length > 0;
     boutonContinuer?.classList.toggle('principal', !aDesQuestionsAReprendre);
     boutonContinuer?.classList.toggle('secondaire', aDesQuestionsAReprendre);
     boutonRejouer?.classList.toggle('principal', aDesQuestionsAReprendre);
@@ -6505,10 +6560,44 @@ function terminerSession() {
     configurerBoutonContinuerBilan();
     actualiserProchaineDestinationBilan();
     afficherCarteVoyageFinale();
-    effacerSessionEnCours();
+    terminerSauvegardeSession();
     afficherEcran('bilan', { remplacerHistorique: true });
     actualiserAccueil();
     lancerCelebrationBilan(bilan.celebration);
+}
+
+function rejouerQuestionsAConsoliderBilan() {
+    const questions = obtenirQuestionsAConsoliderSession();
+    if (!questions.length)
+        return;
+    const progression = etat.progressionAvantRevision;
+    const titre = 'Questions à consolider de ma session';
+    if (estSessionMissionSigles() || estSessionMissionMesures()) {
+        const sigles = estSessionMissionSigles();
+        const cleMeta = sigles ? 'missionSiglesMeta' : 'missionMesuresMeta';
+        const cibles = [...new Map(questions.flatMap(question => sigles
+            ? obtenirCiblesMissionQuestion(question) : obtenirCiblesMissionMesuresQuestion(question))
+            .map(cible => [sigles ? cible.sigle : cible.cle, cible])).values()];
+        const reprises = questions.map(question => ({ ...question, estEvaluationFinale: false,
+            [cleMeta]: { ...question[cleMeta], mode: 'revision' } }));
+        const configuration = { mode: 'revision', questions: reprises, questionsDejaConverties: true,
+            jokersActifs: false, titre };
+        if (sigles)
+            preparerSessionMissionSiglesNative({ ...configuration, sigles: cibles });
+        else
+            preparerSessionMissionMesuresNative({ ...configuration, reperes: cibles });
+    }
+    else {
+        etat.mode = 'revision';
+        etat.perimetreRevision = null;
+        etat.origineSessionAnalytics = 'revision_des_erreurs';
+        etat.jokersSessionActifs = false;
+        etat.chronometreSessionActif = false;
+        lancerSession(questions);
+    }
+    etat.progressionAvantRevision = progression || null;
+    actualiserBoutonReprendreEtapeDepuisDebut(etat.questionCourante);
+    enregistrerSessionEnCours();
 }
 function afficherEtatVideErreurs(zone, aucunePartieJouee) {
     if (aucunePartieJouee) {
@@ -7527,7 +7616,7 @@ function convertirQuestionMissionSiglesVersPJJoue(questionSigles, index, configu
         mauvaisesReponses: options.filter(option => option.correcte !== true).map(option => option.texte)
     };
 }
-function preparerSessionMissionSiglesNative({ mode, etape = null, sigles, questions, jokersActifs = true, titre, chronoActif = false, secondesQuestion = 30 }) {
+function preparerSessionMissionSiglesNative({ questionsDejaConverties = false, mode, etape = null, sigles, questions, jokersActifs = true, titre, chronoActif = false, secondesQuestion = 30 }) {
     const configuration = { domaine:obtenirDomaineSigles(), mode, etape, sigles:[...sigles], jokersActifs, titre, chronoActif, secondesQuestion };
     etatJeuSigles = {
         ...creerEtatJeuSigles(),
@@ -7551,7 +7640,8 @@ function preparerSessionMissionSiglesNative({ mode, etape = null, sigles, questi
     etat.chronometreSessionActif = chronoActif === true;
     etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(secondesQuestion) || 30));
     etat.missionSiglesConfiguration = configuration;
-    const questionsPJJoue = questions.map((question, index) => convertirQuestionMissionSiglesVersPJJoue(question, index, configuration));
+    const questionsPJJoue = questionsDejaConverties ? questions
+        : questions.map((question, index) => convertirQuestionMissionSiglesVersPJJoue(question, index, configuration));
     lancerSession(questionsPJJoue);
 }
 function obtenirCiblesMissionQuestion(question) {
@@ -7663,12 +7753,10 @@ function terminerSessionMissionSiglesNative() {
     const continuer = selectionner('#boutonContinuer');
     continuer.textContent = 'Retour à Mission Sigles →';
     continuer.onclick = () => { etat.missionSiglesConfiguration = null; afficherEcran('sigles', { remplacerHistorique:true }); };
-    const rejouer = selectionner('#boutonRejouerMesErreurs');
-    if (rejouer) rejouer.onclick = () => afficherEcran('sigles-revision');
     const destination = selectionner('#prochaineDestinationBilan');
     if (destination) destination.textContent = mode === 'parcours' ? 'Continue Mission Sigles ou rejoue les sigles à consolider.' : 'Choisis une nouvelle session dans Mission Sigles.';
     selectionner('#carteVoyageFinale')?.classList.add('masque');
-    effacerSessionEnCours();
+    terminerSauvegardeSession();
     afficherEcran('bilan', { remplacerHistorique:true });
     actualiserAccueilSigles();
     lancerCelebrationBilan(celebration);
@@ -8186,7 +8274,7 @@ function convertirQuestionMissionMesuresVersPJJoue(questionMesures, index, confi
     const correcte = options.find(option => option.correcte === true);
     return { ...base, bonneReponse:correcte?.texte || '', mauvaisesReponses:options.filter(option => option.correcte !== true).map(option => option.texte) };
 }
-function preparerSessionMissionMesuresNative({ mode, etape=null, reperes, questions, jokersActifs=true, titre, chronoActif=false, secondesQuestion=30, organisation='ordonne' }) {
+function preparerSessionMissionMesuresNative({ questionsDejaConverties = false, mode, etape=null, reperes, questions, jokersActifs=true, titre, chronoActif=false, secondesQuestion=30, organisation='ordonne' }) {
     const configuration = { mode, etape, reperes:[...reperes], jokersActifs, titre, chronoActif, secondesQuestion, organisation };
     etatJeuMesures = { ...creerEtatJeuMesures(), mode, etape, titreSession:titre, reperesSession:[...reperes], questions:[...questions], configurationDerniereSession:configuration };
     etat.mode = `mesures-${mode}`;
@@ -8199,7 +8287,8 @@ function preparerSessionMissionMesuresNative({ mode, etape=null, reperes, questi
     etat.chronometreSessionActif = chronoActif === true;
     etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(secondesQuestion) || 30));
     etat.missionMesuresConfiguration = configuration;
-    lancerSession(questions.map((question,index) => convertirQuestionMissionMesuresVersPJJoue(question,index,configuration)));
+    lancerSession(questionsDejaConverties ? questions
+        : questions.map((question,index) => convertirQuestionMissionMesuresVersPJJoue(question,index,configuration)));
 }
 function estSessionMissionMesures() { return String(etat?.mode || '').startsWith('mesures-'); }
 function obtenirModeMissionMesures() { return estSessionMissionMesures() ? String(etat.mode).replace(/^mesures-/, '') : null; }
@@ -8379,9 +8468,8 @@ function terminerSessionMissionMesuresNative() {
     selectionner('#scoreBilan').textContent=`${pourcentage}%`; selectionner('#bonnesReponsesBilan').textContent=`${etat.score}/${total}`; selectionner('#meilleureSerieBilan').textContent=etat.meilleureSerie; selectionner('#contexteBilan').textContent=`Mission Mesures · ${titre}`; selectionner('#titreBilan').textContent=titre; selectionner('#rangBilan').textContent=resultat;
     afficherErreursBilan(obtenirQuestionsAConsoliderSession(),passees);
     const continuer=selectionner('#boutonContinuer'); continuer.textContent='Retour à Mission Mesures →'; continuer.onclick=()=>{etat.missionMesuresConfiguration=null;afficherEcran('mesures',{remplacerHistorique:true});};
-    const rejouer=selectionner('#boutonRejouerMesErreurs'); if(rejouer) rejouer.onclick=()=>afficherEcran('mesures-revision');
     selectionner('#prochaineDestinationBilan') && (selectionner('#prochaineDestinationBilan').textContent='Continue Mission Mesures ou retravaille les repères à consolider.');
-    selectionner('#carteVoyageFinale')?.classList.add('masque'); effacerSessionEnCours(); afficherEcran('bilan',{remplacerHistorique:true}); actualiserAccueilMesures(); lancerCelebrationBilan(celebration);
+    selectionner('#carteVoyageFinale')?.classList.add('masque'); terminerSauvegardeSession(); afficherEcran('bilan',{remplacerHistorique:true}); actualiserAccueilMesures(); lancerCelebrationBilan(celebration);
 }
 
 function initialiserJeuMesures() {
@@ -8876,7 +8964,7 @@ function initialiserFenetreJokers() {
 initialiserFenetreJokers();
 selectionner('#boutonRetour').onclick = revenirEnArriere;
 selectionner('#boutonReprendreEtapeDepuisDebut')?.addEventListener('click', reprendreEtapeDepuisDebutQuestion);
-selectionner('#boutonRejouerMesErreurs').onclick = () => afficherEcran('erreurs');
+selectionner('#boutonRejouerMesErreurs').onclick = rejouerQuestionsAConsoliderBilan;
 selectionner('#boutonRevenirAuParcours').onclick = revenirAuParcoursDuBilan;
 selectionner('#boutonOuvrirParcours').onclick = () => ouvrirChoixParcours();
 selectionner('#boutonExporterMaProgression').onclick = exporterProgression;
@@ -9065,7 +9153,7 @@ const TITRES_BOUTONS_SURVOL = Object.freeze({
     boutonReinitialiserValidationsSansJoker: 'Réinitialiser les validations sans joker de cette étape. Les questions travaillées, les questions à consolider et la progression générale restent conservées.',
     boutonJokers: 'Ouvrir les aides disponibles pour cette question.',
     boutonPasser: 'Passer cette question : elle restera à consolider et ne sera pas validée.',
-    boutonRejouerMesErreurs: 'Voir les questions à consolider dans le jeu en cours.',
+    boutonRejouerMesErreurs: 'Refaire directement les questions ratées, passées ou à consolider de cette session.',
     boutonRevenirAuParcours: 'Retourner à la carte du parcours.',
     boutonRefermerSupports: 'Fermer toutes les fiches de support ouvertes.',
     boutonOuvrirParcours: 'Choisir un parcours pour consulter sa progression détaillée.',

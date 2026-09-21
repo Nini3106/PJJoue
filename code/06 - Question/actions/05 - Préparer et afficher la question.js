@@ -326,20 +326,45 @@ function obtenirErreursActivesEtapeQuestion(question) {
 }
 function rejouerErreursEtapeCourante() {
     const question = etat.questionCourante;
-    if (!question)
+    if (!question || !['parcours', 'sigles-parcours', 'mesures-parcours'].includes(etat.mode)
+        || !obtenirErreursActivesEtapeQuestion(question).length)
         return;
+    const progression = creerInstantaneSessionEnCours();
+    if (!progression)
+        return;
+    // Une copie indépendante empêche les brouillons de révision de modifier le parcours suspendu.
+    const retour = JSON.parse(JSON.stringify(progression));
+    const questionsAvant = etat.questionsSession;
     const numeroEtape = Number(question.missionSiglesMeta?.numeroEtape || question.missionMesuresMeta?.numeroEtape || question.etape || 1);
-    if (question.missionSigles) {
+    if (question.missionSigles)
         lancerRevisionEtapeSiglesDepuisQuestion(numeroEtape);
-        return;
-    }
-    if (question.missionMesures) {
+    else if (question.missionMesures)
         lancerRevisionEtapeMesuresDepuisQuestion(numeroEtape);
-        return;
+    else
+        lancerRevisionEtape(question.theme, numeroEtape);
+    if (etat.questionsSession !== questionsAvant) {
+        etat.progressionAvantRevision = retour;
+        actualiserBoutonReprendreEtapeDepuisDebut(etat.questionCourante);
+        enregistrerSessionEnCours();
     }
-    lancerRevisionEtape(question.theme, numeroEtape);
+}
+function reprendreProgressionApresRevision() {
+    const progression = etat.progressionAvantRevision;
+    if (!progression)
+        return false;
+    clearInterval(etat.identifiantMinuteur);
+    if (!restaurerSessionEnCours(progression))
+        return false;
+    afficherEcran('question', { remplacerHistorique: true, forcerSortieQuestion: true });
+    afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+    enregistrerSessionEnCours();
+    return true;
 }
 function reprendreEtapeDepuisDebutQuestion() {
+    if (etat.progressionAvantRevision) {
+        reprendreProgressionApresRevision();
+        return;
+    }
     const question = etat.questionCourante;
     if (!question)
         return;
@@ -358,6 +383,8 @@ function actualiserBoutonReprendreEtapeDepuisDebut(question) {
     const bouton = selectionner('#boutonReprendreEtapeDepuisDebut');
     if (!bouton)
         return;
+    const retourDisponible = Boolean(etat.progressionAvantRevision);
+    bouton.textContent = retourDisponible ? 'Reprendre ma progression' : 'Reprendre depuis le début';
     const modeParcours = question?.missionSigles
         ? obtenirModeMissionSigles() === 'parcours'
         : question?.missionMesures
@@ -365,10 +392,12 @@ function actualiserBoutonReprendreEtapeDepuisDebut(question) {
             : etat.mode === 'parcours';
     const visible = Boolean(question)
         && !question.estEvaluationFinale
-        && modeParcours;
+        && (modeParcours || retourDisponible);
     bouton.classList.toggle('masque', !visible);
     bouton.disabled = !visible;
-    bouton.setAttribute('aria-label', visible
+    bouton.setAttribute('aria-label', retourDisponible
+        ? 'Reprendre ma progression à la question où je me suis arrêté'
+        : visible
         ? `Reprendre l’étape ${Number(question.etape || 1)} depuis la première question`
         : 'Reprendre cette étape depuis la première question');
 }

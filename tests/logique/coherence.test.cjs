@@ -141,3 +141,58 @@ test('La culpabilité seule est acceptée pour la décision acquise, en apprenti
   for(const [reponse,attendu]of cas)
    assert.equal(run(`${validation}(${JSON.stringify(reponse)},QUESTIONS.find(q=>q.id===1072))`),attendu,`${validation}: ${reponse}`);
 });
+
+const preparerRetourRevision=jeu=>`init();
+ ${jeu==='sigles'?`const cs=obtenirSiglesEtape(6).slice(0,4);preparerSessionMissionSiglesNative({mode:'parcours',etape:6,sigles:cs,questions:creerQuestionsRevisionSigles(cs),titre:'Test'});`:
+ jeu==='mesures'?`const cs=obtenirReperesMesuresEtape(1).slice(0,4);preparerSessionMissionMesuresNative({mode:'parcours',etape:1,reperes:cs,questions:creerQuestionsRevisionMesures(cs),titre:'Test'});`:''}
+ finaliserReponse(false,'erreur');afficherQuestionSuivante();
+ finaliserReponse(true,etat.questionCourante.bonneReponse);afficherQuestionSuivante();
+ etat.chronometreSessionActif=true;etat.tempsRestant=11;
+ selectionner('#reponseEcrite').value='brouillon conservé';
+ etat.brouillonActivite={identifiantQuestion:etat.questionCourante.id,elementsSelectionnes:['a']};`;
+
+for(const jeu of ['parcours','sigles','mesures'])test(`${jeu} : revenir exactement au parcours après une révision et une mise à jour`,()=>{
+ const m=creerMoteur();m.run(preparerRetourRevision(jeu));
+ const avant=normaliser(m.run('({mode:etat.mode,index:etat.indexQuestion,id:etat.questionCourante.id,score:etat.score,questions:etat.questionsSession.map(q=>q.id)})'));
+ m.run('rejouerErreursEtapeCourante()');
+ assert.equal(m.nodes.get('#boutonReprendreEtapeDepuisDebut').textContent,'Reprendre ma progression');
+ assert.equal(m.run('etat.progressionAvantRevision.indexQuestion'),2);
+ m.run("etat.brouillonActivite={identifiantQuestion:etat.questionCourante.id,elementsSelectionnes:['b']};preparerMiseAJourAutomatique()");
+ const n=creerMoteur({storage:m.storage,onglet:m.onglet});
+ assert.equal(n.run('restaurerSessionEnCours()'),true);
+ assert.equal(n.run('reprendreProgressionApresRevision()'),true);
+ assert.deepEqual(normaliser(n.run('({mode:etat.mode,index:etat.indexQuestion,id:etat.questionCourante.id,score:etat.score,questions:etat.questionsSession.map(q=>q.id)})')),avant);
+ assert.equal(n.run('etat.tempsRestant'),11);
+ assert.deepEqual(normaliser(n.run('etat.brouillonActivite.elementsSelectionnes')),['a']);
+ // Le faux DOM ne réaffiche pas le brouillon ; vérifier la copie avant son prochain enregistrement.
+ assert.equal(m.run('etat.progressionAvantRevision.brouillonsEcrits.find(([id])=>id===etat.progressionAvantRevision.questions[2])[1]'),'brouillon conservé');
+ n.run('actualiserBoutonReprendreEtapeDepuisDebut(etat.questionCourante)');
+ assert.equal(n.nodes.get('#boutonReprendreEtapeDepuisDebut').textContent,'Reprendre depuis le début');
+ assert.equal(n.run('etat.progressionAvantRevision'),null);
+});
+
+for(const jeu of ['parcours','sigles','mesures'])test(`${jeu} : le raccourci du bilan rejoue seulement les activités à consolider de cette session`,()=>{
+ const m=creerMoteur();m.run(preparerRetourRevision(jeu));
+ m.run("etat.questionsPassees.add(etat.questionCourante.id);etat.reponsesSession.set(etat.questionCourante.id,{statut:'passee'});afficherQuestionSuivante();etat.jokers.indice=false;finaliserReponse(true,etat.questionCourante.bonneReponse);etat.ecran='bilan'");
+ const attendues=normaliser(m.run('obtenirQuestionsAConsoliderSession().map(q=>[q.id,q.enonce])'));
+ assert.equal(attendues.length,3);
+ m.run('rejouerQuestionsAConsoliderBilan()');
+ assert.equal(m.run('etat.ecran'),'question');
+ assert.equal(m.run('etat.mode'),jeu==='parcours'?'revision':`${jeu}-revision`);
+ assert.deepEqual(normaliser(m.run('etat.questionsSession.map(q=>[q.id,q.enonce])')),attendues);
+ assert.equal(m.run('etat.score'),0);
+ assert.equal(m.run('etat.jokersSessionActifs'),false);
+ assert.equal(m.run('etat.progressionAvantRevision'),null);
+ const n=creerMoteur({storage:m.storage,onglet:m.onglet});
+ assert.equal(n.run('restaurerSessionEnCours()'),true);
+ assert.deepEqual(normaliser(n.run('etat.questionsSession.map(q=>[q.id,q.enonce])')),attendues);
+});
+
+test('Un nouveau parcours ou un import ne conserve pas un ancien retour de révision',()=>{
+ const m=creerMoteur();m.run(preparerRetourRevision('parcours'));
+ m.run('rejouerErreursEtapeCourante();lancerSession(obtenirQuestionsEtape("procedure_ordinaire",2))');
+ assert.equal(m.run('etat.progressionAvantRevision'),null);
+ m.run(preparerRetourRevision('parcours'));
+ m.run('rejouerErreursEtapeCourante();effacerSessionEnCours()');
+ assert.equal(m.run('etat.progressionAvantRevision'),null);
+});

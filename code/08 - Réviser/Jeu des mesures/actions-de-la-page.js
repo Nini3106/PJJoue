@@ -329,7 +329,7 @@ function convertirQuestionMissionMesuresVersPJJoue(questionMesures, index, confi
     const correcte = options.find(option => option.correcte === true);
     return { ...base, bonneReponse:correcte?.texte || '', mauvaisesReponses:options.filter(option => option.correcte !== true).map(option => option.texte) };
 }
-function preparerSessionMissionMesuresNative({ mode, etape=null, reperes, questions, jokersActifs=true, titre, chronoActif=false, secondesQuestion=30, organisation='ordonne' }) {
+function preparerSessionMissionMesuresNative({ questionsDejaConverties = false, mode, etape=null, reperes, questions, jokersActifs=true, titre, chronoActif=false, secondesQuestion=30, organisation='ordonne' }) {
     const configuration = { mode, etape, reperes:[...reperes], jokersActifs, titre, chronoActif, secondesQuestion, organisation };
     etatJeuMesures = { ...creerEtatJeuMesures(), mode, etape, titreSession:titre, reperesSession:[...reperes], questions:[...questions], configurationDerniereSession:configuration };
     etat.mode = `mesures-${mode}`;
@@ -342,7 +342,8 @@ function preparerSessionMissionMesuresNative({ mode, etape=null, reperes, questi
     etat.chronometreSessionActif = chronoActif === true;
     etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(secondesQuestion) || 30));
     etat.missionMesuresConfiguration = configuration;
-    lancerSession(questions.map((question,index) => convertirQuestionMissionMesuresVersPJJoue(question,index,configuration)));
+    lancerSession(questionsDejaConverties ? questions
+        : questions.map((question,index) => convertirQuestionMissionMesuresVersPJJoue(question,index,configuration)));
 }
 function estSessionMissionMesures() { return String(etat?.mode || '').startsWith('mesures-'); }
 function obtenirModeMissionMesures() { return estSessionMissionMesures() ? String(etat.mode).replace(/^mesures-/, '') : null; }
@@ -522,9 +523,8 @@ function terminerSessionMissionMesuresNative() {
     selectionner('#scoreBilan').textContent=`${pourcentage}%`; selectionner('#bonnesReponsesBilan').textContent=`${etat.score}/${total}`; selectionner('#meilleureSerieBilan').textContent=etat.meilleureSerie; selectionner('#contexteBilan').textContent=`Mission Mesures · ${titre}`; selectionner('#titreBilan').textContent=titre; selectionner('#rangBilan').textContent=resultat;
     afficherErreursBilan(obtenirQuestionsAConsoliderSession(),passees);
     const continuer=selectionner('#boutonContinuer'); continuer.textContent='Retour à Mission Mesures →'; continuer.onclick=()=>{etat.missionMesuresConfiguration=null;afficherEcran('mesures',{remplacerHistorique:true});};
-    const rejouer=selectionner('#boutonRejouerMesErreurs'); if(rejouer) rejouer.onclick=()=>afficherEcran('mesures-revision');
     selectionner('#prochaineDestinationBilan') && (selectionner('#prochaineDestinationBilan').textContent='Continue Mission Mesures ou retravaille les repères à consolider.');
-    selectionner('#carteVoyageFinale')?.classList.add('masque'); effacerSessionEnCours(); afficherEcran('bilan',{remplacerHistorique:true}); actualiserAccueilMesures(); lancerCelebrationBilan(celebration);
+    selectionner('#carteVoyageFinale')?.classList.add('masque'); terminerSauvegardeSession(); afficherEcran('bilan',{remplacerHistorique:true}); actualiserAccueilMesures(); lancerCelebrationBilan(celebration);
 }
 
 function initialiserJeuMesures() {

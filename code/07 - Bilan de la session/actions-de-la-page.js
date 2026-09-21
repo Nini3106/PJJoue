@@ -130,14 +130,14 @@ function afficherErreursBilan(questionsAReprendre, nombreQuestionsPassees) {
     const boutonRejouer = selectionner('#boutonRejouerMesErreurs');
     const jeu = estSessionMissionSigles() ? 'sigles' : estSessionMissionMesures() ? 'mesures' : 'parcours';
     if (boutonRejouer) {
-        boutonRejouer.textContent = 'Voir mes révisions';
-        boutonRejouer.onclick = () => afficherEcran(jeu === 'parcours' ? 'erreurs' : `${jeu}-revision`);
-        boutonRejouer.classList.toggle('masque', !obtenirElementsCategoriesRevision(jeu).length);
+        boutonRejouer.textContent = 'Refaire les questions à consolider';
+        boutonRejouer.onclick = rejouerQuestionsAConsoliderBilan;
+        boutonRejouer.classList.toggle('masque', !questionsAReprendre.length);
     }
     const retour = selectionner('#boutonRevenirAuParcours');
     retour?.classList.toggle('masque', jeu !== 'parcours');
     if (retour) retour.onclick = revenirAuParcoursDuBilan;
-    const aDesQuestionsAReprendre = questionsAReprendre.length > 0 && obtenirElementsCategoriesRevision(jeu).length > 0;
+    const aDesQuestionsAReprendre = questionsAReprendre.length > 0;
     boutonContinuer?.classList.toggle('principal', !aDesQuestionsAReprendre);
     boutonContinuer?.classList.toggle('secondaire', aDesQuestionsAReprendre);
     boutonRejouer?.classList.toggle('principal', aDesQuestionsAReprendre);
@@ -544,8 +544,42 @@ function terminerSession() {
     configurerBoutonContinuerBilan();
     actualiserProchaineDestinationBilan();
     afficherCarteVoyageFinale();
-    effacerSessionEnCours();
+    terminerSauvegardeSession();
     afficherEcran('bilan', { remplacerHistorique: true });
     actualiserAccueil();
     lancerCelebrationBilan(bilan.celebration);
+}
+
+function rejouerQuestionsAConsoliderBilan() {
+    const questions = obtenirQuestionsAConsoliderSession();
+    if (!questions.length)
+        return;
+    const progression = etat.progressionAvantRevision;
+    const titre = 'Questions à consolider de ma session';
+    if (estSessionMissionSigles() || estSessionMissionMesures()) {
+        const sigles = estSessionMissionSigles();
+        const cleMeta = sigles ? 'missionSiglesMeta' : 'missionMesuresMeta';
+        const cibles = [...new Map(questions.flatMap(question => sigles
+            ? obtenirCiblesMissionQuestion(question) : obtenirCiblesMissionMesuresQuestion(question))
+            .map(cible => [sigles ? cible.sigle : cible.cle, cible])).values()];
+        const reprises = questions.map(question => ({ ...question, estEvaluationFinale: false,
+            [cleMeta]: { ...question[cleMeta], mode: 'revision' } }));
+        const configuration = { mode: 'revision', questions: reprises, questionsDejaConverties: true,
+            jokersActifs: false, titre };
+        if (sigles)
+            preparerSessionMissionSiglesNative({ ...configuration, sigles: cibles });
+        else
+            preparerSessionMissionMesuresNative({ ...configuration, reperes: cibles });
+    }
+    else {
+        etat.mode = 'revision';
+        etat.perimetreRevision = null;
+        etat.origineSessionAnalytics = 'revision_des_erreurs';
+        etat.jokersSessionActifs = false;
+        etat.chronometreSessionActif = false;
+        lancerSession(questions);
+    }
+    etat.progressionAvantRevision = progression || null;
+    actualiserBoutonReprendreEtapeDepuisDebut(etat.questionCourante);
+    enregistrerSessionEnCours();
 }
