@@ -545,3 +545,11 @@ Avant publication, `PREPARER_PJJOUE_AVANT_PUSH.bat` doit reconstruire les donné
 - Le dé conserve son SVG et sa rotation, dans une zone de 76 px sur ordinateur et 64 px sur mobile.
 - Respecter la disposition de la maquette validée : choix d’entraînement en pleine largeur sous chaque titre ; Progression en deux colonnes de hauteur naturelle, séparées par un trait, avec rail sur toute la largeur du résumé et statistiques alignées à gauche. Ne pas forcer les hauteurs des colonnes ou de leurs premiers blocs.
 - Le chrono se règle uniquement sur la carte Question : 15 secondes, puis +5 secondes par clic, pour un budget maximal de 30 secondes. Son contrôle de portée active toutes les questions de la session. Le temps restant et la portée sont conservés à la reprise.
+
+### Audit visuel appliqué — conservation des actions
+
+- Le style, les proportions et la disposition des boutons peuvent évoluer ; toutes les actions et leurs conditions de disponibilité sont conservées.
+- La palette et les couleurs canoniques des parcours/étapes restent inchangées.
+- Les grands regroupements décoratifs sont ouverts ; les contrôles interactifs restent reconnaissables, avec sélection, survol et focus visibles.
+- Les actions du bilan précèdent les détails de consolidation ; les sauvegardes, scores, validations, reprises, jokers et chronomètres conservent leurs règles.
+- Les recherches des glossaires et des sources filtrent seulement l’affichage. Toutes les entrées, leurs liens et les textes d’origine restent accessibles après effacement de la recherche.

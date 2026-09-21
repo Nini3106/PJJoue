@@ -63,7 +63,7 @@
     border-radius:50%;
     color:var(--texte-sur-jaune);
     background:var(--jaune-interface);
-    font-weight:900;
+    font-weight:700;
     font-size:.95rem;
     align-self:center;
 }
@@ -89,7 +89,7 @@
     border-color:#4f8cff;
     background:rgba(79,140,255,.16);
     box-shadow:inset 0 0 0 1px #4f8cff;
-    font-weight:900;
+    font-weight:700;
 }
 #entrainement .entrainement-nombre-choix .choix-bouton:hover,
 #entrainement .entrainement-nombre-choix .choix-bouton:focus-visible,
@@ -128,7 +128,7 @@
 #entrainement .entrainement-perimetre-choix .choix-bouton span {
     display:block;
     font-size:.87rem;
-    font-weight:800;
+    font-weight:650;
 }
 #entrainement .entrainement-perimetre-choix .choix-bouton span {
     color:var(--texte-secondaire);
@@ -333,7 +333,7 @@
     background:transparent;
     list-style:none;
     cursor:pointer;
-    font-weight:750;
+    font-weight:650;
     box-shadow:none;
     font-size:.88rem;
 }
@@ -383,7 +383,7 @@
 #entrainement .entrainement-option > span,
 #entrainement .entrainement-chronometre-secondes > span {
     color:var(--texte);
-    font-weight:850;
+    font-weight:650;
     font-size:.88rem;
 }
 #entrainement .entrainement-bascule-groupe,
@@ -473,7 +473,7 @@
     min-height:48px;
     padding:9px 20px;
     border-radius:12px;
-    font-weight:900;
+    font-weight:700;
 }
 #entrainement .entrainement-hasard-actions .principal {
     border-color:var(--entrainement-hasard-accent);
@@ -579,5 +579,34 @@
     #entrainement .choix-bouton,
     #entrainement .option-bouton,
     #entrainement .entrainement-lancer { min-height:44px; }
+}
+
+/* Audit visuel : hiérarchie, espaces et cadres allégés. */
+#entrainement { max-width:none; padding-inline:0; min-height:0; }
+#entrainement .entrainement-entete { margin-bottom:24px; }
+#entrainement .entrainement-hasard { padding:8px 0 24px; gap:18px; }
+#entrainement .entrainement-hasard h2 { font-weight:650; font-size:1.35rem; }
+#entrainement .entrainement-etape-config,
+#entrainement .entrainement-etape-config.entrainement-etape-modes { padding-block:23px; gap:16px 12px; }
+#entrainement .entrainement-etape-config h2 { font-size:1.3rem; font-weight:650; }
+#entrainement .entrainement-perimetre-choix .choix-bouton { background:transparent; border-width:0 0 1px 3px; border-radius:6px; }
+#entrainement .entrainement-perimetre-choix .choix-bouton b { font-weight:650; line-height:1.4; }
+#entrainement .entrainement-nombre-config { gap:12px 18px; }
+#entrainement #curseurNombreQuestions { accent-color:#9fc2ff; }
+#entrainement .entrainement-carte { grid-template-rows:auto auto auto auto; }
+#entrainement .entrainement-carte > p { min-height:0; }
+#entrainement .entrainement-options-avancees { margin-top:4px; align-self:start; }
+#entrainement .entrainement-options-avancees summary { min-height:36px; padding-block:6px; font-weight:600; }
+#entrainement .entrainement-options-avancees .entrainement-options { margin-top:0; }
+#entrainement .entrainement-option { grid-template-columns:auto 1fr; gap:16px; }
+#entrainement .entrainement-options-avancees + .entrainement-lancer { margin-top:8px; }
+#entrainement .option-bouton { min-height:44px; padding:8px 14px; border-radius:8px; }
+#entrainement .option-bouton[aria-pressed="true"] { border-color:var(--entrainement-accent,#9fc2ff); background:rgba(79,140,255,.2); }
+@media (max-width:620px) {
+    #entrainement .entrainement-hasard { gap:12px; }
+    #entrainement .entrainement-etape-config,
+    #entrainement .entrainement-etape-config.entrainement-etape-modes { padding-block:20px; }
+    #entrainement .entrainement-grille { gap:22px; }
+    #entrainement .entrainement-carte + .entrainement-carte { padding-top:22px; }
 }
 /* === FIN MORCEAU CSS === */

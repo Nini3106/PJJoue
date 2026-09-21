@@ -125,7 +125,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         self.assertRegex(mesures, re.compile(r"#mesures \.mesures-accueil-entete,\s*#mesures \.mesures-page-secondaire-entete\s*\{[^}]*text-align:center;", re.S))
         self.assertRegex(guides, re.compile(r"\.guides-entete\s*\{[^}]*text-align:center;", re.S))
         self.assertRegex(guides, re.compile(r"\.guides-entete h1\s*\{[^}]*font-size:clamp\(1\.55rem,2\.5vw,2\.15rem\);", re.S))
-        self.assertRegex(statique, re.compile(r"\.guide-site-entete\.menu-guide-actif \.guide-navigation-principale a\s*\{[^}]*font-size:\s*1rem;[^}]*font-weight:\s*800;", re.S))
+        self.assertRegex(statique, re.compile(r"\.guide-site-entete\.menu-guide-actif \.guide-navigation-principale a\s*\{[^}]*font-size:\s*1rem;[^}]*font-weight:\s*600;", re.S))
 
     def test_entrainements_missions_acceptent_les_intitules_longs_et_hasard_garde_la_couleur_du_de(self) -> None:
         entrainement = (CODE / "05 - Entraînement libre/style-configurateur-entrainement.css").read_text(encoding="utf-8")
@@ -303,7 +303,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         general = (CODE / "01 - Éléments communs/style-general-pjjoue.css").read_text(encoding="utf-8")
         statique = (CODE / "01 - Éléments communs/static-pages.css").read_text(encoding="utf-8")
         self.assertRegex(statique, re.compile(r"\.guide-site-entete\.menu-guide-actif \.guide-navigation-principale a:hover \{ color: var\(--text\); background: var\(--surface-raised\); \}"))
-        self.assertRegex(general, re.compile(r"header\.entete \.navigation button,\s*header\.entete \.navigation \.navigation-lien \{[^}]*color: #d5e6f7;[^}]*font-weight: 800;", re.S))
+        self.assertRegex(general, re.compile(r"header\.entete \.navigation button,\s*header\.entete \.navigation \.navigation-lien \{[^}]*color: #d5e6f7;[^}]*font-weight: 600;", re.S))
         self.assertRegex(general, re.compile(r"header\.entete \.navigation button:hover,[^{]+\{[^}]*color: #fff;[^}]*border-color: transparent;[^}]*background: #1b568f;", re.S))
 
 

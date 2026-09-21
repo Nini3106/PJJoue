@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
  <head>
- <script src="ressources/consentement-analytics.js?v=14c2341ff308" defer></script>
- <script src="ressources/navigation-locale.js?v=14c2341ff308" defer></script>
+ <script src="ressources/consentement-analytics.js?v=8373a938202c" defer></script>
+ <script src="ressources/navigation-locale.js?v=8373a938202c" defer></script>
 <meta charset="utf-8"/>
   <base href="./"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
@@ -26,8 +26,8 @@
   <meta content="summary_large_image" name="twitter:card"/>
   <meta content="default-src 'self'; script-src 'self' 'sha256-GW2oYsRTeWShIjkgm2IMeEluvBbLcOrEwaq3oOAEGIM=' 'sha256-qh/c/CvY76sHcEVgWMfQQGZzfeZoitbxce1/RhQ+kWw=' 'sha256-ItAmAWRxciYKfMfcAanjDGttuQ/nghlVDCGi8dDLT9I=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; font-src 'self'; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src https://www.googletagmanager.com" http-equiv="Content-Security-Policy"/>
   <title>Quiz CJPM — Justice pénale des mineurs</title>
-  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=14c2341ff308">
-  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=14c2341ff308">
+  <link rel="stylesheet" href="ressources/styles/pjjoue-principal.css?v=8373a938202c">
+  <link rel="stylesheet" href="ressources/styles/95-consentement.css?v=8373a938202c">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Quiz CJPM","alternateName":"PJJoue","url":"https://pjjoue.fr/","description":"Révise le CJPM avec des quiz sur la justice pénale des mineurs, les mesures éducatives et les peines. 960 questions au total, option PJJ comprise.","inLanguage":"fr-FR","publisher":{"@type":"Person","name":"Dev'Ines"}}</script>
 </head>
  <body data-ecran-actif="accueil">
@@ -296,7 +296,7 @@
             <details class="entrainement-options-avancees" open>
               <summary>Options avancées</summary>
               <div class="entrainement-options">
-                <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic"><button id="boutonEntrainementOrdonneAvecJokers" class="option-bouton" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementOrdonneSansJokers" class="option-bouton" data-valeur="non" type="button">Sans</button></div></div>
+                <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" role="group" aria-label="Jokers"><button id="boutonEntrainementOrdonneAvecJokers" class="option-bouton actif" aria-pressed="true" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementOrdonneSansJokers" class="option-bouton" aria-pressed="false" data-valeur="non" type="button">Sans</button></div></div>
               </div>
             </details>
             <button id="boutonLancerEntrainementOrdonne" class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">Commencer →</button>
@@ -307,7 +307,7 @@
             <details class="entrainement-options-avancees" open>
               <summary>Options avancées</summary>
               <div class="entrainement-options">
-                <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic"><button id="boutonEntrainementMelangeAvecJokers" class="option-bouton" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementMelangeSansJokers" class="option-bouton" data-valeur="non" type="button">Sans</button></div></div>
+                <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" role="group" aria-label="Jokers"><button id="boutonEntrainementMelangeAvecJokers" class="option-bouton actif" aria-pressed="true" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementMelangeSansJokers" class="option-bouton" aria-pressed="false" data-valeur="non" type="button">Sans</button></div></div>
               </div>
             </details>
             <button id="boutonLancerEntrainementMelange" class="entrainement-lancer principal" data-organisation-session="melange" type="button">Commencer →</button>
@@ -380,7 +380,7 @@
      <div class="question-commande-ligne">
       <div class="suivant-ligne">
        <button aria-label="Question précédente" class="precedent-bouton" id="boutonQuestionPrecedente">
-        <span class="libelle-bureau">← Question précédente</span><span aria-hidden="true" class="libelle-mobile">← Précédente</span>
+        <span class="libelle-bureau">← Question précédente</span><span aria-hidden="true" class="libelle-mobile">Précédente</span>
        </button>
        <button class="principal masque" id="boutonValider" type="button">
         Valider
@@ -451,6 +451,20 @@
       <div><strong>Prochaine destination</strong><span id="prochaineDestinationBilan">Continue ton parcours.</span></div>
      </aside>
     </div>
+     <div class="actions bilan-actions">
+      <button class="secondaire masque" id="boutonReprendreProgressionBilan" type="button" disabled>
+       Reprendre ma progression
+      </button>
+      <button class="principal" id="boutonContinuer" type="button">
+       Continuer
+      </button>
+      <button class="secondaire" id="boutonRejouerMesErreurs" type="button">
+       Refaire les questions à consolider
+      </button>
+     <button class="discret" id="boutonRevenirAuParcours" type="button">
+       Revenir au parcours
+      </button>
+     </div>
      <section aria-labelledby="titreCarteVoyageFinale" class="carte-voyage-finale masque" id="carteVoyageFinale">
       <div class="carte-voyage-entete">
        <div><span>Tous tes parcours validés</span><h2 id="titreCarteVoyageFinale">La carte de ton voyage</h2></div>
@@ -476,20 +490,7 @@
       <div id="listeErreursBilan">
       </div>
      </section>
-     <div class="actions bilan-actions">
-      <button class="secondaire masque" id="boutonReprendreProgressionBilan" type="button" disabled>
-       Reprendre ma progression
-      </button>
-      <button class="principal" id="boutonContinuer" type="button">
-       Continuer
-      </button>
-      <button class="secondaire" id="boutonRejouerMesErreurs" type="button">
-       Refaire les questions à consolider
-      </button>
-     <button class="discret" id="boutonRevenirAuParcours" type="button">
-       Revenir au parcours
-      </button>
-     </div>
+
    </section>
    
 <section class="ecran" id="erreurs">
@@ -1197,10 +1198,10 @@
     <a href="mentions-legales.html">Mentions légales</a>
    </nav>
   </footer>
-  <script defer="" src="donnees/donnees-pjj.js?v=14c2341ff308">
+  <script defer="" src="donnees/donnees-pjj.js?v=8373a938202c">
   </script>
-  <script defer="" src="ressources/analytics-pjjoue.js?v=14c2341ff308"></script>
-  <script defer="" src="ressources/moteur-jeu.js?v=14c2341ff308">
+  <script defer="" src="ressources/analytics-pjjoue.js?v=8373a938202c"></script>
+  <script defer="" src="ressources/moteur-jeu.js?v=8373a938202c">
   </script>
   <dialog aria-describedby="texteFenetreQuitterSession" aria-labelledby="titreFenetreQuitterSession" class="pjj-fenetre" id="fenetreQuitterSession">
    <div class="pjj-fenetre-panneau">

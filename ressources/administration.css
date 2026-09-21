@@ -12,7 +12,7 @@ textarea { min-height: 90px; resize: vertical; }
 .fenetre-administration { width: min(520px, calc(100vw - 36px)); padding: 0; overflow: visible; border: 0; color: var(--text); background: transparent; }
 .fenetre-administration::backdrop { background:rgba(93,150,200,.22); }
 .fenetre-administration-panneau { position: relative; padding: 30px; border: 1px solid var(--line); border-radius: 24px; background: #fffefa; box-shadow: var(--shadow-md); }
-.fenetre-administration-icone { display: grid; width: 46px; height: 46px; margin-bottom: 18px; place-items: center; border-radius: 15px; color: #48575e; background: #eceeed; font-size: 1.2rem; font-weight: 900; }
+.fenetre-administration-icone { display: grid; width: 46px; height: 46px; margin-bottom: 18px; place-items: center; border-radius: 15px; color: #48575e; background: #eceeed; font-size: 1.2rem; font-weight: 700; }
 .fenetre-administration h2 { margin: 0 44px 10px 0; font-size: 1.55rem; }
 .fenetre-administration p { margin: 0; line-height: 1.55; }
 .fenetre-administration-fermer { position: absolute; top: 16px; right: 16px; display: grid; width: 38px; height: 38px; padding: 0; place-items: center; border-radius: 50%; color: #626b70; background: #eef0ed; font-size: 1.25rem; }
@@ -20,3 +20,16 @@ textarea { min-height: 90px; resize: vertical; }
 .fenetre-administration-actions .fenetre-administration-principal { border-color: transparent; color:#fffefa; background:#56656c; }
 @media (max-width: 720px) { .grille-question { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .fenetre-administration-panneau { padding: 26px 20px 22px; } .fenetre-administration-actions { flex-direction: column-reverse; } .fenetre-administration-actions button { width:max-content; max-width:100%; } }
+
+/* Présentation commune issue de l’audit visuel. */
+body > main > h1 { font-size:clamp(1.8rem,3.2vw,2.5rem); line-height:1.25; }
+body .barre-outils { background:var(--surface); border-radius:12px; box-shadow:none; align-items:end; }
+body .barre-outils label { color:var(--text-soft); }
+.carte-question { background:var(--surface); border-radius:12px; box-shadow:none; }
+.carte-question h2 { font-size:1.25rem; color:var(--text); }
+.carte-question label { color:var(--text-soft); }
+.etat-administration { color:var(--text-soft); background:var(--surface-soft); }
+.fenetre-administration-panneau { background:var(--surface); border-radius:16px; }
+.fenetre-administration :is(h2,p) { color:var(--text); }
+.fenetre-administration-fermer { color:var(--text); background:var(--surface-raised); }
+@media (max-width:620px) { body .barre-outils { position:static; padding:14px; } }

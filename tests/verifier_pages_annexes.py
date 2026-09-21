@@ -45,7 +45,7 @@ PAGES_GUIDES = set(PAGES_BUREAU[:10])
 PAGES_BUREAU += PAGES_CJPM
 PAGES_MOBILE += PAGES_CJPM
 PAGES_GUIDES.update(PAGES_CJPM)
-SCRIPTS_VISUELS = {"donnees-pjj.js", "sources-pjjoue.js", "administration.js"}
+SCRIPTS_VISUELS = {"donnees-pjj.js", "sources-pjjoue.js", "administration.js", "recherche-des-sigles.js"}
 
 
 def nom_capture(adresse: str) -> str:
@@ -145,6 +145,36 @@ def verifier_page(page, nom: str) -> None:
             )
 
 
+def verifier_recherches_ressources(page, nom: str) -> None:
+    if nom in {"sigles-cjpm/index.html", "sigles-pjj/index.html"}:
+        champ = page.get_by_role("searchbox", name="Rechercher un sigle ou un mot")
+        lignes = page.locator(".guide-tableau tbody tr")
+        total = lignes.count()
+        assert total > 30, nom
+        premier = lignes.first.locator("td").first.inner_text()
+        champ.fill(premier.lower())
+        assert lignes.first.is_visible(), f"{nom}: sigle recherché absent"
+        champ.fill("éduc")
+        avec_accent = page.locator(".guide-tableau tbody tr:visible").count()
+        champ.fill("educ")
+        assert page.locator(".guide-tableau tbody tr:visible").count() == avec_accent > 0, nom
+        champ.fill("introuvablexyz123")
+        assert page.locator(".guide-tableau tbody tr:visible").count() == 0, nom
+        assert "Aucun sigle" in page.locator('[role="status"]').inner_text(), nom
+        champ.fill("")
+        assert page.locator(".guide-tableau tbody tr:visible").count() == total, nom
+    if nom == "sources.html":
+        champ = page.locator("#rechercheSources")
+        total = page.locator(".source-fiche").count()
+        champ.fill("introuvablexyz123")
+        assert page.locator(".source-fiche:visible").count() == 0
+        champ.fill("")
+        assert page.locator(".source-fiche:visible").count() == total == 73
+        champ.fill("justice")
+        assert 0 < page.locator(".source-fiche:visible").count() < total
+        champ.fill("")
+
+
 def options_chromium() -> dict:
     """Utilise Chromium système si présent, sinon celui installé par Playwright."""
     configure = os.environ.get("PLAYWRIGHT_CHROMIUM_EXECUTABLE") or os.environ.get("PJJOUE_CHROMIUM")
@@ -227,6 +257,7 @@ def main() -> int:
             page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
             page.set_content(construire_page(adresse), wait_until="domcontentloaded")
             verifier_page(page, adresse)
+            verifier_recherches_ressources(page, adresse)
             if erreurs:
                 raise AssertionError(f"{adresse}: erreur JavaScript: {erreurs[0]}")
             page.screenshot(path=str(SORTIE / f"bureau-{nom_capture(adresse)}.png"), full_page=(adresse != 'administration.html'))
@@ -238,6 +269,7 @@ def main() -> int:
             page.on("pageerror", lambda erreur: erreurs.append(str(erreur)))
             page.set_content(construire_page(adresse), wait_until="domcontentloaded")
             verifier_page(page, adresse)
+            verifier_recherches_ressources(page, adresse)
             if erreurs:
                 raise AssertionError(f"{adresse}: erreur JavaScript mobile: {erreurs[0]}")
             page.screenshot(path=str(SORTIE / f"mobile-{nom_capture(adresse)}.png"), full_page=(adresse != 'administration.html'))

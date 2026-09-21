@@ -30,13 +30,13 @@
 .progression-rail-remplissage { position:absolute; inset:0 auto 0 0; border-radius:inherit; background:var(--jaune-interface); }
 .progression-jalons { position:absolute; inset:-26px -8px auto; display:flex; justify-content:space-between; }
 .progression-jalon { display:grid; justify-items:center; gap:8px; color:var(--texte-secondaire); font-size:.82rem; }
-.progression-jalon i { font-style:normal; font-weight:800; }
+.progression-jalon i { font-style:normal; font-weight:650; }
 .progression-jalon b { position:relative; display:grid; place-items:center; width:14px; height:14px; border:2px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:50%; background:var(--surface-carte-profonde); }
 .progression-jalon.est-entame { color:var(--parcours-accent-lisible,var(--parcours-accent)); }
 .progression-jalon.est-entame b { background:rgba(var(--parcours-accent-rgb),.38); box-shadow:0 0 0 3px rgba(var(--parcours-accent-rgb),.12); }
 .progression-jalon.est-complet { color:var(--parcours-accent-lisible,var(--parcours-accent)); }
 .progression-jalon.est-complet b { background:var(--parcours-accent); box-shadow:0 0 0 3px rgba(var(--parcours-accent-rgb),.18); }
-.progression-jalon.est-complet b::after { content:'✓'; color:var(--bleu-nuit-950); font-size:.58rem; font-weight:950; line-height:1; }
+.progression-jalon.est-complet b::after { content:'✓'; color:var(--bleu-nuit-950); font-size:.58rem; font-weight:700; line-height:1; }
 .progression-global-note { grid-column:1 / -1; margin:0; color:var(--texte-secondaire); font-size:.84rem; line-height:1.6; }
 
 /* Un séparateur commun, puis quatre chiffres alignés sur leurs libellés. */
@@ -48,7 +48,7 @@
 /* Les choix restent des cartes ; leur détail est ouvert et compact. */
 .progression-pastilles { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:10px; margin:0; }
 .progression-pastille { display:grid; grid-template-columns:auto minmax(0,1fr); gap:10px; align-items:center; min-height:76px; padding:12px; border:1px solid var(--bordure); border-left:3px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:10px; color:var(--texte-secondaire); background:var(--surface-carte-profonde); text-align:left; }
-.progression-pastille span { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:.85rem; font-weight:850; }
+.progression-pastille span { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:.85rem; font-weight:650; }
 .progression-pastille strong { color:var(--texte); font-size:.85rem; line-height:1.35; }
 .progression-pastille.est-active { border-color:var(--parcours-accent-lisible,var(--parcours-accent)); background:rgba(var(--parcours-accent-rgb),.12); box-shadow:inset 0 0 0 1px var(--parcours-accent-lisible,var(--parcours-accent)); }
 .progression-pastille:focus-visible { outline:3px solid var(--parcours-accent-lisible,var(--parcours-accent)); outline-offset:3px; }
@@ -56,7 +56,7 @@
 .progression-detail-parcours:focus-visible { outline:3px solid var(--jaune-interface); outline-offset:5px; }
 .progression-parcours-mis-en-avant { display:grid; align-content:start; gap:16px; padding:19px 0 0; border:0; border-top:3px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:0; background:transparent; box-shadow:none; }
 .progression-parcours-mis-en-avant-identite { min-width:0; }
-.progression-parcours-mis-en-avant-chapitre { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:.84rem; font-weight:750; }
+.progression-parcours-mis-en-avant-chapitre { color:var(--parcours-accent-lisible,var(--parcours-accent)); font-size:.84rem; font-weight:650; }
 .progression-parcours-mis-en-avant-identite h3 { margin:6px 0 0; font-size:1.14rem; line-height:1.4; }
 .progression-etats { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
 .progression-parcours-statut,
@@ -88,4 +88,30 @@
     .progression-score > strong { font-size:2.5rem; }
     .progression-score > span { max-width:90px; }
 }
+
+/* Audit visuel : hiérarchie, espaces et cadres allégés. */
+#progression { max-width:none; padding-inline:0; }
+#progression .progression-vue-ensemble-entete,
+#progression .progression-explorateur-entete { margin-bottom:22px; }
+#progression .progression-vue-ensemble-entete h2,
+#progression .progression-explorateur-entete h2 { font-size:1.3rem; font-weight:650; }
+#progression .progression-vue-ensemble-entete p,
+#progression .progression-explorateur-entete p { margin-top:8px; }
+#progression .progression-global { grid-template-columns:120px minmax(0,1fr); gap:20px; }
+#progression .progression-score > strong { font-size:3.2rem; font-weight:650; }
+#progression .progression-global-corps > p { margin-bottom:12px; }
+#progression .progression-global-note { font-size:.8rem; line-height:1.55; }
+#progression .progression-jalon.est-entame b,
+#progression .progression-jalon.est-complet b { box-shadow:none; }
+#progression .progression-pastilles { gap:6px 10px; }
+#progression .progression-pastille { min-height:64px; padding:10px; border-width:0 0 1px 3px; border-radius:6px; background:transparent; }
+#progression .progression-pastille strong { font-weight:600; line-height:1.4; }
+#progression .progression-pastille.est-active { background:rgba(var(--parcours-accent-rgb),.13); box-shadow:none; }
+#progression .progression-parcours-mis-en-avant { border-top-width:2px; gap:12px; padding-top:16px; }
+#progression .progression-vue-ensemble-metrics .progression-statistique > strong { font-size:1.7rem; font-weight:600; }
+@media (max-width:480px) {
+    #progression .progression-global { grid-template-columns:94px minmax(0,1fr); gap:18px 12px; }
+    #progression .progression-pastille { min-height:72px; padding:9px 8px; }
+}
+#progression .progression-ouvrir-selection { justify-self:start; width:max-content; max-width:100%; padding:10px 14px; min-height:44px; border:1px solid var(--parcours-accent-lisible,var(--parcours-accent)); border-radius:10px; font-weight:650; background:transparent; }
 /* === FIN MORCEAU CSS === */
