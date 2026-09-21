@@ -186,7 +186,9 @@ def verifier() -> None:
         assert page.locator("#boutonEntrainementTousQuestions").is_visible()
         assert page.locator("#boutonEntrainementTousQuestions").inner_text().strip() == "Tous"
         page.locator("#boutonEntrainementTousQuestions").click()
-        page.locator("[data-carte-entrainement='melange'] details summary").click()
+        options_melange = page.locator("[data-carte-entrainement='melange'] details")
+        if options_melange.get_attribute("open") is None:
+            options_melange.locator("summary").click()
         page.locator("#boutonEntrainementMelangeSansJokers").click()
         page.locator("#boutonLancerEntrainementMelange").click()
         page.locator("#boutonChronometreToutesQuestions").click()

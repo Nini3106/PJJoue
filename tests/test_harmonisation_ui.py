@@ -288,7 +288,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-etape-config,\s*#entrainement \.entrainement-etape-config\.entrainement-etape-modes \{[^}]*border:0;[^}]*background:transparent;", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-nombre-config \{[^}]*grid-template-columns:1fr;", re.S))
         self.assertRegex(css_genere, re.compile(r"#entrainement \.entrainement-grille \{[^}]*grid-template-columns:\s*repeat\(2,minmax\(0,1fr\)\);", re.S))
-        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-options-avancees summary \{[^}]*width:max-content;[^}]*border:1px solid var\(--bordure\);", re.S))
+        self.assertRegex(css, re.compile(r"#entrainement \.entrainement-options-avancees summary \{[^}]*width:max-content;[^}]*border:0;", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \{[^}]*display:grid;[^}]*grid-template-columns:repeat\(4,minmax\(0,1fr\)\);", re.S))
         self.assertRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \.choix-bouton \{[^}]*height:82px;[^}]*min-height:82px;", re.S))
         self.assertNotRegex(css, re.compile(r"#entrainement \.entrainement-perimetre-choix \.choix-bouton \{[^}]*\n\s*width:100%;", re.S))
@@ -324,7 +324,7 @@ class HarmonisationInterfaceTests(unittest.TestCase):
         question_js = (CODE / "06 - Question/actions/05 - Préparer et afficher la question.js").read_text(encoding="utf-8")
 
         self.assertIn("border-top: 5px solid var(--parcours-accent-lisible,var(--parcours-accent));", parcours_css)
-        self.assertIn("border-left:5px solid var(--parcours-accent,var(--bordure));", entrainement_css)
+        self.assertIn("border-left:3px solid var(--parcours-accent,var(--bordure));", entrainement_css)
         self.assertIn("border-color:var(--parcours-accent,#4f8cff);", entrainement_css)
         self.assertIn("bouton.style.setProperty('--parcours-accent', identite.couleur);", entrainement_js)
         self.assertIn("border-left:5px solid var(--parcours-accent);", revision_css)

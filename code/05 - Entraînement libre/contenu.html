@@ -43,7 +43,6 @@
       <span class="entrainement-etape-numero">2</span>
       <div>
         <h2 id="titreNombreEntrainement">Combien de questions ?</h2>
-        <p class="entrainement-limite" id="limiteQuestionsEntrainement" aria-live="polite">660 questions d’apprentissage disponibles.</p>
         <select aria-hidden="true" class="natif-masque" id="nombreQuestionsEntrainement" tabindex="-1">
        <option value="10" selected>10</option>
        <option value="20">20</option>
@@ -102,6 +101,7 @@
        <option value="660">660</option>
         </select>
         <div class="entrainement-nombre-config">
+        <p class="entrainement-limite" id="limiteQuestionsEntrainement" aria-live="polite">660 questions d’apprentissage disponibles.</p>
           <div class="choix-groupe entrainement-nombre-choix" data-groupe-choix="nombreQuestionsEntrainement" data-selection-visuelle="au-clic">
             <button id="boutonEntrainement10Questions" class="choix-bouton" data-valeur="10" type="button">10</button>
             <button id="boutonEntrainement20Questions" class="choix-bouton" data-valeur="20" type="button">20</button>
@@ -112,7 +112,6 @@
             <div class="entrainement-personnalise-entete"><span>Personnaliser</span><strong id="valeurNombreQuestions">10 questions</strong></div>
             <input id="curseurNombreQuestions" type="range" min="1" max="660" step="1" value="10" aria-label="Nombre personnalisé de questions — clique ou fais glisser sur la barre">
             <div class="entrainement-personnalise-reperes" id="reperesNombreQuestions" aria-hidden="true"></div>
-            <div class="entrainement-personnalise-bornes"><span id="borneMinQuestions">1</span><span id="borneMaxQuestions">660 max</span></div>
           </div>
         </div>
       </div>
@@ -124,12 +123,9 @@
         <h2 id="titreModeEntrainement">Comment veux-tu jouer ?</h2>
         <div class="entrainement-grille">
           <article class="entrainement-carte entrainement-ordonne" data-carte-entrainement="ordonne">
-            <div aria-hidden="true" class="entrainement-icone">
-              <svg viewBox="0 0 32 32" focusable="false"><path d="M11 7h15M11 16h15M11 25h15"/><circle cx="5.5" cy="7" r="2.25"/><circle cx="5.5" cy="16" r="2.25"/><circle cx="5.5" cy="25" r="2.25"/><path d="m4.5 7 1 1 2-2M4.5 16l1 1 2-2M4.5 25l1 1 2-2"/></svg>
-            </div>
             <h3>Par ordre d’étapes</h3>
             <p>Suis la progression pédagogique du parcours choisi.</p>
-            <details class="entrainement-options-avancees">
+            <details class="entrainement-options-avancees" open>
               <summary>Options avancées</summary>
               <div class="entrainement-options">
                 <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic"><button id="boutonEntrainementOrdonneAvecJokers" class="option-bouton" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementOrdonneSansJokers" class="option-bouton" data-valeur="non" type="button">Sans</button></div></div>
@@ -138,12 +134,9 @@
             <button id="boutonLancerEntrainementOrdonne" class="entrainement-lancer principal" data-organisation-session="ordonne" type="button">Commencer →</button>
           </article>
           <article class="entrainement-carte entrainement-melange" data-carte-entrainement="melange">
-            <div aria-hidden="true" class="entrainement-icone">
-              <svg viewBox="0 0 32 32" focusable="false"><path d="M4 9h4c6 0 6 14 13 14h6"/><path d="m23 19 4 4-4 4"/><path d="M4 23h4c2.8 0 4.4-3.1 6.2-6.4"/><path d="M16.8 12.1C18.7 9.8 20.3 9 23 9h4"/><path d="m23 5 4 4-4 4"/></svg>
-            </div>
             <h3>Mélangé</h3>
             <p>Brasse les questions du périmètre choisi.</p>
-            <details class="entrainement-options-avancees">
+            <details class="entrainement-options-avancees" open>
               <summary>Options avancées</summary>
               <div class="entrainement-options">
                 <div class="entrainement-option"><span>Jokers</span><div class="entrainement-bascule-groupe" data-proposition="jokers" data-selection-visuelle="au-clic"><button id="boutonEntrainementMelangeAvecJokers" class="option-bouton" data-valeur="oui" type="button">Avec</button><button id="boutonEntrainementMelangeSansJokers" class="option-bouton" data-valeur="non" type="button">Sans</button></div></div>
