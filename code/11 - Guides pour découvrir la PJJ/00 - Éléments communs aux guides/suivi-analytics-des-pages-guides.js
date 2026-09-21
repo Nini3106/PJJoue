@@ -11,6 +11,8 @@
 (() => {
     const PAGES = [
         ['guides', 'Accueil des guides'],
+        ['rrse-mineur', 'RRSE : définition et déroulement pour un mineur'],
+        ['peines-mineurs-cjpm', 'Quelles peines pour un mineur dans le CJPM ?'],
         ['cjpm-enquete-sanction', 'De l’enquête à la sanction'],
         ['cjpm-information-judiciaire', 'Avant le jugement : l’information judiciaire'],
         ['cjpm-jugement-sanction-educative', 'Du jugement à la sanction'],

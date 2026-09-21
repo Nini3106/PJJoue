@@ -7,12 +7,12 @@
     {
       "sortie": "index.html",
       "url": "https://pjjoue.fr/",
-      "lastmod": "2026-09-20"
+      "lastmod": "2026-09-21"
     },
     {
       "sortie": "guides/index.html",
       "url": "https://pjjoue.fr/guides/",
-      "lastmod": "2026-09-20"
+      "lastmod": "2026-09-21"
     },
     {
       "sortie": "cjpm-enquete-sanction/index.html",
@@ -86,6 +86,14 @@
       "sortie": "sources.html",
       "url": "https://pjjoue.fr/sources.html",
       "lastmod": "2026-09-20"
+    },
+    {
+      "sortie": "rrse-mineur/index.html",
+      "url": "https://pjjoue.fr/rrse-mineur/"
+    },
+    {
+      "sortie": "peines-mineurs-cjpm/index.html",
+      "url": "https://pjjoue.fr/peines-mineurs-cjpm/"
     }
   ]
 }

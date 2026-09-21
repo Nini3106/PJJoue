@@ -22,6 +22,8 @@ PAGES_CJPM = [
     "cjpm-matiere-criminelle-peines/index.html",
     "cjpm-application-execution/index.html",
     "sigles-cjpm/index.html",
+    "rrse-mineur/index.html",
+    "peines-mineurs-cjpm/index.html",
 ]
 PAGES_BUREAU = [
     "guides/index.html",
@@ -157,6 +159,8 @@ def options_chromium() -> dict:
 def verifier_raccourcis_guides(navigateur) -> None:
     """Suit les vrais boutons et leurs redirections, avec les fichiers publiés."""
     cibles = {
+        "rrse-mineur": ("parcours", "procedure_ordinaire", None),
+        "peines-mineurs-cjpm": ("parcours", "jugement_educatif_ordinaire", None),
         "cjpm-enquete-sanction": ("parcours", "procedure_ordinaire", None),
         "cjpm-information-judiciaire": ("parcours", "information_judiciaire", None),
         "cjpm-jugement-sanction-educative": ("parcours", "jugement_educatif_ordinaire", None),
@@ -203,7 +207,7 @@ def verifier_raccourcis_guides(navigateur) -> None:
             assert page.evaluate('etat.ecran') == 'parcours', guide
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), guide
         contexte.close()
-    print("OK — 13 raccourcis de guides : parcours, étapes PJJ et domaines des mini-jeux")
+    print(f"OK — {len(cibles)} raccourcis de guides : parcours, étapes PJJ et domaines des mini-jeux")
 
 
 def main() -> int:

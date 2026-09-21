@@ -114,7 +114,7 @@ for (const route of routes) {
     assert.ok(envois[0][1].pjjoue_nom_guide.length > 10);
 }
 '''
-        resultat = subprocess.run(["node", "-e", programme, json.dumps([*PARCOURS, "sigles-cjpm", "sigles-pjj", "mesures-educatives-pjj"])], cwd=RACINE, capture_output=True, text=True)
+        resultat = subprocess.run(["node", "-e", programme, json.dumps([*PARCOURS, "sigles-cjpm", "sigles-pjj", "mesures-educatives-pjj", "rrse-mineur", "peines-mineurs-cjpm"])], cwd=RACINE, capture_output=True, text=True)
         self.assertEqual(resultat.returncode, 0, resultat.stderr)
 
 

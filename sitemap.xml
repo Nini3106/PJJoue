@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://pjjoue.fr/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-21</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/guides/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-21</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/cjpm-enquete-sanction/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-21</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/cjpm-information-judiciaire/</loc>
@@ -18,15 +18,15 @@
   </url>
   <url>
     <loc>https://pjjoue.fr/cjpm-jugement-sanction-educative/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-21</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/cjpm-matiere-criminelle-peines/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-21</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/cjpm-application-execution/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-21</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/decouvrir-la-pjj/</loc>
@@ -46,7 +46,7 @@
   </url>
   <url>
     <loc>https://pjjoue.fr/mesures-educatives-pjj/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-21</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/sigles-cjpm/</loc>
@@ -58,7 +58,7 @@
   </url>
   <url>
     <loc>https://pjjoue.fr/quiz-pjj/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-21</lastmod>
   </url>
   <url>
     <loc>https://pjjoue.fr/mentions-legales.html</loc>
@@ -75,5 +75,13 @@
   <url>
     <loc>https://pjjoue.fr/sources.html</loc>
     <lastmod>2026-09-20</lastmod>
+  </url>
+  <url>
+    <loc>https://pjjoue.fr/rrse-mineur/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://pjjoue.fr/peines-mineurs-cjpm/</loc>
+    <lastmod>2026-09-21</lastmod>
   </url>
 </urlset>
