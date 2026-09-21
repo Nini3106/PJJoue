@@ -1,6 +1,6 @@
 # Guides CJPM
 
-Les cinq fiches correspondent aux cinq parcours judiciaires de Quiz CJPM. Le parcours `commun` reste l’option Découvrir la PJJ, dont les guides existants sont conservés.
+Les cinq fiches de parcours correspondent aux cinq parcours judiciaires de Quiz CJPM. Deux guides thématiques complètent ces fiches : « RRSE : définition et déroulement pour un mineur » (`/rrse-mineur/`) et « Quelles peines pour un mineur dans le CJPM ? » (`/peines-mineurs-cjpm/`). Le parcours `commun` reste l’option Découvrir la PJJ, dont les guides existants sont conservés.
 
 ## Présentation et navigation
 
