@@ -1,0 +1,80 @@
+name: Valider bandeau mobile une ligne
+
+on:
+  push:
+    branches:
+      - fix/bandeau-mobile-une-ligne
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      BASE_SHA: a870eaae181778cf097f91a877bd6580b5cf3c03
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Installer
+        run: |
+          set -euo pipefail
+          npm ci
+          python -m pip install -r requirements-dev.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Reconstruire
+        run: |
+          set -euo pipefail
+          npm run build:site
+          npm run build:seo
+          npm run build:site
+          npm run build:manifeste
+
+      - name: Verifier le bandeau mobile
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          css=Path("ressources/styles/atlas-systeme.css").read_text(encoding="utf-8")
+          checks=[
+            "min-height:52px;",
+            "padding:4px 8px;",
+            "flex-direction:row;",
+            "flex-wrap:nowrap;",
+            "justify-content:space-between;",
+            "max-width:86px;",
+            "min-width:78px;",
+          ]
+          for check in checks:
+              assert check in css, check
+          print("Bandeau mobile sur une seule ligne valide.")
+          PY
+
+      - name: Tester
+        run: |
+          set -euo pipefail
+          npm test
+          git diff --check
+
+      - name: Creer le commit pret
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE_SHA"
+          rm -f .github/workflows/bandeau-une-ligne.yml
+          git reset --soft "$BASE_SHA"
+          git config user.name "Dev'Ines"
+          git config user.email "129184531+Nini3106@users.noreply.github.com"
+          git add -A
+          git commit -m "Corriger le bandeau mobile sur une seule ligne"
+          git push --force origin HEAD:refs/heads/fix/bandeau-mobile-une-ligne-ready
