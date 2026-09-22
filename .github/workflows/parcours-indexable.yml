@@ -113,8 +113,22 @@ jobs:
               page = meta(page, "description", description)
               page = meta(page, "og:title", titre, "property")
               page = meta(page, "og:description", description, "property")
-              page = meta(page, "twitter:title", titre)
-              page = meta(page, "twitter:description", description)
+              page, n_twitter_titre = re.subn(
+                  r'<meta\\s+name="twitter:title"\\s+content="[^"]*"\\s*/>',
+                  f'<meta name="twitter:title" content="{html.escape(titre, quote=True)}"/>',
+                  page,
+                  count=1,
+                  flags=re.I,
+              )
+              page, n_twitter_description = re.subn(
+                  r'<meta\\s+name="twitter:description"\\s+content="[^"]*"\\s*/>',
+                  f'<meta name="twitter:description" content="{html.escape(description, quote=True)}"/>',
+                  page,
+                  count=1,
+                  flags=re.I,
+              )
+              if n_twitter_titre != 1 or n_twitter_description != 1:
+                  raise ErreurConstruction("Parcours indexable : metas Twitter introuvables.")
               page, n = re.subn(r"<title>.*?</title>", f"<title>{html.escape(titre)}</title>", page, count=1, flags=re.S)
               if n != 1:
                   raise ErreurConstruction("Parcours indexable : title introuvable.")
