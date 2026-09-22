@@ -1,4 +1,4 @@
-name: Valider menu mobile depliant
+name: Valider menu mobile
 
 on:
   push:
@@ -15,10 +15,9 @@ jobs:
     env:
       BASE_SHA: 1e7b56af0409520cae790cb1375d3c0be3bdbf05
     steps:
-      - name: Recuperer la base validee
+      - name: Recuperer la branche de travail
         uses: actions/checkout@v4
         with:
-          ref: 1e7b56af0409520cae790cb1375d3c0be3bdbf05
           fetch-depth: 0
 
       - name: Node
@@ -32,229 +31,15 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Installer les outils
+      - name: Installer
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$BASE_SHA"
           npm ci
           python -m pip install -r requirements-dev.txt
           python -m playwright install --with-deps chromium
 
-      - name: Creer le menu mobile
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import re
-
-          root = Path.cwd()
-
-          # Application principale : les raccourcis principaux sont dupliques
-          # uniquement dans le panneau mobile, sans identifiants dupliques.
-          p = root / "code/01 - Éléments communs/gabarit-page-principale.html"
-          s = p.read_text(encoding="utf-8")
-          old = '<div class="navigation q-pop" id="menuPrincipal">\n<button data-ecran="progression" id="boutonProgression" type="button">Ma progression</button>'
-          mobile = '''<div class="navigation q-pop" id="menuPrincipal">
-<button class="menu-mobile-seulement" data-ecran="accueil" type="button">Accueil</button>
-<button class="menu-mobile-seulement" data-ecran="parcours" type="button">Parcours CJPM</button>
-<button class="menu-mobile-seulement" data-ecran="entrainement" type="button">S’entraîner</button>
-<button class="menu-mobile-seulement" data-ecran="erreurs" type="button">Réviser</button>
-<button class="menu-mobile-seulement" data-ecran="supports" type="button">Ressources</button>
-<span aria-hidden="true" class="menu-mobile-separateur"></span>
-<button data-ecran="progression" id="boutonProgression" type="button">Ma progression</button>'''
-          assert s.count(old) == 1
-          s = s.replace(old, mobile, 1)
-          p.write_text(s, encoding="utf-8")
-
-          # Pages autonomes : meme navigation complete dans le details mobile.
-          # Le prefixe (../ ou autre) est deduit de chaque page pour ne casser aucun lien.
-          pages_modifiees = 0
-          for p in root.glob("code/**/*.html"):
-              if p.name == "gabarit-page-principale.html":
-                  continue
-              s = p.read_text(encoding="utf-8")
-              if 'class="atlas-static-menu q-more"' not in s or 'menu-mobile-seulement' in s:
-                  continue
-              m = re.search(r'<a href="([^"]*index\.html)#parcours">Parcours CJPM</a>', s)
-              if not m:
-                  continue
-              accueil = m.group(1)
-              old = '<div class="q-pop"><a href="' + accueil + '#progression">Ma progression</a>'
-              if old not in s:
-                  continue
-              insert = (
-                  '<div class="q-pop">'
-                  f'<a class="menu-mobile-seulement" href="{accueil}">Accueil</a>'
-                  f'<a class="menu-mobile-seulement" href="{accueil}#parcours">Parcours CJPM</a>'
-                  f'<a class="menu-mobile-seulement" href="{accueil}#entrainement">S’entraîner</a>'
-                  f'<a class="menu-mobile-seulement" href="{accueil}#erreurs">Réviser</a>'
-                  f'<a class="menu-mobile-seulement" href="{accueil}#supports">Ressources</a>'
-                  '<span aria-hidden="true" class="menu-mobile-separateur"></span>'
-                  f'<a href="{accueil}#progression">Ma progression</a>'
-              )
-              s = s.replace(old, insert, 1)
-              p.write_text(s, encoding="utf-8")
-              pages_modifiees += 1
-          if pages_modifiees < 15:
-              raise SystemExit(f"Trop peu de pages autonomes adaptees : {pages_modifiees}")
-          print(f"Pages autonomes adaptees : {pages_modifiees}")
-
-          # Design partage : desktop inchange, menu complet uniquement sous 640px.
-          p = root / "code/01 - Éléments communs/atlas-systeme.css"
-          s = p.read_text(encoding="utf-8")
-          anchor = '#qc-atlas .q-more{position:relative}\n'
-          assert s.count(anchor) == 1
-          s = s.replace(
-              anchor,
-              anchor + '#qc-atlas :is(.menu-mobile-seulement,.menu-mobile-separateur){display:none!important}\n',
-              1,
-          )
-
-          marker = '@media (max-width:640px) {\n #qc-atlas :is(.page-entete,.presentation-page,.parcours-detail-entete) h1'
-          assert s.count(marker) == 1
-          mobile_css = r'''@media (max-width:640px) {
- #qc-atlas .q-header {
-   min-height:68px;
-   padding:12px 16px;
-   align-items:center;
-   gap:12px;
- }
- #qc-atlas .q-identity { gap:10px; }
- #qc-atlas .q-tagline { display:none; }
- #qc-atlas .q-nav {
-   width:auto;
-   margin-left:auto;
-   justify-content:flex-end;
-   flex-wrap:nowrap;
- }
- #qc-atlas .q-nav > :is(button,a):not(.bouton-menu-mobile) { display:none; }
- #qc-atlas .q-more { position:static; margin-left:auto; }
- #qc-atlas .bouton-menu-mobile,
- #qc-atlas .atlas-static-menu > summary {
-   min-width:92px;
-   border:1px solid color-mix(in srgb,var(--q-paper) 38%,transparent);
-   background:color-mix(in srgb,var(--q-paper) 9%,var(--q-menu-fond));
-   border-radius:8px;
-   padding:9px 12px;
- }
- #qc-atlas .bouton-menu-mobile .bouton-menu-libelle { display:none; }
- #qc-atlas .bouton-menu-mobile::before { content:"Menu"; }
- #qc-atlas .bouton-menu-mobile[aria-expanded="true"]::before { content:"Fermer"; }
- #qc-atlas .atlas-static-menu > summary { font-size:0; list-style:none; }
- #qc-atlas .atlas-static-menu > summary::-webkit-details-marker { display:none; }
- #qc-atlas .atlas-static-menu > summary::before {
-   content:"Menu";
-   font-size:var(--q-text-nav);
- }
- #qc-atlas .atlas-static-menu[open] > summary::before { content:"Fermer"; }
- #qc-atlas .atlas-static-menu > summary > span,
- #qc-atlas .bouton-menu-mobile > span[aria-hidden="true"] {
-   font-size:var(--q-text-nav);
-   transition:transform .18s ease;
- }
- #qc-atlas .atlas-static-menu[open] > summary > span,
- #qc-atlas .bouton-menu-mobile[aria-expanded="true"] > span[aria-hidden="true"] {
-   transform:rotate(180deg);
- }
- #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) {
-   left:12px;
-   right:12px;
-   top:calc(100% + 8px);
-   width:auto;
-   min-width:0;
-   max-width:none;
-   max-height:calc(100dvh - 92px);
-   overflow-y:auto;
-   padding:9px;
-   border:1px solid color-mix(in srgb,var(--q-menu-fond) 18%,var(--q-line));
-   border-top:4px solid var(--q-yellow);
-   border-radius:12px;
-   background:var(--q-paper);
-   box-shadow:0 16px 38px rgba(23,45,72,.22);
- }
- #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop)::before {
-   content:"Navigation";
-   display:block;
-   padding:6px 10px 9px;
-   color:var(--q-muted);
-   font-size:var(--q-text-small);
-   font-weight:700;
-   letter-spacing:.08em;
-   text-transform:uppercase;
- }
- #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) :is(button,a) {
-   width:100%;
-   min-height:46px;
-   display:flex;
-   justify-content:flex-start;
-   align-items:center;
-   padding:10px 12px;
-   border:0;
-   border-radius:7px;
-   background:transparent;
-   color:var(--q-ink);
-   font-size:var(--q-text-control);
-   font-weight:600;
-   text-decoration:none;
- }
- #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) :is(button,a):hover,
- #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) :is(button,a):focus-visible,
- #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) [aria-current="page"] {
-   background:color-mix(in srgb,var(--q-menu-fond) 8%,var(--q-paper));
- }
- #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) :is(button,a)[aria-current="page"] {
-   box-shadow:inset 3px 0 var(--q-blue);
- }
- #qc-atlas .menu-mobile-seulement { display:flex!important; }
- #qc-atlas .menu-mobile-separateur {
-   display:block!important;
-   height:1px;
-   margin:7px 8px;
-   background:color-mix(in srgb,var(--q-menu-fond) 16%,transparent);
- }
-}
-'''
-          s = s.replace(marker, mobile_css + marker, 1)
-          p.write_text(s, encoding="utf-8")
-
-          # Regles propres a l'application : neutraliser l'ancien empilement mobile.
-          p = root / "code/01 - Éléments communs/style-general-pjjoue.css"
-          s = p.read_text(encoding="utf-8")
-          old = '''@media (max-width:640px) {
- #qc-atlas .q-header { align-items:flex-start; }
- #qc-atlas .q-nav { width:100%; justify-content:flex-start; gap:4px; flex-wrap:wrap; }
-  #qc-atlas .q-more { margin-left:0; position:static; }
- #qc-atlas #menuPrincipal { left:17px; right:auto; top:calc(100% - 6px); }
-'''
-          new = '''@media (max-width:640px) {
- #qc-atlas .q-header { align-items:center; }
- #qc-atlas .q-nav { width:auto; justify-content:flex-end; gap:0; flex-wrap:nowrap; }
- #qc-atlas .q-more { margin-left:auto; position:static; }
- #qc-atlas #menuPrincipal { left:12px; right:12px; top:calc(100% + 8px); width:auto; max-width:none; }
-'''
-          assert s.count(old) == 1
-          s = s.replace(old, new, 1)
-          p.write_text(s, encoding="utf-8")
-
-          # Le test de finition clique désormais sur l'entree mobile lorsque la barre directe est masquee.
-          p = root / "tests/verifier_finitions_v1.py"
-          s = p.read_text(encoding="utf-8")
-          old = '''        page.keyboard.press('Escape');assert not page.locator('#menuPrincipal').is_visible()
-        page.locator('#boutonParcoursPJJ').click()
-        assert page.locator('#boutonParcoursPJJ').evaluate('e=>getComputedStyle(e).color')=='rgb(244, 239, 230)'
-'''
-          new = '''        page.keyboard.press('Escape');assert not page.locator('#menuPrincipal').is_visible()
-        bouton_parcours=page.locator('#boutonParcoursPJJ')
-        if bouton_parcours.is_visible():
-            bouton_parcours.click()
-            assert bouton_parcours.evaluate('e=>getComputedStyle(e).color')=='rgb(244, 239, 230)'
-        else:
-            page.locator('#boutonMenuMobile').click()
-            page.locator('#menuPrincipal [data-ecran="parcours"]').click()
-'''
-          assert s.count(old) == 1
-          s = s.replace(old, new, 1)
-          p.write_text(s, encoding="utf-8")
-          PY
+      - name: Appliquer les modifications
+        run: python .github/menu_mobile_patch.py
 
       - name: Reconstruire
         run: |
@@ -264,7 +49,7 @@ jobs:
           npm run build:site
           npm run build:manifeste
 
-      - name: Verifier le menu mobile
+      - name: Verifier la cible
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -276,7 +61,6 @@ jobs:
           assert 'border-top:4px solid var(--q-yellow)' in css
           assert '.q-nav > :is(button,a):not(.bouton-menu-mobile) { display:none; }' in css
           assert '.menu-mobile-seulement { display:flex!important; }' in css
-          # Desktop reste regi par les regles existantes hors media query.
           assert '#qc-atlas :is(.menu-mobile-seulement,.menu-mobile-separateur){display:none!important}' in css
           print("Menu mobile cible valide.")
           PY
@@ -287,13 +71,15 @@ jobs:
           npm test
           git diff --check
 
-      - name: Creer le commit pret a publier
+      - name: Creer le commit pret
         run: |
           set -euo pipefail
           git fetch origin main
           test "$(git rev-parse origin/main)" = "$BASE_SHA"
+          rm -f .github/menu_mobile_patch.py .github/workflows/menu-mobile.yml
+          git reset --soft "$BASE_SHA"
           git config user.name "Dev'Ines"
           git config user.email "129184531+Nini3106@users.noreply.github.com"
-          git add --update
+          git add -A
           git commit -m "Ajouter un menu depliant harmonise sur mobile"
-          git push origin HEAD:refs/heads/feat/menu-mobile-depliant-ready
+          git push --force origin HEAD:refs/heads/feat/menu-mobile-depliant-ready
