@@ -51,10 +51,6 @@
       "tailleOctets": 966,
       "sha256": "8dcf221cae9ddb120b84c4f2233234128474f4742ad1d6de4b45d62fda363539"
     },
-    ".github/workflows/reconstruction-temporaire.yml": {
-      "tailleOctets": 1486,
-      "sha256": "009781ff42da030775e30a9ff8f82aea18300d37462702dd16e7f460be1563d0"
-    },
     ".github/workflows/verification.yml": {
       "tailleOctets": 1255,
       "sha256": "5cdbf3e1e552513f65b92b79d9c1f1694bf3d81dad9f37a11a699c6a5b050080"
