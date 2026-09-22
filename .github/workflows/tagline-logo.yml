@@ -1,0 +1,75 @@
+name: Valider tagline et logo CJPM
+
+on:
+  push:
+    branches:
+      - fix/tagline-cjpm-logo
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      BASE_SHA: c2840a5b4305a7b2bcb3dc8def146222429cff33
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Installer
+        run: |
+          set -euo pipefail
+          npm ci
+          python -m pip install -r requirements-dev.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Reconstruire
+        run: |
+          set -euo pipefail
+          npm run build:site
+          npm run build:seo
+          npm run build:site
+          npm run build:manifeste
+
+      - name: Verifier la cible
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          css=Path("ressources/styles/atlas-systeme.css").read_text(encoding="utf-8")
+          assert "font-style:normal;" in css
+          assert "font-style:italic;" not in css
+          assert "white-space:nowrap;" in css
+          assert "font-size:calc(8px * var(--echelle-texte,1));" in css
+          print("CJPM droit et tagline mobile sur une ligne.")
+          PY
+
+      - name: Tester
+        run: |
+          set -euo pipefail
+          npm test
+          git diff --check
+
+      - name: Creer le commit pret
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE_SHA"
+          rm -f .github/workflows/tagline-logo.yml
+          git reset --soft "$BASE_SHA"
+          git config user.name "Dev'Ines"
+          git config user.email "129184531+Nini3106@users.noreply.github.com"
+          git add -A
+          git commit -m "Mettre la signature mobile sur une ligne et CJPM droit"
+          git push --force origin HEAD:refs/heads/fix/tagline-cjpm-logo-ready
