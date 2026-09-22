@@ -202,6 +202,13 @@ jobs:
           new = "        for couleur in ['#f4efe6','#ebe3d6','#ffffff','#172d48','#214fba','#f3d86c']:\n"
           assert t.count(old) == 1
           p.write_text(t.replace(old, new, 1), encoding="utf-8")
+
+          p = root / "outils/auditer_accessibilite_statique.py"
+          t = p.read_text(encoding="utf-8")
+          old = '        # index.html regroupe plusieurs écrans dynamiques, chacun avec son propre h1.\n        if (nom == "index.html" and analyse.titres_h1 < 1) or (nom != "index.html" and analyse.titres_h1 != 1):\n'
+          new = '        # Les deux entrées de l’application regroupent plusieurs écrans dynamiques, chacun avec son propre h1.\n        applications = {"index.html", "parcours/index.html"}\n        if (nom in applications and analyse.titres_h1 < 1) or (nom not in applications and analyse.titres_h1 != 1):\n'
+          assert t.count(old) == 1
+          p.write_text(t.replace(old, new, 1), encoding="utf-8")
           PY
 
       - name: Construire
