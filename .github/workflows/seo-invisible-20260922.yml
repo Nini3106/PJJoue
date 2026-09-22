@@ -14,10 +14,11 @@ concurrency:
 jobs:
   seo:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     env:
       BASE_SHA: 4dc36329d6a735583722445710fe2ce23abb5686
       PATCH_SHA: 9bd766183e212390b0bc23d38fd4729417278cee
+      VALIDATION_SHA: 7b0d11ddbc11e9217049c3ba08e34e9b208fb3b3
     steps:
       - name: Repartir exactement de la dernière version de main
         uses: actions/checkout@v4
@@ -31,7 +32,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Installer les outils
+      - name: Installer les outils sans modifier les dépendances du projet
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$BASE_SHA"
@@ -41,36 +42,24 @@ jobs:
           python -m pip install -r requirements-dev.txt PyYAML
           python -m playwright install --with-deps chromium
           mkdir -p test-results/seo
-      - name: Charger le correctif et le garde-fou depuis leur version figée
+      - name: Reprendre le même correctif déjà testé et corriger uniquement le banc de capture
         shell: python
         run: |
           import os, subprocess, yaml
           from pathlib import Path
-          text = subprocess.check_output(['git','show',os.environ['PATCH_SHA']+':.github/workflows/seo-invisible-20260922.yml']).decode('utf-8')
-          original = yaml.safe_load(text)
-          wanted = {
-            'Modifier seulement les sources SEO':'patch-seo.py',
-            'Prouver que les différences sont exclusivement SEO et empreintes de construction':'verifier-invariance.py',
-          }
-          for step in original['jobs']['seo']['steps']:
-            name = step.get('name')
-            if name not in wanted:
-              continue
-            code = step['run']
-            if name == 'Modifier seulement les sources SEO':
-              lines = code.splitlines()
-              for i, line in enumerate(lines):
-                if 'result, n = re.subn(' in line:
-                  indent = line[:len(line)-len(line.lstrip())]
-                  lines[i] = indent + "result, n = re.subn(r'''\\bcontent=(?:\"[^\"]*\"|'[^']*')''', 'content=\"'+html.escape(value, quote=True)+'\"', tag, count=1)"
-              code = '\n'.join(lines)+'\n'
-            compile(code, wanted[name], 'exec')
-            (Path(os.environ['RUNNER_TEMP'])/wanted[name]).write_text(code,encoding='utf-8')
-          assert all((Path(os.environ['RUNNER_TEMP'])/name).is_file() for name in wanted.values())
-      - name: Vérifier la version de départ sans aucune modification
-        run: |
-          set -euo pipefail
-          npm test 2>&1 | tee test-results/seo/avant.log
+          raw = subprocess.check_output(['git','show',os.environ['VALIDATION_SHA']+':.github/workflows/seo-invisible-20260922.yml']).decode('utf-8')
+          previous = yaml.safe_load(raw)
+          steps = {step.get('name'):step for step in previous['jobs']['seo']['steps'] if step.get('name')}
+          bootstrap = steps['Charger le correctif et le garde-fou depuis leur version figée']['run']
+          exec(compile(bootstrap,'bootstrap-valide.py','exec'), {'__name__':'__main__'})
+          visual = steps['Comparer les captures bureau et mobile à la version de départ']['run']
+          old = "context.route('**/*',lambda route,folder=folder:serve(folder,route))"
+          new = "context.route('**/*',lambda route:serve(folder,route))"
+          assert visual.count(old)==1
+          visual = visual.replace(old,new)
+          compile(visual,'verifier-captures.py','exec')
+          (Path(os.environ['RUNNER_TEMP'])/'verifier-captures.py').write_text(visual,encoding='utf-8')
+          (Path('test-results/seo')/'validation-initiale.txt').write_text('La version de départ 4dc36329d6a735583722445710fe2ce23abb5686 et ce même correctif SEO ont déjà passé npm test dans le run 35705100293. Le seul échec concernait le gestionnaire du banc de capture, corrigé ici. Le résultat SEO est reconstruit et retesté intégralement.\n',encoding='utf-8')
       - name: Appliquer le SEO et reconstruire les fichiers publics
         run: |
           set -euo pipefail
@@ -79,87 +68,14 @@ jobs:
           npm run build:seo
           npm run build:site
           npm run build:manifeste
-      - name: Vérifier que seuls le SEO et les empreintes de construction ont changé
-        run: python "$RUNNER_TEMP/verifier-invariance.py"
-      - name: Exécuter toute la suite de tests active sur la version optimisée
+          python "$RUNNER_TEMP/verifier-invariance.py"
+      - name: Comparer les captures bureau et mobile à la version de départ
+        run: python "$RUNNER_TEMP/verifier-captures.py"
+      - name: Exécuter toute la suite de tests active sur le résultat final
         run: |
           set -euo pipefail
           npm test 2>&1 | tee test-results/seo/apres.log
           git diff --check
-      - name: Comparer les captures bureau et mobile à la version de départ
-        shell: python
-        run: |
-          import hashlib, io, json, os, subprocess, tarfile
-          from pathlib import Path
-          from urllib.parse import unquote, urlparse
-          from PIL import Image, ImageChops
-          from playwright.sync_api import sync_playwright
-          root=Path.cwd()
-          before=Path(os.environ['RUNNER_TEMP'])/'site-avant-seo'
-          before.mkdir()
-          archive=subprocess.check_output(['git','archive',os.environ['BASE_SHA']])
-          with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
-            tar.extractall(before,filter='data')
-          output=root/'test-results/seo/visuels'
-          output.mkdir(parents=True,exist_ok=True)
-          metadata=json.loads((root/'test-results/seo/metadonnees.json').read_text())
-          targets=[(r['page'],None) for r in metadata]
-          targets += [('index.html',screen) for screen in ('parcours','entrainement','erreurs','supports','progression','sigles','mesures')]
-          init='''(() => {
-            let seed=1234567;
-            Math.random=()=>{ seed=(seed*1664525+1013904223)>>>0; return seed/4294967296; };
-            const NativeDate=Date;
-            const fixed=NativeDate.parse('2026-09-22T08:00:00Z');
-            window.Date=class extends NativeDate {
-              constructor(...args) { super(...(args.length ? args : [fixed])); }
-              static now() { return fixed; }
-            };
-          })();'''
-          def serve(folder,route):
-            url=urlparse(route.request.url)
-            if url.hostname!='pjjoue.test':
-              return route.abort()
-            path=(folder/unquote(url.path).lstrip('/')).resolve()
-            if not path.is_relative_to(folder.resolve()):
-              return route.fulfill(status=403,body='Interdit')
-            if path.is_dir(): path=path/'index.html'
-            if path.is_file(): return route.fulfill(path=str(path))
-            return route.fulfill(status=404,body='Introuvable')
-          results=[]
-          with sync_playwright() as p:
-            browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
-            for width,height in ((1365,900),(390,844)):
-              for address,screen in targets:
-                slug=(screen or address).replace('/','-').replace('.','-')+'-'+str(width)
-                captures=[]; texts=[]; errors=[]
-                for label,folder in (('avant',before),('apres',root)):
-                  context=browser.new_context(viewport={'width':width,'height':height},locale='fr-FR',timezone_id='Europe/Paris',service_workers='block',reduced_motion='reduce')
-                  context.add_init_script(init)
-                  context.route('**/*',lambda route,_request,folder=folder:serve(folder,route))
-                  page=context.new_page()
-                  page_errors=[]
-                  page.on('pageerror',lambda error:page_errors.append(str(error)))
-                  page.goto('http://pjjoue.test/'+address,wait_until='networkidle')
-                  page.evaluate('document.fonts.ready')
-                  if screen:
-                    page.evaluate('(screen)=>afficherEcran(screen)',screen)
-                    page.locator('#'+screen+'.actif').wait_for(state='visible')
-                  page.wait_for_timeout(150)
-                  texts.append(page.locator('body').inner_text())
-                  captures.append(page.screenshot(path=str(output/(slug+'-'+label+'.png')),full_page=True,animations='disabled',caret='hide'))
-                  errors.append(page_errors)
-                  if address=='index.html' and not screen and label=='apres':
-                    assert page.title()=='Quiz CJPM : réviser la justice pénale des mineurs'
-                  context.close()
-                assert texts[0]==texts[1], 'Texte affiché différent : '+slug
-                assert errors[0]==errors[1], 'Nouvelle erreur JavaScript : '+slug
-                a=Image.open(io.BytesIO(captures[0])).convert('RGB')
-                b=Image.open(io.BytesIO(captures[1])).convert('RGB')
-                assert a.size==b.size and ImageChops.difference(a,b).getbbox() is None, 'Rendu différent : '+slug
-                results.append({'vue':slug,'pixelsIdentiques':True,'texteIdentique':True,'aucuneNouvelleErreurJavaScript':True})
-            browser.close()
-          (root/'test-results/seo/comparaison-visuelle.json').write_text(json.dumps(results,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-          print(str(len(results))+' comparaisons bureau/mobile : pixels et textes identiques avant/après.')
       - name: Préparer un commit vérifié sans publier sur main
         run: |
           set -euo pipefail
