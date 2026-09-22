@@ -142,11 +142,6 @@ jobs:
                   "author":{"@type":"Person","name":"Dev'Ines"},
               }
               nouveau = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
-              ancien_hash = base64.b64encode(hashlib.sha256(ancien.encode()).digest()).decode()
-              nouveau_hash = base64.b64encode(hashlib.sha256(nouveau.encode()).digest()).decode()
-              if "sha256-"+ancien_hash not in page:
-                  raise ErreurConstruction("Parcours indexable : hash CSP introuvable.")
-              page = page.replace("sha256-"+ancien_hash, "sha256-"+nouveau_hash, 1)
               return motif.sub(lambda x: x.group(1)+nouveau+x.group(3), page, count=1)
 
 
