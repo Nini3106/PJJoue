@@ -160,12 +160,17 @@ def construire_page_parcours_indexable(page_principale: str) -> str:
     }
     nouveau_jsonld = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     page = motif_jsonld.sub(lambda m: m.group(1) + nouveau_jsonld + m.group(3), page, count=1)
-    ancienne_empreinte = base64.b64encode(hashlib.sha256(ancien_jsonld.encode("utf-8")).digest()).decode("ascii")
     nouvelle_empreinte = base64.b64encode(hashlib.sha256(nouveau_jsonld.encode("utf-8")).digest()).decode("ascii")
-    marqueur_ancien = "sha256-" + ancienne_empreinte
-    if page.count(marqueur_ancien) != 1:
-        raise ErreurConstruction("L'empreinte CSP du JSON-LD source est introuvable pour /parcours/.")
-    page = page.replace(marqueur_ancien, "sha256-" + nouvelle_empreinte, 1)
+    marqueur_nouveau = "'sha256-" + nouvelle_empreinte + "'"
+    repere_csp = " https://www.googletagmanager.com; style-src"
+    if page.count(repere_csp) != 1:
+        raise ErreurConstruction("La directive script-src CSP de /parcours/ est introuvable.")
+    if marqueur_nouveau not in page:
+        page = page.replace(
+            repere_csp,
+            f" {marqueur_nouveau} https://www.googletagmanager.com; style-src",
+            1,
+        )
     return page
 
 
