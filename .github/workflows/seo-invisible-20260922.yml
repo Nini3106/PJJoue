@@ -1,0 +1,248 @@
+name: Validation SEO invisible Quiz CJPM
+
+on:
+  push:
+    branches: [seo/quiz-cjpm-20260922-validation]
+
+permissions:
+  contents: write
+
+jobs:
+  seo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      BASE_SHA: 4dc36329d6a735583722445710fe2ce23abb5686
+    steps:
+      - name: Repartir exactement de main sans ajouter ce workflow au résultat
+        uses: actions/checkout@v4
+        with:
+          ref: 4dc36329d6a735583722445710fe2ce23abb5686
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Installer les outils et vérifier la version de départ
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$BASE_SHA"
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE_SHA"
+          npm ci
+          python -m pip install -r requirements-dev.txt
+          python -m playwright install --with-deps chromium
+          mkdir -p test-results/seo
+          npm test 2>&1 | tee test-results/seo/avant.log
+      - name: Modifier seulement les sources SEO
+        shell: python
+        run: |
+          import base64, hashlib, html, json, re
+          from pathlib import Path
+          from html.parser import HTMLParser
+          root = Path.cwd()
+          plan = json.loads((root/'code/plan-construction.json').read_text())
+          config_path = root/'code/seo-pages.json'
+          config = json.loads(config_path.read_text())
+          entries = [
+            ('index.html', 'Quiz CJPM : réviser la justice pénale des mineurs', 'Révise le CJPM avec des quiz, QCM et exercices sur la justice pénale des mineurs. 5 parcours CJPM et une option PJJ. Site indépendant et non officiel.'),
+            ('guides/index.html', 'Réviser le CJPM : guides et fiches | Quiz CJPM', 'Des guides pour réviser le CJPM : procédure, RRSE, MEJ, MEJP, sigles et peines des mineurs. Des repères avant les quiz, avec une option Découvrir la PJJ.'),
+            ('cjpm-enquete-sanction/index.html', 'Réviser le CJPM : enquête et sanction | Quiz CJPM', 'Révise la procédure ordinaire du CJPM : enquête, parquet, culpabilité, mise à l’épreuve éducative et sanction. Un guide pour préparer tes quiz CJPM.'),
+            ('cjpm-information-judiciaire/index.html', 'CJPM : information judiciaire des mineurs | Quiz CJPM', 'Révise l’information judiciaire des mineurs : juge d’instruction, JLD, mesures provisoires et renvoi. Un guide CJPM pour comprendre avant les quiz.'),
+            ('cjpm-jugement-sanction-educative/index.html', 'CJPM : jugement et sanction éducative | Quiz CJPM', 'Révise le CJPM du jugement à la sanction : culpabilité, mise à l’épreuve éducative, MEJ et MEJP. Un guide pour consolider tes repères avant les quiz.'),
+            ('cjpm-matiere-criminelle-peines/index.html', 'CJPM : matière criminelle et peines | Quiz CJPM', 'Révise la matière criminelle dans le CJPM : qualification, juridictions des mineurs et peines. Des repères pour comprendre et préparer tes quiz CJPM.'),
+            ('cjpm-application-execution/index.html', 'CJPM : application et exécution des peines | Quiz CJPM', 'Révise le CJPM après la sanction : application et exécution des peines, rôles du juge des enfants et du JAP. Un guide pour préparer tes quiz CJPM.'),
+            ('mesures-educatives-pjj/index.html', 'MEJ et MEJP : mesures éducatives du CJPM | Quiz CJPM', 'Révise les mesures éducatives du CJPM : MEJ, MEJP, modules et différences avec les peines. Un guide pour comprendre et préparer les quiz et Mission Mesures.'),
+            ('sigles-cjpm/index.html', 'Sigles CJPM : RRSE, MEJ, MEJP, CJ et ARSE | Quiz CJPM', 'Décode les sigles du CJPM : RRSE, MEJ, MEJP, CJ, ARSE et juridictions des mineurs. Un guide pour réviser la justice pénale des mineurs avant les quiz.'),
+            ('quiz-pjj/index.html', 'Quiz et QCM CJPM : parcours de révision | Quiz CJPM', 'Découvre les quiz CJPM : procédure, mesures éducatives et peines des mineurs. 960 questions au total, avec une option PJJ, pour réviser à ton rythme.'),
+            ('rrse-mineur/index.html', 'RRSE du mineur : définition et déroulement | Quiz CJPM', 'Comprends le RRSE du mineur : définition, objectifs et déroulement du recueil de renseignements socio-éducatifs. Un guide pour réviser le CJPM avant les quiz.'),
+            ('peines-mineurs-cjpm/index.html', 'Peines des mineurs dans le CJPM | Quiz CJPM', 'Révise les peines des mineurs dans le CJPM et leurs différences avec les mesures éducatives. Un guide pour comprendre la sanction et préparer tes quiz CJPM.')
+          ]
+          sources = {p['sortie']:p['source'] for p in plan['pages_autonomes']}
+          sources['index.html'] = plan['gabarit_page_principale']
+          urls = {p['sortie']:p['url'] for p in config['pages']}
+          assert len(urls) == 21
+          assert len({e[1] for e in entries}) == len(entries)
+          assert len({e[2] for e in entries}) == len(entries)
+          website_id = 'https://pjjoue.fr/#website'
+          subject = {'@type':'Thing','name':'Code de la justice pénale des mineurs','alternateName':'CJPM'}
+          ld_pattern = re.compile(r'(<script\b[^>]*\btype=[\"\']application/ld\+json[\"\'][^>]*>)(.*?)(</script>)', re.S|re.I)
+          class Tag(HTMLParser):
+            def handle_starttag(self, tag, attrs):
+              self.attrs = dict(attrs)
+          def attributes(tag):
+            parser = Tag(); parser.feed(tag); return parser.attrs
+          def replace_meta(head, key, value, field='name', add=False):
+            count = 0
+            def sub(match):
+              nonlocal count
+              tag = match.group(0)
+              if attributes(tag).get(field) != key:
+                return tag
+              count += 1
+              result, n = re.subn(r'\bcontent=[\"\'][^\"\']*[\"\']', 'content="'+html.escape(value, quote=True)+'"', tag, count=1)
+              assert n == 1, (key, tag)
+              return result
+            head = re.sub(r'<meta\b[^>]*>', sub, head, flags=re.I)
+            if count == 0 and add:
+              return head + '\n<meta '+field+'="'+key+'" content="'+html.escape(value, quote=True)+'"/>\n'
+            assert count == 1, (key, count)
+            return head
+          report = []
+          for output, title, description in entries:
+            assert len(title) <= config['titreMax']
+            assert config['descriptionMin'] <= len(description) <= config['descriptionMax']
+            path = root/sources[output]
+            before = path.read_text(encoding='utf-8')
+            head, separator, body = before.partition('</head>')
+            assert separator and '<body' in body
+            old_title = html.unescape(re.search(r'<title>(.*?)</title>', head, re.S).group(1))
+            head, n = re.subn(r'<title>.*?</title>', '<title>'+html.escape(title)+'</title>', head, count=1, flags=re.S)
+            assert n == 1
+            head = replace_meta(head, 'description', description)
+            head = replace_meta(head, 'og:title', title, 'property')
+            head = replace_meta(head, 'og:description', description, 'property')
+            head = replace_meta(head, 'twitter:title', title, add=True)
+            head = replace_meta(head, 'twitter:description', description, add=True)
+            blocks = list(ld_pattern.finditer(head))
+            assert len(blocks) <= 1, output
+            old_raw = blocks[0].group(2) if blocks else ''
+            data = json.loads(old_raw) if old_raw else {'@context':'https://schema.org','@type':'WebPage','name':title,'url':urls[output]}
+            assert isinstance(data, dict) and '@graph' not in data, output
+            data['description'] = description
+            data['dateModified'] = '2026-09-22'
+            data['inLanguage'] = 'fr-FR'
+            data['about'] = subject
+            if output == 'index.html':
+              assert data.get('@type') == 'WebSite'
+              data['@id'] = website_id
+              data['name'] = 'Quiz CJPM'
+              data['hasPart'] = {
+                '@type':['WebPage','LearningResource'], '@id':urls[output]+'#webpage',
+                'url':urls[output], 'name':title, 'description':description,
+                'inLanguage':'fr-FR', 'isPartOf':{'@id':website_id},
+                'about':subject, 'learningResourceType':['Quiz','QCM','Exercices'],
+                'educationalUse':['Révision','Autoévaluation']
+              }
+            else:
+              assert data.get('@type') in ('WebPage','CollectionPage'), (output,data.get('@type'))
+              data['@type'] = [data['@type'], 'LearningResource']
+              data['@id'] = urls[output]+'#webpage'
+              data['isPartOf'] = {'@type':'WebSite','@id':website_id,'name':'Quiz CJPM','url':'https://pjjoue.fr/'}
+              data['learningResourceType'] = 'Présentation des quiz et parcours' if output == 'quiz-pjj/index.html' else 'Guide de révision'
+              data['educationalUse'] = 'Révision'
+            new_raw = json.dumps(data, ensure_ascii=False, separators=(',',':')).replace('<','\\u003c')
+            if blocks:
+              head = ld_pattern.sub(lambda m:m.group(1)+new_raw+m.group(3), head, count=1)
+              old_hash = base64.b64encode(hashlib.sha256(old_raw.encode()).digest()).decode()
+              new_hash = base64.b64encode(hashlib.sha256(new_raw.encode()).digest()).decode()
+              head = head.replace('sha256-'+old_hash, 'sha256-'+new_hash)
+            else:
+              head += '\n<script type="application/ld+json">'+new_raw+'</script>\n'
+            after = head+separator+body
+            assert after.partition('</head>')[2] == before.partition('</head>')[2]
+            path.write_text(after, encoding='utf-8')
+            for page in config['pages']:
+              if page['sortie'] == output:
+                page['lastmod'] = '2026-09-22'
+            report.append({'page':output,'source':sources[output],'ancienTitre':old_title,'titre':title,'description':description,'contenuVisibleSourceIdentique':True})
+          config_path.write_text(json.dumps(config, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+          nav = root/'code/01 - Éléments communs/JavaScript - Navigation et fenêtres.js'
+          source = nav.read_text(encoding='utf-8')
+          old = "? 'Quiz CJPM — Justice pénale des mineurs'"
+          new = "? '"+entries[0][1]+"'"
+          assert source.count(old) == 1
+          nav.write_text(source.replace(old,new),encoding='utf-8')
+          (root/'test-results/seo/metadonnees.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('12 sources HTML : métadonnées uniquement ; titre JavaScript de l’accueil aligné ; 21 URL conservées.')
+      - name: Reconstruire le site, le sitemap et le manifeste
+        run: |
+          set -euo pipefail
+          npm run build:site
+          npm run build:seo
+          npm run build:site
+          npm run build:manifeste
+      - name: Prouver que les différences sont exclusivement SEO et empreintes de construction
+        shell: python
+        run: |
+          import json, os, re, subprocess
+          from pathlib import Path
+          from html.parser import HTMLParser
+          root = Path.cwd()
+          base = os.environ['BASE_SHA']
+          def original(path):
+            return subprocess.check_output(['git','show',base+':'+path]).decode('utf-8')
+          changed = subprocess.check_output(['git','diff','--name-only','-z',base]).decode().strip('\0').split('\0')
+          assert not subprocess.check_output(['git','diff','--name-only','--diff-filter=ADR',base]).strip()
+          class Tag(HTMLParser):
+            def handle_starttag(self, tag, attrs): self.attrs = dict(attrs)
+          def remove_seo_meta(match):
+            p=Tag(); p.feed(match.group(0)); a=p.attrs
+            if a.get('name') in ('description','twitter:title','twitter:description') or a.get('property') in ('og:title','og:description'):
+              return ''
+            return match.group(0)
+          def normalize_assets(text):
+            return re.sub(r'(?<=\?v=)[a-f0-9]{12}\b','BUILD_VERSION',text)
+          def normalize_html(text):
+            text=normalize_assets(text)
+            head, sep, body=text.partition('</head>')
+            if not sep:
+              return text
+            head=re.sub(r'<title>.*?</title>','',head,flags=re.S)
+            head=re.sub(r'<script\b[^>]*\btype=[\"\']application/ld\+json[\"\'][^>]*>.*?</script>','',head,flags=re.S|re.I)
+            head=re.sub(r'<meta\b[^>]*>',remove_seo_meta,head,flags=re.I)
+            head=re.sub(r'sha256-[A-Za-z0-9+/]{43}=','sha256-METADATA_HASH',head)
+            return re.sub(r'>\s+<','><',head.strip())+sep+body
+          old_title='Quiz CJPM — Justice pénale des mineurs'
+          new_title='Quiz CJPM : réviser la justice pénale des mineurs'
+          for path in changed:
+            before=original(path); after=(root/path).read_text(encoding='utf-8')
+            if path.endswith('.html'):
+              assert normalize_html(before)==normalize_html(after), 'Modification HTML non SEO : '+path
+              if path.startswith('code/'):
+                assert before.partition('</head>')[2]==after.partition('</head>')[2], path
+            elif path in ('code/01 - Éléments communs/JavaScript - Navigation et fenêtres.js','ressources/moteur-jeu.js'):
+              assert before.replace(old_title,new_title)==after, 'Modification fonctionnelle JavaScript : '+path
+            elif path=='service-worker.js':
+              assert re.sub(r'\b[a-f0-9]{12}\b','BUILD_VERSION',before)==re.sub(r'\b[a-f0-9]{12}\b','BUILD_VERSION',after), 'Logique du service worker modifiée'
+            elif path=='code/seo-pages.json':
+              a=json.loads(before); b=json.loads(after)
+              for conf in (a,b):
+                for item in conf['pages']: item.pop('lastmod',None)
+              assert a==b, 'Périmètre d’indexation modifié'
+            elif path=='sitemap.xml':
+              assert re.findall(r'<loc>(.*?)</loc>',before)==re.findall(r'<loc>(.*?)</loc>',after)
+              assert len(re.findall(r'<loc>',after))==21
+            elif path!='MANIFESTE.json':
+              raise AssertionError('Fichier hors périmètre : '+path)
+          report={'base':base,'fichiersModifies':changed,'pagesIndexables':21,'cssImagesQuestionsAnalyticsSauvegardesInchanges':True,'htmlVisibleInchangeHorsVersionsAssets':True,'javascriptSeulTitreAccueilModifie':True}
+          (root/'test-results/seo/invariance.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps(report,ensure_ascii=False,indent=2))
+      - name: Exécuter toutes les vérifications sur le résultat
+        run: |
+          set -euo pipefail
+          npm test 2>&1 | tee test-results/seo/apres.log
+          npm run test:pages-annexes 2>&1 | tee test-results/seo/pages-annexes.log
+          git diff --check
+      - name: Préparer un commit vérifié, sans publier sur main
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$BASE_SHA"
+          git config user.name "Dev'Ines"
+          git config user.email "129184531+Nini3106@users.noreply.github.com"
+          git add --update
+          git commit -m "Renforcer le SEO Quiz CJPM sans modification visible"
+          git push origin HEAD:refs/heads/seo/quiz-cjpm-20260922-ready
+          git rev-parse HEAD | tee test-results/seo/commit.txt
+          git show --stat --oneline HEAD | tee test-results/seo/fichiers.txt
+      - name: Conserver les preuves de validation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-seo-invisible-20260922
+          path: test-results/
+          retention-days: 14
