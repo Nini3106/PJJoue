@@ -190,18 +190,8 @@ jobs:
           new = '        attendus = {f"{route}/index.html" for route in routes.values() if route and route != "parcours"}\n'
           assert t.count(old) == 1
           t = t.replace(old, new, 1)
-          old = '''        for route in routes.values():
-              if route:
-                  self.assertNotIn(f"https://pjjoue.fr/{route}/</loc>", sitemap)
-          '''
-          old = textwrap.dedent(old)
-          new = '''        for route in routes.values():
-              if route and route != "parcours":
-                  self.assertNotIn(f"https://pjjoue.fr/{route}/</loc>", sitemap)
-              elif route == "parcours":
-                  self.assertIn("https://pjjoue.fr/parcours/</loc>", sitemap)
-          '''
-          new = textwrap.dedent(new)
+          old = '        for route in routes.values():\n            if route:\n                self.assertNotIn(f"https://pjjoue.fr/{route}/</loc>", sitemap)\n'
+          new = '        for route in routes.values():\n            if route and route != "parcours":\n                self.assertNotIn(f"https://pjjoue.fr/{route}/</loc>", sitemap)\n        self.assertIn("https://pjjoue.fr/parcours/</loc>", sitemap)\n'
           assert t.count(old) == 1
           t = t.replace(old, new, 1)
           p.write_text(t, encoding="utf-8")
