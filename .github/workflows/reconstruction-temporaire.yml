@@ -1,0 +1,49 @@
+name: Reconstruction temporaire Quiz CJPM
+
+on:
+  push:
+    branches:
+      - professionnalisation-quiz-cjpm
+    paths:
+      - .github/workflows/reconstruction-temporaire.yml
+
+permissions:
+  contents: write
+
+jobs:
+  reconstruire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer la branche
+        uses: actions/checkout@v4
+        with:
+          ref: professionnalisation-quiz-cjpm
+          fetch-depth: 0
+
+      - name: Préparer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Reconstruire les données et le site
+        run: |
+          python outils/verifier_noms_fichiers.py
+          python outils/construire_donnees.py
+          python outils/construire_site.py
+          python outils/construire_seo.py
+          python outils/construire_seo.py --verifier
+          python outils/construire_manifeste.py
+          python outils/construire_site.py --verifier
+          python outils/construire_manifeste.py --verifier
+
+      - name: Enregistrer la reconstruction
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Aucune reconstruction nécessaire."
+          else
+            git commit -m "Reconstruire Quiz CJPM depuis les sources"
+            git push origin HEAD:professionnalisation-quiz-cjpm
+          fi
