@@ -135,7 +135,7 @@ jobs:
                 for label,folder in (('avant',before),('apres',root)):
                   context=browser.new_context(viewport={'width':width,'height':height},locale='fr-FR',timezone_id='Europe/Paris',service_workers='block',reduced_motion='reduce')
                   context.add_init_script(init)
-                  context.route('**/*',lambda route,folder=folder:serve(folder,route))
+                  context.route('**/*',lambda route,_request,folder=folder:serve(folder,route))
                   page=context.new_page()
                   page_errors=[]
                   page.on('pageerror',lambda error:page_errors.append(str(error)))
