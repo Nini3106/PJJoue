@@ -1820,8 +1820,8 @@
       "sha256": "43439401171f02b0115e6cc1d63eeba51140bf773303cffcfc900d868d0536ef"
     },
     "tests/verifier_atlas.py": {
-      "tailleOctets": 25146,
-      "sha256": "7f1868c5f5f6e79bc9381dbd9cde75888392e6385c672f1e403970100e58e97d"
+      "tailleOctets": 25416,
+      "sha256": "da21ac9507febb22dd44f75e8e3e4a53aca0c959da93b814baadcb22536f94cf"
     },
     "tests/verifier_atlas_v1_couleurs.py": {
       "tailleOctets": 10634,
