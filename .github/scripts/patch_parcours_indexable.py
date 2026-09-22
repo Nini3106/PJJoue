@@ -171,7 +171,7 @@ def construire_page_parcours_indexable(page_principale: str) -> str:
             f" {marqueur_nouveau} https://www.googletagmanager.com; style-src",
             1,
         )
-    return page
+    return page.rstrip() + "\n"
 
 
 '''
