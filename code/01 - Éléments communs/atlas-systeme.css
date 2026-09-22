@@ -915,34 +915,42 @@ body { margin:0; min-width:0; }
 #qc-atlas :is(.q-primary,.q-secondary,.q-textbtn) { text-decoration:none; }
 @media (max-width:640px) {
  #qc-atlas .q-header {
-   min-height:54px;
-   padding:5px 10px;
+   min-height:52px;
+   padding:4px 8px;
+   flex-direction:row;
+   flex-wrap:nowrap;
    align-items:center;
-   gap:8px;
+   justify-content:space-between;
+   gap:6px;
  }
  #qc-atlas .q-identity {
-   gap:8px;
    flex:1 1 auto;
    min-width:0;
+   flex-direction:row;
+   flex-wrap:nowrap;
+   align-items:center;
+   gap:6px;
  }
  #qc-atlas .q-header .q-brand {
-   font-size:calc(18px * var(--echelle-texte,1));
-   gap:8px;
+   flex:0 0 auto;
+   font-size:calc(17px * var(--echelle-texte,1));
+   gap:7px;
  }
  #qc-atlas .q-mark {
-   width:32px;
-   height:32px;
-   font-size:calc(22px * var(--echelle-texte,1));
+   width:30px;
+   height:30px;
+   font-size:calc(21px * var(--echelle-texte,1));
  }
  #qc-atlas .q-tagline {
    display:block;
-   max-width:92px;
+   max-width:86px;
    min-width:0;
    white-space:normal;
-   font-size:calc(9px * var(--echelle-texte,1));
-   line-height:1.2;
+   font-size:calc(8.5px * var(--echelle-texte,1));
+   line-height:1.15;
  }
  #qc-atlas .q-nav {
+   flex:0 0 auto;
    width:auto;
    margin-left:auto;
    justify-content:flex-end;
@@ -952,7 +960,7 @@ body { margin:0; min-width:0; }
  #qc-atlas .q-more { position:static; margin-left:auto; }
  #qc-atlas .bouton-menu-mobile,
  #qc-atlas .atlas-static-menu > summary {
-   min-width:82px;
+   min-width:78px;
    min-height:44px;
    border:1px solid color-mix(in srgb,var(--q-paper) 38%,transparent);
    background:color-mix(in srgb,var(--q-paper) 9%,var(--q-menu-fond));
