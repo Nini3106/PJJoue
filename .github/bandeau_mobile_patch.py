@@ -18,7 +18,11 @@ new = """ #qc-atlas .q-header {
    align-items:center;
    gap:8px;
  }
- #qc-atlas .q-identity { gap:8px; }
+ #qc-atlas .q-identity {
+   gap:8px;
+   flex:1 1 auto;
+   min-width:0;
+ }
  #qc-atlas .q-header .q-brand {
    font-size:calc(18px * var(--echelle-texte,1));
    gap:8px;
@@ -27,6 +31,13 @@ new = """ #qc-atlas .q-header {
    width:32px;
    height:32px;
    font-size:calc(22px * var(--echelle-texte,1));
+ }
+ #qc-atlas .q-tagline {
+   display:block;
+   max-width:92px;
+   white-space:normal;
+   font-size:calc(9px * var(--echelle-texte,1));
+   line-height:1.2;
  }
 """
 
