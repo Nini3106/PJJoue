@@ -183,6 +183,27 @@ new = '''@media (max-width:640px) {
 assert s.count(old) == 1
 p.write_text(s.replace(old, new, 1), encoding="utf-8")
 
+# Recette Atlas : sur mobile, utiliser le panneau dépliant lorsque le bouton direct est masqué.
+p = root / "tests/verifier_atlas.py"
+t = p.read_text(encoding="utf-8")
+repere = "\n\ndef navigation(page):\n"
+assert t.count(repere) == 1
+helper = """\n\ndef cliquer_navigation_principale(page, identifiant_direct, ecran):
+    bouton = page.locator(identifiant_direct)
+    if bouton.is_visible():
+        bouton.click()
+        return
+    page.locator('#boutonMenuMobile').click()
+    assert page.locator('#menuPrincipal').is_visible()
+    page.locator(f'#menuPrincipal [data-ecran="{ecran}"]').click()
+\n\ndef navigation(page):\n"""
+t = t.replace(repere, helper, 1)
+assert t.count("    page.locator('#boutonParcoursPJJ').click()\n") == 1
+t = t.replace("    page.locator('#boutonParcoursPJJ').click()\n", "    cliquer_navigation_principale(page, '#boutonParcoursPJJ', 'parcours')\n", 1)
+assert t.count("    page.locator('#boutonEntrainementLibre').click()\n") == 2
+t = t.replace("    page.locator('#boutonEntrainementLibre').click()\n", "    cliquer_navigation_principale(page, '#boutonEntrainementLibre', 'entrainement')\n")
+p.write_text(t, encoding="utf-8")
+
 # Test de finition adapté à la navigation mobile
 p = root / "tests/verifier_finitions_v1.py"
 s = p.read_text(encoding="utf-8")
