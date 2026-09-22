@@ -18,8 +18,12 @@ function lireOption(nom, valeurParDefaut) {
         : valeurParDefaut;
 }
 
-const adresseEcoute = lireOption('--host', '0.0.0.0');
+const adresseEcoute = lireOption('--host', '127.0.0.1');
 const portEcoute = Number(lireOption('--port', '4173'));
+if (!Number.isInteger(portEcoute) || portEcoute < 1 || portEcoute > 65535) {
+    console.error('Port local invalide. Utilise un entier entre 1 et 65535.');
+    process.exit(1);
+}
 const typesContenu = {
     '.css': 'text/css; charset=utf-8',
     '.html': 'text/html; charset=utf-8',
@@ -59,6 +63,12 @@ const serveur = http.createServer((requete, reponse) => {
     fs.createReadStream(cheminFichier).pipe(reponse);
 });
 
+serveur.on('error', erreur => {
+    console.error(erreur.code === 'EADDRINUSE'
+        ? `Le port ${portEcoute} est déjà occupé. Ferme l’autre aperçu, puis relance.`
+        : `Impossible de démarrer l’aperçu : ${erreur.message}`);
+    process.exitCode = 1;
+});
 serveur.listen(portEcoute, adresseEcoute, () => {
-    console.log(`Prévisualisation de PJJoue disponible sur le port ${portEcoute}.`);
+    console.log(`Prévisualisation locale : http://${adresseEcoute}:${portEcoute}`);
 });

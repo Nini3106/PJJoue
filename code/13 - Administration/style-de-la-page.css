@@ -1,35 +1,18 @@
-/* Administration locale — uniquement les composants spécifiques à l'éditeur. */
-body { color: var(--text); background: var(--bg); }
-main > h1 { max-width: 820px; margin-bottom: 10px; }
-main > p { max-width: 900px; line-height: 1.6; }
-.carte-question { margin: 14px 0; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: #fffefa; box-shadow: var(--shadow-xs); }
-.grille-question { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.pleine-largeur { grid-column: 1 / -1; }
-label { display: grid; gap: 6px; }
-small { color: var(--text-soft); }
-textarea { min-height: 90px; resize: vertical; }
-.etat-administration { padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; color: #626b70; background: #f4f4f0; }
-.fenetre-administration { width: min(520px, calc(100vw - 36px)); padding: 0; overflow: visible; border: 0; color: var(--text); background: transparent; }
-.fenetre-administration::backdrop { background:rgba(93,150,200,.22); }
-.fenetre-administration-panneau { position: relative; padding: 30px; border: 1px solid var(--line); border-radius: 24px; background: #fffefa; box-shadow: var(--shadow-md); }
-.fenetre-administration-icone { display: grid; width: 46px; height: 46px; margin-bottom: 18px; place-items: center; border-radius: 15px; color: #48575e; background: #eceeed; font-size: 1.2rem; font-weight: 700; }
-.fenetre-administration h2 { margin: 0 44px 10px 0; font-size: 1.55rem; }
-.fenetre-administration p { margin: 0; line-height: 1.55; }
-.fenetre-administration-fermer { position: absolute; top: 16px; right: 16px; display: grid; width: 38px; height: 38px; padding: 0; place-items: center; border-radius: 50%; color: #626b70; background: #eef0ed; font-size: 1.25rem; }
-.fenetre-administration-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
-.fenetre-administration-actions .fenetre-administration-principal { border-color: transparent; color:#fffefa; background:#56656c; }
-@media (max-width: 720px) { .grille-question { grid-template-columns: 1fr; } }
-@media (max-width: 560px) { .fenetre-administration-panneau { padding: 26px 20px 22px; } .fenetre-administration-actions { flex-direction: column-reverse; } .fenetre-administration-actions button { width:max-content; max-width:100%; } }
-
-/* Présentation commune issue de l’audit visuel. */
-body > main > h1 { font-size:clamp(1.8rem,3.2vw,2.5rem); line-height:1.25; }
-body .barre-outils { background:var(--surface); border-radius:12px; box-shadow:none; align-items:end; }
-body .barre-outils label { color:var(--text-soft); }
-.carte-question { background:var(--surface); border-radius:12px; box-shadow:none; }
-.carte-question h2 { font-size:1.25rem; color:var(--text); }
-.carte-question label { color:var(--text-soft); }
-.etat-administration { color:var(--text-soft); background:var(--surface-soft); }
-.fenetre-administration-panneau { background:var(--surface); border-radius:16px; }
-.fenetre-administration :is(h2,p) { color:var(--text); }
-.fenetre-administration-fermer { color:var(--text); background:var(--surface-raised); }
-@media (max-width:620px) { body .barre-outils { position:static; padding:14px; } }
+/* Atlas — outils d’administration locaux. */
+#qc-atlas .barre-outils {display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:22px;border:1px solid var(--q-line);border-radius:9px;background:var(--q-panel);margin:20px 0;}
+#qc-atlas .barre-outils input {flex:1;min-width:220px;}
+#qc-atlas .etat-administration {color:var(--q-muted);font-size:var(--q-text-control);margin:20px 0;}
+#qc-atlas .carte-question {padding:24px;margin:18px 0;border:1px solid var(--q-line);border-radius:9px;background:var(--q-panel);}
+#qc-atlas .carte-question h2 {font:400 25px/1.2 Georgia,serif;margin:0 0 14px;}
+#qc-atlas .grille-question {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
+#qc-atlas .grille-question > * {min-width:0;}
+#qc-atlas .pleine-largeur {grid-column:1/-1;}
+#qc-atlas .grille-question label {display:grid;gap:8px;font-size:var(--q-text-control);font-weight:600;}
+#qc-atlas textarea {min-height:100px;line-height:1.6;}
+#qc-atlas .fenetre-administration {position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px;background:#172d485e;}
+#qc-atlas .fenetre-administration[hidden] {display:none;}
+#qc-atlas .fenetre-administration-panneau {position:relative;width:min(650px,100%);max-height:90dvh;overflow:auto;padding:30px;background:var(--q-panel);border:1px solid var(--q-ink);border-radius:10px;}
+#qc-atlas .fenetre-administration-fermer {position:absolute;right:10px;top:10px;width:44px;height:44px;}
+#qc-atlas .fenetre-administration-icone {color:var(--q-blue);}
+#qc-atlas .fenetre-administration-actions {display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+@media(max-width:640px) {#qc-atlas .grille-question{grid-template-columns:1fr;}#qc-atlas .barre-outils{padding:18px;}#qc-atlas .carte-question{padding:20px;}#qc-atlas .fenetre-administration-panneau{padding:25px 18px;}}

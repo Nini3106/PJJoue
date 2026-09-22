@@ -1,3 +1,51 @@
+/**
+ * Atlas V1 — palette de présentation partagée.
+ * Les valeurs d'origine restent dans les données ; seuls les accents affichés
+ * sont intensifiés. Aucun score, identifiant, ordre ou état n'est transformé.
+ */
+const ACCENTS_ATLAS = Object.freeze({
+    "#c4a333": "#b8870a",
+    "#55a4bb": "#167f9c",
+    "#a289c4": "#8753b7",
+    "#d57d96": "#c3426a",
+    "#55a396": "#1b8271",
+    "#789bd4": "#3f72bb",
+    "#39d7c4": "#138c7f",
+    "#ffc83d": "#b3860b",
+    "#a986ff": "#8251cb",
+    "#62c5ff": "#147fba",
+    "#ff9e5e": "#c76727",
+    "#5fe0a0": "#27885a",
+    "#ffcf66": "#ad7e19",
+    "#f49ac2": "#bb4c81",
+    "#52d6c8": "#168779",
+    "#78aef5": "#4175bd",
+    "#c59cff": "#8e58c2",
+    "#eb78ac": "#bc437b",
+    "#74d4ff": "#157c9f",
+    "#a7df75": "#648527",
+    "#ff8b73": "#c1543b",
+    "#d49a00": "#b8870a",
+    "#0891b2": "#167f9c",
+    "#8b5cf6": "#8753b7",
+    "#e11d48": "#c3426a",
+    "#0f766e": "#1b8271",
+    "#4f8cff": "#3f72bb"
+});
+function obtenirAccentAtlas(couleur) {
+    return ACCENTS_ATLAS[String(couleur).toLowerCase()] || couleur;
+}
+function obtenirCouleursAtlas(couleurSource) {
+    const couleur = obtenirAccentAtlas(couleurSource);
+    const composantes = /^#[0-9a-f]{6}$/i.test(couleur || '')
+        ? couleur.slice(1).match(/.{2}/g).map(valeur => parseInt(valeur, 16))
+        : [33, 79, 186];
+    const encre = [23, 45, 72];
+    const couleurTexte = '#' + composantes.map((valeur, index) =>
+        Math.round(valeur * .72 + encre[index] * .28).toString(16).padStart(2, '0')
+    ).join('');
+    return { couleur, couleurTexte, couleurRgb: composantes.join(',') };
+}
 'use strict';
 
 /**
@@ -515,7 +563,7 @@ function creerSauvegardeInitiale() {
         aDejaJoue: false,
         erreurs: {},
         progression: { apprenant: {} },
-        parametres: { son: true, volume: .65, echelleTexte: 1 },
+        parametres: { son: true, volume: .65, echelleTexte: 1.15 },
         dernierTheme: null,
         etapesDecouvertes: {},
         questionsJouees: {},
@@ -858,7 +906,7 @@ function nettoyerSauvegarde(sauvegardeBrute) {
                 : .65,
             echelleTexte: [.9, 1, 1.08, 1.15].includes(Number(parametres.echelleTexte))
                 ? Number(parametres.echelleTexte)
-                : 1
+                : 1.15
         },
         dernierTheme: estThemeConnu(sauvegardeBrute.dernierTheme)
             ? sauvegardeBrute.dernierTheme
@@ -1431,7 +1479,7 @@ function fermerMenuPrincipal() {
     bouton?.setAttribute('aria-label', 'Ouvrir le menu principal');
     const libelle = bouton?.querySelector('.bouton-menu-libelle');
     if (libelle)
-        libelle.textContent = 'Menu';
+        libelle.textContent = 'Plus';
 }
 function basculerMenuPrincipal() {
     const entete = document.querySelector('header.entete');
@@ -1445,7 +1493,7 @@ function basculerMenuPrincipal() {
     bouton.setAttribute('aria-label', ouvert ? 'Fermer le menu principal' : 'Ouvrir le menu principal');
     const libelle = bouton.querySelector('.bouton-menu-libelle');
     if (libelle)
-        libelle.textContent = ouvert ? 'Fermer' : 'Menu';
+        libelle.textContent = ouvert ? 'Fermer' : 'Plus';
     mesurerHauteurEntete();
     if (ouvert)
         requestAnimationFrame(() => navigation.querySelector('button:not(:disabled), a[href]')?.focus());
@@ -1581,6 +1629,7 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     if (identifiant === 'mesures')
         actualiserAccueilMesures();
     actualiserGroupesChoix();
+    if (identifiant === 'entrainement') actualiserLibelleSelecteurAtlas();
     actualiserNavigation(identifiant);
     actualiserBoutonRetour();
     if (!optionsAffichage.depuisHistorique && !restaurationNavigation)
@@ -2174,6 +2223,7 @@ function actualiserAccueil() {
         maitrisees.textContent = String(compterEtapesMaitrisees());
     actualiserLibellesProgression();
     actualiserBoutonCommencer();
+    actualiserAccueilAtlas();
     const boutonEntrainementLibreAccueil = selectionner('#boutonEntrainementLibreAccueil');
     if (boutonEntrainementLibreAccueil)
         boutonEntrainementLibreAccueil.hidden = sauvegarde.aDejaJoue !== true;
@@ -2262,9 +2312,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         description: 'Suis le dossier depuis l’enquête et l’orientation du parquet jusqu’à la culpabilité, la MEE éventuelle et la sanction.',
         niveau: 'Intermédiaire',
         duree: '≈ 1 h 40',
-        couleur: '#d49a00',
-        couleurTexte: '#ffd36a',
-        couleurRgb: '212,154,0',
+        ...obtenirCouleursAtlas('#c4a333'),
         recommande: true
     },
     information_judiciaire: {
@@ -2274,9 +2322,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         description: 'Situe l’information judiciaire avant le jugement et repère le rôle du JI, du JLD et les décisions provisoires.',
         niveau: 'Intermédiaire',
         duree: '≈ 1 h 45',
-        couleur: '#0891b2',
-        couleurTexte: '#70d7ea',
-        couleurRgb: '8,145,178'
+        ...obtenirCouleursAtlas('#55a4bb')
     },
     jugement_educatif_ordinaire: {
         numero: '03',
@@ -2285,9 +2331,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         description: 'Comprends le rôle du JE et du TPE et construis la réponse éducative au stade du jugement et de la sanction.',
         niveau: 'Intermédiaire',
         duree: '≈ 1 h 45',
-        couleur: '#8b5cf6',
-        couleurTexte: '#c7afff',
-        couleurRgb: '139,92,246'
+        ...obtenirCouleursAtlas('#a289c4')
     },
     matiere_criminelle_peines: {
         numero: '04',
@@ -2296,9 +2340,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         description: 'Pars de la qualification et de l’âge aux faits pour identifier la juridiction, puis la sanction ou la peine possible.',
         niveau: 'Avancé',
         duree: '≈ 1 h 50',
-        couleur: '#e11d48',
-        couleurTexte: '#ff91a8',
-        couleurRgb: '225,29,72'
+        ...obtenirCouleursAtlas('#d57d96')
     },
     application_execution_peines: {
         numero: '05',
@@ -2307,9 +2349,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         description: 'Après la sanction, suis l’exécution, les aménagements, les incidents et l’articulation entre JE et JAP.',
         niveau: 'Avancé',
         duree: '≈ 1 h 40',
-        couleur: '#0f766e',
-        couleurTexte: '#70d6ca',
-        couleurRgb: '15,118,110'
+        ...obtenirCouleursAtlas('#55a396')
     },
     commun: {
         numero: '06',
@@ -2319,9 +2359,7 @@ const IDENTITES_PARCOURS = Object.freeze({
         description: 'Missions, publics, professionnels, structures et logique éducative de la PJJ.',
         niveau: 'Débutant',
         duree: '≈ 1 h 20',
-        couleur: '#4f8cff',
-        couleurTexte: '#9fc2ff',
-        couleurRgb: '79,140,255',
+        ...obtenirCouleursAtlas('#789bd4'),
         optionnel: true
     }
 });
@@ -2365,9 +2403,8 @@ function calculerProgressionParcours(identifiantTheme) {
     };
 }
 function actualiserSelecteurParcours() {
-    const zone = selectionner('#selecteurParcours');
-    if (!zone)
-        return;
+    const zones = selectionnerTous('#selecteurParcours, #catalogueAtlas');
+    zones.forEach(zone => {
     zone.innerHTML = '';
     THEMES.forEach(theme => {
         const identite = obtenirIdentiteParcours(theme.id);
@@ -2386,19 +2423,14 @@ function actualiserSelecteurParcours() {
         bouton.style.setProperty('--parcours-accent-lisible', identite.couleurTexte);
         bouton.style.setProperty('--parcours-accent-rgb', identite.couleurRgb);
         bouton.setAttribute('aria-label', `${identite.titre}. ${progression.maitrisees} étapes maîtrisées sans joker sur ${progression.total}.${progression.evaluationReussie ? ' Évaluation finale réussie.' : ''}`);
+        bouton.classList.add('q-chapter');
+        const compact = zone.dataset.catalog === 'compact';
         bouton.innerHTML = `
-            ${progression.jalonsMaitrises > 0 ? creerEtoileFilanteProgression(progression.jalonsMaitrises) : ''}
-            <span class="selecteur-parcours-numero">${identite.libelleNumero || `Parcours ${identite.numero}`}</span>
-            <span class="selecteur-parcours-icone">${creerIconeTheme(theme.id, '')}</span>
-            <span class="selecteur-parcours-statut">${statut}</span>
-            <span class="selecteur-parcours-texte">
-                ${theme.id === IDENTIFIANT_PARCOURS_RECOMMANDE ? '<b>Recommandé pour commencer</b>' : (identite.chapitre ? `<b>${identite.chapitre}</b>` : '')}
-                <strong>${identite.titre}</strong>
-                <small>${identite.description}</small>
-            </span>
-            <span class="selecteur-parcours-informations"><span>${identite.niveau}</span><span>${identite.duree}</span></span>
-            <span class="selecteur-parcours-progression" aria-hidden="true"><i style="width:${progression.pourcentage}%"></i></span>
-            <span class="selecteur-parcours-pied"><span>${progression.maitrisees}/${progression.total} étapes</span><span>Explorer →</span></span>`;
+            <span class="q-chapter-top"><span>${identite.numero}</span><span>${identite.optionnel ? 'OPTION PJJ' : identite.recommande ? 'POINT DE DÉPART' : 'PARCOURS CJPM'}</span></span>
+            <h3 class="selecteur-parcours-titre">${identite.titre}</h3>
+            ${compact ? '' : `<p>${identite.description}</p>`}
+            <span class="q-chapter-bottom"><span>${progression.jalonsMaitrises > 0 ? `${progression.maitrisees} / ${progression.total} étapes maîtrisées` : identite.chapitre || 'Le parcours optionnel'}</span><span class="atlas-chapter-reperes">${progression.jalonsMaitrises > 0 ? creerEtoileFilanteProgression(progression.jalonsMaitrises) : ''}<span aria-hidden="true">↗</span></span></span>
+            <span class="lecteur-ecran-seulement">${statut}. ${identite.niveau}. ${identite.duree}.</span>`;
         bouton.onclick = () => {
             envoyerEvenementPJJ('parcours_selectionne', {
                 pjjoue_parcours: PROGRAMMES[theme.id]?.titre,
@@ -2408,6 +2440,7 @@ function actualiserSelecteurParcours() {
             ouvrirParcours(theme.id);
         };
         zone.appendChild(bouton);
+    });
     });
 }
 function ouvrirChoixParcours(optionsAffichage = {}) {
@@ -2534,15 +2567,22 @@ const COULEURS_THEMES_ETAPES = Object.freeze([
     '#f49ac2', '#52d6c8', '#78aef5', '#c59cff', '#ffc83d'
 ]);
 function obtenirCouleurTitreEtape(numeroEtape) {
-    return COULEURS_THEMES_ETAPES[(Number(numeroEtape) - 1) % COULEURS_THEMES_ETAPES.length];
+    return obtenirAccentAtlas(COULEURS_THEMES_ETAPES[(Number(numeroEtape) - 1) % COULEURS_THEMES_ETAPES.length]);
 }
 function obtenirCouleurIconeEtape(numeroEtape) {
-    return COULEURS_THEMES_ETAPES[Number(numeroEtape) % COULEURS_THEMES_ETAPES.length];
+    return obtenirAccentAtlas(COULEURS_THEMES_ETAPES[Number(numeroEtape) % COULEURS_THEMES_ETAPES.length]);
+}
+function obtenirCouleurEtapeAtlas(identifiantTheme, numeroEtape) {
+    const programme = PROGRAMMES[identifiantTheme];
+    const numero = Number(numeroEtape);
+    if (programme && numero > programme.etapes.length) return obtenirIdentiteParcours(identifiantTheme).couleur;
+    return identifiantTheme === 'commun'
+        ? obtenirCouleursEtapePJJ(numero).couleur
+        : obtenirCouleurTitreEtape(numero);
 }
 function obtenirCouleursEtapePJJ(numeroEtape) {
     const couleur = PROGRAMMES.commun.etapes.find(etape => etape.id === Number(numeroEtape)).couleur;
-    const couleurRgb = couleur.slice(1).match(/.{2}/g).map(valeur => parseInt(valeur, 16)).join(',');
-    return { couleur, couleurTexte: couleur, couleurRgb };
+    return obtenirCouleursAtlas(couleur);
 }
 const FICHIERS_ICONES_PARCOURS_DECOUVERTE = Object.freeze({
     1: 'icone-loupe-decouverte.svg',
@@ -2602,7 +2642,7 @@ function afficherEtapes() {
         carte.dataset.etape = String(etapeProgramme.id);
         carte.dataset.theme = etat.theme;
         if (etat.theme === 'commun') {
-            carte.style.setProperty('--couleur-etape', etapeProgramme.couleur);
+            carte.style.setProperty('--couleur-etape', obtenirCouleurEtapeAtlas(etat.theme, etapeProgramme.id));
         } else {
             carte.style.setProperty('--couleur-etape', obtenirCouleurTitreEtape(etapeProgramme.id));
             carte.style.setProperty('--couleur-icone-etape', obtenirCouleurIconeEtape(etapeProgramme.id));
@@ -2616,17 +2656,10 @@ function afficherEtapes() {
         ].filter(Boolean).join(' ');
         carte.setAttribute('aria-label', `Étape ${etapeProgramme.id} — ${etapeProgramme.titre} — ${nombreTraitees} questions réalisées sur ${total}${etapeValideeEnAutonomie ? ' — maîtrisée sans joker' : ''}`);
         carte.innerHTML = `
-          ${etapeValideeEnAutonomie ? creerEtoileFilanteProgression() : ''}
-          <span class="chemin-etape-icone" aria-hidden="true">${obtenirBaliseIconeEtape(etapeProgramme.id, etat.theme)}</span>
-          <span class="chemin-etape-texte">
-            <span class="chemin-etape-numero">ÉTAPE ${etapeProgramme.id}</span>
-            <span class="chemin-etape-titre">${etapeProgramme.titre}</span>
-          </span>
-          ${estDestinationActuelle ? '<span class="chemin-position-actuelle">À travailler</span>' : ''}
-          <span class="chemin-progression"><i style="width:${pourcentageTermine}%"></i></span>
-          <span class="chemin-nombre">${etapeValideeEnAutonomie
-            ? '<b>Maîtrisée sans aide</b>'
-            : `<b>${nombreTraitees}/${total}</b> questions · environ 8 min`}</span>`;
+          <span class="atlas-etape-repere"><span class="chemin-etape-numero">${String(etapeProgramme.id).padStart(2, '0')}</span>${etapeValideeEnAutonomie ? creerEtoileFilanteProgression() : ''}</span>
+          <span class="chemin-etape-texte"><strong class="chemin-etape-titre">${etapeProgramme.titre}</strong><span class="chemin-nombre">${nombreTraitees}/${total} questions travaillées</span></span>
+          <span class="chemin-statut">${etapeValideeEnAutonomie ? 'Maîtrisée sans aide' : estDestinationActuelle ? 'À travailler →' : pourcentageTermine === 100 ? 'À consolider' : 'À découvrir'}</span>
+          <span class="chemin-progression" aria-label="${pourcentageTermine}%"><i style="width:${pourcentageTermine}%"></i></span>`;
         carte.addEventListener('click', evenement => {
             if (evenement.target.closest('button'))
                 return;
@@ -2675,6 +2708,7 @@ function afficherEtapes() {
     evaluation.setAttribute('aria-disabled', String(!evaluationDeverrouillee));
     evaluation.classList.toggle('deverrouillee', evaluationDeverrouillee);
     evaluation.classList.toggle('complete', evaluationReussie);
+    evaluation.style.setProperty('--couleur-etape', obtenirIdentiteParcours(etat.theme).couleur);
     evaluation.querySelector(':scope > .etoile-filante-progression')?.remove();
     if (evaluationReussie)
         evaluation.insertAdjacentHTML('afterbegin', creerEtoileFilanteProgression());
@@ -2854,7 +2888,7 @@ function appliquerCouleursParcoursEntrainement() {
     if (etat.contexteEntrainement === 'sigles') {
         groupe.querySelectorAll('.choix-bouton[data-valeur]').forEach(bouton => {
             const numero = Number(bouton.dataset.valeur);
-            if (!Number.isFinite(numero) || numero < 1 || numero > 6)
+            if (!Number.isFinite(numero) || !SIGLES.some(sigle => Number(sigle.etape) === numero))
                 return;
             const identite = obtenirIdentiteEtapeMissionSigles(numero);
             bouton.style.setProperty('--parcours-accent', identite.couleur);
@@ -3042,6 +3076,7 @@ function actualiserGroupesChoix() {
     });
     appliquerCouleursParcoursEntrainement();
     actualiserLimiteQuestionsEntrainement();
+    actualiserLibelleSelecteurAtlas();
 }
 // -----------------------------------------------------------------------------
 // Sélection des questions et préparation des sessions
@@ -4690,9 +4725,7 @@ function preparerQuestionCourante() {
 }
 
 const IDENTITE_PARCOURS_MINI_JEUX = Object.freeze({
-    couleur: '#4f8cff',
-    couleurTexte: '#9fc2ff',
-    couleurRgb: '79,140,255'
+    ...obtenirCouleursAtlas('#4f8cff')
 });
 
 function obtenirIdentiteParcoursQuestion(question) {
@@ -4910,12 +4943,8 @@ function appliquerIdentiteVisuelleEtape(question) {
         identifiantEtape = `mesures-${numeroEtape}`;
     }
     else {
-        const programme = PROGRAMMES[question?.theme];
-        const etapeProgramme = programme?.etapes?.find(
-            etape => Number(etape.id) === Number(question?.etape)
-        );
-        couleurEtape = etapeProgramme?.couleur || obtenirCouleurTitreEtape(question?.etape);
-        couleurEtapeLisible = couleurEtape;
+        couleurEtape = obtenirCouleurEtapeAtlas(question?.theme, question?.etape);
+        couleurEtapeLisible = obtenirCouleursAtlas(couleurEtape).couleurTexte;
     }
 
     document.documentElement.style.setProperty('--couleur-etape-active', couleurEtape);
@@ -6452,7 +6481,7 @@ function afficherCarteVoyageFinale() {
             const bouton = document.createElement('button');
             bouton.type = 'button';
             bouton.className = 'carte-voyage-etape';
-            bouton.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#2d7379');
+            bouton.style.setProperty('--couleur-etape', obtenirCouleurEtapeAtlas(theme.id, etapeProgramme.id));
             bouton.innerHTML = `${obtenirBaliseIconeEtape(etapeProgramme.id, theme.id)}<span>P${indexTheme + 1}·${etapeProgramme.id}</span>`;
             bouton.setAttribute('aria-label', `Ouvrir le parcours ${indexTheme + 1}, étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
             bouton.onclick = () => ouvrirEtapeDepuisCarteFinale(theme.id, etapeProgramme.id);
@@ -6642,7 +6671,7 @@ function construireReperesRevision(jeu, element) {
         `<span class="revision-repere" style="--repere-accent:${couleur};--repere-texte:${couleurTexte}">${echapperHtml(libelle)}</span>`;
     if (jeu === 'parcours') {
         const parcours = obtenirIdentiteParcours(cible.theme);
-        const couleurEtape = obtenirEtapeProgramme(cible.theme, cible.etape)?.couleur || obtenirCouleurTitreEtape(cible.etape);
+        const couleurEtape = obtenirCouleurEtapeAtlas(cible.theme, cible.etape);
         return `<small class="revision-reperes">${badge(`Parcours ${obtenirOrdreTheme(cible.theme) + 1}`, parcours.couleur, parcours.couleurTexte)}${badge(`Étape ${cible.etape}`, couleurEtape)}</small>`;
     }
     const etape = jeu === 'sigles' ? obtenirIdentiteEtapeMissionSigles(cible.etape)
@@ -6688,11 +6717,11 @@ function construireEspaceRevision(jeu, zone) {
     const selection = filtrerElementsRevision(jeu, elements);
     const choixParcours = [{ valeur:'toutes', libelle:'Tous les parcours' }, ...themes.map(theme => {
         const identite = obtenirIdentiteParcours(theme.id);
-        return { valeur:theme.id, libelle:identite.titre, couleur:identite.couleurTexte || identite.couleur };
+        return { valeur:theme.id, libelle:identite.titre, couleur:identite.couleur };
     })];
     const choixEtapes = [{ valeur:'toutes', libelle:'Toutes les étapes' }, ...etapes.map(numero => ({
         valeur:String(numero), libelle:jeu === 'sigles' ? libelleEtapeSigles(numero) : `Étape ${numero}`,
-        couleur:jeu === 'parcours' ? (obtenirEtapeProgramme(filtres.theme, numero)?.couleur || obtenirCouleurTitreEtape(numero))
+        couleur:jeu === 'parcours' ? obtenirCouleurEtapeAtlas(filtres.theme, numero)
             : (jeu === 'sigles' ? obtenirIdentiteEtapeMissionSigles(numero) : obtenirIdentiteEtapeMissionMesures(numero)).couleur
     }))];
     zone.innerHTML = `<section class="revision-filtres" aria-label="Choisir les questions à réviser">
@@ -7013,11 +7042,11 @@ function initialiserRechercheSupports() {
     synchroniserOuvertureSupports(zone);
 }
 const ETAPES_MISSION_SIGLES = Object.freeze({
-    1: { numero:'01', titre:'Enquête et premiers repères', sousTitre:'Parcours 1 · De l’enquête à la sanction', domaine:'cjpm', couleur:'#d49a00', couleurTexte:'#ffd36a', couleurRgb:'212,154,0', icone:'justice' },
-    2: { numero:'02', titre:'Instruction et mesures de sûreté', sousTitre:'Parcours 2 · Information judiciaire', domaine:'cjpm', couleur:'#0891b2', couleurTexte:'#70d7ea', couleurRgb:'8,145,178', icone:'justice' },
-    3: { numero:'03', titre:'Jugement et réponse éducative', sousTitre:'Parcours 3 · Du jugement à la sanction', domaine:'cjpm', couleur:'#8b5cf6', couleurTexte:'#c7afff', couleurRgb:'139,92,246', icone:'mesures' },
-    4: { numero:'04', titre:'Matière criminelle et garanties', sousTitre:'Parcours 4 · Crimes, peines et droits', domaine:'cjpm', couleur:'#e11d48', couleurTexte:'#ff91a8', couleurRgb:'225,29,72', icone:'justice' },
-    5: { numero:'05', titre:'Application et exécution des peines', sousTitre:'Parcours 5 · Après la sanction', domaine:'cjpm', couleur:'#0f766e', couleurTexte:'#70d6ca', couleurRgb:'15,118,110', icone:'mesures' },
+    1: { numero:'01', titre:'Enquête et premiers repères', sousTitre:'Parcours 1 · De l’enquête à la sanction', domaine:'cjpm', ...obtenirCouleursAtlas('#d49a00'), icone:'justice' },
+    2: { numero:'02', titre:'Instruction et mesures de sûreté', sousTitre:'Parcours 2 · Information judiciaire', domaine:'cjpm', ...obtenirCouleursAtlas('#0891b2'), icone:'justice' },
+    3: { numero:'03', titre:'Jugement et réponse éducative', sousTitre:'Parcours 3 · Du jugement à la sanction', domaine:'cjpm', ...obtenirCouleursAtlas('#8b5cf6'), icone:'mesures' },
+    4: { numero:'04', titre:'Matière criminelle et garanties', sousTitre:'Parcours 4 · Crimes, peines et droits', domaine:'cjpm', ...obtenirCouleursAtlas('#e11d48'), icone:'justice' },
+    5: { numero:'05', titre:'Application et exécution des peines', sousTitre:'Parcours 5 · Après la sanction', domaine:'cjpm', ...obtenirCouleursAtlas('#0f766e'), icone:'mesures' },
     6: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', domaine:'pjj', etapePjj:5, ...obtenirCouleursEtapePJJ(5), icone:'organisation' },
     7: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', domaine:'pjj', etapePjj:6, ...obtenirCouleursEtapePJJ(6), icone:'services' },
     8: { numero:'03', titre:'Placement et détention', sousTitre:'Structures et dispositifs de placement', domaine:'pjj', etapePjj:9, ...obtenirCouleursEtapePJJ(9), icone:'placement' },
@@ -7196,7 +7225,8 @@ function actualiserCarteEvaluationSigles() {
 function construireChoixPerimetreSigles() {
     const zone = selectionnerSigles('#siglesChoixPerimetre'); if (!zone) return;
     const actuel = zone.querySelector('[aria-pressed="true"]')?.dataset.perimetre || 'tous';
-    zone.innerHTML = `<button class="choix-bouton entrainement-perimetre-global" data-perimetre="tous" type="button" style="--parcours-accent:#4f8cff;--parcours-accent-lisible:#9fc2ff;--parcours-accent-rgb:79,140,255"><b>Tous les sigles</b><span>Les ${numerosEtapesSigles().length} étapes</span></button>` + numerosEtapesSigles().map(n => { const e=ETAPES_MISSION_SIGLES[n]; return `<button class="choix-bouton" data-perimetre="${n}" type="button" style="--parcours-accent:${e.couleur};--parcours-accent-lisible:${e.couleurTexte};--parcours-accent-rgb:${e.couleurRgb}"><b>${e.numero} · ${e.titre}</b><span>${obtenirSiglesEtape(n).length} sigles</span></button>`; }).join('');
+    const identiteGlobale = obtenirCouleursAtlas('#4f8cff');
+    zone.innerHTML = `<button class="choix-bouton entrainement-perimetre-global" data-perimetre="tous" type="button" style="--parcours-accent:${identiteGlobale.couleur};--parcours-accent-lisible:${identiteGlobale.couleurTexte};--parcours-accent-rgb:${identiteGlobale.couleurRgb}"><b>Tous les sigles</b><span>Les ${numerosEtapesSigles().length} étapes</span></button>` + numerosEtapesSigles().map(n => { const e=ETAPES_MISSION_SIGLES[n]; return `<button class="choix-bouton" data-perimetre="${n}" type="button" style="--parcours-accent:${e.couleur};--parcours-accent-lisible:${e.couleurTexte};--parcours-accent-rgb:${e.couleurRgb}"><b>${e.numero} · ${e.titre}</b><span>${obtenirSiglesEtape(n).length} sigles</span></button>`; }).join('');
     zone.querySelectorAll('button').forEach(b => { const actif = b.dataset.perimetre === actuel; b.classList.toggle('actif', actif); b.setAttribute('aria-pressed', actif?'true':'false'); b.addEventListener('click', () => { activerBoutonGroupeSigles(zone,b); actualiserDisponibiliteNombreSigles(); }); });
     actualiserDisponibiliteNombreSigles();
 }
@@ -7772,14 +7802,14 @@ function configurerEntrainementMissionSiglesNatif() {
     ecran.dataset.contexteEntrainement = 'sigles';
     const entete = ecran.querySelector('.entrainement-entete');
     entete?.querySelector('.surtitre') && (entete.querySelector('.surtitre').textContent = 'Mission Sigles');
-    entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Choisis ta session');
+    entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Une session à ta mesure.');
     entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Entraîne-toi sur les sigles avec exactement les mêmes réglages que dans Quiz CJPM.');
     const resultatDe = selectionner('#resultatDeParcours');
     if (resultatDe) resultatDe.textContent = `Lance le dé pour tirer de 1 à 6 questions aléatoires parmi les ${obtenirPoolDomaineSigles().length} sigles ${libelleDomaineSigles()}.`;
     const selectPerimetre = selectionner('#perimetreEntrainement');
     const groupePerimetre = document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
     if (selectPerimetre && groupePerimetre) {
-        const options=[...['cjpm','pjj','tous'].map(d=>({valeur:d,titre:d==='tous'?'Tous les sigles':`Sigles ${libelleDomaineSigles(d)}`,detail:`${obtenirPoolDomaineSigles(d).length} sigles`,couleur:d==='cjpm'?'#d49a00':'#4f8cff',couleurTexte:d==='cjpm'?'#ffd36a':'#9fc2ff',couleurRgb:d==='cjpm'?'212,154,0':'79,140,255'})),
+        const options=[...['cjpm','pjj','tous'].map(d=>({valeur:d,titre:d==='tous'?'Tous les sigles':`Sigles ${libelleDomaineSigles(d)}`,detail:`${obtenirPoolDomaineSigles(d).length} sigles`,...obtenirCouleursAtlas(d==='cjpm'?'#d49a00':'#4f8cff')})),
             ...numerosEtapesSigles('tous').map(n=>({...ETAPES_MISSION_SIGLES[n],valeur:String(n),titre:`${libelleDomaineSigles(ETAPES_MISSION_SIGLES[n].domaine)} ${ETAPES_MISSION_SIGLES[n].numero} · ${ETAPES_MISSION_SIGLES[n].titre}`,detail:`${obtenirSiglesEtape(n).length} sigles`}))];
         selectPerimetre.innerHTML=options.map(o=>`<option value="${o.valeur}">${o.titre}</option>`).join('');
         groupePerimetre.innerHTML=options.map(o=>`<button class="choix-bouton" data-valeur="${o.valeur}" type="button" style="--parcours-accent:${o.couleur};--parcours-accent-lisible:${o.couleurTexte};--parcours-accent-rgb:${o.couleurRgb}"><b>${o.titre}</b><span>${o.detail}</span></button>`).join('');
@@ -7836,8 +7866,8 @@ function restaurerEntrainementPJJoueNatif() {
     etat.contexteEntrainement = null;
     const entete = ecran.querySelector('.entrainement-entete');
     entete?.querySelector('.surtitre') && (entete.querySelector('.surtitre').textContent = 'Entraînement libre');
-    entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Choisis ta session');
-    entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Lance un défi surprise en un clic ou compose précisément ce que tu veux travailler, la durée et l’ordre des questions.');
+    entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Une session à ta mesure.');
+    entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Choisis ce que tu travailles, ou laisse le hasard te proposer un petit défi.');
     const resultatDe = selectionner('#resultatDeParcours');
     if (resultatDe) resultatDe.textContent = 'Lance le dé pour tirer de 1 à 6 questions aléatoires dans les six parcours.';
     const selectPerimetre = selectionner('#perimetreEntrainement');
@@ -7935,6 +7965,7 @@ const REPERES_MISSION_MESURES = Object.freeze([...(MESURES_MISSION?.reperes || [
 const ETAPES_MISSION_MESURES = Object.freeze(Object.fromEntries(
     (MESURES_MISSION?.etapes || []).map(etape => [Number(etape.numero), Object.freeze({
         ...etape,
+        ...obtenirCouleursAtlas(etape.couleur),
         numeroFormate: String(etape.numero).padStart(2, '0')
     })])
 ));
@@ -8637,6 +8668,7 @@ function remplirPastillesProgression() {
     afficherDetailProgressionParcours(obtenirThemeProgressionParDefaut());
 }
 function afficherProgression() {
+    afficherVueEnsembleAtlas();
     actualiserAccueil();
     const zone = selectionner('#tableauProgression');
     if (!zone)
@@ -8661,8 +8693,8 @@ function chargerParametres() {
     const parametres = sauvegarde.parametres;
     selectionner('#sonActif').value = String(parametres.son !== false);
     selectionner('#volumeSon').value = parametres.volume;
-    selectionner('#echelleTexte').value = String(parametres.echelleTexte || 1);
-    document.documentElement.style.setProperty('--echelle-texte', String(parametres.echelleTexte || 1));
+    selectionner('#echelleTexte').value = String(parametres.echelleTexte || 1.15);
+    document.documentElement.style.setProperty('--echelle-texte', String(parametres.echelleTexte || 1.15));
     appliquerDisponibiliteVolumeSon();
     requestAnimationFrame(mesurerHauteurEntete);
     actualiserGroupesChoix();
@@ -8888,6 +8920,102 @@ function lancerConfettis(intensite = 1, cible = document.body) {
         animation.onfinish = () => confetti.remove();
     }
 }
+/**
+ * Atlas — présentation uniquement.
+ * Lit les indicateurs du moteur existant ; ne définit aucune règle de score,
+ * de reprise, d’évaluation ni de stockage. Les commandes appellent les actions natives.
+ */
+function actualiserAccueilAtlas() {
+    const action = obtenirProchaineActionParcoursComplet();
+    const theme = action.theme || THEMES[0]?.id;
+    const programme = PROGRAMMES[theme];
+    const identite = obtenirIdentiteParcours(theme);
+    const progression = calculerProgressionParcours(theme);
+    const remplir = (id, valeur) => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = valeur;
+    };
+    const dossier = document.getElementById('atlasItineraire');
+    if (dossier) dossier.dataset.numero = identite.numero;
+    remplir('atlasItineraireTitre', identite.titre);
+    remplir('atlasItineraireSurTitre', progression.jalonsMaitrises ? 'Ton parcours en cours' : 'Ton point de départ');
+    remplir('atlasEtapesMaitrisees', `${progression.maitrisees} ${accorderLibelle(progression.maitrisees, 'étape maîtrisée', 'étapes maîtrisées')}`);
+    remplir('atlasEtapeCouranteNumero', action.type === 'etape' ? action.etape.id : '✓');
+    remplir('atlasEtapeCourante', action.type === 'etape' ? `Tu es ici · étape ${action.etape.id}` : action.type === 'evaluation' ? 'Prêt pour l’évaluation' : 'Tous les parcours validés');
+    remplir('atlasEtapeCouranteTitre', action.type === 'etape' ? action.etape.titre : 'À ton rythme, sans perdre tes acquis.');
+    remplir('atlasEtatEvaluation', progression.evaluationReussie ? 'Évaluation réussie ✓' : `Après les ${programme?.etapes.length || 11} étapes`);
+    const revisions = compterQuestionsAConsolider();
+    remplir('atlasResumeRevision', revisions ? `${revisions} ${accorderLibelle(revisions, 'question à retravailler', 'questions à retravailler')}.` : 'Tes questions à retravailler se retrouveront ici.');
+    actualiserSelecteurParcours();
+}
+
+function afficherVueEnsembleAtlas() {
+    const liste = document.getElementById('atlasProgressionListe');
+    if (!liste) return;
+    liste.replaceChildren();
+    THEMES.forEach(theme => {
+        const identite = obtenirIdentiteParcours(theme.id);
+        const progression = calculerProgressionParcours(theme.id);
+        const ligne = document.createElement('button');
+        ligne.type = 'button';
+        ligne.className = 'q-statsrow atlas-progress-row';
+        ligne.style.setProperty('--parcours-accent', identite.couleur);
+        ligne.setAttribute('aria-label', `${identite.titre} : ${progression.maitrisees} étapes maîtrisées sur ${progression.total}. Ouvrir ce parcours.`);
+        ligne.innerHTML = `<span class="atlas-progress-copy"><strong>${identite.numero} · ${identite.titre}</strong><span>${identite.optionnel ? 'Option PJJ · ' : ''}${progression.maitrisees}/${progression.total} étapes maîtrisées${progression.evaluationReussie ? ' · évaluation réussie ✓' : ''}</span></span><span class="atlas-progress-meter"><span class="q-small">${progression.pourcentage}%</span><span class="q-progress" aria-hidden="true"><span style="width:${progression.pourcentage}%;background:var(--parcours-accent)"></span></span></span>`;
+        ligne.addEventListener('click', () => ouvrirParcours(theme.id));
+        liste.appendChild(ligne);
+    });
+}
+
+function actualiserLibelleSelecteurAtlas() {
+    document.querySelectorAll('[data-atlas-select]').forEach(menu => {
+        const select = document.getElementById(menu.dataset.atlasSelect);
+        const etiquette = menu.querySelector('[data-atlas-select-label]');
+        const choisi = menu.querySelector('.choix-bouton.actif');
+        if (etiquette && select) etiquette.textContent = choisi?.querySelector('b')?.textContent || select.selectedOptions[0]?.textContent || 'Choisir';
+        // Lire le repère du bouton natif : ni filtre supplémentaire, ni état de jeu dupliqué.
+        const resume = menu.querySelector('summary');
+        if (resume) resume.style.setProperty('--parcours-accent', choisi?.style.getPropertyValue('--parcours-accent') || 'var(--q-blue)');
+    });
+}
+
+function initialiserPresentationAtlas() {
+    const entrainement = document.getElementById('entrainement');
+    if (!entrainement) return;
+    entrainement.querySelectorAll('[data-atlas-order]').forEach(bouton => {
+        bouton.addEventListener('click', () => {
+            entrainement.dataset.ordreAtlas = bouton.dataset.atlasOrder;
+            entrainement.querySelectorAll('[data-atlas-order]').forEach(autre => {
+                autre.setAttribute('aria-pressed', String(autre === bouton));
+            });
+        });
+    });
+    document.querySelectorAll('[data-atlas-select]').forEach(menu => {
+        // Délégation : les périmètres de Mission Sigles et Mesures sont générés
+        // par le moteur dans le même configurateur, sans reconstruire un faux formulaire.
+        menu.addEventListener('click', evenement => {
+            if (!evenement.target.closest('.choix-bouton')) return;
+            queueMicrotask(() => {
+                actualiserLibelleSelecteurAtlas();
+                menu.open = false;
+                menu.querySelector('summary')?.focus();
+            });
+        });
+        menu.addEventListener('keydown', evenement => {
+            if (evenement.key === 'Escape') {
+                menu.open = false;
+                menu.querySelector('summary')?.focus();
+            }
+        });
+        document.getElementById(menu.dataset.atlasSelect)?.addEventListener('change', () => queueMicrotask(actualiserLibelleSelecteurAtlas));
+    });
+    document.addEventListener('pointerdown', evenement => {
+        document.querySelectorAll('.atlas-select[open]').forEach(menu => {
+            if (!menu.contains(evenement.target)) menu.open = false;
+        });
+    });
+    actualiserLibelleSelecteurAtlas();
+}
 // -----------------------------------------------------------------------------
 // Branchement des commandes de l’interface
 // -----------------------------------------------------------------------------
@@ -8898,7 +9026,7 @@ selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => {
         ouvrirChoixParcours();
         return;
     }
-    if (bouton.dataset.ecran === 'entrainement' && bouton.id === 'boutonEntrainementLibre')
+    if (bouton.dataset.ecran === 'entrainement' && (bouton.id === 'boutonEntrainementLibre' || bouton.hasAttribute('data-entrainement-principal')))
         restaurerEntrainementPJJoueNatif();
     if (bouton.dataset.ecran === 'erreurs' && bouton.id === 'boutonReviser')
         etat.contexteRevision = null;
@@ -9383,6 +9511,7 @@ else
     activerAidesAuSurvol();
 window.addEventListener('resize', mesurerHauteurEntete, { passive: true });
 initialiserGroupesChoix();
+initialiserPresentationAtlas();
 initialiserRechercheSupports();
 actualiserAccueil();
 restaurerRoute(history.state || lireRoute());

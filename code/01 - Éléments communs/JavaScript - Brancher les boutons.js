@@ -15,7 +15,7 @@ selectionnerTous('[data-ecran]').forEach(bouton => bouton.onclick = () => {
         ouvrirChoixParcours();
         return;
     }
-    if (bouton.dataset.ecran === 'entrainement' && bouton.id === 'boutonEntrainementLibre')
+    if (bouton.dataset.ecran === 'entrainement' && (bouton.id === 'boutonEntrainementLibre' || bouton.hasAttribute('data-entrainement-principal')))
         restaurerEntrainementPJJoueNatif();
     if (bouton.dataset.ecran === 'erreurs' && bouton.id === 'boutonReviser')
         etat.contexteRevision = null;
@@ -500,6 +500,7 @@ else
     activerAidesAuSurvol();
 window.addEventListener('resize', mesurerHauteurEntete, { passive: true });
 initialiserGroupesChoix();
+initialiserPresentationAtlas();
 initialiserRechercheSupports();
 actualiserAccueil();
 restaurerRoute(history.state || lireRoute());

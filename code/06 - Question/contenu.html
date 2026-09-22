@@ -1,86 +1,66 @@
 <section class="ecran" id="question">
-    <div class="question-conteneur">
-     <div class="question-entete">
-      <div class="compteur" id="compteurQuestion">
-      </div>
-      <div aria-label="Avancement de la session" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="progression" role="progressbar">
-       <i id="progressionQuestion">
-       </i>
-      </div>
-      <button class="question-revision-etape-bouton masque" data-action="rejouer-erreurs-etape" id="boutonRejouerErreursEtape" type="button">
-       Consolider mes réponses
-      </button>
-      <div aria-live="polite" class="indicateur-serie masque" id="indicateurSerie">
-       <span aria-hidden="true">✦</span>
-       <strong></strong>
-      </div>
-     </div>
-     <div class="question-contexte-etape" id="contexteEtapeQuestion" aria-live="polite">
-      <div class="question-contexte-identites">
-       <div class="question-parcours-identite" id="identiteParcoursQuestion">
-        <span id="numeroParcoursQuestion">Parcours 01</span>
-        <strong id="titreParcoursQuestion">Découvrir la PJJ</strong>
-       </div>
-       <div class="question-etape-identite">
-        <div class="question-etape-numero-ligne">
-         <span id="numeroEtapeQuestion">Étape 1</span>
-         <button aria-label="Reprendre cette étape depuis la première question" class="question-reprendre-etape-bouton" id="boutonReprendreEtapeDepuisDebut" type="button">Reprendre depuis le début</button>
-        </div>
-        <strong id="titreEtapeQuestion">Parcours CJPM</strong>
-       </div>
-      </div>
-      <div class="question-autonomie" id="suiviSansJokerQuestion">
-       <span>Maîtrisées sans aide <strong id="compteurSansJokerQuestion">0/10</strong></span>
-       <button class="question-autonomie-reinitialiser" id="boutonReinitialiserValidationsSansJoker" type="button">Réinitialiser</button>
-      </div>
-     </div>
-     <h2 id="enonceQuestion">
-     </h2>
-     <div class="question-etape">
-      <div class="question question-carte">
-       <div class="question-chronometre-commandes" role="group" aria-label="Chronomètre de la question">
-        <button id="boutonChronometreQuestion" class="question-chronometre-bouton" type="button" aria-label="Activer le chronomètre : 15 secondes">
-         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 2h6M12 2v3m6 1 2-2"/><circle cx="12" cy="14" r="8"/><path d="M12 9v5l3 2"/></svg>
-         <span id="chronometreQuestion">Chrono</span>
-         <span id="ajoutChronometreQuestion" class="question-chronometre-ajout" aria-hidden="true"></span>
-        </button>
-        <button id="boutonChronometreToutesQuestions" class="question-chronometre-portee" type="button" aria-pressed="false" aria-label="Activer le chrono pour toutes les questions de cette session">Toutes les questions</button>
-        <button id="boutonArreterChronometre" class="question-chronometre-arret masque" type="button" aria-label="Arrêter le chronomètre">Arrêter</button>
-       </div>
-       <div class="reperes" id="reperesQuestion">
-       </div>
-       <div class="reponses" id="zoneReponses">
-       </div>
-       <div aria-atomic="true" aria-live="polite" class="correction masque" id="zoneCorrection" role="status" tabindex="-1">
-       </div>
-       <div class="correction masque" id="zoneIndice">
-       </div>
-      </div>
-     </div>
-     <div class="question-commande-ligne">
-      <div class="suivant-ligne">
-       <button aria-label="Question précédente" class="precedent-bouton" id="boutonQuestionPrecedente">
-        <span class="libelle-bureau">← Question précédente</span><span aria-hidden="true" class="libelle-mobile">← Précédente</span>
-       </button>
-       <button class="principal masque" id="boutonValider" type="button">
+
+<div class="question-conteneur">
+<header class="q-pagehead atlas-question-head"><div><div class="atlas-question-identity"><div class="question-parcours-identite" id="identiteParcoursQuestion">
+<span id="numeroParcoursQuestion">Parcours 01</span>
+<strong id="titreParcoursQuestion">Découvrir la PJJ</strong>
+</div></div><h1 class="q-serif">Un nouveau déclic.</h1></div><div class="atlas-question-timer"><div aria-label="Chronomètre de la question" class="question-chronometre-commandes" role="group">
+<button aria-label="Activer le chronomètre : 15 secondes" class="question-chronometre-bouton" id="boutonChronometreQuestion" type="button">
+<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M9 2h6M12 2v3m6 1 2-2"></path><circle cx="12" cy="14" r="8"></circle><path d="M12 9v5l3 2"></path></svg>
+<span id="chronometreQuestion">Chrono</span>
+<span aria-hidden="true" class="question-chronometre-ajout" id="ajoutChronometreQuestion"></span>
+</button>
+<button aria-label="Activer le chrono pour toutes les questions de cette session" aria-pressed="false" class="question-chronometre-portee" id="boutonChronometreToutesQuestions" type="button">Toutes les questions</button>
+<button aria-label="Arrêter le chronomètre" class="question-chronometre-arret masque" id="boutonArreterChronometre" type="button">Arrêter</button>
+</div></div></header>
+<div class="q-focuslayout">
+<section aria-labelledby="enonceQuestion" class="q-panel atlas-question-panel">
+<div class="q-stephead question-entete"><div class="question-etape-identite"><span class="atlas-step-number"><span id="numeroEtapeQuestion">Étape 1</span></span><strong class="atlas-step-title" id="titreEtapeQuestion">Parcours CJPM</strong></div><div class="atlas-question-counter"><div class="compteur" id="compteurQuestion">
+</div><div aria-live="polite" class="indicateur-serie masque" id="indicateurSerie">
+<span aria-hidden="true">✦</span>
+<strong></strong>
+</div></div></div>
+<div class="atlas-session-progress"><div aria-label="Avancement de la session" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="progression" role="progressbar">
+<i id="progressionQuestion">
+</i>
+</div></div>
+<div class="q-questionbody question question-carte"><div class="atlas-question-meta"><div class="reperes" id="reperesQuestion">
+</div></div><div class="atlas-question-title"><h2 id="enonceQuestion">
+</h2></div><div class="atlas-question-inputs"><div class="reponses" id="zoneReponses">
+</div><div aria-atomic="true" aria-live="polite" class="correction masque" id="zoneCorrection" role="status" tabindex="-1">
+</div><div class="correction masque" id="zoneIndice">
+</div></div></div>
+<div class="q-questionfoot"><div class="question-commande-ligne">
+<div class="suivant-ligne">
+<button aria-label="Question précédente" class="precedent-bouton" id="boutonQuestionPrecedente">
+<span class="libelle-bureau">← Question précédente</span><span aria-hidden="true" class="libelle-mobile">← Précédente</span>
+</button>
+<button class="principal masque" id="boutonValider" type="button">
         Valider
        </button>
-       <div class="navigation-question-groupe">
-        <button aria-controls="fenetreJokers" aria-expanded="false" aria-haspopup="dialog" class="joker-menu-bouton masque" id="boutonJokers" type="button">
-         <span aria-hidden="true" class="joker-onglet-icone">
-          <svg viewBox="0 0 24 24"><path d="M12 2.8l2.72 5.51 6.08.88-4.4 4.29 1.04 6.05L12 16.67l-5.44 2.86 1.04-6.05-4.4-4.29 6.08-.88L12 2.8z"></path></svg>
-         </span>
-         <span>Jokers</span>
-        </button>
-        <button class="passer-bouton" id="boutonPasser">
+<div class="navigation-question-groupe">
+<button aria-controls="fenetreJokers" aria-expanded="false" aria-haspopup="dialog" class="joker-menu-bouton masque" id="boutonJokers" type="button">
+<span aria-hidden="true" class="joker-onglet-icone">
+<svg viewBox="0 0 24 24"><path d="M12 2.8l2.72 5.51 6.08.88-4.4 4.29 1.04 6.05L12 16.67l-5.44 2.86 1.04-6.05-4.4-4.29 6.08-.88L12 2.8z"></path></svg>
+</span>
+<span>Jokers</span>
+</button>
+<button class="passer-bouton" id="boutonPasser">
          Passer →
         </button>
-        <button aria-label="Question suivante" class="principal masque" id="boutonQuestionSuivante">
-         <span class="libelle-bureau">Question suivante →</span><span aria-hidden="true" class="libelle-mobile">Suivante →</span>
-        </button>
-       </div>
-      </div>
-     </div>
-    </div>
-   </section>
-   
+<button aria-label="Question suivante" class="principal masque" id="boutonQuestionSuivante">
+<span class="libelle-bureau">Question suivante →</span><span aria-hidden="true" class="libelle-mobile">Suivante →</span>
+</button>
+</div>
+</div>
+</div></div></section>
+<aside class="q-sides question-contexte-etape" id="contexteEtapeQuestion">
+<div class="q-panel q-sidebox atlas-autonomy"><span class="q-overline">Dans cette étape</span><div class="atlas-autonomy-content"><div class="question-autonomie" id="suiviSansJokerQuestion">
+<span>Maîtrisées sans aide <strong id="compteurSansJokerQuestion">0/10</strong></span>
+<button class="question-autonomie-reinitialiser" id="boutonReinitialiserValidationsSansJoker" type="button">Réinitialiser</button>
+</div></div><p>Les réussites autonomes restent enregistrées.</p></div>
+<div class="q-panel q-sidebox atlas-step-actions"><h3>Les commandes de l’étape</h3><div class="atlas-step-action-buttons"><button class="question-revision-etape-bouton masque" data-action="rejouer-erreurs-etape" id="boutonRejouerErreursEtape" type="button">
+       Consolider mes réponses
+      </button><button aria-label="Reprendre cette étape depuis la première question" class="question-reprendre-etape-bouton" id="boutonReprendreEtapeDepuisDebut" type="button">Reprendre depuis le début</button></div><p>Reprendre une étape ne supprime pas les questions déjà maîtrisées.</p><button class="q-textbtn" data-ecran="supports" type="button">Ouvrir les supports ↗</button></div>
+</aside></div></div></section>
+

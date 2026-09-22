@@ -1,0 +1,2 @@
+OK — 108 fichiers publics servis par HTTP local : statut 200 et octets identiques. Route inexistante : 404.
+Client HTTP Python uniquement ; navigation Chromium HTTP non validée dans cet environnement.

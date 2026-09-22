@@ -46,6 +46,7 @@ function actualiserAccueil() {
         maitrisees.textContent = String(compterEtapesMaitrisees());
     actualiserLibellesProgression();
     actualiserBoutonCommencer();
+    actualiserAccueilAtlas();
     const boutonEntrainementLibreAccueil = selectionner('#boutonEntrainementLibreAccueil');
     if (boutonEntrainementLibreAccueil)
         boutonEntrainementLibreAccueil.hidden = sauvegarde.aDejaJoue !== true;

@@ -115,7 +115,7 @@ function fermerMenuPrincipal() {
     bouton?.setAttribute('aria-label', 'Ouvrir le menu principal');
     const libelle = bouton?.querySelector('.bouton-menu-libelle');
     if (libelle)
-        libelle.textContent = 'Menu';
+        libelle.textContent = 'Plus';
 }
 function basculerMenuPrincipal() {
     const entete = document.querySelector('header.entete');
@@ -129,7 +129,7 @@ function basculerMenuPrincipal() {
     bouton.setAttribute('aria-label', ouvert ? 'Fermer le menu principal' : 'Ouvrir le menu principal');
     const libelle = bouton.querySelector('.bouton-menu-libelle');
     if (libelle)
-        libelle.textContent = ouvert ? 'Fermer' : 'Menu';
+        libelle.textContent = ouvert ? 'Fermer' : 'Plus';
     mesurerHauteurEntete();
     if (ouvert)
         requestAnimationFrame(() => navigation.querySelector('button:not(:disabled), a[href]')?.focus());
@@ -265,6 +265,7 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     if (identifiant === 'mesures')
         actualiserAccueilMesures();
     actualiserGroupesChoix();
+    if (identifiant === 'entrainement') actualiserLibelleSelecteurAtlas();
     actualiserNavigation(identifiant);
     actualiserBoutonRetour();
     if (!optionsAffichage.depuisHistorique && !restaurationNavigation)

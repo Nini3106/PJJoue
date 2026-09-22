@@ -1,470 +1,159 @@
+/* Atlas — style-de-la-page.css : source unique du composant. */
 /* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=41 === */
-/* Finitions de la page Question : hauteur naturelle et commandes stables. */
-#question #enonceQuestion {
-    text-wrap: pretty;
+/* Question, sept présentations interactives et corrections. */
+#qc-atlas #question {
+ --etoile-accent:var(--couleur-etape-active);
+ --q-selection-accent:var(--couleur-etape-active,var(--q-blue));
+ --q-selection-fond:color-mix(in srgb,var(--q-selection-accent) var(--q-teinte-survol),var(--q-panel));
+ --q-selection-fond-fort:color-mix(in srgb,var(--q-selection-accent) var(--q-teinte-selection),var(--q-panel));
+ --q-selection-encre:color-mix(in srgb,var(--q-selection-accent) 72%,var(--q-ink));
 }
-
-/* Le focus reste annoncé aux technologies d’assistance sans dessiner un cadre
-   de bouton autour d’un titre non interactif. */
-#question #enonceQuestion[tabindex="-1"]:focus,
-#question #enonceQuestion[tabindex="-1"]:focus-visible {
-    outline: none;
-    box-shadow: none;
+#qc-atlas #question .q-stephead { background:color-mix(in srgb,var(--couleur-etape-active) 20%,var(--q-panel));border-top:4px solid var(--couleur-etape-active);color:var(--q-ink);flex-wrap:wrap; }
+#qc-atlas #question .atlas-session-progress .progression>i {background:var(--couleur-etape-active);}
+#qc-atlas #question .question-parcours-identite {border-left:4px solid var(--parcours-accent);padding-left:10px;color:var(--parcours-accent-lisible);}
+#qc-atlas .atlas-question-head { align-items:center; margin-top:10px; }
+#qc-atlas .atlas-question-head h1 { font-size:calc(40px * var(--echelle-texte,1)); margin-top:12px; }
+#qc-atlas .question-parcours-identite { display:flex; flex-wrap:wrap; gap:6px; color:var(--q-muted); font-size:var(--q-text-small); text-transform:uppercase; letter-spacing:.06em; }
+#qc-atlas .question-parcours-identite strong { font-weight:500; }
+#qc-atlas .question-parcours-identite>span::after { content:' · '; }
+#qc-atlas .question-chronometre-commandes { display:flex; gap:6px; flex-wrap:wrap; max-width:290px; justify-content:flex-end; }
+#qc-atlas .question-chronometre-commandes button { padding:9px; font-size:var(--q-text-small); }
+#qc-atlas .question-chronometre-commandes svg { fill:none; stroke:currentColor; stroke-width:1.7; }
+#qc-atlas .question-chronometre-bouton.actif,#qc-atlas .question-chronometre-bouton[aria-pressed="true"] { background:var(--q-ink); color:var(--q-paper); }
+#qc-atlas .question-chronometre-bouton.urgence { background:var(--q-badbg); color:var(--q-bad); }
+#qc-atlas .question-chronometre-portee[aria-pressed="true"] { border-color:var(--q-blue); color:var(--q-blue); }
+#qc-atlas .question-chronometre-ajout { color:inherit; }
+#qc-atlas .atlas-question-panel { align-self:start; }
+#qc-atlas .question-etape-identite { display:flex; flex-direction:column; gap:4px; min-width:0; }
+#qc-atlas .atlas-step-number { font-size:var(--q-text-small); letter-spacing:.07em; text-transform:uppercase; }
+#qc-atlas .atlas-step-title { font-size:var(--q-text-secondary); line-height:1.5; }
+#qc-atlas .atlas-question-counter { flex-shrink:0; text-align:right; font-size:var(--q-text-secondary); }
+#qc-atlas .indicateur-serie { font-size:var(--q-text-small); margin-top:4px; }
+#qc-atlas .atlas-session-progress .progression { height:3px; border-radius:0; }
+#qc-atlas .q-questionbody { padding:27px; }
+#qc-atlas .reperes { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px; font-size:var(--q-text-small); color:var(--q-muted); flex-wrap:wrap; }
+#qc-atlas .repere-theme { display:none; }
+#qc-atlas .reperes:empty { display:none; }
+#qc-atlas #enonceQuestion { font:400 30px/1.25 Georgia,'Times New Roman',serif; letter-spacing:-.5px; margin-bottom:25px; white-space:pre-line; overflow-wrap:anywhere; }
+#qc-atlas .reponses { display:flex; flex-direction:column; gap:11px; }
+#qc-atlas :is(.reponse,.multiple-choix,.elimination-choix,.sigles-reponse) { display:flex; align-items:center; justify-content:flex-start; text-align:left; padding:14px 15px; min-height:58px; width:100%; font-size:var(--q-text-base); font-weight:400; gap:13px; border:1px solid var(--q-line); border-radius:6px; background:var(--q-panel); line-height:1.55; }
+#qc-atlas .reponse .lettre { display:grid; place-items:center; height:23px; width:23px; border:1px solid var(--q-line); border-radius:50%; flex-shrink:0; font-size:var(--q-text-small); font-weight:500; }
+#qc-atlas :is(.reponse.selectionne,.reponse[aria-checked="true"],.multiple-choix.selectionne,.association-choix.selectionne,.choisir-ordre-proposition.selectionne) { background:var(--q-selection-fond); border-color:var(--q-selection-accent); box-shadow:inset 0 0 0 1px var(--q-selection-accent); color:var(--q-ink); }
+#qc-atlas .reponse.retire { visibility:hidden; pointer-events:none; }
+#qc-atlas .multiple-choix.retire { display:none; }
+#qc-atlas :is(.reponse.correcte,.reponse.bonne,.reponse.bonne-reponse,.sigles-reponse-correcte) { background:var(--q-goodbg); color:var(--q-good); border-color:var(--q-good); }
+#qc-atlas :is(.reponse.incorrecte,.reponse.mauvaise-reponse,.sigles-reponse-incorrecte) { background:var(--q-badbg); color:var(--q-bad); border-color:var(--q-bad); }
+#qc-atlas .reponse:disabled { opacity:1; }
+#qc-atlas .q-questionfoot { display:block; padding:18px 24px; }
+#qc-atlas .suivant-ligne { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+#qc-atlas .navigation-question-groupe { display:contents; }
+#qc-atlas .suivant-ligne > #boutonQuestionPrecedente { order:1; }
+#qc-atlas #boutonJokers { order:2; }
+#qc-atlas #boutonPasser { order:3; }
+#qc-atlas #boutonValider,#qc-atlas #boutonQuestionSuivante { order:4;margin-left:auto; }
+#qc-atlas :is(.precedent-bouton,.passer-bouton,.joker-menu-bouton) { border-color:transparent; background:transparent; color:var(--q-blue); font-size:var(--q-text-secondary); padding:10px 4px; }
+#qc-atlas .joker-onglet-icone svg { fill:none; stroke:currentColor; stroke-width:1.6; width:16px; height:16px; }
+#qc-atlas .libelle-mobile { display:none; }
+#qc-atlas .atlas-autonomy-content { margin-top:14px; }
+#qc-atlas .question-autonomie>span { display:flex; flex-direction:column-reverse; font-size:var(--q-text-secondary); gap:7px; }
+#qc-atlas #compteurSansJokerQuestion { font:calc(39px * var(--echelle-texte,1))/1 Georgia,serif; letter-spacing:-1px; }
+#qc-atlas .question-autonomie-reinitialiser { width:auto; padding-left:0; font-size:var(--q-text-small); justify-content:flex-start; }
+#qc-atlas .atlas-step-action-buttons { display:flex; flex-direction:column; gap:8px; }
+#qc-atlas .atlas-step-action-buttons button { margin:0; font-size:var(--q-text-control); padding:11px 9px; }
+#qc-atlas .atlas-autonomy:has(.question-autonomie.masque) { display:none; }
+/* Multiple choice and ordering. */
+#qc-atlas .activite-consigne { display:flex; flex-direction:column; gap:7px; font-size:var(--q-text-control); margin:0 0 17px; }
+#qc-atlas .activite-consigne>span { font-size:var(--q-text-small); color:var(--q-muted); text-transform:uppercase; letter-spacing:.07em; }
+#qc-atlas .activite-consigne>b { font-weight:500; }
+#qc-atlas :is(.multiple-grille,.elimination-grille,.sigles-reponses,.ordre-liste,.choisir-ordre-reserve,.classement-liste) { display:flex; flex-direction:column; gap:10px; padding:0; margin:0; }
+#qc-atlas .multiple-coche { width:20px; height:20px; border:1px solid var(--q-line); border-radius:4px; color:transparent; flex-shrink:0; display:grid; place-items:center; }
+#qc-atlas .selectionne .multiple-coche { color:var(--q-selection-encre,var(--q-ink)); background:var(--q-selection-fond-fort,var(--q-soft)); border-color:var(--q-selection-accent,var(--q-blue)); }
+#qc-atlas :is(.ordre-liste,.ordre-choix-selectionne)>li { display:flex; align-items:center; gap:12px; padding:12px; border:1px solid var(--q-line); border-radius:6px; background:var(--q-panel); }
+#qc-atlas .ordre-liste>li>b { color:var(--q-selection-encre); font-size:var(--q-text-secondary); }
+#qc-atlas .ordre-texte { flex:1; font-size:var(--q-text-control); }
+#qc-atlas .ordre-commandes { display:flex; flex-direction:column; gap:3px; }
+#qc-atlas .ordre-commandes button { width:38px; min-height:34px; padding:4px; }
+#qc-atlas .choisir-ordre-proposition { justify-content:flex-start; text-align:left; gap:12px; font-size:var(--q-text-control); font-weight:400; padding:13px; }
+#qc-atlas .choisir-ordre-compteur,#qc-atlas .elimination-compteur { margin:15px 0; font-size:var(--q-text-secondary); color:var(--q-muted); }
+#qc-atlas .ordre-choix-selectionne { display:flex;flex-direction:column;gap:10px;list-style:none;counter-reset:ordre;margin:18px 0 0;padding:0; }
+#qc-atlas .ordre-choix-selectionne>li::before {counter-increment:ordre;content:counter(ordre);font:22px/1 Georgia,serif;color:var(--q-selection-encre);}
+#qc-atlas .elimination-choix.elimine { text-decoration:line-through; background:var(--q-selection-fond); border-color:var(--q-selection-accent); box-shadow:inset 0 0 0 1px var(--q-selection-accent); color:var(--q-ink); }
+#qc-atlas .elimination-choix.elimine>span:last-child { text-decoration:line-through; }
+#qc-atlas .verrouille-joker,#qc-atlas .ordre-verrouille { background:var(--q-soft); }
+/* Associations: the original SVG paths remain dynamically positioned. */
+#qc-atlas .association-aide { font-size:var(--q-text-secondary); color:var(--q-muted); margin-bottom:16px; }
+#qc-atlas .association-panneau { position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:44px; }
+#qc-atlas .association-colonne { display:flex; flex-direction:column; gap:10px; min-width:0; z-index:1; }
+#qc-atlas .association-colonne-titre { font-size:var(--q-text-small); color:var(--q-muted); margin-bottom:4px; }
+#qc-atlas .association-panneau button { width:100%; text-align:left; justify-content:flex-start; font-size:var(--q-text-control); font-weight:400; padding:13px; min-height:65px; }
+#qc-atlas .association-panneau button.actif,#qc-atlas .association-panneau button.selectionne,#qc-atlas .association-panneau button.associe { border-color:var(--q-selection-accent); background:var(--q-selection-fond); color:var(--q-ink); box-shadow:inset 0 0 0 1px var(--q-selection-accent); }
+#qc-atlas .association-repere {display:inline-flex;align-items:center;justify-content:center;min-width:52px;min-height:24px;padding:3px 7px;border-radius:20px;border:1px solid var(--q-line);font-size:var(--q-text-small);flex-shrink:0;margin-left:auto;}
+#qc-atlas .association-lignes { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+#qc-atlas .fil-association { stroke:var(--q-selection-accent); stroke-width:3; stroke-linecap:round; fill:none; }
+#qc-atlas .classement-element { display:grid; grid-template-columns:minmax(0,1fr) minmax(150px,.8fr); align-items:center; gap:16px; padding:15px; border:1px solid var(--q-line); border-radius:6px; font-size:var(--q-text-control); }
+#qc-atlas .classement-element select { font-size:var(--q-text-control); }
+#qc-atlas .classement-element>[role="group"] {display:flex;gap:7px;flex-wrap:wrap;}
+#qc-atlas .classement-element>[role="group"]>button {flex:1;font-size:var(--q-text-secondary);padding:10px;}
+#qc-atlas .classement-element button.selectionne {background:var(--q-selection-fond);border-color:var(--q-selection-accent);color:var(--q-ink);box-shadow:inset 0 0 0 1px var(--q-selection-accent);}
+#qc-atlas .ecrite-zone { display:flex; gap:10px; align-items:center; }
+#qc-atlas .ecrite-zone input { min-height:54px; }
+#qc-atlas .revelation-cinquante-cinquante { padding:12px; border-radius:6px; background:var(--q-yellow); color:var(--q-on-yellow); font-size:var(--q-text-control); margin-bottom:15px; }
+#qc-atlas .activite-verrouille { display:flex; flex-direction:column; gap:10px; padding:18px; background:var(--q-soft); border-radius:7px; font-size:var(--q-text-control); }
+/* États de saisie : repère d’étape, avant toute correction du moteur. */
+#qc-atlas #zoneReponses :is(.reponse,.multiple-choix,.elimination-choix,.choisir-ordre-proposition,.association-panneau button,.classement-element button,.ordre-commandes button):not(:disabled):hover {
+ background:var(--q-selection-fond-fort); border-color:var(--q-selection-accent); color:var(--q-ink);
 }
-
-#question #zoneCorrection[tabindex="-1"]:focus,
-#question #zoneCorrection[tabindex="-1"]:focus-visible {
-    outline: 1px solid rgba(255,200,61,.5);
-    outline-offset: 2px;
+#qc-atlas #zoneReponses :is(button,input,select):focus-visible {
+ outline-color:var(--q-selection-accent); border-color:var(--q-selection-accent);
 }
-
-#question .question-commande-ligne .suivant-ligne #boutonJokers > span:last-child {
-    text-transform: none;
-    letter-spacing: 0;
+#qc-atlas #zoneReponses .association-panneau button.actif {
+ background:var(--q-selection-fond-fort); outline:2px solid var(--q-selection-accent); outline-offset:3px;
 }
-
-#question .question-carte {
-    height: auto;
-    min-height: 0;
-    max-height: none;
-    overflow: visible;
-    justify-content: flex-start;
+#qc-atlas #zoneReponses .association-repere {
+ border-color:var(--q-selection-accent); background:var(--q-selection-fond-fort); color:var(--q-selection-encre);
 }
-
-#question .question-carte #zoneReponses {
-    flex: 0 0 auto;
-    max-height: none;
-    overflow: visible;
-    padding-right: 0;
-    scrollbar-gutter: auto;
+#qc-atlas #zoneReponses :is(.ordre-liste,.ordre-choix-selectionne)>li {
+ background:color-mix(in srgb,var(--q-selection-accent) var(--q-teinte-repos),var(--q-panel));
+ border-left:3px solid var(--q-selection-accent);
 }
-
-/* Une correction ou un indice remplace le jeu dans le flux. La page porte le
-   défilement, ce qui évite un deuxième ascenseur dans une carte trop courte. */
-#question .question-carte:has(> #zoneCorrection:not(.masque)),
-#question .question-carte:has(> #zoneIndice:not(.masque)) {
-    height: auto;
-    min-height: 0;
-    max-height: none;
-    padding: 0;
-    overflow: visible;
-    justify-content: flex-start;
+#qc-atlas #reponseEcrite:focus-visible {
+ background:color-mix(in srgb,var(--q-selection-accent) var(--q-teinte-repos),var(--q-panel));
+ box-shadow:inset 0 0 0 1px var(--q-selection-accent);
 }
-
-#question .question-carte:has(> #zoneCorrection:not(.masque)) > .reperes,
-#question .question-carte:has(> #zoneCorrection:not(.masque)) > #zoneReponses,
-#question .question-carte:has(> #zoneIndice:not(.masque)) > .reperes,
-#question .question-carte:has(> #zoneIndice:not(.masque)) > #zoneReponses {
-    display: none;
+/* Corrections : tous les états pédagogiques du moteur, pas seulement bon/mauvais. */
+#qc-atlas .correction { position:relative; padding:18px; margin-top:20px; background:var(--q-soft); border-left:3px solid var(--q-muted); border-radius:0 7px 7px 0; font-size:var(--q-text-control); line-height:1.65; }
+#qc-atlas .correction.bon { background:var(--q-goodbg); border-color:var(--q-good); }
+#qc-atlas .correction.incorrecte { background:var(--q-badbg); border-color:var(--q-bad); }
+#qc-atlas .correction.aidee { background:#fff5ce; border-color:#90701c; }
+#qc-atlas .correction :is(h3,h4) { font-size:var(--q-text-base); margin:10px 0; }
+#qc-atlas .correction p { margin:9px 0; }
+#qc-atlas .correction-entete { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px 16px; padding-right:30px; margin-bottom:14px; }
+#qc-atlas .correction .correction-entete h3 { margin:0; line-height:1.5; flex:1 1 220px; }
+#qc-atlas .correction-entete-actions { display:flex; align-items:center; gap:8px; }
+#qc-atlas .correction-fermer { position:absolute; top:5px; right:5px; padding:0; width:36px; min-height:36px; border:0; background:transparent; font-size:23px; font-weight:400; color:var(--q-muted); }
+#qc-atlas .reessayer-question-bouton { font-size:var(--q-text-secondary); padding:10px 13px; }
+#qc-atlas .correction-separateur { height:1px; background:var(--q-line); margin:12px 0; }
+#qc-atlas .correction :is(.sources,.correction-sources) { margin-top:15px; font-size:var(--q-text-secondary); }
+#qc-atlas .correction a { color:var(--q-blue); }
+#qc-atlas .detaillee-correction-ligne { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:10px; align-items:center; border-top:1px solid var(--q-line); padding:10px 0; }
+#qc-atlas .detaillee-correction-ligne.unique-ligne { display:block; }
+#qc-atlas .detaillee-correction-ligne.ligne-eliminee { grid-template-columns:auto minmax(0,1fr); }
+#qc-atlas .ordre-correction { display:flex; flex-direction:column; gap:7px; margin:12px 0; }
+#qc-atlas .retournee-note { font-size:var(--q-text-secondary); color:var(--q-muted); }
+@media(max-width:800px) { #qc-atlas .atlas-question-head { align-items:flex-start; flex-direction:column; } #qc-atlas .question-chronometre-commandes { max-width:100%; justify-content:flex-start; } }
+@media(max-width:640px) {
+ #qc-atlas .atlas-question-head h1 { font-size:calc(34px * var(--echelle-texte,1)); }
+ #qc-atlas .q-questionbody { padding:23px 18px; }
+ #qc-atlas #enonceQuestion { font-size:calc(27px * var(--echelle-texte,1)); }
+ #qc-atlas .q-questionfoot { padding:16px; }
+ #qc-atlas .libelle-mobile { display:inline; } #qc-atlas .libelle-bureau { display:none; }
+ #qc-atlas .association-panneau { gap:22px;grid-template-columns:1fr; }
+ #qc-atlas .association-panneau button { font-size:var(--q-text-control); padding:10px 8px; }
+ #qc-atlas .classement-element { grid-template-columns:1fr; gap:10px; }
+ #qc-atlas .q-stephead { padding:13px 18px; }
+ #qc-atlas .q-sides { grid-template-columns:1fr; }
+ #qc-atlas .detaillee-correction-ligne { grid-template-columns:1fr; gap:5px; }
+ #qc-atlas .ordre-commandes button { min-height:40px; width:40px; }
 }
-
-#question .question-carte > #zoneCorrection:not(.masque),
-#question .question-carte > #zoneIndice:not(.masque) {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    min-height: 0;
-    max-height: none;
-    margin: 0;
-    overflow: visible;
-    overscroll-behavior: auto;
-    scrollbar-gutter: auto;
-}
-
-#question .question-commande-ligne button {
-    min-height: 44px;
-    height: auto;
-}
-
-/* Révision ciblée : le bouton reste au bord de la progression, sans
-   affecter les commandes de réponse. */
-#question .question-revision-etape-bouton {
-    flex: 0 1 auto;
-    min-height: 36px;
-    max-width: min(260px, 34vw);
-    padding: 7px 11px;
-    border: 1px solid var(--couleur-etape-active-lisible, #9fc2ff);
-    border-radius: 10px;
-    color: var(--couleur-etape-active-lisible, #9fc2ff);
-    background: color-mix(in srgb, var(--couleur-etape-active, #4f8cff) 12%, transparent);
-    box-shadow: none;
-    font-size: .78rem;
-    font-weight: 850;
-    line-height: 1.15;
-    text-align: center;
-    white-space: normal;
-}
-#question .question-revision-etape-bouton:hover:not(:disabled),
-#question .question-revision-etape-bouton:focus-visible:not(:disabled) {
-    color: var(--texte, #fff);
-    border-color: var(--couleur-etape-active-lisible, #9fc2ff);
-    background: color-mix(in srgb, var(--couleur-etape-active, #4f8cff) 24%, transparent);
-    box-shadow: inset 0 0 0 1px var(--couleur-etape-active-lisible, #9fc2ff);
-}
-#question .question-revision-etape-bouton:disabled { cursor: not-allowed; opacity: .62; }
-#question .question-revision-etape-bouton.masque { display: none; }
-
-#question .question-etape-numero-ligne {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-#question .question-etape-numero-ligne > #numeroEtapeQuestion {
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    min-height: 30px;
-    padding: 4px 10px;
-    border: 1px solid color-mix(in srgb, var(--couleur-etape-active, #2d7379) 44%, transparent);
-    border-radius: 999px;
-    color: var(--couleur-etape-active-lisible, #7de0d5);
-    background: color-mix(in srgb, var(--couleur-etape-active, #2d7379) 14%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--couleur-etape-active, #2d7379) 12%, transparent);
-    font-weight: 850;
-    white-space: nowrap;
-}
-#question .question-reprendre-etape-bouton {
-    min-height: 34px;
-    padding: 6px 9px;
-    border: 1px solid var(--couleur-etape-active-lisible, #9fc2ff);
-    border-radius: 10px;
-    color: var(--couleur-etape-active-lisible, #9fc2ff);
-    background: color-mix(in srgb, var(--couleur-etape-active, #4f8cff) 12%, transparent);
-    box-shadow: none;
-    font-size: .76rem;
-    font-weight: 850;
-    line-height: 1.15;
-    white-space: nowrap;
-}
-#question .question-reprendre-etape-bouton:hover,
-#question .question-reprendre-etape-bouton:focus-visible {
-    color: var(--texte, #fff);
-    border-color: var(--couleur-etape-active-lisible, #9fc2ff);
-    background: color-mix(in srgb, var(--couleur-etape-active, #4f8cff) 24%, transparent);
-    box-shadow: inset 0 0 0 1px var(--couleur-etape-active-lisible, #9fc2ff);
-}
-#question .question-reprendre-etape-bouton.masque { display: none; }
-
-@media (max-width:820px) {
-    #question .question-contexte-identites {
-        width: 100%;
-        flex-wrap: wrap;
-        row-gap: 6px;
-    }
-    #question .question-etape-identite {
-        width: auto;
-        max-width: 100%;
-        flex: 0 1 auto;
-    }
-    #question .question-etape-numero-ligne {
-        max-width: 100%;
-    }
-    #question .question-reprendre-etape-bouton {
-        max-width: 100%;
-        white-space: normal;
-    }
-    #question .question-etape > .question-carte {
-        min-height: 0;
-        padding: 20px 16px;
-    }
-
-    #question .question-contexte-etape {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 8px;
-        margin: 0 4px 12px;
-    }
-
-    #question .question-contexte-identites {
-        max-width: 100%;
-        font-size: clamp(12px,3.6vw,.94rem);
-    }
-
-    #question .question-autonomie {
-        width: 100%;
-        justify-content: space-between;
-        gap: 10px;
-    }
-
-    /* Trois emplacements fixes sur la première ligne : Précédente, Valider,
-       Passer/Suivante. Jokers reste centré sur la seconde ligne. */
-    #question .question-conteneur > .question-commande-ligne {
-        display: grid;
-        grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
-        grid-template-rows: auto auto;
-        align-items: center;
-        column-gap: 8px;
-        row-gap: 10px;
-        width: 100%;
-        min-height: 0;
-        margin-top: 16px;
-    }
-
-    #question .question-conteneur > .question-commande-ligne > .suivant-ligne,
-    #question .question-commande-ligne > .suivant-ligne > .navigation-question-groupe {
-        display: contents;
-    }
-
-    #question .suivant-ligne > #boutonQuestionPrecedente,
-    #question .suivant-ligne > #boutonValider,
-    #question .suivant-ligne #boutonJokers,
-    #question .suivant-ligne #boutonPasser,
-    #question .suivant-ligne #boutonQuestionSuivante {
-        position: static;
-        width: max-content;
-        max-width: 100%;
-        min-width: 0;
-        min-height: 42px;
-        height: auto;
-        margin: 0;
-        padding: 8px 10px;
-        flex: 0 0 auto;
-        font-size: clamp(12px,3.35vw,14px);
-        line-height: 1.15;
-        white-space: nowrap;
-        transform: none;
-    }
-
-    #question .suivant-ligne > #boutonQuestionPrecedente {
-        grid-column: 1;
-        grid-row: 1;
-        justify-self: start;
-    }
-
-    #question .suivant-ligne > #boutonValider {
-        grid-column: 2;
-        grid-row: 1;
-        justify-self: center;
-    }
-
-    #question .suivant-ligne #boutonPasser,
-    #question .suivant-ligne #boutonQuestionSuivante {
-        grid-column: 3;
-        grid-row: 1;
-        justify-self: end;
-    }
-
-    #question .suivant-ligne #boutonJokers {
-        grid-column: 2;
-        grid-row: 2;
-        justify-self: center;
-    }
-
-    #question .suivant-ligne #boutonJokers > span:last-child {
-        font-size: inherit;
-    }
-
-    /* Les boutons de liaison restent les seuls objets encadrés : les deux
-       colonnes n’ajoutent plus une boîte intermédiaire. */
-    #question .association-colonne {
-        padding: 0;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
-    }
-}
-
-@media (max-width:700px) {
-    #question .question-revision-etape-bouton {
-        order: 4;
-        flex-basis: 100%;
-        max-width: none;
-    }
-    #question .indicateur-serie { order: 5; }
-}
-
-/* === Cohérence des couleurs de l'étape dans tous les modes de réponse ===
-   La ligne supérieure de la carte est la source visuelle : toute sélection
-   utilisateur et tout fil de liaison reprennent exactement la même couleur
-   canonique d'étape. Les états propres aux jokers et aux corrections gardent
-   leurs couleurs fonctionnelles (aide, réussite, erreur). */
-#question {
-    --fond-selection-etape: color-mix(
-        in srgb,
-        var(--couleur-etape-active) 22%,
-        rgba(20,79,137,.72)
-    );
-}
-
-/* Le badge Étape reprend la couleur de la carte ; le badge Parcours conserve
-   l’identité canonique du parcours, ou celle de l’étape dans Mission Sigles. */
-#question .question-etape-identite > span {
-    border-color: var(--couleur-etape-active);
-    color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
-    background: color-mix(in srgb,var(--couleur-etape-active) 16%,rgba(6,45,91,.72));
-    box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--couleur-etape-active) 18%,transparent);
-}
-
-/* Choix unique. */
-#question #zoneReponses .reponse.selectionne,
-#question #zoneReponses .reponse[aria-checked="true"] {
-    border-color: var(--couleur-etape-active);
-    background: var(--fond-selection-etape);
-    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
-}
-#question #zoneReponses .reponse.selectionne .lettre,
-#question #zoneReponses .reponse[aria-checked="true"] .lettre {
-    border-color: var(--couleur-etape-active);
-    background: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
-    color: var(--bleu-nuit-950);
-}
-
-/* Sélection multiple. */
-#question .multiple-choix.selectionne,
-#question .multiple-choix[aria-pressed="true"] {
-    border-color: var(--couleur-etape-active);
-    background: var(--fond-selection-etape);
-    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
-}
-#question .multiple-choix.selectionne .multiple-coche,
-#question .multiple-choix[aria-pressed="true"] .multiple-coche {
-    border-color: var(--couleur-etape-active);
-    color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
-    background: color-mix(in srgb,var(--couleur-etape-active) 20%,var(--surface-carte-profonde));
-}
-
-/* Retirer des choix : « éliminé » est ici un choix de l'utilisateur avant
-   validation, donc il suit l'étape et non la couleur rouge d'une erreur. */
-#question .elimination-choix.elimine {
-    opacity: .86;
-    border-color: var(--couleur-etape-active);
-    background: var(--fond-selection-etape);
-    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
-}
-#question .elimination-choix:not(.verrouille-joker)::after {
-    color: var(--couleur-etape-active-lisible,var(--couleur-etape-active));
-}
-
-/* Relier : sélection, paire créée et fil utilisent une seule et même couleur. */
-#question .association-colonne button.actif,
-#question .association-colonne button.associe,
-#question .association-colonne button[aria-pressed="true"] {
-    border-color: var(--couleur-etape-active);
-    background: var(--fond-selection-etape);
-    box-shadow: inset 4px 0 0 var(--couleur-etape-active);
-}
-#question .association-lignes .fil-association {
-    stroke: var(--couleur-etape-active);
-}
-
-/* Classer. */
-#question .classement-element button.selectionne,
-#question .classement-element button[aria-pressed="true"] {
-    border-color: var(--couleur-etape-active);
-    background: var(--fond-selection-etape);
-    box-shadow: inset 3px 0 0 var(--couleur-etape-active);
-}
-
-/* Ordre et choisir puis ordonner : il n'y a pas de case « sélectionnée »
-   permanente dans l'ordre simple ; les commandes et les éléments retenus
-   reprennent néanmoins le repère de l'étape. */
-#question .ordre-commandes button:hover:not(:disabled),
-#question .ordre-commandes button:focus-visible,
-#question .choisir-ordre-proposition:hover,
-#question .choisir-ordre-proposition:focus-visible {
-    border-color: var(--couleur-etape-active);
-}
-#question .ordre-choix-selectionne > li:not(.ordre-verrouille) {
-    border-left: 4px solid var(--couleur-etape-active);
-    background: color-mix(in srgb,var(--couleur-etape-active) 10%,rgba(20,79,137,.72));
-}
-
-/* Réponse écrite : le focus constitue l'état de sélection du champ. */
-#question .ecrite-zone input:focus,
-#question .ecrite-zone textarea:focus,
-#question .ecrite-zone select:focus {
-    border-color: var(--couleur-etape-active);
-    box-shadow: 0 0 0 2px color-mix(in srgb,var(--couleur-etape-active) 28%,transparent);
-}
-
-/* Correction du mode « Retirer des choix » : cette ligne ne contient que
-   deux éléments. Elle ne doit donc pas hériter de la grille à trois colonnes
-   réservée aux corrections avec flèche. */
-#question .detaillee-correction-ligne.ligne-eliminee {
-    grid-template-columns: 24px minmax(0,1fr);
-    align-items: start;
-    gap: 10px;
-}
-#question .detaillee-correction-ligne.ligne-eliminee .marque-erreur {
-    display: block;
-    width: 24px;
-    text-align: center;
-}
-#question .detaillee-correction-ligne.ligne-eliminee > span:last-child {
-    min-width: 0;
-    overflow-wrap: normal;
-    word-break: normal;
-}
-/* === FIN cohérence couleurs de l'étape === */
-
-/* Le chrono appartient à la carte ; aucune option préalable n’est nécessaire. */
-#question .question-chronometre-commandes {
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    justify-content:flex-end;
-    gap:6px;
-    margin:0 0 12px;
-}
-#question .question-chronometre-commandes button {
-    position:relative;
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    width:auto;
-    min-height:44px;
-    padding:8px 11px;
-    border:1px solid var(--bordure);
-    border-radius:999px;
-    color:var(--texte-secondaire);
-    background:transparent;
-    box-shadow:none;
-    font-size:.82rem;
-    font-weight:750;
-}
-#question .question-chronometre-commandes button.masque { display:none; }
-#question .question-chronometre-bouton svg {
-    width:20px;
-    height:20px;
-    fill:none;
-    stroke:currentColor;
-    stroke-width:1.7;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
-#question .question-chronometre-commandes .est-actif,
-#question .question-chronometre-commandes [aria-pressed="true"] {
-    border-color:var(--couleur-etape-active-lisible,#9fc2ff);
-    color:var(--couleur-etape-active-lisible,#9fc2ff);
-    background:color-mix(in srgb,var(--couleur-etape-active,#4f8cff) 12%,transparent);
-}
-#question .question-chronometre-commandes button:disabled { opacity:.7; cursor:default; }
-#question .question-chronometre-commandes .temps-court { color:#ffb7b7; border-color:#ffb7b7; }
-#question .question-chronometre-commandes .question-chronometre-arret { border-color:transparent; }
-#question #chronometreQuestion { min-width:40px; font-variant-numeric:tabular-nums; }
-#question .question-chronometre-ajout {
-    position:absolute;
-    inset:auto 0 100%;
-    opacity:0;
-    color:var(--couleur-etape-active-lisible,#9fc2ff);
-    text-align:center;
-    pointer-events:none;
-    font-weight:900;
-}
-#question .question-chronometre-ajout.est-visible { animation:tempsAjoute .8s ease-out forwards; }
-@keyframes tempsAjoute {
-    0% { opacity:1; transform:translateY(8px); }
-    65% { opacity:1; }
-    100% { opacity:0; transform:translateY(-18px); }
-}
-@keyframes tempsAjouteSansMouvement {
-    0%, 65% { opacity:1; }
-    100% { opacity:0; }
-}
-@media (prefers-reduced-motion:reduce) {
-    #question .question-chronometre-ajout.est-visible { animation-name:tempsAjouteSansMouvement; }
-}
+#qc-atlas .atlas-step-actions:has(#boutonReprendreEtapeDepuisDebut.masque):has(#boutonRejouerErreursEtape.masque) > p { display:none; }
 /* === FIN MORCEAU CSS === */

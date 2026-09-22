@@ -1,6 +1,7 @@
 @echo off
 chcp 65001 >nul
 setlocal
+cd /d "%~dp0"
 
 echo ============================================================
 echo PJJoue - Verification avant publication
@@ -10,7 +11,7 @@ echo.
 call :trouver_python
 if errorlevel 1 goto erreur_python
 
-if not exist "node_modules\.bin\eslint.cmd" goto erreur_node
+if not exist "node_modules\postcss\package.json" goto erreur_node
 
 echo 1/12 - Verification UTF-8 des noms et fichiers texte...
 %PYTHON_PJJOUE% outils\verifier_noms_fichiers.py
@@ -29,7 +30,7 @@ if errorlevel 1 goto erreur
 
 echo.
 echo 3/12 - Controle du JavaScript...
-call npm.cmd run controle:javascript
+call npm.cmd run controle:syntaxe
 if errorlevel 1 goto erreur
 
 echo.
@@ -44,12 +45,12 @@ if errorlevel 1 goto erreur
 
 echo.
 echo 6/12 - Tests unitaires des donnees...
-%PYTHON_PJJOUE% -m unittest discover -s tests -p test_*.py
+%PYTHON_PJJOUE% tests\verifier_socle_atlas.py
 if errorlevel 1 goto erreur
 
 echo.
-echo 7/12 - Verification des questions et des fichiers...
-%PYTHON_PJJOUE% tests\verifier_pjjoue.py
+echo 7/12 - Regles du moteur, chronometre, progression et mises a jour...
+call npm.cmd run test:logique
 if errorlevel 1 goto erreur
 
 echo.
@@ -68,19 +69,20 @@ echo 10/12 - Rappel de verification des sources tous les 365 jours...
 if errorlevel 1 goto erreur
 
 echo.
-echo 11/12 - Verification des liens officiels...
-%PYTHON_PJJOUE% outils\verifier_liens_officiels.py
+echo 11/12 - Navigation pedagogique libre...
+%PYTHON_PJJOUE% tests\verifier_navigation_libre.py
 if errorlevel 1 goto erreur
 
 echo.
 echo 12/12 - Captures visuelles ordinateur et mobile...
-%PYTHON_PJJOUE% tests\verifier_regression_visuelle.py
+%PYTHON_PJJOUE% tests\verifier_atlas.py --captures
 if errorlevel 1 goto erreur
 
 echo.
 echo ============================================================
-echo Tous les controles automatiques sont termines sans erreur.
-echo Captures : test-results\regression-visuelle-moderne\
+echo Les controles Atlas sont termines sans erreur. Aucune publication.
+echo La validation humaine et les essais PWA sur l'appareil cible restent distincts.
+echo Captures : test-results\atlas\
 echo ============================================================
 pause
 exit /b 0

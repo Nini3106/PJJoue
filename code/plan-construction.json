@@ -140,6 +140,10 @@
   ],
   "javascript": [
     {
+      "source": "code/01 - Éléments communs/Palette-Atlas.js",
+      "debut_code_apres_entete_lignes": 0
+    },
+    {
       "source": "code/01 - Éléments communs/JavaScript - Démarrage et Analytics.js",
       "debut_code_apres_entete_lignes": 7
     },
@@ -230,6 +234,10 @@
     {
       "source": "code/01 - Éléments communs/JavaScript - Sons et célébrations.js",
       "debut_code_apres_entete_lignes": 7
+    },
+    {
+      "source": "code/01 - Éléments communs/Presentation-Atlas.js",
+      "debut_code_apres_entete_lignes": 0
     },
     {
       "source": "code/01 - Éléments communs/JavaScript - Brancher les boutons.js",
@@ -338,6 +346,10 @@
     {
       "source": "code/01 - Éléments communs/consentement.css",
       "sortie": "ressources/styles/95-consentement.css"
+    },
+    {
+      "source": "code/01 - Éléments communs/atlas-systeme.css",
+      "sortie": "ressources/styles/atlas-systeme.css"
     }
   ]
 }

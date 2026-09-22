@@ -26,47 +26,13 @@ FEUILLES_INTERFACE = (
 
 
 def construire_page_jeu() -> str:
-    page = (RACINE / "index.html").read_text(encoding="utf-8")
-    feuille = "\n".join((RACINE / chemin).read_text(encoding="utf-8") for chemin in FEUILLES_INTERFACE)
-    donnees = (RACINE / "donnees/donnees-pjj.js").read_text(encoding="utf-8")
-    moteur = (RACINE / "ressources/moteur-jeu.js").read_text(encoding="utf-8")
-    moteur = moteur.replace(
-        "restaurerRoute(history.state || lireRoute());",
-        "mettreAJourAdresseNavigation = () => {}; restaurerRoute(history.state || lireRoute());",
-        1,
-    )
-    image = base64.b64encode((RACINE / "ressources/panorama-accueil-calme.png").read_bytes()).decode("ascii")
-    page = re.sub(r'<meta[^>]+http-equiv="Content-Security-Policy"[^>]*/?>', "", page, flags=re.I)
-    page = re.sub(r'<!-- Google Tag Manager -->.*?<!-- End Google Tag Manager -->\s*', "", page, count=1, flags=re.S | re.I)
-    page = re.sub(r'<!-- Google Tag Manager \(noscript\) -->.*?<!-- End Google Tag Manager \(noscript\) -->\s*', "", page, count=1, flags=re.S | re.I)
-    page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/(?:consentement-analytics|analytics-pjjoue|navigation-locale)\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
-        "", page, flags=re.I,
-    )
-    page = re.sub(r'<link\b(?=[^>]*href="ressources/styles/[^"]+\.css(?:\?[^\"]*)?")[^>]*>\s*', "", page, flags=re.I)
-    page = page.replace("</head>", f"<style>{feuille}</style></head>", 1)
-    page = page.replace('src="ressources/panorama-accueil-calme.png"', f'src="data:image/png;base64,{image}"')
-    graine = "<script>let graineTest=123456789;Math.random=()=>{graineTest=(1103515245*graineTest+12345)%2147483648;return graineTest/2147483648};</script>"
-    page = re.sub(
-        r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
-        lambda _: graine + f"<script>{donnees}</script>", page, count=1, flags=re.I,
-    )
-    page = re.sub(
-        r'<script\b(?=[^>]*src="ressources/moteur-jeu\.js(?:\?[^\"]*)?")[^>]*>\s*</script>',
-        lambda _: f"<script>{moteur}</script>", page, count=1, flags=re.I,
-    )
-    return page
+    from atlas_support import construire_page_atlas
+    return construire_page_atlas()
 
 
 def construire_page_administration() -> str:
-    page = (RACINE / "administration.html").read_text(encoding="utf-8")
-    feuille = (RACINE / "ressources/administration.css").read_text(encoding="utf-8")
-    donnees = (RACINE / "donnees/donnees-pjj.js").read_text(encoding="utf-8")
-    administration = (RACINE / "ressources/administration.js").read_text(encoding="utf-8")
-    page = re.sub(r'<link\b(?=[^>]*href="ressources/administration\.css(?:\?[^\"]*)?")[^>]*>', f"<style>{feuille}</style>", page, count=1, flags=re.I)
-    page = re.sub(r'<script\b(?=[^>]*src="donnees/donnees-pjj\.js(?:\?[^\"]*)?")[^>]*>\s*</script>', lambda _: f"<script>{donnees}</script>", page, count=1, flags=re.I)
-    page = re.sub(r'<script\b(?=[^>]*src="ressources/administration\.js(?:\?[^\"]*)?")[^>]*>\s*</script>', lambda _: f"<script>{administration}</script>", page, count=1, flags=re.I)
-    return page
+    from atlas_support import construire_page_atlas
+    return construire_page_atlas('administration.html')
 
 
 def lancer_chromium(automate):
@@ -167,7 +133,7 @@ def verifier_liens_guides_locaux(navigateur) -> None:
         if message.type == "error" else None,
     )
     page.goto((RACINE / "guides" / "index.html").resolve().as_uri(), wait_until="domcontentloaded")
-    page.wait_for_function("() => Boolean(document.querySelector('.guide-bouton-menu-principal'))")
+    page.wait_for_function("() => Boolean(document.querySelector('.atlas-static-menu'))")
     observation = page.evaluate("""() => new Promise(resolve => {
         const lien = document.querySelector('a[href^="mailto:"]');
         if (!lien) {

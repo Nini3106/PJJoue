@@ -10,6 +10,7 @@ const REPERES_MISSION_MESURES = Object.freeze([...(MESURES_MISSION?.reperes || [
 const ETAPES_MISSION_MESURES = Object.freeze(Object.fromEntries(
     (MESURES_MISSION?.etapes || []).map(etape => [Number(etape.numero), Object.freeze({
         ...etape,
+        ...obtenirCouleursAtlas(etape.couleur),
         numeroFormate: String(etape.numero).padStart(2, '0')
     })])
 ));

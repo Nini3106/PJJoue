@@ -1,0 +1,54 @@
+{
+  "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js": [
+    {
+      "avant": "parametres: { son: true, volume: .65, echelleTexte: 1 },",
+      "apres": "parametres: { son: true, volume: .65, echelleTexte: 1.15 },",
+      "occurrences": 1
+    },
+    {
+      "avant": "? Number(parametres.echelleTexte)\n                : 1",
+      "apres": "? Number(parametres.echelleTexte)\n                : 1.15",
+      "occurrences": 1
+    }
+  ],
+  "code/10 - Paramètres/actions-de-la-page.js": [
+    {
+      "avant": "parametres.echelleTexte || 1",
+      "apres": "parametres.echelleTexte || 1.15",
+      "occurrences": 2
+    }
+  ],
+  "code/01 - Éléments communs/Navigation/navigation-locale.js": [
+    {
+      "avant": "  let propositionInstallation = null;",
+      "apres": "  // Même préférence sur les guides et l’application, sans écrire ni migrer la progression.\n  function appliquerTailleTexteEnregistree() {\n    let echelle = 1.15;\n    try {\n      const preferences = JSON.parse(localStorage.getItem('pjjoue_v1_sauvegarde') || 'null');\n      const choix = Number(preferences?.parametres?.echelleTexte);\n      if ([.9, 1, 1.08, 1.15].includes(choix)) echelle = choix;\n    } catch (erreur) { /* Stockage absent ou invalide : garder Grande. */ }\n    document.documentElement.style.setProperty('--echelle-texte', String(echelle));\n  }\n  appliquerTailleTexteEnregistree();\n  window.addEventListener('pageshow', appliquerTailleTexteEnregistree);\n  window.addEventListener('storage', evenement => {\n    if (!evenement.key || evenement.key === 'pjjoue_v1_sauvegarde') appliquerTailleTexteEnregistree();\n  });\n\n  let propositionInstallation = null;",
+      "occurrences": 1
+    }
+  ],
+  "code/08 - Réviser/actions-de-la-page.js": [
+    {
+      "avant": "libelle:identite.titre, couleur:identite.couleurTexte || identite.couleur",
+      "apres": "libelle:identite.titre, couleur:identite.couleur",
+      "occurrences": 1
+    }
+  ],
+  "code/01 - Éléments communs/Presentation-Atlas.js": [
+    {
+      "avant": "        const choisi = menu.querySelector('.choix-bouton.actif b');\n        if (etiquette && select) etiquette.textContent = choisi?.textContent || select.selectedOptions[0]?.textContent || 'Choisir';",
+      "apres": "        const choisi = menu.querySelector('.choix-bouton.actif');\n        if (etiquette && select) etiquette.textContent = choisi?.querySelector('b')?.textContent || select.selectedOptions[0]?.textContent || 'Choisir';\n        // Lire le repère du bouton natif : ni filtre supplémentaire, ni état de jeu dupliqué.\n        const resume = menu.querySelector('summary');\n        if (resume) resume.style.setProperty('--parcours-accent', choisi?.style.getPropertyValue('--parcours-accent') || 'var(--q-blue)');",
+      "occurrences": 1
+    }
+  ],
+  "code/05 - Entraînement libre/actions-de-la-page.js": [
+    {
+      "avant": "if (!Number.isFinite(numero) || numero < 1 || numero > 6)",
+      "apres": "if (!Number.isFinite(numero) || !SIGLES.some(sigle => Number(sigle.etape) === numero))",
+      "occurrences": 1
+    },
+    {
+      "avant": "    appliquerCouleursParcoursEntrainement();\n    actualiserLimiteQuestionsEntrainement();\n}",
+      "apres": "    appliquerCouleursParcoursEntrainement();\n    actualiserLimiteQuestionsEntrainement();\n    actualiserLibelleSelecteurAtlas();\n}",
+      "occurrences": 1
+    }
+  ]
+}

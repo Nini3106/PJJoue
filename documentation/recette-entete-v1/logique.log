@@ -1,0 +1,232 @@
+TAP version 13
+# Subtest: Chrono à la demande : 15 secondes, ajouts de 5, plafond total de 30 sans recharge infinie
+ok 1 - Chrono à la demande : 15 secondes, ajouts de 5, plafond total de 30 sans recharge infinie
+  ---
+  duration_ms: 66.388772
+  type: 'test'
+  ...
+# Subtest: Chrono sur une seule question : changement, retour et arrêt ne contaminent pas la suivante
+ok 2 - Chrono sur une seule question : changement, retour et arrêt ne contaminent pas la suivante
+  ---
+  duration_ms: 27.531188
+  type: 'test'
+  ...
+# Subtest: Portée session : activation en un clic, durée choisie, puis nouvelle session sans chrono
+ok 3 - Portée session : activation en un clic, durée choisie, puis nouvelle session sans chrono
+  ---
+  duration_ms: 21.866163
+  type: 'test'
+  ...
+# Subtest: Reprise après rechargement : portée et temps de chaque question conservés
+ok 4 - Reprise après rechargement : portée et temps de chaque question conservés
+  ---
+  duration_ms: 44.128198
+  type: 'test'
+  ...
+# Subtest: Ancienne session chronométrée : migration avec durée et temps restant
+ok 5 - Ancienne session chronométrée : migration avec durée et temps restant
+  ---
+  duration_ms: 23.365736
+  type: 'test'
+  ...
+# Subtest: Expiration : correction et score uniques dans les sept modes ; rejouer garde un budget entier
+ok 6 - Expiration : correction et score uniques dans les sept modes ; rejouer garde un budget entier
+  ---
+  duration_ms: 177.015674
+  type: 'test'
+  ...
+# Subtest: Horloge réelle : un intervalle retardé ne rallonge pas le délai
+ok 7 - Horloge réelle : un intervalle retardé ne rallonge pas le délai
+  ---
+  duration_ms: 21.753538
+  type: 'test'
+  ...
+# Subtest: 66 étapes : les 660 réponses autonomes survivent au nettoyage et célèbrent une seule fois
+ok 8 - 66 étapes : les 660 réponses autonomes survivent au nettoyage et célèbrent une seule fois
+  ---
+  duration_ms: 993.343895
+  type: 'test'
+  ...
+# Subtest: Une reprise autonome valide le score, reste à consolider et disparaît après une nouvelle session réussie
+ok 9 - Une reprise autonome valide le score, reste à consolider et disparaît après une nouvelle session réussie
+  ---
+  duration_ms: 24.197799
+  type: 'test'
+  ...
+# Subtest: Une question passée puis révisée valide son étape depuis toute entrée de révision
+ok 10 - Une question passée puis révisée valide son étape depuis toute entrée de révision
+  ---
+  duration_ms: 54.536753
+  type: 'test'
+  ...
+# Subtest: Les montants et négations sont exacts, les variantes déclarées restent acceptées
+ok 11 - Les montants et négations sont exacts, les variantes déclarées restent acceptées
+  ---
+  duration_ms: 162.857474
+  type: 'test'
+  ...
+# Subtest: Aucune collision dans 1000 évaluations de 30 questions par mission, y compris les associations
+ok 12 - Aucune collision dans 1000 évaluations de 30 questions par mission, y compris les associations
+  ---
+  duration_ms: 2873.79583
+  type: 'test'
+  ...
+# Subtest: Les trois évaluations refusent passage, joker et reprise sans altérer le score
+ok 13 - Les trois évaluations refusent passage, joker et reprise sans altérer le score
+  ---
+  duration_ms: 23.372778
+  type: 'test'
+  ...
+# Subtest: Mission sigles : reprise après mise à jour dans un moteur neuf, avec brouillon et minuterie
+ok 14 - Mission sigles : reprise après mise à jour dans un moteur neuf, avec brouillon et minuterie
+  ---
+  duration_ms: 55.15437
+  type: 'test'
+  ...
+# Subtest: Mission mesures : reprise après mise à jour dans un moteur neuf, avec brouillon et minuterie
+ok 15 - Mission mesures : reprise après mise à jour dans un moteur neuf, avec brouillon et minuterie
+  ---
+  duration_ms: 45.501944
+  type: 'test'
+  ...
+# Subtest: Deux onglets retrouvent chacun leur question après une mise à jour
+ok 16 - Deux onglets retrouvent chacun leur question après une mise à jour
+  ---
+  duration_ms: 163.43307
+  type: 'test'
+  ...
+# Subtest: Import valide : remplacement récupérable, session obsolète effacée ; panne et JSON étrangers refusés
+ok 17 - Import valide : remplacement récupérable, session obsolète effacée ; panne et JSON étrangers refusés
+  ---
+  duration_ms: 163.438362
+  type: 'test'
+  ...
+# Subtest: Une session ancienne V1 du parcours reste reprenable
+ok 18 - Une session ancienne V1 du parcours reste reprenable
+  ---
+  duration_ms: 50.019639
+  type: 'test'
+  ...
+# Subtest: Le pourcentage du parcours inclut son évaluation partout
+ok 19 - Le pourcentage du parcours inclut son évaluation partout
+  ---
+  duration_ms: 63.737319
+  type: 'test'
+  ...
+# Subtest: Les filtres et le lancement de révision sélectionnent exactement les mêmes questions
+ok 20 - Les filtres et le lancement de révision sélectionnent exactement les mêmes questions
+  ---
+  duration_ms: 145.285072
+  type: 'test'
+  ...
+# Subtest: Mission sigles : une étape terminée en entraînement est célébrée une seule fois
+ok 21 - Mission sigles : une étape terminée en entraînement est célébrée une seule fois
+  ---
+  duration_ms: 41.60672
+  type: 'test'
+  ...
+# Subtest: Mission mesures : une étape terminée en entraînement est célébrée une seule fois
+ok 22 - Mission mesures : une étape terminée en entraînement est célébrée une seule fois
+  ---
+  duration_ms: 25.148024
+  type: 'test'
+  ...
+# Subtest: La culpabilité seule est acceptée pour la décision acquise, en apprentissage et en évaluation
+ok 23 - La culpabilité seule est acceptée pour la décision acquise, en apprentissage et en évaluation
+  ---
+  duration_ms: 44.810092
+  type: 'test'
+  ...
+# Subtest: parcours : revenir exactement au parcours après une révision et une mise à jour
+ok 24 - parcours : revenir exactement au parcours après une révision et une mise à jour
+  ---
+  duration_ms: 61.458583
+  type: 'test'
+  ...
+# Subtest: sigles : revenir exactement au parcours après une révision et une mise à jour
+ok 25 - sigles : revenir exactement au parcours après une révision et une mise à jour
+  ---
+  duration_ms: 81.461518
+  type: 'test'
+  ...
+# Subtest: mesures : revenir exactement au parcours après une révision et une mise à jour
+ok 26 - mesures : revenir exactement au parcours après une révision et une mise à jour
+  ---
+  duration_ms: 41.014068
+  type: 'test'
+  ...
+# Subtest: parcours : le raccourci du bilan rejoue seulement les activités à consolider de cette session
+ok 27 - parcours : le raccourci du bilan rejoue seulement les activités à consolider de cette session
+  ---
+  duration_ms: 51.025591
+  type: 'test'
+  ...
+# Subtest: sigles : le raccourci du bilan rejoue seulement les activités à consolider de cette session
+ok 28 - sigles : le raccourci du bilan rejoue seulement les activités à consolider de cette session
+  ---
+  duration_ms: 44.964361
+  type: 'test'
+  ...
+# Subtest: mesures : le raccourci du bilan rejoue seulement les activités à consolider de cette session
+ok 29 - mesures : le raccourci du bilan rejoue seulement les activités à consolider de cette session
+  ---
+  duration_ms: 42.215494
+  type: 'test'
+  ...
+# Subtest: Un nouveau parcours ou un import ne conserve pas un ancien retour de révision
+ok 30 - Un nouveau parcours ou un import ne conserve pas un ancien retour de révision
+  ---
+  duration_ms: 26.845552
+  type: 'test'
+  ...
+# Subtest: Nouvelle version : sauvegarde puis rechargement immédiat, une seule fois, sans confirmation
+ok 31 - Nouvelle version : sauvegarde puis rechargement immédiat, une seule fois, sans confirmation
+  ---
+  duration_ms: 2.822289
+  type: 'test'
+  ...
+# Subtest: Première installation : aucun rechargement inutile, les mises à jour suivantes sont automatiques
+ok 32 - Première installation : aucun rechargement inutile, les mises à jour suivantes sont automatiques
+  ---
+  duration_ms: 1.86743
+  type: 'test'
+  ...
+# Subtest: Vérifications au démarrage, retour dans l’onglet, reconnexion et toutes les minutes
+ok 33 - Vérifications au démarrage, retour dans l’onglet, reconnexion et toutes les minutes
+  ---
+  duration_ms: 1.008759
+  type: 'test'
+  ...
+# Subtest: Échec de sauvegarde : pas de perte de session ni boucle de rechargement
+ok 34 - Échec de sauvegarde : pas de perte de session ni boucle de rechargement
+  ---
+  duration_ms: 0.906006
+  type: 'test'
+  ...
+# Subtest: Une installation incomplète ne remplace jamais la version utilisable
+ok 35 - Une installation incomplète ne remplace jamais la version utilisable
+  ---
+  duration_ms: 30.209607
+  type: 'test'
+  ...
+# Subtest: Une ancienne ressource ne satisfait jamais la demande d’une version différente
+ok 36 - Une ancienne ressource ne satisfait jamais la demande d’une version différente
+  ---
+  duration_ms: 5.63017
+  type: 'test'
+  ...
+# Subtest: Construction : toutes les ressources CSS/JS locales des pages portent la même version que le cache
+ok 37 - Construction : toutes les ressources CSS/JS locales des pages portent la même version que le cache
+  ---
+  duration_ms: 2.276548
+  type: 'test'
+  ...
+1..37
+# tests 37
+# suites 0
+# pass 37
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5373.499571

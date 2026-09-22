@@ -1,6 +1,7 @@
 @echo off
 chcp 65001 >nul
 setlocal
+cd /d "%~dp0"
 
 echo ============================================================
 echo PJJoue V1 - Preparation obligatoire avant push
@@ -61,7 +62,8 @@ if errorlevel 1 goto erreur
 
 echo.
 echo ============================================================
-echo PJJoue est pret pour le commit et le push.
+echo Archive reconstruite et controlee. Aucune publication automatique.
+echo ATTENDRE la validation explicite de la proprietaire avant tout push.
 echo UTF-8, SEO/sitemap et MANIFESTE.json confirmes a jour.
 echo ============================================================
 pause
@@ -88,12 +90,12 @@ exit /b 1
 :preparer_outils_node
 where npm.cmd >nul 2>&1
 if errorlevel 1 exit /b 1
-if exist "node_modules\.bin\eslint.cmd" exit /b 0
+if exist "node_modules\postcss\package.json" exit /b 0
 echo.
 echo Outils Node.js absents ou incomplets : installation automatique avec npm ci...
 call npm.cmd ci
 if errorlevel 1 exit /b 1
-if not exist "node_modules\.bin\eslint.cmd" exit /b 1
+if not exist "node_modules\postcss\package.json" exit /b 1
 exit /b 0
 
 :erreur_node

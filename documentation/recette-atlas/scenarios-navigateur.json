@@ -1,0 +1,781 @@
+{
+  "environnement": "Chromium, vrais fichiers construits, origine inline / Storage de test",
+  "exclus": [
+    "transport HTTP/file",
+    "installation PWA réelle",
+    "lecteur d’écran",
+    "autres navigateurs"
+  ],
+  "scenarios": [
+    {
+      "nom": "navigation",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "consentement",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "installation-interface",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "entrainement",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "de",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "jokers",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "chronometre",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "revision-et-reprise",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "sauvegarde-import-export",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "infobulle",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "choix-unique",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "selection-multiple",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "association",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "classer",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "remettre-ordre",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "eliminer",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "reponse-ecrite",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "navigation",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "consentement",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "installation-interface",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "entrainement",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "de",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "jokers",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "chronometre",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "revision-et-reprise",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "sauvegarde-import-export",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "infobulle",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "choix-unique",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "selection-multiple",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "association",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "classer",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "remettre-ordre",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "eliminer",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "reponse-ecrite",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-parcours-detail",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-revision",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-supports-ouvert",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-progression-peuplee",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-bilan",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-unique",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-multiple",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-association",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-classement",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-ordre",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-eliminer",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-ecrite",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-correction",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-jokers",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-quitter",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "accueil",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "entrainement",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "parcours",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "parametres",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles-etapes",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures-etapes",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles-entrainement",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures-entrainement",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-parcours-detail",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-revision",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-supports-ouvert",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-progression-peuplee",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-bilan",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-unique",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-multiple",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-association",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-classement",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-ordre",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-eliminer",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-question-ecrite",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-correction",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-jokers",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "bureau-quitter",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "accueil",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "entrainement",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "parcours",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "parametres",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles-etapes",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures-etapes",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles-entrainement",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures-entrainement",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "accueil",
+      "largeur": 320,
+      "statut": "OK"
+    },
+    {
+      "nom": "entrainement",
+      "largeur": 320,
+      "statut": "OK"
+    },
+    {
+      "nom": "parcours",
+      "largeur": 320,
+      "statut": "OK"
+    },
+    {
+      "nom": "parametres",
+      "largeur": 320,
+      "statut": "OK"
+    },
+    {
+      "nom": "progression",
+      "largeur": 320,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles",
+      "largeur": 320,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures",
+      "largeur": 320,
+      "statut": "OK"
+    },
+    {
+      "nom": "supports",
+      "largeur": 320,
+      "statut": "OK"
+    },
+    {
+      "nom": "accueil",
+      "largeur": 768,
+      "statut": "OK"
+    },
+    {
+      "nom": "entrainement",
+      "largeur": 768,
+      "statut": "OK"
+    },
+    {
+      "nom": "parcours",
+      "largeur": 768,
+      "statut": "OK"
+    },
+    {
+      "nom": "parametres",
+      "largeur": 768,
+      "statut": "OK"
+    },
+    {
+      "nom": "progression",
+      "largeur": 768,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles",
+      "largeur": 768,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures",
+      "largeur": 768,
+      "statut": "OK"
+    },
+    {
+      "nom": "supports",
+      "largeur": 768,
+      "statut": "OK"
+    },
+    {
+      "nom": "accueil",
+      "largeur": 1920,
+      "statut": "OK"
+    },
+    {
+      "nom": "entrainement",
+      "largeur": 1920,
+      "statut": "OK"
+    },
+    {
+      "nom": "parcours",
+      "largeur": 1920,
+      "statut": "OK"
+    },
+    {
+      "nom": "parametres",
+      "largeur": 1920,
+      "statut": "OK"
+    },
+    {
+      "nom": "progression",
+      "largeur": 1920,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles",
+      "largeur": 1920,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures",
+      "largeur": 1920,
+      "statut": "OK"
+    },
+    {
+      "nom": "supports",
+      "largeur": 1920,
+      "statut": "OK"
+    },
+    {
+      "nom": "guides/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-enquete-sanction/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-information-judiciaire/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-jugement-sanction-educative/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-matiere-criminelle-peines/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-application-execution/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "decouvrir-la-pjj/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "organisation-pjj/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "metiers-pjj/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "structures-pjj/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures-educatives-pjj/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles-cjpm/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles-pjj/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "quiz-pjj/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "accessibilite.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "confidentialite.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "mentions-legales.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "sources.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "administration.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "rrse-mineur/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "peines-mineurs-cjpm/index.html",
+      "largeur": 1440,
+      "statut": "OK"
+    },
+    {
+      "nom": "guides/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-enquete-sanction/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-information-judiciaire/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-jugement-sanction-educative/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-matiere-criminelle-peines/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "cjpm-application-execution/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "decouvrir-la-pjj/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "organisation-pjj/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "metiers-pjj/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "structures-pjj/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "mesures-educatives-pjj/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles-cjpm/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "sigles-pjj/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "quiz-pjj/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "accessibilite.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "confidentialite.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "mentions-legales.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "sources.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "administration.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "rrse-mineur/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    },
+    {
+      "nom": "peines-mineurs-cjpm/index.html",
+      "largeur": 390,
+      "statut": "OK"
+    }
+  ]
+}

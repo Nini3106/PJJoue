@@ -171,7 +171,7 @@
         panneau.setAttribute('aria-labelledby', 'pjjoueConsentementTitre');
         panneau.setAttribute('aria-describedby', 'pjjoueConsentementTexte');
         panneau.innerHTML = `
-            <div class="pjj-consentement-repere" aria-hidden="true"><span class="pjj-consentement-marque"><span class="pjj-consentement-marque-pjj">PJJ</span><span class="pjj-consentement-marque-oue">oue</span></span></div>
+            <div class="pjj-consentement-repere" aria-hidden="true"><span class="pjj-consentement-marque">Quiz <span class="pjj-consentement-marque-cjpm">CJPM</span></span></div>
             <button class="pjj-consentement-fermer" type="button" aria-label="Fermer sans choisir">×</button>
             <div class="pjj-consentement-contenu">
                 <h2 id="pjjoueConsentementTitre">Mesure d’audience</h2>

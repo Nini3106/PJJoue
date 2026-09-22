@@ -1,0 +1,90 @@
+[
+  {
+    "largeur": 1440,
+    "controle": "etoiles",
+    "etoiles_contextuelles": 105,
+    "couleurs_distinctes": 17,
+    "ok": true
+  },
+  {
+    "largeur": 1440,
+    "controle": "coherence",
+    "etapes_carte_question_revision": 66,
+    "ok": true
+  },
+  {
+    "largeur": 1440,
+    "controle": "typographie",
+    "texte_normal_px": 17,
+    "menu_px": 15.5,
+    "agrandissement_115_pourcent": true,
+    "pages_agrandies": 8,
+    "ok": true
+  },
+  {
+    "largeur": 768,
+    "controle": "etoiles",
+    "etoiles_contextuelles": 105,
+    "couleurs_distinctes": 17,
+    "ok": true
+  },
+  {
+    "largeur": 768,
+    "controle": "coherence",
+    "etapes_carte_question_revision": 66,
+    "ok": true
+  },
+  {
+    "largeur": 768,
+    "controle": "typographie",
+    "texte_normal_px": 17,
+    "menu_px": 14,
+    "agrandissement_115_pourcent": true,
+    "pages_agrandies": 8,
+    "ok": true
+  },
+  {
+    "largeur": 390,
+    "controle": "etoiles",
+    "etoiles_contextuelles": 105,
+    "couleurs_distinctes": 17,
+    "ok": true
+  },
+  {
+    "largeur": 390,
+    "controle": "coherence",
+    "etapes_carte_question_revision": 66,
+    "ok": true
+  },
+  {
+    "largeur": 390,
+    "controle": "typographie",
+    "texte_normal_px": 17,
+    "menu_px": 14,
+    "agrandissement_115_pourcent": true,
+    "pages_agrandies": 8,
+    "ok": true
+  },
+  {
+    "largeur": 320,
+    "controle": "etoiles",
+    "etoiles_contextuelles": 105,
+    "couleurs_distinctes": 17,
+    "ok": true
+  },
+  {
+    "largeur": 320,
+    "controle": "coherence",
+    "etapes_carte_question_revision": 66,
+    "ok": true
+  },
+  {
+    "largeur": 320,
+    "controle": "typographie",
+    "texte_normal_px": 17,
+    "menu_px": 14,
+    "agrandissement_115_pourcent": true,
+    "pages_agrandies": 8,
+    "ok": true
+  }
+]

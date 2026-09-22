@@ -40,6 +40,7 @@ try {
     ];
     const selecteursSemantiques = new Set([
         '.masque',
+        '#qc-atlas:is(.masque,[hidden],.natif-masque,.fichier-importation-visuellement-cache,.masque-recherche-support)',
         '.pjj-consentement[hidden],.pjj-consentement-preferences[hidden]',
     ]);
     const prioritesInterdites = [];
@@ -51,7 +52,15 @@ try {
             const exceptionValide = selecteursSemantiques.has(selecteur)
                 && declaration.prop === 'display'
                 && declaration.value.trim() === 'none';
-            if (!exceptionValide)
+            let parent = declaration.parent;
+            let mouvementReduit = false;
+            while (parent) {
+                if (parent.type === 'atrule' && parent.name === 'media'
+                    && parent.params.replace(/\s+/g, '') === '(prefers-reduced-motion:reduce)')
+                    mouvementReduit = ['animation', 'transition'].includes(declaration.prop) && declaration.value.trim() === 'none';
+                parent = parent.parent;
+            }
+            if (!exceptionValide && !mouvementReduit)
                 prioritesInterdites.push(`${path.relative(process.cwd(), feuille)}:${declaration.source.start.line}`);
         });
     }

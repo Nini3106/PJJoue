@@ -1,6 +1,22 @@
 (function () {
   'use strict';
 
+  // Même préférence sur les guides et l’application, sans écrire ni migrer la progression.
+  function appliquerTailleTexteEnregistree() {
+    let echelle = 1.15;
+    try {
+      const preferences = JSON.parse(localStorage.getItem('pjjoue_v1_sauvegarde') || 'null');
+      const choix = Number(preferences?.parametres?.echelleTexte);
+      if ([.9, 1, 1.08, 1.15].includes(choix)) echelle = choix;
+    } catch (erreur) { /* Stockage absent ou invalide : garder Grande. */ }
+    document.documentElement.style.setProperty('--echelle-texte', String(echelle));
+  }
+  appliquerTailleTexteEnregistree();
+  window.addEventListener('pageshow', appliquerTailleTexteEnregistree);
+  window.addEventListener('storage', evenement => {
+    if (!evenement.key || evenement.key === 'pjjoue_v1_sauvegarde') appliquerTailleTexteEnregistree();
+  });
+
   let propositionInstallation = null;
   const scriptNavigation = document.currentScript;
   const racineApplication = scriptNavigation?.src
@@ -61,92 +77,22 @@
   }
 
   function initialiserMenuPrincipalGuides() {
-    const entete = document.querySelector('.guide-site-entete');
-    const navigation = entete?.querySelector('nav');
-    const marque = entete?.querySelector('.guide-site-marque');
-    if (!entete || !navigation || !marque || entete.dataset.menuInitialise === 'true')
-      return;
-
-    entete.dataset.menuInitialise = 'true';
-    entete.classList.add('menu-guide-actif');
-    navigation.classList.add('guide-navigation-principale');
-    navigation.id = navigation.id || 'navigationPrincipaleGuides';
-
-    const navigationLocale = window.location.protocol === 'file:';
-    const routesApplication = {
-      accueil: ['', 'accueil'],
-      parcours: ['parcours/', 'parcours'],
-      erreurs: ['revision/', 'revision'],
-      supports: ['supports/', 'supports'],
-      entrainement: ['entrainement/', 'entrainement'],
-      sigles: ['mission-sigles/', 'mission-sigles'],
-      mesures: ['mission-mesures/', 'mission-mesures'],
-      progression: ['progression/', 'progression'],
-      carnet: ['carnet/', 'carnet'],
-      parametres: ['parametres/', 'parametres']
-    };
-    const lienApplication = ecran => navigationLocale
-      ? `${racineApplication.href}index.html?pjjoue_route=${encodeURIComponent(routesApplication[ecran][1])}`
-      : new URL(routesApplication[ecran][0], racineApplication).href;
-    const lienGuides = `${racineApplication.href}guides/${navigationLocale ? 'index.html' : ''}`;
-    const entrees = [
-      { libelle: 'Accueil', href: lienApplication('accueil') },
-      { libelle: 'Parcours CJPM', href: lienApplication('parcours') },
-      { libelle: 'Entraînement libre', href: lienApplication('entrainement') },
-      { libelle: 'Réviser', href: lienApplication('erreurs') },
-      { libelle: 'Progression', href: lienApplication('progression') },
-      { separation: true },
-      { section: 'Supports' },
-      { libelle: 'Supports de révision', href: lienApplication('supports') },
-      { libelle: 'Guides', href: lienGuides },
-      { separation: true },
-      { section: 'Mini jeux' },
-      { libelle: 'Mission Sigles', href: lienApplication('sigles'), miniJeu: true },
-      { libelle: 'Mission Mesures', href: lienApplication('mesures'), miniJeu: true },
-      { separation: true },
-      { libelle: 'Paramètres', href: lienApplication('parametres') }
-    ];
-
-    navigation.innerHTML = entrees.map(entree => {
-      if (entree.section)
-        return `<span class="guide-navigation-section-titre">${entree.section}</span>`;
-      if (entree.separation)
-        return '<span class="guide-navigation-section-separation" aria-hidden="true"></span>';
-      const actif = entree.libelle === 'Guides' ? ' aria-current="page"' : '';
-      const classe = entree.miniJeu ? ' class="guide-navigation-mini-jeu"' : '';
-      return `<a href="${entree.href}"${classe}${actif}>${entree.libelle}</a>`;
-    }).join('');
-
-    const bouton = document.createElement('button');
-    bouton.type = 'button';
-    bouton.className = 'guide-bouton-menu-principal';
-    bouton.setAttribute('aria-controls', navigation.id);
-    bouton.setAttribute('aria-expanded', 'false');
-    bouton.innerHTML = '<span>Menu</span><span class="guide-bouton-menu-icone" aria-hidden="true"><i></i><i></i><i></i></span>';
-    entete.insertBefore(bouton, navigation);
-
-    const fermerMenu = () => {
-      entete.classList.remove('menu-guide-ouvert');
-      bouton.setAttribute('aria-expanded', 'false');
-    };
-
-    bouton.addEventListener('click', evenement => {
-      evenement.stopPropagation();
-      const ouvert = entete.classList.toggle('menu-guide-ouvert');
-      bouton.setAttribute('aria-expanded', String(ouvert));
+    // L’en-tête Atlas est écrit dans la source de chaque document : pas de menu
+    // reconstruit après coup ni de deuxième navigation ajoutée au chargement.
+    const menu = document.querySelector('.atlas-static-menu');
+    const resume = menu?.querySelector('summary');
+    if (!menu || !resume) return;
+    const fermer = () => { menu.open = false; };
+    menu.addEventListener('click', evenement => {
+      if (evenement.target.closest('a')) fermer();
     });
-    navigation.addEventListener('click', evenement => {
-      if (evenement.target.closest('a'))
-        fermerMenu();
-    });
-    document.addEventListener('click', evenement => {
-      if (!entete.contains(evenement.target))
-        fermerMenu();
+    document.addEventListener('pointerdown', evenement => {
+      if (!menu.contains(evenement.target)) fermer();
     });
     document.addEventListener('keydown', evenement => {
-      if (evenement.key === 'Escape' && entete.classList.contains('menu-guide-ouvert')) {
-        fermerMenu();
-        bouton.focus();
+      if (evenement.key === 'Escape' && menu.open) {
+        fermer();
+        resume.focus();
       }
     });
   }

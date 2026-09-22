@@ -1,0 +1,13 @@
+OK 1440 etoiles
+OK 1440 coherence
+OK 1440 typographie
+OK 768 etoiles
+OK 768 coherence
+OK 768 typographie
+OK 390 etoiles
+OK 390 coherence
+OK 390 typographie
+OK 320 etoiles
+OK 320 coherence
+OK 320 typographie
+12/12 scénarios couleurs, étoiles et lisibilité validés.

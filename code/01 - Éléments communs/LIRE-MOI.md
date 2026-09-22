@@ -11,3 +11,9 @@ Ce dossier contient seulement ce qui sert à plusieurs pages.
 - **CSS partagé et adaptation aux écrans** : règles qui touchent plusieurs pages ou plusieurs tailles d’écran.
 
 Si une fonction ne sert qu’à une page, elle ne doit pas rester ici : range-la dans le dossier de la page concernée.
+
+## Identité Atlas V1
+
+`Palette-Atlas.js` centralise les accents affichés, sans modifier les données.
+`atlas-systeme.css` définit les couleurs et les tailles de texte communes.
+`Presentation-Atlas.js` lit les indicateurs réels du moteur pour les résumés.

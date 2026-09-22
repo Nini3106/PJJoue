@@ -461,7 +461,7 @@ function afficherCarteVoyageFinale() {
             const bouton = document.createElement('button');
             bouton.type = 'button';
             bouton.className = 'carte-voyage-etape';
-            bouton.style.setProperty('--couleur-etape', etapeProgramme.couleur || '#2d7379');
+            bouton.style.setProperty('--couleur-etape', obtenirCouleurEtapeAtlas(theme.id, etapeProgramme.id));
             bouton.innerHTML = `${obtenirBaliseIconeEtape(etapeProgramme.id, theme.id)}<span>P${indexTheme + 1}·${etapeProgramme.id}</span>`;
             bouton.setAttribute('aria-label', `Ouvrir le parcours ${indexTheme + 1}, étape ${etapeProgramme.id} · ${etapeProgramme.titre}`);
             bouton.onclick = () => ouvrirEtapeDepuisCarteFinale(theme.id, etapeProgramme.id);

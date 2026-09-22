@@ -7,9 +7,11 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#efeae2",
-  "theme_color": "#5d96c8",
-  "categories": ["education"],
+  "background_color": "#eae3d5",
+  "theme_color": "#172d48",
+  "categories": [
+    "education"
+  ],
   "icons": [
     {
       "src": "icone-pjjoue-192.png",

@@ -59,7 +59,7 @@ function creerSauvegardeInitiale() {
         aDejaJoue: false,
         erreurs: {},
         progression: { apprenant: {} },
-        parametres: { son: true, volume: .65, echelleTexte: 1 },
+        parametres: { son: true, volume: .65, echelleTexte: 1.15 },
         dernierTheme: null,
         etapesDecouvertes: {},
         questionsJouees: {},
@@ -402,7 +402,7 @@ function nettoyerSauvegarde(sauvegardeBrute) {
                 : .65,
             echelleTexte: [.9, 1, 1.08, 1.15].includes(Number(parametres.echelleTexte))
                 ? Number(parametres.echelleTexte)
-                : 1
+                : 1.15
         },
         dernierTheme: estThemeConnu(sauvegardeBrute.dernierTheme)
             ? sauvegardeBrute.dernierTheme

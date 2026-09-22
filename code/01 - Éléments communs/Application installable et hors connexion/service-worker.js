@@ -3,6 +3,7 @@ const NOM_CACHE = 'pjjoue-application-__VERSION_CACHE_PJJOUE__';
 const RESSOURCES_ESSENTIELLES = [
   './',
   './index.html',
+  './ressources/styles/atlas-systeme.css',
   './manifest.webmanifest',
   './donnees/donnees-pjj.js',
   './ressources/moteur-jeu.js',
@@ -67,7 +68,7 @@ const RESSOURCES_ESSENTIELLES = [
 function estRessourceIndispensable(ressource) {
   return ressource === './' || ressource === './index.html'
     || /(?:donnees-pjj|moteur-jeu|navigation-locale)\.js/.test(ressource)
-    || /pjjoue-principal\.css/.test(ressource);
+    || /(?:pjjoue-principal|atlas-systeme)\.css/.test(ressource);
 }
 async function precacherApplication(cache) {
   // Le nouveau moteur ne peut prendre la main qu'après le téléchargement

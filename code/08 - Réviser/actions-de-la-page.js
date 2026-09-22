@@ -68,7 +68,7 @@ function construireReperesRevision(jeu, element) {
         `<span class="revision-repere" style="--repere-accent:${couleur};--repere-texte:${couleurTexte}">${echapperHtml(libelle)}</span>`;
     if (jeu === 'parcours') {
         const parcours = obtenirIdentiteParcours(cible.theme);
-        const couleurEtape = obtenirEtapeProgramme(cible.theme, cible.etape)?.couleur || obtenirCouleurTitreEtape(cible.etape);
+        const couleurEtape = obtenirCouleurEtapeAtlas(cible.theme, cible.etape);
         return `<small class="revision-reperes">${badge(`Parcours ${obtenirOrdreTheme(cible.theme) + 1}`, parcours.couleur, parcours.couleurTexte)}${badge(`Étape ${cible.etape}`, couleurEtape)}</small>`;
     }
     const etape = jeu === 'sigles' ? obtenirIdentiteEtapeMissionSigles(cible.etape)
@@ -114,11 +114,11 @@ function construireEspaceRevision(jeu, zone) {
     const selection = filtrerElementsRevision(jeu, elements);
     const choixParcours = [{ valeur:'toutes', libelle:'Tous les parcours' }, ...themes.map(theme => {
         const identite = obtenirIdentiteParcours(theme.id);
-        return { valeur:theme.id, libelle:identite.titre, couleur:identite.couleurTexte || identite.couleur };
+        return { valeur:theme.id, libelle:identite.titre, couleur:identite.couleur };
     })];
     const choixEtapes = [{ valeur:'toutes', libelle:'Toutes les étapes' }, ...etapes.map(numero => ({
         valeur:String(numero), libelle:jeu === 'sigles' ? libelleEtapeSigles(numero) : `Étape ${numero}`,
-        couleur:jeu === 'parcours' ? (obtenirEtapeProgramme(filtres.theme, numero)?.couleur || obtenirCouleurTitreEtape(numero))
+        couleur:jeu === 'parcours' ? obtenirCouleurEtapeAtlas(filtres.theme, numero)
             : (jeu === 'sigles' ? obtenirIdentiteEtapeMissionSigles(numero) : obtenirIdentiteEtapeMissionMesures(numero)).couleur
     }))];
     zone.innerHTML = `<section class="revision-filtres" aria-label="Choisir les questions à réviser">

@@ -12,7 +12,7 @@ function creerNavigation({controleur={},sauvegardePossible=true,enLigne=true}={}
  const serviceWorker={controller:controleur,addEventListener:(e,f)=>workerEvents[e]=f,
   register:async(_url,o)=>{options=o;return inscription}};
  const contexte={URL,console,navigator:{serviceWorker,onLine:enLigne},
-  document:{currentScript:{src:'https://pjjoue.test/ressources/navigation-locale.js'},baseURI:'https://pjjoue.test/',visibilityState:'visible',addEventListener:(e,f)=>documentEvents[e]=f},
+  document:{documentElement:{style:{setProperty(){}}},currentScript:{src:'https://pjjoue.test/ressources/navigation-locale.js'},baseURI:'https://pjjoue.test/',visibilityState:'visible',addEventListener:(e,f)=>documentEvents[e]=f},
   window:{location:{protocol:'https:',reload:()=>recharges++},addEventListener:(e,f)=>fenetre[e]=f,
   setInterval:(f,ms)=>{intervalles.push({f,ms})},preparerMiseAJourPJJoue:()=>{sauvegardes++;return sauvegardePossible}}};
  vm.runInNewContext(lire('ressources/navigation-locale.js'),contexte);

@@ -1,3 +1,24 @@
+# Quiz CJPM V1 — Livraison locale à valider
+
+**Extrais le ZIP dans un nouveau dossier puis ouvre `ESSAYER_QUIZ_CJPM.bat`.**
+Le site complet et ses sources sont inclus. Aucun déploiement ni modification du
+dépôt GitHub n’a été effectué. Toute publication attend la validation explicite.
+
+Barre unique bleu nuit, papier beige approfondi, texte Grande par défaut,
+couleurs contextuelles dans les questions et les listes Réviser/S’entraîner.
+Les 960 questions et les sept fichiers de données sont conservés.
+
+Documentation actuelle : **`LIRE-MOI-V1.md`**, **`RAPPORT-VALIDATION-V1.md`** et
+`documentation/recette-v1-finitions/`. Version **1.0.0 / V1**, sans migration de progression.
+
+---
+
+## Documentation historique de la base PJJoue
+
+La documentation ci-dessous est conservée pour la maintenance du socle. Elle
+décrit la base antérieure ; les instructions de lancement et la recette de la
+présente livraison sont celles des documents actuels nommés ci-dessus.
+
 # PJJoue V1 — 6 parcours pédagogiques
 
 **Création : août 2026.**

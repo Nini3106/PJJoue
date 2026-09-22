@@ -143,7 +143,7 @@ function appliquerCouleursParcoursEntrainement() {
     if (etat.contexteEntrainement === 'sigles') {
         groupe.querySelectorAll('.choix-bouton[data-valeur]').forEach(bouton => {
             const numero = Number(bouton.dataset.valeur);
-            if (!Number.isFinite(numero) || numero < 1 || numero > 6)
+            if (!Number.isFinite(numero) || !SIGLES.some(sigle => Number(sigle.etape) === numero))
                 return;
             const identite = obtenirIdentiteEtapeMissionSigles(numero);
             bouton.style.setProperty('--parcours-accent', identite.couleur);
@@ -331,4 +331,5 @@ function actualiserGroupesChoix() {
     });
     appliquerCouleursParcoursEntrainement();
     actualiserLimiteQuestionsEntrainement();
+    actualiserLibelleSelecteurAtlas();
 }

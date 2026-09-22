@@ -1,0 +1,40 @@
+{
+  "livraison": "Quiz CJPM — Atlas V1, couleurs et lisibilité renforcées",
+  "date": "2026-09-21",
+  "depot": "Nini3106/PJJoue",
+  "commit": "283933f5105b12081bbd94cde14e1c2aa40022d9",
+  "artefact_github_pages": 10633915236,
+  "execution_deploiement_source": 35588745797,
+  "mise_en_ligne_effectuee": false,
+  "reference_maquette_sha256": "6e8d4b9021be3a20888051598be76003fb858b7bd7c959ccbf16c0cf287a117f",
+  "donnees_inchangees_sha256": {
+    "couverture-corpus-v1.json": "76b773543c87dc1fde7ab91e35256fa4cc683098deb8fa2b4d7fc66c92d9dcd7",
+    "donnees-pjj.js": "5b654043ed29396c028c136c8ec77863a7aa21900b9dc386d1e2bbe898aa1650",
+    "mesures.json": "1d5466e412554b4c16f33a7c36fd55edada44154aa78a2cbc4ec0ee5c1d7df1a",
+    "programme.json": "c9400eb4ce8422a890417cbb67d842408eba0b3458c2af510e51d54067dbb8c9",
+    "questions.json": "4c4d2a3a99721bfb101dd00156cc3520f5761d39df98dfae5c6f061e6c4ae66b",
+    "sigles.json": "a4ccd41b140d6b22fd9bc6a5e6e0a0fe6948127783cc317759df7850aa04ffe0",
+    "sources.json": "cfe4526554b47565f4b5c83d60412cba94a7875e03c1af9743c1a9acb846f68f"
+  },
+  "identifiants_origine_conserves": 264,
+  "fichiers_metier_proteges": 33,
+  "tests": {
+    "scenarios_navigateur": 154,
+    "tests_socle": 97,
+    "tests_logique": 37,
+    "controles_reponses": 562,
+    "pages_structure_accessibilite": 41,
+    "fichiers_syntaxe_js": 50,
+    "scenarios_couleurs_et_lisibilite": 12,
+    "etoiles_par_largeur": 105,
+    "fichiers_transport_http": 108
+  },
+  "limites": [
+    "Chromium inline ; stockage et API de périphérie simulés pour la recette",
+    "Windows, Safari, Firefox et appareils réels non testés",
+    "Installation PWA et cycle réel de mise à jour non exercés",
+    "Pas de certification WCAG ou audit juridique nouveau"
+  ],
+  "version": "V1",
+  "base_locale": "Quiz-CJPM-Atlas-Refonte-Complete.zip"
+}

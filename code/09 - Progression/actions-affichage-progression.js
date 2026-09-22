@@ -175,6 +175,7 @@ function remplirPastillesProgression() {
     afficherDetailProgressionParcours(obtenirThemeProgressionParDefaut());
 }
 function afficherProgression() {
+    afficherVueEnsembleAtlas();
     actualiserAccueil();
     const zone = selectionner('#tableauProgression');
     if (!zone)

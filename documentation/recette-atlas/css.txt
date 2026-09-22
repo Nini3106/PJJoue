@@ -1,0 +1,6 @@
+OK — aucun doublon CSS strict détecté.
+OK — aucun doublon CSS strict détecté.
+OK — aucun doublon CSS strict détecté.
+OK — aucune déclaration répétée ni paire de médias adjacents détectée.
+OK — aucune déclaration répétée ni paire de médias adjacents détectée.
+OK — aucune déclaration répétée ni paire de médias adjacents détectée.

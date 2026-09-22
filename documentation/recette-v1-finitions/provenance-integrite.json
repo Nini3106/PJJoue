@@ -1,0 +1,41 @@
+{
+  "version": "V1",
+  "version_package": "1.0.0",
+  "archive_precedente": "Quiz-CJPM-Atlas-V1-Couleurs-Lisibilite.zip",
+  "archive_precedente_sha256": "50b8e611b12411275752ef5b8e4167299631ba505194ac8a57848d915b560a4b",
+  "commit_base_de_la_refonte": "283933f5105b12081bbd94cde14e1c2aa40022d9",
+  "donnees_identiques": {
+    "donnees/programme.json": "c9400eb4ce8422a890417cbb67d842408eba0b3458c2af510e51d54067dbb8c9",
+    "donnees/mesures.json": "1d5466e412554b4c16f33a7c36fd55edada44154aa78a2cbc4ec0ee5c1d7df1a",
+    "donnees/sigles.json": "a4ccd41b140d6b22fd9bc6a5e6e0a0fe6948127783cc317759df7850aa04ffe0",
+    "donnees/couverture-corpus-v1.json": "76b773543c87dc1fde7ab91e35256fa4cc683098deb8fa2b4d7fc66c92d9dcd7",
+    "donnees/sources.json": "cfe4526554b47565f4b5c83d60412cba94a7875e03c1af9743c1a9acb846f68f",
+    "donnees/donnees-pjj.js": "5b654043ed29396c028c136c8ec77863a7aa21900b9dc386d1e2bbe898aa1650",
+    "donnees/questions.json": "4c4d2a3a99721bfb101dd00156cc3520f5761d39df98dfae5c6f061e6c4ae66b"
+  },
+  "nombre_questions": 960,
+  "fichiers_js_modifications_recensees": [
+    "code/01 - Éléments communs/JavaScript - Sauvegarde locale.js",
+    "code/10 - Paramètres/actions-de-la-page.js",
+    "code/01 - Éléments communs/Navigation/navigation-locale.js",
+    "code/08 - Réviser/actions-de-la-page.js",
+    "code/01 - Éléments communs/Presentation-Atlas.js",
+    "code/05 - Entraînement libre/actions-de-la-page.js"
+  ],
+  "recettes": {
+    "generale": {
+      "reussis": 154,
+      "total": 154
+    },
+    "finitions": {
+      "reussis": 40,
+      "total": 40
+    },
+    "couleurs": {
+      "reussis": 12,
+      "total": 12
+    }
+  },
+  "publication_effectuee": false,
+  "ecritures_github_effectuees": false
+}

@@ -1,0 +1,1 @@
+OK — 79 fichiers publics et ressources : HTTP 200, octets exacts. Route inexistante : HTTP 404. Client Python ; navigateur non revendiqué.

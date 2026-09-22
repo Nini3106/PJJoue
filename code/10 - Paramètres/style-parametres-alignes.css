@@ -1,55 +1,14 @@
-/* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=0006 === */
-/* Paramètres : grille régulière et commandes alignées. */
-#parametres .formulaire-grille { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-#parametres .parametre { display:grid; grid-template-columns:minmax(0,1fr); align-content:start; gap:14px; min-height:148px; padding:20px; border:1px solid var(--bordure-carte); border-radius:var(--rayon-grand); background:var(--surface-carte); box-shadow:var(--ombre-douce); }
-#parametres .choix-libelle,
-#parametres .parametre > label { color:var(--texte); font-weight:850; }
-#parametres .parametres-choix .choix-groupe { display:flex; flex-wrap:wrap; align-items:center; width:max-content; max-width:100%; }
-#parametres .parametres-choix .choix-groupe[data-groupe-choix="sonActif"] { justify-content:flex-start; }
-#parametres .parametres-choix .choix-groupe[data-groupe-choix="echelleTexte"] { justify-content:flex-start; }
-#parametres .parametres-choix .choix-groupe .choix-bouton { width:max-content; max-width:100%; min-width:0; min-height:46px; height:auto; padding:8px 12px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; white-space:normal; }
-#parametres .parametres-choix .choix-groupe .choix-bouton.actif,
-#parametres .parametres-choix .choix-groupe .choix-bouton.selectionne,
-#parametres .parametres-choix .choix-groupe .choix-bouton[aria-pressed="true"] { border-color:#4f8cff; color:var(--texte); background:rgba(79,140,255,.16); box-shadow:inset 0 0 0 1px #4f8cff; }
-#parametres .parametre-volume .curseur { width:100%; height:46px; min-height:46px; margin:0; accent-color:var(--jaune-interface); }
-#parametres .parametre-sauvegarde { grid-column:1/-1; grid-template-columns:minmax(180px,.65fr) minmax(0,1.35fr); min-height:0; align-items:center; }
-#parametres .parametre-sauvegarde p { margin:0; color:var(--texte-secondaire); line-height:1.5; }
-#parametres .parametre-sauvegarde .parametres-actions-boutons { grid-column:2; }
-#parametres .parametres-actions-boutons { display:flex; flex-wrap:wrap; align-items:center; width:100%; max-width:100%; gap:9px; }
-#parametres .parametres-actions-boutons > button,
-#parametres .progression-importation { display:flex; align-items:center; justify-content:center; min-height:46px; padding:10px 14px; border:1px solid var(--bordure); border-radius:12px; color:var(--texte); background:var(--surface-carte-profonde); font-weight:800; text-align:center; cursor:pointer; }
-#parametres .fichier-importation-visuellement-cache { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); border:0; white-space:nowrap; }
-#parametres .parametres-actions-boutons .principal { border-color:#6f94c0; color:var(--texte); background:var(--surface-carte-profonde); }
-#parametres .parametres-actions-boutons .principal:hover,
-#parametres .parametres-actions-boutons .principal:focus-visible { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.08); }
-#parametres .parametres-actions-principales { grid-column:1/-1; display:flex; justify-content:flex-start; padding-top:4px; }
-#parametres .parametres-actions-principales button { min-height:50px; padding:11px 28px; border-radius:12px; font-weight:850; }
-#parametres .parametres-actions-principales .principal { border:1px solid #6f94c0; color:var(--texte); background:var(--surface-carte-profonde); }
-#parametres .parametres-actions-principales .principal:hover,
-#parametres .parametres-actions-principales .principal:focus-visible { border-color:var(--jaune-interface); color:var(--texte); background:rgba(255,200,61,.08); }
-#parametres .parametres-zone-sensible { grid-column:1/-1; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:18px; margin-top:8px; padding:18px 20px; border:1px solid rgba(202,52,83,.72); border-radius:var(--rayon-grand); background:rgba(202,52,83,.09); }
-#parametres .parametres-zone-sensible-texte { display:grid; gap:5px; }
-#parametres .parametres-zone-sensible h2 { margin:0; color:var(--texte); font-size:1rem; }
-#parametres .parametres-zone-sensible p { margin:0; color:var(--texte-secondaire); line-height:1.5; }
-#parametres .parametres-zone-sensible .danger { min-height:50px; padding:11px 18px; border:1px solid #ef7890; border-radius:12px; color:#fff; background:#ca3453; font-weight:850; }
-#parametres .parametres-zone-sensible .danger:hover,
-#parametres .parametres-zone-sensible .danger:focus-visible { border-color:#ffabc0; color:#fff; background:#b82b48; }
-@media (max-width:900px) {
-  #parametres .formulaire-grille { grid-template-columns:1fr; }
-  #parametres .parametre-sauvegarde,
-  #parametres .parametres-actions-principales,
-  #parametres .parametres-zone-sensible { grid-column:auto; }
-}
-@media (max-width:620px) {
-  #parametres .parametre,
-  #parametres .parametre-sauvegarde { grid-template-columns:1fr; gap:12px; }
-  #parametres .parametre-sauvegarde .parametres-actions-boutons { grid-column:auto; }
-  #parametres .parametres-actions-boutons { justify-content:flex-start; }
-  #parametres .parametres-choix .choix-groupe[data-groupe-choix="echelleTexte"] { justify-content:flex-start; }
-  #parametres .parametres-choix .choix-groupe .choix-bouton { min-height:46px; }
-  #parametres .parametres-actions-principales { align-items:stretch; }
-  #parametres .parametres-actions-principales button { width:max-content; max-width:100%; }
-  #parametres .parametres-zone-sensible { grid-template-columns:1fr; align-items:stretch; }
-  #parametres .parametres-zone-sensible .danger { width:max-content; max-width:100%; }
-}
+/* Atlas — style-parametres-alignes.css : source unique du composant. */
+/* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=6 === */
+/* Paramètres : toutes les actions de sauvegarde, import, annulation et remise à zéro. */
+#qc-atlas #parametres .formulaire-grille { max-width:760px; background:var(--q-panel); border:1px solid var(--q-line); border-radius:10px; padding:28px; }
+#qc-atlas .parametre { padding:0 0 24px; margin:0 0 24px; border-bottom:1px solid var(--q-line); }
+#qc-atlas .choix-libelle,#qc-atlas .parametre>label { display:block; font-size:var(--q-text-control); font-weight:650; margin-bottom:12px; }
+#qc-atlas .parametre p { color:var(--q-muted); font-size:var(--q-text-control); margin:10px 0 16px; }
+#qc-atlas .parametre-desactive { opacity:.5; }
+#qc-atlas .parametres-actions-principales { margin-bottom:26px; }
+#qc-atlas .parametres-zone-sensible { padding:22px; border:1px solid var(--q-bad); border-radius:8px; background:var(--q-badbg); }
+#qc-atlas .parametres-zone-sensible h2 { font:400 25px/1.2 Georgia,serif; }
+#qc-atlas .parametres-zone-sensible p { font-size:var(--q-text-control); margin:12px 0 18px; }
+@media(max-width:640px) { #qc-atlas #parametres .formulaire-grille { padding:22px 18px; } }
 /* === FIN MORCEAU CSS === */

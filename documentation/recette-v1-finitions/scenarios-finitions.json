@@ -1,0 +1,512 @@
+{
+  "scenarios": [
+    {
+      "cas": "barre-unique",
+      "largeur": 1440,
+      "statut": "OK",
+      "detail": {
+        "total": 1,
+        "bandes": 0,
+        "slogan": "Comprendre · Pratiquer · Retenir",
+        "bg": "rgb(23, 45, 72)",
+        "largeur": 1440,
+        "viewport": 1440,
+        "texte": "rgb(234, 227, 213)",
+        "logoFond": "rgb(234, 227, 213)",
+        "logoLettre": "rgb(23, 45, 72)",
+        "cjpm": "rgb(33, 79, 186)",
+        "cjpmFond": "rgb(234, 227, 213)",
+        "liens": [
+          {
+            "texte": "Parcours CJPM",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "S’entraîner",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Réviser",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Ressources",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Plus⌄",
+            "couleur": "rgb(234, 227, 213)"
+          }
+        ],
+        "atlasVisible": false
+      }
+    },
+    {
+      "cas": "preferences",
+      "largeur": 1440,
+      "statut": "OK",
+      "detail": {
+        "reglages": 4,
+        "restaurations_nettoyees": 8,
+        "defaut": 1.15
+      }
+    },
+    {
+      "cas": "revision",
+      "largeur": 1440,
+      "statut": "OK",
+      "detail": {
+        "parcours": 6,
+        "etapes": 66
+      }
+    },
+    {
+      "cas": "entrainement",
+      "largeur": 1440,
+      "statut": "OK",
+      "detail": {
+        "choix_colores": 36,
+        "selection_native_et_resume": true
+      }
+    },
+    {
+      "cas": "questions",
+      "largeur": 1440,
+      "statut": "OK",
+      "detail": {
+        "formats": 7,
+        "couleurs_fils_etapes": 66,
+        "correction_semantique_preservee": true
+      }
+    },
+    {
+      "cas": "barre-unique",
+      "largeur": 1280,
+      "statut": "OK",
+      "detail": {
+        "total": 1,
+        "bandes": 0,
+        "slogan": "Comprendre · Pratiquer · Retenir",
+        "bg": "rgb(23, 45, 72)",
+        "largeur": 1280,
+        "viewport": 1280,
+        "texte": "rgb(234, 227, 213)",
+        "logoFond": "rgb(234, 227, 213)",
+        "logoLettre": "rgb(23, 45, 72)",
+        "cjpm": "rgb(33, 79, 186)",
+        "cjpmFond": "rgb(234, 227, 213)",
+        "liens": [
+          {
+            "texte": "Parcours CJPM",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "S’entraîner",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Réviser",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Ressources",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Plus⌄",
+            "couleur": "rgb(234, 227, 213)"
+          }
+        ],
+        "atlasVisible": false
+      }
+    },
+    {
+      "cas": "barre-unique",
+      "largeur": 1024,
+      "statut": "OK",
+      "detail": {
+        "total": 1,
+        "bandes": 0,
+        "slogan": "Comprendre · Pratiquer · Retenir",
+        "bg": "rgb(23, 45, 72)",
+        "largeur": 1024,
+        "viewport": 1024,
+        "texte": "rgb(234, 227, 213)",
+        "logoFond": "rgb(234, 227, 213)",
+        "logoLettre": "rgb(23, 45, 72)",
+        "cjpm": "rgb(33, 79, 186)",
+        "cjpmFond": "rgb(234, 227, 213)",
+        "liens": [
+          {
+            "texte": "Parcours CJPM",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "S’entraîner",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Réviser",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Ressources",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Plus⌄",
+            "couleur": "rgb(234, 227, 213)"
+          }
+        ],
+        "atlasVisible": false
+      }
+    },
+    {
+      "cas": "barre-unique",
+      "largeur": 768,
+      "statut": "OK",
+      "detail": {
+        "total": 1,
+        "bandes": 0,
+        "slogan": "Comprendre · Pratiquer · Retenir",
+        "bg": "rgb(23, 45, 72)",
+        "largeur": 768,
+        "viewport": 768,
+        "texte": "rgb(234, 227, 213)",
+        "logoFond": "rgb(234, 227, 213)",
+        "logoLettre": "rgb(23, 45, 72)",
+        "cjpm": "rgb(33, 79, 186)",
+        "cjpmFond": "rgb(234, 227, 213)",
+        "liens": [
+          {
+            "texte": "Parcours CJPM",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "S’entraîner",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Réviser",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Ressources",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Plus⌄",
+            "couleur": "rgb(234, 227, 213)"
+          }
+        ],
+        "atlasVisible": false
+      }
+    },
+    {
+      "cas": "barre-unique",
+      "largeur": 390,
+      "statut": "OK",
+      "detail": {
+        "total": 1,
+        "bandes": 0,
+        "slogan": "Comprendre · Pratiquer · Retenir",
+        "bg": "rgb(23, 45, 72)",
+        "largeur": 390,
+        "viewport": 390,
+        "texte": "rgb(234, 227, 213)",
+        "logoFond": "rgb(234, 227, 213)",
+        "logoLettre": "rgb(23, 45, 72)",
+        "cjpm": "rgb(33, 79, 186)",
+        "cjpmFond": "rgb(234, 227, 213)",
+        "liens": [
+          {
+            "texte": "Parcours CJPM",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "S’entraîner",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Réviser",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Ressources",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Plus⌄",
+            "couleur": "rgb(234, 227, 213)"
+          }
+        ],
+        "atlasVisible": false
+      }
+    },
+    {
+      "cas": "preferences",
+      "largeur": 390,
+      "statut": "OK",
+      "detail": {
+        "reglages": 4,
+        "restaurations_nettoyees": 8,
+        "defaut": 1.15
+      }
+    },
+    {
+      "cas": "revision",
+      "largeur": 390,
+      "statut": "OK",
+      "detail": {
+        "parcours": 6,
+        "etapes": 66
+      }
+    },
+    {
+      "cas": "entrainement",
+      "largeur": 390,
+      "statut": "OK",
+      "detail": {
+        "choix_colores": 36,
+        "selection_native_et_resume": true
+      }
+    },
+    {
+      "cas": "questions",
+      "largeur": 390,
+      "statut": "OK",
+      "detail": {
+        "formats": 7,
+        "couleurs_fils_etapes": 66,
+        "correction_semantique_preservee": true
+      }
+    },
+    {
+      "cas": "barre-unique",
+      "largeur": 320,
+      "statut": "OK",
+      "detail": {
+        "total": 1,
+        "bandes": 0,
+        "slogan": "Comprendre · Pratiquer · Retenir",
+        "bg": "rgb(23, 45, 72)",
+        "largeur": 320,
+        "viewport": 320,
+        "texte": "rgb(234, 227, 213)",
+        "logoFond": "rgb(234, 227, 213)",
+        "logoLettre": "rgb(23, 45, 72)",
+        "cjpm": "rgb(33, 79, 186)",
+        "cjpmFond": "rgb(234, 227, 213)",
+        "liens": [
+          {
+            "texte": "Parcours CJPM",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "S’entraîner",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Réviser",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Ressources",
+            "couleur": "rgb(234, 227, 213)"
+          },
+          {
+            "texte": "Plus⌄",
+            "couleur": "rgb(234, 227, 213)"
+          }
+        ],
+        "atlasVisible": false
+      }
+    },
+    {
+      "cas": "preferences",
+      "largeur": 320,
+      "statut": "OK",
+      "detail": {
+        "reglages": 4,
+        "restaurations_nettoyees": 8,
+        "defaut": 1.15
+      }
+    },
+    {
+      "cas": "revision",
+      "largeur": 320,
+      "statut": "OK",
+      "detail": {
+        "parcours": 6,
+        "etapes": 66
+      }
+    },
+    {
+      "cas": "entrainement",
+      "largeur": 320,
+      "statut": "OK",
+      "detail": {
+        "choix_colores": 36,
+        "selection_native_et_resume": true
+      }
+    },
+    {
+      "cas": "questions",
+      "largeur": 320,
+      "statut": "OK",
+      "detail": {
+        "formats": 7,
+        "couleurs_fils_etapes": 66,
+        "correction_semantique_preservee": true
+      }
+    },
+    {
+      "cas": "preferences-restaurees-app-et-guides",
+      "statut": "OK",
+      "detail": [
+        [
+          "index.html",
+          0.9
+        ],
+        [
+          "guides/index.html",
+          0.9
+        ],
+        [
+          "sources.html",
+          0.9
+        ],
+        [
+          "index.html",
+          1
+        ],
+        [
+          "guides/index.html",
+          1
+        ],
+        [
+          "sources.html",
+          1
+        ],
+        [
+          "index.html",
+          1.15
+        ],
+        [
+          "guides/index.html",
+          1.15
+        ],
+        [
+          "sources.html",
+          1.15
+        ]
+      ]
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "guides/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "cjpm-enquete-sanction/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "cjpm-information-judiciaire/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "cjpm-jugement-sanction-educative/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "cjpm-matiere-criminelle-peines/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "cjpm-application-execution/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "decouvrir-la-pjj/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "organisation-pjj/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "metiers-pjj/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "structures-pjj/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "mesures-educatives-pjj/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "sigles-cjpm/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "sigles-pjj/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "quiz-pjj/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "accessibilite.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "confidentialite.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "mentions-legales.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "sources.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "administration.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "rrse-mineur/index.html",
+      "statut": "OK"
+    },
+    {
+      "cas": "barre-autonome",
+      "page": "peines-mineurs-cjpm/index.html",
+      "statut": "OK"
+    }
+  ],
+  "limites": "Chromium en mémoire et stockage de test ; aucune validation PWA réelle."
+}

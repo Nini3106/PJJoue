@@ -22,8 +22,8 @@ function chargerParametres() {
     const parametres = sauvegarde.parametres;
     selectionner('#sonActif').value = String(parametres.son !== false);
     selectionner('#volumeSon').value = parametres.volume;
-    selectionner('#echelleTexte').value = String(parametres.echelleTexte || 1);
-    document.documentElement.style.setProperty('--echelle-texte', String(parametres.echelleTexte || 1));
+    selectionner('#echelleTexte').value = String(parametres.echelleTexte || 1.15);
+    document.documentElement.style.setProperty('--echelle-texte', String(parametres.echelleTexte || 1.15));
     appliquerDisponibiliteVolumeSon();
     requestAnimationFrame(mesurerHauteurEntete);
     actualiserGroupesChoix();

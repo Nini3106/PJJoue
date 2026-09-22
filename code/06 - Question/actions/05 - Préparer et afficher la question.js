@@ -72,9 +72,7 @@ function preparerQuestionCourante() {
 }
 
 const IDENTITE_PARCOURS_MINI_JEUX = Object.freeze({
-    couleur: '#4f8cff',
-    couleurTexte: '#9fc2ff',
-    couleurRgb: '79,140,255'
+    ...obtenirCouleursAtlas('#4f8cff')
 });
 
 function obtenirIdentiteParcoursQuestion(question) {
@@ -292,12 +290,8 @@ function appliquerIdentiteVisuelleEtape(question) {
         identifiantEtape = `mesures-${numeroEtape}`;
     }
     else {
-        const programme = PROGRAMMES[question?.theme];
-        const etapeProgramme = programme?.etapes?.find(
-            etape => Number(etape.id) === Number(question?.etape)
-        );
-        couleurEtape = etapeProgramme?.couleur || obtenirCouleurTitreEtape(question?.etape);
-        couleurEtapeLisible = couleurEtape;
+        couleurEtape = obtenirCouleurEtapeAtlas(question?.theme, question?.etape);
+        couleurEtapeLisible = obtenirCouleursAtlas(couleurEtape).couleurTexte;
     }
 
     document.documentElement.style.setProperty('--couleur-etape-active', couleurEtape);

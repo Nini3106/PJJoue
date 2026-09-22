@@ -1,0 +1,2 @@
+INFO — navigation file:// bloquée par l'environnement : contrôles locaux directs ignorés, interface inline maintenue.
+OK — interface : 6 parcours, 66 étapes, 6 évaluations et 562 contrôles de réponses réussis

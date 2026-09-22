@@ -37,7 +37,7 @@ class GuidesCJPMTests(unittest.TestCase):
         self.assertEqual(cartes[5:7], ["../mesures-educatives-pjj/", "../sigles-cjpm/"])
         self.assertEqual(cartes[-1], "../sigles-pjj/")
         page = (RACINE / "guides/index.html").read_text()
-        collections = re.findall(r'<section class="guides-collection".*?</section>', page, re.S)
+        collections = re.findall(r'<section\b(?=[^>]*\bclass="guides-collection")[^>]*>.*?</section>', page, re.S)
         self.assertEqual(len(collections), 2)
         self.assertNotIn("Prendre ses repères", page)
         self.assertIn("../sigles-cjpm/", collections[0])
@@ -74,10 +74,14 @@ class GuidesCJPMTests(unittest.TestCase):
         for route, numero in {"decouvrir-la-pjj": 1, "organisation-pjj": 5, "metiers-pjj": 4, "structures-pjj": 6}.items():
             with self.subTest(route=route):
                 carte = next(l for l in cartes if l["href"] == f"../{route}/")
-                self.assertIn(f"--guide-accent:{couleurs[numero]}", carte["style"])
-                self.assertIn(f"--couleur-parcours:{couleurs[numero]}", carte["style"])
+                self.assertIn(f"--guide-accent:var(--q-etape-pjj-{numero})", carte["style"])
+                palette_source = (RACINE / "code/01 - Éléments communs/Palette-Atlas.js").read_text(encoding="utf-8")
+                palette = json.loads(re.search(r"Object.freeze\((\{.*?\})\);", palette_source, re.S)[1])
+                styles = (RACINE / "ressources/styles/atlas-systeme.css").read_text(encoding="utf-8")
+                self.assertIn(f"--q-etape-pjj-{numero}:{palette[couleurs[numero]]}", styles)
+                self.assertIn(f"--couleur-parcours:var(--q-etape-pjj-{numero})", carte["style"])
                 page = (RACINE / route / "index.html").read_text()
-                self.assertIn(f'--guide-accent:{couleurs[numero]}', page)
+                self.assertIn(f'--guide-accent:var(--q-etape-pjj-{numero})', page)
 
     def test_nouveaux_guides_mesures_une_fois_et_seulement_apres_consentement(self):
         programme = r'''

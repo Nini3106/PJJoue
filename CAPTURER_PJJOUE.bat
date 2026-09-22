@@ -1,6 +1,7 @@
 @echo off
 chcp 65001 >nul
 setlocal
+cd /d "%~dp0"
 
 echo ============================================================
 echo PJJoue - Captures visuelles Chromium
@@ -13,21 +14,15 @@ if errorlevel 1 goto erreur_python
 %PYTHON_PJJOUE% -c "import playwright" >nul 2>&1
 if errorlevel 1 goto erreur_outils
 
-echo 1/2 - Captures de l'interface principale...
-%PYTHON_PJJOUE% tests\verifier_regression_visuelle.py
-if errorlevel 1 goto erreur
-
-echo.
-echo 2/2 - Captures des guides et pages annexes...
-%PYTHON_PJJOUE% tests\verifier_pages_annexes.py
+echo Captures et interactions Atlas - ordinateur, mobile, guides et pages annexes...
+%PYTHON_PJJOUE% tests\verifier_atlas.py --captures
 if errorlevel 1 goto erreur
 
 echo.
 echo ============================================================
-echo Captures terminees.
-echo Dossiers :
-echo   test-results\regression-visuelle-moderne\
-echo   test-results\pages-annexes\
+echo Captures terminees : test-results\atlas\
+echo Le rapport JSON indique les controles et leurs limites.
+echo Aucune publication n'a ete effectuee.
 echo ============================================================
 pause
 exit /b 0

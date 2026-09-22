@@ -1,47 +1,45 @@
-<section class="ecran" id="progression">
-  <header class="page-entete progression-entete">
-    <span class="surtitre">Progression</span>
-    <h1>Tes parcours prennent forme.</h1>
-    <p>Retrouve ta progression globale, tes repères d’activité et l’avancée de chaque parcours.</p>
-  </header>
-
-  <div class="progression-studio">
-    <section class="progression-vue-ensemble" aria-labelledby="titreActiviteProgression">
-      <header class="progression-vue-ensemble-entete">
-        <div>
-          <span class="surtitre">Vue d’ensemble</span>
-          <h2 id="titreActiviteProgression">Ta trajectoire</h2>
-          <p>Visualise tes repères d’activité, les questions travaillées et les étapes maîtrisées.</p>
-        </div>
-      </header>
-
-      <div class="progression-colonne-contenu">
-        <div class="progression-tableau-bord" id="tableauProgression"></div>
-        <div class="progression-vue-ensemble-metrics" aria-label="Indicateurs d’activité">
-          <div class="progression-statistique progression-decouverte-statistique">
-            <span>Étapes abordées</span>
-            <strong id="experienceProgression">0</strong>
-          </div>
-          <div class="progression-statistique"><span>Questions travaillées</span><strong id="questionsJoueesProgression">0</strong></div>
-          <div class="progression-statistique"><span>Questions à consolider</span><strong id="erreursProgression">0</strong></div>
-          <div class="progression-statistique"><span>Étapes maîtrisées</span><strong id="etapesMaitriseesProgression">0</strong></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="progression-explorateur" aria-labelledby="titreParcoursProgression">
-      <header class="progression-explorateur-entete">
-        <div>
-          <span class="surtitre">Parcours</span>
-          <h2 id="titreParcoursProgression">Voir un parcours en détail</h2>
-          <p>Consulte son avancement, les étapes maîtrisées et l’état de son évaluation.</p>
-        </div>
-        <button class="secondaire" id="boutonOuvrirParcours" type="button">Tous les parcours →</button>
-      </header>
-      <div class="progression-colonne-contenu">
-        <div class="progression-pastilles" id="listeProgressionParcours" role="tablist" aria-label="Choisir un parcours à afficher"></div>
-        <div class="progression-detail-parcours" id="detailProgressionParcours" role="tabpanel" tabindex="0" aria-labelledby="ongletProgressionParcours-commun"></div>
-      </div>
-    </section>
-  </div>
+<section class="ecran" id="progression"><div class="q-topline"><span>Ma progression</span><span>La maîtrise, étape par étape</span></div>
+<header class="page-entete progression-entete">
+<span class="surtitre">Progression</span>
+<h1>Voilà le chemin parcouru.</h1>
+<p>Les étapes maîtrisées restent visibles. Retrouve le détail de ton activité et les questions à consolider.</p>
+</header><div aria-label="Vue d’ensemble des six parcours" class="q-panel atlas-progress-list" id="atlasProgressionListe"></div>
+<div class="progression-studio">
+<section aria-labelledby="titreActiviteProgression" class="progression-vue-ensemble">
+<header class="progression-vue-ensemble-entete">
+<div>
+<span class="surtitre">Vue d’ensemble</span>
+<h2 id="titreActiviteProgression">Ta trajectoire</h2>
+<p>Visualise tes repères d’activité, les questions travaillées et les étapes maîtrisées.</p>
+</div>
+</header>
+<div class="progression-colonne-contenu">
+<div class="progression-tableau-bord" id="tableauProgression"></div>
+<div aria-label="Indicateurs d’activité" class="progression-vue-ensemble-metrics">
+<div class="progression-statistique progression-decouverte-statistique">
+<span>Étapes abordées</span>
+<strong id="experienceProgression">0</strong>
+</div>
+<div class="progression-statistique"><span>Questions travaillées</span><strong id="questionsJoueesProgression">0</strong></div>
+<div class="progression-statistique"><span>Questions à consolider</span><strong id="erreursProgression">0</strong></div>
+<div class="progression-statistique"><span>Étapes maîtrisées</span><strong id="etapesMaitriseesProgression">0</strong></div>
+</div>
+</div>
 </section>
+<section aria-labelledby="titreParcoursProgression" class="progression-explorateur">
+<header class="progression-explorateur-entete">
+<div>
+<span class="surtitre">Parcours</span>
+<h2 id="titreParcoursProgression">Voir un parcours en détail</h2>
+<p>Consulte son avancement, les étapes maîtrisées et l’état de son évaluation.</p>
+</div>
+<button class="secondaire" id="boutonOuvrirParcours" type="button">Tous les parcours →</button>
+</header>
+<div class="progression-colonne-contenu">
+<div aria-label="Choisir un parcours à afficher" class="progression-pastilles" id="listeProgressionParcours" role="tablist"></div>
+<div aria-labelledby="ongletProgressionParcours-commun" class="progression-detail-parcours" id="detailProgressionParcours" role="tabpanel" tabindex="0"></div>
+</div>
+</section>
+</div>
+</section>
+

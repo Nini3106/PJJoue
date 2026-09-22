@@ -1,0 +1,1 @@
+42/42 vues autonomes validées, ouverture et fermeture Escape contrôlées strictement.

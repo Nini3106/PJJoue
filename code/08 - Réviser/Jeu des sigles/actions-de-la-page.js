@@ -6,11 +6,11 @@
  * Il n'existe donc plus d'écran qui donne les réponses avant de jouer.
  */
 const ETAPES_MISSION_SIGLES = Object.freeze({
-    1: { numero:'01', titre:'Enquête et premiers repères', sousTitre:'Parcours 1 · De l’enquête à la sanction', domaine:'cjpm', couleur:'#d49a00', couleurTexte:'#ffd36a', couleurRgb:'212,154,0', icone:'justice' },
-    2: { numero:'02', titre:'Instruction et mesures de sûreté', sousTitre:'Parcours 2 · Information judiciaire', domaine:'cjpm', couleur:'#0891b2', couleurTexte:'#70d7ea', couleurRgb:'8,145,178', icone:'justice' },
-    3: { numero:'03', titre:'Jugement et réponse éducative', sousTitre:'Parcours 3 · Du jugement à la sanction', domaine:'cjpm', couleur:'#8b5cf6', couleurTexte:'#c7afff', couleurRgb:'139,92,246', icone:'mesures' },
-    4: { numero:'04', titre:'Matière criminelle et garanties', sousTitre:'Parcours 4 · Crimes, peines et droits', domaine:'cjpm', couleur:'#e11d48', couleurTexte:'#ff91a8', couleurRgb:'225,29,72', icone:'justice' },
-    5: { numero:'05', titre:'Application et exécution des peines', sousTitre:'Parcours 5 · Après la sanction', domaine:'cjpm', couleur:'#0f766e', couleurTexte:'#70d6ca', couleurRgb:'15,118,110', icone:'mesures' },
+    1: { numero:'01', titre:'Enquête et premiers repères', sousTitre:'Parcours 1 · De l’enquête à la sanction', domaine:'cjpm', ...obtenirCouleursAtlas('#d49a00'), icone:'justice' },
+    2: { numero:'02', titre:'Instruction et mesures de sûreté', sousTitre:'Parcours 2 · Information judiciaire', domaine:'cjpm', ...obtenirCouleursAtlas('#0891b2'), icone:'justice' },
+    3: { numero:'03', titre:'Jugement et réponse éducative', sousTitre:'Parcours 3 · Du jugement à la sanction', domaine:'cjpm', ...obtenirCouleursAtlas('#8b5cf6'), icone:'mesures' },
+    4: { numero:'04', titre:'Matière criminelle et garanties', sousTitre:'Parcours 4 · Crimes, peines et droits', domaine:'cjpm', ...obtenirCouleursAtlas('#e11d48'), icone:'justice' },
+    5: { numero:'05', titre:'Application et exécution des peines', sousTitre:'Parcours 5 · Après la sanction', domaine:'cjpm', ...obtenirCouleursAtlas('#0f766e'), icone:'mesures' },
     6: { numero:'01', titre:'Organisation de la PJJ', sousTitre:'Directions, fonctions et pilotage', domaine:'pjj', etapePjj:5, ...obtenirCouleursEtapePJJ(5), icone:'organisation' },
     7: { numero:'02', titre:'Services, unités et formation', sousTitre:'Milieu ouvert, insertion et formation', domaine:'pjj', etapePjj:6, ...obtenirCouleursEtapePJJ(6), icone:'services' },
     8: { numero:'03', titre:'Placement et détention', sousTitre:'Structures et dispositifs de placement', domaine:'pjj', etapePjj:9, ...obtenirCouleursEtapePJJ(9), icone:'placement' },
@@ -189,7 +189,8 @@ function actualiserCarteEvaluationSigles() {
 function construireChoixPerimetreSigles() {
     const zone = selectionnerSigles('#siglesChoixPerimetre'); if (!zone) return;
     const actuel = zone.querySelector('[aria-pressed="true"]')?.dataset.perimetre || 'tous';
-    zone.innerHTML = `<button class="choix-bouton entrainement-perimetre-global" data-perimetre="tous" type="button" style="--parcours-accent:#4f8cff;--parcours-accent-lisible:#9fc2ff;--parcours-accent-rgb:79,140,255"><b>Tous les sigles</b><span>Les ${numerosEtapesSigles().length} étapes</span></button>` + numerosEtapesSigles().map(n => { const e=ETAPES_MISSION_SIGLES[n]; return `<button class="choix-bouton" data-perimetre="${n}" type="button" style="--parcours-accent:${e.couleur};--parcours-accent-lisible:${e.couleurTexte};--parcours-accent-rgb:${e.couleurRgb}"><b>${e.numero} · ${e.titre}</b><span>${obtenirSiglesEtape(n).length} sigles</span></button>`; }).join('');
+    const identiteGlobale = obtenirCouleursAtlas('#4f8cff');
+    zone.innerHTML = `<button class="choix-bouton entrainement-perimetre-global" data-perimetre="tous" type="button" style="--parcours-accent:${identiteGlobale.couleur};--parcours-accent-lisible:${identiteGlobale.couleurTexte};--parcours-accent-rgb:${identiteGlobale.couleurRgb}"><b>Tous les sigles</b><span>Les ${numerosEtapesSigles().length} étapes</span></button>` + numerosEtapesSigles().map(n => { const e=ETAPES_MISSION_SIGLES[n]; return `<button class="choix-bouton" data-perimetre="${n}" type="button" style="--parcours-accent:${e.couleur};--parcours-accent-lisible:${e.couleurTexte};--parcours-accent-rgb:${e.couleurRgb}"><b>${e.numero} · ${e.titre}</b><span>${obtenirSiglesEtape(n).length} sigles</span></button>`; }).join('');
     zone.querySelectorAll('button').forEach(b => { const actif = b.dataset.perimetre === actuel; b.classList.toggle('actif', actif); b.setAttribute('aria-pressed', actif?'true':'false'); b.addEventListener('click', () => { activerBoutonGroupeSigles(zone,b); actualiserDisponibiliteNombreSigles(); }); });
     actualiserDisponibiliteNombreSigles();
 }
@@ -765,14 +766,14 @@ function configurerEntrainementMissionSiglesNatif() {
     ecran.dataset.contexteEntrainement = 'sigles';
     const entete = ecran.querySelector('.entrainement-entete');
     entete?.querySelector('.surtitre') && (entete.querySelector('.surtitre').textContent = 'Mission Sigles');
-    entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Choisis ta session');
+    entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Une session à ta mesure.');
     entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Entraîne-toi sur les sigles avec exactement les mêmes réglages que dans Quiz CJPM.');
     const resultatDe = selectionner('#resultatDeParcours');
     if (resultatDe) resultatDe.textContent = `Lance le dé pour tirer de 1 à 6 questions aléatoires parmi les ${obtenirPoolDomaineSigles().length} sigles ${libelleDomaineSigles()}.`;
     const selectPerimetre = selectionner('#perimetreEntrainement');
     const groupePerimetre = document.querySelector('[data-groupe-choix="perimetreEntrainement"]');
     if (selectPerimetre && groupePerimetre) {
-        const options=[...['cjpm','pjj','tous'].map(d=>({valeur:d,titre:d==='tous'?'Tous les sigles':`Sigles ${libelleDomaineSigles(d)}`,detail:`${obtenirPoolDomaineSigles(d).length} sigles`,couleur:d==='cjpm'?'#d49a00':'#4f8cff',couleurTexte:d==='cjpm'?'#ffd36a':'#9fc2ff',couleurRgb:d==='cjpm'?'212,154,0':'79,140,255'})),
+        const options=[...['cjpm','pjj','tous'].map(d=>({valeur:d,titre:d==='tous'?'Tous les sigles':`Sigles ${libelleDomaineSigles(d)}`,detail:`${obtenirPoolDomaineSigles(d).length} sigles`,...obtenirCouleursAtlas(d==='cjpm'?'#d49a00':'#4f8cff')})),
             ...numerosEtapesSigles('tous').map(n=>({...ETAPES_MISSION_SIGLES[n],valeur:String(n),titre:`${libelleDomaineSigles(ETAPES_MISSION_SIGLES[n].domaine)} ${ETAPES_MISSION_SIGLES[n].numero} · ${ETAPES_MISSION_SIGLES[n].titre}`,detail:`${obtenirSiglesEtape(n).length} sigles`}))];
         selectPerimetre.innerHTML=options.map(o=>`<option value="${o.valeur}">${o.titre}</option>`).join('');
         groupePerimetre.innerHTML=options.map(o=>`<button class="choix-bouton" data-valeur="${o.valeur}" type="button" style="--parcours-accent:${o.couleur};--parcours-accent-lisible:${o.couleurTexte};--parcours-accent-rgb:${o.couleurRgb}"><b>${o.titre}</b><span>${o.detail}</span></button>`).join('');
@@ -829,8 +830,8 @@ function restaurerEntrainementPJJoueNatif() {
     etat.contexteEntrainement = null;
     const entete = ecran.querySelector('.entrainement-entete');
     entete?.querySelector('.surtitre') && (entete.querySelector('.surtitre').textContent = 'Entraînement libre');
-    entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Choisis ta session');
-    entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Lance un défi surprise en un clic ou compose précisément ce que tu veux travailler, la durée et l’ordre des questions.');
+    entete?.querySelector('h1') && (entete.querySelector('h1').textContent = 'Une session à ta mesure.');
+    entete?.querySelector('p') && (entete.querySelector('p').textContent = 'Choisis ce que tu travailles, ou laisse le hasard te proposer un petit défi.');
     const resultatDe = selectionner('#resultatDeParcours');
     if (resultatDe) resultatDe.textContent = 'Lance le dé pour tirer de 1 à 6 questions aléatoires dans les six parcours.';
     const selectPerimetre = selectionner('#perimetreEntrainement');

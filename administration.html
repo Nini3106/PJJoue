@@ -1,56 +1,60 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex,nofollow">
-    <link rel="icon" href="favicon.ico" sizes="any"/>
-  <link rel="icon" href="favicon-48x48.png" type="image/png" sizes="48x48"/>
-  <link rel="icon" href="favicon-96x96.png" type="image/png" sizes="96x96"/>
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180"/>
-  <title>Administration de contenu — Quiz CJPM</title>
-  <link rel="stylesheet" href="ressources/styles/pjjoue-static.css?v=6899d106e72b">
-  <link rel="stylesheet" href="ressources/administration.css?v=6899d106e72b">
-</head>
-<body>
-<main>
-  <h1>Administration de contenu — Quiz CJPM</h1>
-  <p>Éditeur local de la banque. Il n’envoie aucune donnée et n’écrit pas directement dans le paquet livré : il exporte un JSON à valider puis intégrer dans une nouvelle version.</p>
-  <div class="barre-outils">
-    <label>Parcours
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="noindex,nofollow" name="robots"/>
+<link href="ressources/styles/atlas-systeme.css?v=1953ebc48428" rel="stylesheet"/>
+<link href="favicon.ico" rel="icon" sizes="any"/>
+<link href="favicon-48x48.png" rel="icon" sizes="48x48" type="image/png"/>
+<link href="favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+<link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<title>Administration de contenu — Quiz CJPM</title>
+<link href="ressources/styles/pjjoue-static.css?v=1953ebc48428" rel="stylesheet"/>
+<link href="ressources/administration.css?v=1953ebc48428" rel="stylesheet"/>
+<meta content="#172d48" name="theme-color"/></head>
+<body class="atlas-document" id="qc-atlas"><header class="q-header atlas-static-header"><div class="q-identity"><a aria-label="Quiz CJPM — accueil" class="q-brand" href="index.html"><span aria-hidden="true" class="q-mark">q</span><span>Quiz <em>CJPM</em></span></a><span class="q-tagline">Comprendre · Pratiquer · Retenir</span></div><nav aria-label="Navigation principale" class="q-nav"><a href="index.html#parcours">Parcours CJPM</a><a href="index.html#entrainement">S’entraîner</a><a href="index.html#erreurs">Réviser</a><a href="index.html#supports">Ressources</a><details class="atlas-static-menu q-more"><summary>Plus<span aria-hidden="true">⌄</span></summary><div class="q-pop"><a href="index.html#progression">Ma progression</a><a href="guides/">Guides CJPM et PJJ</a><a href="index.html#sigles">Mission Sigles</a><a href="index.html#mesures">Mission Mesures</a><a href="index.html#parametres">Paramètres</a></div></details></nav></header>
+<main class="q-body">
+<h1>Administration de contenu — Quiz CJPM</h1>
+<p>Éditeur local de la banque. Il n’envoie aucune donnée et n’écrit pas directement dans le paquet livré : il exporte un JSON à valider puis intégrer dans une nouvelle version.</p>
+<div class="barre-outils">
+<label>Parcours
       <select id="filtreParcours"><option value="tous">Tous</option><option value="procedure_ordinaire">01 — Procédure ordinaire</option><option value="information_judiciaire">02 — Information judiciaire</option><option value="jugement_educatif_ordinaire">03 — Jugement éducatif</option><option value="matiere_criminelle_peines">04 — Matière criminelle</option><option value="application_execution_peines">05 — Application des peines</option><option value="commun">06 — Découvrir la PJJ (option)</option></select>
-    </label>
-    <label>Étape
+</label>
+<label>Étape
       <select id="filtreEtape">
-        <option value="0">Toutes</option>
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
-        <option value="10">10</option><option value="11">11</option><option value="12">12 — Évaluation finale</option>
-      </select>
-    </label>
-    <label>Recherche <input id="rechercheQuestions" placeholder="sigle, mot, réponse…"></label>
-    <button id="boutonControler">Contrôler</button>
-    <button id="boutonExporter">Exporter JSON</button>
-    <button id="boutonReinitialiser">Réinitialiser</button>
-  </div>
-  <p id="nombreQuestionsAffichees"></p>
-  <div id="etatAdministration" class="etat-administration" aria-live="polite">Prêt.</div>
-  <div id="listeQuestions"></div>
+<option value="0">Toutes</option>
+<option value="1">1</option><option value="2">2</option><option value="3">3</option>
+<option value="4">4</option><option value="5">5</option><option value="6">6</option>
+<option value="7">7</option><option value="8">8</option><option value="9">9</option>
+<option value="10">10</option><option value="11">11</option><option value="12">12 — Évaluation finale</option>
+</select>
+</label>
+<label>Recherche <input id="rechercheQuestions" placeholder="sigle, mot, réponse…"/></label>
+<button id="boutonControler">Contrôler</button>
+<button id="boutonExporter">Exporter JSON</button>
+<button id="boutonReinitialiser">Réinitialiser</button>
+</div>
+<p id="nombreQuestionsAffichees"></p>
+<div aria-live="polite" class="etat-administration" id="etatAdministration">Prêt.</div>
+<div id="listeQuestions"></div>
 </main>
-<dialog id="fenetreReinitialisation" class="fenetre-administration" aria-labelledby="titreReinitialisation" aria-describedby="texteReinitialisation">
-  <div class="fenetre-administration-panneau">
-    <button type="button" id="fermerReinitialisation" class="fenetre-administration-fermer" aria-label="Fermer">×</button>
-    <div class="fenetre-administration-icone" aria-hidden="true">!</div>
-    <h2 id="titreReinitialisation">Abandonner le brouillon local ?</h2>
-    <p id="texteReinitialisation">Toutes les modifications non exportées seront supprimées.</p>
-    <div class="fenetre-administration-actions">
-      <button type="button" id="annulerReinitialisation">Annuler</button>
-      <button type="button" id="confirmerReinitialisation" class="fenetre-administration-principal">Réinitialiser</button>
-    </div>
-  </div>
+<dialog aria-describedby="texteReinitialisation" aria-labelledby="titreReinitialisation" class="fenetre-administration" id="fenetreReinitialisation">
+<div class="fenetre-administration-panneau">
+<button aria-label="Fermer" class="fenetre-administration-fermer" id="fermerReinitialisation" type="button">×</button>
+<div aria-hidden="true" class="fenetre-administration-icone">!</div>
+<h2 id="titreReinitialisation">Abandonner le brouillon local ?</h2>
+<p id="texteReinitialisation">Toutes les modifications non exportées seront supprimées.</p>
+<div class="fenetre-administration-actions">
+<button id="annulerReinitialisation" type="button">Annuler</button>
+<button class="fenetre-administration-principal" id="confirmerReinitialisation" type="button">Réinitialiser</button>
+</div>
+</div>
 </dialog>
-<script src="donnees/donnees-pjj.js?v=6899d106e72b"></script>
-<script src="ressources/administration.js?v=6899d106e72b"></script>
+<script src="donnees/donnees-pjj.js?v=1953ebc48428"></script>
+<script src="ressources/administration.js?v=1953ebc48428"></script>
+<footer class="produit-pied-page q-footer"><div><p><strong>Quiz CJPM · Un projet indépendant de Dev’Ines.</strong><br/><span data-nosnippet="">Site personnel, pédagogique et non officiel, sans lien institutionnel avec le Gouvernement français, le ministère de la Justice, la PJJ ou l’ENPJJ. Les réponses s’appuient sur des sources officielles consultables depuis le site.</span></p><p class="pied-page-contact">Contact : <a href="mailto:contact.pjjoue@gmail.com">contact.pjjoue@gmail.com</a></p><p class="produit-repere">Version 1 · Août 2026</p></div><nav aria-label="Informations légales et pratiques" class="q-footer-links"><a href="sources.html">Sources officielles</a><a href="accessibilite.html">Accessibilité</a><a href="confidentialite.html">Confidentialité</a><a href="mentions-legales.html">Mentions légales</a></nav></footer><script src="ressources/navigation-locale.js?v=1953ebc48428" defer></script>
 </body>
 </html>
+

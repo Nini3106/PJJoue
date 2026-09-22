@@ -1,110 +1,33 @@
+/* Atlas — style-de-la-page.css : source unique du composant. */
 /* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=42 === */
-/* Finitions du bilan : un résumé, puis des sections sœurs non imbriquées. */
-#bilan.ecran.actif {
-    display: grid;
-    gap: 24px;
-}
-
-#bilan .bilan-resume-carte {
-    overflow: visible;
-}
-
-#bilan .carte-voyage-finale,
-#bilan .bilan-erreurs-panneau,
-#bilan .bilan-actions {
-    margin: 0;
-}
-
-#bilan #listeErreursBilan {
-    max-height: none;
-    overflow: visible;
-    overscroll-behavior: auto;
-    padding-right: 0;
-    scrollbar-gutter: auto;
-}
-
-/* Comme sur la question, le titre est focalisé pour annoncer le changement
-   d’écran, mais ce titre non interactif ne ressemble pas à un bouton. */
-#bilan #titreBilan[tabindex="-1"]:focus,
-#bilan #titreBilan[tabindex="-1"]:focus-visible {
-    outline: none;
-    box-shadow: none;
-}
-
-#bilan .bilan-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    padding-top: 0;
-    border-top: 0;
-}
-
-#bilan .bilan-actions button {
-    min-height: 44px;
-    height: auto;
-    margin: 0;
-    padding: 9px 18px;
-}
-
-#bilan .bilan-actions .principal {
-    order: -1;
-    color: var(--texte);
-    border-color: #6f94c0;
-    background: var(--surface-carte-profonde);
-}
-
-#bilan .bilan-actions .principal:hover,
-#bilan .bilan-actions .principal:focus-visible {
-    color: var(--texte);
-    border-color: var(--jaune-interface);
-    background: rgba(255,200,61,.08);
-}
-
-#bilan .bilan-actions .secondaire {
-    color: var(--texte);
-    border-color: rgba(142,199,251,.52);
-    background: rgba(8,56,108,.66);
-}
-
-#bilan .bilan-actions .secondaire:hover,
-#bilan .bilan-actions .secondaire:focus-visible {
-    color: #fff;
-    border-color: var(--accent);
-    background: #174f89;
-}
-
-#bilan .bilan-resume-carte .bilan-statistiques {
-    grid-template-columns: repeat(3,minmax(0,1fr));
-}
-
-@media (max-width:760px) {
-    #bilan .bilan-resume-carte .bilan-statistiques {
-        grid-template-columns: repeat(2,minmax(0,1fr));
-        gap: 10px;
-    }
-
-    #bilan .bilan-actions {
-        display: grid;
-        grid-template-columns: repeat(2,minmax(0,1fr));
-        gap: 10px;
-    }
-
-    #bilan .bilan-actions.actions button {
-        width: max-content;
-        max-width: 100%;
-        min-width: 0;
-        min-height: 44px;
-        margin: 0;
-    }
-
-    #bilan .bilan-actions .principal {
-        grid-column: auto;
-        grid-row: auto;
-    }
-
-    #bilan .bilan-erreurs-panneau {
-        padding: 18px 16px;
-    }
-}
+/* Bilan : métriques et décisions inchangées, présentation Atlas. */
+#qc-atlas .bilan-resume-carte { margin:22px 0; }
+#qc-atlas .bilan-resume-entete { display:flex; align-items:flex-start; gap:12px; margin-bottom:20px; }
+#qc-atlas .resultat-icone { width:26px; height:26px; flex-shrink:0; color:var(--q-good); }
+#qc-atlas .resultat-icone svg { width:26px; height:26px; fill:none; stroke:currentColor; stroke-width:1.6; }
+#qc-atlas #titreBilan { font:400 31px/1.2 Georgia,serif; margin:12px 0; }
+#qc-atlas #rangBilan { font-size:var(--q-text-control); margin:0; }
+#qc-atlas .q-resultscore>strong { font:calc(70px * var(--echelle-texte,1))/1 Georgia,serif; letter-spacing:-3px; margin-bottom:12px; }
+#qc-atlas .bilan-prochaine-destination { display:flex; align-items:center; gap:12px; font-size:var(--q-text-control); margin:18px 0 22px; }
+#qc-atlas .bilan-prochaine-destination>div { display:flex; flex-direction:column; gap:5px; }
+#qc-atlas .bilan-destination-icone { color:var(--q-blue); }
+#qc-atlas .bilan-actions { display:flex; flex-wrap:wrap; gap:8px; }
+#qc-atlas .bilan-actions button { font-size:var(--q-text-secondary); }
+#qc-atlas .bilan-statistiques { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:18px 0; }
+#qc-atlas .bilan-statistiques>.statistique { display:flex; align-items:center; gap:15px; padding:22px; border:1px solid var(--q-line); background:var(--q-panel); border-radius:8px; }
+#qc-atlas .statistique strong { font:calc(32px * var(--echelle-texte,1))/1 Georgia,serif; }
+#qc-atlas .statistique span { font-size:var(--q-text-secondary); color:var(--q-muted); }
+#qc-atlas .bilan-erreurs-panneau { margin-top:28px; }
+#qc-atlas .bilan-section-entete { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:20px; }
+#qc-atlas .bilan-section-entete h2 { font:400 28px/1.2 Georgia,serif; margin-top:8px; }
+#qc-atlas .bilan-erreurs-nombre { font-size:var(--q-text-secondary); color:var(--q-muted); }
+#qc-atlas #listeErreursBilan { font-size:var(--q-text-control); }
+#qc-atlas #listeErreursBilan>div { background:var(--q-panel); border:1px solid var(--q-line); border-radius:8px; padding:20px; margin-bottom:12px; }
+#qc-atlas #listeErreursBilan :is(h3,h4) { font-size:var(--q-text-base); margin:10px 0; }
+#qc-atlas #listeErreursBilan :is(p,ul) { margin:10px 0; }
+#qc-atlas .carte-voyage-finale { margin:25px 0; padding:24px; border:1px solid var(--q-line); border-radius:10px; background:var(--q-panel); }
+#qc-atlas .carte-voyage-entete { margin-bottom:22px; }
+#qc-atlas .carte-voyage-entete h2 { font:400 28px Georgia,serif; margin:12px 0; }
+#qc-atlas .carte-voyage-destinations { display:flex; gap:10px; flex-wrap:wrap; }
+@media(max-width:640px) { #qc-atlas .bilan-statistiques { grid-template-columns:1fr; } #qc-atlas .bilan-section-entete { align-items:flex-start; flex-direction:column; } }
 /* === FIN MORCEAU CSS === */

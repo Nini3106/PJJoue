@@ -1,61 +1,58 @@
 <section class="ecran parcours-ecran" id="parcours">
-  <section class="parcours-selection-vue" id="vueChoixParcours" aria-labelledby="titreChoixParcours">
-    <header class="presentation-page parcours-selection-entete">
-      <span class="surtitre">Ton apprentissage</span>
-      <h1 id="titreChoixParcours">Choisis ton itinéraire.</h1>
-      <p>Pour profiter de la progression pédagogique prévue, il est conseillé de suivre les parcours dans l’ordre. Si tu maîtrises déjà certains sujets, tu peux toutefois accéder directement au parcours qui correspond le mieux à tes connaissances ou à tes besoins.</p>
-    </header>
-    <div class="selecteur-parcours selecteur-parcours-grille" id="selecteurParcours" aria-label="Choisir un parcours"></div>
-  </section>
+<section aria-labelledby="titreChoixParcours" class="parcours-selection-vue" id="vueChoixParcours"><div class="q-topline"><span>Les parcours CJPM</span><span>01 — 06</span></div>
+<header class="presentation-page parcours-selection-entete">
+<span class="surtitre">Ton apprentissage</span>
+<h1 id="titreChoixParcours">Chaque notion trouve sa place.</h1>
+<p>Pour profiter de la progression pédagogique prévue, il est conseillé de suivre les parcours dans l’ordre. Si tu maîtrises déjà certains sujets, tu peux toutefois accéder directement au parcours qui correspond le mieux à tes connaissances ou à tes besoins.</p>
+</header>
+<div aria-label="Choisir un parcours" class="selecteur-parcours selecteur-parcours-grille q-catalog" data-catalog="full" id="selecteurParcours"></div>
+<div class="q-bottomgrid"><button class="q-door" data-ecran="progression" type="button"><span aria-hidden="true" class="q-door-icon">↗</span><span class="q-door-copy"><strong>Voir ma progression</strong><span>Ce que je maîtrise, ce que je consolide.</span></span></button><button class="q-door" data-ecran="supports" type="button"><span aria-hidden="true" class="q-door-icon">≡</span><span class="q-door-copy"><strong>Un repère avant de commencer</strong><span>Guides, sigles et supports de révision.</span></span></button></div></section>
+<section aria-labelledby="titreParcours" class="parcours-detail-vue masque" id="vueDetailParcours">
+<button class="discret parcours-retour-liste" id="boutonChangerParcours" type="button">← Choisir un autre parcours</button>
+<header class="parcours-detail-entete">
+<div class="parcours-detail-identite">
+<span aria-hidden="true" class="parcours-detail-icone atlas-course-icon" id="iconeParcoursSelectionne"></span>
+<div class="parcours-detail-titres">
+<span class="surtitre" id="surtitreParcours">Parcours 1 sur 6</span>
+<h1 id="titreParcours">Découvrir la PJJ</h1>
+<p id="sousTitreParcours">Comprendre les missions, les publics, les professionnels et l’organisation de la PJJ.</p>
 
-  <section class="parcours-detail-vue masque" id="vueDetailParcours" aria-labelledby="titreParcours">
-    <button class="discret parcours-retour-liste" id="boutonChangerParcours" type="button">← Choisir un autre parcours</button>
-    <header class="parcours-detail-entete">
-      <div class="parcours-detail-identite">
-        <span class="parcours-detail-icone" id="iconeParcoursSelectionne" aria-hidden="true"></span>
-        <div class="parcours-detail-titres">
-          <span class="surtitre" id="surtitreParcours">Parcours 1 sur 6</span>
-          <h1 id="titreParcours">Découvrir la PJJ</h1>
-          <p id="sousTitreParcours">Comprendre les missions, les publics, les professionnels et l’organisation de la PJJ.</p>
-          <div class="parcours-detail-repere">
-            <span aria-hidden="true" class="parcours-detail-repere-icone"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 6-6M16 6h2v2"/></svg></span>
-            <span id="texteObjectifParcours">Complète les 11 étapes pour accéder à l’évaluation finale. Les réussites sans aide sont distinguées dans ta progression.</span>
-          </div>
-        </div>
-      </div>
+</div>
+</div>
 
-      <aside class="parcours-detail-actions">
-        <div class="parcours-detail-progression">
-          <div class="parcours-detail-progression-ligne">
-            <span id="libelleProgressionParcours">0 / 11 étapes maîtrisées</span>
-            <strong id="pourcentageProgressionParcours">0%</strong>
-          </div>
-          <div class="parcours-detail-barre" role="progressbar" aria-label="Progression du parcours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressionParcoursSelectionne"><i></i></div>
-        </div>
-        <button class="principal parcours-action-principale" id="boutonActionParcours" type="button">Commencer l’étape 1 →</button>
-      </aside>
-    </header>
+</header><div class="q-focuslayout atlas-course-layout"><div class="atlas-itinerary"><section aria-labelledby="titreDestinationsParcours" class="parcours-carte-zone q-panel">
+<div class="parcours-carte-entete-v1">
+<div class="carte-parcours-titres">
+<h2 id="titreDestinationsParcours">Les 11 étapes</h2>
+<p id="resumeCarteParcours"></p>
+</div>
+</div>
+<div class="chemin-ligne" id="ligneParcours1"></div>
+<div class="chemin-ligne" id="ligneParcours2"></div>
+<div class="chemin-ligne" id="ligneParcours3"></div>
+<div class="chemin-finale-ligne">
+<div id="cartesEtapesFinales"></div>
+<button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled="" id="carteEvaluationFinale" type="button">
+<span aria-hidden="true" class="icone-evaluation"><svg focusable="false" viewBox="0 0 24 24"><path d="M8 4h8v5c0 3-1.8 5-4 5S8 12 8 9z"></path><path d="M8 6H4v2c0 2 1.5 3 4 3M16 6h4v2c0 2-1.5 3-4 3M12 14v4M8 21h8M9 18h6"></path></svg></span>
+<span class="evaluation-etape-numero">ÉTAPE 12</span>
+<span class="evaluation-titre">Évaluation finale</span>
+<span class="evaluation-statut">Disponible après les 11 étapes</span>
+</button>
+</div>
+</section></div><aside class="q-sides"><aside class="parcours-detail-actions q-panel q-sidebox"><span class="q-overline">Maîtrise autonome</span>
+<div class="parcours-detail-progression">
+<div class="parcours-detail-progression-ligne">
+<span id="libelleProgressionParcours">0 / 11 étapes maîtrisées</span>
+<strong id="pourcentageProgressionParcours">0%</strong>
+</div>
+<div aria-label="Progression du parcours" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="parcours-detail-barre" id="progressionParcoursSelectionne" role="progressbar"><i></i></div>
+</div>
+<button class="principal parcours-action-principale" id="boutonActionParcours" type="button">Commencer l’étape 1 →</button>
+</aside><div class="q-panel q-sidebox"><h3>Choisis ton rythme.</h3><div class="parcours-detail-repere">
 
-    <section class="parcours-carte-zone" aria-labelledby="titreDestinationsParcours">
-      <div class="parcours-carte-entete-v1">
-        <div class="carte-parcours-titres">
-          <h2 id="titreDestinationsParcours">Les 11 étapes</h2>
-          <p id="resumeCarteParcours"></p>
-        </div>
-      </div>
+<span id="texteObjectifParcours">Complète les 11 étapes pour accéder à l’évaluation finale. Les réussites sans aide sont distinguées dans ta progression.</span>
+</div><p>Le chronomètre et les jokers se règlent dans les questions. Tes réussites restent enregistrées.</p><button class="secondaire" data-ecran="supports" type="button">Ouvrir les supports</button></div></aside></div>
 
-      <div class="chemin-ligne" id="ligneParcours1"></div>
-      <div class="chemin-ligne" id="ligneParcours2"></div>
-      <div class="chemin-ligne" id="ligneParcours3"></div>
-      <div class="chemin-finale-ligne">
-        <div id="cartesEtapesFinales"></div>
-        <button aria-disabled="true" class="evaluation-carte chemin-evaluation-carte" disabled id="carteEvaluationFinale" type="button">
-          <span aria-hidden="true" class="icone-evaluation"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8v5c0 3-1.8 5-4 5S8 12 8 9z"/><path d="M8 6H4v2c0 2 1.5 3 4 3M16 6h4v2c0 2-1.5 3-4 3M12 14v4M8 21h8M9 18h6"/></svg></span>
-          <span class="evaluation-etape-numero">ÉTAPE 12</span>
-          <span class="evaluation-titre">Évaluation finale</span>
-          <span class="evaluation-statut">Disponible après les 11 étapes</span>
-        </button>
-      </div>
-    </section>
-  </section>
 </section>
+</section>
+
