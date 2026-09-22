@@ -146,7 +146,8 @@ jobs:
                   "author":{"@type":"Person","name":"Dev'Ines"},
               }
               nouveau = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
-              return motif.sub(lambda x: x.group(1)+nouveau+x.group(3), page, count=1)
+              page = motif.sub(lambda x: x.group(1)+nouveau+x.group(3), page, count=1)
+              return page.rstrip() + "\n"
 
 
           """)
