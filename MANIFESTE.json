@@ -47,13 +47,9 @@
     }
   },
   "fichiers": {
-    ".github/bandeau_mobile_patch.py": {
-      "tailleOctets": 1788,
-      "sha256": "bcee9bc1d115154b95f4d6f7fde40b7f5889ed189117d605e7e30fc54437db24"
-    },
-    ".github/workflows/bandeau-mobile.yml": {
-      "tailleOctets": 2386,
-      "sha256": "c6c0808e667d6f9d62e25eeb362e8f30b56adc1eff931829884a5dc770776157"
+    ".github/workflows/bandeau-une-ligne.yml": {
+      "tailleOctets": 2225,
+      "sha256": "ea5fc4ec9778ef7a8c8f2e01e88375d0e8f822e96d9678648d4d39e85ee9c32a"
     },
     ".github/workflows/captures-visuelles.yml": {
       "tailleOctets": 966,
@@ -153,11 +149,11 @@
     },
     "accessibilite.html": {
       "tailleOctets": 6387,
-      "sha256": "a384912fd8d23d9191d3f113716e047058fe86c6172d255b0df6f2994ae679fa"
+      "sha256": "5eaf94897037fffdcfaca51ec81af12fe2b4a16edc4332b599eb488323c8b585"
     },
     "administration.html": {
       "tailleOctets": 5814,
-      "sha256": "772e3d8a8b9dbdf79c4ba2dd1ba83d459382912d31197dd54b33c8ab5836f264"
+      "sha256": "1673b1cf8d68bb4ef16a13ea026c53a3279d6be82314939e71f767ce90e15f14"
     },
     "apple-touch-icon.png": {
       "tailleOctets": 4846,
@@ -169,7 +165,7 @@
     },
     "cjpm-application-execution/index.html": {
       "tailleOctets": 15702,
-      "sha256": "91e0e7ff02f2a516abb3e7f673abe646269688f073aaae3c155e83fb77e7d5c3"
+      "sha256": "a64001e8df6af14543a045922cfca41920657e4f8c03591f638e542f62400800"
     },
     "cjpm-application-execution/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -177,7 +173,7 @@
     },
     "cjpm-enquete-sanction/index.html": {
       "tailleOctets": 15118,
-      "sha256": "f2ad8f20c9b7a401da5a3e3ead8556bacecd916977a4f2b6be81ebe8f931a868"
+      "sha256": "26a3eea9a063d09b30cb7433c8581174bef86fa3c517a7142a2d99a08ecbe823"
     },
     "cjpm-enquete-sanction/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -185,7 +181,7 @@
     },
     "cjpm-information-judiciaire/index.html": {
       "tailleOctets": 17176,
-      "sha256": "7673c48092fb72539781860056a0ded7a2e0f68f41042849a4efe1cce5dacbce"
+      "sha256": "be9f330565973240e2de1923e667c5ece00047a6e832c3cac8bb474d1ac8b003"
     },
     "cjpm-information-judiciaire/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -193,7 +189,7 @@
     },
     "cjpm-jugement-sanction-educative/index.html": {
       "tailleOctets": 16450,
-      "sha256": "7f169faeab37c81cc33ee265b44b7537c340325cd8b8c8e7c1a33cae127a8514"
+      "sha256": "67e9930c13f0e535c5739bfe0c73e61ba77e07c0b4f2efce5a8592dcdc2caf03"
     },
     "cjpm-jugement-sanction-educative/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -201,7 +197,7 @@
     },
     "cjpm-matiere-criminelle-peines/index.html": {
       "tailleOctets": 15517,
-      "sha256": "6453acbbd55dd037d8d408b36fcb734338353150e3f4cf5f0b0d5cca60d57cc8"
+      "sha256": "1d29bff1d8ffe05b88458928f51c7b24acdcee10356d091c4206c41ba1344a64"
     },
     "cjpm-matiere-criminelle-peines/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -296,8 +292,8 @@
       "sha256": "8b712922459bb1a09ed07e428c2915245f465df12da2504a3a61b5c845b4942d"
     },
     "code/01 - Éléments communs/atlas-systeme.css": {
-      "tailleOctets": 38989,
-      "sha256": "f76ab29a24f9f786c24a518c19fda78d8d4064be40f15578af1be256c38768ee"
+      "tailleOctets": 39172,
+      "sha256": "f964c1be9076c546bf196ce3cf7514ac50ed0ef69a346285d536a96d3867959e"
     },
     "code/01 - Éléments communs/consentement.css": {
       "tailleOctets": 2578,
@@ -793,11 +789,11 @@
     },
     "confidentialite.html": {
       "tailleOctets": 10788,
-      "sha256": "549614534e701052d274ae3068af3afde144eb45703c9898046c1d32243810cc"
+      "sha256": "456754fcfb467d7a0dd00fd16e2bc1138915c21011a4f8dbb4b4c8236c075d74"
     },
     "decouvrir-la-pjj/index.html": {
       "tailleOctets": 9744,
-      "sha256": "b00c36d824eef4aced4786de8c9ff9542e55f56f1af1e7d8346b02c5e268ab6a"
+      "sha256": "9d53525d02c71454db3a8680f0f1816d7cc34e162dc6ef4d02c6be8477e8180d"
     },
     "decouvrir-la-pjj/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1121,7 +1117,7 @@
     },
     "guides/index.html": {
       "tailleOctets": 14047,
-      "sha256": "7e7bfc798e39b68ade25f9eafdb26826332c5e9e9c64796cb96aac709fe59968"
+      "sha256": "36fa0417dc10a263daef72c83b4c056789f92b7813e415c511c3d6e4cea45da3"
     },
     "guides/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1137,7 +1133,7 @@
     },
     "index.html": {
       "tailleOctets": 132950,
-      "sha256": "5c054957949f42a112ca3440fda085a7b69c5ec1f4747c44f3fb5d5a8a3c1901"
+      "sha256": "bfba05105ad47458d51919d94224af8b0fd86c20e1406a7a592431abd442f248"
     },
     "manifest.webmanifest": {
       "tailleOctets": 749,
@@ -1145,11 +1141,11 @@
     },
     "mentions-legales.html": {
       "tailleOctets": 8181,
-      "sha256": "1f841c1fac3607438368a653b624c83a644a2af3fc715d04c9cd0b446d209126"
+      "sha256": "3b7ef7e8983fc508032642d30f57f636f1507c5dbc8dc0da18595a7f4fe9c2c3"
     },
     "mesures-educatives-pjj/index.html": {
       "tailleOctets": 23772,
-      "sha256": "03ebda3c61bbe728cdb617f9d379ca0874f1aa330b9cc94493b9de354447e118"
+      "sha256": "3568454cbb49b63adee6cb77348b6e1cd79b67584687675fc633070be9d22e05"
     },
     "mesures-educatives-pjj/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1157,7 +1153,7 @@
     },
     "metiers-pjj/index.html": {
       "tailleOctets": 14886,
-      "sha256": "df1cb70143f91c879fa0b4a5a22b9e6b289d6c0574f3bcb21e4759d66cb50c31"
+      "sha256": "313d96e6152bb00ea1fb7d9f899ad66138028a81dfa17fd58ec93d550cf3ca67"
     },
     "metiers-pjj/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1181,7 +1177,7 @@
     },
     "organisation-pjj/index.html": {
       "tailleOctets": 11984,
-      "sha256": "c766ff77dc03d7f1b8fe66932e1d30d1ab7a133e2042b00a8464ab305d1db004"
+      "sha256": "d9c30c79a11c2e8f4fcbd421ae5c17a64a7d389ed7535afe28199d58f59d3677"
     },
     "organisation-pjj/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1281,7 +1277,7 @@
     },
     "parcours/index.html": {
       "tailleOctets": 132636,
-      "sha256": "cb53bf6b65436ede65012ec38fdc1bd566949d1f80d4a3e35f238b830758dc20"
+      "sha256": "6f5e9328d240c2d8e0d62d6e1502f3ee11eae00d89f038a460e79ff2dd892e89"
     },
     "parcours/information_judiciaire/index.html": {
       "tailleOctets": 846,
@@ -1301,7 +1297,7 @@
     },
     "peines-mineurs-cjpm/index.html": {
       "tailleOctets": 17327,
-      "sha256": "2c089898493aff9b84923236923cc8fcaa63a810861aa7c49fc291d2c8c842a6"
+      "sha256": "ececdee8f22b0717f292c6d48eb8684a19c0ac2dff404bdf374b972c8fa46a51"
     },
     "peines-mineurs-cjpm/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1317,7 +1313,7 @@
     },
     "quiz-pjj/index.html": {
       "tailleOctets": 11385,
-      "sha256": "1c020a9c52c63f5b2da75e045980e0f456a3f9ca6426c0b14a5f1c842e7919cb"
+      "sha256": "1b0e5d24b504693a2b30d61008997a85feb617479deaebda28bcc665733b1502"
     },
     "quiz-pjj/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1440,8 +1436,8 @@
       "sha256": "2da0c5b7c96dd0ba3558e7b18be8bf9fafdc038d16dab69f386c1ecc30984f63"
     },
     "ressources/styles/atlas-systeme.css": {
-      "tailleOctets": 38989,
-      "sha256": "f76ab29a24f9f786c24a518c19fda78d8d4064be40f15578af1be256c38768ee"
+      "tailleOctets": 39172,
+      "sha256": "f964c1be9076c546bf196ce3cf7514ac50ed0ef69a346285d536a96d3867959e"
     },
     "ressources/styles/pages-legales/accessibilite.css": {
       "tailleOctets": 81,
@@ -1485,7 +1481,7 @@
     },
     "rrse-mineur/index.html": {
       "tailleOctets": 14740,
-      "sha256": "f6400b7f91094ffa03ddd8d3fdf4dfa88cb724811d2e5a7be6a64b00cdddf2be"
+      "sha256": "9976a9c902a805b0adc7945f07a127644555fe78a3846d4b312720e9f8874d97"
     },
     "rrse-mineur/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1497,11 +1493,11 @@
     },
     "service-worker.js": {
       "tailleOctets": 7578,
-      "sha256": "04fd09b3c1e5d47ddfa06cf39948ff46a8b4b9abaf6266b240e8322498558a00"
+      "sha256": "b4c6a9ec51c439831d03f56bd1df0f1f8889205127afb64adaf063deb313d87e"
     },
     "sigles-cjpm/index.html": {
       "tailleOctets": 22184,
-      "sha256": "4a2e30b4b79c0b43d1a5437d863de2fa7a2da9a7d8b7036ce3533652321f54c8"
+      "sha256": "d82bae91a5d02a3370f8f6e33937ebe43a3448ceaba3be5d90aa777cfe6a46e6"
     },
     "sigles-cjpm/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1509,7 +1505,7 @@
     },
     "sigles-pjj/index.html": {
       "tailleOctets": 16853,
-      "sha256": "5531ac44e8ec48dbfa39d1a5bc237f1de6a693ec45281f9bb45fdee71f9d4dab"
+      "sha256": "f43cd66bfb30c4894e215f2fd9e76ff0835db1233c6c2040724dd49b41066fa0"
     },
     "sigles-pjj/style-de-la-page.css": {
       "tailleOctets": 81,
@@ -1521,11 +1517,11 @@
     },
     "sources.html": {
       "tailleOctets": 5626,
-      "sha256": "922b4e99f6eeea6dbdb82246db5cf7f56a74483bea511c460c95fa236bf63c3b"
+      "sha256": "6a1ee3294f9d2728b597b51ed3661f93bbb8d221ba24bff7cf13191542e580dd"
     },
     "structures-pjj/index.html": {
       "tailleOctets": 12903,
-      "sha256": "fc875572aa013b2a224b98b3b7cb2e9ae723d8997da1200b55312cfffcaa6dfa"
+      "sha256": "c156312b998bc34feb85b362b5cbab32d0c8613ab1213d63a050699af3fd0121"
     },
     "structures-pjj/style-de-la-page.css": {
       "tailleOctets": 81,
