@@ -45,6 +45,7 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import json
+          import textwrap
 
           root = Path.cwd()
 
@@ -79,7 +80,7 @@ jobs:
           s = s.replace("import argparse\n", "import argparse\nimport base64\n", 1)
           marker = "def construire_javascript(plan: dict) -> str:\n"
           assert s.count(marker) == 1
-          function = r"""
+          function = textwrap.dedent(r"""
           def construire_page_parcours_indexable(page_principale: str) -> str:
               titre = "Parcours CJPM : quiz de justice pénale des mineurs"
               description = (
@@ -147,8 +148,7 @@ jobs:
               return motif.sub(lambda x: x.group(1)+nouveau+x.group(3), page, count=1)
 
 
-          """
-          function = "\n".join(line[10:] if line.startswith("          ") else line for line in function.splitlines()) + "\n"
+          """)
           s = s.replace(marker, function + marker, 1)
 
           import re
