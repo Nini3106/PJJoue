@@ -158,7 +158,12 @@ mobile_css = '''@media (max-width:640px) {
  }
 }
 '''
-p.write_text(s.replace(marker, mobile_css + marker, 1), encoding="utf-8")
+s = s.replace(marker, mobile_css + marker, 1)
+jonction = '}\n@media (max-width:640px) {\n #qc-atlas :is(.page-entete,.presentation-page,.parcours-detail-entete) h1'
+fusion = '\n #qc-atlas :is(.page-entete,.presentation-page,.parcours-detail-entete) h1'
+assert s.count(jonction) == 1
+s = s.replace(jonction, fusion, 1)
+p.write_text(s, encoding="utf-8")
 
 # Ancien empilement mobile de l'application
 p = root / "code/01 - Éléments communs/style-general-pjjoue.css"
