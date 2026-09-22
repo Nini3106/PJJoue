@@ -49,10 +49,10 @@
 #qc-atlas .infobulle-pjjoue { position:fixed; z-index:250; max-width:min(380px,calc(100vw - 20px)); padding:12px 15px; background:var(--q-ink); color:var(--q-paper); border-radius:8px; box-shadow:0 5px 25px #172d4830; font-size:var(--q-text-secondary); line-height:1.6; pointer-events:none; }
 #qc-atlas :is(.confetti,.celebration-confetti) { position:fixed; z-index:190; pointer-events:none; }
 @media (max-width:640px) {
- #qc-atlas .q-header { align-items:flex-start; }
- #qc-atlas .q-nav { width:100%; justify-content:flex-start; gap:4px; flex-wrap:wrap; }
-  #qc-atlas .q-more { margin-left:0; position:static; }
- #qc-atlas #menuPrincipal { left:17px; right:auto; top:calc(100% - 6px); }
+ #qc-atlas .q-header { align-items:center; }
+ #qc-atlas .q-nav { width:auto; justify-content:flex-end; gap:0; flex-wrap:nowrap; }
+ #qc-atlas .q-more { margin-left:auto; position:static; }
+ #qc-atlas #menuPrincipal { left:12px; right:12px; top:calc(100% + 8px); width:auto; max-width:none; }
   #qc-atlas .pjj-fenetre-panneau,#qc-atlas .celebration-panneau { padding:24px 20px; }
  #qc-atlas .joker-choix { gap:7px; }
  #qc-atlas .joker { padding:10px 6px; font-size:var(--q-text-secondary); }

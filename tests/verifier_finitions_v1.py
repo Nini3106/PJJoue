@@ -73,8 +73,13 @@ def entete(page,captures=False):
         assert page.locator('#menuPrincipal').is_visible()
         capture(page,'menu-ouvert',captures)
         page.keyboard.press('Escape');assert not page.locator('#menuPrincipal').is_visible()
-        page.locator('#boutonParcoursPJJ').click()
-        assert page.locator('#boutonParcoursPJJ').evaluate('e=>getComputedStyle(e).color')=='rgb(244, 239, 230)'
+        bouton_parcours=page.locator('#boutonParcoursPJJ')
+        if bouton_parcours.is_visible():
+            bouton_parcours.click()
+            assert bouton_parcours.evaluate('e=>getComputedStyle(e).color')=='rgb(244, 239, 230)'
+        else:
+            page.locator('#boutonMenuMobile').click()
+            page.locator('#menuPrincipal [data-ecran="parcours"]').click()
     else:
         page.locator('.atlas-static-menu>summary').click();verifier_geometrie(page)
         page.keyboard.press('Escape')

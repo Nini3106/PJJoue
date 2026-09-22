@@ -128,6 +128,7 @@ body { margin:0; min-width:0; }
   outline:3px solid var(--q-paper); outline-offset:3px;
 }
 #qc-atlas .q-more{position:relative}
+#qc-atlas :is(.menu-mobile-seulement,.menu-mobile-separateur){display:none}
 #qc-atlas summary{cursor:var(--cursor-interaction,pointer)}
 #qc-atlas .q-pop{position:absolute;
   right:0;
@@ -913,6 +914,106 @@ body { margin:0; min-width:0; }
 #qc-atlas .q-footer .q-footer-links { max-width:370px; }
 #qc-atlas :is(.q-primary,.q-secondary,.q-textbtn) { text-decoration:none; }
 @media (max-width:640px) {
+ #qc-atlas .q-header {
+   min-height:68px;
+   padding:12px 16px;
+   align-items:center;
+   gap:12px;
+ }
+ #qc-atlas .q-identity { gap:10px; }
+ #qc-atlas .q-tagline { display:none; }
+ #qc-atlas .q-nav {
+   width:auto;
+   margin-left:auto;
+   justify-content:flex-end;
+   flex-wrap:nowrap;
+ }
+ #qc-atlas .q-nav > :is(button,a):not(.bouton-menu-mobile) { display:none; }
+ #qc-atlas .q-more { position:static; margin-left:auto; }
+ #qc-atlas .bouton-menu-mobile,
+ #qc-atlas .atlas-static-menu > summary {
+   min-width:92px;
+   border:1px solid color-mix(in srgb,var(--q-paper) 38%,transparent);
+   background:color-mix(in srgb,var(--q-paper) 9%,var(--q-menu-fond));
+   border-radius:8px;
+   padding:9px 12px;
+ }
+ #qc-atlas .bouton-menu-mobile .bouton-menu-libelle { display:none; }
+ #qc-atlas .bouton-menu-mobile::before { content:"Menu"; }
+ #qc-atlas .bouton-menu-mobile[aria-expanded="true"]::before { content:"Fermer"; }
+ #qc-atlas .atlas-static-menu > summary { font-size:0; list-style:none; }
+ #qc-atlas .atlas-static-menu > summary::-webkit-details-marker { display:none; }
+ #qc-atlas .atlas-static-menu > summary::before {
+   content:"Menu";
+   font-size:var(--q-text-nav);
+ }
+ #qc-atlas .atlas-static-menu[open] > summary::before { content:"Fermer"; }
+ #qc-atlas .atlas-static-menu > summary > span,
+ #qc-atlas .bouton-menu-mobile > span[aria-hidden="true"] {
+   font-size:var(--q-text-nav);
+   transition:transform .18s ease;
+ }
+ #qc-atlas .atlas-static-menu[open] > summary > span,
+ #qc-atlas .bouton-menu-mobile[aria-expanded="true"] > span[aria-hidden="true"] {
+   transform:rotate(180deg);
+ }
+ #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) {
+   left:12px;
+   right:12px;
+   top:calc(100% + 8px);
+   width:auto;
+   min-width:0;
+   max-width:none;
+   max-height:calc(100dvh - 92px);
+   overflow-y:auto;
+   padding:9px;
+   border:1px solid color-mix(in srgb,var(--q-menu-fond) 18%,var(--q-line));
+   border-top:4px solid var(--q-yellow);
+   border-radius:12px;
+   background:var(--q-paper);
+   box-shadow:0 16px 38px rgba(23,45,72,.22);
+ }
+ #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop)::before {
+   content:"Navigation";
+   display:block;
+   padding:6px 10px 9px;
+   color:var(--q-muted);
+   font-size:var(--q-text-small);
+   font-weight:700;
+   letter-spacing:.08em;
+   text-transform:uppercase;
+ }
+ #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) :is(button,a) {
+   width:100%;
+   min-height:46px;
+   display:flex;
+   justify-content:flex-start;
+   align-items:center;
+   padding:10px 12px;
+   border:0;
+   border-radius:7px;
+   background:transparent;
+   color:var(--q-ink);
+   font-size:var(--q-text-control);
+   font-weight:600;
+   text-decoration:none;
+ }
+ #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) :is(button,a):hover,
+ #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) :is(button,a):focus-visible,
+ #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) [aria-current="page"] {
+   background:color-mix(in srgb,var(--q-menu-fond) 8%,var(--q-paper));
+ }
+ #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) :is(button,a)[aria-current="page"] {
+   box-shadow:inset 3px 0 var(--q-blue);
+ }
+ #qc-atlas .menu-mobile-seulement { display:flex; }
+ #qc-atlas .menu-mobile-separateur {
+   display:block;
+   height:1px;
+   margin:7px 8px;
+   background:color-mix(in srgb,var(--q-menu-fond) 16%,transparent);
+ }
+
  #qc-atlas :is(.page-entete,.presentation-page,.parcours-detail-entete) h1 { font-size:calc(37px * var(--echelle-texte,1)); }
  #qc-atlas .q-hero h1 { font-size:calc(45px * var(--echelle-texte,1)); }
  #qc-atlas :is(.q-pagehead,.page-entete,.presentation-page) { margin-top:15px; }

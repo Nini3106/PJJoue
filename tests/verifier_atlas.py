@@ -86,11 +86,21 @@ def verifier_mode(page,mode):
     assert page.evaluate('etat.questionCourante.id')==q['id']
 
 
+def cliquer_navigation_principale(page, identifiant_direct, ecran):
+    bouton = page.locator(identifiant_direct)
+    if bouton.is_visible():
+        bouton.click()
+        return
+    page.locator('#boutonMenuMobile').click()
+    assert page.locator('#menuPrincipal').is_visible()
+    page.locator(f'#menuPrincipal [data-ecran="{ecran}"]').click()
+
+
 def navigation(page):
     assert page.locator('#catalogueAtlas .q-chapter').count()==6
     assert page.evaluate("getComputedStyle(document.querySelector('#qc-atlas')).backgroundColor")=='rgb(244, 239, 230)'
     assert page.evaluate("getComputedStyle(document.querySelector('.q-hero h1')).fontFamily").startswith('Georgia')
-    page.locator('#boutonParcoursPJJ').click()
+    cliquer_navigation_principale(page, '#boutonParcoursPJJ', 'parcours')
     assert page.locator('#vueChoixParcours').is_visible()
     for theme in page.evaluate('THEMES.map(t=>t.id)'):
         page.evaluate('ouvrirChoixParcours()')
@@ -110,7 +120,7 @@ def navigation(page):
 
 
 def training(page):
-    page.locator('#boutonEntrainementLibre').click()
+    cliquer_navigation_principale(page, '#boutonEntrainementLibre', 'entrainement')
     menu=page.locator('.atlas-select')
     menu.locator('summary').click()
     page.locator('[data-groupe-choix="perimetreEntrainement"] [data-valeur="procedure_ordinaire"]').click()
@@ -135,7 +145,7 @@ def training(page):
 
 
 def dice(page):
-    page.locator('#boutonEntrainementLibre').click()
+    cliquer_navigation_principale(page, '#boutonEntrainementLibre', 'entrainement')
     page.locator('#boutonLancerLeDe').click()
     page.wait_for_timeout(550)
     n=int(page.locator('#faceDeParcours').get_attribute('data-face'))
