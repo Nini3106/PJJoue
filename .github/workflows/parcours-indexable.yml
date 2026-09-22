@@ -151,24 +151,14 @@ jobs:
           function = "\n".join(line[10:] if line.startswith("          ") else line for line in function.splitlines()) + "\n"
           s = s.replace(marker, function + marker, 1)
 
-          old = '''    for route in routes.values():
-              route = route.strip("/")
-              if not route:
-                  continue
-              profondeur = len(route.split("/"))
-              sorties[f"{route}/index.html"] = construire_relais_route(route, profondeur)
-          '''
-          old = "\n".join(line[10:] if line.startswith("          ") else line for line in old.splitlines()) + "\n"
-          new = '''    for route in routes.values():
-              route = route.strip("/")
-              if not route or route == "parcours":
-                  continue
-              profondeur = len(route.split("/"))
-              sorties[f"{route}/index.html"] = construire_relais_route(route, profondeur)
-          '''
-          new = "\n".join(line[10:] if line.startswith("          ") else line for line in new.splitlines()) + "\n"
-          assert s.count(old) == 1
-          s = s.replace(old, new, 1)
+          import re
+          motif_route = re.compile(
+              r'(    for route in routes\.values\(\):\n'
+              r'        route = route\.strip\("/"\)\n'
+              r'        )if not route:(\n        +continue\n)'
+          )
+          s, n = motif_route.subn(r'\1if not route or route == "parcours":\2', s, count=1)
+          assert n == 1, "Boucle des relais introuvable"
 
           old = '    ajouter("index.html", construire_page_principale(plan))\n\n    for sortie, contenu in construire_relais_routes().items():'
           new = '    page_principale = construire_page_principale(plan)\n    ajouter("index.html", page_principale)\n    ajouter("parcours/index.html", construire_page_parcours_indexable(page_principale))\n\n    for sortie, contenu in construire_relais_routes().items():'
