@@ -54,7 +54,7 @@ def entete(page,captures=False):
  }''')
     assert result['total']==1 and result['bandes']==0,result
     assert result['bg']==result['logoLettre']=='rgb(23, 45, 72)',result
-    assert result['texte']==result['logoFond']==result['cjpmContour']=='rgb(234, 227, 213)',result
+    assert result['texte']==result['logoFond']==result['cjpmContour']=='rgb(244, 239, 230)',result
     assert result['cjpmFond']=='rgba(0, 0, 0, 0)',result
     assert result['cjpmBordure']=='0px' and result['cjpmOmbre']=='none',result
     assert result['cjpmContourLargeur']=='1.4px' and result['cjpmPeinture'].startswith('stroke'),result
@@ -63,8 +63,8 @@ def entete(page,captures=False):
     assert result['cjpm']=='rgb(33, 79, 186)',result
     assert result['slogan']=='Comprendre · Pratiquer · Retenir'
     assert result['largeur']==result['viewport']
-    assert len(result['liens'])==5,result
-    assert all(l['couleur']=='rgb(234, 227, 213)' for l in result['liens'])
+    assert len(result['liens']) in {5,6},result
+    assert all(l['couleur']=='rgb(244, 239, 230)' for l in result['liens'])
     assert not result['atlasVisible']
     verifier_geometrie(page)
     capture(page,'accueil',captures)
@@ -74,7 +74,7 @@ def entete(page,captures=False):
         capture(page,'menu-ouvert',captures)
         page.keyboard.press('Escape');assert not page.locator('#menuPrincipal').is_visible()
         page.locator('#boutonParcoursPJJ').click()
-        assert page.locator('#boutonParcoursPJJ').evaluate('e=>getComputedStyle(e).color')=='rgb(234, 227, 213)'
+        assert page.locator('#boutonParcoursPJJ').evaluate('e=>getComputedStyle(e).color')=='rgb(244, 239, 230)'
     else:
         page.locator('.atlas-static-menu>summary').click();verifier_geometrie(page)
         page.keyboard.press('Escape')

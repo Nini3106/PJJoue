@@ -11,6 +11,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from pathlib import Path
 import argparse
+import base64
 import hashlib
 import html
 import json
@@ -223,6 +224,72 @@ def construire_page_principale(plan: dict) -> str:
     return page
 
 
+
+def construire_page_parcours_indexable(page_principale: str) -> str:
+    titre = "Parcours CJPM : quiz de justice pénale des mineurs"
+    description = (
+        "Choisis parmi 5 parcours CJPM pour réviser la justice pénale des mineurs, "
+        "étape par étape, avec quiz, QCM et exercices. Une option PJJ complète le jeu."
+    )
+    url = "https://pjjoue.fr/parcours/"
+    page = page_principale
+    remplacements = {
+        '<base href="./"/>': '<base href="../"/>',
+        '<body data-ecran-actif="accueil" id="qc-atlas">': '<body data-ecran-actif="parcours" id="qc-atlas">',
+        '<section class="ecran actif" id="accueil">': '<section class="ecran" id="accueil">',
+        '<section class="ecran parcours-ecran" id="parcours">': '<section class="ecran parcours-ecran actif" id="parcours">',
+        '<link href="https://pjjoue.fr/" rel="canonical"/>': f'<link href="{url}" rel="canonical"/>',
+        '<meta content="https://pjjoue.fr/" property="og:url"/>': f'<meta content="{url}" property="og:url"/>',
+        '<meta name="twitter:title" content="Quiz CJPM : réviser la justice pénale des mineurs"/>':
+            f'<meta name="twitter:title" content="{html.escape(titre, quote=True)}"/>',
+        '<meta name="twitter:description" content="Révise le CJPM avec des quiz, QCM et exercices sur la justice pénale des mineurs. 5 parcours CJPM et une option PJJ. Site indépendant et non officiel."/>':
+            f'<meta name="twitter:description" content="{html.escape(description, quote=True)}"/>',
+    }
+    for ancien, nouveau in remplacements.items():
+        if page.count(ancien) != 1:
+            raise ErreurConstruction(f"Parcours indexable : repère invalide : {ancien}")
+        page = page.replace(ancien, nouveau, 1)
+
+    def meta(page_html: str, nom: str, valeur: str, attribut: str = "name") -> str:
+        motif = re.compile(rf'<meta\s+content="[^"]*"\s+{attribut}="{re.escape(nom)}"\s*/>', re.I)
+        nouveau = f'<meta content="{html.escape(valeur, quote=True)}" {attribut}="{nom}"/>'
+        page_html, n = motif.subn(nouveau, page_html, count=1)
+        if n != 1:
+            raise ErreurConstruction(f"Parcours indexable : meta {nom} introuvable.")
+        return page_html
+
+    page = meta(page, "description", description)
+    page = meta(page, "og:title", titre, "property")
+    page = meta(page, "og:description", description, "property")
+    page, n = re.subn(r"<title>.*?</title>", f"<title>{html.escape(titre)}</title>", page, count=1, flags=re.S)
+    if n != 1:
+        raise ErreurConstruction("Parcours indexable : title introuvable.")
+
+    motif = re.compile(r'(<script type="application/ld\+json">)(.*?)(</script>)', re.S | re.I)
+    m = motif.search(page)
+    if not m:
+        raise ErreurConstruction("Parcours indexable : JSON-LD introuvable.")
+    ancien = m.group(2)
+    donnees = {
+        "@context":"https://schema.org",
+        "@type":["WebPage","LearningResource"],
+        "@id":url+"#webpage",
+        "url":url,
+        "name":titre,
+        "description":description,
+        "inLanguage":"fr-FR",
+        "dateModified":"2026-09-22",
+        "isPartOf":{"@type":"WebSite","@id":"https://pjjoue.fr/#website","name":"Quiz CJPM","url":"https://pjjoue.fr/"},
+        "about":{"@type":"Thing","name":"Code de la justice pénale des mineurs","alternateName":"CJPM"},
+        "learningResourceType":["Quiz","QCM","Exercices"],
+        "educationalUse":["Révision","Autoévaluation"],
+        "author":{"@type":"Person","name":"Dev'Ines"},
+    }
+    nouveau = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+    page = motif.sub(lambda x: x.group(1)+nouveau+x.group(3), page, count=1)
+    return page.rstrip() + "\n"
+
+
 def construire_javascript(plan: dict) -> str:
     parties: list[str] = []
     for partie in plan["javascript"]:
@@ -344,7 +411,7 @@ def construire_relais_routes() -> dict[str, str]:
     sorties: dict[str, str] = {}
     for route in routes.values():
         route = route.strip("/")
-        if not route:
+        if not route or route == "parcours":
             continue
         profondeur = len(route.split("/"))
         sorties[f"{route}/index.html"] = construire_relais_route(route, profondeur)
@@ -369,7 +436,9 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
             raise ErreurConstruction(f"Le constructeur essaie de produire deux fois : {sortie}")
         sorties[sortie] = contenu
 
-    ajouter("index.html", construire_page_principale(plan))
+    page_principale = construire_page_principale(plan)
+    ajouter("index.html", page_principale)
+    ajouter("parcours/index.html", construire_page_parcours_indexable(page_principale))
 
     for sortie, contenu in construire_relais_routes().items():
         ajouter(sortie, contenu)
