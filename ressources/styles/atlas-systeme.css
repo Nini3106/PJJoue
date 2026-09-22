@@ -97,7 +97,7 @@ body { margin:0; min-width:0; }
 /* CJPM : lettres bleues détourées en beige, sans cartouche ni encadrement.
    Le contour est peint avant le remplissage pour garder le bleu intact. */
 #qc-atlas .q-brand em {
-  font-style:italic;
+  font-style:normal;
   font-weight:750;
   color:#214fba;
   background:transparent;
@@ -943,11 +943,11 @@ body { margin:0; min-width:0; }
  }
  #qc-atlas .q-tagline {
    display:block;
-   max-width:86px;
+   max-width:none;
    min-width:0;
-   white-space:normal;
-   font-size:calc(8.5px * var(--echelle-texte,1));
-   line-height:1.15;
+   white-space:nowrap;
+   font-size:calc(8px * var(--echelle-texte,1));
+   line-height:1;
  }
  #qc-atlas .q-nav {
    flex:0 0 auto;
