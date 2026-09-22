@@ -60,8 +60,8 @@ jobs:
           assert 'content:"Menu"' in css
           assert 'border-top:4px solid var(--q-yellow)' in css
           assert '.q-nav > :is(button,a):not(.bouton-menu-mobile) { display:none; }' in css
-          assert '.menu-mobile-seulement { display:flex!important; }' in css
-          assert '#qc-atlas :is(.menu-mobile-seulement,.menu-mobile-separateur){display:none!important}' in css
+          assert '.menu-mobile-seulement { display:flex; }' in css
+          assert '#qc-atlas :is(.menu-mobile-seulement,.menu-mobile-separateur){display:none}' in css
           print("Menu mobile cible valide.")
           PY
 
