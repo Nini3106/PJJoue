@@ -272,6 +272,27 @@ def infobulle(page):
     page.mouse.move(2,2);bouton.evaluate('e=>e.blur()');page.wait_for_timeout(50)
     assert not page.locator('[role="tooltip"]').is_visible()
 
+    # Une aide peut être « visible » dans le DOM tout en étant sous la modale.
+    page.locator('#boutonJokers').click()
+    for identifiant in ['boutonJoker5050', 'boutonJokerIndice', 'boutonJokerLangueAuChat']:
+        joker=page.locator('#'+identifiant)
+        if page.viewport_size['width']<600: joker.focus()
+        else: joker.hover()
+        bulle=page.locator('[role="tooltip"]')
+        assert bulle.is_visible()
+        assert bulle.evaluate('''e => {
+            const r=e.getBoundingClientRect(), ancien=e.style.pointerEvents;
+            e.style.pointerEvents='auto';
+            try {
+                return r.left>=0 && r.top>=0 && r.right<=innerWidth && r.bottom<=innerHeight
+                    && e.contains(document.elementFromPoint(r.left+r.width/2,r.top+r.height/2));
+            } finally { e.style.pointerEvents=ancien; }
+        }'''), 'L’infobulle du joker doit être au-dessus de sa fenêtre et dans l’écran'
+        page.mouse.move(2,2);joker.evaluate('e=>e.blur()')
+        assert not page.locator('[role="tooltip"]').is_visible()
+    page.locator('#fermerFenetreJokers').click()
+    assert not page.locator('#fenetreJokers [role="tooltip"]').count()
+
 
 def consentement(page):
     # Cookie jar vide pour l'origine opaque, comme Storage dans le chargeur.

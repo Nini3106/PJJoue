@@ -416,7 +416,10 @@ function afficherInfobullePJJoue(declencheur) {
     element.textContent = texte;
     const ariaDescribedBy = declencheur.getAttribute('aria-describedby') || '';
     declencheur.setAttribute('aria-describedby', element.id);
-    document.body.appendChild(element);
+    // Une fenêtre modale est au-dessus du document, quel que soit le z-index.
+    // Son aide doit appartenir à la même fenêtre pour rester visible et accessible.
+    const fenetre = declencheur.closest('dialog[open]');
+    (fenetre || document.body).appendChild(element);
     infobullePJJoueActive = { declencheur, element, ariaDescribedBy };
     positionnerInfobullePJJoue();
     requestAnimationFrame(() => element.classList.add('est-visible'));
@@ -483,6 +486,10 @@ function activerAidesAuSurvol() {
         if (evenement.key === 'Escape')
             masquerInfobullePJJoue();
     });
+    document.addEventListener('close', evenement => {
+        if (infobullePJJoueActive && evenement.target.contains(infobullePJJoueActive.declencheur))
+            masquerInfobullePJJoue();
+    }, true);
     window.addEventListener('resize', positionnerInfobullePJJoue, { passive: true });
     window.addEventListener('scroll', positionnerInfobullePJJoue, { passive: true, capture: true });
     const observateur = new MutationObserver(mutations => {
