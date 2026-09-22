@@ -7,32 +7,37 @@
     {
       "sortie": "index.html",
       "url": "https://pjjoue.fr/",
-      "lastmod": "2026-09-21"
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "guides/index.html",
       "url": "https://pjjoue.fr/guides/",
-      "lastmod": "2026-09-21"
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "cjpm-enquete-sanction/index.html",
-      "url": "https://pjjoue.fr/cjpm-enquete-sanction/"
+      "url": "https://pjjoue.fr/cjpm-enquete-sanction/",
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "cjpm-information-judiciaire/index.html",
-      "url": "https://pjjoue.fr/cjpm-information-judiciaire/"
+      "url": "https://pjjoue.fr/cjpm-information-judiciaire/",
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "cjpm-jugement-sanction-educative/index.html",
-      "url": "https://pjjoue.fr/cjpm-jugement-sanction-educative/"
+      "url": "https://pjjoue.fr/cjpm-jugement-sanction-educative/",
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "cjpm-matiere-criminelle-peines/index.html",
-      "url": "https://pjjoue.fr/cjpm-matiere-criminelle-peines/"
+      "url": "https://pjjoue.fr/cjpm-matiere-criminelle-peines/",
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "cjpm-application-execution/index.html",
-      "url": "https://pjjoue.fr/cjpm-application-execution/"
+      "url": "https://pjjoue.fr/cjpm-application-execution/",
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "decouvrir-la-pjj/index.html",
@@ -52,11 +57,13 @@
     },
     {
       "sortie": "mesures-educatives-pjj/index.html",
-      "url": "https://pjjoue.fr/mesures-educatives-pjj/"
+      "url": "https://pjjoue.fr/mesures-educatives-pjj/",
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "sigles-cjpm/index.html",
-      "url": "https://pjjoue.fr/sigles-cjpm/"
+      "url": "https://pjjoue.fr/sigles-cjpm/",
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "sigles-pjj/index.html",
@@ -65,7 +72,8 @@
     },
     {
       "sortie": "quiz-pjj/index.html",
-      "url": "https://pjjoue.fr/quiz-pjj/"
+      "url": "https://pjjoue.fr/quiz-pjj/",
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "mentions-legales.html",
@@ -89,11 +97,13 @@
     },
     {
       "sortie": "rrse-mineur/index.html",
-      "url": "https://pjjoue.fr/rrse-mineur/"
+      "url": "https://pjjoue.fr/rrse-mineur/",
+      "lastmod": "2026-09-22"
     },
     {
       "sortie": "peines-mineurs-cjpm/index.html",
-      "url": "https://pjjoue.fr/peines-mineurs-cjpm/"
+      "url": "https://pjjoue.fr/peines-mineurs-cjpm/",
+      "lastmod": "2026-09-22"
     }
   ]
 }
