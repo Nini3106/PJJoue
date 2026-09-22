@@ -1,7 +1,8 @@
 /* Atlas — style-des-six-parcours.css : source unique du composant. */
 /* === MORCEAU CSS | sortie=pjjoue-principal.css | ordre=2 === */
 /* Catalogue et itinéraire. Une ligne est une vraie étape, jamais une tuile décorative. */
-#qc-atlas .parcours-selection-entete { max-width:850px; }
+#qc-atlas .parcours-selection-entete { max-width:none; }
+#qc-atlas .parcours-selection-entete > p { max-width:none; }
 #qc-atlas .parcours-detail-identite { display:flex; align-items:center; gap:18px; }
 #qc-atlas .atlas-course-icon { display:grid; place-items:center; width:50px; height:50px; flex-shrink:0; background:color-mix(in srgb,var(--parcours-accent) 18%,var(--q-panel)); border-radius:50%; color:var(--parcours-accent-lisible); }
 #qc-atlas .atlas-course-icon svg { width:28px; height:28px; fill:none; stroke:currentColor; }
