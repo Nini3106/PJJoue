@@ -209,6 +209,13 @@ jobs:
           new = '        # Les deux entrées de l’application regroupent plusieurs écrans dynamiques, chacun avec son propre h1.\n        applications = {"index.html", "parcours/index.html"}\n        if (nom in applications and analyse.titres_h1 < 1) or (nom not in applications and analyse.titres_h1 != 1):\n'
           assert t.count(old) == 1
           p.write_text(t.replace(old, new, 1), encoding="utf-8")
+
+          p = root / "tests/verifier_atlas.py"
+          t = p.read_text(encoding="utf-8")
+          old = "    assert page.evaluate(\"getComputedStyle(document.querySelector('#qc-atlas')).backgroundColor\")=='rgb(234, 227, 213)'\n"
+          new = "    assert page.evaluate(\"getComputedStyle(document.querySelector('#qc-atlas')).backgroundColor\")=='rgb(244, 239, 230)'\n"
+          assert t.count(old) == 1
+          p.write_text(t.replace(old, new, 1), encoding="utf-8")
           PY
 
       - name: Construire
