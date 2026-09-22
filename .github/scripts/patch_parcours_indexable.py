@@ -303,6 +303,18 @@ tests = remplacer_unique(
 )
 atlas.write_text(tests, encoding="utf-8")
 
+# La recette des finitions intègre le bouton Accueil et la nouvelle teinte beige.
+finitions = root / "tests/verifier_finitions_v1.py"
+tests = finitions.read_text(encoding="utf-8")
+tests = tests.replace("rgb(234, 227, 213)", "rgb(244, 240, 232)")
+tests = remplacer_unique(
+    tests,
+    "    assert len(result['liens'])==5,result\n",
+    "    assert len(result['liens'])==6,result\n",
+    "recette finitions : nombre d’entrées du menu",
+)
+finitions.write_text(tests, encoding="utf-8")
+
 rapport = {
     "pagesAutonomesAvecAccueil": len(pages_modifiees),
     "nouveauFond": {"papier": "#f4f0e8", "profond": "#ebe4d8"},
