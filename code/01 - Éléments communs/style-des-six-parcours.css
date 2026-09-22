@@ -26,6 +26,7 @@
 #qc-atlas .evaluation-titre { font-size:var(--q-text-control); }
 #qc-atlas .evaluation-statut { display:block; flex-basis:100%; font-size:var(--q-text-secondary); font-weight:400; }
 #qc-atlas .icone-evaluation svg { fill:none; stroke:currentColor; width:25px; height:25px; }
+#qc-atlas :is(.icone-evaluation,.sigles-evaluation-icone,.mesures-evaluation-icone) svg path:first-child { fill:var(--q-yellow); stroke:var(--q-on-yellow); }
 #qc-atlas .parcours-detail-actions { margin:0 0 14px; }
 #qc-atlas .parcours-detail-progression { margin:16px 0; }
 #qc-atlas .parcours-detail-progression-ligne { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; font-size:var(--q-text-secondary); }

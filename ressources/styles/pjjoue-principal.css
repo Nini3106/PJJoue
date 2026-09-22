@@ -124,6 +124,7 @@
 #qc-atlas .evaluation-titre { font-size:var(--q-text-control); }
 #qc-atlas .evaluation-statut { display:block; flex-basis:100%; font-size:var(--q-text-secondary); font-weight:400; }
 #qc-atlas .icone-evaluation svg { fill:none; stroke:currentColor; width:25px; height:25px; }
+#qc-atlas :is(.icone-evaluation,.sigles-evaluation-icone,.mesures-evaluation-icone) svg path:first-child { fill:var(--q-yellow); stroke:var(--q-on-yellow); }
 #qc-atlas .parcours-detail-actions { margin:0 0 14px; }
 #qc-atlas .parcours-detail-progression { margin:16px 0; }
 #qc-atlas .parcours-detail-progression-ligne { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; font-size:var(--q-text-secondary); }
@@ -502,7 +503,7 @@
 #qc-atlas #boutonPasser { order:3; }
 #qc-atlas #boutonValider,#qc-atlas #boutonQuestionSuivante { order:4;margin-left:auto; }
 #qc-atlas :is(.precedent-bouton,.passer-bouton,.joker-menu-bouton) { border-color:transparent; background:transparent; color:var(--q-blue); font-size:var(--q-text-secondary); padding:10px 4px; }
-#qc-atlas .joker-onglet-icone svg { fill:none; stroke:currentColor; stroke-width:1.6; width:16px; height:16px; }
+#qc-atlas .joker-onglet-icone svg { fill:var(--q-yellow); stroke:var(--q-on-yellow); stroke-width:1.6; width:16px; height:16px; }
 #qc-atlas .libelle-mobile { display:none; }
 #qc-atlas .atlas-autonomy-content { margin-top:14px; }
 #qc-atlas .question-autonomie>span { display:flex; flex-direction:column-reverse; font-size:var(--q-text-secondary); gap:7px; }
