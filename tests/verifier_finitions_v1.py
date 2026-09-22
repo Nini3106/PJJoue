@@ -20,7 +20,7 @@ STYLE='''(arg) => {
  const probe=document.createElement('span');document.body.appendChild(probe);
  probe.style.color=arg.accent;
  const accent=getComputedStyle(probe).color;
- probe.style.backgroundColor=`color-mix(in srgb,${arg.accent} ${arg.part}%,var(--q-panel))`;
+ probe.style.backgroundColor=arg.fondCommun ? "var(--q-panel)" : `color-mix(in srgb,${arg.accent} ${arg.part}%,var(--q-panel))`;
  const fond=getComputedStyle(probe).backgroundColor;probe.remove();
  const reel=getComputedStyle(e);
  if(reel[arg.bord||'borderLeftColor']!==accent)throw Error(JSON.stringify({sel:arg.sel,attendu:accent,reel:reel[arg.bord||'borderLeftColor']}));
@@ -125,7 +125,7 @@ def revision(page,captures=False):
     for t in themes:
         if not page.locator(menu+'-options').is_visible():page.locator(menu).click()
         page.locator(f'{menu}-options [data-valeur-filtre="{t["id"]}"]').click()
-        page.evaluate(STYLE,dict(sel=menu,accent=t['couleur'],part=14))
+        page.evaluate(STYLE,dict(sel=menu,accent=t['couleur'],fondCommun=True))
         step='#filtreRevisionEtape-parcours'
         page.locator(step).click()
         etapes=page.evaluate('id=>PROGRAMMES[id].etapes.map(e=>({id:e.id,couleur:obtenirCouleurEtapeAtlas(id,e.id)}))',t['id'])
@@ -133,7 +133,7 @@ def revision(page,captures=False):
             page.evaluate(STYLE,dict(sel=f'{step}-options [data-valeur-filtre="{e["id"]}"]',accent=e['couleur'],part=7));total+=1
         if t['id']=='commun':capture(page,'revision-etapes',captures)
         page.locator(f'{step}-options [data-valeur-filtre="{etapes[2]["id"]}"]').click()
-        page.evaluate(STYLE,dict(sel=step,accent=etapes[2]['couleur'],part=14))
+        page.evaluate(STYLE,dict(sel=step,accent=etapes[2]['couleur'],fondCommun=True))
         # Actual filtering, not only decoration.
         assert page.evaluate('obtenirFiltresRevision("parcours").theme')==t['id']
         assert str(page.evaluate('obtenirFiltresRevision("parcours").etape'))==str(etapes[2]['id'])
@@ -155,7 +155,7 @@ def entrainement(page,captures=False):
         if menu.get_attribute('open') is None:menu.locator('summary').click()
         page.locator(f'{options} [data-valeur="{t["id"]}"]').click()
         assert page.locator('#perimetreEntrainement').input_value()==t['id']
-        page.evaluate(STYLE,dict(sel='.atlas-select>summary',accent=t['couleur'],part=14))
+        page.evaluate(STYLE,dict(sel='.atlas-select>summary',accent=t['couleur'],fondCommun=True))
         assert not menu.get_attribute('open')
     # Steps 6-9 of PJJ were previously uncolored by a fixed "<= 6" predicate.
     for jeu,domaine in [('sigles','cjpm'),('sigles','pjj'),('mesures',None)]:
@@ -169,7 +169,7 @@ def entrainement(page,captures=False):
             page.evaluate(STYLE,dict(sel=f'{options} [data-valeur="{e["id"]}"]',accent=e['couleur'],part=7));checked+=1
         capture(page,'entrainement-'+(domaine or jeu),captures)
         last=current[-1];page.locator(f'{options} [data-valeur="{last["id"]}"]').click()
-        page.evaluate(STYLE,dict(sel='.atlas-select>summary',accent=last['couleur'],part=14))
+        page.evaluate(STYLE,dict(sel='.atlas-select>summary',accent=last['couleur'],fondCommun=True))
         verifier_geometrie(page)
     assert checked==36,checked
     return {'choix_colores':checked,'selection_native_et_resume':True}
