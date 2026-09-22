@@ -51,10 +51,6 @@
       "tailleOctets": 966,
       "sha256": "8dcf221cae9ddb120b84c4f2233234128474f4742ad1d6de4b45d62fda363539"
     },
-    ".github/workflows/tagline-logo.yml": {
-      "tailleOctets": 2073,
-      "sha256": "3a4a0084af406099fef89aa94c05a1a944f8ba931b65ac3abddd2680c2fca1bd"
-    },
     ".github/workflows/verification.yml": {
       "tailleOctets": 1255,
       "sha256": "5cdbf3e1e552513f65b92b79d9c1f1694bf3d81dad9f37a11a699c6a5b050080"
@@ -336,8 +332,8 @@
       "sha256": "dc0bd50dce4c15c458c81c19cf6bf2fdba1e65c000e0f032fe3fff26e01d0d4a"
     },
     "code/03 - Parcours PJJ/contenu.html": {
-      "tailleOctets": 4698,
-      "sha256": "03ae2814b3e423eaef4f671f9fa819110eea1fc2075d1b31735cf7ba6f8d5723"
+      "tailleOctets": 4776,
+      "sha256": "3ae61c97565e990e02903de89d44053653079ae2160f72866153dc3b8e95b7d6"
     },
     "code/04 - Carnet de parcours/LIRE-MOI.md": {
       "tailleOctets": 319,
@@ -396,8 +392,8 @@
       "sha256": "008a00fe98c6d0ea23dd9bf17c5854b2626a0fca4b5ed5b80d5ebd66b194e65b"
     },
     "code/06 - Question/contenu.html": {
-      "tailleOctets": 5207,
-      "sha256": "a39669786255be15d06400bdc01b4ad3ad71aee2de9e8bf2ee6d93e7b641f543"
+      "tailleOctets": 5220,
+      "sha256": "b0fc7320979520798cc579fd2e5b235aae62781cfc5ab9487d42d175ef8c5760"
     },
     "code/06 - Question/style-de-la-page.css": {
       "tailleOctets": 16164,
@@ -1132,8 +1128,8 @@
       "sha256": "8edcb2239f446470e669505299394d2fa96738405c0eaf42590fb8ef20ffdc25"
     },
     "index.html": {
-      "tailleOctets": 132950,
-      "sha256": "651a32dc1300f4598fb6bb215049cf2fdfc7a8c9497ba44fa779925e7cbe47bb"
+      "tailleOctets": 133041,
+      "sha256": "32768c4eb110d6f9b2103e162146b5d026788b66a555b5842b2fa10b84a6c369"
     },
     "manifest.webmanifest": {
       "tailleOctets": 749,
@@ -1276,8 +1272,8 @@
       "sha256": "a042139d7f962e137db66fec06496bfddeb367142247e3466aa12e28153b94b5"
     },
     "parcours/index.html": {
-      "tailleOctets": 132636,
-      "sha256": "72ad197cd8a5e067ff1a1c0c74b113b94bbc5bd9ad293ec133c15c8c6412f2f6"
+      "tailleOctets": 132727,
+      "sha256": "c58869b046b97b3b64e23ef52ff5e81d1c0409fa09eca0058026848ea5c85c81"
     },
     "parcours/information_judiciaire/index.html": {
       "tailleOctets": 846,
@@ -1840,8 +1836,8 @@
       "sha256": "3ec79e62290ef6d9d8db59d4148fe2a59b431e33f11e8afdb621924756800857"
     },
     "tests/verifier_identite_v1.py": {
-      "tailleOctets": 3876,
-      "sha256": "bc4335a9ed5889e4a6dc6dca74caf042babe04687318fadaf7bc8e7a55fdd7fd"
+      "tailleOctets": 4831,
+      "sha256": "8ae5d864fa9cfbd1cd5b7a42c6abfe4fbea8a267d33f6bbc6de753258abe2ea1"
     },
     "tests/verifier_interface.py": {
       "tailleOctets": 32262,
