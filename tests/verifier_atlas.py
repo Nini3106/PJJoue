@@ -88,7 +88,7 @@ def verifier_mode(page,mode):
 
 def navigation(page):
     assert page.locator('#catalogueAtlas .q-chapter').count()==6
-    assert page.evaluate("getComputedStyle(document.querySelector('#qc-atlas')).backgroundColor")=='rgb(234, 227, 213)'
+    assert page.evaluate("getComputedStyle(document.querySelector('#qc-atlas')).backgroundColor")=='rgb(244, 240, 232)'
     assert page.evaluate("getComputedStyle(document.querySelector('.q-hero h1')).fontFamily").startswith('Georgia')
     page.locator('#boutonParcoursPJJ').click()
     assert page.locator('#vueChoixParcours').is_visible()

@@ -112,7 +112,7 @@ def extraire_dates_jsonld(analyse: AnalyseHTML) -> list[str]:
 
 def sorties_html_indexables_du_plan() -> set[str]:
     plan = lire_json(PLAN)
-    sorties = {"index.html"}
+    sorties = {"index.html", "parcours/index.html"}
     for page in plan["pages_autonomes"]:
         sortie = page["sortie"]
         if sortie == "administration.html":
@@ -124,7 +124,7 @@ def sorties_html_indexables_du_plan() -> set[str]:
 def routes_relais_attendues() -> set[str]:
     routes = lire_json(ROUTES)
     programme = lire_json(PROGRAMME)
-    chemins = {route.strip("/") for route in routes.values() if route.strip("/")}
+    chemins = {route.strip("/") for route in routes.values() if route.strip("/") and route.strip("/") != "parcours"}
     chemins.update(f"parcours/{theme}" for theme in programme)
     return chemins
 
@@ -189,9 +189,9 @@ def verifier_page(page: dict[str, str], config: dict[str, object]) -> tuple[str,
     # une duplication mot pour mot qui n'apporte rien au référencement.
     if "noindex" in robots or "index" not in robots:
         raise SystemExit(f"ÉCHEC SEO — page indexable mal balisée robots : {sortie} — {robots}")
-    if sortie == "index.html":
+    if sortie in {"index.html", "parcours/index.html"}:
         if analyse.h1 < 1:
-            raise SystemExit("ÉCHEC SEO — l’accueil doit conserver au moins un H1.")
+            raise SystemExit(f"ÉCHEC SEO — {sortie} doit conserver au moins un H1.")
     elif analyse.h1 != 1:
         raise SystemExit(f"ÉCHEC SEO — {sortie} doit contenir exactement un H1 (trouvé : {analyse.h1}).")
     return page["url"], lastmod_page(page, analyse)

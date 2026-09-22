@@ -11,6 +11,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from pathlib import Path
 import argparse
+import base64
 import hashlib
 import html
 import json
@@ -339,12 +340,126 @@ def construire_relais_route(route: str, profondeur: int) -> str:
     )
 
 
+
+def construire_page_parcours_indexable(page_principale: str) -> str:
+    """Construit /parcours/ comme vraie entrée indexable de l'application."""
+    titre = "Parcours CJPM : quiz pour réviser le CJPM | Quiz CJPM"
+    description = (
+        "Explore 5 parcours de quiz pour réviser le CJPM, de l’enquête à l’exécution "
+        "des peines, plus une option pour découvrir la PJJ."
+    )
+    url = "https://pjjoue.fr/parcours/"
+    page = page_principale
+
+    if page.count('<base href="./"/>') != 1:
+        raise ErreurConstruction("La base de l'application est introuvable pour construire /parcours/.")
+    page = page.replace('<base href="./"/>', '<base href="../"/>', 1)
+
+    page, nombre = re.subn(
+        r"<title>.*?</title>",
+        f"<title>{html.escape(titre)}</title>",
+        page,
+        count=1,
+        flags=re.S,
+    )
+    if nombre != 1:
+        raise ErreurConstruction("La balise title de l'application est introuvable pour /parcours/.")
+
+    def remplacer_meta(contenu: str, attribut: str, cle: str, valeur: str) -> str:
+        motif = re.compile(r"<meta\b[^>]*>", re.I)
+        compteur = 0
+
+        def remplacer(correspondance):
+            nonlocal compteur
+            balise = correspondance.group(0)
+            if not re.search(rf'\b{re.escape(attribut)}="{re.escape(cle)}"', balise, re.I):
+                return balise
+            compteur += 1
+            nouvelle, nb = re.subn(
+                r'\bcontent="[^"]*"',
+                f'content="{html.escape(valeur, quote=True)}"',
+                balise,
+                count=1,
+            )
+            if nb != 1:
+                raise ErreurConstruction(f"Attribut content absent pour {attribut}={cle} dans /parcours/.")
+            return nouvelle
+
+        resultat = motif.sub(remplacer, contenu)
+        if compteur != 1:
+            raise ErreurConstruction(f"Meta {attribut}={cle} attendue une fois pour /parcours/, trouvée {compteur}.")
+        return resultat
+
+    page = remplacer_meta(page, "name", "description", description)
+    page = remplacer_meta(page, "property", "og:title", titre)
+    page = remplacer_meta(page, "property", "og:description", description)
+    page = remplacer_meta(page, "property", "og:url", url)
+    page = remplacer_meta(page, "name", "twitter:title", titre)
+    page = remplacer_meta(page, "name", "twitter:description", description)
+
+    motif_canonical = re.compile(r'<link\b[^>]*\brel="canonical"[^>]*>', re.I)
+    correspondances = list(motif_canonical.finditer(page))
+    if len(correspondances) != 1:
+        raise ErreurConstruction(f"Canonical de /parcours/ attendu une fois, trouvé {len(correspondances)}.")
+    balise = correspondances[0].group(0)
+    nouvelle_balise, nb = re.subn(r'href="[^"]*"', f'href="{url}"', balise, count=1)
+    if nb != 1:
+        raise ErreurConstruction("href canonical absent pour /parcours/.")
+    page = page[:correspondances[0].start()] + nouvelle_balise + page[correspondances[0].end():]
+
+    motif_jsonld = re.compile(
+        r'(<script\b[^>]*\btype="application/ld\+json"[^>]*>)(.*?)(</script>)',
+        re.S | re.I,
+    )
+    blocs = list(motif_jsonld.finditer(page))
+    if len(blocs) != 1:
+        raise ErreurConstruction(f"JSON-LD de l'application attendu une fois pour /parcours/, trouvé {len(blocs)}.")
+    ancien_jsonld = blocs[0].group(2)
+    donnees = {
+        "@context": "https://schema.org",
+        "@type": ["CollectionPage", "LearningResource"],
+        "@id": "https://pjjoue.fr/parcours/#webpage",
+        "url": url,
+        "name": titre,
+        "description": description,
+        "inLanguage": "fr-FR",
+        "dateModified": "2026-09-22",
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://pjjoue.fr/#website",
+            "name": "Quiz CJPM",
+            "url": "https://pjjoue.fr/",
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Code de la justice pénale des mineurs",
+            "alternateName": "CJPM",
+        },
+        "learningResourceType": ["Quiz", "Parcours d’apprentissage"],
+        "educationalUse": ["Révision", "Autoévaluation"],
+    }
+    nouveau_jsonld = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+    page = motif_jsonld.sub(lambda m: m.group(1) + nouveau_jsonld + m.group(3), page, count=1)
+    nouvelle_empreinte = base64.b64encode(hashlib.sha256(nouveau_jsonld.encode("utf-8")).digest()).decode("ascii")
+    marqueur_nouveau = "'sha256-" + nouvelle_empreinte + "'"
+    repere_csp = " https://www.googletagmanager.com; style-src"
+    if page.count(repere_csp) != 1:
+        raise ErreurConstruction("La directive script-src CSP de /parcours/ est introuvable.")
+    if marqueur_nouveau not in page:
+        page = page.replace(
+            repere_csp,
+            f" {marqueur_nouveau} https://www.googletagmanager.com; style-src",
+            1,
+        )
+    return page.rstrip() + "\n"
+
+
 def construire_relais_routes() -> dict[str, str]:
     routes = charger_routes_application()
     sorties: dict[str, str] = {}
     for route in routes.values():
         route = route.strip("/")
-        if not route:
+        if not route or route == "parcours":
             continue
         profondeur = len(route.split("/"))
         sorties[f"{route}/index.html"] = construire_relais_route(route, profondeur)
@@ -369,7 +484,9 @@ def construire_tous_les_fichiers(plan: dict) -> dict[str, str]:
             raise ErreurConstruction(f"Le constructeur essaie de produire deux fois : {sortie}")
         sorties[sortie] = contenu
 
-    ajouter("index.html", construire_page_principale(plan))
+    page_principale = construire_page_principale(plan)
+    ajouter("index.html", page_principale)
+    ajouter("parcours/index.html", construire_page_parcours_indexable(page_principale))
 
     for sortie, contenu in construire_relais_routes().items():
         ajouter(sortie, contenu)

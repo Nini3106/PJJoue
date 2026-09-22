@@ -57,8 +57,9 @@ def main() -> int:
             anomalies.append(f"{nom} : langue principale absente ou différente de fr")
         if analyse.titres_page != 1:
             anomalies.append(f"{nom} : {analyse.titres_page} élément(s) title")
-        # index.html regroupe plusieurs écrans dynamiques, chacun avec son propre h1.
-        if (nom == "index.html" and analyse.titres_h1 < 1) or (nom != "index.html" and analyse.titres_h1 != 1):
+        # Les coquilles de l’application regroupent plusieurs écrans dynamiques, chacun avec son propre h1.
+        pages_application = {"index.html", "parcours/index.html"}
+        if (nom in pages_application and analyse.titres_h1 < 1) or (nom not in pages_application and analyse.titres_h1 != 1):
             anomalies.append(f"{nom} : {analyse.titres_h1} titre(s) h1")
         doublons = sorted({identifiant for identifiant in analyse.identifiants if analyse.identifiants.count(identifiant) > 1})
         if doublons:

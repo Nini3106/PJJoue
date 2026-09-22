@@ -1,11 +1,11 @@
 /* Atlas — jetons et composants partagés avec les pages autonomes. */
-:root { color-scheme:light; --echelle-texte:1.15; background:#eae3d5; }
+:root { color-scheme:light; --echelle-texte:1.15; background:#f4f0e8; }
 html { margin:0; scroll-behavior:smooth; }
 body { margin:0; min-width:0; }
 * { box-sizing:border-box; }
 
-    #qc-atlas{--q-paper:light-dark(#eae3d5,#171d29);
-  --q-paper-profond:light-dark(#ddd3bf,#121925);
+    #qc-atlas{--q-paper:light-dark(#f4f0e8,#171d29);
+  --q-paper-profond:light-dark(#ebe4d8,#121925);
   --q-menu-fond:#172d48;
   --q-teinte-repos:7%;
   --q-teinte-survol:14%;

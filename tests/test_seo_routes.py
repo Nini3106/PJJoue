@@ -36,7 +36,7 @@ class TestSeoEtRoutesPropres(unittest.TestCase):
         relais = CONSTRUCTION.construire_relais_routes()
         routes = json.loads((RACINE / "code" / "routes-application.json").read_text(encoding="utf-8"))
         programme = json.loads((RACINE / "donnees" / "programme.json").read_text(encoding="utf-8"))
-        attendus = {f"{route}/index.html" for route in routes.values() if route}
+        attendus = {f"{route}/index.html" for route in routes.values() if route and route != "parcours"}
         attendus.update(f"parcours/{theme}/index.html" for theme in programme)
         self.assertEqual(set(relais), attendus)
         for chemin, contenu in relais.items():
@@ -68,8 +68,9 @@ class TestSeoEtRoutesPropres(unittest.TestCase):
         sitemap = SEO.construire_sitemap([(url, "2026-08-30") for url in urls]).decode("utf-8")
         routes = json.loads((RACINE / "code" / "routes-application.json").read_text(encoding="utf-8"))
         for route in routes.values():
-            if route:
+            if route and route != "parcours":
                 self.assertNotIn(f"https://pjjoue.fr/{route}/</loc>", sitemap)
+        self.assertIn("https://pjjoue.fr/parcours/</loc>", sitemap)
 
     def test_navigation_http_et_file_reste_explicitement_separee(self):
         source = (RACINE / "code" / "01 - Éléments communs" / "JavaScript - Navigation et fenêtres.js").read_text(encoding="utf-8")

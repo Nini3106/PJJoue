@@ -3,6 +3,7 @@ const NOM_CACHE = 'pjjoue-application-__VERSION_CACHE_PJJOUE__';
 const RESSOURCES_ESSENTIELLES = [
   './',
   './index.html',
+  './parcours/index.html',
   './ressources/styles/atlas-systeme.css',
   './manifest.webmanifest',
   './donnees/donnees-pjj.js',

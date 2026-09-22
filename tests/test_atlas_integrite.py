@@ -83,11 +83,11 @@ class IntegriteAtlas(unittest.TestCase):
         self.assertNotIn('panorama-accueil',source)
         self.assertNotIn('@import',source)
         commun=(RACINE/'ressources/styles/atlas-systeme.css').read_text(encoding='utf-8')
-        for couleur in ['#eae3d5','#ddd3bf','#ffffff','#172d48','#214fba','#f3d86c']:
+        for couleur in ['#f4f0e8','#ebe4d8','#ffffff','#172d48','#214fba','#f3d86c']:
             self.assertIn(couleur,commun)
     def test_sources_securite_scripts_inline(self):
         plan=json.loads((RACINE/'code/plan-construction.json').read_text(encoding='utf-8'))
-        pages=['index.html']+[item['sortie'] for item in plan['pages_autonomes']]
+        pages=['index.html','parcours/index.html']+[item['sortie'] for item in plan['pages_autonomes']]
         for fichier in pages:
             page=(RACINE/fichier).read_text(encoding='utf-8')
             for attributs,corps in re.findall(r'<script\b([^>]*)>(.*?)</script>',page,re.S|re.I):

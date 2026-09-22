@@ -192,7 +192,9 @@ function actualiserTitrePage(ecran) {
     // L’accueil conserve un titre descriptif après le rendu JavaScript et le retour au menu.
     document.title = ecran === 'accueil'
         ? 'Quiz CJPM : réviser la justice pénale des mineurs'
-        : `${TITRES_ECRANS[ecran] || 'Quiz CJPM'} — Quiz CJPM`;
+        : ecran === 'parcours'
+            ? 'Parcours CJPM : quiz pour réviser le CJPM | Quiz CJPM'
+            : `${TITRES_ECRANS[ecran] || 'Quiz CJPM'} — Quiz CJPM`;
 }
 function afficherEcran(identifiant, optionsAffichage = {}) {
     if (identifiant === 'carnet') identifiant = 'progression';
