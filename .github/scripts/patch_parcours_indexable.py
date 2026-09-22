@@ -281,6 +281,17 @@ tests = remplacer_unique(
 )
 test_atlas.write_text(tests, encoding="utf-8")
 
+# L'auditeur statique reconnaît désormais les deux documents qui hébergent la SPA.
+auditeur = root / "outils/auditer_accessibilite_statique.py"
+tests = auditeur.read_text(encoding="utf-8")
+tests = remplacer_unique(
+    tests,
+    '        # index.html regroupe plusieurs écrans dynamiques, chacun avec son propre h1.\n        if (nom == "index.html" and analyse.titres_h1 < 1) or (nom != "index.html" and analyse.titres_h1 != 1):\n',
+    '        # Les coquilles de l’application regroupent plusieurs écrans dynamiques, chacun avec son propre h1.\n        pages_application = {"index.html", "parcours/index.html"}\n        if (nom in pages_application and analyse.titres_h1 < 1) or (nom not in pages_application and analyse.titres_h1 != 1):\n',
+    "auditeur accessibilité des coquilles SPA",
+)
+auditeur.write_text(tests, encoding="utf-8")
+
 rapport = {
     "pagesAutonomesAvecAccueil": len(pages_modifiees),
     "nouveauFond": {"papier": "#f4f0e8", "profond": "#ebe4d8"},
