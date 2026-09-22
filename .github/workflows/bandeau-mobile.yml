@@ -56,7 +56,10 @@ jobs:
           assert "width:32px;" in css and "height:32px;" in css
           assert "min-width:82px;" in css
           assert "min-height:44px;" in css
-          print("Bandeau mobile compact valide.")
+          assert "max-width:92px;" in css
+          assert "font-size:calc(9px * var(--echelle-texte,1));" in css
+          assert "#qc-atlas .q-tagline { display:none; }" not in css
+          print("Bandeau mobile compact avec signature valide.")
           PY
 
       - name: Tester
