@@ -248,6 +248,39 @@ sw_text = remplacer_unique(
 )
 sw.write_text(sw_text, encoding="utf-8")
 
+# 6) Adapter les contrats de test à l'exception volontaire /parcours/ et au nouveau beige.
+test_seo = root / "tests/test_seo_routes.py"
+tests = test_seo.read_text(encoding="utf-8")
+tests = remplacer_unique(
+    tests,
+    '        attendus = {f"{route}/index.html" for route in routes.values() if route}\n',
+    '        attendus = {f"{route}/index.html" for route in routes.values() if route and route != "parcours"}\n',
+    "test relais : exception parcours",
+)
+tests = remplacer_unique(
+    tests,
+    '        for route in routes.values():\n            if route:\n                self.assertNotIn(f"https://pjjoue.fr/{route}/</loc>", sitemap)\n',
+    '        for route in routes.values():\n            if route and route != "parcours":\n                self.assertNotIn(f"https://pjjoue.fr/{route}/</loc>", sitemap)\n        self.assertIn("https://pjjoue.fr/parcours/</loc>", sitemap)\n',
+    "test sitemap : exception parcours",
+)
+test_seo.write_text(tests, encoding="utf-8")
+
+test_atlas = root / "tests/test_atlas_integrite.py"
+tests = test_atlas.read_text(encoding="utf-8")
+tests = remplacer_unique(
+    tests,
+    "        for couleur in ['#eae3d5','#ddd3bf','#ffffff','#172d48','#214fba','#f3d86c']:\n",
+    "        for couleur in ['#f4f0e8','#ebe4d8','#ffffff','#172d48','#214fba','#f3d86c']:\n",
+    "contrat palette beige",
+)
+tests = remplacer_unique(
+    tests,
+    "        pages=['index.html']+[item['sortie'] for item in plan['pages_autonomes']]\n",
+    "        pages=['index.html','parcours/index.html']+[item['sortie'] for item in plan['pages_autonomes']]\n",
+    "contrat sécurité /parcours/",
+)
+test_atlas.write_text(tests, encoding="utf-8")
+
 rapport = {
     "pagesAutonomesAvecAccueil": len(pages_modifiees),
     "nouveauFond": {"papier": "#f4f0e8", "profond": "#ebe4d8"},
