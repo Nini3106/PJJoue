@@ -182,6 +182,36 @@ jobs:
           assert len(data["pages"]) == 21
           data["pages"].insert(1, {"sortie":"parcours/index.html","url":"https://pjjoue.fr/parcours/","lastmod":"2026-09-22"})
           p.write_text(json.dumps(data, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+
+          # 5) Mettre à jour uniquement les garde-fous devenus obsolètes par ces choix.
+          p = root / "tests/test_seo_routes.py"
+          t = p.read_text(encoding="utf-8")
+          old = '        attendus = {f"{route}/index.html" for route in routes.values() if route}\n'
+          new = '        attendus = {f"{route}/index.html" for route in routes.values() if route and route != "parcours"}\n'
+          assert t.count(old) == 1
+          t = t.replace(old, new, 1)
+          old = '''        for route in routes.values():
+              if route:
+                  self.assertNotIn(f"https://pjjoue.fr/{route}/</loc>", sitemap)
+          '''
+          old = textwrap.dedent(old)
+          new = '''        for route in routes.values():
+              if route and route != "parcours":
+                  self.assertNotIn(f"https://pjjoue.fr/{route}/</loc>", sitemap)
+              elif route == "parcours":
+                  self.assertIn("https://pjjoue.fr/parcours/</loc>", sitemap)
+          '''
+          new = textwrap.dedent(new)
+          assert t.count(old) == 1
+          t = t.replace(old, new, 1)
+          p.write_text(t, encoding="utf-8")
+
+          p = root / "tests/test_atlas_integrite.py"
+          t = p.read_text(encoding="utf-8")
+          old = "        for couleur in ['#eae3d5','#ddd3bf','#ffffff','#172d48','#214fba','#f3d86c']:\n"
+          new = "        for couleur in ['#f4efe6','#ebe3d6','#ffffff','#172d48','#214fba','#f3d86c']:\n"
+          assert t.count(old) == 1
+          p.write_text(t.replace(old, new, 1), encoding="utf-8")
           PY
 
       - name: Construire
