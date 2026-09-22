@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 25
     env:
       BASE_SHA: 405bff72f6388400e0ebfb80c44beecb5d1d2729
-      SCRIPT_SHA: b312ee72bb74356469a84e2f8489fb4164d8f51e
+      SCRIPT_SHA: c226e454ce87a70b573e35591aa288889cd7df76
     steps:
       - name: Repartir exactement de main
         uses: actions/checkout@v4
