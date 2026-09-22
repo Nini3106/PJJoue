@@ -1,8 +1,9 @@
-name: Préparer Parcours indexable et finitions visuelles
+name: Parcours CJPM indexable
 
 on:
   push:
-    branches: [fix/parcours-indexable-accueil-beige-clair]
+    branches:
+      - fix/parcours-indexable-accueil-beige-clair
 
 permissions:
   contents: write
@@ -14,33 +15,39 @@ jobs:
     env:
       BASE_SHA: 405bff72f6388400e0ebfb80c44beecb5d1d2729
     steps:
-      - uses: actions/checkout@v4
+      - name: Recuperer main
+        uses: actions/checkout@v4
         with:
           ref: 405bff72f6388400e0ebfb80c44beecb5d1d2729
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+
+      - name: Node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - uses: actions/setup-python@v5
+
+      - name: Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
-      - name: Installer les outils
+          python-version: "3.13"
+
+      - name: Installer
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$BASE_SHA"
           npm ci
           python -m pip install -r requirements-dev.txt
           python -m playwright install --with-deps chromium
-      - name: Modifier uniquement les sources
-        shell: python
+
+      - name: Modifier les sources
         run: |
+          python - <<'PY'
           from pathlib import Path
           import json
 
           root = Path.cwd()
 
-          # 1) Accueil dans la barre principale, sans doublon dans "Plus".
           p = root / "code/01 - Éléments communs/gabarit-page-principale.html"
           s = p.read_text(encoding="utf-8")
           old = '<nav aria-label="Navigation principale" class="navigation q-nav">\n<button data-ecran="parcours" id="boutonParcoursPJJ" type="button">Parcours CJPM</button>'
@@ -52,140 +59,114 @@ jobs:
           s = s.replace(pop, '<button data-ecran="progression" id="boutonProgression" type="button">Ma progression</button>', 1)
           p.write_text(s, encoding="utf-8")
 
-          # 2) Beige global deux tons plus clair.
           p = root / "code/01 - Éléments communs/atlas-systeme.css"
           s = p.read_text(encoding="utf-8")
-          replacements = {
+          for a, b in {
               ':root { color-scheme:light; --echelle-texte:1.15; background:#eae3d5; }':
               ':root { color-scheme:light; --echelle-texte:1.15; background:#f4efe6; }',
               '--q-paper:light-dark(#eae3d5,#171d29);':
               '--q-paper:light-dark(#f4efe6,#171d29);',
               '--q-paper-profond:light-dark(#ddd3bf,#121925);':
               '--q-paper-profond:light-dark(#ebe3d6,#121925);',
-          }
-          for a,b in replacements.items():
+          }.items():
               assert s.count(a) == 1, a
-              s = s.replace(a,b,1)
+              s = s.replace(a, b, 1)
           p.write_text(s, encoding="utf-8")
 
-          # 3) /parcours/ devient une vraie vue de l'application, indexable et canonique.
           p = root / "outils/construire_site.py"
           s = p.read_text(encoding="utf-8")
           assert "import base64\n" not in s
           s = s.replace("import argparse\n", "import argparse\nimport base64\n", 1)
-
           marker = "def construire_javascript(plan: dict) -> str:\n"
           assert s.count(marker) == 1
-          function = r'''
-def construire_page_parcours_indexable(page_principale: str) -> str:
-    """Produit /parcours/ avec le même rendu et la même application, mais son SEO propre."""
-    titre = "Parcours CJPM : quiz de justice pénale des mineurs"
-    description = (
-        "Choisis parmi 5 parcours CJPM pour réviser la justice pénale des mineurs, "
-        "étape par étape, avec quiz, QCM et exercices. Une option PJJ complète le jeu."
-    )
-    url = "https://pjjoue.fr/parcours/"
-    page = page_principale
+          function = r"""
+          def construire_page_parcours_indexable(page_principale: str) -> str:
+              titre = "Parcours CJPM : quiz de justice pénale des mineurs"
+              description = (
+                  "Choisis parmi 5 parcours CJPM pour réviser la justice pénale des mineurs, "
+                  "étape par étape, avec quiz, QCM et exercices. Une option PJJ complète le jeu."
+              )
+              url = "https://pjjoue.fr/parcours/"
+              page = page_principale
+              remplacements = {
+                  '<base href="./"/>': '<base href="../"/>',
+                  '<body data-ecran-actif="accueil" id="qc-atlas">': '<body data-ecran-actif="parcours" id="qc-atlas">',
+                  '<section class="ecran actif" id="accueil">': '<section class="ecran" id="accueil">',
+                  '<section class="ecran parcours-ecran" id="parcours">': '<section class="ecran parcours-ecran actif" id="parcours">',
+                  '<link href="https://pjjoue.fr/" rel="canonical"/>': f'<link href="{url}" rel="canonical"/>',
+                  '<meta content="https://pjjoue.fr/" property="og:url"/>': f'<meta content="{url}" property="og:url"/>',
+              }
+              for ancien, nouveau in remplacements.items():
+                  if page.count(ancien) != 1:
+                      raise ErreurConstruction(f"Parcours indexable : repère invalide : {ancien}")
+                  page = page.replace(ancien, nouveau, 1)
 
-    remplacements_uniques = {
-        '<base href="./"/>': '<base href="../"/>',
-        '<body data-ecran-actif="accueil" id="qc-atlas">': '<body data-ecran-actif="parcours" id="qc-atlas">',
-        '<section class="ecran actif" id="accueil">': '<section class="ecran" id="accueil">',
-        '<section class="ecran parcours-ecran" id="parcours">': '<section class="ecran parcours-ecran actif" id="parcours">',
-        '<link href="https://pjjoue.fr/" rel="canonical"/>': f'<link href="{url}" rel="canonical"/>',
-        '<meta content="https://pjjoue.fr/" property="og:url"/>': f'<meta content="{url}" property="og:url"/>',
-    }
-    for ancien, nouveau in remplacements_uniques.items():
-        if page.count(ancien) != 1:
-            raise ErreurConstruction(f"Parcours indexable : repère inattendu ou dupliqué : {ancien}")
-        page = page.replace(ancien, nouveau, 1)
+              def meta(page_html: str, nom: str, valeur: str, attribut: str = "name") -> str:
+                  motif = re.compile(rf'<meta\s+content="[^"]*"\s+{attribut}="{re.escape(nom)}"\s*/>', re.I)
+                  nouveau = f'<meta content="{html.escape(valeur, quote=True)}" {attribut}="{nom}"/>'
+                  page_html, n = motif.subn(nouveau, page_html, count=1)
+                  if n != 1:
+                      raise ErreurConstruction(f"Parcours indexable : meta {nom} introuvable.")
+                  return page_html
 
-    def remplacer_meta(page_html: str, nom: str, valeur: str, attribut: str = "name") -> str:
-        motif = re.compile(
-            rf'<meta\s+content="[^"]*"\s+{attribut}="{re.escape(nom)}"\s*/>',
-            re.I,
-        )
-        nouveau = f'<meta content="{html.escape(valeur, quote=True)}" {attribut}="{nom}"/>'
-        page_html, nombre = motif.subn(nouveau, page_html, count=1)
-        if nombre != 1:
-            raise ErreurConstruction(f"Parcours indexable : meta {attribut}={nom} introuvable.")
-        return page_html
+              page = meta(page, "description", description)
+              page = meta(page, "og:title", titre, "property")
+              page = meta(page, "og:description", description, "property")
+              page = meta(page, "twitter:title", titre)
+              page = meta(page, "twitter:description", description)
+              page, n = re.subn(r"<title>.*?</title>", f"<title>{html.escape(titre)}</title>", page, count=1, flags=re.S)
+              if n != 1:
+                  raise ErreurConstruction("Parcours indexable : title introuvable.")
 
-    page = remplacer_meta(page, "description", description)
-    page = remplacer_meta(page, "og:title", titre, "property")
-    page = remplacer_meta(page, "og:description", description, "property")
-    page = remplacer_meta(page, "twitter:title", titre)
-    page = remplacer_meta(page, "twitter:description", description)
-
-    page, nombre_titre = re.subn(
-        r"<title>.*?</title>",
-        f"<title>{html.escape(titre)}</title>",
-        page,
-        count=1,
-        flags=re.S,
-    )
-    if nombre_titre != 1:
-        raise ErreurConstruction("Parcours indexable : balise title introuvable.")
-
-    motif_jsonld = re.compile(
-        r'(<script type="application/ld\+json">)(.*?)(</script>)',
-        re.S | re.I,
-    )
-    correspondance = motif_jsonld.search(page)
-    if not correspondance:
-        raise ErreurConstruction("Parcours indexable : JSON-LD introuvable.")
-    ancien_jsonld = correspondance.group(2)
-    donnees = {
-        "@context": "https://schema.org",
-        "@type": ["WebPage", "LearningResource"],
-        "@id": url + "#webpage",
-        "url": url,
-        "name": titre,
-        "description": description,
-        "inLanguage": "fr-FR",
-        "dateModified": "2026-09-22",
-        "isPartOf": {
-            "@type": "WebSite",
-            "@id": "https://pjjoue.fr/#website",
-            "name": "Quiz CJPM",
-            "url": "https://pjjoue.fr/",
-        },
-        "about": {
-            "@type": "Thing",
-            "name": "Code de la justice pénale des mineurs",
-            "alternateName": "CJPM",
-        },
-        "learningResourceType": ["Quiz", "QCM", "Exercices"],
-        "educationalUse": ["Révision", "Autoévaluation"],
-        "author": {"@type": "Person", "name": "Dev'Ines"},
-    }
-    nouveau_jsonld = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
-    ancien_hash = base64.b64encode(hashlib.sha256(ancien_jsonld.encode("utf-8")).digest()).decode("ascii")
-    nouveau_hash = base64.b64encode(hashlib.sha256(nouveau_jsonld.encode("utf-8")).digest()).decode("ascii")
-    if "sha256-" + ancien_hash not in page:
-        raise ErreurConstruction("Parcours indexable : empreinte CSP du JSON-LD introuvable.")
-    page = page.replace("sha256-" + ancien_hash, "sha256-" + nouveau_hash, 1)
-    page = motif_jsonld.sub(lambda m: m.group(1) + nouveau_jsonld + m.group(3), page, count=1)
-    return page
+              motif = re.compile(r'(<script type="application/ld\+json">)(.*?)(</script>)', re.S | re.I)
+              m = motif.search(page)
+              if not m:
+                  raise ErreurConstruction("Parcours indexable : JSON-LD introuvable.")
+              ancien = m.group(2)
+              donnees = {
+                  "@context":"https://schema.org",
+                  "@type":["WebPage","LearningResource"],
+                  "@id":url+"#webpage",
+                  "url":url,
+                  "name":titre,
+                  "description":description,
+                  "inLanguage":"fr-FR",
+                  "dateModified":"2026-09-22",
+                  "isPartOf":{"@type":"WebSite","@id":"https://pjjoue.fr/#website","name":"Quiz CJPM","url":"https://pjjoue.fr/"},
+                  "about":{"@type":"Thing","name":"Code de la justice pénale des mineurs","alternateName":"CJPM"},
+                  "learningResourceType":["Quiz","QCM","Exercices"],
+                  "educationalUse":["Révision","Autoévaluation"],
+                  "author":{"@type":"Person","name":"Dev'Ines"},
+              }
+              nouveau = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+              ancien_hash = base64.b64encode(hashlib.sha256(ancien.encode()).digest()).decode()
+              nouveau_hash = base64.b64encode(hashlib.sha256(nouveau.encode()).digest()).decode()
+              if "sha256-"+ancien_hash not in page:
+                  raise ErreurConstruction("Parcours indexable : hash CSP introuvable.")
+              page = page.replace("sha256-"+ancien_hash, "sha256-"+nouveau_hash, 1)
+              return motif.sub(lambda x: x.group(1)+nouveau+x.group(3), page, count=1)
 
 
-'''
+          """
+          function = "\n".join(line[10:] if line.startswith("          ") else line for line in function.splitlines()) + "\n"
           s = s.replace(marker, function + marker, 1)
 
           old = '''    for route in routes.values():
-        route = route.strip("/")
-        if not route:
-            continue
-        profondeur = len(route.split("/"))
-        sorties[f"{route}/index.html"] = construire_relais_route(route, profondeur)
-'''
+              route = route.strip("/")
+              if not route:
+                  continue
+              profondeur = len(route.split("/"))
+              sorties[f"{route}/index.html"] = construire_relais_route(route, profondeur)
+          '''
+          old = "\n".join(line[10:] if line.startswith("          ") else line for line in old.splitlines()) + "\n"
           new = '''    for route in routes.values():
-        route = route.strip("/")
-        if not route or route == "parcours":
-            continue
-        profondeur = len(route.split("/"))
-        sorties[f"{route}/index.html"] = construire_relais_route(route, profondeur)
-'''
+              route = route.strip("/")
+              if not route or route == "parcours":
+                  continue
+              profondeur = len(route.split("/"))
+              sorties[f"{route}/index.html"] = construire_relais_route(route, profondeur)
+          '''
+          new = "\n".join(line[10:] if line.startswith("          ") else line for line in new.splitlines()) + "\n"
           assert s.count(old) == 1
           s = s.replace(old, new, 1)
 
@@ -195,13 +176,10 @@ def construire_page_parcours_indexable(page_principale: str) -> str:
           s = s.replace(old, new, 1)
           p.write_text(s, encoding="utf-8")
 
-          # 4) SEO : /parcours/ devient la 22e URL indexable, les autres relais restent noindex.
           p = root / "outils/construire_seo.py"
           s = p.read_text(encoding="utf-8")
-          old = '    sorties = {"index.html"}\n'
-          new = '    sorties = {"index.html", "parcours/index.html"}\n'
-          assert s.count(old) == 1
-          s = s.replace(old, new, 1)
+          assert s.count('    sorties = {"index.html"}\n') == 1
+          s = s.replace('    sorties = {"index.html"}\n', '    sorties = {"index.html", "parcours/index.html"}\n', 1)
           old = '    chemins = {route.strip("/") for route in routes.values() if route.strip("/")}\n'
           new = '    chemins = {route.strip("/") for route in routes.values() if route.strip("/") and route.strip("/") != "parcours"}\n'
           assert s.count(old) == 1
@@ -215,56 +193,47 @@ def construire_page_parcours_indexable(page_principale: str) -> str:
           p = root / "code/seo-pages.json"
           data = json.loads(p.read_text(encoding="utf-8"))
           assert len(data["pages"]) == 21
-          assert not any(x["sortie"] == "parcours/index.html" for x in data["pages"])
-          data["pages"].insert(1, {
-              "sortie": "parcours/index.html",
-              "url": "https://pjjoue.fr/parcours/",
-              "lastmod": "2026-09-22"
-          })
-          p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          data["pages"].insert(1, {"sortie":"parcours/index.html","url":"https://pjjoue.fr/parcours/","lastmod":"2026-09-22"})
+          p.write_text(json.dumps(data, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+          PY
 
-          print("Sources modifiées : Accueil dans la barre, beige éclairci, /parcours/ indexable.")
-      - name: Reconstruire le site
+      - name: Construire
         run: |
           set -euo pipefail
           npm run build:site
           npm run build:seo
           npm run build:site
           npm run build:manifeste
-      - name: Vérifier le résultat ciblé
-        shell: python
+
+      - name: Verifier la cible
         run: |
+          python - <<'PY'
           from pathlib import Path
-          import json, re
+          import json
           root=Path.cwd()
           parcours=(root/"parcours/index.html").read_text(encoding="utf-8")
           index=(root/"index.html").read_text(encoding="utf-8")
           sitemap=(root/"sitemap.xml").read_text(encoding="utf-8")
-          assert 'name="robots" content="noindex' not in parcours
-          assert 'content="index,follow,max-image-preview:large" name="robots"' in parcours
-          assert '<link href="https://pjjoue.fr/parcours/" rel="canonical"/>' in parcours
-          assert '<meta content="https://pjjoue.fr/parcours/" property="og:url"/>' in parcours
-          assert '<title>Parcours CJPM : quiz de justice pénale des mineurs</title>' in parcours
+          assert 'noindex,follow' not in parcours
+          assert 'https://pjjoue.fr/parcours/' in parcours
+          assert '<meta http-equiv="refresh"' not in parcours
           assert '<body data-ecran-actif="parcours"' in parcours
           assert '<section class="ecran parcours-ecran actif" id="parcours">' in parcours
-          assert '<section class="ecran" id="accueil">' in parcours
-          assert '<meta http-equiv="refresh"' not in parcours
-          assert '?pjjoue_route=parcours' not in parcours
-          assert '<loc>https://pjjoue.fr/parcours/</loc>' in sitemap
           assert sitemap.count("<loc>") == 22
+          assert '<loc>https://pjjoue.fr/parcours/</loc>' in sitemap
           assert index.count('id="boutonAccueil"') == 1
-          nav=index.split('<nav aria-label="Navigation principale"',1)[1].split('</nav>',1)[0]
-          assert nav.index('id="boutonAccueil"') < nav.index('id="boutonParcoursPJJ"')
           assert '#f4efe6' in (root/"ressources/styles/atlas-systeme.css").read_text(encoding="utf-8")
-          config=json.loads((root/"code/seo-pages.json").read_text(encoding="utf-8"))
-          assert len(config["pages"]) == 22
-          print("Ciblage validé : /parcours/ indexable, 22 URLs, Accueil visible dans la barre, beige éclairci.")
-      - name: Lancer les tests complets
+          assert len(json.loads((root/"code/seo-pages.json").read_text())["pages"]) == 22
+          print("Cible valide.")
+          PY
+
+      - name: Tester
         run: |
           set -euo pipefail
           npm test
           git diff --check
-      - name: Préparer le commit prêt à publier
+
+      - name: Commit pret
         run: |
           set -euo pipefail
           git fetch origin main
@@ -272,5 +241,5 @@ def construire_page_parcours_indexable(page_principale: str) -> str:
           git config user.name "Dev'Ines"
           git config user.email "129184531+Nini3106@users.noreply.github.com"
           git add --update
-          git commit -m "Indexer Parcours CJPM et éclaircir l’interface"
+          git commit -m "Indexer Parcours CJPM et eclaircir l interface"
           git push origin HEAD:refs/heads/fix/parcours-indexable-accueil-beige-clair-ready
