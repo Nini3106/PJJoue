@@ -32,17 +32,23 @@ new = """ #qc-atlas .q-header {
    height:32px;
    font-size:calc(22px * var(--echelle-texte,1));
  }
- #qc-atlas .q-tagline {
+"""
+
+assert s.count(old) == 1
+s = s.replace(old, new, 1)
+
+old_tagline = " #qc-atlas .q-tagline { display:none; }\n"
+new_tagline = """ #qc-atlas .q-tagline {
    display:block;
    max-width:92px;
+   min-width:0;
    white-space:normal;
    font-size:calc(9px * var(--echelle-texte,1));
    line-height:1.2;
  }
 """
-
-assert s.count(old) == 1
-s = s.replace(old, new, 1)
+assert s.count(old_tagline) == 1
+s = s.replace(old_tagline, new_tagline, 1)
 
 old = """ #qc-atlas .bouton-menu-mobile,
  #qc-atlas .atlas-static-menu > summary {
