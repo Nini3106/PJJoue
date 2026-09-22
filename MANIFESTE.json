@@ -47,6 +47,14 @@
     }
   },
   "fichiers": {
+    ".github/workflows/captures-visuelles.yml": {
+      "tailleOctets": 966,
+      "sha256": "8dcf221cae9ddb120b84c4f2233234128474f4742ad1d6de4b45d62fda363539"
+    },
+    ".github/workflows/verification.yml": {
+      "tailleOctets": 1255,
+      "sha256": "5cdbf3e1e552513f65b92b79d9c1f1694bf3d81dad9f37a11a699c6a5b050080"
+    },
     ".gitignore": {
       "tailleOctets": 110,
       "sha256": "5f8a64e58dfd791e3030a63ddea70a92a713d6e6ead3c85de43a527a5a311c53"
