@@ -292,6 +292,17 @@ tests = remplacer_unique(
 )
 auditeur.write_text(tests, encoding="utf-8")
 
+# La recette navigateur Atlas doit attendre la nouvelle couleur de fond demandée.
+atlas = root / "tests/verifier_atlas.py"
+tests = atlas.read_text(encoding="utf-8")
+tests = remplacer_unique(
+    tests,
+    "    assert page.evaluate(\"getComputedStyle(document.querySelector('#qc-atlas')).backgroundColor\")=='rgb(234, 227, 213)'\n",
+    "    assert page.evaluate(\"getComputedStyle(document.querySelector('#qc-atlas')).backgroundColor\")=='rgb(244, 240, 232)'\n",
+    "recette Atlas : beige éclairci",
+)
+atlas.write_text(tests, encoding="utf-8")
+
 rapport = {
     "pagesAutonomesAvecAccueil": len(pages_modifiees),
     "nouveauFond": {"papier": "#f4f0e8", "profond": "#ebe4d8"},
