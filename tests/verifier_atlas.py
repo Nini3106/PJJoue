@@ -288,6 +288,10 @@ def infobulle(page):
         joker=page.locator('#'+identifiant)
         if page.viewport_size['width']<600: joker.focus()
         else: joker.hover()
+        # L'ouverture du dialog programme son autofocus au prochain frame.
+        # On laisse ce frame se terminer avant de vérifier l'aide afin d'éviter
+        # une course entre l'autofocus natif de la modale et le focus du test.
+        page.wait_for_timeout(80)
         bulle=page.locator('[role="tooltip"]')
         assert bulle.is_visible()
         assert bulle.evaluate('''e => {

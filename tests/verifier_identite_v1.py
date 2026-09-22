@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Vérifie que la livraison se présente uniquement comme PJJoue V1 créée en août 2026."""
+"""Vérifie l’identité publique Quiz CJPM et les invariants historiques de la V1."""
 from pathlib import Path
 import json
 import re
@@ -66,7 +66,17 @@ def principal() -> int:
 
     index = (RACINE / 'index.html').read_text(encoding='utf-8')
     if 'Version 1 · Août 2026' not in index:
-        erreurs.append('Le pied de page public ne présente pas l’identité originale « Version 1 · Août 2026 ».')
+        erreurs.append('Le pied de page public ne présente pas l’identité originale « Version 1 · Août 2026 ».') 
+    if 'Quiz CJPM' not in index:
+        erreurs.append('L’identité publique « Quiz CJPM » doit être présente dans la page principale.')
+    if 'id="surtitreParcours">Procédure ordinaire · parcours 1 sur 6' not in index:
+        erreurs.append('Le contenu de secours doit présenter le parcours CJPM 01 comme premier parcours.')
+    if 'id="titreParcours">De l’enquête à la sanction</h1>' not in index:
+        erreurs.append('Le titre de secours du parcours 01 doit être « De l’enquête à la sanction ».')
+    if 'id="titreParcoursQuestion">De l’enquête à la sanction</strong>' not in index:
+        erreurs.append('Le contexte de secours d’une question doit pointer vers le parcours CJPM 01.')
+    if 'id="titreParcours">Découvrir la PJJ</h1>' in index or 'id="titreParcoursQuestion">Découvrir la PJJ</strong>' in index:
+        erreurs.append('L’option PJJ ne doit jamais apparaître comme parcours 01 dans le HTML de secours.')
 
     illustrations_parcours_1 = list((RACINE / 'ressources/icones-parcours').glob('*.svg'))
     if len(illustrations_parcours_1) != 11:
