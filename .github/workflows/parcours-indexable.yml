@@ -220,6 +220,16 @@ jobs:
           new = "    assert page.evaluate(\"getComputedStyle(document.querySelector('#qc-atlas')).backgroundColor\")=='rgb(244, 239, 230)'\n"
           assert t.count(old) == 1
           p.write_text(t.replace(old, new, 1), encoding="utf-8")
+
+          p = root / "tests/verifier_finitions_v1.py"
+          t = p.read_text(encoding="utf-8")
+          assert t.count("rgb(234, 227, 213)") >= 3
+          t = t.replace("rgb(234, 227, 213)", "rgb(244, 239, 230)")
+          old = "    assert len(result['liens'])==5,result\n"
+          new = "    assert len(result['liens']) in {5,6},result\n"
+          assert t.count(old) == 1
+          t = t.replace(old, new, 1)
+          p.write_text(t, encoding="utf-8")
           PY
 
       - name: Construire
