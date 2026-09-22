@@ -52,7 +52,7 @@ p = root / "code/01 - Éléments communs/atlas-systeme.css"
 s = p.read_text(encoding="utf-8")
 anchor = '#qc-atlas .q-more{position:relative}\n'
 assert s.count(anchor) == 1
-s = s.replace(anchor, anchor + '#qc-atlas :is(.menu-mobile-seulement,.menu-mobile-separateur){display:none!important}\n', 1)
+s = s.replace(anchor, anchor + '#qc-atlas :is(.menu-mobile-seulement,.menu-mobile-separateur){display:none}\n', 1)
 
 marker = '@media (max-width:640px) {\n #qc-atlas :is(.page-entete,.presentation-page,.parcours-detail-entete) h1'
 assert s.count(marker) == 1
@@ -149,9 +149,9 @@ mobile_css = '''@media (max-width:640px) {
  #qc-atlas :is(#menuPrincipal,.atlas-static-menu .q-pop) :is(button,a)[aria-current="page"] {
    box-shadow:inset 3px 0 var(--q-blue);
  }
- #qc-atlas .menu-mobile-seulement { display:flex!important; }
+ #qc-atlas .menu-mobile-seulement { display:flex; }
  #qc-atlas .menu-mobile-separateur {
-   display:block!important;
+   display:block;
    height:1px;
    margin:7px 8px;
    background:color-mix(in srgb,var(--q-menu-fond) 16%,transparent);
