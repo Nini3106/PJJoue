@@ -129,23 +129,34 @@ def bas_de_page_et_evaluation(page,captures=False):
       const trophee=carte.querySelector('.icone-evaluation').getBoundingClientRect();
       const texte=carte.querySelector('.evaluation-texte').getBoundingClientRect();
       const sceau=carte.querySelector('.evaluation-sceau').getBoundingClientRect();
+      const etat=carte.querySelector('.evaluation-etat').getBoundingClientRect();
       return {bandeau:{t:bandeau.top,b:bandeau.bottom,l:bandeau.left,r:bandeau.right},
         corps:{t:corps.top,b:corps.bottom,l:corps.left,r:corps.right},
-        numero:{l:numero.left,r:numero.right},trophee:{l:trophee.left,r:trophee.right},
+        numero:{l:numero.left,r:numero.right},trophee:{l:trophee.left,r:trophee.right,t:trophee.top,b:trophee.bottom},
         texte:{l:texte.left,r:texte.right},sceau:{l:sceau.left,r:sceau.right},
+        etat:{l:etat.left,r:etat.right,t:etat.top,b:etat.bottom},
+        libelleEtat:carte.querySelector('.evaluation-etat').textContent.trim(),
         progression:carte.querySelector('.evaluation-progression').textContent.trim(),
         tropheeLargeur:trophee.width};
     }""")
     assert evaluation['bandeau']['b'] <= evaluation['corps']['t']+1,evaluation
     assert evaluation['numero']['r'] <= evaluation['texte']['l']+1,evaluation
     assert evaluation['texte']['r'] <= evaluation['trophee']['l']+1,evaluation
+    if page.viewport_size['width'] > 640:
+        assert evaluation['trophee']['r'] <= evaluation['etat']['l']+1,evaluation
+    else:
+        assert evaluation['etat']['t'] >= evaluation['trophee']['b']-1,evaluation
+    assert evaluation['libelleEtat']=='Parcours maîtrisé',evaluation
     assert evaluation['sceau']['r'] <= evaluation['bandeau']['r']+1,evaluation
     assert evaluation['progression']=='50/50 questions d’évaluation',evaluation
     assert evaluation['tropheeLargeur']>=36,evaluation
     progression_en_cours=page.evaluate("""() => {
       const theme=THEMES[0].id;
       const questions=QUESTIONS.filter(q=>q.theme===theme && q.estEvaluationFinale===true);
-      obtenirEvaluationFinaleTheme(theme).nombreTentatives=0;
+      const evaluationEtat=obtenirEvaluationFinaleTheme(theme);
+      evaluationEtat.reussie=false;
+      evaluationEtat.nombreTentatives=0;
+      evaluationEtat.meilleurScore=0;
       const reponses=questions.slice(0,6).map(q=>[q.id,{statut:'correcte'}]);
       const passages=[questions[6].id];
       ecrireInstantaneSessionEnCours({version:2,questions:questions.map(q=>q.id),mode:'evaluation-finale',theme,reponsesSession:reponses,questionsPassees:passages});
@@ -154,6 +165,20 @@ def bas_de_page_et_evaluation(page,captures=False):
       return document.querySelector('.evaluation-progression').textContent.trim();
     }""")
     assert progression_en_cours=='7/50 questions d’évaluation',progression_en_cours
+    assert page.locator('.evaluation-etat').inner_text().strip()=='Évaluation en cours'
+    page.evaluate("""() => {
+      effacerSessionEnCours();
+      const theme=THEMES[0].id;
+      const e=obtenirEvaluationFinaleTheme(theme);e.reussie=false;e.nombreTentatives=0;e.meilleurScore=0;
+      ouvrirParcours(theme);
+    }""")
+    assert page.locator('.evaluation-etat').inner_text().strip()=='Évaluation à passer'
+    page.evaluate("""() => {
+      sauvegarde=creerSauvegardeInitiale();
+      effacerSessionEnCours();
+      ouvrirParcours(THEMES[0].id);
+    }""")
+    assert page.locator('.evaluation-etat').inner_text().strip()=='Évaluation verrouillée'
     verifier_geometrie(page)
     capture(page,'bas-de-page-evaluation',captures)
     return {'footer_pleine_largeur':True,'texte_footer_etendu':True,'evaluation_alignee':True}

@@ -465,6 +465,24 @@ function afficherEtapes() {
         : (evaluationEnregistree.nombreTentatives > 0
             ? `Meilleur score ${evaluationEnregistree.meilleurScore}%`
             : (evaluationDeverrouillee ? 'Prête à commencer' : 'Termine les 11 étapes pour l’ouvrir'));
+    const etatEvaluation = evaluation.querySelector('.evaluation-etat');
+    if (etatEvaluation) {
+        const evaluationCommencee = progressionEvaluation.traitees > 0 || evaluationEnregistree.nombreTentatives > 0;
+        etatEvaluation.textContent = evaluationReussie
+            ? 'Parcours maîtrisé'
+            : !evaluationDeverrouillee
+                ? 'Évaluation verrouillée'
+                : evaluationCommencee
+                    ? 'Évaluation en cours'
+                    : 'Évaluation à passer';
+        etatEvaluation.dataset.etat = evaluationReussie
+            ? 'maitrise'
+            : !evaluationDeverrouillee
+                ? 'verrouillee'
+                : evaluationCommencee
+                    ? 'en-cours'
+                    : 'a-passer';
+    }
     evaluation.onclick = evaluationDeverrouillee ? () => {
         envoyerEvenementPJJ('etape_selectionnee', {
             pjjoue_parcours: programme.titre,
