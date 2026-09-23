@@ -200,7 +200,7 @@ def verifier_jeu(navigateur, page_html: str) -> int:
     assert cartes.count() == 11, "Le parcours 1 n’affiche pas 11 étapes d’apprentissage."
     assert identifiants == [str(i) for i in range(1, 12)], identifiants
     texte_final = page.locator('.chemin-evaluation-carte').inner_text().upper()
-    assert "ÉTAPE 12" in texte_final, texte_final
+    assert "ÉVALUATION FINALE" in texte_final and "JALON FINAL" in texte_final, texte_final
     assert not page.locator('.chemin-evaluation-carte').evaluate("element => element.classList.contains('deverrouillee')"), "L’évaluation est déverrouillée trop tôt."
 
     # Le sélecteur doit exposer six parcours séparés, chacun avec 11 étapes.
