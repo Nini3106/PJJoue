@@ -5,7 +5,7 @@
   "description": "Quiz CJPM V1 — parcours, couleurs contextuelles et lecture confortable ; aperçu local à valider",
   "scripts": {
     "dev": "node outils/serveur-previsualisation.js",
-    "test": "npm run controle:syntaxe && npm run controle:css && npm run test:logique && npm run test:socle-atlas && npm run controle:accessibilite && npm run controle:navigation-libre && npm run test:interface && npm run test:atlas && npm run test:atlas-v1-couleurs && npm run test:finitions-v1",
+    "test": "npm run controle:syntaxe && npm run controle:css && npm run test:logique && npm run test:socle-atlas && npm run controle:accessibilite && npm run controle:navigation-libre && npm run test:pause-ressources && npm run test:interface && npm run test:atlas && npm run test:atlas-v1-couleurs && npm run test:finitions-v1",
     "controle:javascript": "eslint ressources/*.js",
     "controle:css": "npm run controle:css:doublons && npm run controle:css:structure",
     "controle:css:doublons": "node outils/controler_css.js doublons",
@@ -43,7 +43,8 @@
     "test:unitaire:historique": "python -m unittest discover -s tests -p test_*.py",
     "test:visuel:historique": "python tests/verifier_regression_visuelle.py",
     "test:atlas-v1-couleurs": "python tests/verifier_atlas_v1_couleurs.py",
-    "test:finitions-v1": "python tests/verifier_finitions_v1.py"
+    "test:finitions-v1": "python tests/verifier_finitions_v1.py",
+    "test:pause-ressources": "python tests/test_pause_reprise_ressources.py"
   },
   "keywords": [
     "PJJ",
