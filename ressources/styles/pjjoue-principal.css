@@ -119,11 +119,17 @@
 #qc-atlas .chemin-progression { position:absolute; bottom:0; left:0; right:0; height:3px; }
 #qc-atlas .chemin-progression i { display:block; height:100%; background:var(--couleur-etape,var(--parcours-accent)); }
 #qc-atlas .atlas-etape-repere { display:flex;flex-direction:column;align-items:center;gap:8px;align-self:center; }
-#qc-atlas .evaluation-carte { width:100%; border:0; border-radius:0; padding:20px 23px; justify-content:flex-start; gap:10px; flex-wrap:wrap; text-align:left; --etoile-accent:var(--couleur-etape,var(--parcours-accent)); border-left:4px solid var(--parcours-accent); background:color-mix(in srgb,var(--parcours-accent) 12%,var(--q-panel)); }
-#qc-atlas .evaluation-carte:disabled { opacity:.65; }
+#qc-atlas .evaluation-carte { width:100%; border:2px solid var(--q-yellow); border-left-width:5px; border-radius:0; padding:20px 23px; justify-content:flex-start; gap:10px; flex-wrap:wrap; text-align:left; --etoile-accent:var(--q-yellow); background:color-mix(in srgb,var(--q-yellow) 16%,var(--q-panel)); }
+#qc-atlas .evaluation-carte.deverrouillee:hover { background:color-mix(in srgb,var(--q-yellow) 23%,var(--q-panel)); }
+#qc-atlas .evaluation-carte.complete { box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--q-yellow) 45%,transparent); }
+#qc-atlas .evaluation-carte:disabled { opacity:.68; }
 #qc-atlas .evaluation-etape-numero { font-size:var(--q-text-small); letter-spacing:.04em; }
 #qc-atlas .evaluation-titre { font-size:var(--q-text-control); }
 #qc-atlas .evaluation-statut { display:block; flex-basis:100%; font-size:var(--q-text-secondary); font-weight:400; }
+#qc-atlas .evaluation-carte .etoile-filante-evaluation { color:var(--q-yellow); }
+#qc-atlas .evaluation-carte .etoile-filante-evaluation svg { width:58px; height:34px; }
+#qc-atlas .evaluation-carte .etoile-filante-astre-secondaire { stroke-width:1.5; }
+#qc-atlas .icone-evaluation { color:var(--q-on-yellow); }
 #qc-atlas .icone-evaluation svg { fill:none; stroke:currentColor; width:25px; height:25px; }
 #qc-atlas :is(.icone-evaluation,.sigles-evaluation-icone,.mesures-evaluation-icone) svg path:first-child { fill:var(--q-yellow); stroke:var(--q-on-yellow); }
 #qc-atlas .parcours-detail-actions { margin:0 0 14px; }
