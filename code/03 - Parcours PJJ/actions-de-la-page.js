@@ -101,6 +101,11 @@ function obtenirProgressionEvaluationFinaleAffichee(identifiantTheme) {
         question.theme === identifiantTheme && question.estEvaluationFinale === true
     );
     const total = questionsEvaluation.length || 50;
+    const evaluation = obtenirEvaluationFinaleTheme(identifiantTheme);
+    // Une réussite définitive prime sur tout ancien instantané technique
+    // éventuellement resté en stockage : une évaluation réussie vaut 50/50.
+    if (evaluation?.reussie === true)
+        return { traitees: total, total };
     const identifiants = new Set(questionsEvaluation.map(question => Number(question.id)));
     const compter = (reponses, passees) => {
         const traitees = new Set();
@@ -118,8 +123,7 @@ function obtenirProgressionEvaluationFinaleAffichee(identifiantTheme) {
     if (instantane?.mode === 'evaluation-finale' && instantane.theme === identifiantTheme) {
         return { traitees: compter(instantane.reponsesSession, instantane.questionsPassees), total };
     }
-    const evaluation = obtenirEvaluationFinaleTheme(identifiantTheme);
-    return { traitees: (evaluation?.reussie === true || (evaluation?.nombreTentatives || 0) > 0) ? total : 0, total };
+    return { traitees: (evaluation?.nombreTentatives || 0) > 0 ? total : 0, total };
 }
 function calculerProgressionParcours(identifiantTheme) {
     const programme = PROGRAMMES[identifiantTheme];
