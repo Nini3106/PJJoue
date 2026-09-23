@@ -12,7 +12,7 @@ CODE = RACINE / "code"
 class ProgressionEtoileFilanteEtSupportsTests(unittest.TestCase):
     def test_etoile_filante_represente_bien_une_etoile_avec_trainees(self) -> None:
         actions = (CODE / "03 - Parcours PJJ/actions-de-la-page.js").read_text(encoding="utf-8")
-        css = (CODE / "01 - Éléments communs/style-des-six-parcours.css").read_text(encoding="utf-8")
+        css = (CODE / "01 - Éléments communs/style-general-pjjoue.css").read_text(encoding="utf-8")
         self.assertIn('class="etoile-filante-trainee etoile-filante-trainee-haute"', actions)
         self.assertIn('class="etoile-filante-trainee etoile-filante-trainee-basse"', actions)
         self.assertIn('class="etoile-filante-astre"', actions)
@@ -24,8 +24,21 @@ class ProgressionEtoileFilanteEtSupportsTests(unittest.TestCase):
         self.assertIn("const jalonsMaitrises = maitrisees + (evaluationReussie ? 1 : 0);", actions)
         self.assertIn("const totalJalons = total + 1;", actions)
         self.assertIn("creerEtoileFilanteProgression(progression.jalonsMaitrises)", actions)
-        self.assertIn("evaluation.insertAdjacentHTML('afterbegin', creerEtoileFilanteProgression());", actions)
+        self.assertIn("evaluation.insertAdjacentHTML('afterbegin', creerEtoileFilanteEvaluation());", actions)
         self.assertRegex(actions, re.compile(r"etapeValideeEnAutonomie \? creerEtoileFilanteProgression\(\) : ''"))
+
+    def test_evaluation_a_un_code_visuel_jaune_et_trois_etoiles(self) -> None:
+        actions = (CODE / "03 - Parcours PJJ/actions-de-la-page.js").read_text(encoding="utf-8")
+        css = (CODE / "01 - Éléments communs/style-des-six-parcours.css").read_text(encoding="utf-8")
+        bloc = actions.split("function creerEtoileFilanteEvaluation()", 1)[1].split("function calculerProgressionParcours", 1)[0]
+        self.assertEqual(bloc.count('class="etoile-filante-astre'), 3)
+        self.assertIn("etoile-filante-astre-principale", bloc)
+        self.assertEqual(bloc.count("etoile-filante-astre-secondaire"), 2)
+        self.assertIn("border:2px solid var(--q-yellow)", css)
+        self.assertIn("--etoile-accent:var(--q-yellow)", css)
+        self.assertIn("background:color-mix(in srgb,var(--q-yellow) 16%,var(--q-panel))", css)
+        self.assertIn("fill:var(--q-yellow)", css)
+        self.assertIn("stroke:var(--q-on-yellow)", css)
 
     def test_parcours_n_est_termine_qu_apres_evaluation(self) -> None:
         actions = (CODE / "03 - Parcours PJJ/actions-de-la-page.js").read_text(encoding="utf-8")
