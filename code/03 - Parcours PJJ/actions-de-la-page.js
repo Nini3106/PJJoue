@@ -176,7 +176,9 @@ function actualiserSelecteurParcours() {
         bouton.onclick = () => {
             envoyerEvenementPJJ('parcours_selectionne', {
                 pjjoue_parcours: PROGRAMMES[theme.id]?.titre,
+                pjjoue_nom_parcours: PROGRAMMES[theme.id]?.titre,
                 pjjoue_parcours_selectionne: PROGRAMMES[theme.id]?.titre,
+                pjjoue_identifiant_parcours: theme.id,
                 pjjoue_numero_parcours: Number(identite.numero)
             });
             ouvrirParcours(theme.id);
@@ -229,8 +231,13 @@ function actualiserEnteteParcours(programme) {
         boutonAction.onclick = () => {
             envoyerEvenementPJJ('etape_selectionnee', {
                 pjjoue_parcours: programme.titre,
+                pjjoue_nom_parcours: programme.titre,
                 pjjoue_parcours_selectionne: programme.titre,
-                pjjoue_numero_etape: prochaineEtape.id,
+                pjjoue_identifiant_parcours: programme.id,
+                pjjoue_numero_parcours: obtenirOrdreTheme(programme.id) + 1,
+                pjjoue_numero_etape: obtenirInformationsEtapeAnalytics({ theme: programme.id, etape: prochaineEtape.id }).numero,
+                pjjoue_numero_etape_visible: prochaineEtape.id,
+                pjjoue_identifiant_etape: obtenirInformationsEtapeAnalytics({ theme: programme.id, etape: prochaineEtape.id }).identifiantPermanent,
                 pjjoue_nom_etape: prochaineEtape.titre
             });
             lancerEtape(programme.id, prochaineEtape.id);
@@ -241,8 +248,13 @@ function actualiserEnteteParcours(programme) {
         boutonAction.onclick = () => {
             envoyerEvenementPJJ('etape_selectionnee', {
                 pjjoue_parcours: programme.titre,
+                pjjoue_nom_parcours: programme.titre,
                 pjjoue_parcours_selectionne: programme.titre,
+                pjjoue_identifiant_parcours: programme.id,
+                pjjoue_numero_parcours: obtenirOrdreTheme(programme.id) + 1,
                 pjjoue_numero_etape: 12,
+                pjjoue_numero_etape_visible: 12,
+                pjjoue_identifiant_etape: 12,
                 pjjoue_nom_etape: 'Évaluation finale'
             });
             lancerEvaluationFinale(programme.id);
@@ -407,8 +419,13 @@ function afficherEtapes() {
                 return;
             envoyerEvenementPJJ('etape_selectionnee', {
                 pjjoue_parcours: programme.titre,
+                pjjoue_nom_parcours: programme.titre,
                 pjjoue_parcours_selectionne: programme.titre,
-                pjjoue_numero_etape: etapeProgramme.id,
+                pjjoue_identifiant_parcours: programme.id,
+                pjjoue_numero_parcours: obtenirOrdreTheme(programme.id) + 1,
+                pjjoue_numero_etape: obtenirInformationsEtapeAnalytics({ theme: programme.id, etape: etapeProgramme.id }).numero,
+                pjjoue_numero_etape_visible: etapeProgramme.id,
+                pjjoue_identifiant_etape: obtenirInformationsEtapeAnalytics({ theme: programme.id, etape: etapeProgramme.id }).identifiantPermanent,
                 pjjoue_nom_etape: etapeProgramme.titre
             });
             lancerEtape(etat.theme, etapeProgramme.id);
@@ -418,8 +435,13 @@ function afficherEtapes() {
                 evenement.preventDefault();
                 envoyerEvenementPJJ('etape_selectionnee', {
                     pjjoue_parcours: programme.titre,
+                    pjjoue_nom_parcours: programme.titre,
                     pjjoue_parcours_selectionne: programme.titre,
-                    pjjoue_numero_etape: etapeProgramme.id,
+                    pjjoue_identifiant_parcours: programme.id,
+                    pjjoue_numero_parcours: obtenirOrdreTheme(programme.id) + 1,
+                    pjjoue_numero_etape: obtenirInformationsEtapeAnalytics({ theme: programme.id, etape: etapeProgramme.id }).numero,
+                    pjjoue_numero_etape_visible: etapeProgramme.id,
+                    pjjoue_identifiant_etape: obtenirInformationsEtapeAnalytics({ theme: programme.id, etape: etapeProgramme.id }).identifiantPermanent,
                     pjjoue_nom_etape: etapeProgramme.titre
                 });
                 lancerEtape(etat.theme, etapeProgramme.id);
@@ -490,8 +512,13 @@ function afficherEtapes() {
     evaluation.onclick = evaluationDeverrouillee ? () => {
         envoyerEvenementPJJ('etape_selectionnee', {
             pjjoue_parcours: programme.titre,
+            pjjoue_nom_parcours: programme.titre,
             pjjoue_parcours_selectionne: programme.titre,
+            pjjoue_identifiant_parcours: programme.id,
+            pjjoue_numero_parcours: obtenirOrdreTheme(programme.id) + 1,
             pjjoue_numero_etape: 12,
+            pjjoue_numero_etape_visible: 12,
+            pjjoue_identifiant_etape: 12,
             pjjoue_nom_etape: 'Évaluation finale'
         });
         lancerEvaluationFinale(etat.theme);
