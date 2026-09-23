@@ -2423,12 +2423,42 @@ function creerEtoileFilanteProgression(nombreJalons = null) {
 }
 function creerEtoileFilanteEvaluation() {
     return `<span class="etoile-filante-progression etoile-filante-evaluation" aria-hidden="true">
-        <svg viewBox="0 0 76 46" focusable="false">
-            <path class="etoile-filante-trainee etoile-filante-trainee-haute" d="M4 28 C16 27 25 21 34 12"></path>
-            <path class="etoile-filante-trainee etoile-filante-trainee-basse" d="M8 40 C21 37 31 30 39 21"></path>
-            <path class="etoile-filante-astre" d="M50 4 L54.4 13.4 L64.7 14.6 L57.1 21.7 L59.2 31.7 L50 26.5 L40.8 31.7 L42.9 21.7 L35.3 14.6 L45.6 13.4 Z"></path>
+        <svg viewBox="0 0 112 58" focusable="false">
+            <path class="etoile-filante-trainee etoile-filante-trainee-haute" d="M4 34 C22 32 37 24 50 12"></path>
+            <path class="etoile-filante-trainee etoile-filante-trainee-basse" d="M10 48 C29 44 42 35 55 24"></path>
+            <path class="etoile-filante-astre etoile-filante-astre-principale" d="M70 5 L74.5 14.6 L85 15.8 L77.2 23.1 L79.4 33.4 L70 28 L60.6 33.4 L62.8 23.1 L55 15.8 L65.5 14.6 Z"></path>
+            <path class="etoile-filante-astre etoile-filante-astre-satellite" d="M94 7 L96 11.2 L100.6 11.8 L97.2 14.9 L98.1 19.4 L94 17.1 L89.9 19.4 L90.8 14.9 L87.4 11.8 L92 11.2 Z"></path>
+            <path class="etoile-filante-astre etoile-filante-astre-satellite" d="M103 27 L104.5 30.2 L108 30.7 L105.4 33.1 L106.1 36.5 L103 34.7 L99.9 36.5 L100.6 33.1 L98 30.7 L101.5 30.2 Z"></path>
+            <path class="etoile-filante-astre etoile-filante-astre-satellite" d="M89 39 L90.6 42.4 L94.3 42.9 L91.5 45.4 L92.3 49 L89 47.1 L85.7 49 L86.5 45.4 L83.7 42.9 L87.4 42.4 Z"></path>
+            <path class="etoile-filante-astre etoile-filante-astre-satellite" d="M55 2 L56.4 5 L59.7 5.4 L57.3 7.7 L57.9 10.9 L55 9.2 L52.1 10.9 L52.7 7.7 L50.3 5.4 L53.6 5 Z"></path>
+            <path class="etoile-filante-astre etoile-filante-astre-satellite" d="M47 29 L48.2 31.6 L51 32 L49 33.9 L49.5 36.7 L47 35.2 L44.5 36.7 L45 33.9 L43 32 L45.8 31.6 Z"></path>
         </svg>
     </span>`;
+}
+function obtenirProgressionEvaluationFinaleAffichee(identifiantTheme) {
+    const questionsEvaluation = QUESTIONS.filter(question =>
+        question.theme === identifiantTheme && question.estEvaluationFinale === true
+    );
+    const total = questionsEvaluation.length || 50;
+    const identifiants = new Set(questionsEvaluation.map(question => Number(question.id)));
+    const compter = (reponses, passees) => {
+        const traitees = new Set();
+        const entrees = reponses instanceof Map ? [...reponses.keys()]
+            : Array.isArray(reponses) ? reponses.map(entree => Array.isArray(entree) ? entree[0] : entree) : [];
+        entrees.forEach(id => { if (identifiants.has(Number(id))) traitees.add(Number(id)); });
+        const passages = passees instanceof Set ? [...passees] : Array.isArray(passees) ? passees : [];
+        passages.forEach(id => { if (identifiants.has(Number(id))) traitees.add(Number(id)); });
+        return Math.min(total, traitees.size);
+    };
+    if (etat.mode === 'evaluation-finale' && etat.theme === identifiantTheme && etat.questionsSession?.length) {
+        return { traitees: compter(etat.reponsesSession, etat.questionsPassees), total };
+    }
+    const instantane = typeof chargerSessionEnCours === 'function' ? chargerSessionEnCours() : null;
+    if (instantane?.mode === 'evaluation-finale' && instantane.theme === identifiantTheme) {
+        return { traitees: compter(instantane.reponsesSession, instantane.questionsPassees), total };
+    }
+    const evaluation = obtenirEvaluationFinaleTheme(identifiantTheme);
+    return { traitees: (evaluation?.reussie === true || (evaluation?.nombreTentatives || 0) > 0) ? total : 0, total };
 }
 function calculerProgressionParcours(identifiantTheme) {
     const programme = PROGRAMMES[identifiantTheme];
@@ -2762,11 +2792,18 @@ function afficherEtapes() {
     }
     const iconeEvaluation = evaluation.querySelector('.icone-evaluation');
     if (iconeEvaluation) iconeEvaluation.innerHTML = creerPictogrammeAuTrait('trophee', 'pictogramme-evaluation');
-    evaluation.querySelector('.evaluation-etape-numero').textContent = 'JALON FINAL';
-    evaluation.querySelector('.evaluation-titre').textContent = `Parcours ${obtenirOrdreTheme(etat.theme) + 1}`;
+    evaluation.querySelector('.evaluation-etape-numero').textContent = '12';
+    evaluation.querySelector('.evaluation-titre').textContent = 'Évaluation finale';
+    const progressionEvaluation = obtenirProgressionEvaluationFinaleAffichee(etat.theme);
+    const progressionEvaluationElement = evaluation.querySelector('.evaluation-progression');
+    if (progressionEvaluationElement)
+        progressionEvaluationElement.textContent = `${progressionEvaluation.traitees}/${progressionEvaluation.total} questions d’évaluation`;
+    const evaluationEnregistree = obtenirEvaluationFinaleTheme(etat.theme);
     evaluation.querySelector('.evaluation-statut').textContent = evaluationReussie
-        ? `Réussie · meilleur score ${obtenirEvaluationFinaleTheme(etat.theme).meilleurScore}%`
-        : (evaluationDeverrouillee ? '50 questions · évaluation complète' : 'Termine les 11 étapes pour l’ouvrir');
+        ? `Réussie · meilleur score ${evaluationEnregistree.meilleurScore}%`
+        : (evaluationEnregistree.nombreTentatives > 0
+            ? `Meilleur score ${evaluationEnregistree.meilleurScore}%`
+            : (evaluationDeverrouillee ? 'Prête à commencer' : 'Termine les 11 étapes pour l’ouvrir'));
     evaluation.onclick = evaluationDeverrouillee ? () => {
         envoyerEvenementPJJ('etape_selectionnee', {
             pjjoue_parcours: programme.titre,

@@ -27,19 +27,19 @@ class ProgressionEtoileFilanteEtSupportsTests(unittest.TestCase):
         self.assertIn("sceauEvaluation.innerHTML = evaluationReussie ? creerEtoileFilanteEvaluation() : '';", actions)
         self.assertRegex(actions, re.compile(r"etapeValideeEnAutonomie \? creerEtoileFilanteProgression\(\) : ''"))
 
-    def test_evaluation_est_un_jalon_final_distinct_des_etapes(self) -> None:
+    def test_evaluation_reprend_le_langage_des_etapes_avec_un_sceau_riche(self) -> None:
         actions = (CODE / "03 - Parcours PJJ/actions-de-la-page.js").read_text(encoding="utf-8")
         contenu = (CODE / "03 - Parcours PJJ/contenu.html").read_text(encoding="utf-8")
         css = (CODE / "01 - Éléments communs/style-des-six-parcours.css").read_text(encoding="utf-8")
-        bloc = actions.split("function creerEtoileFilanteEvaluation()", 1)[1].split("function calculerProgressionParcours", 1)[0]
-        self.assertEqual(bloc.count('class="etoile-filante-astre"'), 1)
-        self.assertIn('class="evaluation-bandeau"', contenu)
-        self.assertIn('class="evaluation-corps"', contenu)
-        self.assertIn('class="evaluation-sceau"', contenu)
-        self.assertIn("background:var(--q-yellow)", css)
-        self.assertIn("background:var(--q-panel)", css)
-        self.assertIn("border-radius:50%", css)
-        self.assertIn("JALON FINAL", actions)
+        bloc = actions.split("function creerEtoileFilanteEvaluation()", 1)[1].split("function obtenirProgressionEvaluationFinaleAffichee", 1)[0]
+        self.assertEqual(bloc.count('class="etoile-filante-astre'), 6)
+        self.assertEqual(bloc.count("etoile-filante-astre-satellite"), 5)
+        self.assertIn('class="evaluation-etape-numero">12</span>', contenu)
+        self.assertIn('class="evaluation-progression">0/50 questions d’évaluation</span>', contenu)
+        self.assertIn("obtenirProgressionEvaluationFinaleAffichee", actions)
+        self.assertIn("background:color-mix(in srgb,var(--q-paper) 78%,var(--q-panel))", css)
+        self.assertIn("width:42px; height:42px", css)
+        self.assertIn("border-radius:0;", css)
 
     def test_parcours_n_est_termine_qu_apres_evaluation(self) -> None:
         actions = (CODE / "03 - Parcours PJJ/actions-de-la-page.js").read_text(encoding="utf-8")
