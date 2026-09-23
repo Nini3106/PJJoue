@@ -37,6 +37,7 @@ class ProgressionEtoileFilanteEtSupportsTests(unittest.TestCase):
         self.assertIn('class="evaluation-etape-numero">12</span>', contenu)
         self.assertIn('class="evaluation-progression">0/50 questions d’évaluation</span>', contenu)
         self.assertIn('class="evaluation-etat">Évaluation verrouillée</span>', contenu)
+        self.assertIn("FIN DE PARCOURS · TESTE TES ACQUIS", contenu)
         self.assertIn("'Parcours maîtrisé'", actions)
         self.assertIn("'Évaluation en cours'", actions)
         self.assertIn("'Évaluation à passer'", actions)
