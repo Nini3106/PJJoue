@@ -1558,16 +1558,51 @@ function actualiserTitrePage(ecran) {
         ? 'Quiz CJPM : réviser la justice pénale des mineurs'
         : `${TITRES_ECRANS[ecran] || 'Quiz CJPM'} — Quiz CJPM`;
 }
+function suspendreSessionPourSupports() {
+    const instantane = creerInstantaneSessionEnCours();
+    if (!instantane)
+        return false;
+    clearInterval(etat.identifiantMinuteur);
+    etat.identifiantMinuteur = null;
+    return ecrireInstantaneSessionEnCours({
+        ...instantane,
+        retourDepuisSupports: true
+    });
+}
+function reprendreSessionDepuisSupports() {
+    const instantane = chargerSessionEnCours();
+    if (!instantane?.retourDepuisSupports)
+        return false;
+    clearInterval(etat.identifiantMinuteur);
+    etat.identifiantMinuteur = null;
+    if (!restaurerSessionEnCours(instantane))
+        return false;
+    afficherEcran('question', {
+        forcerSortieQuestion: true,
+        remplacerHistorique: true
+    });
+    afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+    // La nouvelle sauvegarde retire le marqueur temporaire retourDepuisSupports.
+    enregistrerSessionEnCours();
+    return true;
+}
 function afficherEcran(identifiant, optionsAffichage = {}) {
     if (identifiant === 'carnet') identifiant = 'progression';
     masquerInfobullePJJoue();
     fermerMenuPrincipal();
+    const courant = etat.ecran;
+    const consultationSupportsDepuisQuestion = courant === 'question'
+        && identifiant === 'supports'
+        && Boolean(etat.questionsSession?.length)
+        && Boolean(etat.questionCourante);
+    if (consultationSupportsDepuisQuestion)
+        suspendreSessionPourSupports();
     if (identifiant === 'supports')
         initialiserRechercheSupports();
     clearInterval(etat.identifiantMinuteur);
+    etat.identifiantMinuteur = null;
     if (identifiant !== 'question')
         fermerFenetreJokers({ restaurerFocus: false });
-    const courant = etat.ecran;
     const doitMemoriserEcran = courant
         && courant !== identifiant
         && !optionsAffichage.remplacerHistorique
@@ -1580,6 +1615,7 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     }
     const doitAbandonnerSession = courant === 'question'
         && identifiant !== 'question'
+        && !consultationSupportsDepuisQuestion
         && !optionsAffichage.remplacerHistorique
         && !optionsAffichage.forcerSortieQuestion
         && !optionsAffichage.depuisHistorique;
@@ -1753,6 +1789,8 @@ function ouvrirFenetreQuitterSession({ message, apresConfirmation, apresAnnulati
 }
 function revenirEnArriere() {
     if (confirmationRetourEnCours)
+        return;
+    if (etat.ecran === 'supports' && reprendreSessionDepuisSupports())
         return;
     if (etat.ecran === 'question' && etat.questionsSession?.length && !etat.questionValidee) {
         confirmationRetourEnCours = true;
