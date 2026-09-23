@@ -1,0 +1,33 @@
+name: Finalize evaluation and footer alignment
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.head_ref == 'fix/alignement-evaluation-footer' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Reconstruire le site et le manifeste
+        run: |
+          rm .github/workflows/finalize-evaluation-footer.yml
+          python outils/construire_site.py
+          python outils/construire_manifeste.py
+      - name: Enregistrer les fichiers générés
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Reconstruire l’alignement de l’évaluation et du pied de page"
+          git push origin HEAD:${{ github.head_ref }}
