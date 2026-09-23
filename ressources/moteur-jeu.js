@@ -2458,7 +2458,7 @@ function obtenirProgressionEvaluationFinaleAffichee(identifiantTheme) {
         return { traitees: compter(instantane.reponsesSession, instantane.questionsPassees), total };
     }
     const evaluation = obtenirEvaluationFinaleTheme(identifiantTheme);
-    return { traitees: (evaluation?.nombreTentatives || 0) > 0 ? total : 0, total };
+    return { traitees: (evaluation?.reussie === true || (evaluation?.nombreTentatives || 0) > 0) ? total : 0, total };
 }
 function calculerProgressionParcours(identifiantTheme) {
     const programme = PROGRAMMES[identifiantTheme];
