@@ -88,7 +88,22 @@ def etoiles(page):
         r=page.evaluate(LIRE_ETOILES,dict(selecteur='.chemin-etape-carte',variable='--couleur-etape',compte=False))
         assert len(r)==11
         resultats.extend(r)
-        r=page.evaluate(LIRE_ETOILES,dict(selecteur='#carteEvaluationFinale',variable='--couleur-etape',compte=False))
+        r=page.evaluate("""() => {
+          const carte=document.querySelector('#carteEvaluationFinale');
+          const etoile=carte?.querySelector('.etoile-filante-evaluation');
+          if (!carte || !etoile) throw Error('Repère de réussite de l’évaluation absent.');
+          const bord=getComputedStyle(carte).borderTopColor;
+          const fond=getComputedStyle(carte).backgroundColor;
+          const astres=[...etoile.querySelectorAll('.etoile-filante-astre')];
+          const trainees=[...etoile.querySelectorAll('.etoile-filante-trainee')];
+          if (astres.length!==3) throw Error('L’évaluation doit afficher exactement trois étoiles.');
+          if (astres.some(a=>getComputedStyle(a).fill!==bord)) throw Error('Les étoiles de l’évaluation ne reprennent pas le jaune du cadre.');
+          if (trainees.some(a=>getComputedStyle(a).stroke!==bord)) throw Error('La traînée de l’évaluation ne reprend pas le jaune du cadre.');
+          const trophee=carte.querySelector('.icone-evaluation svg path:first-child');
+          if (!trophee || getComputedStyle(trophee).fill!==bord) throw Error('Le trophée ne reprend pas le jaune de l’évaluation.');
+          if (fond===bord) throw Error('Le fond de l’évaluation doit rester plus clair que son cadre.');
+          return [{couleur:bord,compteur:null}];
+        }""")
         assert len(r)==1
         resultats.extend(r); verifier_geometrie(page)
     page.evaluate("afficherEcran('sigles'); choisirDomaineSigles('tous')")
