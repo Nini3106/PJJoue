@@ -1536,8 +1536,8 @@
       "sha256": "9b1bd6aec05bdc091b94e7ad085f61cd1f39a620e422be7b2a2ff153da0bd461"
     },
     "tests/atlas_v1_changements_presentation.json": {
-      "tailleOctets": 32801,
-      "sha256": "f9511c672683cab40430ec18d18b46837bd2fbc39d3c3f6bcdeedeb0df51f89b"
+      "tailleOctets": 33944,
+      "sha256": "052712e0d8eba33009f434f0e22f7f83f076a7ca1dd95698c5788c4f357678fb"
     },
     "tests/atlas_v1_empreintes_presentation.json": {
       "tailleOctets": 761,
