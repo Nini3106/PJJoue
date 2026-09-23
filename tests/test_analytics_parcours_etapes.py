@@ -17,6 +17,15 @@ def main():
             resultat = page.evaluate("""() => {
                 window.PJJConsentement = { estAutorise: () => true };
                 window.dataLayer = [];
+                window.PJJ_ANALYTICS = {
+                    envoyer: (nom, parametres = {}) => {
+                        window.dataLayer.push({
+                            event: String(nom).startsWith('pjjoue_') ? String(nom) : 'pjjoue_' + String(nom),
+                            ...parametres
+                        });
+                        return true;
+                    }
+                };
                 const theme = 'procedure_ordinaire';
                 etat.theme = theme;
                 etat.mode = 'parcours';
