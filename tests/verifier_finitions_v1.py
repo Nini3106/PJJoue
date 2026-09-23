@@ -170,6 +170,12 @@ def bas_de_page_et_evaluation(page,captures=False):
       ouvrirParcours(theme);
     }""")
     assert page.locator('.evaluation-etat').inner_text().strip()=='Évaluation à passer'
+    page.evaluate("""() => {
+      sauvegarde=creerSauvegardeInitiale();
+      effacerSessionEnCours();
+      ouvrirParcours(THEMES[0].id);
+    }""")
+    assert page.locator('.evaluation-etat').inner_text().strip()=='Évaluation verrouillée'
     verifier_geometrie(page)
     capture(page,'bas-de-page-evaluation',captures)
     return {'footer_pleine_largeur':True,'texte_footer_etendu':True,'evaluation_alignee':True}
