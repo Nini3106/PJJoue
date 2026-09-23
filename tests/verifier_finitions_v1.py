@@ -132,7 +132,7 @@ def bas_de_page_et_evaluation(page,captures=False):
       const etat=carte.querySelector('.evaluation-etat').getBoundingClientRect();
       return {bandeau:{t:bandeau.top,b:bandeau.bottom,l:bandeau.left,r:bandeau.right},
         corps:{t:corps.top,b:corps.bottom,l:corps.left,r:corps.right},
-        numero:{l:numero.left,r:numero.right},trophee:{l:trophee.left,r:trophee.right},
+        numero:{l:numero.left,r:numero.right},trophee:{l:trophee.left,r:trophee.right,t:trophee.top,b:trophee.bottom},
         texte:{l:texte.left,r:texte.right},sceau:{l:sceau.left,r:sceau.right},
         etat:{l:etat.left,r:etat.right,t:etat.top,b:etat.bottom},
         libelleEtat:carte.querySelector('.evaluation-etat').textContent.trim(),
