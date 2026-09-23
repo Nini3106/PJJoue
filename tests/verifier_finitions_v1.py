@@ -150,6 +150,23 @@ def bas_de_page_et_evaluation(page,captures=False):
     assert evaluation['sceau']['r'] <= evaluation['bandeau']['r']+1,evaluation
     assert evaluation['progression']=='50/50 questions d’évaluation',evaluation
     assert evaluation['tropheeLargeur']>=36,evaluation
+    maitrise_avec_ancien_instantane=page.evaluate("""() => {
+      const theme=THEMES[0].id;
+      const questions=QUESTIONS.filter(q=>q.theme===theme && q.estEvaluationFinale===true);
+      ecrireInstantaneSessionEnCours({
+        version:2,questions:questions.map(q=>q.id),mode:'evaluation-finale',theme,
+        reponsesSession:[],questionsPassees:[]
+      });
+      ouvrirParcours(theme);
+      return {
+        progression:document.querySelector('.evaluation-progression').textContent.trim(),
+        etat:document.querySelector('.evaluation-etat').textContent.trim()
+      };
+    }""")
+    assert maitrise_avec_ancien_instantane=={
+        'progression':'50/50 questions d’évaluation',
+        'etat':'Parcours maîtrisé'
+    },maitrise_avec_ancien_instantane
     progression_en_cours=page.evaluate("""() => {
       const theme=THEMES[0].id;
       const questions=QUESTIONS.filter(q=>q.theme===theme && q.estEvaluationFinale===true);
