@@ -1844,8 +1844,8 @@
       "sha256": "8ae5d864fa9cfbd1cd5b7a42c6abfe4fbea8a267d33f6bbc6de753258abe2ea1"
     },
     "tests/verifier_interface.py": {
-      "tailleOctets": 32262,
-      "sha256": "0c0750ead30a5913fa0f99e23a9324f29df17f1dcf3ef880f9a240f89586d47e"
+      "tailleOctets": 32304,
+      "sha256": "68a868f566c7235bb3adc54bba6e204fcddfd69e1520e53027575fa79e5dab70"
     },
     "tests/verifier_jeu_sigles.py": {
       "tailleOctets": 23031,
