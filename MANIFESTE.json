@@ -1752,8 +1752,8 @@
       "sha256": "121a978c932513fa04377f9e7ea57a8e16c17a0620eea495ec083e1ebd3261a8"
     },
     "tests/test_analytics_parcours_etapes.py": {
-      "tailleOctets": 3841,
-      "sha256": "9f09080f7c21129abd4ed8685063c2797f59048e4dfe57cb18cc2b18304d3a0b"
+      "tailleOctets": 4245,
+      "sha256": "d7383dac4614a7082bedc19ca2f5fd1390fa61218dce2f1840172c10a9acd385"
     },
     "tests/test_atlas_integrite.py": {
       "tailleOctets": 6648,
