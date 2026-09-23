@@ -114,7 +114,11 @@ def bas_de_page_et_evaluation(page,captures=False):
       return {footer:rf.width,viewport:innerWidth,texte:rt.width,paragraphe:rp.width,liens:rl.width,gap:rl.left-rt.right};
     }""")
     assert abs(footer['footer']-footer['viewport'])<1,footer
-    assert footer['texte']>footer['liens'],footer
+    if page.viewport_size['width'] > 640:
+        assert footer['texte']>footer['liens'],footer
+        assert footer['gap'] >= 0,footer
+    else:
+        assert abs(footer['texte']-footer['liens'])<2,footer
     assert abs(footer['paragraphe']-footer['texte'])<2,footer
 
     evaluation=page.evaluate("""() => {
