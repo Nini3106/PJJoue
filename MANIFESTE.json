@@ -1256,8 +1256,8 @@
       "sha256": "5fa2bcd6cd014391f8d62359eb249078d75f3973897176b68c408903679749c3"
     },
     "package.json": {
-      "tailleOctets": 4269,
-      "sha256": "b9d92555d8d68078491f1a4d4bd2e47d5090a007e44d3e729a5e2b0bf51bc239"
+      "tailleOctets": 4378,
+      "sha256": "6c72b49618c60ad45c1855517043c982358e196a1aeed8ba39f5ce9ecd8c29f5"
     },
     "parametres/index.html": {
       "tailleOctets": 742,
@@ -1774,6 +1774,10 @@
     "tests/test_couleurs_questions_et_correction.py": {
       "tailleOctets": 3011,
       "sha256": "326521553bdae6bf2494756a2af902838246df907bf9bb43a35c3505af3baf1d"
+    },
+    "tests/test_evaluation_reussie_50_sur_50.py": {
+      "tailleOctets": 2870,
+      "sha256": "926f18e0b91dea5b8dd3386dbc23b3ad97067faa6d299962e4e11fd038ca78f2"
     },
     "tests/test_guides_cjpm.py": {
       "tailleOctets": 6616,
