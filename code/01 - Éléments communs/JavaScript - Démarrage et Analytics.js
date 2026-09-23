@@ -218,16 +218,29 @@ function obtenirPageMenuAnalytics(identifiant = etat?.ecran) {
         return 'Réviser';
     return null;
 }
-function obtenirLibelleParcoursAnalytics(question = null) {
+function obtenirInformationsParcoursAnalytics(question = null) {
     const origine = String(etat?.origineSessionAnalytics || '');
     if (origine.startsWith('mission_sigles_') || question?.missionSigles || String(etat?.mode || '').startsWith('sigles-'))
-        return 'Mission Sigles';
+        return { identifiant: 'mission_sigles', numero: null, nom: 'Mission Sigles' };
     if (origine.startsWith('mission_mesures_') || question?.missionMesures || String(etat?.mode || '').startsWith('mesures-'))
-        return 'Mission Mesures';
+        return { identifiant: 'mission_mesures', numero: null, nom: 'Mission Mesures' };
     const identifiantTheme = question?.theme || etat?.theme || null;
-    if (identifiantTheme && PROGRAMMES[identifiantTheme])
-        return PROGRAMMES[identifiantTheme].titre;
-    return etat?.perimetreEntrainement === 'tous' ? 'Parcours complet' : null;
+    if (identifiantTheme && PROGRAMMES[identifiantTheme]) {
+        const ordre = obtenirOrdreTheme(identifiantTheme);
+        return {
+            identifiant: identifiantTheme,
+            numero: Number.isFinite(ordre) && ordre < 999 ? ordre + 1 : null,
+            nom: PROGRAMMES[identifiantTheme].titre
+        };
+    }
+    return {
+        identifiant: etat?.perimetreEntrainement === 'tous' ? 'parcours_complet' : null,
+        numero: null,
+        nom: etat?.perimetreEntrainement === 'tous' ? 'Parcours complet' : null
+    };
+}
+function obtenirLibelleParcoursAnalytics(question = null) {
+    return obtenirInformationsParcoursAnalytics(question).nom;
 }
 function obtenirNomQuestionAnalytics(question) {
     const nom = question?.nom || question?.titre || question?.enonce || question?.question;
@@ -263,7 +276,7 @@ function obtenirInformationsEtapeAnalytics(question = null) {
         || etat?.mode === 'evaluation-finale'
         || /^(sigles|mesures)-evaluation$/.test(String(etat?.mode || ''));
     if (evaluationFinale)
-        return { numero: 12, nom: 'Évaluation finale' };
+        return { numero: 12, numeroVisible: 12, identifiantPermanent: 12, nom: 'Évaluation finale' };
 
     if (question?.missionSigles || String(etat?.mode || '').startsWith('sigles-')) {
         const numero = Number(question?.missionSiglesMeta?.numeroEtape || question?.etape || etat?.etape);
@@ -273,6 +286,8 @@ function obtenirInformationsEtapeAnalytics(question = null) {
             : null;
         return {
             numero: numeroValide ? numero : null,
+            numeroVisible: numeroValide ? numero : null,
+            identifiantPermanent: numeroValide ? numero : null,
             nom: identite?.titre || (numeroValide ? `Étape ${numero}` : null)
         };
     }
@@ -284,13 +299,15 @@ function obtenirInformationsEtapeAnalytics(question = null) {
             : null;
         return {
             numero: numeroValide ? numero : null,
+            numeroVisible: numeroValide ? numero : null,
+            identifiantPermanent: numeroValide ? numero : null,
             nom: identite?.titre || (numeroValide ? `Étape ${numero}` : null)
         };
     }
 
     const numeroVisible = Number(question?.etape ?? etat?.etape);
     if (!Number.isFinite(numeroVisible) || numeroVisible <= 0)
-        return { numero: null, nom: null };
+        return { numero: null, numeroVisible: null, identifiantPermanent: null, nom: null };
     const identifiantTheme = question?.theme || etat?.theme || IDENTIFIANT_PARCOURS_RECOMMANDE;
     const etapeProgramme = obtenirEtapeProgramme(identifiantTheme, numeroVisible)
         || obtenirEtapeProgramme(IDENTIFIANT_PARCOURS_RECOMMANDE, numeroVisible);
@@ -301,8 +318,11 @@ function obtenirInformationsEtapeAnalytics(question = null) {
         ?? etapeProgramme?.idAnalyticsPermanent
         ?? numeroVisible
     );
+    const identifiantPermanent = Number.isFinite(numeroPermanent) && numeroPermanent > 0 ? numeroPermanent : numeroVisible;
     return {
-        numero: Number.isFinite(numeroPermanent) && numeroPermanent > 0 ? numeroPermanent : numeroVisible,
+        numero: identifiantPermanent,
+        numeroVisible,
+        identifiantPermanent,
         nom: etapeProgramme?.titre || `Étape ${numeroVisible}`
     };
 }
@@ -331,14 +351,18 @@ function obtenirDureeSessionAnalytics() {
 }
 function obtenirContexteSessionAnalytics() {
     const modeDeJeu = obtenirLibelleModeJeuAnalytics();
-    const parcours = obtenirLibelleParcoursAnalytics();
+    const informationsParcours = obtenirInformationsParcoursAnalytics();
+    const parcours = informationsParcours.nom;
     const contexte = {
         pjjoue_page_consultee: obtenirPageMenuAnalytics(),
         pjjoue_ecran: obtenirLibelleEcranAnalytics(etat?.ecran),
         pjjoue_mode_de_jeu: modeDeJeu,
         pjjoue_type_session: modeDeJeu,
         pjjoue_parcours: parcours,
+        pjjoue_nom_parcours: parcours,
         pjjoue_parcours_selectionne: parcours,
+        pjjoue_identifiant_parcours: informationsParcours.identifiant,
+        pjjoue_numero_parcours: informationsParcours.numero,
         pjjoue_nombre_questions: Array.isArray(etat?.questionsSession) && etat.questionsSession.length
             ? etat.questionsSession.length
             : null,
@@ -347,6 +371,8 @@ function obtenirContexteSessionAnalytics() {
     if (etat.mode === 'parcours' || etat.mode === 'evaluation-finale') {
         const etape = obtenirInformationsEtapeAnalytics();
         contexte.pjjoue_numero_etape = etape.numero;
+        contexte.pjjoue_numero_etape_visible = etape.numeroVisible;
+        contexte.pjjoue_identifiant_etape = etape.identifiantPermanent;
         contexte.pjjoue_nom_etape = etape.nom;
     }
     if (etat.mode === 'parcours' || /^(sigles|mesures)-parcours$/.test(String(etat.mode || ''))) {
@@ -378,6 +404,8 @@ function obtenirContexteQuestionAnalytics(question) {
     return {
         ...obtenirContexteSessionAnalytics(),
         pjjoue_numero_etape: etape.numero,
+        pjjoue_numero_etape_visible: etape.numeroVisible,
+        pjjoue_identifiant_etape: etape.identifiantPermanent,
         pjjoue_nom_etape: etape.nom,
         pjjoue_identifiant_question: obtenirIdentifiantQuestionAnalytics(question),
         pjjoue_nom_question: obtenirNomQuestionAnalytics(question),
@@ -404,9 +432,15 @@ function envoyerOptionDeJeuAnalytics(option, parametres = {}) {
     });
 }
 function obtenirContexteAnalyticsGlobal() {
+    const informationsParcours = obtenirInformationsParcoursAnalytics();
     return {
         pjjoue_page_consultee: obtenirPageMenuAnalytics(),
-        pjjoue_ecran: obtenirLibelleEcranAnalytics(etat?.ecran)
+        pjjoue_ecran: obtenirLibelleEcranAnalytics(etat?.ecran),
+        pjjoue_parcours: informationsParcours.nom,
+        pjjoue_nom_parcours: informationsParcours.nom,
+        pjjoue_parcours_selectionne: informationsParcours.nom,
+        pjjoue_identifiant_parcours: informationsParcours.identifiant,
+        pjjoue_numero_parcours: informationsParcours.numero
     };
 }
 function estRouteAccueil() {

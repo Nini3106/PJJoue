@@ -1,0 +1,43 @@
+{
+  "property": "PJJoue",
+  "account_id": "548397269",
+  "scope": "EVENT",
+  "dimensions": [
+    {
+      "display_name": "Nom du parcours",
+      "event_parameter": "pjjoue_nom_parcours",
+      "status": "a_creer"
+    },
+    {
+      "display_name": "Numéro du parcours",
+      "event_parameter": "pjjoue_numero_parcours",
+      "status": "a_creer"
+    },
+    {
+      "display_name": "Identifiant du parcours",
+      "event_parameter": "pjjoue_identifiant_parcours",
+      "status": "a_creer"
+    },
+    {
+      "display_name": "Numéro visible de l’étape",
+      "event_parameter": "pjjoue_numero_etape_visible",
+      "status": "a_creer"
+    },
+    {
+      "display_name": "Identifiant historique de l’étape",
+      "event_parameter": "pjjoue_identifiant_etape",
+      "status": "a_creer"
+    },
+    {
+      "display_name": "Nom de l’étape",
+      "event_parameter": "pjjoue_nom_etape",
+      "status": "existe_deja"
+    },
+    {
+      "display_name": "Numéro de l’étape (historique)",
+      "event_parameter": "pjjoue_numero_etape",
+      "status": "existe_deja"
+    }
+  ],
+  "note": "Le connecteur Windsor.ai lit GA4 mais n’expose pas d’action d’administration pour créer les dimensions personnalisées. Ce fichier garde la configuration attendue côté site."
+}
