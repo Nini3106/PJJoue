@@ -1,21 +1,21 @@
 name: Rebuild fix resources session
 
 on:
-  push:
+  pull_request:
     branches:
-      - fix/pause-reprise-ressources-evaluation
+      - main
 
 permissions:
   contents: write
 
 jobs:
   rebuild:
-    if: github.actor != 'github-actions[bot]'
+    if: github.head_ref == 'fix/pause-reprise-ressources-evaluation' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: fix/pause-reprise-ressources-evaluation
+          ref: ${{ github.head_ref }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
@@ -30,4 +30,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "Reconstruire le site pour la reprise depuis les ressources"
-          git push
+          git push origin HEAD:${{ github.head_ref }}
