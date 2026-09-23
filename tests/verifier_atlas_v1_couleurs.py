@@ -95,10 +95,12 @@ def etoiles(page):
           const etoile=carte?.querySelector('.etoile-filante-evaluation');
           if (!carte || !bandeau || !corps || !etoile) throw Error('Structure du jalon final incomplète.');
           const astres=[...etoile.querySelectorAll('.etoile-filante-astre')];
-          if (astres.length!==1) throw Error('Le sceau de réussite doit rester discret : une seule étoile.');
+          const satellites=[...etoile.querySelectorAll('.etoile-filante-astre-satellite')];
+          if (astres.length!==6 || satellites.length!==5) throw Error('Le sceau doit avoir une étoile principale entourée de cinq petites étoiles.');
           if (getComputedStyle(bandeau).backgroundColor===getComputedStyle(corps).backgroundColor)
-            throw Error('Le bandeau final doit se distinguer du corps de la carte.');
-          if (!/JALON FINAL/.test(carte.textContent)) throw Error('Le jalon final n’est pas identifié.');
+            throw Error('Le bandeau final doit se distinguer du corps blanc cassé.');
+          if (carte.querySelector('.evaluation-etape-numero')?.textContent.trim()!=='12') throw Error('Le repère 12 manque.');
+          if (!/questions d’évaluation/.test(carte.textContent)) throw Error('Le compteur d’évaluation manque.');
           return [{couleur:getComputedStyle(bandeau).backgroundColor,compteur:null}];
         }""")
         assert len(r)==1
