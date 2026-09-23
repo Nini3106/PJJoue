@@ -86,6 +86,59 @@ def entete(page,captures=False):
         assert page.locator('.atlas-static-menu').get_attribute('open') is None
     return result
 
+def bas_de_page_et_evaluation(page,captures=False):
+    page.evaluate("""() => {
+      sauvegarde=creerSauvegardeInitiale();
+      const theme=THEMES[0];
+      for (const etape of PROGRAMMES[theme.id].etapes) {
+        const bilan=obtenirBilanEtape(theme.id,etape.id);
+        bilan.termineeSansJoker=true;
+        bilan.nombreTentatives=1;
+        for (const q of obtenirQuestionsEtape(theme.id,etape.id)) {
+          bilan.questionsTraitees[q.id]=true;
+          bilan.resultats[q.id]=true;
+          bilan.validationsSansJoker[q.id]=true;
+        }
+      }
+      const evaluation=obtenirEvaluationFinaleTheme(theme.id);
+      evaluation.reussie=true;
+      evaluation.meilleurScore=96;
+      ouvrirParcours(theme.id);
+    }""")
+    footer=page.evaluate("""() => {
+      const f=document.querySelector('.q-footer');
+      const texte=f.querySelector(':scope>div');
+      const p=texte.querySelector('p');
+      const liens=f.querySelector('.q-footer-links');
+      const rf=f.getBoundingClientRect(), rt=texte.getBoundingClientRect(), rp=p.getBoundingClientRect(), rl=liens.getBoundingClientRect();
+      return {footer:rf.width,viewport:innerWidth,texte:rt.width,paragraphe:rp.width,liens:rl.width,gap:rl.left-rt.right};
+    }""")
+    assert abs(footer['footer']-footer['viewport'])<1,footer
+    if page.viewport_size['width'] > 640:
+        assert footer['texte']>footer['liens'],footer
+        assert footer['gap'] >= 0,footer
+    else:
+        assert abs(footer['texte']-footer['liens'])<2,footer
+    assert abs(footer['paragraphe']-footer['texte'])<2,footer
+
+    evaluation=page.evaluate("""() => {
+      const carte=document.querySelector('#carteEvaluationFinale');
+      const trophee=carte.querySelector('.icone-evaluation').getBoundingClientRect();
+      const etape=carte.querySelector('.evaluation-etape-numero').getBoundingClientRect();
+      const titre=carte.querySelector('.evaluation-titre').getBoundingClientRect();
+      const etoiles=carte.querySelector('.etoile-filante-evaluation').getBoundingClientRect();
+      const statut=carte.querySelector('.evaluation-statut').getBoundingClientRect();
+      return {trophee:{l:trophee.left,r:trophee.right},etape:{l:etape.left,r:etape.right,t:etape.top,b:etape.bottom},
+        titre:{l:titre.left,r:titre.right,t:titre.top,b:titre.bottom},etoiles:{l:etoiles.left,r:etoiles.right,t:etoiles.top,b:etoiles.bottom},
+        statut:{l:statut.left,r:statut.right,t:statut.top,b:statut.bottom},carte:carte.getBoundingClientRect().width};
+    }""")
+    assert evaluation['trophee']['r'] <= evaluation['etape']['l']+1,evaluation
+    assert evaluation['etoiles']['l'] >= evaluation['titre']['r']-1,evaluation
+    assert evaluation['statut']['t'] >= min(evaluation['etape']['b'],evaluation['titre']['b'])-1,evaluation
+    verifier_geometrie(page)
+    capture(page,'bas-de-page-evaluation',captures)
+    return {'footer_pleine_largeur':True,'texte_footer_etendu':True,'evaluation_alignee':True}
+
 def preferences(page,captures=False):
     assert page.evaluate('creerSauvegardeInitiale().parametres.echelleTexte')==1.15
     assert page.evaluate('sauvegarde.parametres.echelleTexte')==1.15
@@ -262,7 +315,7 @@ def main():
         browser=p.chromium.launch(**({'executable_path':executable} if executable else {}),args=['--no-sandbox'])
         for width in [1440,1280,1024,768,390,320]:
             cases=[('barre-unique',entete)]
-            if width in [1440,390,320]:cases += [('preferences',preferences),('revision',revision),('entrainement',entrainement),('questions',questions)]
+            if width in [1440,390,320]:cases += [('bas-de-page-evaluation',bas_de_page_et_evaluation),('preferences',preferences),('revision',revision),('entrainement',entrainement),('questions',questions)]
             for name,case in cases:
                 page=browser.new_page(viewport={'width':width,'height':950},reduced_motion='reduce');page.set_default_timeout(5000)
                 errors=[];page.on('pageerror',lambda e:errors.append(str(e)))

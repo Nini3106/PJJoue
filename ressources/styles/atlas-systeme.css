@@ -449,13 +449,16 @@ body { margin:0; min-width:0; }
   padding:23px 32px;
   display:flex;
   justify-content:space-between;
-  gap:20px;
+  align-items:flex-start;
+  gap:32px;
   font-size:var(--q-text-small);
   color:var(--q-muted)}
-#qc-atlas .q-footer p{max-width:550px}
+#qc-atlas .q-footer>div{flex:1 1 auto;min-width:0}
+#qc-atlas .q-footer p{max-width:none;width:100%}
 #qc-atlas .q-footer strong{font-weight:600;
   color:var(--q-ink)}
 #qc-atlas .q-footer-links{display:flex;
+  flex:0 0 auto;
   gap:12px;
   flex-wrap:wrap;
   align-content:flex-start}
