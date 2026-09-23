@@ -125,17 +125,35 @@ def bas_de_page_et_evaluation(page,captures=False):
       const carte=document.querySelector('#carteEvaluationFinale');
       const bandeau=carte.querySelector('.evaluation-bandeau').getBoundingClientRect();
       const corps=carte.querySelector('.evaluation-corps').getBoundingClientRect();
+      const numero=carte.querySelector('.evaluation-etape-numero').getBoundingClientRect();
       const trophee=carte.querySelector('.icone-evaluation').getBoundingClientRect();
       const texte=carte.querySelector('.evaluation-texte').getBoundingClientRect();
       const sceau=carte.querySelector('.evaluation-sceau').getBoundingClientRect();
       return {bandeau:{t:bandeau.top,b:bandeau.bottom,l:bandeau.left,r:bandeau.right},
         corps:{t:corps.top,b:corps.bottom,l:corps.left,r:corps.right},
-        trophee:{l:trophee.left,r:trophee.right},texte:{l:texte.left,r:texte.right},
-        sceau:{l:sceau.left,r:sceau.right}};
+        numero:{l:numero.left,r:numero.right},trophee:{l:trophee.left,r:trophee.right},
+        texte:{l:texte.left,r:texte.right},sceau:{l:sceau.left,r:sceau.right},
+        progression:carte.querySelector('.evaluation-progression').textContent.trim(),
+        tropheeLargeur:trophee.width};
     }""")
     assert evaluation['bandeau']['b'] <= evaluation['corps']['t']+1,evaluation
-    assert evaluation['trophee']['r'] <= evaluation['texte']['l']+1,evaluation
+    assert evaluation['numero']['r'] <= evaluation['texte']['l']+1,evaluation
+    assert evaluation['texte']['r'] <= evaluation['trophee']['l']+1,evaluation
     assert evaluation['sceau']['r'] <= evaluation['bandeau']['r']+1,evaluation
+    assert evaluation['progression']=='50/50 questions d’évaluation',evaluation
+    assert evaluation['tropheeLargeur']>=36,evaluation
+    progression_en_cours=page.evaluate("""() => {
+      const theme=THEMES[0].id;
+      const questions=QUESTIONS.filter(q=>q.theme===theme && q.estEvaluationFinale===true);
+      obtenirEvaluationFinaleTheme(theme).nombreTentatives=0;
+      const reponses=questions.slice(0,6).map(q=>[q.id,{statut:'correcte'}]);
+      const passages=[questions[6].id];
+      ecrireInstantaneSessionEnCours({version:2,questions:questions.map(q=>q.id),mode:'evaluation-finale',theme,reponsesSession:reponses,questionsPassees:passages});
+      etat.mode='parcours';
+      ouvrirParcours(theme);
+      return document.querySelector('.evaluation-progression').textContent.trim();
+    }""")
+    assert progression_en_cours=='7/50 questions d’évaluation',progression_en_cours
     verifier_geometrie(page)
     capture(page,'bas-de-page-evaluation',captures)
     return {'footer_pleine_largeur':True,'texte_footer_etendu':True,'evaluation_alignee':True}
