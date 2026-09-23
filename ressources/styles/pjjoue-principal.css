@@ -119,21 +119,22 @@
 #qc-atlas .chemin-progression { position:absolute; bottom:0; left:0; right:0; height:3px; }
 #qc-atlas .chemin-progression i { display:block; height:100%; background:var(--couleur-etape,var(--parcours-accent)); }
 #qc-atlas .atlas-etape-repere { display:flex;flex-direction:column;align-items:center;gap:8px;align-self:center; }
-#qc-atlas .evaluation-carte { width:100%; padding:0; display:block; text-align:left; overflow:hidden; border:1px solid var(--q-line); border-radius:10px; background:var(--q-panel); }
-#qc-atlas .evaluation-carte.deverrouillee:hover { border-color:var(--q-yellow); background:var(--q-panel); }
-#qc-atlas .evaluation-carte.complete { border-color:color-mix(in srgb,var(--q-yellow) 70%,var(--q-line)); }
+#qc-atlas .evaluation-carte { width:100%; padding:0; display:block; text-align:left; overflow:visible; border:0; border-radius:0; background:transparent; }
+#qc-atlas .evaluation-carte.deverrouillee:hover .evaluation-corps { border-color:var(--q-yellow); background:color-mix(in srgb,var(--q-paper) 84%,var(--q-panel)); }
 #qc-atlas .evaluation-carte:disabled { opacity:.68; }
-#qc-atlas .evaluation-bandeau { min-height:38px; padding:8px 14px 8px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--q-yellow); color:var(--q-on-yellow); font-size:var(--q-text-small); font-weight:750; letter-spacing:.08em; }
-#qc-atlas .evaluation-sceau { min-width:42px; display:flex; justify-content:flex-end; align-items:center; }
-#qc-atlas .evaluation-corps { display:grid; grid-template-columns:56px minmax(0,1fr); align-items:center; gap:16px; padding:20px 22px; }
-#qc-atlas .evaluation-texte { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:4px; }
-#qc-atlas .evaluation-etape-numero { font-size:var(--q-text-small); color:var(--q-muted); letter-spacing:.08em; font-weight:700; }
-#qc-atlas .evaluation-titre { font-size:var(--q-text-base); line-height:1.35; color:var(--q-ink); }
-#qc-atlas .evaluation-statut { display:block; font-size:var(--q-text-secondary); color:var(--q-muted); font-weight:400; }
+#qc-atlas .evaluation-bandeau { min-height:38px; padding:8px 14px 8px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; border:1px solid color-mix(in srgb,var(--q-yellow) 78%,var(--q-line)); border-bottom:0; border-radius:0; background:var(--q-yellow); color:var(--q-on-yellow); font-size:var(--q-text-small); font-weight:750; letter-spacing:.08em; }
+#qc-atlas .evaluation-sceau { min-width:74px; display:flex; justify-content:flex-end; align-items:center; }
+#qc-atlas .evaluation-corps { display:grid; grid-template-columns:48px minmax(0,1fr) 58px; align-items:center; gap:16px; padding:20px 20px; border:1px solid color-mix(in srgb,var(--q-yellow) 62%,var(--q-line)); border-top:0; border-radius:0 0 10px 10px; background:color-mix(in srgb,var(--q-paper) 78%,var(--q-panel)); }
+#qc-atlas .evaluation-etape-numero { font:calc(25px * var(--echelle-texte,1))/1 Georgia,serif; color:color-mix(in srgb,var(--q-yellow) 74%,var(--q-ink)); display:grid; place-items:center; width:48px; min-height:48px; padding:8px 4px; border-radius:7px; background:color-mix(in srgb,var(--q-yellow) 24%,var(--q-paper)); }
+#qc-atlas .evaluation-texte { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:5px; }
+#qc-atlas .evaluation-titre { font-size:var(--q-text-base); line-height:1.45; color:var(--q-ink); font-weight:650; }
+#qc-atlas .evaluation-progression { font-size:var(--q-text-secondary); color:var(--q-muted); }
+#qc-atlas .evaluation-statut { display:block; font-size:var(--q-text-small); color:var(--q-muted); font-weight:400; }
 #qc-atlas .evaluation-carte .etoile-filante-evaluation { color:var(--q-on-yellow); }
-#qc-atlas .evaluation-carte .etoile-filante-evaluation svg { width:40px; height:25px; }
-#qc-atlas .icone-evaluation { width:48px; height:48px; display:grid; place-items:center; border-radius:50%; color:var(--q-on-yellow); background:color-mix(in srgb,var(--q-yellow) 52%,var(--q-panel)); border:1px solid color-mix(in srgb,var(--q-yellow) 75%,var(--q-line)); }
-#qc-atlas .icone-evaluation svg { fill:none; stroke:currentColor; width:26px; height:26px; }
+#qc-atlas .evaluation-carte .etoile-filante-evaluation svg { width:72px; height:38px; }
+#qc-atlas .evaluation-carte .etoile-filante-astre-satellite { stroke-width:1.2; }
+#qc-atlas .icone-evaluation { justify-self:end; display:grid; place-items:center; color:var(--q-on-yellow); background:transparent; border:0; }
+#qc-atlas .icone-evaluation svg { fill:none; stroke:currentColor; width:42px; height:42px; stroke-width:1.55; }
 #qc-atlas .icone-evaluation svg path:first-child { fill:var(--q-yellow); stroke:var(--q-on-yellow); }
 #qc-atlas .parcours-detail-actions { margin:0 0 14px; }
 #qc-atlas .parcours-detail-progression { margin:16px 0; }
@@ -150,9 +151,11 @@
  #qc-atlas .atlas-course-icon { display:none; }
  #qc-atlas .atlas-course-layout>.q-sides { grid-template-columns:1fr; }
  #qc-atlas .evaluation-bandeau { padding:8px 12px 8px 14px; }
- #qc-atlas .evaluation-corps { grid-template-columns:48px minmax(0,1fr); gap:12px; padding:17px 14px; }
- #qc-atlas .icone-evaluation { width:44px; height:44px; }
- #qc-atlas .evaluation-carte .etoile-filante-evaluation svg { width:36px; height:23px; }
+ #qc-atlas .evaluation-sceau { min-width:64px; }
+ #qc-atlas .evaluation-corps { grid-template-columns:42px minmax(0,1fr) 48px; gap:11px; padding:17px 14px; }
+ #qc-atlas .evaluation-etape-numero { width:42px; min-height:44px; font-size:calc(23px * var(--echelle-texte,1)); }
+ #qc-atlas .icone-evaluation svg { width:36px; height:36px; }
+ #qc-atlas .evaluation-carte .etoile-filante-evaluation svg { width:62px; height:34px; }
 }/* Le configurateur reste commun aux parcours, aux sigles et aux mesures. */
 #qc-atlas .q-form { overflow:visible; }
 #qc-atlas .q-training { align-items:start; }
