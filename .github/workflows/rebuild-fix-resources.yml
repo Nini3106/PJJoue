@@ -1,0 +1,33 @@
+name: Rebuild fix resources session
+
+on:
+  push:
+    branches:
+      - fix/pause-reprise-ressources-evaluation
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/pause-reprise-ressources-evaluation
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Reconstruire les fichiers publics
+        run: python outils/construire_site.py
+      - name: Enregistrer la reconstruction
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Reconstruire le site pour la reprise depuis les ressources"
+          git push
