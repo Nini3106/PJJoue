@@ -123,18 +123,19 @@ def bas_de_page_et_evaluation(page,captures=False):
 
     evaluation=page.evaluate("""() => {
       const carte=document.querySelector('#carteEvaluationFinale');
+      const bandeau=carte.querySelector('.evaluation-bandeau').getBoundingClientRect();
+      const corps=carte.querySelector('.evaluation-corps').getBoundingClientRect();
       const trophee=carte.querySelector('.icone-evaluation').getBoundingClientRect();
-      const etape=carte.querySelector('.evaluation-etape-numero').getBoundingClientRect();
-      const titre=carte.querySelector('.evaluation-titre').getBoundingClientRect();
-      const etoiles=carte.querySelector('.etoile-filante-evaluation').getBoundingClientRect();
-      const statut=carte.querySelector('.evaluation-statut').getBoundingClientRect();
-      return {trophee:{l:trophee.left,r:trophee.right},etape:{l:etape.left,r:etape.right,t:etape.top,b:etape.bottom},
-        titre:{l:titre.left,r:titre.right,t:titre.top,b:titre.bottom},etoiles:{l:etoiles.left,r:etoiles.right,t:etoiles.top,b:etoiles.bottom},
-        statut:{l:statut.left,r:statut.right,t:statut.top,b:statut.bottom},carte:carte.getBoundingClientRect().width};
+      const texte=carte.querySelector('.evaluation-texte').getBoundingClientRect();
+      const sceau=carte.querySelector('.evaluation-sceau').getBoundingClientRect();
+      return {bandeau:{t:bandeau.top,b:bandeau.bottom,l:bandeau.left,r:bandeau.right},
+        corps:{t:corps.top,b:corps.bottom,l:corps.left,r:corps.right},
+        trophee:{l:trophee.left,r:trophee.right},texte:{l:texte.left,r:texte.right},
+        sceau:{l:sceau.left,r:sceau.right}};
     }""")
-    assert evaluation['trophee']['r'] <= evaluation['etape']['l']+1,evaluation
-    assert evaluation['etoiles']['l'] >= evaluation['titre']['r']-1,evaluation
-    assert evaluation['statut']['t'] >= min(evaluation['etape']['b'],evaluation['titre']['b'])-1,evaluation
+    assert evaluation['bandeau']['b'] <= evaluation['corps']['t']+1,evaluation
+    assert evaluation['trophee']['r'] <= evaluation['texte']['l']+1,evaluation
+    assert evaluation['sceau']['r'] <= evaluation['bandeau']['r']+1,evaluation
     verifier_geometrie(page)
     capture(page,'bas-de-page-evaluation',captures)
     return {'footer_pleine_largeur':True,'texte_footer_etendu':True,'evaluation_alignee':True}
