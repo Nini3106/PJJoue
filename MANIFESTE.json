@@ -1836,8 +1836,8 @@
       "sha256": "b3ee90506c9ff8bc019649a11f96d30e606d283b3173a303703574413514a700"
     },
     "tests/verifier_finitions_v1.py": {
-      "tailleOctets": 21616,
-      "sha256": "9496e50fa7f94ad7a0f9f894fdd5d22d47e5a4ef95247d59a79621c5f1b4adff"
+      "tailleOctets": 21774,
+      "sha256": "14c96886eece8ce4a9b81b7d0ebe5c17af8d330feb2a2d2e6c30626752af5831"
     },
     "tests/verifier_identite_v1.py": {
       "tailleOctets": 4831,
