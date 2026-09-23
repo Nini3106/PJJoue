@@ -51,10 +51,6 @@
       "tailleOctets": 966,
       "sha256": "8dcf221cae9ddb120b84c4f2233234128474f4742ad1d6de4b45d62fda363539"
     },
-    ".github/workflows/rebuild-manifest-fix-resources.yml": {
-      "tailleOctets": 981,
-      "sha256": "3255e94b94dfcc0fea99b4679f21eca0eb420abf8dec050127727fe47b979f05"
-    },
     ".github/workflows/verification.yml": {
       "tailleOctets": 1255,
       "sha256": "5cdbf3e1e552513f65b92b79d9c1f1694bf3d81dad9f37a11a699c6a5b050080"
