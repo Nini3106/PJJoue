@@ -84,12 +84,10 @@ function creerEtoileFilanteProgression(nombreJalons = null) {
 }
 function creerEtoileFilanteEvaluation() {
     return `<span class="etoile-filante-progression etoile-filante-evaluation" aria-hidden="true">
-        <svg viewBox="0 0 92 52" focusable="false">
-            <path class="etoile-filante-trainee etoile-filante-trainee-haute" d="M4 31 C20 30 31 23 43 12"></path>
-            <path class="etoile-filante-trainee etoile-filante-trainee-basse" d="M9 44 C25 41 37 33 47 23"></path>
-            <path class="etoile-filante-astre etoile-filante-astre-principale" d="M58 4 L62.4 13.4 L72.7 14.6 L65.1 21.7 L67.2 31.7 L58 26.5 L48.8 31.7 L50.9 21.7 L43.3 14.6 L53.6 13.4 Z"></path>
-            <path class="etoile-filante-astre etoile-filante-astre-secondaire" d="M78 8 L80 12.3 L84.7 12.9 L81.2 16.1 L82.2 20.7 L78 18.3 L73.8 20.7 L74.8 16.1 L71.3 12.9 L76 12.3 Z"></path>
-            <path class="etoile-filante-astre etoile-filante-astre-secondaire" d="M75 30 L76.7 33.7 L80.8 34.2 L77.8 37 L78.6 41 L75 38.9 L71.4 41 L72.2 37 L69.2 34.2 L73.3 33.7 Z"></path>
+        <svg viewBox="0 0 76 46" focusable="false">
+            <path class="etoile-filante-trainee etoile-filante-trainee-haute" d="M4 28 C16 27 25 21 34 12"></path>
+            <path class="etoile-filante-trainee etoile-filante-trainee-basse" d="M8 40 C21 37 31 30 39 21"></path>
+            <path class="etoile-filante-astre" d="M50 4 L54.4 13.4 L64.7 14.6 L57.1 21.7 L59.2 31.7 L50 26.5 L40.8 31.7 L42.9 21.7 L35.3 14.6 L45.6 13.4 Z"></path>
         </svg>
     </span>`;
 }
@@ -419,13 +417,14 @@ function afficherEtapes() {
     evaluation.classList.toggle('deverrouillee', evaluationDeverrouillee);
     evaluation.classList.toggle('complete', evaluationReussie);
     evaluation.style.setProperty('--couleur-etape', obtenirIdentiteParcours(etat.theme).couleur);
-    evaluation.querySelector(':scope > .etoile-filante-progression')?.remove();
-    if (evaluationReussie)
-        evaluation.insertAdjacentHTML('afterbegin', creerEtoileFilanteEvaluation());
+    const sceauEvaluation = evaluation.querySelector('.evaluation-sceau');
+    if (sceauEvaluation) {
+        sceauEvaluation.innerHTML = evaluationReussie ? creerEtoileFilanteEvaluation() : '';
+    }
     const iconeEvaluation = evaluation.querySelector('.icone-evaluation');
     if (iconeEvaluation) iconeEvaluation.innerHTML = creerPictogrammeAuTrait('trophee', 'pictogramme-evaluation');
-    evaluation.querySelector('.evaluation-etape-numero').textContent = 'ÉTAPE 12';
-    evaluation.querySelector('.evaluation-titre').textContent = `Évaluation du parcours ${obtenirOrdreTheme(etat.theme) + 1}`;
+    evaluation.querySelector('.evaluation-etape-numero').textContent = 'JALON FINAL';
+    evaluation.querySelector('.evaluation-titre').textContent = `Parcours ${obtenirOrdreTheme(etat.theme) + 1}`;
     evaluation.querySelector('.evaluation-statut').textContent = evaluationReussie
         ? `Réussie · meilleur score ${obtenirEvaluationFinaleTheme(etat.theme).meilleurScore}%`
         : (evaluationDeverrouillee ? '50 questions · évaluation complète' : 'Termine les 11 étapes pour l’ouvrir');
