@@ -1,0 +1,32 @@
+name: Finalize evaluation 12 tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.head_ref == 'design/evaluation-12-compteur-trophee' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Finaliser le manifeste
+        run: |
+          rm .github/workflows/finalize-evaluation-12-tests.yml
+          python outils/construire_manifeste.py
+      - name: Enregistrer l’état final
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Finaliser les contrôles de l’évaluation 12"
+          git push origin HEAD:${{ github.head_ref }}
