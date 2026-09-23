@@ -153,7 +153,10 @@ def bas_de_page_et_evaluation(page,captures=False):
     progression_en_cours=page.evaluate("""() => {
       const theme=THEMES[0].id;
       const questions=QUESTIONS.filter(q=>q.theme===theme && q.estEvaluationFinale===true);
-      obtenirEvaluationFinaleTheme(theme).nombreTentatives=0;
+      const evaluationEtat=obtenirEvaluationFinaleTheme(theme);
+      evaluationEtat.reussie=false;
+      evaluationEtat.nombreTentatives=0;
+      evaluationEtat.meilleurScore=0;
       const reponses=questions.slice(0,6).map(q=>[q.id,{statut:'correcte'}]);
       const passages=[questions[6].id];
       ecrireInstantaneSessionEnCours({version:2,questions:questions.map(q=>q.id),mode:'evaluation-finale',theme,reponsesSession:reponses,questionsPassees:passages});
