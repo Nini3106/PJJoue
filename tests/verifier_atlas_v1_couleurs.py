@@ -90,19 +90,16 @@ def etoiles(page):
         resultats.extend(r)
         r=page.evaluate("""() => {
           const carte=document.querySelector('#carteEvaluationFinale');
+          const bandeau=carte?.querySelector('.evaluation-bandeau');
+          const corps=carte?.querySelector('.evaluation-corps');
           const etoile=carte?.querySelector('.etoile-filante-evaluation');
-          if (!carte || !etoile) throw Error('Repère de réussite de l’évaluation absent.');
-          const bord=getComputedStyle(carte).borderTopColor;
-          const fond=getComputedStyle(carte).backgroundColor;
+          if (!carte || !bandeau || !corps || !etoile) throw Error('Structure du jalon final incomplète.');
           const astres=[...etoile.querySelectorAll('.etoile-filante-astre')];
-          const trainees=[...etoile.querySelectorAll('.etoile-filante-trainee')];
-          if (astres.length!==3) throw Error('L’évaluation doit afficher exactement trois étoiles.');
-          if (astres.some(a=>getComputedStyle(a).fill!==bord)) throw Error('Les étoiles de l’évaluation ne reprennent pas le jaune du cadre.');
-          if (trainees.some(a=>getComputedStyle(a).stroke!==bord)) throw Error('La traînée de l’évaluation ne reprend pas le jaune du cadre.');
-          const trophee=carte.querySelector('.icone-evaluation svg path:first-child');
-          if (!trophee || getComputedStyle(trophee).fill!==bord) throw Error('Le trophée ne reprend pas le jaune de l’évaluation.');
-          if (fond===bord) throw Error('Le fond de l’évaluation doit rester plus clair que son cadre.');
-          return [{couleur:bord,compteur:null}];
+          if (astres.length!==1) throw Error('Le sceau de réussite doit rester discret : une seule étoile.');
+          if (getComputedStyle(bandeau).backgroundColor===getComputedStyle(corps).backgroundColor)
+            throw Error('Le bandeau final doit se distinguer du corps de la carte.');
+          if (!/JALON FINAL/.test(carte.textContent)) throw Error('Le jalon final n’est pas identifié.');
+          return [{couleur:getComputedStyle(bandeau).backgroundColor,compteur:null}];
         }""")
         assert len(r)==1
         resultats.extend(r); verifier_geometrie(page)
