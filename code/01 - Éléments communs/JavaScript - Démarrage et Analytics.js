@@ -220,9 +220,9 @@ function obtenirPageMenuAnalytics(identifiant = etat?.ecran) {
 }
 function obtenirInformationsParcoursAnalytics(question = null) {
     const origine = String(etat?.origineSessionAnalytics || '');
-    if (origine.startsWith('mission_sigles_') || question?.missionSigles || String(etat?.mode || '').startsWith('sigles-'))
+    if (question?.missionSigles || (!question && (origine.startsWith('mission_sigles_') || String(etat?.mode || '').startsWith('sigles-'))))
         return { identifiant: 'mission_sigles', numero: null, nom: 'Mission Sigles' };
-    if (origine.startsWith('mission_mesures_') || question?.missionMesures || String(etat?.mode || '').startsWith('mesures-'))
+    if (question?.missionMesures || (!question && (origine.startsWith('mission_mesures_') || String(etat?.mode || '').startsWith('mesures-'))))
         return { identifiant: 'mission_mesures', numero: null, nom: 'Mission Mesures' };
     const identifiantTheme = question?.theme || etat?.theme || null;
     if (identifiantTheme && PROGRAMMES[identifiantTheme]) {
@@ -262,7 +262,7 @@ function obtenirLibelleModeJeuAnalytics() {
     if (origine === 'defi_du_hasard' || mode === 'sigles-hasard' || mode === 'mesures-hasard')
         return 'Défi du hasard';
     if (mode === 'parcours' || mode === 'sigles-parcours' || mode === 'mesures-parcours')
-        return 'Parcours CJPM';
+        return mode === 'parcours' ? 'Parcours CJPM' : 'Parcours par étapes';
     if (mode === 'libre' || mode === 'sigles-entrainement' || mode === 'mesures-entrainement')
         return 'Entraînement libre';
     if (mode === 'revision' || mode === 'sigles-revision' || mode === 'mesures-revision')
@@ -273,12 +273,12 @@ function obtenirLibelleModeJeuAnalytics() {
 }
 function obtenirInformationsEtapeAnalytics(question = null) {
     const evaluationFinale = question?.estEvaluationFinale === true
-        || etat?.mode === 'evaluation-finale'
-        || /^(sigles|mesures)-evaluation$/.test(String(etat?.mode || ''));
+        || (!question && (etat?.mode === 'evaluation-finale'
+        || /^(sigles|mesures)-evaluation$/.test(String(etat?.mode || ''))));
     if (evaluationFinale)
-        return { numero: 12, numeroVisible: 12, identifiantPermanent: 12, nom: 'Évaluation finale' };
+        return { numero: 12, numeroVisible: /^(sigles|mesures)-/.test(String(etat?.mode || '')) ? null : 12, identifiantPermanent: 12, nom: 'Évaluation finale' };
 
-    if (question?.missionSigles || String(etat?.mode || '').startsWith('sigles-')) {
+    if (question?.missionSigles || (!question && String(etat?.mode || '').startsWith('sigles-'))) {
         const numero = Number(question?.missionSiglesMeta?.numeroEtape || question?.etape || etat?.etape);
         const numeroValide = Number.isFinite(numero) && numero > 0;
         const identite = numeroValide && typeof obtenirIdentiteEtapeMissionSigles === 'function'
@@ -286,12 +286,12 @@ function obtenirInformationsEtapeAnalytics(question = null) {
             : null;
         return {
             numero: numeroValide ? numero : null,
-            numeroVisible: numeroValide ? numero : null,
+            numeroVisible: numeroValide ? Number(identite?.numero || numero) : null,
             identifiantPermanent: numeroValide ? numero : null,
             nom: identite?.titre || (numeroValide ? `Étape ${numero}` : null)
         };
     }
-    if (question?.missionMesures || String(etat?.mode || '').startsWith('mesures-')) {
+    if (question?.missionMesures || (!question && String(etat?.mode || '').startsWith('mesures-'))) {
         const numero = Number(question?.missionMesuresMeta?.numeroEtape || question?.etape || etat?.etape);
         const numeroValide = Number.isFinite(numero) && numero > 0;
         const identite = numeroValide && typeof obtenirIdentiteEtapeMissionMesures === 'function'
@@ -349,6 +349,19 @@ function obtenirDureeSessionAnalytics() {
         return null;
     return Math.max(0, Math.round((Date.now() - etat.debutSessionAnalytics) / 1000));
 }
+function obtenirPerimetreSessionAnalytics() {
+    const configurationMission = String(etat.mode || '').startsWith('sigles-')
+        ? etat.missionSiglesConfiguration : etat.missionMesuresConfiguration;
+    if (/^(sigles|mesures)-/.test(String(etat.mode || ''))) {
+        if (configurationMission?.perimetre)
+            return configurationMission.perimetre;
+        if (configurationMission?.etape)
+            return String(etat.mode).startsWith('sigles-') ? libelleEtapeSigles(configurationMission.etape) : `Étape ${configurationMission.etape}`;
+        return configurationMission?.domaine === 'cjpm' ? 'Sigles CJPM'
+            : configurationMission?.domaine === 'pjj' ? 'Sigles PJJ' : 'Toute la mission';
+    }
+    return PROGRAMMES[etat.theme]?.titre || 'Tous les parcours';
+}
 function obtenirContexteSessionAnalytics() {
     const modeDeJeu = obtenirLibelleModeJeuAnalytics();
     const informationsParcours = obtenirInformationsParcoursAnalytics();
@@ -357,6 +370,7 @@ function obtenirContexteSessionAnalytics() {
         pjjoue_page_consultee: obtenirPageMenuAnalytics(),
         pjjoue_ecran: obtenirLibelleEcranAnalytics(etat?.ecran),
         pjjoue_mode_de_jeu: modeDeJeu,
+        pjjoue_perimetre_session: obtenirPerimetreSessionAnalytics(),
         pjjoue_type_session: modeDeJeu,
         pjjoue_parcours: parcours,
         pjjoue_nom_parcours: parcours,
@@ -368,7 +382,8 @@ function obtenirContexteSessionAnalytics() {
             : null,
         pjjoue_jokers: etat?.jokersSessionActifs === false ? 'Sans' : 'Avec'
     };
-    if (etat.mode === 'parcours' || etat.mode === 'evaluation-finale') {
+    if (etat.mode === 'parcours' || etat.mode === 'evaluation-finale'
+        || /^(sigles|mesures)-(parcours|evaluation)$/.test(String(etat.mode || ''))) {
         const etape = obtenirInformationsEtapeAnalytics();
         contexte.pjjoue_numero_etape = etape.numero;
         contexte.pjjoue_numero_etape_visible = etape.numeroVisible;
@@ -392,22 +407,28 @@ function obtenirContexteSessionAnalytics() {
             : null;
     }
     if (etat.origineSessionAnalytics === 'defi_du_hasard' || /^(sigles|mesures)-hasard$/.test(String(etat.mode || ''))) {
-        contexte.pjjoue_nombre_questions_defi_du_hasard = Number(etat.nombreQuestionsTirageDe) || null;
+        contexte.pjjoue_nombre_questions_defi_du_hasard = etat.questionsSession?.length || Number(etat.nombreQuestionsTirageDe) || null;
     }
     return contexte;
 }
 function obtenirContexteQuestionAnalytics(question) {
     const etape = obtenirInformationsEtapeAnalytics(question);
+    const parcours = obtenirInformationsParcoursAnalytics(question);
     const modeQuestion = question
         ? (question.modePresentation || obtenirModeQuestion(question))
         : null;
     return {
         ...obtenirContexteSessionAnalytics(),
+        pjjoue_nom_parcours: parcours.nom,
+        pjjoue_parcours: parcours.nom,
+        pjjoue_identifiant_parcours: parcours.identifiant,
+        pjjoue_numero_parcours: parcours.numero,
         pjjoue_numero_etape: etape.numero,
         pjjoue_numero_etape_visible: etape.numeroVisible,
         pjjoue_identifiant_etape: etape.identifiantPermanent,
         pjjoue_nom_etape: etape.nom,
         pjjoue_identifiant_question: obtenirIdentifiantQuestionAnalytics(question),
+        pjjoue_reperes_question: [...new Set(question?.missionSiglesMeta?.cibles || question?.missionMesuresMeta?.cibles || [])].sort().join(' · ') || null,
         pjjoue_nom_question: obtenirNomQuestionAnalytics(question),
         pjjoue_position_question_session: Number.isFinite(Number(etat?.indexQuestion))
             ? Number(etat.indexQuestion) + 1
@@ -422,17 +443,38 @@ function envoyerUtilisationJoker(type) {
         pjjoue_option_de_jeu: `Joker · ${LIBELLES_JOKERS_ANALYTICS[type] || type}`
     });
 }
+function envoyerTirageMissionAnalytics(mission, nombre) {
+    envoyerEvenementPJJ('defi_du_hasard_lance', {
+        pjjoue_nom_parcours: mission === 'sigles' ? 'Mission Sigles' : 'Mission Mesures',
+        pjjoue_identifiant_parcours: `mission_${mission}`,
+        pjjoue_numero_parcours: null,
+        pjjoue_mode_de_jeu: 'Défi du hasard',
+        pjjoue_nombre_questions_defi_du_hasard: nombre
+    });
+}
 function envoyerOptionDeJeuAnalytics(option, parametres = {}) {
     const libelle = String(option || '').trim();
     if (!libelle)
         return false;
     return envoyerEvenementPJJ('option_de_jeu_selectionnee', {
         pjjoue_option_de_jeu: libelle,
+        ...(etat.ecran === 'entrainement' && ['sigles', 'mesures'].includes(etat.contexteEntrainement) ? {
+            pjjoue_nom_parcours: etat.contexteEntrainement === 'sigles' ? 'Mission Sigles' : 'Mission Mesures',
+            pjjoue_identifiant_parcours: `mission_${etat.contexteEntrainement}`,
+            pjjoue_numero_parcours: null
+        } : {}),
         ...parametres
     });
 }
 function obtenirContexteAnalyticsGlobal() {
-    const informationsParcours = obtenirInformationsParcoursAnalytics();
+    const ecran = String(etat?.ecran || '');
+    const mission = ecran.startsWith('sigles') ? 'Mission Sigles'
+        : ecran.startsWith('mesures') ? 'Mission Mesures' : null;
+    const informationsParcours = mission
+        ? { nom: mission, identifiant: ecran.startsWith('sigles') ? 'mission_sigles' : 'mission_mesures', numero: null }
+        : ['parcours', 'question', 'bilan'].includes(ecran)
+            ? obtenirInformationsParcoursAnalytics(ecran === 'parcours' ? { theme: etat.theme } : null)
+            : { nom: null, identifiant: null, numero: null };
     return {
         pjjoue_page_consultee: obtenirPageMenuAnalytics(),
         pjjoue_ecran: obtenirLibelleEcranAnalytics(etat?.ecran),
@@ -442,6 +484,24 @@ function obtenirContexteAnalyticsGlobal() {
         pjjoue_identifiant_parcours: informationsParcours.identifiant,
         pjjoue_numero_parcours: informationsParcours.numero
     };
+}
+function envoyerFinSessionAnalytics(resultatSession, scorePourcentage = null) {
+    // La même mesure de fin couvre les parcours CJPM, Mission Sigles et Mission Mesures.
+    // Un second affichage du bilan ne doit jamais compter une deuxième fin de partie.
+    if (etat.finSessionAnalyticsEnvoyee)
+        return false;
+    const envoyee = envoyerEvenementPJJ('session_terminee', {
+        ...obtenirContexteSessionAnalytics(),
+        pjjoue_score: scorePourcentage,
+        pjjoue_reussites_autonomes: etat.score,
+        pjjoue_questions_passees: etat.questionsPassees?.size || 0,
+        pjjoue_reussites_avec_aide: etat.nombreReponsesAidees || 0,
+        pjjoue_joker_utilise_session: sessionAUtiliseJoker() ? 'Oui' : 'Non',
+        pjjoue_duree_session_secondes: obtenirDureeSessionAnalytics(),
+        pjjoue_resultat_session: resultatSession
+    });
+    etat.finSessionAnalyticsEnvoyee = envoyee;
+    return envoyee;
 }
 function estRouteAccueil() {
     if (typeof lireRoute === 'function')

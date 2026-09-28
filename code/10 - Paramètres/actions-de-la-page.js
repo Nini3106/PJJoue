@@ -40,6 +40,7 @@ function enregistrerParametres() {
     envoyerEvenementPJJ('parametres_enregistres', {
         pjjoue_page_consultee: 'Paramètres',
         pjjoue_son: sauvegarde.parametres.son ? 'Activé' : 'Désactivé',
+        pjjoue_volume_son: Math.round(sauvegarde.parametres.volume * 100),
         pjjoue_taille_texte: obtenirLibelleTailleTexteAnalytics(sauvegarde.parametres.echelleTexte)
     });
     if (!sonEtaitActif && sauvegarde.parametres.son) {
@@ -103,6 +104,7 @@ function annulerDernierImport() {
         chargerParametres();
         actualiserAccueil();
         actualiserRestaurationAvantImport();
+        envoyerEvenementPJJ('progression_restauree', { pjjoue_page_consultee: 'Progression' });
         afficherNotification('Progression précédant l’import restaurée');
     } catch (erreur) {
         ouvrirFenetreMessage({ titre: 'Restauration impossible', message: erreur.message, libelleConfirmer: 'Fermer' });

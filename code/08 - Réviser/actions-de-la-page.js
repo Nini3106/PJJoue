@@ -150,6 +150,7 @@ function construireEspaceRevision(jeu, zone) {
         options.forEach(option => { option.onclick = () => {
             filtres[menu.dataset.filtreRevision] = option.dataset.valeurFiltre;
             if (menu.dataset.filtreRevision === 'theme') filtres.etape = 'toutes';
+            envoyerEvenementPJJ('revision_filtree', obtenirContexteRevisionAnalytics(jeu));
             construireEspaceRevision(jeu, zone);
             selectionner(`#${entete.id}`)?.focus();
         }; });
@@ -158,11 +159,23 @@ function construireEspaceRevision(jeu, zone) {
     const bouton = zone.querySelector('[data-revision-selection]');
     if (bouton) bouton.onclick = () => lancerRevisionSelection(jeu);
 }
+function obtenirContexteRevisionAnalytics(jeu, categorie = null) {
+    const filtres = obtenirFiltresRevision(jeu);
+    const theme = jeu === 'parcours' && filtres.theme !== 'toutes' ? filtres.theme : null;
+    return {
+        pjjoue_nom_parcours: jeu === 'sigles' ? 'Mission Sigles' : jeu === 'mesures' ? 'Mission Mesures' : PROGRAMMES[theme]?.titre || null,
+        pjjoue_identifiant_parcours: jeu === 'parcours' ? theme : `mission_${jeu}`,
+        pjjoue_numero_parcours: theme ? obtenirOrdreTheme(theme) + 1 : null,
+        pjjoue_perimetre_session: `${PROGRAMMES[theme]?.titre || (jeu === 'parcours' ? 'Tous les parcours' : 'Toute la mission')} · ${filtres.etape === 'toutes' ? 'Toutes les étapes' : `Étape ${filtres.etape}`}`,
+        pjjoue_categorie_revision: categorie ? obtenirLibelleConsolidation({ motifRevision: categorie }) : 'Toutes les catégories'
+    };
+}
 function lancerRevisionSelection(jeu, categorie = null) {
     const cibles = filtrerElementsRevision(jeu, obtenirElementsCategoriesRevision(jeu))
         .filter(element => categorie === null || obtenirCategorieRevision(element.suivi) === categorie)
         .map(element => element.cible);
     if (!cibles.length) { afficherNotification('Aucune question dans cette sélection.'); return; }
+    envoyerEvenementPJJ('revision_lancee', { ...obtenirContexteRevisionAnalytics(jeu, categorie), pjjoue_nombre_questions: cibles.length });
     if (jeu === 'parcours') {
         const filtres = obtenirFiltresRevision(jeu);
         lancerRevision(filtres.theme, categorie, filtres.etape);
@@ -404,9 +417,29 @@ function appliquerRechercheSupports() {
             ? `${categoriesVisibles} ${accorderLibelle(categoriesVisibles, 'catégorie', 'catégories')} · ${ressourcesVisibles} ${accorderLibelle(ressourcesVisibles, 'ressource', 'ressources')}`
             : 'Aucune ressource ne correspond à cette recherche.';
     synchroniserOuvertureSupports(zone);
+    return ressourcesVisibles;
+}
+let delaiRechercheSupportsAnalytics;
+let derniereRechercheSupportsAnalytics = '';
+function obtenirFiltreSupportsAnalytics() {
+    const filtre = selectionner('#supports')?.dataset.filtreSupports || 'tous';
+    return PROGRAMMES[filtre]?.titre || 'Tous les parcours';
 }
 function rechercherDansSupportsFiltres() {
     appliquerRechercheSupports();
+    clearTimeout(delaiRechercheSupportsAnalytics);
+    delaiRechercheSupportsAnalytics = setTimeout(() => {
+        const recherche = normaliserRechercheSupports(selectionner('#rechercheSupports')?.value);
+        const filtre = obtenirFiltreSupportsAnalytics();
+        // La saisie reste locale. Seuls le filtre public et le nombre de résultats sortent.
+        const signature = JSON.stringify([recherche, filtre]);
+        if (!recherche || signature === derniereRechercheSupportsAnalytics || etat.ecran !== 'supports') return;
+        const envoye = envoyerEvenementPJJ('supports_recherches', {
+            pjjoue_categorie_support: filtre,
+            pjjoue_nombre_resultats: appliquerRechercheSupports()
+        });
+        if (envoye) derniereRechercheSupportsAnalytics = signature;
+    }, 600);
 }
 function initialiserRechercheSupports() {
     const zone = selectionner('#supports');
@@ -426,7 +459,19 @@ function initialiserRechercheSupports() {
     zone.querySelectorAll('[data-filtre-supports]').forEach(bouton => bouton.addEventListener('click', () => {
         synchroniserFiltreSupports(zone, bouton.dataset.filtreSupports);
         appliquerRechercheSupports();
+        envoyerEvenementPJJ('supports_filtres', { pjjoue_categorie_support: obtenirFiltreSupportsAnalytics() });
     }));
+    zone.addEventListener('click', evenement => {
+        const summary = evenement.target.closest('summary');
+        const detail = summary?.parentElement;
+        if (!detail?.matches('details') || detail.open || !zone.contains(detail)) return;
+        const categorie = detail.closest('.supports-juridiction');
+        const titre = element => element?.querySelector(':scope > summary strong')?.textContent.trim() || null;
+        envoyerEvenementPJJ('support_ouvert', {
+            pjjoue_categorie_support: titre(categorie),
+            pjjoue_nom_support: detail.matches('.support-revision') ? titre(detail) : null
+        });
+    });
     zone.querySelectorAll('details').forEach(detail => detail.addEventListener('toggle', () => {
         synchroniserOuvertureSupports(zone);
     }));

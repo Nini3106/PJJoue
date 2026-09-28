@@ -25,7 +25,11 @@
         ['mesures-educatives-pjj', 'Comprendre les mesures éducatives'],
         ['sigles-cjpm', 'Décoder les sigles CJPM'],
         ['sigles-pjj', 'Décoder les sigles PJJ'],
-        ['quiz-pjj', 'Quiz PJJ']
+        ['quiz-pjj', 'Quiz PJJ'],
+        ['accessibilite.html', 'Accessibilité', 'Accessibilité'],
+        ['confidentialite.html', 'Confidentialité', 'Confidentialité'],
+        ['mentions-legales.html', 'Mentions légales', 'Mentions légales'],
+        ['sources.html', 'Sources officielles', 'Sources officielles']
     ];
 
     let envoye = false;
@@ -43,7 +47,7 @@
             if (location.protocol !== 'file:' && ref.origin !== location.origin)
                 return null;
             const entree = entreePourChemin(ref.pathname);
-            return entree ? 'Guides' : (ref.pathname === '/' ? 'Accueil' : null);
+            return entree ? (entree[2] || 'Guides') : (ref.pathname === '/' ? 'Accueil' : null);
         }
         catch (erreur) {
             return null;
@@ -58,10 +62,9 @@
             return;
         const precedente = obtenirPagePrecedente();
         window.PJJ_ANALYTICS.envoyer('page_consultee', {
-            pjjoue_page_consultee: 'Guides',
-            pjjoue_page_detail: entree[1],
-            pjjoue_nom_guide: entree[1],
-            pjjoue_ecran: 'Page publique · Guide',
+            pjjoue_page_consultee: entree[2] || 'Guides',
+            pjjoue_nom_guide: entree[2] ? null : entree[1],
+            pjjoue_ecran: entree[2] || 'Page publique · Guide',
             ...(precedente ? { pjjoue_page_precedente: precedente } : {})
         });
         envoye = true;

@@ -32,6 +32,7 @@ function lancerSession(session) {
     etat.nombreReponsesAidees = 0;
     etat.sessionAvecJoker = false;
     etat.debutSessionAnalytics = Date.now();
+    etat.finSessionAnalyticsEnvoyee = false;
     etat.jokers = { cinquanteCinquante: true, indice: true, langueAuChat: true };
     envoyerEvenementPJJ('session_commencee', {
         ...obtenirContexteSessionAnalytics(),

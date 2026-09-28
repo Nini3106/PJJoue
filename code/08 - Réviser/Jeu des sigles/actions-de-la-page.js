@@ -455,7 +455,7 @@ function lancerEtapeSigles(numero, { depuisDebut = false } = {}){
     preparerSessionMissionSiglesNative({mode:'parcours',etape:numero,sigles,questions:questions.length ? questions : questionsCompletes,jokersActifs:true,titre:`${libelleEtapeSigles(numero)} · ${ETAPES_MISSION_SIGLES[numero].titre}`});
 }
 function lancerEntrainementSigles(){ const perimetre=valeurGroupeSigles('#siglesChoixPerimetre','perimetre','tous'); const pool=perimetre==='tous'?[...SIGLES]:obtenirSiglesEtape(Number(perimetre)); const nombreBrut=valeurGroupeSigles('#siglesChoixNombre','nombre','10'); const nombre=nombreBrut==='tous'?pool.length:Math.min(pool.length,Number(nombreBrut)||10); const organisation=valeurGroupeSigles('#siglesChoixOrganisation','organisation','etapes'); let cibles=choisirSansDoublon(pool,nombre); if(organisation==='etapes')cibles=cibles.sort((a,b)=>Number(a.etape)-Number(b.etape)||Number(a.id)-Number(b.id)); const chrono=valeurGroupeSigles('#siglesChoixChrono','chrono','non')==='oui'; const secondes=Number(valeurGroupeSigles('#siglesChoixSecondes','secondes','30'))||30; const jokers=valeurGroupeSigles('#siglesChoixJokers','jokers','oui')==='oui'; const questions=creerQuestionsEntrainementSigles(cibles,organisation==='melange'); preparerSessionSigles({mode:'entrainement',sigles:cibles,questions,jokersActifs:jokers,titre:`Entraînement Sigles · ${nombre} sigle${nombre===1?'':'s'}`,chronoActif:chrono,secondesQuestion:secondes}); }
-function lancerDeSigles(){ const face=selectionnerSigles('#siglesFaceDe'),resultat=selectionnerSigles('#siglesDeResultat'),lancer=selectionnerSigles('#siglesLancerDe'),jouer=selectionnerSigles('#siglesJouerTirage'); if(!face||!resultat||!lancer||!jouer)return; const valeur=1+Math.floor(Math.random()*6); lancer.disabled=true;jouer.classList.add('masque');face.classList.remove('de-en-lancer');void face.offsetWidth;face.classList.add('de-en-lancer');window.setTimeout(()=>{ etatJeuSigles.nombreTire=valeur;etatJeuSigles.tirageHasard=choisirSansDoublon(obtenirPoolDomaineSigles(),valeur);face.dataset.face=String(valeur);face.classList.remove('de-en-lancer');resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les ${obtenirPoolDomaineSigles().length} sigles ${libelleDomaineSigles()}.`;jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`;lancer.textContent='Relancer le dé';lancer.classList.add('principal');lancer.classList.remove('sigles-bouton-secondaire');jouer.classList.remove('masque');lancer.disabled=false;jouer.focus({preventScroll:true}); },420); }
+function lancerDeSigles(){ const face=selectionnerSigles('#siglesFaceDe'),resultat=selectionnerSigles('#siglesDeResultat'),lancer=selectionnerSigles('#siglesLancerDe'),jouer=selectionnerSigles('#siglesJouerTirage'); if(!face||!resultat||!lancer||!jouer)return; const valeur=1+Math.floor(Math.random()*6); lancer.disabled=true;jouer.classList.add('masque');face.classList.remove('de-en-lancer');void face.offsetWidth;face.classList.add('de-en-lancer');window.setTimeout(()=>{ etatJeuSigles.nombreTire=valeur;envoyerTirageMissionAnalytics('sigles', valeur);etatJeuSigles.tirageHasard=choisirSansDoublon(obtenirPoolDomaineSigles(),valeur);face.dataset.face=String(valeur);face.classList.remove('de-en-lancer');resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les ${obtenirPoolDomaineSigles().length} sigles ${libelleDomaineSigles()}.`;jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`;lancer.textContent='Relancer le dé';lancer.classList.add('principal');lancer.classList.remove('sigles-bouton-secondaire');jouer.classList.remove('masque');lancer.disabled=false;jouer.focus({preventScroll:true}); },420); }
 function jouerTirageDeSigles(){ const cibles=[...etatJeuSigles.tirageHasard]; if(!cibles.length)return; preparerSessionMissionSiglesNative({mode:'hasard',sigles:cibles,questions:creerQuestionsHasardSigles(cibles),jokersActifs:true,titre:`Défi du hasard · ${cibles.length} question${cibles.length===1?'':'s'}`,chronoActif:false}); }
 function lancerRevisionSigles(){
     afficherEcran('sigles-revision');
@@ -590,8 +590,8 @@ function convertirQuestionMissionSiglesVersPJJoue(questionSigles, index, configu
         mauvaisesReponses: options.filter(option => option.correcte !== true).map(option => option.texte)
     };
 }
-function preparerSessionMissionSiglesNative({ questionsDejaConverties = false, mode, etape = null, sigles, questions, jokersActifs = true, titre, chronoActif = false, secondesQuestion = 30 }) {
-    const configuration = { domaine:obtenirDomaineSigles(), mode, etape, sigles:[...sigles], jokersActifs, titre, chronoActif, secondesQuestion };
+function preparerSessionMissionSiglesNative({ questionsDejaConverties = false, mode, etape = null, sigles, questions, jokersActifs = true, titre, chronoActif = false, secondesQuestion = 30, organisation = 'ordonne', perimetre = null }) {
+    const configuration = { domaine:obtenirDomaineSigles(), mode, etape, sigles:[...sigles], jokersActifs, titre, chronoActif, secondesQuestion, organisation, perimetre };
     etatJeuSigles = {
         ...creerEtatJeuSigles(),
         mode,
@@ -614,6 +614,8 @@ function preparerSessionMissionSiglesNative({ questionsDejaConverties = false, m
     etat.chronometreSessionActif = chronoActif === true;
     etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(secondesQuestion) || 30));
     etat.missionSiglesConfiguration = configuration;
+    if (mode === 'parcours' || mode === 'evaluation')
+        envoyerEvenementPJJ('etape_selectionnee', obtenirContexteSessionAnalytics());
     const questionsPJJoue = questionsDejaConverties ? questions
         : questions.map((question, index) => convertirQuestionMissionSiglesVersPJJoue(question, index, configuration));
     lancerSession(questionsPJJoue);
@@ -716,6 +718,9 @@ function terminerSessionMissionSiglesNative() {
         }
     }
     if (mode !== 'evaluation') celebration = collecterCelebrationMission('sigles');
+    envoyerFinSessionAnalytics(mode === 'evaluation'
+        ? (pourcentage >= SEUIL_EVALUATION_SIGLES && passees === 0 ? 'Évaluation réussie' : 'Évaluation terminée')
+        : 'Session terminée', pourcentage);
     enregistrerSauvegarde();
     selectionner('#scoreBilan').textContent = `${pourcentage}%`;
     selectionner('#bonnesReponsesBilan').textContent = `${etat.score}/${total}`;
@@ -883,7 +888,7 @@ function lancerDeSiglesEntrainementNatif() {
     lancer.disabled=true; jouer.classList.add('masque'); face.classList.remove('de-en-lancer'); void face.offsetWidth; face.classList.add('de-en-lancer');
     window.setTimeout(()=>{
         etat.nombreQuestionsTirageDe=valeur;
-        etatJeuSigles.nombreTire=valeur;
+        etatJeuSigles.nombreTire=valeur;envoyerTirageMissionAnalytics('sigles', valeur);
         etatJeuSigles.tirageHasard=choisirSansDoublon(pool,valeur);
         face.dataset.face=String(valeur); face.classList.remove('de-en-lancer');
         resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard parmi les ${pool.length} sigles du périmètre choisi.`;
@@ -905,7 +910,8 @@ function lancerEntrainementMissionSiglesNatif() {
         : choisirSansDoublon(pool,nombre);
     const questions = creerQuestionsEntrainementSigles(cibles, organisation === 'melange');
     preparerSessionMissionSiglesNative({
-        mode:'entrainement', sigles:cibles, questions,
+        mode:'entrainement', sigles:cibles, questions, organisation,
+        perimetre: selectionner('#perimetreEntrainement')?.selectedOptions[0]?.textContent?.trim(),
         jokersActifs: etat.jokersSessionActifs !== false,
         titre:`Entraînement Sigles · ${nombre} sigle${nombre===1?'':'s'}`,
         chronoActif: etat.chronometreSessionActif === true,

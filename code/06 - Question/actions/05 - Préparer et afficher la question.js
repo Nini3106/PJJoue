@@ -351,6 +351,7 @@ function reprendreProgressionApresRevision() {
         return false;
     afficherEcran('question', { remplacerHistorique: true, forcerSortieQuestion: true });
     afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+    envoyerEvenementPJJ('session_reprise', { ...obtenirContexteSessionAnalytics(), pjjoue_motif_reprise: 'Retour après révision' });
     enregistrerSessionEnCours();
     return true;
 }

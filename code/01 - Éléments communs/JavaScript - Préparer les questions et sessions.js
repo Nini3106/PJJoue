@@ -233,7 +233,10 @@ function lancerDeParcours() {
         etat.nombreQuestionsTirageDe = nombreTire;
         envoyerEvenementPJJ('defi_du_hasard_lance', {
             pjjoue_mode_de_jeu: 'Défi du hasard',
-            pjjoue_parcours: 'Parcours complet',
+            pjjoue_nom_parcours: 'Tous les parcours CJPM',
+            pjjoue_identifiant_parcours: 'parcours_complet',
+            pjjoue_numero_parcours: null,
+            pjjoue_perimetre_session: 'Tous les parcours CJPM',
             pjjoue_nombre_questions_defi_du_hasard: nombreTire
         });
         face.dataset.face = String(nombreTire);

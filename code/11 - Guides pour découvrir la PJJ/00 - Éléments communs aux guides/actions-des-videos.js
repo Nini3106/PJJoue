@@ -17,10 +17,10 @@
     function envoyerAnalytics(carte, evenement) {
         window.PJJ_ANALYTICS?.envoyer?.(evenement, {
             pjjoue_page_consultee: 'Guides',
-            pjjoue_page_detail: carte.dataset.pjjVideoPage,
+            pjjoue_nom_guide: carte.dataset.pjjVideoPage,
+            pjjoue_ecran: 'Page publique · Guide',
             pjjoue_video_identifiant: carte.dataset.pjjVideoId,
             pjjoue_video_titre: carte.dataset.pjjVideoTitre,
-            pjjoue_video_page: carte.dataset.pjjVideoPage,
             pjjoue_video_source: carte.dataset.pjjVideoSource
         });
     }
