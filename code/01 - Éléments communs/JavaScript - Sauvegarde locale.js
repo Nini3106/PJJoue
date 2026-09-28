@@ -572,6 +572,7 @@ function creerInstantaneSessionEnCours() {
         tempsRestant: etat.tempsRestant,
         delaiDepasse: etat.delaiDepasse === true,
         debutSessionAnalytics: etat.debutSessionAnalytics,
+        finSessionAnalyticsEnvoyee: etat.finSessionAnalyticsEnvoyee === true,
         nombreQuestionsTirageDe: etat.nombreQuestionsTirageDe || 0,
         decalageReponses: etat.decalageReponses || 0,
         questions: etat.questionsSession.map(question => Number(question.id)).filter(Number.isFinite),
@@ -704,6 +705,7 @@ function restaurerSessionEnCours(instantane = chargerSessionEnCours()) {
     }
     etat.delaiDepasse = instantane.delaiDepasse === true;
     etat.debutSessionAnalytics = Number(instantane.debutSessionAnalytics) || Date.now();
+    etat.finSessionAnalyticsEnvoyee = instantane.finSessionAnalyticsEnvoyee === true;
     etat.nombreQuestionsTirageDe = Math.max(0, Number(instantane.nombreQuestionsTirageDe) || 0);
     etat.decalageReponses = Number(instantane.decalageReponses) || 0;
     etat.erreursSession = restaurerEnsemble(instantane.erreursSession);

@@ -7,11 +7,23 @@ import base64,json,re,unittest
 RACINE=Path(__file__).resolve().parents[1]
 CONTRAT=json.loads((RACINE/'tests/atlas_integrite.json').read_text(encoding='utf-8'))
 FINITIONS=json.loads((RACINE/'tests/v1_finitions_changements.json').read_text(encoding='utf-8'))
+ANALYTICS=json.loads((RACINE/'tests/analytics_changements_autorises.json').read_text(encoding='utf-8'))
+def revenir_avant_analytics(fichier, contenu):
+    """Migration Analytics autorisée le 28/09/2026, testée par test_analytics_complet.
+    On inverse ses seuls écarts recensés pour garder intacts les contrats historiques.
+    """
+    texte=contenu.decode('utf-8')
+    for modification in reversed(ANALYTICS.get(fichier, [])):
+        if texte.count(modification['apres']) != modification['occurrences']:
+            raise AssertionError((fichier, 'Migration Analytics non recensée'))
+        texte=texte.replace(modification['apres'], modification['avant'])
+    return texte.encode('utf-8')
 def revenir_avant_finitions(fichier, contenu):
     """Les seuls écarts autorisés sont inversés avant les contrôles historiques.
     Les empreintes d'origine ne sont pas modifiées. Les réglages de texte Grande
     sont la seule modification de défaut expressément demandée par la propriétaire.
     """
+    contenu=revenir_avant_analytics(fichier, contenu)
     modifications=FINITIONS.get(fichier,[])
     if not modifications:return contenu
     texte=contenu.decode('utf-8')

@@ -261,7 +261,8 @@ function finaliserReponse(estCorrecte, texteChoisi, { bouton = null, precisions 
             ? 'Réussite autonome'
             : (resultat.reussiteAidee ? 'Réussite avec aide' : 'Réponse incorrecte'),
         pjjoue_nombre_tentatives: Math.max(1, Number(resultat.tentatives) + 1),
-        pjjoue_temps_ecoule: etat.delaiDepasse ? 'Oui' : 'Non'
+        pjjoue_temps_ecoule: etat.delaiDepasse ? 'Oui' : 'Non',
+        pjjoue_reponse_apres_reprise: Number(resultat.tentatives) > 0 ? 'Oui' : 'Non'
     });
     enregistrerResultatReponse(question, texteChoisi, precisions, resultat);
     if (resultat.reussiteAutonome)

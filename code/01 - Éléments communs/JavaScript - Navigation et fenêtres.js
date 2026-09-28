@@ -218,6 +218,7 @@ function reprendreSessionDepuisSupports() {
         remplacerHistorique: true
     });
     afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+    envoyerEvenementPJJ('session_reprise', { ...obtenirContexteSessionAnalytics(), pjjoue_motif_reprise: 'Retour des supports' });
     // La nouvelle sauvegarde retire le marqueur temporaire retourDepuisSupports.
     enregistrerSessionEnCours();
     return true;
@@ -227,12 +228,15 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     masquerInfobullePJJoue();
     fermerMenuPrincipal();
     const courant = etat.ecran;
+    const pagePrecedenteAnalytics = obtenirPageMenuAnalytics(courant);
     const consultationSupportsDepuisQuestion = courant === 'question'
         && identifiant === 'supports'
         && Boolean(etat.questionsSession?.length)
         && Boolean(etat.questionCourante);
-    if (consultationSupportsDepuisQuestion)
+    if (consultationSupportsDepuisQuestion) {
         suspendreSessionPourSupports();
+        envoyerEvenementPJJ('session_suspendue', { ...obtenirContexteSessionAnalytics(), pjjoue_motif_reprise: 'Consultation des supports' });
+    }
     if (identifiant === 'supports')
         initialiserRechercheSupports();
     clearInterval(etat.identifiantMinuteur);
@@ -278,14 +282,6 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     cible.classList.add('actif');
     etat.ecran = identifiant;
     document.body.dataset.ecranActif = identifiant;
-    if (courant !== identifiant) {
-        envoyerEvenementPJJ('page_consultee', {
-            pjjoue_page_consultee: obtenirPageMenuAnalytics(identifiant),
-            pjjoue_ecran: obtenirLibelleEcranAnalytics(identifiant),
-            pjjoue_page_precedente: obtenirPageMenuAnalytics(courant),
-            pjjoue_ecran_precedent: obtenirLibelleEcranAnalytics(courant)
-        });
-    }
     actualiserTitrePage(identifiant);
     mesurerHauteurEntete();
     if (identifiant === 'erreurs')
@@ -306,6 +302,14 @@ function afficherEcran(identifiant, optionsAffichage = {}) {
     actualiserBoutonRetour();
     if (!optionsAffichage.depuisHistorique && !restaurationNavigation)
         mettreAJourAdresseNavigation(identifiant, Boolean(optionsAffichage.remplacerHistorique));
+    if (courant !== identifiant) {
+        envoyerEvenementPJJ('page_consultee', {
+            pjjoue_page_consultee: obtenirPageMenuAnalytics(identifiant),
+            pjjoue_ecran: obtenirLibelleEcranAnalytics(identifiant),
+            pjjoue_page_precedente: pagePrecedenteAnalytics,
+            pjjoue_ecran_precedent: obtenirLibelleEcranAnalytics(courant)
+        });
+    }
     if (identifiant === 'accueil')
         garantirAccueilEnHaut();
     else
@@ -555,6 +559,7 @@ function restaurerRoute(route) {
         if (restaurerSessionEnCours()) {
             afficherEcran('question', { depuisHistorique: true, forcerSortieQuestion: true });
             afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+            envoyerEvenementPJJ('session_reprise', { ...obtenirContexteSessionAnalytics(), pjjoue_motif_reprise: 'Retour à une partie sauvegardée' });
         }
         else {
             ouvrirParcours(etatRoute.theme || IDENTIFIANT_PARCOURS_RECOMMANDE, { remplacerHistorique: true });
@@ -573,6 +578,7 @@ function restaurerRoute(route) {
         if (!etat.questionsSession?.length && reprise?.retourDepuisBilanRevision && restaurerSessionEnCours(reprise)) {
             afficherEcran('question', { depuisHistorique: true, forcerSortieQuestion: true });
             afficherQuestion({ suivreAnalytics: false, reprendreChronometre: true });
+            envoyerEvenementPJJ('session_reprise', { ...obtenirContexteSessionAnalytics(), pjjoue_motif_reprise: 'Retour à une partie sauvegardée' });
         }
         else if (etat.questionsSession?.length)
             afficherEcran('bilan', { depuisHistorique: true, forcerSortieQuestion: true });

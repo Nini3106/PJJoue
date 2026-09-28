@@ -525,18 +525,9 @@ function terminerSession() {
             jokerUtilise,
             celebration: progression.celebration
         });
-    envoyerEvenementPJJ('session_terminee', {
-        ...obtenirContexteSessionAnalytics(),
-        pjjoue_score: pourcentage,
-        pjjoue_reussites_autonomes: etat.score,
-        pjjoue_questions_passees: nombreQuestionsPassees,
-        pjjoue_reussites_avec_aide: nombreReponsesAidees,
-        pjjoue_joker_utilise_session: jokerUtilise ? 'Oui' : 'Non',
-        pjjoue_duree_session_secondes: obtenirDureeSessionAnalytics(),
-        pjjoue_resultat_session: etat.mode === 'evaluation-finale'
-            ? (progression.evaluationFinaleReussie ? 'Évaluation réussie' : 'Évaluation terminée')
-            : 'Session terminée'
-    });
+    envoyerFinSessionAnalytics(etat.mode === 'evaluation-finale'
+        ? (progression.evaluationFinaleReussie ? 'Évaluation réussie' : 'Évaluation terminée')
+        : 'Session terminée', pourcentage);
     enregistrerSauvegarde();
     selectionner('#scoreBilan').textContent = pourcentage + '%';
     selectionner('#bonnesReponsesBilan').textContent = etat.score + '/' + total;

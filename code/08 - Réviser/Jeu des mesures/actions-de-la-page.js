@@ -330,8 +330,8 @@ function convertirQuestionMissionMesuresVersPJJoue(questionMesures, index, confi
     const correcte = options.find(option => option.correcte === true);
     return { ...base, bonneReponse:correcte?.texte || '', mauvaisesReponses:options.filter(option => option.correcte !== true).map(option => option.texte) };
 }
-function preparerSessionMissionMesuresNative({ questionsDejaConverties = false, mode, etape=null, reperes, questions, jokersActifs=true, titre, chronoActif=false, secondesQuestion=30, organisation='ordonne' }) {
-    const configuration = { mode, etape, reperes:[...reperes], jokersActifs, titre, chronoActif, secondesQuestion, organisation };
+function preparerSessionMissionMesuresNative({ questionsDejaConverties = false, mode, etape=null, reperes, questions, jokersActifs=true, titre, chronoActif=false, secondesQuestion=30, organisation='ordonne', perimetre=null }) {
+    const configuration = { mode, etape, reperes:[...reperes], jokersActifs, titre, chronoActif, secondesQuestion, organisation, perimetre };
     etatJeuMesures = { ...creerEtatJeuMesures(), mode, etape, titreSession:titre, reperesSession:[...reperes], questions:[...questions], configurationDerniereSession:configuration };
     etat.mode = `mesures-${mode}`;
     etat.theme = obtenirThemeVisuelMissionMesures(etape || reperes?.[0]?.etape || questions?.[0]?.etape || 1);
@@ -343,6 +343,8 @@ function preparerSessionMissionMesuresNative({ questionsDejaConverties = false, 
     etat.chronometreSessionActif = chronoActif === true;
     etat.dureeChronometreSession = Math.min(30, Math.max(5, Number(secondesQuestion) || 30));
     etat.missionMesuresConfiguration = configuration;
+    if (mode === 'parcours' || mode === 'evaluation')
+        envoyerEvenementPJJ('etape_selectionnee', obtenirContexteSessionAnalytics());
     lancerSession(questionsDejaConverties ? questions
         : questions.map((question,index) => convertirQuestionMissionMesuresVersPJJoue(question,index,configuration)));
 }
@@ -435,7 +437,7 @@ function lancerDeMesures() {
     const valeur=1+Math.floor(Math.random()*6);
     lancer.disabled=true; jouer.classList.add('masque'); face.classList.remove('de-en-lancer'); void face.offsetWidth; face.classList.add('de-en-lancer');
     window.setTimeout(()=>{
-        etatJeuMesures.nombreTire=valeur;
+        etatJeuMesures.nombreTire=valeur;envoyerTirageMissionAnalytics('mesures', valeur);
         etatJeuMesures.tirageHasard=choisirMesuresSansDoublon(REPERES_MISSION_MESURES,valeur);
         face.dataset.face=String(valeur); face.classList.remove('de-en-lancer');
         resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} au hasard dans Mission Mesures.`;
@@ -478,7 +480,7 @@ function ouvrirEntrainementMissionMesuresNatif() { configurerEntrainementMission
 function lancerDeMesuresEntrainementNatif() {
     const face=selectionner('#faceDeParcours'), resultat=selectionner('#resultatDeParcours'), lancer=selectionner('#boutonLancerLeDe'), jouer=selectionner('#boutonJouerLeTirage'); if(!face||!resultat||!lancer||!jouer)return;
     const valeur=1+Math.floor(Math.random()*6); lancer.disabled=true; jouer.classList.add('masque'); face.classList.remove('de-en-lancer'); void face.offsetWidth; face.classList.add('de-en-lancer');
-    window.setTimeout(()=>{etatJeuMesures.tirageHasard=choisirMesuresSansDoublon(REPERES_MISSION_MESURES,valeur);face.dataset.face=String(valeur);face.classList.remove('de-en-lancer');resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} dans Mission Mesures.`;jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`;jouer.classList.remove('masque');lancer.textContent='Relancer le dé';lancer.disabled=false;},420);
+    window.setTimeout(()=>{envoyerTirageMissionAnalytics('mesures', valeur);etatJeuMesures.tirageHasard=choisirMesuresSansDoublon(REPERES_MISSION_MESURES,valeur);face.dataset.face=String(valeur);face.classList.remove('de-en-lancer');resultat.textContent=`${valeur} question${valeur===1?'':'s'} tirée${valeur===1?'':'s'} dans Mission Mesures.`;jouer.textContent=`Lancer ${valeur} question${valeur===1?'':'s'}`;jouer.classList.remove('masque');lancer.textContent='Relancer le dé';lancer.disabled=false;},420);
 }
 function jouerTirageDeMesuresEntrainementNatif() { jouerTirageDeMesures(); }
 function lancerEntrainementMissionMesuresNatif() {
@@ -487,7 +489,7 @@ function lancerEntrainementMissionMesuresNatif() {
     const nombre=Math.min(pool.length,Math.max(1,Number(selectionner('#nombreQuestionsEntrainement')?.value)||10));
     const organisation=etat.organisationSession||'ordonne';
     const reperes=organisation==='ordonne'?[...pool].sort((a,b)=>Number(a.etape)-Number(b.etape)||Number(a.id)-Number(b.id)).slice(0,nombre):choisirMesuresSansDoublon(pool,nombre);
-    preparerSessionMissionMesuresNative({mode:'entrainement',reperes,questions:creerQuestionsEntrainementMesures(reperes,organisation==='melange'),jokersActifs:etat.jokersSessionActifs!==false,titre:`Entraînement Mesures · ${nombre} question${nombre===1?'':'s'}`,chronoActif:etat.chronometreSessionActif===true,secondesQuestion:etat.dureeChronometreSession||30,organisation});
+    preparerSessionMissionMesuresNative({mode:'entrainement',reperes,questions:creerQuestionsEntrainementMesures(reperes,organisation==='melange'),jokersActifs:etat.jokersSessionActifs!==false,titre:`Entraînement Mesures · ${nombre} question${nombre===1?'':'s'}`,chronoActif:etat.chronometreSessionActif===true,secondesQuestion:etat.dureeChronometreSession||30,organisation,perimetre:selectionner('#perimetreEntrainement')?.selectedOptions[0]?.textContent?.trim()});
 }
 
 function afficherRevisionMesures() {
@@ -520,6 +522,9 @@ function terminerSessionMissionMesuresNative() {
     }
     if(mode==='hasard'){titre='Défi du hasard · Mission Mesures';resultat=pourcentage===100?'Tirage parfait !':`Résultat : ${pourcentage} %.`;}
     if (mode !== 'evaluation') celebration = collecterCelebrationMission('mesures');
+    envoyerFinSessionAnalytics(mode === 'evaluation'
+        ? (pourcentage >= SEUIL_EVALUATION_MESURES && passees === 0 ? 'Évaluation réussie' : 'Évaluation terminée')
+        : 'Session terminée', pourcentage);
     enregistrerSauvegarde();
     selectionner('#scoreBilan').textContent=`${pourcentage}%`; selectionner('#bonnesReponsesBilan').textContent=`${etat.score}/${total}`; selectionner('#meilleureSerieBilan').textContent=etat.meilleureSerie; selectionner('#contexteBilan').textContent=`Mission Mesures · ${titre}`; selectionner('#titreBilan').textContent=titre; selectionner('#rangBilan').textContent=resultat;
     afficherErreursBilan(obtenirQuestionsAConsoliderSession(),passees);

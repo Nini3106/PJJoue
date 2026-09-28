@@ -318,12 +318,12 @@ def consentement(page):
     assert page.locator('#pjjoue-google-tag-manager').count()==0
     page.locator('[data-consentement="refuser"]').click()
     assert not page.evaluate('PJJConsentement.estAutorise()')
-    assert not page.evaluate("PJJ_ANALYTICS.envoyer('test_refus',{xp:1})")
+    assert not page.evaluate("PJJ_ANALYTICS.envoyer('page_consultee',{xp:1})")
     assert page.evaluate("localStorage.getItem('pjjoue_consentement_analytics_v1')")=='refuse'
     page.evaluate('PJJConsentement.ouvrir()')
     page.locator('[data-consentement="accepter"]').click()
     assert page.evaluate('PJJConsentement.estAutorise()')
-    assert page.evaluate("PJJ_ANALYTICS.envoyer('test_consentement',{pjjoue_nom:'ne pas transmettre',xp:1})")
+    assert page.evaluate("PJJ_ANALYTICS.envoyer('page_consultee',{pjjoue_nom:'ne pas transmettre',xp:1})")
     assert page.evaluate("dataLayer.at(-1).pjjoue_nom===undefined")
     assert page.locator('#pjjoue-google-tag-manager').count()==0  # contexte non HTTP
     page.evaluate('PJJConsentement.ouvrir()');verifier_geometrie(page)
